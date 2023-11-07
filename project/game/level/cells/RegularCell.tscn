@@ -109,7 +109,7 @@ texture_click_mask = ExtResource("10_tknv5")
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="Dec" type="TextureRect" parent="DiagHints"]
 layout_mode = 0
@@ -131,7 +131,7 @@ texture = ExtResource("10_of3lx")
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Walls"]
 layout_mode = 0
