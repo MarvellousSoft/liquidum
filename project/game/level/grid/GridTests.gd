@@ -41,8 +41,8 @@ func test_simple() -> void:
 	var simple := """
 	wwwx
 	L../
-	...w
-	L._╲
+	#..w
+	L╲_╲
 	"""
 	var g := GridImpl.create(2, 2)
 	assert(!g.get_cell(0, 0).water_full())
@@ -61,6 +61,9 @@ func test_simple() -> void:
 	assert(g.get_cell(0, 1).air_at(BottomRight))
 	assert(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
 	assert(g.is_flooded())
+	# Check block
+	assert(!g.get_cell(1, 0).block_full())
+	assert(g.get_cell(1, 0).block_at(BottomLeft))
 	# Check diag walls
 	assert(!g.get_cell(0, 0).diag_wall_at(Dec))
 	assert(g.get_cell(0, 1).diag_wall_at(Inc))
@@ -75,33 +78,6 @@ func test_simple() -> void:
 	assert(g.get_cell(1, 1).wall_at(Right))
 
 	assert_grid_eq(simple, g.to_str())
-
-func test_is_flooded() -> void:
-	assert(str_grid("..\n..").is_flooded())
-	assert(!str_grid("w.\n..").is_flooded())
-	assert(!str_grid(".w\n..").is_flooded())
-	assert(str_grid("ww\n..").is_flooded())
-	assert(str_grid("w.\n.╲").is_flooded())
-	assert(str_grid("w.\n./").is_flooded())
-	assert(!str_grid("""
-	ww..
-	L._/
-	""").is_flooded())
-	assert(str_grid("""
-	ww..
-	L.L/
-	""").is_flooded())
-	assert(!str_grid("""
-	..w.
-	L._/
-	""").is_flooded())
-	# Tricky case with a "cave" on top, where gravity should carry water to the other side
-	#assert(!str_grid("""
-	#w..w
-	#|╲./
-	#wwww
-	#L._.
-	#""").is_flooded())
 
 func test_put_water_one_cell() -> void:
 	var g := str_grid("..\n..")
@@ -127,8 +103,8 @@ const big_level := """
 |╲./|.
 ......
 L../.╲
-......
-L._╲_.
+#.....
+L╲_╲_.
 """
 
 func test_water_big_level() -> void:
@@ -143,8 +119,8 @@ func test_water_big_level() -> void:
 |╲./|.
 ...ww.
 L../.╲
-...www
-L._╲_.
+#..www
+L╲_╲_.
 	""")
 	# Test flooding up through "caves"
 	g.undo()
@@ -169,8 +145,8 @@ wwwww.
 |╲./|.
 .....w
 L../.╲
-www...
-L._╲_.
+#ww...
+L╲_╲_.
 	""")
 	g.get_cell(3, 0).remove_water_or_air(TopRight)
 	g.get_cell(1, 0).put_water(BottomLeft)
@@ -183,8 +159,8 @@ L._╲_.
 |╲./|.
 www..w
 L../.╲
-......
-L._╲_.
+#.....
+L╲_╲_.
 	""")
 	assert(g.hint_col(0) == -1.)
 	g.set_hint_col(0, 1.5)

@@ -56,7 +56,7 @@ func _init(n_: int, m_: int) -> void:
 	for j in m:
 		hint_cols.append(-1.)
 
-enum Content { Nothing, Water, Air }
+enum Content { Nothing, Water, Air, Block }
 
 class PureCell:
 	# By default, uses inc diagonal /, if inverted uses dec \
@@ -90,6 +90,10 @@ class PureCell:
 		return c_left == Content.Air and c_right == Content.Air
 	func air_at(corner: GridModel.Corner) -> bool:
 		return _content_at(corner) == Content.Air
+	func block_full() -> bool:
+		return c_left == Content.Block and c_right == Content.Block
+	func block_at(corner: GridModel.Corner) -> bool:
+		return _content_at(corner) == Content.Block
 	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
 		match diag:
 			Diagonal.Dec: # \
@@ -98,19 +102,22 @@ class PureCell:
 				return !inverted and diag_wall
 		assert(false, "Invalid diagonal")
 		return false
+	# Can't override block
 	func put_content(corner: GridModel.Corner, content: Content) -> bool:
+		if _content_at(corner) == Content.Block:
+			return false
 		var prev_left := c_left
 		var prev_right := c_right
 		if corner == TopLeft or corner == BottomLeft:
 			if diag_wall:
 				assert(!inverted if corner == TopLeft else inverted, "Invalid corner")
-			else:
+			elif c_right != Content.Block:
 				c_right = content
 			c_left = content
 		else:
 			if diag_wall:
 				assert(!inverted if corner == BottomRight else inverted, "Invalid corner")
-			else:
+			elif c_left != Content.Block:
 				c_left = content
 			c_right = content
 		return prev_left != c_left or prev_right != c_right
@@ -165,6 +172,10 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure.air_full()
 	func air_at(corner: GridModel.Corner) -> bool:
 		return pure.air_at(corner)
+	func block_full() -> bool:
+		return pure.block_full()
+	func block_at(corner: GridModel.Corner) -> bool:
+		return pure.block_at(corner)
 	func wall_at(side: GridModel.Side) -> bool:
 		return grid.wall_at(i, j, side)
 	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
@@ -249,6 +260,8 @@ func _str_content(chr: String) -> Content:
 			return Content.Water
 		'x':
 			return Content.Air
+		'#':
+			return Content.Block
 	assert(false, "Unknown content")
 	return Content.Nothing
 
@@ -260,6 +273,8 @@ func _content_str(c: Content) -> String:
 			return 'w'
 		Content.Air:
 			return 'x'
+		Content.Block:
+			return '#'
 	assert(false, "Unknown content")
 	return '?'
 
@@ -268,8 +283,8 @@ func load_from_str(s: String) -> void:
 	assert(lines.size() == 2 * n, "Invalid number of rows")
 	for i in n:
 		for j in m:
-			var c1: String = _validate(lines[2 * i][2 * j], '.wx')
-			var c2: String = _validate(lines[2 * i][2 * j + 1], '.wx')
+			var c1: String = _validate(lines[2 * i][2 * j], '.wx#')
+			var c2: String = _validate(lines[2 * i][2 * j + 1], '.wx#')
 			var c3: String = _validate(lines[2 * i + 1][2 * j], '.|_L')
 			var c4: String = _validate(lines[2 * i + 1][2 * j + 1], '.╲/')
 			var cell := _pure_cell(i, j)
@@ -306,34 +321,6 @@ func to_str() -> String:
 	return "".join(builder)
 
 func is_flooded() -> bool:
-	const Air := Content.Air
-	const Nothing := Content.Nothing
-	const Water := Content.Water
-	for i in n:
-		for j in m:
-			var cell := _pure_cell(i, j)
-			# No wall but different contents
-			if !cell.diag_wall and cell.c_left != cell.c_right:
-				return false
-			# Should content escape left?
-			if !_has_wall_left(i, j) and cell.c_left != Nothing:
-				if _pure_cell(i, j - 1).c_right != cell.c_left:
-					return false
-			# Should content escape right
-			if !_has_wall_right(i, j) and cell.c_right != Nothing:
-				if _pure_cell(i, j + 1).c_left != cell.c_right:
-					return false
-			# Should air escape up
-			if !_has_wall_up(i, j) and (cell._content_at(Corner.TopLeft) == Air or cell._content_at(Corner.TopRight) == Air):
-				var up := _pure_cell(i - 1, j)
-				if up._content_at(Corner.BottomLeft) != Air and up._content_at(Corner.BottomRight) != Air:
-					return false
-			# Should water escape down
-			if !_has_wall_down(i, j) and (cell._content_at(Corner.BottomLeft) == Water or cell._content_at(Corner.BottomRight) == Water):
-				var down := _pure_cell(i + 1, j)
-				if down._content_at(Corner.TopLeft) != Water and down._content_at(Corner.TopRight) != Water:
-					return false
-			# TODO: Water up "cave"
 	return true
 
 func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:

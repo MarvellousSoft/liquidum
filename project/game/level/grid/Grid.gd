@@ -20,6 +20,10 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func air_at(_corner: GridModel.Corner) -> bool:
 		return GridModel.must_be_implemented()
+	func block_full() -> bool:
+		return GridModel.must_be_implemented()
+	func block_at(_corner: GridModel.Corner) -> bool:
+		return GridModel.must_be_implemented()
 	# Counts the sides of the grid as walls
 	func wall_at(_side: GridModel.Side) -> bool:
 		return GridModel.must_be_implemented()
@@ -73,6 +77,7 @@ func are_hints_satisfied() -> bool:
 # 1 and 2 are the contents on both left and right sides.
 # - w: water
 # - x: air (not necessary for the solution, just for tracking where there's no water)
+# - #: block (can't have either water or air)
 # - .: nothing
 # 3 is the left and bottom wall information.
 # - |: left wall only
@@ -86,7 +91,7 @@ func are_hints_satisfied() -> bool:
 # Example:
 # wwwx
 # L../
-# ...w
+# #..w
 # L._\
 func load_from_str(_s: String) -> void:
 	return GridModel.must_be_implemented()
