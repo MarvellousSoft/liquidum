@@ -45,6 +45,52 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	return cell
 
 
-func _on_cell_pressed(i, j, which):
-	printt(i,j,which)
+func get_cell(i: int, j: int) -> Node:
+	return Columns.get_child(i).get_child(j)
+
+
+func string_to_corner(s : String) -> GridModel.Corner:
+	match s:
+		"s":
+			return GridModel.Corner.BottomLeft
+		"tl":
+			return GridModel.Corner.TopLeft
+		"tr":
+			return GridModel.Corner.TopRight
+		"br":
+			return GridModel.Corner.BottomRight
+		"bl":
+			return GridModel.Corner.BottomLeft
+		_:
+			push_error("Not a valid corner:" + str(s))
+	return GridModel.Corner.BottomLeft
+
+
+func string_to_water_side(s : String) -> Cell.WATERS:
+	match s:
+		"s":
+			return Cell.WATERS.SINGLE
+		"tl":
+			return Cell.WATERS.TOPLEFT
+		"tr":
+			return Cell.WATERS.TOPRIGHT
+		"br":
+			return Cell.WATERS.BOTTOMRIGHT
+		"bl":
+			return Cell.WATERS.BOTTOMLEFT
+		_:
+			push_error("Not a valid corner:" + str(s))
+	return Cell.WATERS.NONE
+
+
+func _on_cell_pressed(i : int, j : int, which : String) -> void:
+	var cell_data = grid_logic.get_cell(i, j)
+	var cell = get_cell (i, j)
+	var corner = string_to_corner(which)
+	if cell_data.water_at(corner):
+		cell_data.remove_water_or_air(corner)
+		cell.set_water(string_to_water_side(which), false)
+	else:
+		cell_data.put_water(corner)
+		cell.set_water(string_to_water_side(which), true)
 	

@@ -84,19 +84,18 @@ func remove_water():
 		water.hide()
 
 
-func set_water(water : Cell.WATERS) -> void:
-	remove_water()
+func set_water(water : Cell.WATERS, value: bool) -> void:
 	match water:
 		Cell.WATERS.SINGLE:
-			Waters.s.show()
+			Waters.s.visible = value
 		Cell.WATERS.TOPLEFT:
-			Waters.tl.show()
+			Waters.tl.visible = value
 		Cell.WATERS.TOPRIGHT:
-			Waters.tl.show()
+			Waters.tr.visible = value
 		Cell.WATERS.BOTTOMRIGHT:
-			Waters.tl.show()
+			Waters.br.visible = value
 		Cell.WATERS.BOTTOMLEFT:
-			Waters.tl.show()
+			Waters.bl.visible = value
 		Cell.WATERS.NONE:
 			remove_water()
 		_:

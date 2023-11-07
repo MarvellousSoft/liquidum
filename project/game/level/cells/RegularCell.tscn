@@ -226,7 +226,7 @@ mouse_filter = 2
 texture = ExtResource("12_q2grv")
 flip_h = true
 
-[connection signal="pressed" from="Buttons/Single" to="." method="_on_button_pressed" binds= ["single"]]
+[connection signal="pressed" from="Buttons/Single" to="." method="_on_button_pressed" binds= ["s"]]
 [connection signal="pressed" from="Buttons/TopLeft" to="." method="_on_button_pressed" binds= ["tl"]]
 [connection signal="pressed" from="Buttons/TopRight" to="." method="_on_button_pressed" binds= ["tr"]]
 [connection signal="pressed" from="Buttons/BottomRight" to="." method="_on_button_pressed" binds= ["br"]]
