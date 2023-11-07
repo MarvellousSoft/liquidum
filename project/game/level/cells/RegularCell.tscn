@@ -1,8 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=16 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
+[ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/single_water.png" id="2_gil80"]
 [ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/single_button_normal.png" id="2_yedx8"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/single_button_pressed.png" id="3_b1y6m"]
+[ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/topleft_water.png" id="3_qjmm0"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/single_button_hover.png" id="4_8abky"]
 [ext_resource type="Texture2D" uid="uid://dqki8j2vmoesq" path="res://assets/images/ui/single_button_disabled.png" id="5_venyn"]
 [ext_resource type="Texture2D" uid="uid://cc5o7ctb2q2y3" path="res://assets/images/ui/diagonal_button_normal.png" id="6_tg4ma"]
@@ -32,13 +34,55 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="SingleWater" type="ColorRect" parent="."]
+[node name="Waters" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Single" type="TextureRect" parent="Waters"]
+visible = false
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 50.0
-color = Color(0, 0, 1, 1)
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("2_gil80")
+
+[node name="TopLeft" type="TextureRect" parent="Waters"]
+visible = false
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("3_qjmm0")
+
+[node name="TopRight" type="TextureRect" parent="Waters"]
+visible = false
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("3_qjmm0")
+
+[node name="BottomRight" type="TextureRect" parent="Waters"]
+visible = false
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 3.14159
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("3_qjmm0")
+
+[node name="BottomLeft" type="TextureRect" parent="Waters"]
+visible = false
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 4.71239
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("3_qjmm0")
 
 [node name="Buttons" type="Control" parent="."]
 anchors_preset = 0

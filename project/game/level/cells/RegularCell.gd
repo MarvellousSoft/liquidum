@@ -4,6 +4,13 @@ const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mas
 
 signal pressed
 
+@onready var Waters = {
+	"s" : $Waters/Single,
+	"tl" : $Waters/TopLeft,
+	"tr" : $Waters/TopRight,
+	"bl" : $Waters/BottomLeft,
+	"br" : $Waters/BottomRight,
+}
 @onready var Buttons = {
 	"s" : $Buttons/Single,
 	"tl" : $Buttons/TopLeft,
@@ -31,6 +38,8 @@ var column : int
 func setup(type : Cell.TYPES, i : int, j : int) -> void:
 	row = i
 	column = j
+	for water in Waters.values():
+		water.hide()
 	for buttons in Buttons.values():
 		buttons.hide()
 	for hint in Hints.values():
@@ -68,6 +77,30 @@ func set_wall(wall : Cell.WALLS) -> void:
 			Walls.dec.show()
 		_:
 			push_error("Not a valid wall:" + str(wall))
+
+
+func remove_water():
+	for water in Waters.values():
+		water.hide()
+
+
+func set_water(water : Cell.WATERS) -> void:
+	remove_water()
+	match water:
+		Cell.WATERS.SINGLE:
+			Waters.s.show()
+		Cell.WATERS.TOPLEFT:
+			Waters.tl.show()
+		Cell.WATERS.TOPRIGHT:
+			Waters.tl.show()
+		Cell.WATERS.BOTTOMRIGHT:
+			Waters.tl.show()
+		Cell.WATERS.BOTTOMLEFT:
+			Waters.tl.show()
+		Cell.WATERS.NONE:
+			remove_water()
+		_:
+			push_error("Not a valid water:" + str(water))
 
 
 func _on_button_pressed(which : String) -> void:
