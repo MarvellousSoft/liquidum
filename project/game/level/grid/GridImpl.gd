@@ -1,6 +1,11 @@
 class_name GridImpl
 extends Grid
 
+static func create(rows_: int, cols_: int) -> Grid:
+	return GridImpl.new(rows_, cols_)
+
+# Everything below is implementation details about grids.
+
 var n: int
 var m: int
 # NxM Array[Array[PureCell]] but GDscript doesn't support it
@@ -43,7 +48,7 @@ class PureCell:
 		return PureCell.new()
 	func water_full() -> bool:
 		return water_left and water_right
-	func water_at(corner: Corner) -> bool:
+	func water_at(corner: Grid.Corner) -> bool:
 		if water_full():
 			return true
 		match corner:
@@ -57,7 +62,7 @@ class PureCell:
 				return inverted and water_right
 		assert(false, "Invalid corner")
 		return false
-	func diag_wall_at(diag: Diagonal) -> bool:
+	func diag_wall_at(diag: Grid.Diagonal) -> bool:
 		match diag:
 			Diagonal.Major: # \
 				return !inverted and diag_wall
@@ -79,11 +84,11 @@ class CellWithLoc extends Grid.Cell:
 		self.grid = grid_
 	func water_full() -> bool:
 		return pure.water_full()
-	func water_at(corner: Corner) -> bool:
+	func water_at(corner: Grid.Corner) -> bool:
 		return pure.water_at(corner)
-	func wall_at(side: Side) -> bool:
+	func wall_at(side: Grid.Side) -> bool:
 		return grid.wall_at(i, j, side)
-	func diag_wall_at(diag: Diagonal) -> bool:
+	func diag_wall_at(diag: Grid.Diagonal) -> bool:
 		return pure.diag_wall_at(diag)
 
 func rows() -> int:
@@ -104,7 +109,7 @@ func hint_row(i: int) -> float:
 func hint_col(j: int) -> float:
 	return hint_cols[j]
 
-func wall_at(i: int, j: int, side: Side) -> bool:
+func wall_at(i: int, j: int, side: Grid.Side) -> bool:
 	match side:
 		Side.Left:
 			return _has_wall_left(i, j)
@@ -128,3 +133,9 @@ func _has_wall_right(i: int, j: int) -> bool:
 
 func _has_wall_left(i: int, j: int) -> bool:
 	return j == 0 or _has_wall_right(i, j - 1)
+
+func load_from_str(s: String) -> void:
+	pass
+
+func to_str() -> String:
+	return ""
