@@ -127,7 +127,7 @@ L../.╲
 L._╲_.
 """
 
-func test_put_water_big_level() -> void:
+func test_water_big_level() -> void:
 	var g := str_grid(big_level)
 	# Test a "bucket" of water
 	g.get_cell(1, 1).put_water(TopLeft)
@@ -166,5 +166,19 @@ wwwww.
 .....w
 L../.╲
 www...
+L._╲_.
+	""")
+	g.get_cell(3, 0).remove_water_or_air(TopRight)
+	g.get_cell(1, 0).put_water(BottomLeft)
+	g.get_cell(1, 2).put_air(BottomRight)
+	g.get_cell(1, 1).put_air(BottomRight)
+	assert_grid_eq(g.to_str(), """
+......
+|....╲
+.wwxxx
+|╲./|.
+www..w
+L../.╲
+......
 L._╲_.
 	""")

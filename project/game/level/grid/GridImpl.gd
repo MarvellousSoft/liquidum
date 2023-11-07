@@ -165,6 +165,9 @@ class CellWithLoc extends GridModel.CellModel:
 			grid._push_undo_changes(changes)
 	func put_air(corner: GridModel.Corner) -> void:
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
+		if water_at(corner):
+			# TODO: Everything should go in the same undo
+			remove_water_or_air(corner)
 		if pure.put_air(corner):
 			# No auto-flooding air
 			grid._push_undo_changes(changes)
@@ -348,8 +351,9 @@ func _flood_from(i: int, j: int, corner: GridModel.Corner, water: bool) -> Array
 		dfs.flood(i, j, corner)
 		return dfs.changes
 	else:
-		# RemoveWaterDfs
-		return []
+		var dfs := RemoveWaterDfs.new(self, i)
+		dfs.flood(i, j, corner)
+		return dfs.changes
 
 class Dfs:
 	var grid: GridImpl
@@ -362,6 +366,8 @@ class Dfs:
 	func _cell_logic(_i: int, _j: int, _corner: GridModel.Corner, _cell: PureCell) -> bool:
 		return GridModel.must_be_implemented()
 	func _can_go_up(_i: int, _j: int) -> bool:
+		return GridModel.must_be_implemented()
+	func _can_go_down(_i: int, _j: int) -> bool:
 		return GridModel.must_be_implemented()
 	func flood(i: int, j: int, corner: GridModel.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
@@ -382,7 +388,7 @@ class Dfs:
 		if !grid._has_wall_right(i, j) and !(cell.diag_wall and is_left):
 			flood(i, j + 1, BottomLeft if grid._pure_cell(i, j + 1).inverted else TopLeft)
 		# Try to flood down
-		if !grid._has_wall_down(i, j) and !(cell.diag_wall and is_top):
+		if !grid._has_wall_down(i, j) and !(cell.diag_wall and is_top) and _can_go_down(i, j):
 			flood(i + 1, j, TopRight if grid._pure_cell(i + 1, j).inverted else TopLeft)
 		# Try to flood up, if gravity helps
 		if !grid._has_wall_up(i, j) and !(cell.diag_wall and !is_top) and _can_go_up(i, j):
@@ -399,3 +405,22 @@ class AddWaterDfs extends Dfs:
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
 		return i - 1 >= min_i
+	func _can_go_down(_i: int, _j: int) -> bool:
+		return true
+
+class RemoveWaterDfs extends Dfs:
+	# Remove all water at or above min_i
+	var min_i: int
+	func _init(grid_: GridImpl, min_i_: int) -> void:
+		super(grid_)
+		min_i = min_i_
+	func _cell_logic(i: int, j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+		# Only keep going if we changed something
+		if i <= min_i:
+			return cell.put_nothing(corner)
+		else:
+			return true
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	func _can_go_down(i: int, _j: int) -> bool:
+		return i >= min_i
