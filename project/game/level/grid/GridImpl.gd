@@ -139,6 +139,14 @@ class PureCell:
 		cell.diag_wall = diag_wall
 		# last_seen doesn't need to be copied
 		return cell
+	func _block_top() -> bool:
+		return _content_at(GridModel.Corner.TopLeft) == Content.Block or _content_at(GridModel.Corner.TopRight) == Content.Block 
+	func _block_bottom() -> bool:
+			return _content_at(GridModel.Corner.BottomLeft) == Content.Block or _content_at(GridModel.Corner.BottomRight) == Content.Block 
+	func _block_left() -> bool:
+		return c_left == Content.Block
+	func _block_right() -> bool:
+		return c_right == Content.Block
 
 class Change:
 	var i: int
@@ -296,6 +304,7 @@ func load_from_str(s: String) -> void:
 				wall_down[i][j] = (c3 == '_' or c3 == 'L')
 			if j > 0:
 				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
+	validate()
 
 func to_str() -> String:
 	var builder := PackedStringArray()
@@ -448,3 +457,20 @@ func are_hints_satisfied() -> bool:
 		if count != hint:
 			return false
 	return true
+
+func validate() -> void:
+	# For now, just check all blocks are surrounded by walls
+	for i in n:
+		for j in m:
+			var cell := _pure_cell(i, j)
+			if cell._block_left() != cell._block_right():
+				assert(cell.diag_wall)
+			if !_has_wall_left(i, j) and cell._block_left():
+				assert(_pure_cell(i, j - 1).block_right())
+			if !_has_wall_right(i, j) and cell._block_right():
+				assert(_pure_cell(i, j + 1).block_left())
+			if !_has_wall_up(i, j) and cell._block_top():
+				assert(_pure_cell(i - 1, j)._block_bottom())
+			if !_has_wall_down(i, j) and cell._block_bottom():
+				assert(_pure_cell(i + 1, j)._block_top())
+			
