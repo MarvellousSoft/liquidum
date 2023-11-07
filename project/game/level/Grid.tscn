@@ -20,6 +20,7 @@ use_top_left = true
 
 [node name="Columns" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Row1" type="HBoxContainer" parent="CenterContainer/Columns"]
 layout_mode = 2

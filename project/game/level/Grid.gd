@@ -14,6 +14,7 @@ func setup(n : int, m : int, level : String) -> void:
 		Columns.remove_child(child)
 	for i in n:
 		var new_row = HBoxContainer.new()
+		new_row.add_theme_constant_override("separation", 0)
 		Columns.add_child(new_row)
 		for j in m:
 			var cell_data = grid_logic.get_cell(i, j)
