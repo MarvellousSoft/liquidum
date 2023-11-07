@@ -1,15 +1,15 @@
 class_name GridTests
 
-const TopLeft := Grid.Corner.TopLeft
-const TopRight := Grid.Corner.TopRight
-const BottomLeft := Grid.Corner.BottomLeft
-const BottomRight := Grid.Corner.BottomRight
-const Left := Grid.Side.Left
-const Right := Grid.Side.Right
-const Top := Grid.Side.Top
-const Bottom := Grid.Side.Bottom
-const Major := Grid.Diagonal.Major
-const Minor := Grid.Diagonal.Minor
+const TopLeft := GridModel.Corner.TopLeft
+const TopRight := GridModel.Corner.TopRight
+const BottomLeft := GridModel.Corner.BottomLeft
+const BottomRight := GridModel.Corner.BottomRight
+const Left := GridModel.Side.Left
+const Right := GridModel.Side.Right
+const Top := GridModel.Side.Top
+const Bottom := GridModel.Side.Bottom
+const Dec := GridModel.Diagonal.Dec
+const Inc := GridModel.Diagonal.Inc
 
 func run_all_tests() -> void:
 	for method in get_method_list():
@@ -25,7 +25,7 @@ func assert_grid_eq(a: String, b: String) -> void:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
 		assert(a == b)
 
-func str_grid(s: String) -> Grid:
+func str_grid(s: String) -> GridModel:
 	s = s.dedent().strip_edges()
 	var rows := (s.count('\n') + 1) / 2
 	var cols := s.find('\n') / 2
@@ -58,10 +58,10 @@ func test_simple() -> void:
 	assert(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
 	assert(g.is_flooded())
 	# Check diag walls
-	assert(!g.get_cell(0, 0).diag_wall_at(Major))
-	assert(g.get_cell(0, 1).diag_wall_at(Minor))
-	assert(!g.get_cell(0, 1).diag_wall_at(Major))
-	assert(g.get_cell(1, 1).diag_wall_at(Major))
+	assert(!g.get_cell(0, 0).diag_wall_at(Dec))
+	assert(g.get_cell(0, 1).diag_wall_at(Inc))
+	assert(!g.get_cell(0, 1).diag_wall_at(Dec))
+	assert(g.get_cell(1, 1).diag_wall_at(Dec))
 	# Check walls
 	assert(g.get_cell(0, 0).wall_at(Left))
 	assert(!g.get_cell(0, 0).wall_at(Right))
