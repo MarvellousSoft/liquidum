@@ -76,3 +76,7 @@ func load_from_str(_s: String) -> void:
 # Converts to string format as described on `load_from_str`
 func to_str() -> String:
 	return Grid.must_be_implemented()
+
+# Whether all water and air is in correct places
+func is_flooded() -> bool:
+	return Grid.must_be_implemented()

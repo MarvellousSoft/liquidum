@@ -25,6 +25,14 @@ func assert_grid_eq(a: String, b: String) -> void:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
 		assert(a == b)
 
+func str_grid(s: String) -> Grid:
+	s = s.dedent().strip_edges()
+	var rows := (s.count('\n') + 1) / 2
+	var cols := s.find('\n') / 2
+	var g := GridImpl.new(rows, cols)
+	g.load_from_str(s)
+	return g
+
 func test_simple() -> void:
 	var simple := """
 	wwwx
@@ -48,6 +56,7 @@ func test_simple() -> void:
 	assert(!g.get_cell(0, 1).air_at(TopLeft))
 	assert(g.get_cell(0, 1).air_at(BottomRight))
 	assert(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
+	assert(g.is_flooded())
 	# Check diag walls
 	assert(!g.get_cell(0, 0).diag_wall_at(Major))
 	assert(g.get_cell(0, 1).diag_wall_at(Minor))
@@ -62,3 +71,30 @@ func test_simple() -> void:
 	assert(g.get_cell(1, 1).wall_at(Right))
 
 	assert_grid_eq(simple, g.to_str())
+
+func test_is_flooded() -> void:
+	assert(str_grid("..\n..").is_flooded())
+	assert(!str_grid("w.\n..").is_flooded())
+	assert(!str_grid(".w\n..").is_flooded())
+	assert(str_grid("ww\n..").is_flooded())
+	assert(str_grid("w.\n.╲").is_flooded())
+	assert(str_grid("w.\n./").is_flooded())
+	assert(!str_grid("""
+	ww..
+	L._/
+	""").is_flooded())
+	assert(str_grid("""
+	ww..
+	L.L/
+	""").is_flooded())
+	assert(!str_grid("""
+	..w.
+	L._/
+	""").is_flooded())
+	# Tricky case with a "cave" on top, where gravity should carry water to the other side
+	#assert(!str_grid("""
+	#w..w
+	#|╲./
+	#wwww
+	#L._.
+	#""").is_flooded())

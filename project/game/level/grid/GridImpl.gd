@@ -213,3 +213,34 @@ func to_str() -> String:
 				builder.append(".")
 		builder.append("\n")
 	return "".join(builder)
+
+func is_flooded() -> bool:
+	const Air := Content.Air
+	const Nothing := Content.Nothing
+	const Water := Content.Water
+	for i in n:
+		for j in m:
+			var cell := _pure_cell(i, j)
+			# No wall but different contents
+			if !cell.diag_wall and cell.c_left != cell.c_right:
+				return false
+			# Should content escape left?
+			if !_has_wall_left(i, j) and cell.c_left != Nothing:
+				if _pure_cell(i, j - 1).c_right != cell.c_left:
+					return false
+			# Should content escape right
+			if !_has_wall_right(i, j) and cell.c_right != Nothing:
+				if _pure_cell(i, j + 1).c_left != cell.c_right:
+					return false
+			# Should air escape up
+			if !_has_wall_up(i, j) and (cell._content_at(Corner.TopLeft) == Air or cell._content_at(Corner.TopRight) == Air):
+				var up := _pure_cell(i - 1, j)
+				if up._content_at(Corner.BottomLeft) != Air and up._content_at(Corner.BottomRight) != Air:
+					return false
+			# Should water escape down
+			if !_has_wall_down(i, j) and (cell._content_at(Corner.BottomLeft) == Water or cell._content_at(Corner.BottomRight) == Water):
+				var down := _pure_cell(i + 1, j)
+				if down._content_at(Corner.TopLeft) != Water and down._content_at(Corner.TopRight) != Water:
+					return false
+			# TODO: Water up "cave"
+	return true
