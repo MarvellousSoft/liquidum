@@ -1,16 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cfk16upq1k4yq"]
+[gd_scene load_steps=2 format=3 uid="uid://btg7l0wgtmmry"]
 
 [ext_resource type="Script" path="res://audio/AudioManager.gd" id="1"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1")
 
-[node name="BGMS" type="Node" parent="."]
-
-[node name="BGMPlayer" type="AudioStreamPlayer" parent="BGMS"]
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="."]
 bus = &"BGM"
 
-[node name="FadeOutBGMPlayer" type="AudioStreamPlayer" parent="BGMS"]
+[node name="FadeOutBGMPlayer" type="AudioStreamPlayer" parent="."]
 bus = &"BGM"
 
 [node name="SFXS" type="Node" parent="."]

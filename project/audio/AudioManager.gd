@@ -17,10 +17,14 @@ const SFX_PATH = "res://database/audio/sfx/"
 
 @onready var BGMS = {}
 @onready var SFXS = {}
+@onready var SFX_NODE = $SFXS
+@onready var BGMPlayer = $BGMPlayer
+@onready var FadeOutBGMPlayer = $FadeOutBGMPlayer
 
 var bgms_last_pos = {}
 var cur_bgm
 var cur_sfx_player := 1
+
 
 func _ready():
 	setup_nodes()
@@ -33,7 +37,7 @@ func setup_nodes():
 		var player = AudioStreamPlayer.new()
 		player.stream = AudioStreamRandomizer.new()
 		player.bus = "SFX"
-		$SFXS.add_child(player)
+		SFX_NODE.add_child(player)
 
 
 func setup_bgms():
@@ -88,7 +92,7 @@ func get_bus_volume(which_bus: int):
 ##BGM METHODS
 
 func play_bgm(bgm_name, start_from_beginning = false, fade_in_speed_override = false):
-	var player = $BGMS/BGMPlayer1
+	var player = BGMPlayer
 	if cur_bgm:
 		if start_from_beginning or player.stream != BGMS[bgm_name].asset:
 			stop_bgm()
@@ -112,9 +116,9 @@ func play_bgm(bgm_name, start_from_beginning = false, fade_in_speed_override = f
 
 
 func stop_bgm():
-	var fadein = $BGMS/BGMPlayer
+	var fadein = BGMPlayer
 	if fadein.is_playing():
-		var fadeout = $BGMS/FadeOutBGMPlayer
+		var fadeout = FadeOutBGMPlayer
 		var pos = fadein.get_playback_position()
 		set_bgm_last_pos(cur_bgm, pos)
 		var vol = fadein.volume_db

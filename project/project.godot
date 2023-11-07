@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-AudioManager="*res://audio/AudioManager.gd"
 LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
+AudioManager="*res://audio/AudioManager.tscn"
 
 [editor_plugins]
 
