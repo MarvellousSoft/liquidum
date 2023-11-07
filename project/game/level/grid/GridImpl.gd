@@ -15,8 +15,8 @@ var n: int
 var m: int
 # NxM Array[Array[PureCell]] but GDscript doesn't support it
 var pure_cells: Array[Array]
-var hint_rows: Array[int]
-var hint_cols: Array[int]
+var hint_rows: Array[float]
+var hint_cols: Array[float]
 # (N-1)xM Array[Array[bool]]
 var wall_down: Array[Array]
 # Nx(M-1) Array[Array[bool]]
@@ -44,9 +44,9 @@ func _init(n_: int, m_: int) -> void:
 		if i < n - 1:
 			wall_down.append(row_down)
 	for i in n:
-		hint_rows.append(-1)
+		hint_rows.append(-1.)
 	for j in m:
-		hint_cols.append(-1)
+		hint_cols.append(-1.)
 
 enum Content { Nothing, Water, Air }
 
@@ -112,6 +112,8 @@ class PureCell:
 		return put_content(corner, Content.Air)
 	func put_nothing(corner: GridModel.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
+	func water_count() -> float:
+		return 0.5 * (float(c_left == Content.Water) + float(c_right == Content.Water))
 	func eq(other: PureCell) -> bool:
 		return c_left == other.c_left and c_right == other.c_right and inverted == other.inverted and diag_wall == other.diag_wall
 	func clone() -> PureCell:
@@ -193,8 +195,14 @@ func get_cell(i: int, j: int) -> CellModel:
 func hint_row(i: int) -> float:
 	return hint_rows[i]
 
+func set_hint_row(i: int, v: float) -> void:
+	hint_rows[i] = v
+
 func hint_col(j: int) -> float:
 	return hint_cols[j]
+
+func set_hint_col(j: int, v: float) -> void:
+	hint_cols[j] = v
 
 func wall_at(i: int, j: int, side: GridModel.Side) -> bool:
 	match side:
@@ -424,3 +432,24 @@ class RemoveWaterDfs extends Dfs:
 		return true
 	func _can_go_down(i: int, _j: int) -> bool:
 		return i >= min_i
+
+func are_hints_satisfied() -> bool:
+	for i in n:
+		var hint := hint_rows[i]
+		if hint == -1:
+			continue
+		var count := 0.
+		for j in m:
+			count += _pure_cell(i, j).water_count()
+		if count != hint:
+			return false
+	for j in m:
+		var hint := hint_cols[j]
+		if hint == -1:
+			continue
+		var count := 0.
+		for i in n:
+			count += _pure_cell(i, j).water_count()
+		if count != hint:
+			return false
+	return true

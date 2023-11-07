@@ -182,3 +182,12 @@ L../.╲
 ......
 L._╲_.
 	""")
+	assert(g.hint_col(0) == -1.)
+	g.set_hint_col(0, 1.5)
+	assert(g.hint_col(0) == 1.5)
+	g.set_hint_row(1, 1.)
+	assert(g.are_hints_satisfied())
+	g.set_hint_col(2, 0.5)
+	assert(g.are_hints_satisfied())
+	g.set_hint_row(0, 0.5)
+	assert(!g.are_hints_satisfied())

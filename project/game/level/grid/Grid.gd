@@ -52,8 +52,18 @@ func wall_at(_i: int, _j: int, _side: GridModel.Side) -> bool:
 func hint_row(_i: int) -> float:
 	return GridModel.must_be_implemented()
 
+func set_hint_row(_i: int, _v: float) -> void:
+	return GridModel.must_be_implemented()
+
 # -1 if there's no hint. 0.5 for diagonals
 func hint_col(_j: int) -> float:
+	return GridModel.must_be_implemented()
+
+func set_hint_col(_j: int, _v: float) -> void:
+	return GridModel.must_be_implemented()
+
+# Is this a valid solution?
+func are_hints_satisfied() -> bool:
 	return GridModel.must_be_implemented()
 
 # Replace this grid with the one loaded from the string
