@@ -134,8 +134,48 @@ func _has_wall_right(i: int, j: int) -> bool:
 func _has_wall_left(i: int, j: int) -> bool:
 	return j == 0 or _has_wall_right(i, j - 1)
 
+func _validate(chr: String, possible: String) -> String:
+	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
+	return chr
+
 func load_from_str(s: String) -> void:
-	pass
+	var lines := s.dedent().strip_edges().split('\n', false)
+	assert(lines.size() == 2 * n, "Invalid number of rows")
+	for i in n:
+		for j in m:
+			var c1: String = _validate(lines[2 * i][2 * j], '.w')
+			var c2: String = _validate(lines[2 * i][2 * j + 1], '.w')
+			var c3: String = _validate(lines[2 * i + 1][2 * j], '.|_L')
+			var c4: String = _validate(lines[2 * i + 1][2 * j + 1], '.╲/')
+			var cell := _pure_cell(i, j)
+			cell.water_left = (c1 == 'w')
+			cell.water_right = (c2 == 'w')
+			cell.inverted = (c4 == '/')
+			cell.diag_wall = (c4 == '/' or c4 == '╲')
+			if i < n - 1:
+				wall_down[i][j] = (c3 == '_' or c3 == 'L')
+			if j > 0:
+				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 
 func to_str() -> String:
-	return ""
+	var builder := PackedStringArray()
+	for i in n:
+		for j in m:
+			var cell := _pure_cell(i, j)
+			builder.append("w" if cell.water_left else ".")
+			builder.append("w" if cell.water_right else ".")
+		builder.append("\n")
+		for j in m:
+			var left := _has_wall_left(i, j)
+			var down := _has_wall_down(i, j)
+			if left:
+				builder.append("L" if down else "|")
+			else:
+				builder.append("_" if down else ".")
+			var cell := _pure_cell(i, j)
+			if cell.diag_wall:
+				builder.append("/" if cell.inverted else "╲")
+			else:
+				builder.append(".")
+		builder.append("\n")
+	return "".join(builder)
