@@ -25,13 +25,13 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func diag_wall_at(_diag: GridModel.Diagonal) -> bool:
 		return GridModel.must_be_implemented()
-	# TODO: Not implemented
 	# Puts water in the given diagonal and floods
 	func put_water(_corner: GridModel.Corner) -> void:
 		return GridModel.must_be_implemented()
-	# TODO: Not implemented
-	# Puts air in the given diagonal and floods
+	# Puts air in the given diagonal
 	func put_air(_corner: GridModel.Corner) -> void:
+		return GridModel.must_be_implemented()
+	func remove_water_or_air(_corner: GridModel.Corner) -> void:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
@@ -85,7 +85,6 @@ func load_from_str(_s: String) -> void:
 func to_str() -> String:
 	return GridModel.must_be_implemented()
 
-# TODO: not implemented
 # Undo the latest changes. Returns true if it was possible to do so.
 func undo() -> bool:
 	return GridModel.must_be_implemented()
@@ -94,6 +93,7 @@ func undo() -> bool:
 func redo() -> bool:
 	return GridModel.must_be_implemented()
 
+# TODO: Not implemented
 # Whether all water and air is in correct places
 func is_flooded() -> bool:
 	return GridModel.must_be_implemented()

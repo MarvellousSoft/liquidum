@@ -110,6 +110,10 @@ class PureCell:
 		return put_content(corner, Content.Water)
 	func put_air(corner: GridModel.Corner) -> bool:
 		return put_content(corner, Content.Air)
+	func put_nothing(corner: GridModel.Corner) -> bool:
+		return put_content(corner, Content.Nothing)
+	func eq(other: PureCell) -> bool:
+		return c_left == other.c_left and c_right == other.c_right and inverted == other.inverted and diag_wall == other.diag_wall
 	func clone() -> PureCell:
 		var cell := PureCell.empty()
 		cell.c_left = c_left
@@ -156,15 +160,20 @@ class CellWithLoc extends GridModel.CellModel:
 	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
 		return pure.diag_wall_at(diag)
 	func put_water(corner: GridModel.Corner) -> void:
-		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
-		if pure.put_water(corner):
-			changes.append_array(grid._flood_from(i, j, corner))
+		if !water_at(corner):
+			var changes := grid._flood_from(i, j, corner, true)
 			grid._push_undo_changes(changes)
 	func put_air(corner: GridModel.Corner) -> void:
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if pure.put_air(corner):
-			changes.append_array(grid._flood_from(i, j, corner))
+			# No auto-flooding air
 			grid._push_undo_changes(changes)
+	func remove_water_or_air(corner: GridModel.Corner) -> void:
+		if water_at(corner):
+			grid._flood_from(i, j, corner, false)
+		var change := Change.new(i, j, pure.clone())
+		if pure.put_nothing(corner):
+			grid._push_undo_changes([change])
 
 func rows() -> int:
 	return n
@@ -332,26 +341,28 @@ func _push_undo_changes(changes: Array[Change]) -> void:
 	redo_stack.clear()
 	undo_stack.push_back(Changes.new(changes))
 
-func _flood_from(i: int, j: int, corner: GridModel.Corner) -> Array[Change]:
-	# "Clears" DFS lazily so we make sure we don't visit the same thing twice
-	last_seen += 1
-	if _pure_cell(i, j).water_at(corner):
-		var dfs := WaterDfs.new(self, i)
+
+func _flood_from(i: int, j: int, corner: GridModel.Corner, water: bool) -> Array[Change]:
+	if water:
+		var dfs := AddWaterDfs.new(self, i)
 		dfs.flood(i, j, corner)
 		return dfs.changes
-	elif _pure_cell(i, j).air_at(corner):
-		# TODO
+	else:
+		# RemoveWaterDfs
 		return []
-	return []
 
-class WaterDfs:
+class Dfs:
 	var grid: GridImpl
-	# Water can go up to level min_i because of physics
-	var min_i: int
 	var changes: Array[Change] = []
-	func _init(grid_: GridImpl, min_i_: int) -> void:
+	func _init(grid_: GridImpl) -> void:
 		grid = grid_
-		min_i = min_i_
+		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
+		grid.last_seen += 1
+	# Returns if it should continue going to nearby cells
+	func _cell_logic(_i: int, _j: int, _corner: GridModel.Corner, _cell: PureCell) -> bool:
+		return GridModel.must_be_implemented()
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return GridModel.must_be_implemented()
 	func flood(i: int, j: int, corner: GridModel.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
 		if cell.last_seen == grid.last_seen:
@@ -359,7 +370,8 @@ class WaterDfs:
 		cell.last_seen = grid.last_seen
 		# Try to flood the same cell
 		var prev_cell := cell.clone()
-		if cell.put_water(corner):
+		self._cell_logic(i, j, corner, cell)
+		if !cell.eq(prev_cell):
 			changes.append(Change.new(i, j, prev_cell))
 		var is_left := (corner == TopLeft or corner == BottomLeft)
 		var is_top := (corner == TopLeft or corner == TopRight)
@@ -373,5 +385,17 @@ class WaterDfs:
 		if !grid._has_wall_down(i, j) and !(cell.diag_wall and is_top):
 			flood(i + 1, j, TopRight if grid._pure_cell(i + 1, j).inverted else TopLeft)
 		# Try to flood up, if gravity helps
-		if !grid._has_wall_up(i, j) and !(cell.diag_wall and !is_top) and i - 1 >= min_i:
+		if !grid._has_wall_up(i, j) and !(cell.diag_wall and !is_top) and _can_go_up(i, j):
 			flood(i - 1, j, BottomLeft if grid._pure_cell(i - 1, j).inverted else BottomRight)
+
+class AddWaterDfs extends Dfs:
+	# Water can go up to level min_i because of physics
+	var min_i: int
+	func _init(grid_: GridImpl, min_i_: int) -> void:
+		super(grid_)
+		min_i = min_i_
+	func _cell_logic(i: int, j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+		cell.put_water(corner)
+		return true
+	func _can_go_up(i: int, _j: int) -> bool:
+		return i - 1 >= min_i
