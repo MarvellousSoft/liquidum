@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
 AudioManager="*res://audio/AudioManager.tscn"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/localization_editor/plugin.cfg")

@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=3 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
+[ext_resource type="PackedScene" uid="uid://cww4tk7afj31" path="res://game/level/Grid.tscn" id="2_yywdk"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Grid" parent="CenterContainer" instance=ExtResource("2_yywdk")]
+layout_mode = 2

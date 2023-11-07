@@ -1,0 +1,121 @@
+[gd_scene load_steps=14 format=3 uid="uid://ducq8gqvrwpyh"]
+
+[ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
+[ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/single_button_normal.png" id="2_yedx8"]
+[ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/single_button_pressed.png" id="3_b1y6m"]
+[ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/single_button_hover.png" id="4_8abky"]
+[ext_resource type="Texture2D" uid="uid://dqki8j2vmoesq" path="res://assets/images/ui/single_button_disabled.png" id="5_venyn"]
+[ext_resource type="Texture2D" uid="uid://cc5o7ctb2q2y3" path="res://assets/images/ui/diagonal_button_normal.png" id="6_tg4ma"]
+[ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/diagonal_button_pressed.png" id="7_jf17e"]
+[ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/diagonal_button_hover.png" id="8_t0be4"]
+[ext_resource type="Texture2D" uid="uid://dcyidkiwytat7" path="res://assets/images/ui/diagonal_button_disabled.png" id="9_ch1i2"]
+
+[sub_resource type="BitMap" id="BitMap_10adi"]
+
+[sub_resource type="BitMap" id="BitMap_o5egv"]
+
+[sub_resource type="BitMap" id="BitMap_w28vy"]
+
+[sub_resource type="BitMap" id="BitMap_popt5"]
+
+[node name="RegularCell" type="Control"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1920.0
+offset_bottom = -1080.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_102n5")
+
+[node name="BG" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SingleWater" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 50.0
+color = Color(0, 0, 1, 1)
+
+[node name="Buttons" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Single" type="TextureButton" parent="Buttons"]
+modulate = Color(0.0941176, 1, 1, 1)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+pivot_offset = Vector2(50, 50)
+focus_mode = 0
+texture_normal = ExtResource("2_yedx8")
+texture_pressed = ExtResource("3_b1y6m")
+texture_hover = ExtResource("4_8abky")
+texture_disabled = ExtResource("5_venyn")
+
+[node name="TopLeft" type="TextureButton" parent="Buttons"]
+modulate = Color(0.768627, 0.458824, 1, 1)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+pivot_offset = Vector2(50, 50)
+focus_mode = 0
+texture_normal = ExtResource("6_tg4ma")
+texture_pressed = ExtResource("7_jf17e")
+texture_hover = ExtResource("8_t0be4")
+texture_disabled = ExtResource("9_ch1i2")
+texture_click_mask = SubResource("BitMap_10adi")
+
+[node name="TopRight" type="TextureButton" parent="Buttons"]
+modulate = Color(1, 1, 0.34902, 1)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+focus_mode = 0
+texture_normal = ExtResource("6_tg4ma")
+texture_pressed = ExtResource("7_jf17e")
+texture_hover = ExtResource("8_t0be4")
+texture_disabled = ExtResource("9_ch1i2")
+texture_click_mask = SubResource("BitMap_o5egv")
+
+[node name="BottomRight" type="TextureButton" parent="Buttons"]
+modulate = Color(1, 0, 0.34902, 1)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+rotation = 3.14159
+pivot_offset = Vector2(50, 50)
+focus_mode = 0
+texture_normal = ExtResource("6_tg4ma")
+texture_pressed = ExtResource("7_jf17e")
+texture_hover = ExtResource("8_t0be4")
+texture_disabled = ExtResource("9_ch1i2")
+texture_click_mask = SubResource("BitMap_w28vy")
+
+[node name="BottomLeft" type="TextureButton" parent="Buttons"]
+modulate = Color(0.341176, 0.517647, 0.941176, 1)
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+rotation = -1.5708
+pivot_offset = Vector2(50, 50)
+focus_mode = 0
+texture_normal = ExtResource("6_tg4ma")
+texture_pressed = ExtResource("7_jf17e")
+texture_hover = ExtResource("8_t0be4")
+texture_disabled = ExtResource("9_ch1i2")
+texture_click_mask = SubResource("BitMap_popt5")
+
+[connection signal="pressed" from="Buttons/Single" to="." method="_on_button_pressed" binds= ["single"]]
+[connection signal="pressed" from="Buttons/TopLeft" to="." method="_on_button_pressed" binds= ["tl"]]
+[connection signal="pressed" from="Buttons/TopRight" to="." method="_on_button_pressed" binds= ["tr"]]
+[connection signal="pressed" from="Buttons/BottomRight" to="." method="_on_button_pressed" binds= ["br"]]
+[connection signal="pressed" from="Buttons/BottomLeft" to="." method="_on_button_pressed" binds= ["bl"]]
