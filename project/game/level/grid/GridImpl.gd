@@ -4,6 +4,14 @@ extends GridModel
 static func create(rows_: int, cols_: int) -> GridModel:
 	return GridImpl.new(rows_, cols_)
 
+static func from_str(s: String) -> GridModel:
+	s = s.dedent().strip_edges()
+	var rows_ := (s.count('\n') + 1) / 2
+	var cols_ := s.find('\n') / 2
+	var g := GridImpl.new(rows_, cols_)
+	g.load_from_str(s)
+	return g
+
 # Everything below is implementation details about grids.
 
 const TopLeft := GridModel.Corner.TopLeft

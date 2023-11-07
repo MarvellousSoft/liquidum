@@ -26,12 +26,7 @@ func assert_grid_eq(a: String, b: String) -> void:
 		assert(a == b)
 
 func str_grid(s: String) -> GridModel:
-	s = s.dedent().strip_edges()
-	var rows := (s.count('\n') + 1) / 2
-	var cols := s.find('\n') / 2
-	var g := GridImpl.new(rows, cols)
-	g.load_from_str(s)
-	return g
+	return GridImpl.from_str(s)
 
 func test_simple() -> void:
 	var simple := """
