@@ -1,0 +1,236 @@
+[gd_scene load_steps=8 format=3 uid="uid://bssdhtctthadv"]
+
+[ext_resource type="Script" path="res://addons/localization_editor/scenes/auto_translate/translator/LocalizationAutoTranslate.gd" id="1_cuqef"]
+[ext_resource type="Texture2D" uid="uid://byv22srd37niw" path="res://addons/localization_editor/icons/Google.png" id="2_l1peq"]
+[ext_resource type="Texture2D" uid="uid://chlw8bdg84q1m" path="res://addons/localization_editor/icons/Yandex.png" id="3_ul6cn"]
+[ext_resource type="Texture2D" uid="uid://c24qna6n2q27l" path="res://addons/localization_editor/icons/DeepL.png" id="4_142cw"]
+[ext_resource type="Texture2D" uid="uid://cfu2uuf8hh0c" path="res://addons/localization_editor/icons/Amazon.png" id="5_0oig7"]
+[ext_resource type="Texture2D" uid="uid://dekewvpr4ic2c" path="res://addons/localization_editor/icons/Microsoft.png" id="6_tal6j"]
+[ext_resource type="PackedScene" path="res://addons/ui_extensions/dropdown/Dropdown.tscn" id="7_jsbqb"]
+
+[node name="LocalizationAutotranslateGoogle" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_cuqef")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxTranslator" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/HBoxTranslator"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Translator"
+
+[node name="Translator" type="OptionButton" parent="Panel/VBox/HBoxTranslator"]
+layout_mode = 2
+tooltip_text = "Select translation engine"
+item_count = 5
+selected = 0
+popup/item_0/text = ""
+popup/item_0/icon = ExtResource("2_l1peq")
+popup/item_0/id = 0
+popup/item_1/text = ""
+popup/item_1/icon = ExtResource("3_ul6cn")
+popup/item_1/id = 1
+popup/item_1/disabled = true
+popup/item_2/text = ""
+popup/item_2/icon = ExtResource("4_142cw")
+popup/item_2/id = 2
+popup/item_3/text = ""
+popup/item_3/icon = ExtResource("5_0oig7")
+popup/item_3/id = 3
+popup/item_4/text = ""
+popup/item_4/icon = ExtResource("6_tal6j")
+popup/item_4/id = 4
+
+[node name="LinkButton" type="LinkButton" parent="Panel/VBox/HBoxTranslator"]
+layout_mode = 2
+text = "https://translate.google.com/"
+
+[node name="SaveAuth" type="CheckBox" parent="Panel/VBox/HBoxTranslator"]
+layout_mode = 2
+text = "Save Authentication Data"
+
+[node name="HBoxMicrosoft" type="HBoxContainer" parent="Panel/VBox"]
+visible = false
+layout_mode = 2
+
+[node name="LabelURL" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Base URL:
+"
+
+[node name="URL" type="OptionButton" parent="Panel/VBox/HBoxMicrosoft"]
+layout_mode = 2
+tooltip_text = "Select BAse-URL for translation service"
+item_count = 4
+selected = 0
+popup/item_0/text = "GLOBAL | api.cognitive.microsofttranslator.com"
+popup/item_0/id = 0
+popup/item_1/text = "ASIA PACIFIC | api-apc.congnitive.microsofttranslator.com"
+popup/item_1/id = 1
+popup/item_2/text = "EUROPE | api-eur.congnitive.microsofttranslator.com"
+popup/item_2/id = 2
+popup/item_3/text = "UNITED STATES | api-nam.congnitive.microsofttranslator.com"
+popup/item_3/id = 3
+
+[node name="LabelLocation" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Location:"
+
+[node name="Location" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+tooltip_text = "Location/Region for translation service"
+
+[node name="LabelKey" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "Key:"
+
+[node name="Key" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Insert Ocp-Apim-Subscription-Key for authorisation"
+secret = true
+
+[node name="VBoxAWS" type="VBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="HBoxRegion" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+layout_mode = 2
+
+[node name="LabelRegion" type="Label" parent="Panel/VBox/VBoxAWS/HBoxRegion"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Region:"
+
+[node name="Region" type="OptionButton" parent="Panel/VBox/VBoxAWS/HBoxRegion"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select BAse-URL for translation service"
+item_count = 17
+popup/item_0/text = "US East (Ohio) |  translate.us-east-2.amazonaws.com"
+popup/item_0/id = 0
+popup/item_1/text = "US East (N. Virginia) | translate.us-east-1.amazonaws.com"
+popup/item_1/id = 1
+popup/item_2/text = "US West (N. California) | translate.us-west-1.amazonaws.com"
+popup/item_2/id = 2
+popup/item_3/text = "US West (Oregon) | translate.us-west-2.amazonaws.com"
+popup/item_3/id = 3
+popup/item_4/text = "Asia Pacific (Hong Kong) | translate.ap-east-1.amazonaws.com"
+popup/item_4/id = 4
+popup/item_5/text = "Asia Pacific (Mumbai) | translate.ap-south-1.amazonaws.com"
+popup/item_5/id = 5
+popup/item_6/text = "Asia Pacific (Seoul) | translate.ap-northeast-2.amazonaws.com"
+popup/item_6/id = 6
+popup/item_7/text = "Asia Pacific (Singapore) | translate.ap-southeast-1.amazonaws.com"
+popup/item_7/id = 7
+popup/item_8/text = "Asia Pacific (Sydney) | translate.ap-southeast-2.amazonaws.com"
+popup/item_8/id = 8
+popup/item_9/text = "Asia Pacific (Tokyo) | translate.ap-northeast-1.amazonaws.com"
+popup/item_9/id = 9
+popup/item_10/text = "Canada (Central) | translate.ca-central-1.amazonaws.com"
+popup/item_10/id = 10
+popup/item_11/text = "Europe (Frankfurt) | translate.eu-central-1.amazonaws.com"
+popup/item_11/id = 11
+popup/item_12/text = "Europe (Ireland) | translate.eu-west-1.amazonaws.com"
+popup/item_12/id = 12
+popup/item_13/text = "Europe (London) | translate.eu-west-2.amazonaws.com"
+popup/item_13/id = 13
+popup/item_14/text = "Europe (Paris) | translate.eu-west-3.amazonaws.com"
+popup/item_14/id = 14
+popup/item_15/text = "Europe (Stockholm) | translate.eu-north-1.amazonaws.com"
+popup/item_15/id = 15
+popup/item_16/text = "AWS GovCloud (US-West) | translate.us-gov-west-1.amazonaws.com"
+popup/item_16/id = 16
+
+[node name="HBoxAccessKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+layout_mode = 2
+
+[node name="LabelAccessKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxAccessKey"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "AccessKey:"
+
+[node name="AccessKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxAccessKey"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Location/Region for translation service"
+secret = true
+
+[node name="HBoxSecretKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+layout_mode = 2
+
+[node name="LabelSecretKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxSecretKey"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "SecretKey:"
+
+[node name="SecretKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxSecretKey"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Insert Ocp-Apim-Subscription-Key for authorisation"
+secret = true
+
+[node name="HBoxDeepL" type="HBoxContainer" parent="Panel/VBox"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/HBoxDeepL"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Key:"
+
+[node name="DeepLKey" type="LineEdit" parent="Panel/VBox/HBoxDeepL"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Insert DeepL-Auth-Key for authorisation"
+secret = true
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="From" type="Label" parent="Panel/VBox/HBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "From:"
+
+[node name="FromLanguage" parent="Panel/VBox/HBox" instance=ExtResource("7_jsbqb")]
+layout_mode = 2
+
+[node name="To" type="Label" parent="Panel/VBox/HBox"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "To:"
+
+[node name="ToLanguage" parent="Panel/VBox/HBox" instance=ExtResource("7_jsbqb")]
+layout_mode = 2
+
+[node name="Translate" type="Button" parent="Panel/VBox/HBox"]
+layout_mode = 2
+disabled = true
+text = "Translate"
+
+[node name="Progress" type="ProgressBar" parent="Panel/VBox"]
+layout_mode = 2
