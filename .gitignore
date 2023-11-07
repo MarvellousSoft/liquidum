@@ -13,3 +13,11 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+#Steam Stuff
+
+game/addons/godotsteam/linux32/libsteam_api.so
+game/addons/godotsteam/linux64/libsteam_api.so
+game/addons/godotsteam/osx/libsteam_api.dylib
+game/addons/godotsteam/win32/steam_api64.dll
+game/addons/godotsteam/win64/steam_api64.dll
