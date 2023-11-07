@@ -27,7 +27,7 @@ func assert_grid_eq(a: String, b: String) -> void:
 
 func test_simple() -> void:
 	var simple := """
-	www.
+	wwwx
 	L../
 	...w
 	L._╲
@@ -43,6 +43,11 @@ func test_simple() -> void:
 	assert(!g.get_cell(0, 1).water_at(BottomRight))
 	assert(g.get_cell(1, 1).water_at(TopRight))
 	assert(!g.get_cell(1, 1).water_at(BottomLeft))
+	# Check air
+	assert(!g.get_cell(0, 0).air_at(TopLeft))
+	assert(!g.get_cell(0, 1).air_at(TopLeft))
+	assert(g.get_cell(0, 1).air_at(BottomRight))
+	assert(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
 	# Check diag walls
 	assert(!g.get_cell(0, 0).diag_wall_at(Major))
 	assert(g.get_cell(0, 1).diag_wall_at(Minor))

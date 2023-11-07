@@ -38,35 +38,43 @@ func _init(n_: int, m_: int) -> void:
 	for j in m:
 		hint_cols.append(-1)
 
+enum Content { Nothing, Water, Air }
+
 class PureCell:
 	# By default, uses major diagonal \, if inverted uses minor /
 	var inverted: bool
-	var water_left: bool
-	var water_right: bool
+	var c_left := Content.Nothing
+	var c_right := Content.Nothing
 	var diag_wall: bool
 	static func empty() -> PureCell:
 		return PureCell.new()
-	func water_full() -> bool:
-		return water_left and water_right
-	func water_at(corner: Grid.Corner) -> bool:
-		if water_full():
-			return true
+	func _content_at(corner: Grid.Corner) -> Content:
+		if c_left == c_right:
+			return c_left
 		match corner:
 			Corner.TopLeft:
-				return inverted and water_left
+				return c_left if inverted else Content.Nothing
 			Corner.TopRight:
-				return !inverted and water_right
+				return c_right if !inverted else Content.Nothing
 			Corner.BottomLeft:
-				return !inverted and water_left
+				return c_left if !inverted else Content.Nothing
 			Corner.BottomRight:
-				return inverted and water_right
+				return c_right if inverted else Content.Nothing
 		assert(false, "Invalid corner")
-		return false
+		return Content.Nothing
+	func water_full() -> bool:
+		return c_left == Content.Water and c_right == Content.Water
+	func water_at(corner: Grid.Corner) -> bool:
+		return _content_at(corner) == Content.Water
+	func air_full() -> bool:
+		return c_left == Content.Air and c_right == Content.Air
+	func air_at(corner: Grid.Corner) -> bool:
+		return _content_at(corner) == Content.Air
 	func diag_wall_at(diag: Grid.Diagonal) -> bool:
 		match diag:
 			Diagonal.Major: # \
 				return !inverted and diag_wall
-			Diagonal.Minor:
+			Diagonal.Minor: # /
 				return inverted and diag_wall
 		assert(false, "Invalid diagonal")
 		return false
@@ -86,6 +94,10 @@ class CellWithLoc extends Grid.Cell:
 		return pure.water_full()
 	func water_at(corner: Grid.Corner) -> bool:
 		return pure.water_at(corner)
+	func air_full() -> bool:
+		return pure.air_full()
+	func air_at(corner: Grid.Corner) -> bool:
+		return pure.air_at(corner)
 	func wall_at(side: Grid.Side) -> bool:
 		return grid.wall_at(i, j, side)
 	func diag_wall_at(diag: Grid.Diagonal) -> bool:
@@ -138,18 +150,40 @@ func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
 	return chr
 
+func _str_content(chr: String) -> Content:
+	match chr:
+		'.':
+			return Content.Nothing
+		'w':
+			return Content.Water
+		'x':
+			return Content.Air
+	assert(false, "Unknown content")
+	return Content.Nothing
+
+func _content_str(c: Content) -> String:
+	match c:
+		Content.Nothing:
+			return '.'
+		Content.Water:
+			return 'w'
+		Content.Air:
+			return 'x'
+	assert(false, "Unknown content")
+	return '?'
+
 func load_from_str(s: String) -> void:
 	var lines := s.dedent().strip_edges().split('\n', false)
 	assert(lines.size() == 2 * n, "Invalid number of rows")
 	for i in n:
 		for j in m:
-			var c1: String = _validate(lines[2 * i][2 * j], '.w')
-			var c2: String = _validate(lines[2 * i][2 * j + 1], '.w')
+			var c1: String = _validate(lines[2 * i][2 * j], '.wx')
+			var c2: String = _validate(lines[2 * i][2 * j + 1], '.wx')
 			var c3: String = _validate(lines[2 * i + 1][2 * j], '.|_L')
 			var c4: String = _validate(lines[2 * i + 1][2 * j + 1], '.╲/')
 			var cell := _pure_cell(i, j)
-			cell.water_left = (c1 == 'w')
-			cell.water_right = (c2 == 'w')
+			cell.c_left = _str_content(c1)
+			cell.c_right = _str_content(c2)
 			cell.inverted = (c4 == '/')
 			cell.diag_wall = (c4 == '/' or c4 == '╲')
 			if i < n - 1:
@@ -162,8 +196,8 @@ func to_str() -> String:
 	for i in n:
 		for j in m:
 			var cell := _pure_cell(i, j)
-			builder.append("w" if cell.water_left else ".")
-			builder.append("w" if cell.water_right else ".")
+			builder.append(_content_str(cell.c_left))
+			builder.append(_content_str(cell.c_right))
 		builder.append("\n")
 		for j in m:
 			var left := _has_wall_left(i, j)

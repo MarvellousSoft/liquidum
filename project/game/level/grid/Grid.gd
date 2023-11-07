@@ -15,6 +15,11 @@ class Cell:
 	# If full of water, all Corners return true
 	func water_at(_corner: Grid.Corner) -> bool:
 		return Grid.must_be_implemented()
+	# When user marks a tile definitely doesn't contain water
+	func air_full() -> bool:
+		return Grid.must_be_implemented()
+	func air_at(_corner: Grid.Corner) -> bool:
+		return Grid.must_be_implemented()
 	# Counts the sides of the grid as walls
 	func wall_at(_side: Grid.Side) -> bool:
 		return Grid.must_be_implemented()
@@ -49,6 +54,7 @@ func hint_col(_j: int) -> float:
 # 34
 # 1 and 2 are the contents on both left and right sides.
 # - w: water
+# - x: air (not necessary for the solution, just for tracking where there's no water)
 # - .: nothing
 # 3 is the left and bottom wall information.
 # - |: left wall only
@@ -60,7 +66,7 @@ func hint_col(_j: int) -> float:
 # - /: minor diagonal wall
 # - .: no diagonal wall
 # Example:
-# www.
+# wwwx
 # L../
 # ...w
 # L._\
