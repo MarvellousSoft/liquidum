@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
 AudioManager="*res://audio/AudioManager.tscn"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+
 [display]
 
 window/size/viewport_width=1920

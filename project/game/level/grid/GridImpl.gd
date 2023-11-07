@@ -412,7 +412,7 @@ class AddWaterDfs extends Dfs:
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
-	func _cell_logic(i: int, j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+	func _cell_logic(_i: int, _j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
 		cell.put_water(corner)
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
@@ -426,7 +426,7 @@ class RemoveWaterDfs extends Dfs:
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
-	func _cell_logic(i: int, j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+	func _cell_logic(i: int, _j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
 		# Only keep going if we changed something
 		if i <= min_i:
 			return cell.put_nothing(corner)
