@@ -16,11 +16,17 @@ func setup(n : int, m : int) -> void:
 		Columns.add_child(new_row)
 		for j in m:
 			var type = [Cell.TYPES.SINGLE, Cell.TYPES.INC_DIAG, Cell.TYPES.DEC_DIAG].pick_random()
-			var cell = create_cell(new_row, type, n, m)
+			create_cell(new_row, type, i, j)
 
 
 func create_cell(new_row : Node, type : Cell.TYPES, n : int, m : int) -> Cell:
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 	cell.setup(type, n, m)
+	cell.pressed.connect(_on_cell_pressed)
 	return cell
+
+
+func _on_cell_pressed(i, j, which):
+	printt(i,j,which)
+	

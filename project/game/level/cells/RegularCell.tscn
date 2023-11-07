@@ -9,14 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/diagonal_button_pressed.png" id="7_jf17e"]
 [ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/diagonal_button_hover.png" id="8_t0be4"]
 [ext_resource type="Texture2D" uid="uid://dcyidkiwytat7" path="res://assets/images/ui/diagonal_button_disabled.png" id="9_ch1i2"]
-
-[sub_resource type="BitMap" id="BitMap_10adi"]
-
-[sub_resource type="BitMap" id="BitMap_o5egv"]
-
-[sub_resource type="BitMap" id="BitMap_w28vy"]
-
-[sub_resource type="BitMap" id="BitMap_popt5"]
+[ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/dec_diag_hint.png" id="10_of3lx"]
+[ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/diagonal_button_mask.png" id="10_tknv5"]
+[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/left_wall.png" id="11_b6aso"]
+[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/dec_diag.png" id="12_q2grv"]
 
 [node name="RegularCell" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -48,7 +44,6 @@ color = Color(0, 0, 1, 1)
 anchors_preset = 0
 
 [node name="Single" type="TextureButton" parent="Buttons"]
-modulate = Color(0.0941176, 1, 1, 1)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -60,7 +55,6 @@ texture_hover = ExtResource("4_8abky")
 texture_disabled = ExtResource("5_venyn")
 
 [node name="TopLeft" type="TextureButton" parent="Buttons"]
-modulate = Color(0.768627, 0.458824, 1, 1)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -70,10 +64,9 @@ texture_normal = ExtResource("6_tg4ma")
 texture_pressed = ExtResource("7_jf17e")
 texture_hover = ExtResource("8_t0be4")
 texture_disabled = ExtResource("9_ch1i2")
-texture_click_mask = SubResource("BitMap_10adi")
+texture_click_mask = ExtResource("10_tknv5")
 
 [node name="TopRight" type="TextureButton" parent="Buttons"]
-modulate = Color(1, 1, 0.34902, 1)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -84,10 +77,9 @@ texture_normal = ExtResource("6_tg4ma")
 texture_pressed = ExtResource("7_jf17e")
 texture_hover = ExtResource("8_t0be4")
 texture_disabled = ExtResource("9_ch1i2")
-texture_click_mask = SubResource("BitMap_o5egv")
+texture_click_mask = ExtResource("10_tknv5")
 
 [node name="BottomRight" type="TextureButton" parent="Buttons"]
-modulate = Color(1, 0, 0.34902, 1)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -98,10 +90,9 @@ texture_normal = ExtResource("6_tg4ma")
 texture_pressed = ExtResource("7_jf17e")
 texture_hover = ExtResource("8_t0be4")
 texture_disabled = ExtResource("9_ch1i2")
-texture_click_mask = SubResource("BitMap_w28vy")
+texture_click_mask = ExtResource("10_tknv5")
 
 [node name="BottomLeft" type="TextureButton" parent="Buttons"]
-modulate = Color(0.341176, 0.517647, 0.941176, 1)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -112,7 +103,84 @@ texture_normal = ExtResource("6_tg4ma")
 texture_pressed = ExtResource("7_jf17e")
 texture_hover = ExtResource("8_t0be4")
 texture_disabled = ExtResource("9_ch1i2")
-texture_click_mask = SubResource("BitMap_popt5")
+texture_click_mask = ExtResource("10_tknv5")
+
+[node name="DiagHints" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+
+[node name="Dec" type="TextureRect" parent="DiagHints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("10_of3lx")
+
+[node name="Inc" type="TextureRect" parent="DiagHints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("10_of3lx")
+
+[node name="Walls" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+
+[node name="Top" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("11_b6aso")
+
+[node name="Right" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("11_b6aso")
+flip_h = true
+
+[node name="Bottom" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("11_b6aso")
+flip_h = true
+
+[node name="Left" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+texture = ExtResource("11_b6aso")
+
+[node name="DecDiag" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("12_q2grv")
+
+[node name="IncDiag" type="TextureRect" parent="Walls"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("12_q2grv")
+flip_h = true
 
 [connection signal="pressed" from="Buttons/Single" to="." method="_on_button_pressed" binds= ["single"]]
 [connection signal="pressed" from="Buttons/TopLeft" to="." method="_on_button_pressed" binds= ["tl"]]
