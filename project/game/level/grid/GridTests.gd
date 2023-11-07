@@ -98,3 +98,73 @@ func test_is_flooded() -> void:
 	#wwww
 	#L._.
 	#""").is_flooded())
+
+func test_put_water_one_cell() -> void:
+	var g := str_grid("..\n..")
+	g.get_cell(0, 0).put_water(BottomRight)
+	assert(g.is_flooded())
+	assert_grid_eq(g.to_str(), "ww\nL.")
+	g = str_grid("..\nL╲")
+	g.get_cell(0, 0).put_water(TopRight)
+	assert_grid_eq(g.to_str(), ".w\nL╲")
+	g.get_cell(0, 0).put_water(TopRight)
+	assert_grid_eq(g.to_str(), ".w\nL╲")
+	g.get_cell(0, 0).put_water(BottomLeft)
+	assert_grid_eq(g.to_str(), "ww\nL╲")
+	g.undo()
+	assert_grid_eq(g.to_str(), ".w\nL╲")
+	g.redo()
+	assert_grid_eq(g.to_str(), "ww\nL╲")
+
+const big_level := """
+......
+|....╲
+......
+|╲./|.
+......
+L../.╲
+......
+L._╲_.
+"""
+
+func test_put_water_big_level() -> void:
+	var g := str_grid(big_level)
+	# Test a "bucket" of water
+	g.get_cell(1, 1).put_water(TopLeft)
+	g.get_cell(2, 2).put_water(BottomLeft)
+	assert_grid_eq(g.to_str(), """
+......
+|....╲
+.ww...
+|╲./|.
+...ww.
+L../.╲
+...www
+L._╲_.
+	""")
+	# Test flooding up through "caves"
+	g.undo()
+	g.get_cell(1, 1).put_water(BottomRight)
+	assert(g.get_cell(1, 0).water_at(BottomLeft))
+	# Other direction
+	g.undo()
+	assert(!g.get_cell(1, 1).water_at(BottomRight))
+	g.get_cell(1, 0).put_water(BottomLeft)
+	assert(g.get_cell(1, 1).water_at(BottomRight))
+	g.undo()
+	g.get_cell(0, 0).put_water(TopLeft)
+	g.undo()
+	g.redo()
+	g.get_cell(3, 1).put_water(BottomLeft)
+	g.redo()
+	g.redo()
+	assert_grid_eq(g.to_str(), """
+wwwww.
+|....╲
+.ww.ww
+|╲./|.
+.....w
+L../.╲
+www...
+L._╲_.
+	""")

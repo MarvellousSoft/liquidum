@@ -6,6 +6,11 @@ static func create(rows_: int, cols_: int) -> GridModel:
 
 # Everything below is implementation details about grids.
 
+const TopLeft := GridModel.Corner.TopLeft
+const TopRight := GridModel.Corner.TopRight
+const BottomLeft := GridModel.Corner.BottomLeft
+const BottomRight := GridModel.Corner.BottomRight
+
 var n: int
 var m: int
 # NxM Array[Array[PureCell]] but GDscript doesn't support it
@@ -46,7 +51,7 @@ func _init(n_: int, m_: int) -> void:
 enum Content { Nothing, Water, Air }
 
 class PureCell:
-	# By default, uses major diagonal \, if inverted uses minor /
+	# By default, uses inc diagonal /, if inverted uses dec \
 	var inverted: bool
 	var c_left := Content.Nothing
 	var c_right := Content.Nothing
@@ -60,13 +65,13 @@ class PureCell:
 			return c_left
 		match corner:
 			Corner.TopLeft:
-				return c_left if inverted else Content.Nothing
-			Corner.TopRight:
-				return c_right if !inverted else Content.Nothing
-			Corner.BottomLeft:
 				return c_left if !inverted else Content.Nothing
-			Corner.BottomRight:
+			Corner.TopRight:
 				return c_right if inverted else Content.Nothing
+			Corner.BottomLeft:
+				return c_left if inverted else Content.Nothing
+			Corner.BottomRight:
+				return c_right if !inverted else Content.Nothing
 		assert(false, "Invalid corner")
 		return Content.Nothing
 	func water_full() -> bool:
@@ -80,23 +85,23 @@ class PureCell:
 	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
 		match diag:
 			Diagonal.Dec: # \
-				return !inverted and diag_wall
-			Diagonal.Inc: # /
 				return inverted and diag_wall
+			Diagonal.Inc: # /
+				return !inverted and diag_wall
 		assert(false, "Invalid diagonal")
 		return false
 	func put_content(corner: GridModel.Corner, content: Content) -> bool:
 		var prev_left := c_left
 		var prev_right := c_right
-		if corner == GridModel.Corner.TopLeft or corner == GridModel.Corner.BottomLeft:
+		if corner == TopLeft or corner == BottomLeft:
 			if diag_wall:
-				assert(inverted if corner == GridModel.Corner.TopLeft else !inverted, "Invalid corner")
+				assert(!inverted if corner == TopLeft else inverted, "Invalid corner")
 			else:
 				c_right = content
 			c_left = content
 		else:
 			if diag_wall:
-				assert(inverted if corner == GridModel.Corner.BottomRight else !inverted, "Invalid corner")
+				assert(!inverted if corner == BottomRight else inverted, "Invalid corner")
 			else:
 				c_left = content
 			c_right = content
@@ -112,7 +117,6 @@ class PureCell:
 		cell.inverted = inverted
 		cell.diag_wall = diag_wall
 		# last_seen doesn't need to be copied
-		print(self.get_property_list())
 		return cell
 
 class Change:
@@ -243,7 +247,7 @@ func load_from_str(s: String) -> void:
 			var cell := _pure_cell(i, j)
 			cell.c_left = _str_content(c1)
 			cell.c_right = _str_content(c2)
-			cell.inverted = (c4 == '/')
+			cell.inverted = (c4 == '╲')
 			cell.diag_wall = (c4 == '/' or c4 == '╲')
 			if i < n - 1:
 				wall_down[i][j] = (c3 == '_' or c3 == 'L')
@@ -267,7 +271,7 @@ func to_str() -> String:
 				builder.append("_" if down else ".")
 			var cell := _pure_cell(i, j)
 			if cell.diag_wall:
-				builder.append("/" if cell.inverted else "╲")
+				builder.append("╲" if cell.inverted else "/")
 			else:
 				builder.append(".")
 		builder.append("\n")
@@ -353,18 +357,21 @@ class WaterDfs:
 		if cell.last_seen == grid.last_seen:
 			return
 		cell.last_seen = grid.last_seen
-		assert(cell._content_at(corner) == Content.Water)
 		# Try to flood the same cell
 		var prev_cell := cell.clone()
 		if cell.put_water(corner):
 			changes.append(Change.new(i, j, prev_cell))
-		var is_left := (corner == GridModel.Corner.TopLeft or corner == GridModel.Corner.BottomLeft)
+		var is_left := (corner == TopLeft or corner == BottomLeft)
+		var is_top := (corner == TopLeft or corner == TopRight)
 		# Try to flood left
 		if !grid._has_wall_left(i, j) and !(cell.diag_wall and !is_left):
-			flood(i, j - 1, GridModel.Corner.BottomRight if grid._pure_cell(i, j - 1).inverted else GridModel.Corner.TopRight)
+			flood(i, j - 1, TopRight if grid._pure_cell(i, j - 1).inverted else BottomRight)
 		# Try to flood right
 		if !grid._has_wall_right(i, j) and !(cell.diag_wall and is_left):
-			flood(i, j + 1, GridModel.Corner.TopLeft if grid._pure_cell(i, j + 1).inverted else GridModel.Corner.BottomLeft)
+			flood(i, j + 1, BottomLeft if grid._pure_cell(i, j + 1).inverted else TopLeft)
 		# Try to flood down
-		#if !grid._has_wall_down(i, j) and !(cell.diag_wall and )
-		# Try to flood up
+		if !grid._has_wall_down(i, j) and !(cell.diag_wall and is_top):
+			flood(i + 1, j, TopRight if grid._pure_cell(i + 1, j).inverted else TopLeft)
+		# Try to flood up, if gravity helps
+		if !grid._has_wall_up(i, j) and !(cell.diag_wall and !is_top) and i - 1 >= min_i:
+			flood(i - 1, j, BottomLeft if grid._pure_cell(i - 1, j).inverted else BottomRight)
