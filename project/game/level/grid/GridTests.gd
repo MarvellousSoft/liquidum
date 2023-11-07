@@ -25,6 +25,15 @@ func assert_grid_eq(a: String, b: String) -> void:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
 		assert(a == b)
 
+
+func get_rows(s : String) -> int:
+	return (s.count('\n') + 1) / 2
+
+
+func get_cols(s: String) -> int:
+	return s.find('\n') / 2
+
+
 func str_grid(s: String) -> GridModel:
 	return GridImpl.from_str(s)
 

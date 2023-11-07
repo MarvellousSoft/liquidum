@@ -43,13 +43,31 @@ func setup(type : Cell.TYPES, i : int, j : int) -> void:
 		Cell.TYPES.INC_DIAG:
 			Buttons.tl.show()
 			Buttons.br.show()
-			Hints.inc.show()
+			set_wall(Cell.WALLS.INC_DIAG)
 		Cell.TYPES.DEC_DIAG:
 			Buttons.tr.show()
 			Buttons.bl.show()
-			Hints.dec.show()
+			set_wall(Cell.WALLS.DEC_DIAG)
 		_:
 			push_error("Not a valid type of cell:" + str(type))
+
+
+func set_wall(wall : Cell.WALLS) -> void:
+	match wall:
+		Cell.WALLS.TOP:
+			Walls.top.show()
+		Cell.WALLS.RIGHT:
+			Walls.right.show()
+		Cell.WALLS.BOTTOM:
+			Walls.bottom.show()
+		Cell.WALLS.LEFT:
+			Walls.left.show()
+		Cell.WALLS.INC_DIAG:
+			Walls.inc.show()
+		Cell.WALLS.DEC_DIAG:
+			Walls.dec.show()
+		_:
+			push_error("Not a valid wall:" + str(wall))
 
 
 func _on_button_pressed(which : String) -> void:

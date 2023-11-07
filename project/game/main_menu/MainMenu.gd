@@ -2,6 +2,6 @@ extends Node2D
 
 
 func _ready():
-	AudioManager.play_sfx("test")
+	get_tree().change_scene_to_file("res://game/level/Level.tscn")
 
 
