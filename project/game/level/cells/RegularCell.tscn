@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=20 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/single_water.png" id="2_gil80"]
@@ -18,6 +18,7 @@
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/diagonal_button_mask.png" id="10_tknv5"]
 [ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/left_wall.png" id="11_b6aso"]
 [ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/dec_diag.png" id="12_q2grv"]
+[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/left_wall_hint.png" id="16_r1v74"]
 
 [node name="RegularCell" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -201,25 +202,65 @@ texture_hover = ExtResource("8_t0be4")
 texture_disabled = ExtResource("9_ch1i2")
 texture_click_mask = ExtResource("10_tknv5")
 
-[node name="DiagHints" type="Control" parent="."]
+[node name="Hints" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Dec" type="TextureRect" parent="DiagHints"]
+[node name="Top" type="TextureRect" parent="Hints"]
 layout_mode = 0
+offset_top = -4.0
 offset_right = 100.0
+offset_bottom = 96.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("16_r1v74")
+
+[node name="Right" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_left = 3.0
+offset_right = 103.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("10_of3lx")
+texture = ExtResource("16_r1v74")
+flip_h = true
 
-[node name="Inc" type="TextureRect" parent="DiagHints"]
+[node name="Bottom" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 100.0
+offset_bottom = 104.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("16_r1v74")
+flip_h = true
+
+[node name="Left" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_left = -3.0
+offset_right = 97.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("16_r1v74")
+
+[node name="Inc" type="TextureRect" parent="Hints"]
+visible = false
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("10_of3lx")
+
+[node name="Dec" type="TextureRect" parent="Hints"]
+visible = false
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("10_of3lx")
 
@@ -241,8 +282,8 @@ texture = ExtResource("11_b6aso")
 
 [node name="Right" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_left = 4.0
-offset_right = 104.0
+offset_left = 3.0
+offset_right = 103.0
 offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("11_b6aso")
@@ -261,20 +302,20 @@ flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_left = -4.0
-offset_right = 96.0
+offset_left = -3.0
+offset_right = 97.0
 offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("11_b6aso")
 
-[node name="DecDiag" type="TextureRect" parent="Walls"]
+[node name="Dec" type="TextureRect" parent="Walls"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("12_q2grv")
 
-[node name="IncDiag" type="TextureRect" parent="Walls"]
+[node name="Inc" type="TextureRect" parent="Walls"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0

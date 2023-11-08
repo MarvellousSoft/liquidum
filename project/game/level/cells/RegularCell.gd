@@ -27,16 +27,20 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 	E.BottomRight: $Buttons/BottomRight,
 }
 @onready var Hints = {
-	E.Dec: $DiagHints/Dec,
-	E.Inc: $DiagHints/Inc,
+	E.Walls.Top: $Hints/Top,
+	E.Walls.Right: $Hints/Right,
+	E.Walls.Bottom: $Hints/Bottom,
+	E.Walls.Left:$Hints/Left,
+	E.Walls.DecDiag: $Hints/Dec,
+	E.Walls.IncDiag: $Hints/Inc,
 }
 @onready var Walls = {
 	E.Walls.Top: $Walls/Top,
 	E.Walls.Right: $Walls/Right,
 	E.Walls.Bottom: $Walls/Bottom,
 	E.Walls.Left:$Walls/Left,
-	E.Walls.DecDiag: $Walls/DecDiag,
-	E.Walls.IncDiag: $Walls/IncDiag,
+	E.Walls.DecDiag: $Walls/Dec,
+	E.Walls.IncDiag: $Walls/Inc,
 }
 
 var row : int
@@ -52,8 +56,6 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 		air.hide()
 	for buttons in Buttons.values():
 		buttons.hide()
-	for hint in Hints.values():
-		hint.hide()
 	for wall in Walls.values():
 		wall.hide()
 	match type:
@@ -73,7 +75,7 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 
 func set_wall(wall : E.Walls) -> void:
 	Walls[wall].show()
-
+	Hints[wall].hide()
 
 func remove_water():
 	for water in Waters.values():
