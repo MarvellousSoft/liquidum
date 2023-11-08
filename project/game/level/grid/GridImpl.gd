@@ -225,7 +225,7 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure.diag_wall_at(diag)
 	func put_water(corner: E.Corner) -> void:
 		if !water_at(corner):
-			var changes := grid._flood_from(i, j, corner, true)
+			var changes := grid._flood_water(i, j, corner, true)
 			grid._push_undo_changes(changes)
 	func put_air(corner: E.Corner, flood := false) -> void:
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
@@ -241,7 +241,7 @@ class CellWithLoc extends GridModel.CellModel:
 			grid._push_undo_changes(changes)
 	func remove_water_or_air(corner: E.Corner) -> void:
 		if water_at(corner):
-			grid._flood_from(i, j, corner, false)
+			grid._flood_water(i, j, corner, false)
 		var change := Change.new(i, j, pure.clone())
 		if pure.put_nothing(corner):
 			grid._push_undo_changes([change])
@@ -418,8 +418,8 @@ func _push_undo_changes(changes: Array[Change]) -> void:
 	undo_stack.push_back(Changes.new(changes))
 
 
-func _flood_from(i: int, j: int, corner: E.Corner, water: bool) -> Array[Change]:
-	if water:
+func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Array[Change]:
+	if add:
 		var dfs := AddWaterDfs.new(self, i)
 		dfs.flood(i, j, corner)
 		return dfs.changes
@@ -502,7 +502,10 @@ class RemoveWaterDfs extends Dfs:
 	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		# Only keep going if we changed something
 		if i <= min_i:
-			return cell.put_nothing(corner)
+			if cell.water_at(corner):
+				return cell.put_nothing(corner)
+			else:
+				return false
 		else:
 			return true
 	func _can_go_up(_i: int, _j: int) -> bool:

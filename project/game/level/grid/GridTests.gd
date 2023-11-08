@@ -241,3 +241,18 @@ func test_solver_rows() -> void:
 	.....
 	.L._.
 	"""))
+
+func test_remove_water_bug() -> void:
+	var g := str_grid("""
+	xx
+	|.
+	ww
+	L.
+	""")
+	g.get_cell(1, 0).remove_water_or_air(BottomLeft)
+	assert_grid_eq(g.to_str(), """
+	xx
+	|.
+	..
+	L.
+	""")
