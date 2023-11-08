@@ -19,3 +19,8 @@ func corner_is_left(corner: E.Corner) -> bool:
 	return corner == Corner.TopLeft or corner == Corner.BottomLeft
 func corner_is_top(corner: E.Corner) -> bool:
 	return corner == Corner.TopLeft or corner == Corner.TopRight
+func corner_to_diag(corner: E.Corner) -> E.Diagonal:
+	if corner == E.Corner.BottomLeft or corner == E.Corner.TopRight:
+		return E.Diagonal.Dec
+	else:
+		return E.Diagonal.Inc

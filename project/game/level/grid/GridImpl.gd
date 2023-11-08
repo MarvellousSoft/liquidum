@@ -76,7 +76,10 @@ class PureCell:
 		else:
 			return last_seen_right
 	func set_last_seen(corner: E.Corner, val: int) -> void:
-		if E.corner_is_left(corner):
+		if !diag_wall:
+			last_seen_left = val
+			last_seen_right = val
+		elif E.corner_is_left(corner):
 			last_seen_left = val
 		else:
 			last_seen_right = val
@@ -139,8 +142,12 @@ class PureCell:
 		return put_content(corner, Content.Air)
 	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
+	func _content_count(c: Content) -> float:
+		return 0.5 * (float(c_left == c) + float(c_right == c))
 	func water_count() -> float:
-		return 0.5 * (float(c_left == Content.Water) + float(c_right == Content.Water))
+		return _content_count(Content.Water)
+	func nothing_count() -> float:
+		return _content_count(Content.Nothing)
 	func eq(other: PureCell) -> bool:
 		return c_left == other.c_left and c_right == other.c_right and inverted == other.inverted and diag_wall == other.diag_wall
 	func clone() -> PureCell:
@@ -159,6 +166,8 @@ class PureCell:
 		return c_left == Content.Block
 	func _block_right() -> bool:
 		return c_right == Content.Block
+	func _valid_corner(corner: E.Corner) -> bool:
+		return !diag_wall or (E.corner_to_diag(corner) == E.Diagonal.Dec) == inverted
 
 class Change:
 	var i: int
@@ -204,13 +213,17 @@ class CellWithLoc extends GridModel.CellModel:
 		if !water_at(corner):
 			var changes := grid._flood_from(i, j, corner, true)
 			grid._push_undo_changes(changes)
-	func put_air(corner: E.Corner) -> void:
+	func put_air(corner: E.Corner, flood := false) -> void:
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if water_at(corner):
 			# TODO: Everything should go in the same undo
 			remove_water_or_air(corner)
 		if pure.put_air(corner):
 			# No auto-flooding air
+			if flood:
+				var dfs := AddAirDfs.new(grid)
+				dfs.flood(i, j, corner)
+				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes)
 	func remove_water_or_air(corner: E.Corner) -> void:
 		if water_at(corner):
@@ -448,6 +461,17 @@ class AddWaterDfs extends Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
+
+class AddAirDfs extends Dfs:
+	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+		cell.put_air(corner)
+		return true
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	# TODO: This is incomplete, because we need to move down through water to other "tunnels"
+	func _can_go_down(_i: int, _j: int) -> bool:
+		return false
+
 class RemoveWaterDfs extends Dfs:
 	# Remove all water at or above min_i
 	var min_i: int
@@ -507,4 +531,3 @@ func validate() -> void:
 				assert(_pure_cell(i - 1, j)._block_bottom())
 			if !_has_wall_down(i, j) and cell._block_bottom():
 				assert(_pure_cell(i + 1, j)._block_top())
-			

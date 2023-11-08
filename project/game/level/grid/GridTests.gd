@@ -190,3 +190,13 @@ func test_simple_solve() -> void:
 	g.get_cell(1, 2).put_water(BottomLeft)
 	# Successfully solved, hooray!
 	assert(g.are_hints_satisfied())
+	g.undo()
+	g.undo()
+	assert(!g.are_hints_satisfied())
+	SolverModel.new().apply_strategies(g)
+	assert_grid_eq(g.to_str(), """
+	x.....
+	|╲_/./
+	xxxxww
+	L._.L.
+	""")
