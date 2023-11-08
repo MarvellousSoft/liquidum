@@ -84,7 +84,7 @@ class PureCell:
 		else:
 			last_seen_right = val
 	func _content_at(corner: E.Corner) -> Content:
-		if c_left == c_right:
+		if c_left == c_right and !diag_wall:
 			return c_left
 		match corner:
 			E.TopLeft:
@@ -97,18 +97,20 @@ class PureCell:
 				return c_right if !inverted else Content.Nothing
 		assert(false, "Invalid corner")
 		return Content.Nothing
+	func _content_full(content: Content) -> bool:
+		return !diag_wall and c_left == content and c_right == content
 	func water_full() -> bool:
-		return c_left == Content.Water and c_right == Content.Water
+		return _content_full(Content.Water)
 	func water_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Water
 	func air_full() -> bool:
-		return c_left == Content.Air and c_right == Content.Air
+		return _content_full(Content.Air)
 	func air_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Air
 	func nothing_full() -> bool:
-		return c_left == Content.Nothing and c_right == Content.Nothing
+		return _content_full(Content.Nothing)
 	func block_full() -> bool:
-		return c_left == Content.Block and c_right == Content.Block
+		return _content_full(Content.Block)
 	func block_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Block
 	func diag_wall_at(diag: E.Diagonal) -> bool:
