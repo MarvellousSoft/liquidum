@@ -21,6 +21,7 @@ func setup(level : String) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
+	update_visuals()
 
 
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
@@ -62,7 +63,7 @@ func get_cell(i: int, j: int) -> Node:
 func _on_cell_pressed(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
 	var cell_data := grid_logic.get_cell(i, j)
-	var corner = E.BottomLeft if which == E.Single else which
+	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.water_at(corner):
 		cell_data.remove_water_or_air(corner)
 	else:

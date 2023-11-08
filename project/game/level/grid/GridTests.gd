@@ -1,4 +1,7 @@
 class_name GridTests
+extends Node
+
+signal show_grids(g1: String, g2: String)
 
 const TopLeft := E.Corner.TopLeft
 const TopRight := E.Corner.TopRight
@@ -11,19 +14,32 @@ const Bottom := E.Side.Bottom
 const Dec := E.Diagonal.Dec
 const Inc := E.Diagonal.Inc
 
+var fail := 0
+
 func run_all_tests() -> void:
 	for method in get_method_list():
-		var name: String = method["name"]
-		if name.begins_with("test_"):
-			print("Running %s" % name)
-			call(name)
+		var t_name: String = method["name"]
+		if t_name.begins_with("test_"):
+			print("Running %s" % t_name)
+			call(t_name)
+			assert(fail == 0)
+
+func check(cond: bool) -> void:
+	if not cond and fail == 0:
+		assert(false)
+
+func fail_later_if(cond: bool) -> void:
+	if cond:
+		fail += 1
 
 func assert_grid_eq(a: String, b: String) -> void:
 	a = a.dedent().strip_edges()
 	b = b.dedent().strip_edges()
 	if a != b:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
-		assert(a == b)
+		show_grids.emit(a, b)
+		
+		fail_later_if(a == b)
 
 
 func get_rows(s : String) -> int:
@@ -45,45 +61,45 @@ func test_simple() -> void:
 	L╲_╲
 	"""
 	var g := GridImpl.create(2, 2)
-	assert(!g.get_cell(0, 0).water_full())
+	check(!g.get_cell(0, 0).water_full())
 	g.load_from_str(simple)
 	# Check waters make sense
-	assert(g.get_cell(0, 0).water_full())
+	check(g.get_cell(0, 0).water_full())
 	for corner in [BottomLeft, BottomRight, TopLeft, TopRight]:
-		assert(g.get_cell(0, 0).water_at(corner))
-	assert(g.get_cell(0, 1).water_at(TopLeft))
-	assert(!g.get_cell(0, 1).water_at(BottomRight))
-	assert(g.get_cell(1, 1).water_at(TopRight))
-	assert(!g.get_cell(1, 1).water_at(BottomLeft))
+		check(g.get_cell(0, 0).water_at(corner))
+	check(g.get_cell(0, 1).water_at(TopLeft))
+	check(!g.get_cell(0, 1).water_at(BottomRight))
+	check(g.get_cell(1, 1).water_at(TopRight))
+	check(!g.get_cell(1, 1).water_at(BottomLeft))
 	# Check air
-	assert(!g.get_cell(0, 0).air_at(TopLeft))
-	assert(!g.get_cell(0, 1).air_at(TopLeft))
-	assert(g.get_cell(0, 1).air_at(BottomRight))
-	assert(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
-	assert(g.is_flooded())
+	check(!g.get_cell(0, 0).air_at(TopLeft))
+	check(!g.get_cell(0, 1).air_at(TopLeft))
+	check(g.get_cell(0, 1).air_at(BottomRight))
+	check(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
+	check(g.is_flooded())
 	# Check block
-	assert(!g.get_cell(1, 0).block_full())
-	assert(g.get_cell(1, 0).block_at(BottomLeft))
+	check(!g.get_cell(1, 0).block_full())
+	check(g.get_cell(1, 0).block_at(BottomLeft))
 	# Check diag walls
-	assert(!g.get_cell(0, 0).diag_wall_at(Dec))
-	assert(g.get_cell(0, 1).diag_wall_at(Inc))
-	assert(!g.get_cell(0, 1).diag_wall_at(Dec))
-	assert(g.get_cell(1, 1).diag_wall_at(Dec))
+	check(!g.get_cell(0, 0).diag_wall_at(Dec))
+	check(g.get_cell(0, 1).diag_wall_at(Inc))
+	check(!g.get_cell(0, 1).diag_wall_at(Dec))
+	check(g.get_cell(1, 1).diag_wall_at(Dec))
 	# Check walls
-	assert(g.get_cell(0, 0).wall_at(Left))
-	assert(!g.get_cell(0, 0).wall_at(Right))
-	assert(g.get_cell(0, 0).wall_at(Bottom))
-	assert(g.get_cell(0, 0).wall_at(Top))
-	assert(!g.get_cell(1, 1).wall_at(Left))
-	assert(g.get_cell(1, 1).wall_at(Right))
+	check(g.get_cell(0, 0).wall_at(Left))
+	check(!g.get_cell(0, 0).wall_at(Right))
+	check(g.get_cell(0, 0).wall_at(Bottom))
+	check(g.get_cell(0, 0).wall_at(Top))
+	check(!g.get_cell(1, 1).wall_at(Left))
+	check(g.get_cell(1, 1).wall_at(Right))
 
 	assert_grid_eq(simple, g.to_str())
 
 func test_put_water_one_cell() -> void:
 	var g := str_grid("..\n..")
-	assert(g.get_cell(0, 0).nothing_full())
+	check(g.get_cell(0, 0).nothing_full())
 	g.get_cell(0, 0).put_water(BottomRight)
-	assert(g.is_flooded())
+	check(g.is_flooded())
 	assert_grid_eq(g.to_str(), "ww\nL.")
 	g = str_grid("..\nL╲")
 	g.get_cell(0, 0).put_water(TopRight)
@@ -126,12 +142,12 @@ L╲_╲_.
 	# Test flooding up through "caves"
 	g.undo()
 	g.get_cell(1, 1).put_water(BottomRight)
-	assert(g.get_cell(1, 0).water_at(BottomLeft))
+	check(g.get_cell(1, 0).water_at(BottomLeft))
 	# Other direction
 	g.undo()
-	assert(!g.get_cell(1, 1).water_at(BottomRight))
+	check(!g.get_cell(1, 1).water_at(BottomRight))
 	g.get_cell(1, 0).put_water(BottomLeft)
-	assert(g.get_cell(1, 1).water_at(BottomRight))
+	check(g.get_cell(1, 1).water_at(BottomRight))
 	g.undo()
 	g.get_cell(0, 0).put_water(TopLeft)
 	g.undo()
@@ -163,15 +179,15 @@ L../.╲
 #.....
 L╲_╲_.
 	""")
-	assert(g.hint_col(0) == -1.)
+	check(g.hint_col(0) == -1.)
 	g.set_hint_col(0, 1.5)
-	assert(g.hint_col(0) == 1.5)
+	check(g.hint_col(0) == 1.5)
 	g.set_hint_row(1, 1.)
-	assert(g.are_hints_satisfied())
+	check(g.are_hints_satisfied())
 	g.set_hint_col(2, 0.5)
-	assert(g.are_hints_satisfied())
+	check(g.are_hints_satisfied())
 	g.set_hint_row(0, 0.5)
-	assert(!g.are_hints_satisfied())
+	check(!g.are_hints_satisfied())
 
 func test_simple_solve() -> void:
 	var g := str_grid("""
@@ -181,23 +197,39 @@ func test_simple_solve() -> void:
 	2......
 	.L._.L.
 """)
-	assert(!g.are_hints_satisfied())
-	assert(g.hint_col(0) == -1.)
-	assert(g.hint_col(1) == 0.5)
-	assert(g.hint_col(2) == 1.5)
-	assert(g.hint_row(0) == 1.)
-	assert(g.hint_row(1) == 1.)
+	check(!g.are_hints_satisfied())
+	check(g.hint_col(0) == -1.)
+	check(g.hint_col(1) == 0.5)
+	check(g.hint_col(2) == 1.5)
+	check(g.hint_row(0) == 1.)
+	check(g.hint_row(1) == 1.)
 	g.get_cell(0, 1).put_water(BottomRight)
 	g.get_cell(1, 2).put_water(BottomLeft)
 	# Successfully solved, hooray!
-	assert(g.are_hints_satisfied())
+	check(g.are_hints_satisfied())
 	g.undo()
 	g.undo()
-	assert(!g.are_hints_satisfied())
+	check(!g.are_hints_satisfied())
 	SolverModel.new().apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
 	x.....
 	|╲_/./
 	xxxxww
 	L._.L.
+	""")
+
+func test_solver_rows() -> void:
+	var g := str_grid("""
+	.....
+	2....
+	.L.|.
+	3....
+	.L._╲
+	""")
+	SolverModel.new().apply_strategies(g)
+	assert_grid_eq(g.to_str(), """
+	wwxx
+	L.|.
+	wwwx
+	L._╲
 	""")

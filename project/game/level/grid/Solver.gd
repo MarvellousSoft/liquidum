@@ -6,8 +6,9 @@ class RowStrategy:
 	func _init(grid_: GridImpl) -> void:
 		grid = grid_
 	# values is an array of component, that is, all triangles
-	# are in the same aquarium. Since this is a row. Flooding any one will flood
-	# the whole thing.
+	# are in the same aquarium. Each of the triangles in the component MUST be
+	# flooded all at once with water or air. Each distinct componene IS completely
+	# independent.
 	func _apply_strategy(_values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
@@ -72,16 +73,23 @@ class RowDfs extends GridImpl.Dfs:
 class BasicRowStrategy extends RowStrategy:
 	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
-			print("Filling with water")
 			for comp in values:
-				print("size %f, i %d j %d" % [comp.size, comp.first.i, comp.first.j])
 				comp.put_water()
 			return true
 		var any := false
 		for comp in values:
 			if comp.size > water_left:
-				print("Putting air because %f > %f" % [comp.size, water_left])
 				comp.put_air()
+				any = true
+		return any
+
+# If a component is so big it MUST be filled, fill it.
+class MediumRowStrategy extends RowStrategy:
+	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+		var any := false
+		for comp in values:
+			if comp.size <= water_left and (nothing_left - comp.size) < water_left:
+				comp.put_water()
 				any = true
 		return any
 
@@ -92,6 +100,7 @@ func apply_strategies(grid: GridModel) -> void:
 			# Is this true?
 			assert(false, "Can't solve partial grid")
 			return
-	var strategy := BasicRowStrategy.new(grid)
-	while strategy.apply_any():
+	var basic := BasicRowStrategy.new(grid)
+	var medium := MediumRowStrategy.new(grid)
+	while [basic, medium].any(func(s): return s.apply_any()):
 		print("1 pass")
