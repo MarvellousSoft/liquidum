@@ -105,6 +105,8 @@ class PureCell:
 		return c_left == Content.Air and c_right == Content.Air
 	func air_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Air
+	func nothing_full() -> bool:
+		return c_left == Content.Nothing and c_right == Content.Nothing
 	func block_full() -> bool:
 		return c_left == Content.Block and c_right == Content.Block
 	func block_at(corner: E.Corner) -> bool:

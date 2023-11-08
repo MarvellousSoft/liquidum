@@ -11,6 +11,8 @@ class RowStrategy:
 	func _apply_strategy(_values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
+		if grid.hint_row(i) < 0:
+			return false
 		var dfs := RowDfs.new(i, grid)
 		var last_seen := grid.last_seen
 		var comps: Array[RowComponent] = []
