@@ -17,6 +17,8 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func air_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
+	func nothing_full() -> bool:
+		return GridModel.must_be_implemented()
 	func block_full() -> bool:
 		return GridModel.must_be_implemented()
 	func block_at(_corner: E.Corner) -> bool:

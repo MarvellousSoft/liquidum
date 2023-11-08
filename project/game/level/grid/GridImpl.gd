@@ -203,6 +203,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure.air_full()
 	func air_at(corner: E.Corner) -> bool:
 		return pure.air_at(corner)
+	func nothing_full() -> bool:
+		return pure.nothing_full()
 	func block_full() -> bool:
 		return pure.block_full()
 	func block_at(corner: E.Corner) -> bool:

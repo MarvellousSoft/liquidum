@@ -81,6 +81,7 @@ func test_simple() -> void:
 
 func test_put_water_one_cell() -> void:
 	var g := str_grid("..\n..")
+	assert(g.get_cell(0, 0).nothing_full())
 	g.get_cell(0, 0).put_water(BottomRight)
 	assert(g.is_flooded())
 	assert_grid_eq(g.to_str(), "ww\nL.")
