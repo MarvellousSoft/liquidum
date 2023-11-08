@@ -219,6 +219,7 @@ func test_simple_solve() -> void:
 	""")
 
 func test_solver_rows() -> void:
+	var solver := SolverModel.new()
 	var g := str_grid("""
 	.....
 	2....
@@ -226,10 +227,17 @@ func test_solver_rows() -> void:
 	3....
 	.L._╲
 	""")
-	SolverModel.new().apply_strategies(g)
+	solver.apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
 	wwxx
 	L.|.
 	wwwx
 	L._╲
 	""")
+	solver.apply_strategies(str_grid("""
+	.....
+	2.ww.
+	.|╲./
+	.....
+	.L._.
+	"""))

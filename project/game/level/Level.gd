@@ -19,3 +19,7 @@ func _ready():
 
 func setup(level : String):
 	GridNode.setup(level)
+
+
+func _on_solve_button_pressed():
+	GridNode.auto_solve()

@@ -12,3 +12,12 @@ offset_bottom = 1080.0
 
 [node name="Grid" parent="CenterContainer" instance=ExtResource("2_yywdk")]
 layout_mode = 2
+
+[node name="SolveButton" type="Button" parent="."]
+offset_left = 147.0
+offset_top = 521.0
+offset_right = 308.0
+offset_bottom = 591.0
+text = "Auto-solve!"
+
+[connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]

@@ -8,7 +8,7 @@ const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 	"left": $CenterContainer/GridContainer/HintBarLeft,
 }
 
-var grid_logic : GridImpl
+var grid_logic : GridModel
 var rows : int
 var columns : int
 
@@ -27,6 +27,10 @@ func setup(level : String) -> void:
 			create_cell(new_row, cell_data, i, j)
 	update_visuals()
 	setup_hints()
+
+func auto_solve() -> void:
+	SolverModel.new().apply_strategies(grid_logic)
+	update_visuals()
 
 #Assumes grid_logic is already setup
 func setup_hints():

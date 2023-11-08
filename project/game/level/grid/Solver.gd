@@ -20,7 +20,7 @@ class RowStrategy:
 		for j in grid.cols():
 			for corner in E.Corner.values():
 				var cell := grid._pure_cell(i, j)
-				if cell.last_seen(corner) < grid.last_seen and cell._valid_corner(corner):
+				if cell.last_seen(corner) < grid.last_seen and cell._valid_corner(corner) and cell.nothing_at(corner):
 					dfs.comp = RowComponent.new(grid.get_cell(i, j), corner)
 					dfs.flood(i, j, corner)
 					if dfs.comp.size > 0:
@@ -29,7 +29,7 @@ class RowStrategy:
 		for j in grid.cols():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
 		var water_left := grid.hint_row(i) - grid.count_water_row(i)
-		if nothing_left == 0 or comps.size() == 0:
+		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(comps, water_left, nothing_left)
 	func apply_any() -> bool:
@@ -47,8 +47,10 @@ class RowComponent:
 		first = first_
 		corner = corner_
 	func put_water() -> void:
+		print("Put water on (%d, %d)" % [first.i, first.j])
 		first.put_water(corner)
 	func put_air() -> void:
+		print("Put air on (%d, %d)" % [first.i, first.j])
 		first.put_air(corner, true)
 
 class RowDfs extends GridImpl.Dfs:
@@ -95,12 +97,11 @@ class MediumRowStrategy extends RowStrategy:
 
 # Tries to solve the puzzle as much as possible
 func apply_strategies(grid: GridModel) -> void:
-	for i in grid.rows():
-		if grid.count_water_row(i) > 0:
-			# Is this true?
-			assert(false, "Can't solve partial grid")
-			return
 	var basic := BasicRowStrategy.new(grid)
 	var medium := MediumRowStrategy.new(grid)
-	while [basic, medium].any(func(s): return s.apply_any()):
+	for _i in 50:
+		if not [basic, medium].any(func(s): return s.apply_any()):
+			return
+		print(grid.to_str())
 		print("1 pass")
+		assert(_i < 20)
