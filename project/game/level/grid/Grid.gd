@@ -67,6 +67,12 @@ func set_hint_col(_j: int, _v: float) -> void:
 func are_hints_satisfied() -> bool:
 	return GridModel.must_be_implemented()
 
+func count_water_row(_i: int) -> float:
+	return GridModel.must_be_implemented()
+
+func count_water_col(_j: int) -> float:
+	return GridModel.must_be_implemented()
+
 # Replace this grid with the one loaded from the string
 # The string should be a 2Nx2M grid, each cell represented by 4 characters
 # 12

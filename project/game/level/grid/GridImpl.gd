@@ -66,9 +66,20 @@ class PureCell:
 	var c_right := Content.Nothing
 	var diag_wall: bool
 	# Last seen by a dfs
-	var last_seen := 0
+	var last_seen_left := 0
+	var last_seen_right := 0
 	static func empty() -> PureCell:
 		return PureCell.new()
+	func last_seen(corner: E.Corner) -> int:
+		if E.corner_is_left(corner):
+			return last_seen_left
+		else:
+			return last_seen_right
+	func set_last_seen(corner: E.Corner, val: int) -> void:
+		if E.corner_is_left(corner):
+			last_seen_left = val
+		else:
+			last_seen_right = val
 	func _content_at(corner: E.Corner) -> Content:
 		if c_left == c_right:
 			return c_left
@@ -400,9 +411,9 @@ class Dfs:
 		return GridModel.must_be_implemented()
 	func flood(i: int, j: int, corner: E.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
-		if cell.last_seen == grid.last_seen:
+		if cell.last_seen(corner) == grid.last_seen:
 			return
-		cell.last_seen = grid.last_seen
+		cell.set_last_seen(corner, grid.last_seen)
 		# Try to flood the same cell
 		var prev_cell := cell.clone()
 		self._cell_logic(i, j, corner, cell)
@@ -454,24 +465,30 @@ class RemoveWaterDfs extends Dfs:
 	func _can_go_down(i: int, _j: int) -> bool:
 		return i >= min_i
 
+func count_water_row(i: int) -> float:
+	var count := 0.
+	for j in m:
+		count += _pure_cell(i, j).water_count()
+	return count
+
+func count_water_col(j: int) -> float:
+	var count := 0.
+	for i in n:
+		count += _pure_cell(i, j).water_count()
+	return count
+
 func are_hints_satisfied() -> bool:
 	for i in n:
 		var hint := hint_rows[i]
 		if hint == -1:
 			continue
-		var count := 0.
-		for j in m:
-			count += _pure_cell(i, j).water_count()
-		if count != hint:
+		if count_water_row(i) != hint:
 			return false
 	for j in m:
 		var hint := hint_cols[j]
 		if hint == -1:
 			continue
-		var count := 0.
-		for i in n:
-			count += _pure_cell(i, j).water_count()
-		if count != hint:
+		if count_water_col(j) != hint:
 			return false
 	return true
 

@@ -1,3 +1,4 @@
+extends Node
 # These enums are made to be used interchangeably because they always have the same values.
 # So be very careful when changing the order of elements.
 # If necessary for type checking, you can cast between them, like:
@@ -13,3 +14,8 @@ enum Diagonal { Inc = 9, Dec }
 enum CellType { IncDiag = 9, DecDiag, Single}
 enum Walls {Top = 1, Right, Bottom, Left, IncDiag = 9, DecDiag}
 enum Waters {TopLeft = 5, TopRight, BottomRight, BottomLeft, Single = 11, None}
+
+func corner_is_left(corner: E.Corner) -> bool:
+	return corner == Corner.TopLeft or corner == Corner.BottomLeft
+func corner_is_top(corner: E.Corner) -> bool:
+	return corner == Corner.TopLeft or corner == Corner.TopRight
