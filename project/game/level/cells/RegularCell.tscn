@@ -210,38 +210,16 @@ mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_top = -4.0
 offset_right = 100.0
-offset_bottom = 96.0
-rotation = 1.5708
-pivot_offset = Vector2(50, 50)
-mouse_filter = 2
-texture = ExtResource("16_r1v74")
-
-[node name="Right" type="TextureRect" parent="Hints"]
-layout_mode = 0
-offset_left = 3.0
-offset_right = 103.0
 offset_bottom = 100.0
-mouse_filter = 2
-texture = ExtResource("16_r1v74")
-flip_h = true
-
-[node name="Bottom" type="TextureRect" parent="Hints"]
-layout_mode = 0
-offset_top = 4.0
-offset_right = 100.0
-offset_bottom = 104.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("16_r1v74")
-flip_h = true
 
 [node name="Left" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_left = -3.0
-offset_right = 97.0
+offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("16_r1v74")

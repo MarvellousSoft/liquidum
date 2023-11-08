@@ -18,14 +18,24 @@ func _ready():
 
 func setup(hints : Array):
 	var bar = Horizontal if is_horizontal else Vertical
-	for hint in hints:
+	for idx in hints.size():
+		var hint = hints[idx]
 		var new_hint = HINT.instantiate()
 		bar.add_child(new_hint)
+		#Set value
 		if hint == -1:
 			new_hint.no_hint()
 		else:
 			new_hint.set_value(hint)
-
+		#Set graphical hints
+		if is_horizontal:
+			new_hint.set_hint_visibility(E.Top, false)
+			if idx == 0:
+				new_hint.set_hint_visibility(E.Left, false)
+		else:
+			new_hint.set_hint_visibility(E.Left, false)
+			if idx == 0:
+				new_hint.set_hint_visibility(E.Top, false)
 
 func get_hint(idx : int) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical

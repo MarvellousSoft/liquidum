@@ -28,8 +28,6 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 }
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
-	E.Walls.Right: $Hints/Right,
-	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 	E.Walls.DecDiag: $Hints/Dec,
 	E.Walls.IncDiag: $Hints/Inc,
@@ -75,7 +73,8 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 
 func set_wall(wall : E.Walls) -> void:
 	Walls[wall].show()
-	Hints[wall].hide()
+	if Hints.has(wall):
+		Hints[wall].hide()
 
 func remove_water():
 	for water in Waters.values():

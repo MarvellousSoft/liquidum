@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://sogub73jvlos"]
+[gd_scene load_steps=3 format=3 uid="uid://sogub73jvlos"]
 
 [ext_resource type="Script" path="res://Hint.gd" id="1_p6546"]
+[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/left_wall_hint.png" id="2_8gvav"]
 
 [node name="Hint" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -13,6 +14,24 @@ offset_bottom = -980.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p6546")
+
+[node name="Hints" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Top" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("2_8gvav")
+
+[node name="Left" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("2_8gvav")
 
 [node name="Number" type="Label" parent="."]
 layout_mode = 0

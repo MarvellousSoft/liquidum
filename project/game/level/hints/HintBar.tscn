@@ -18,6 +18,7 @@ script = ExtResource("1_tfe5l")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_constants/separation = 0
 
 [node name="Hint" parent="Horizontal" instance=ExtResource("2_fgutn")]
 layout_mode = 2
@@ -35,6 +36,7 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+theme_override_constants/separation = 0
 
 [node name="Hint" parent="Vertical" instance=ExtResource("2_fgutn")]
 layout_mode = 2
