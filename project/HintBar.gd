@@ -15,6 +15,7 @@ func _ready():
 	for child in Horizontal.get_children():
 		Horizontal.remove_child(child)
 
+
 func setup(hints : Array):
 	var bar = Horizontal if is_horizontal else Vertical
 	for hint in hints:
@@ -24,3 +25,9 @@ func setup(hints : Array):
 			new_hint.no_hint()
 		else:
 			new_hint.set_value(hint)
+
+
+func get_hint(idx : int) -> Node:
+	var bar = Horizontal if is_horizontal else Vertical
+	assert(idx < bar.get_child_count(), "Not a valid index to get hint:" + str(idx))
+	return bar.get_child(idx)

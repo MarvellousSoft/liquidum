@@ -25,12 +25,12 @@ func setup(level : String) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
-	update_visuals()
 	setup_hints()
+	update()
 
 func auto_solve() -> void:
 	SolverModel.new().apply_strategies(grid_logic)
-	update_visuals()
+	update()
 
 #Assumes grid_logic is already setup
 func setup_hints():
@@ -58,6 +58,11 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	return cell
 
 
+func update() -> void:
+	update_visuals()
+	update_hints()
+
+
 func update_visuals() -> void:
 	for i in rows:
 		for j in columns:
@@ -78,6 +83,24 @@ func update_visuals() -> void:
 					cell.set_air(corner, cell_data.air_at(corner))
 
 
+func update_hints() -> void:
+	for i in rows:
+		var hint = HintBars.left.get_hint(i)
+		if grid_logic.is_row_hint_wrong(i):
+			hint.set_error()
+		elif grid_logic.is_row_hint_satisfied(i):
+			hint.set_satisfied()
+		else:
+			hint.set_normal()
+	for j in columns:
+		var hint = HintBars.top.get_hint(j)
+		if grid_logic.is_col_hint_wrong(j):
+			hint.set_error()
+		elif grid_logic.is_col_hint_satisfied(j):
+			hint.set_satisfied()
+		else:
+			hint.set_normal()
+
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
@@ -90,7 +113,7 @@ func _on_cell_pressed_water(i: int, j: int, which: E.Waters) -> void:
 		cell_data.remove_water_or_air(corner)
 	else:
 		cell_data.put_water(corner)
-	update_visuals()
+	update()
 
 
 func _on_cell_pressed_air(i: int, j: int, which: E.Waters) -> void:
@@ -101,5 +124,5 @@ func _on_cell_pressed_air(i: int, j: int, which: E.Waters) -> void:
 		cell_data.remove_water_or_air(corner)
 	else:
 		cell_data.put_air(corner)
-	update_visuals()
+	update()
 

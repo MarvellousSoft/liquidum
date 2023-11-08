@@ -531,6 +531,30 @@ func are_hints_satisfied() -> bool:
 			return false
 	return true
 
+func is_row_hint_wrong(i : int) -> bool:
+	var hint := hint_rows[i]
+	if hint == -1:
+		return false
+	return count_water_row(i) > hint
+
+func is_col_hint_wrong(j : int) -> bool:
+	var hint := hint_cols[j]
+	if hint == -1:
+		return false
+	return count_water_col(j) > hint
+
+func is_row_hint_satisfied(i : int) -> bool:
+	var hint := hint_rows[i]
+	if hint == -1:
+		return true
+	return count_water_row(i) == hint
+
+func is_col_hint_satisfied(j : int) -> bool:
+	var hint := hint_cols[j]
+	if hint == -1:
+		return true
+	return count_water_col(j) == hint
+
 func validate() -> void:
 	# For now, just check all blocks are surrounded by walls
 	for i in n:
