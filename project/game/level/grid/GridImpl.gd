@@ -148,6 +148,12 @@ class PureCell:
 		return put_content(corner, Content.Air)
 	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
+	func _content_count_from(c: Content, corner: E.Corner) -> float:
+		if !diag_wall:
+			return _content_count(c)
+		if !_valid_corner(corner):
+			return 0.
+		return 0.5 * (float(c == c_left) if E.corner_is_left(corner) else float(c == c_right))
 	func _content_count(c: Content) -> float:
 		return 0.5 * (float(c_left == c) + float(c_right == c))
 	func water_count() -> float:
@@ -446,8 +452,8 @@ class Dfs:
 		self._cell_logic(i, j, corner, cell)
 		if !cell.eq(prev_cell):
 			changes.append(Change.new(i, j, prev_cell))
-		var is_left := (corner == TopLeft or corner == BottomLeft)
-		var is_top := (corner == TopLeft or corner == TopRight)
+		var is_left := E.corner_is_left(corner)
+		var is_top := E.corner_is_top(corner)
 		# Try to flood left
 		if !grid._has_wall_left(i, j) and !(cell.diag_wall and !is_left):
 			flood(i, j - 1, TopRight if grid._pure_cell(i, j - 1).inverted else BottomRight)
