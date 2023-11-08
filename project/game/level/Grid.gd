@@ -48,7 +48,7 @@ func update_visuals() -> void:
 			var cell := get_cell(i, j) as Cell
 			if cell_data.water_full():
 				cell.set_water(E.Single, true)
-			elif cell_data.air_full():
+			elif cell_data.nothing_full():
 				cell.remove_water()
 			else:
 				for corner in E.Corner.values():
