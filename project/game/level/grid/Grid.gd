@@ -88,11 +88,22 @@ func are_hints_satisfied() -> bool:
 # - ╲: major diagonal wall (fancy unicode ╲ to avoid escaping on strings)
 # - /: minor diagonal wall
 # - .: no diagonal wall
+# If hints are desired, the string should be a (2N+1)x(2M+1) grid, and the first row and
+# first column should contain the hints multiplied by two. The hints are integers, up to
+# two characters long. (That's because hints in the actual game increment by 0.5)
+# The other characters must be '.', and any row or column may not have a hint.
+# (If the row hint has two characters, it must be one per line.)
 # Example:
 # wwwx
 # L../
 # #..w
-# L._\
+# L._╲
+# Example with hints:
+# ...1.3.
+# 2......
+# .|╲_/./
+# 2......
+# .L._.L.
 func load_from_str(_s: String) -> void:
 	return GridModel.must_be_implemented()
 

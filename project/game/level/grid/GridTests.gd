@@ -171,3 +171,22 @@ L╲_╲_.
 	assert(g.are_hints_satisfied())
 	g.set_hint_row(0, 0.5)
 	assert(!g.are_hints_satisfied())
+
+func test_simple_solve() -> void:
+	var g := str_grid("""
+	...1.3.
+	2......
+	.|╲_/./
+	2......
+	.L._.L.
+""")
+	assert(!g.are_hints_satisfied())
+	assert(g.hint_col(0) == -1.)
+	assert(g.hint_col(1) == 0.5)
+	assert(g.hint_col(2) == 1.5)
+	assert(g.hint_row(0) == 1.)
+	assert(g.hint_row(1) == 1.)
+	g.get_cell(0, 1).put_water(BottomRight)
+	g.get_cell(1, 2).put_water(BottomLeft)
+	# Successfully solved, hooray!
+	assert(g.are_hints_satisfied())

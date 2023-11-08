@@ -6,6 +6,7 @@ static func create(rows_: int, cols_: int) -> GridModel:
 
 static func from_str(s: String) -> GridModel:
 	s = s.dedent().strip_edges()
+	# Integer division round down makes this work even with hints
 	var rows_ := (s.count('\n') + 1) / 2
 	var cols_ := s.find('\n') / 2
 	var g := GridImpl.new(rows_, cols_)
@@ -286,15 +287,31 @@ func _content_str(c: Content) -> String:
 	assert(false, "Unknown content")
 	return '?'
 
+func _validate_hint(c1: String, c2: String) -> float:
+	c1 = _validate(c1, ".123456789")
+	c2 = _validate(c2, ".0123456789")
+	if c1 != '.':
+		return float(c1 + c2.replace(".", "")) / 2.
+	else:
+		assert(c2 == ".", "Invalid hint")
+		return -1.
+
 func load_from_str(s: String) -> void:
 	var lines := s.dedent().strip_edges().split('\n', false)
-	assert(lines.size() == 2 * n, "Invalid number of rows")
+	assert(lines.size() == 2 * n || lines.size() == 2 * n + 1, "Invalid number of rows")
+	# 1 if has hints, 0 if not
+	var h := int(lines.size() == 2 * n + 1)
+	if h == 1:
+		for i in n:
+			hint_rows[i] = _validate_hint(lines[2 * i + 1][0], lines[2 * i + 2][0])
+		for j in m:
+			hint_cols[j] = _validate_hint(lines[0][2 * j + 1], lines[0][2 * j + 2])
 	for i in n:
 		for j in m:
-			var c1: String = _validate(lines[2 * i][2 * j], '.wx#')
-			var c2: String = _validate(lines[2 * i][2 * j + 1], '.wx#')
-			var c3: String = _validate(lines[2 * i + 1][2 * j], '.|_L')
-			var c4: String = _validate(lines[2 * i + 1][2 * j + 1], '.╲/')
+			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wx#')
+			var c2 := _validate(lines[2 * i + h][2 * j + 1 + h], '.wx#')
+			var c3 := _validate(lines[2 * i + 1 + h][2 * j + h], '.|_L')
+			var c4 := _validate(lines[2 * i + 1 + h][2 * j + 1 + h], '.╲/')
 			var cell := _pure_cell(i, j)
 			cell.c_left = _str_content(c1)
 			cell.c_right = _str_content(c2)
