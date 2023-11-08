@@ -49,7 +49,8 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 		if cell_data.wall_at(side):
 			cell.set_wall(side)
 	
-	cell.pressed.connect(_on_cell_pressed)
+	cell.pressed_water.connect(_on_cell_pressed_water)
+	cell.pressed_air.connect(_on_cell_pressed_air)
 	return cell
 
 
@@ -60,18 +61,24 @@ func update_visuals() -> void:
 			var cell := get_cell(i, j) as Cell
 			if cell_data.water_full():
 				cell.set_water(E.Single, true)
+				cell.remove_air()
+			elif cell_data.air_full():
+				cell.remove_water()
+				cell.set_air(E.Single, true)
 			elif cell_data.nothing_full():
 				cell.remove_water()
+				cell.remove_air()
 			else:
 				for corner in E.Corner.values():
 					cell.set_water(corner, cell_data.water_at(corner))
+					cell.set_air(corner, cell_data.air_at(corner))
 
 
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
 
-func _on_cell_pressed(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_pressed_water(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
@@ -79,5 +86,16 @@ func _on_cell_pressed(i: int, j: int, which: E.Waters) -> void:
 		cell_data.remove_water_or_air(corner)
 	else:
 		cell_data.put_water(corner)
+	update_visuals()
+
+
+func _on_cell_pressed_air(i: int, j: int, which: E.Waters) -> void:
+	assert(which != E.Waters.None)
+	var cell_data := grid_logic.get_cell(i, j)
+	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
+	if cell_data.air_at(corner):
+		cell_data.remove_water_or_air(corner)
+	else:
+		cell_data.put_air(corner)
 	update_visuals()
 

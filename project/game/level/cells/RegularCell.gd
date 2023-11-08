@@ -2,7 +2,8 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mask.png")
 
-signal pressed(i: int, j: int, which: E.Waters)
+signal pressed_water(i: int, j: int, which: E.Waters)
+signal pressed_air(i: int, j: int, which: E.Waters)
 
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
@@ -10,6 +11,13 @@ signal pressed(i: int, j: int, which: E.Waters)
 	E.Waters.TopRight: $Waters/TopRight,
 	E.Waters.BottomLeft: $Waters/BottomLeft,
 	E.Waters.BottomRight: $Waters/BottomRight,
+}
+@onready var Airs = {
+	E.Waters.Single: $Airs/Single,
+	E.Waters.TopLeft: $Airs/TopLeft,
+	E.Waters.TopRight: $Airs/TopRight,
+	E.Waters.BottomLeft: $Airs/BottomLeft,
+	E.Waters.BottomRight: $Airs/BottomRight,
 }
 @onready var Buttons = {
 	E.Single: $Buttons/Single,
@@ -40,6 +48,8 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 	column = j
 	for water in Waters.values():
 		water.hide()
+	for air in Airs.values():
+		air.hide()
 	for buttons in Buttons.values():
 		buttons.hide()
 	for hint in Hints.values():
@@ -78,5 +88,23 @@ func set_water(water : E.Waters, value: bool) -> void:
 			Waters[water].visible = value
 
 
-func _on_button_pressed(which: E.Waters) -> void:
-	pressed.emit(row, column, which)
+func remove_air():
+	for air in Airs.values():
+		air.hide()
+
+
+func set_air(air : E.Waters, value: bool) -> void:
+	match air:
+		E.Waters.None:
+			remove_air()
+		_:
+			Airs[air].visible = value
+
+
+func _on_button_gui_input(event, which : E.Waters) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				pressed_water.emit(row, column, which)
+			MOUSE_BUTTON_RIGHT:
+				pressed_air.emit(row, column, which)
