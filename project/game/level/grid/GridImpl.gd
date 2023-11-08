@@ -15,10 +15,10 @@ static func from_str(s: String) -> GridModel:
 
 # Everything below is implementation details about grids.
 
-const TopLeft := GridModel.Corner.TopLeft
-const TopRight := GridModel.Corner.TopRight
-const BottomLeft := GridModel.Corner.BottomLeft
-const BottomRight := GridModel.Corner.BottomRight
+const TopLeft := E.Corner.TopLeft
+const TopRight := E.Corner.TopRight
+const BottomLeft := E.Corner.BottomLeft
+const BottomRight := E.Corner.BottomRight
 
 var n: int
 var m: int
@@ -69,42 +69,42 @@ class PureCell:
 	var last_seen := 0
 	static func empty() -> PureCell:
 		return PureCell.new()
-	func _content_at(corner: GridModel.Corner) -> Content:
+	func _content_at(corner: E.Corner) -> Content:
 		if c_left == c_right:
 			return c_left
 		match corner:
-			Corner.TopLeft:
+			E.TopLeft:
 				return c_left if !inverted else Content.Nothing
-			Corner.TopRight:
+			E.TopRight:
 				return c_right if inverted else Content.Nothing
-			Corner.BottomLeft:
+			E.BottomLeft:
 				return c_left if inverted else Content.Nothing
-			Corner.BottomRight:
+			E.BottomRight:
 				return c_right if !inverted else Content.Nothing
 		assert(false, "Invalid corner")
 		return Content.Nothing
 	func water_full() -> bool:
 		return c_left == Content.Water and c_right == Content.Water
-	func water_at(corner: GridModel.Corner) -> bool:
+	func water_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Water
 	func air_full() -> bool:
 		return c_left == Content.Air and c_right == Content.Air
-	func air_at(corner: GridModel.Corner) -> bool:
+	func air_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Air
 	func block_full() -> bool:
 		return c_left == Content.Block and c_right == Content.Block
-	func block_at(corner: GridModel.Corner) -> bool:
+	func block_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Block
-	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
+	func diag_wall_at(diag: E.Diagonal) -> bool:
 		match diag:
-			Diagonal.Dec: # \
+			E.Diagonal.Dec: # \
 				return inverted and diag_wall
-			Diagonal.Inc: # /
+			E.Diagonal.Inc: # /
 				return !inverted and diag_wall
 		assert(false, "Invalid diagonal")
 		return false
 	# Can't override block
-	func put_content(corner: GridModel.Corner, content: Content) -> bool:
+	func put_content(corner: E.Corner, content: Content) -> bool:
 		if _content_at(corner) == Content.Block:
 			return false
 		var prev_left := c_left
@@ -122,11 +122,11 @@ class PureCell:
 				c_left = content
 			c_right = content
 		return prev_left != c_left or prev_right != c_right
-	func put_water(corner: GridModel.Corner) -> bool:
+	func put_water(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Water)
-	func put_air(corner: GridModel.Corner) -> bool:
+	func put_air(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Air)
-	func put_nothing(corner: GridModel.Corner) -> bool:
+	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
 	func water_count() -> float:
 		return 0.5 * (float(c_left == Content.Water) + float(c_right == Content.Water))
@@ -141,9 +141,9 @@ class PureCell:
 		# last_seen doesn't need to be copied
 		return cell
 	func _block_top() -> bool:
-		return _content_at(GridModel.Corner.TopLeft) == Content.Block or _content_at(GridModel.Corner.TopRight) == Content.Block 
+		return _content_at(E.Corner.TopLeft) == Content.Block or _content_at(E.Corner.TopRight) == Content.Block 
 	func _block_bottom() -> bool:
-			return _content_at(GridModel.Corner.BottomLeft) == Content.Block or _content_at(GridModel.Corner.BottomRight) == Content.Block 
+			return _content_at(E.Corner.BottomLeft) == Content.Block or _content_at(E.Corner.BottomRight) == Content.Block 
 	func _block_left() -> bool:
 		return c_left == Content.Block
 	func _block_right() -> bool:
@@ -175,25 +175,25 @@ class CellWithLoc extends GridModel.CellModel:
 		self.grid = grid_
 	func water_full() -> bool:
 		return pure.water_full()
-	func water_at(corner: GridModel.Corner) -> bool:
+	func water_at(corner: E.Corner) -> bool:
 		return pure.water_at(corner)
 	func air_full() -> bool:
 		return pure.air_full()
-	func air_at(corner: GridModel.Corner) -> bool:
+	func air_at(corner: E.Corner) -> bool:
 		return pure.air_at(corner)
 	func block_full() -> bool:
 		return pure.block_full()
-	func block_at(corner: GridModel.Corner) -> bool:
+	func block_at(corner: E.Corner) -> bool:
 		return pure.block_at(corner)
-	func wall_at(side: GridModel.Side) -> bool:
+	func wall_at(side: E.Side) -> bool:
 		return grid.wall_at(i, j, side)
-	func diag_wall_at(diag: GridModel.Diagonal) -> bool:
+	func diag_wall_at(diag: E.Diagonal) -> bool:
 		return pure.diag_wall_at(diag)
-	func put_water(corner: GridModel.Corner) -> void:
+	func put_water(corner: E.Corner) -> void:
 		if !water_at(corner):
 			var changes := grid._flood_from(i, j, corner, true)
 			grid._push_undo_changes(changes)
-	func put_air(corner: GridModel.Corner) -> void:
+	func put_air(corner: E.Corner) -> void:
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if water_at(corner):
 			# TODO: Everything should go in the same undo
@@ -201,7 +201,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if pure.put_air(corner):
 			# No auto-flooding air
 			grid._push_undo_changes(changes)
-	func remove_water_or_air(corner: GridModel.Corner) -> void:
+	func remove_water_or_air(corner: E.Corner) -> void:
 		if water_at(corner):
 			grid._flood_from(i, j, corner, false)
 		var change := Change.new(i, j, pure.clone())
@@ -232,15 +232,15 @@ func hint_col(j: int) -> float:
 func set_hint_col(j: int, v: float) -> void:
 	hint_cols[j] = v
 
-func wall_at(i: int, j: int, side: GridModel.Side) -> bool:
+func wall_at(i: int, j: int, side: E.Side) -> bool:
 	match side:
-		Side.Left:
+		E.Side.Left:
 			return _has_wall_left(i, j)
-		Side.Right:
+		E.Side.Right:
 			return _has_wall_right(i, j)
-		Side.Top:
+		E.Side.Top:
 			return _has_wall_up(i, j)
-		Side.Bottom:
+		E.Side.Bottom:
 			return _has_wall_down(i, j)
 	assert(false, "Invalid side")
 	return false
@@ -374,7 +374,7 @@ func _push_undo_changes(changes: Array[Change]) -> void:
 	undo_stack.push_back(Changes.new(changes))
 
 
-func _flood_from(i: int, j: int, corner: GridModel.Corner, water: bool) -> Array[Change]:
+func _flood_from(i: int, j: int, corner: E.Corner, water: bool) -> Array[Change]:
 	if water:
 		var dfs := AddWaterDfs.new(self, i)
 		dfs.flood(i, j, corner)
@@ -392,13 +392,13 @@ class Dfs:
 		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
 		grid.last_seen += 1
 	# Returns if it should continue going to nearby cells
-	func _cell_logic(_i: int, _j: int, _corner: GridModel.Corner, _cell: PureCell) -> bool:
+	func _cell_logic(_i: int, _j: int, _corner: E.Corner, _cell: PureCell) -> bool:
 		return GridModel.must_be_implemented()
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return GridModel.must_be_implemented()
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return GridModel.must_be_implemented()
-	func flood(i: int, j: int, corner: GridModel.Corner) -> void:
+	func flood(i: int, j: int, corner: E.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
 		if cell.last_seen == grid.last_seen:
 			return
@@ -429,7 +429,7 @@ class AddWaterDfs extends Dfs:
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
-	func _cell_logic(_i: int, _j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		cell.put_water(corner)
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
@@ -443,7 +443,7 @@ class RemoveWaterDfs extends Dfs:
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
-	func _cell_logic(i: int, _j: int, corner: GridModel.Corner, cell: PureCell) -> bool:
+	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		# Only keep going if we changed something
 		if i <= min_i:
 			return cell.put_nothing(corner)

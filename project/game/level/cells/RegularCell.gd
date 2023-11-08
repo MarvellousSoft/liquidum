@@ -35,7 +35,7 @@ var row : int
 var column : int
 
 
-func setup(type : Cell.TYPES, i : int, j : int) -> void:
+func setup(type : E.CellType, i : int, j : int) -> void:
 	row = i
 	column = j
 	for water in Waters.values():
@@ -47,33 +47,33 @@ func setup(type : Cell.TYPES, i : int, j : int) -> void:
 	for wall in Walls.values():
 		wall.hide()
 	match type:
-		Cell.TYPES.SINGLE:
+		E.CellType.Single:
 			Buttons.s.show()
-		Cell.TYPES.INC_DIAG:
+		E.CellType.IncDiag:
 			Buttons.tl.show()
 			Buttons.br.show()
-			set_wall(Cell.WALLS.INC_DIAG)
-		Cell.TYPES.DEC_DIAG:
+			set_wall(E.Walls.IncDiag)
+		E.CellType.DecDiag:
 			Buttons.tr.show()
 			Buttons.bl.show()
-			set_wall(Cell.WALLS.DEC_DIAG)
+			set_wall(E.Walls.DecDiag)
 		_:
 			push_error("Not a valid type of cell:" + str(type))
 
 
-func set_wall(wall : Cell.WALLS) -> void:
+func set_wall(wall : E.Walls) -> void:
 	match wall:
-		Cell.WALLS.TOP:
+		E.Walls.Top:
 			Walls.top.show()
-		Cell.WALLS.RIGHT:
+		E.Walls.Right:
 			Walls.right.show()
-		Cell.WALLS.BOTTOM:
+		E.Walls.Bottom:
 			Walls.bottom.show()
-		Cell.WALLS.LEFT:
+		E.Walls.Left:
 			Walls.left.show()
-		Cell.WALLS.INC_DIAG:
+		E.Walls.IncDiag:
 			Walls.inc.show()
-		Cell.WALLS.DEC_DIAG:
+		E.Walls.DecDiag:
 			Walls.dec.show()
 		_:
 			push_error("Not a valid wall:" + str(wall))
@@ -84,19 +84,19 @@ func remove_water():
 		water.hide()
 
 
-func set_water(water : Cell.WATERS, value: bool) -> void:
+func set_water(water : E.Waters, value: bool) -> void:
 	match water:
-		Cell.WATERS.SINGLE:
+		E.Waters.Single:
 			Waters.s.visible = value
-		Cell.WATERS.TOPLEFT:
+		E.Waters.TopLeft:
 			Waters.tl.visible = value
-		Cell.WATERS.TOPRIGHT:
+		E.Waters.TopRight:
 			Waters.tr.visible = value
-		Cell.WATERS.BOTTOMRIGHT:
+		E.Waters.BottomRight:
 			Waters.br.visible = value
-		Cell.WATERS.BOTTOMLEFT:
+		E.Waters.BottomLeft:
 			Waters.bl.visible = value
-		Cell.WATERS.NONE:
+		E.Waters.None:
 			remove_water()
 		_:
 			push_error("Not a valid water:" + str(water))

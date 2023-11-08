@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
 AudioManager="*res://audio/AudioManager.tscn"
+E="*res://game/level/grid/Enums.gd"
 
 [debug]
 

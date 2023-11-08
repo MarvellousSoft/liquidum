@@ -1,15 +1,15 @@
 class_name GridTests
 
-const TopLeft := GridModel.Corner.TopLeft
-const TopRight := GridModel.Corner.TopRight
-const BottomLeft := GridModel.Corner.BottomLeft
-const BottomRight := GridModel.Corner.BottomRight
-const Left := GridModel.Side.Left
-const Right := GridModel.Side.Right
-const Top := GridModel.Side.Top
-const Bottom := GridModel.Side.Bottom
-const Dec := GridModel.Diagonal.Dec
-const Inc := GridModel.Diagonal.Inc
+const TopLeft := E.Corner.TopLeft
+const TopRight := E.Corner.TopRight
+const BottomLeft := E.Corner.BottomLeft
+const BottomRight := E.Corner.BottomRight
+const Left := E.Side.Left
+const Right := E.Side.Right
+const Top := E.Side.Top
+const Bottom := E.Side.Bottom
+const Dec := E.Diagonal.Dec
+const Inc := E.Diagonal.Inc
 
 func run_all_tests() -> void:
 	for method in get_method_list():

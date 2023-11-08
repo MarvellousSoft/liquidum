@@ -4,38 +4,35 @@ static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")
 	return null
 
-enum Corner { TopLeft, TopRight, BottomRight, BottomLeft }
-enum Side { Top, Right, Bottom, Left }
-# Dec diagonal = \, Inc diagonal = /
-enum Diagonal { Inc, Dec }
+
 
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
 	# If full of water, all Corners return true
-	func water_at(_corner: GridModel.Corner) -> bool:
+	func water_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	# When user marks a tile definitely doesn't contain waters
 	func air_full() -> bool:
 		return GridModel.must_be_implemented()
-	func air_at(_corner: GridModel.Corner) -> bool:
+	func air_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	func block_full() -> bool:
 		return GridModel.must_be_implemented()
-	func block_at(_corner: GridModel.Corner) -> bool:
+	func block_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	# Counts the sides of the grid as walls
-	func wall_at(_side: GridModel.Side) -> bool:
+	func wall_at(_side: E.Side) -> bool:
 		return GridModel.must_be_implemented()
-	func diag_wall_at(_diag: GridModel.Diagonal) -> bool:
+	func diag_wall_at(_diag: E.Diagonal) -> bool:
 		return GridModel.must_be_implemented()
 	# Puts water in the given diagonal and floods
-	func put_water(_corner: GridModel.Corner) -> void:
+	func put_water(_corner: E.Corner) -> void:
 		return GridModel.must_be_implemented()
 	# Puts air in the given diagonal
-	func put_air(_corner: GridModel.Corner) -> void:
+	func put_air(_corner: E.Corner) -> void:
 		return GridModel.must_be_implemented()
-	func remove_water_or_air(_corner: GridModel.Corner) -> void:
+	func remove_water_or_air(_corner: E.Corner) -> void:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
@@ -49,7 +46,7 @@ func get_cell(_i: int, _j: int) -> CellModel:
 	return GridModel.must_be_implemented()
 
 # Checks walls in the grid without accessing cells directly
-func wall_at(_i: int, _j: int, _side: GridModel.Side) -> bool:
+func wall_at(_i: int, _j: int, _side: E.Side) -> bool:
 	return GridModel.must_be_implemented()
 
 # -1 if there's no hint. 0.5 for diagonals

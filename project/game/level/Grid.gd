@@ -25,21 +25,21 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 	
-	var type = Cell.TYPES.SINGLE
-	if cell_data.diag_wall_at(GridModel.Diagonal.Inc):
-		type = Cell.TYPES.INC_DIAG
-	elif cell_data.diag_wall_at(GridModel.Diagonal.Dec):
-		type = Cell.TYPES.DEC_DIAG
+	var type = E.CellType.Single
+	if cell_data.diag_wall_at(E.Diagonal.Inc):
+		type = E.CellType.IncDiag
+	elif cell_data.diag_wall_at(E.Diagonal.Dec):
+		type = E.CellType.DecDiag
 	cell.setup(type, n, m)
 	
-	if cell_data.wall_at(GridModel.Side.Top):
-		cell.set_wall(Cell.WALLS.TOP)
-	if cell_data.wall_at(GridModel.Side.Right):
-		cell.set_wall(Cell.WALLS.RIGHT)
-	if cell_data.wall_at(GridModel.Side.Bottom):
-		cell.set_wall(Cell.WALLS.BOTTOM)
-	if cell_data.wall_at(GridModel.Side.Left):
-		cell.set_wall(Cell.WALLS.LEFT)
+	if cell_data.wall_at(E.Side.Top):
+		cell.set_wall(E.Walls.Top)
+	if cell_data.wall_at(E.Side.Right):
+		cell.set_wall(E.Walls.Right)
+	if cell_data.wall_at(E.Side.Bottom):
+		cell.set_wall(E.Walls.Bottom)
+	if cell_data.wall_at(E.Side.Left):
+		cell.set_wall(E.Walls.Left)
 	
 	cell.pressed.connect(_on_cell_pressed)
 	return cell
@@ -49,38 +49,38 @@ func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
 
-func string_to_corner(s : String) -> GridModel.Corner:
+func string_to_corner(s : String) -> E.Corner:
 	match s:
 		"s":
-			return GridModel.Corner.BottomLeft
+			return E.Corner.BottomLeft
 		"tl":
-			return GridModel.Corner.TopLeft
+			return E.Corner.TopLeft
 		"tr":
-			return GridModel.Corner.TopRight
+			return E.Corner.TopRight
 		"br":
-			return GridModel.Corner.BottomRight
+			return E.Corner.BottomRight
 		"bl":
-			return GridModel.Corner.BottomLeft
+			return E.Corner.BottomLeft
 		_:
 			push_error("Not a valid corner:" + str(s))
-	return GridModel.Corner.BottomLeft
+	return E.Corner.BottomLeft
 
 
-func string_to_water_side(s : String) -> Cell.WATERS:
+func string_to_water_side(s : String) -> E.Waters:
 	match s:
 		"s":
-			return Cell.WATERS.SINGLE
+			return E.Waters.Single
 		"tl":
-			return Cell.WATERS.TOPLEFT
+			return E.Waters.TopLeft
 		"tr":
-			return Cell.WATERS.TOPRIGHT
+			return E.Waters.TopRight
 		"br":
-			return Cell.WATERS.BOTTOMRIGHT
+			return E.Waters.BottomRight
 		"bl":
-			return Cell.WATERS.BOTTOMLEFT
+			return E.Waters.BottomLeft
 		_:
 			push_error("Not a valid corner:" + str(s))
-	return Cell.WATERS.NONE
+	return E.Waters.None
 
 
 func _on_cell_pressed(i : int, j : int, which : String) -> void:
