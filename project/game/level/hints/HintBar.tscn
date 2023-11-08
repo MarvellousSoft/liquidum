@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://bljmpbyn14lnb"]
+
+[ext_resource type="Script" path="res://HintBar.gd" id="1_tfe5l"]
+[ext_resource type="PackedScene" uid="uid://sogub73jvlos" path="res://game/level/hints/Hint.tscn" id="2_fgutn"]
+
+[node name="HintBar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1920.0
+offset_bottom = -1080.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tfe5l")
+
+[node name="Horizontal" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Hint" parent="Horizontal" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint2" parent="Horizontal" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint3" parent="Horizontal" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint4" parent="Horizontal" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Vertical" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Hint" parent="Vertical" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint2" parent="Vertical" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint3" parent="Vertical" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint4" parent="Vertical" instance=ExtResource("2_fgutn")]
+layout_mode = 2

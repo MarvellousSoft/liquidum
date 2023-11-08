@@ -2,7 +2,11 @@ extends Control
 
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 
-@onready var Columns = $CenterContainer/Columns
+@onready var Columns = $CenterContainer/GridContainer/Columns
+@onready var HintBars = {
+	"top": $CenterContainer/GridContainer/HintBarTop,
+	"left": $CenterContainer/GridContainer/HintBarLeft,
+}
 
 var grid_logic : GridImpl
 var rows : int
@@ -22,6 +26,13 @@ func setup(level : String) -> void:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
 	update_visuals()
+	setup_hints()
+
+#Assumes grid_logic is already setup
+func setup_hints():
+	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
+	HintBars.top.setup(grid_logic.hint_all_cols())
+	HintBars.left.setup(grid_logic.hint_all_rows())
 
 
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:

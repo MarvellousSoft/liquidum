@@ -253,11 +253,17 @@ func get_cell(i: int, j: int) -> CellModel:
 func hint_row(i: int) -> float:
 	return hint_rows[i]
 
+func hint_all_rows() -> Array:
+	return hint_rows
+
 func set_hint_row(i: int, v: float) -> void:
 	hint_rows[i] = v
 
 func hint_col(j: int) -> float:
 	return hint_cols[j]
+
+func hint_all_cols() -> Array:
+	return hint_cols
 
 func set_hint_col(j: int, v: float) -> void:
 	hint_cols[j] = v
