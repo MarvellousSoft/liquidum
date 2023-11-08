@@ -5,11 +5,7 @@ const GRID = preload("res://game/level/Grid.tscn")
 @onready var GridNode = $CenterContainer/Grid
 
 func _ready():
-	setup(4,3)
-
-
-func setup(n : int, m : int):
-	GridNode.setup(n, m, """
+	setup("""
 ......
 |....╲
 ......
@@ -18,3 +14,7 @@ func setup(n : int, m : int):
 L../.╲
 ......
 L._╲_.""")
+
+
+func setup(level : String):
+	GridNode.setup(level)
