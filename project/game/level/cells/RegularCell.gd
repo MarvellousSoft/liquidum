@@ -2,7 +2,7 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mask.png")
 
-signal pressed
+signal pressed(i: int, j: int, which: E.Waters)
 
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
@@ -78,5 +78,5 @@ func set_water(water : E.Waters, value: bool) -> void:
 			Waters[water].visible = value
 
 
-func _on_button_pressed(which : String) -> void:
-	emit_signal("pressed", row, column, which)
+func _on_button_pressed(which: E.Waters) -> void:
+	pressed.emit(row, column, which)

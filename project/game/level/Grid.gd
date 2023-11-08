@@ -25,21 +25,15 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 	
-	var type = E.CellType.Single
-	if cell_data.diag_wall_at(E.Diagonal.Inc):
-		type = E.CellType.IncDiag
-	elif cell_data.diag_wall_at(E.Diagonal.Dec):
-		type = E.CellType.DecDiag
+	var type := E.CellType.Single
+	for diag in E.Diagonal.values():
+		if cell_data.diag_wall_at(diag):
+			type = diag
 	cell.setup(type, n, m)
 	
-	if cell_data.wall_at(E.Side.Top):
-		cell.set_wall(E.Walls.Top)
-	if cell_data.wall_at(E.Side.Right):
-		cell.set_wall(E.Walls.Right)
-	if cell_data.wall_at(E.Side.Bottom):
-		cell.set_wall(E.Walls.Bottom)
-	if cell_data.wall_at(E.Side.Left):
-		cell.set_wall(E.Walls.Left)
+	for side in E.Side.values():
+		if cell_data.wall_at(side):
+			cell.set_wall(side)
 	
 	cell.pressed.connect(_on_cell_pressed)
 	return cell
@@ -49,48 +43,15 @@ func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
 
-func string_to_corner(s : String) -> E.Corner:
-	match s:
-		"s":
-			return E.Corner.BottomLeft
-		"tl":
-			return E.Corner.TopLeft
-		"tr":
-			return E.Corner.TopRight
-		"br":
-			return E.Corner.BottomRight
-		"bl":
-			return E.Corner.BottomLeft
-		_:
-			push_error("Not a valid corner:" + str(s))
-	return E.Corner.BottomLeft
-
-
-func string_to_water_side(s : String) -> E.Waters:
-	match s:
-		"s":
-			return E.Waters.Single
-		"tl":
-			return E.Waters.TopLeft
-		"tr":
-			return E.Waters.TopRight
-		"br":
-			return E.Waters.BottomRight
-		"bl":
-			return E.Waters.BottomLeft
-		_:
-			push_error("Not a valid corner:" + str(s))
-	return E.Waters.None
-
-
-func _on_cell_pressed(i : int, j : int, which : String) -> void:
-	var cell_data = grid_logic.get_cell(i, j)
-	var cell = get_cell (i, j)
-	var corner = string_to_corner(which)
+func _on_cell_pressed(i: int, j: int, which: E.Waters) -> void:
+	assert(which != E.Waters.None)
+	var cell_data := grid_logic.get_cell(i, j)
+	var cell := get_cell (i, j)
+	var corner = E.BottomLeft if which == E.Single else which
 	if cell_data.water_at(corner):
 		cell_data.remove_water_or_air(corner)
-		cell.set_water(string_to_water_side(which), false)
+		cell.set_water(which, false)
 	else:
 		cell_data.put_water(corner)
-		cell.set_water(string_to_water_side(which), true)
+		cell.set_water(which, true)
 	

@@ -1,5 +1,5 @@
-# These enums are made to be used interchangeably so be very careful when changing the order of
-# elements.
+# These enums are made to be used interchangeably because they always have the same values.
+# So be very careful when changing the order of elements.
 # If necessary for type checking, you can cast between them, like:
 # call_corner(corner as E.Corner)
 
