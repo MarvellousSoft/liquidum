@@ -179,8 +179,9 @@ mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Walls"]
 layout_mode = 0
+offset_top = -3.0
 offset_right = 100.0
-offset_bottom = 100.0
+offset_bottom = 97.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
@@ -188,7 +189,8 @@ texture = ExtResource("11_b6aso")
 
 [node name="Right" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_right = 100.0
+offset_left = 4.0
+offset_right = 104.0
 offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("11_b6aso")
@@ -196,8 +198,9 @@ flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Walls"]
 layout_mode = 0
+offset_top = 3.0
 offset_right = 100.0
-offset_bottom = 100.0
+offset_bottom = 103.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
@@ -206,8 +209,9 @@ flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -4.0
+offset_right = 96.0
+offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("11_b6aso")
 
