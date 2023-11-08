@@ -19,6 +19,8 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func nothing_full() -> bool:
 		return GridModel.must_be_implemented()
+	func nothing_at(_corner: E.Corner) -> bool:
+		return GridModel.must_be_implemented()
 	func block_full() -> bool:
 		return GridModel.must_be_implemented()
 	func block_at(_corner: E.Corner) -> bool:
@@ -130,7 +132,6 @@ func undo() -> bool:
 func redo() -> bool:
 	return GridModel.must_be_implemented()
 
-# TODO: Not implemented
-# Whether all water and air is in correct places
-func is_flooded() -> bool:
+# Flood all water and air in the grid. Returns whether it did anything
+func flood_all() -> bool:
 	return GridModel.must_be_implemented()

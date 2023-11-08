@@ -22,7 +22,11 @@ func run_all_tests() -> void:
 		if t_name.begins_with("test_"):
 			print("Running %s" % t_name)
 			call(t_name)
-			assert(fail == 0)
+			if fail > 0:
+				call_deferred("do_fail")
+
+func do_fail() -> void:
+	assert(false)
 
 func check(cond: bool) -> void:
 	if not cond and fail == 0:
@@ -39,7 +43,15 @@ func assert_grid_eq(a: String, b: String) -> void:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
 		show_grids.emit(a, b)
 		
-		fail_later_if(a == b)
+		fail_later_if(a != b)
+
+func assert_can_solve(s: String) -> void:
+	var g := str_grid(s)
+	check(!g.are_hints_satisfied())
+	SolverModel.new().apply_strategies(g)
+	if !g.are_hints_satisfied():
+		fail_later_if(true)
+		show_grids.emit(s, g.to_str())
 
 
 func get_rows(s : String) -> int:
@@ -76,7 +88,6 @@ func test_simple() -> void:
 	check(!g.get_cell(0, 1).air_at(TopLeft))
 	check(g.get_cell(0, 1).air_at(BottomRight))
 	check(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
-	check(g.is_flooded())
 	# Check block
 	check(!g.get_cell(1, 0).block_full())
 	check(g.get_cell(1, 0).block_at(BottomLeft))
@@ -98,8 +109,8 @@ func test_simple() -> void:
 func test_put_water_one_cell() -> void:
 	var g := str_grid("..\n..")
 	check(g.get_cell(0, 0).nothing_full())
+	check(g.get_cell(0, 0).nothing_at(TopLeft))
 	g.get_cell(0, 0).put_water(BottomRight)
-	check(g.is_flooded())
 	assert_grid_eq(g.to_str(), "ww\nL.")
 	g = str_grid("..\nL╲")
 	g.get_cell(0, 0).put_water(TopRight)
@@ -256,3 +267,19 @@ func test_remove_water_bug() -> void:
 	..
 	L.
 	""")
+
+func test_can_solve() -> void:
+	assert_can_solve(".2.\n...\n...")
+	assert_can_solve("""
+	.4...
+	2....
+	._.L.
+	2....
+	...|.
+	2....
+	._.L.
+	""")
+
+func _flood_all(bef: String, aft: String) -> void:
+	var g := str_grid(bef)
+

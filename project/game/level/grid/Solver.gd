@@ -74,31 +74,6 @@ class RowDfs extends GridImpl.Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
-# - Put air in components that are too big
-# - Put water everywhere if there's no more space for air
-class BasicRowStrategy extends RowStrategy:
-	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
-		if water_left == nothing_left:
-			for comp in values:
-				comp.put_water()
-			return true
-		var any := false
-		for comp in values:
-			if comp.size > water_left:
-				comp.put_air()
-				any = true
-		return any
-
-# If a component is so big it MUST be filled, fill it.
-class MediumRowStrategy extends RowStrategy:
-	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
-		var any := false
-		for comp in values:
-			if comp.size <= water_left and (nothing_left - comp.size) < water_left:
-				comp.put_water()
-				any = true
-		return any
-
 # Strategy for a single column
 class ColumnStrategy extends Strategy:
 	var grid: GridImpl
@@ -195,6 +170,30 @@ class ColDfs extends GridImpl.Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return false
 
+# - Put air in components that are too big
+# - Put water everywhere if there's no more space for air
+class BasicRowStrategy extends RowStrategy:
+	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+		if water_left == nothing_left:
+			for comp in values:
+				comp.put_water()
+			return true
+		var any := false
+		for comp in values:
+			if comp.size > water_left:
+				comp.put_air()
+				any = true
+		return any
+
+# If a component is so big it MUST be filled, fill it.
+class MediumRowStrategy extends RowStrategy:
+	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+		var any := false
+		for comp in values:
+			if comp.size <= water_left and (nothing_left - comp.size) < water_left:
+				comp.put_water()
+				any = true
+		return any
 
 # - Put air partially in components that are too big
 # - Put water everywhere if there's no more space for non-water
@@ -211,12 +210,23 @@ class BasicColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
+# If a component is so big it MUST be partially filled, fill it.
+class MediumColStrategy extends ColumnStrategy:
+	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
+		var any := false
+		for comp in values:
+			if nothing_left - comp.size < water_left:
+				comp.put_water_on(grid, water_left - (nothing_left - comp.size))
+				any = true
+		return any
+
 # Tries to solve the puzzle as much as possible
 func apply_strategies(grid: GridModel) -> void:
 	var strategies: Array[Strategy] = [
 		BasicRowStrategy.new(grid),
 		BasicColStrategy.new(grid),
 		MediumRowStrategy.new(grid),
+		MediumColStrategy.new(grid),
 	]
 	for _i in 50:
 		if not strategies.any(func(s): return s.apply_any()):

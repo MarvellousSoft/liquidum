@@ -215,6 +215,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure.air_at(corner)
 	func nothing_full() -> bool:
 		return pure.nothing_full()
+	func nothing_at(corner: E.Corner) -> bool:
+		return pure.nothing_at(corner)
 	func block_full() -> bool:
 		return pure.block_full()
 	func block_at(corner: E.Corner) -> bool:
@@ -389,9 +391,6 @@ func to_str() -> String:
 				builder.append(".")
 		builder.append("\n")
 	return "".join(builder)
-
-func is_flooded() -> bool:
-	return true
 
 func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 	if undos.is_empty():
@@ -579,3 +578,18 @@ func validate() -> void:
 				assert(_pure_cell(i - 1, j)._block_bottom())
 			if !_has_wall_down(i, j) and cell._block_bottom():
 				assert(_pure_cell(i + 1, j)._block_top())
+
+func flood_all() -> bool:
+	var dfs := AddWaterDfs.new(self, 0)
+	# Top down is important for correctness
+	for i in n:
+		for j in m:
+			var c := _pure_cell(i, j)
+			for corner in E.Corner.values():
+				if c.last_seen(corner) < last_seen and c.water_at(corner):
+					dfs.min_i = i
+					dfs.flood(i, j, corner)
+	if !dfs.changes.is_empty():
+		_push_undo_changes(dfs.changes)
+		return true
+	return false
