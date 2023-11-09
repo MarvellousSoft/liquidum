@@ -43,9 +43,22 @@ func generate(n: int, m: int, clear_solution := true) -> GridModel:
 			g[i].append(0)
 	var left := n * m
 	var group := 0
+	# Break groups into similar sizes, this uses the "sticks and rocks" technique
+	var group_sizes: Array[int] = [left - 1]
+	for group_i in (n * m) / 2:
+		var s := randi_range(0, left - 2 - group_i)
+		for j in (group_i + 1):
+			if s < group_sizes[j]:
+				var rest := group_sizes[j] - s
+				group_sizes[j] = s
+				group_sizes.append(rest - 1)
+				break
+			s -= group_sizes[j]
 	while left > 0:
 		group += 1
-		var group_size := wrand(left, left / 5) - 1
+		var group_size: int = group_sizes.pop_back() + 1
+		if group_sizes.is_empty():
+			group_sizes.push_back(2)
 		left -= 1
 		var cells: Array[Vector2i] = [any_empty(g)]
 		g[cells[0].x][cells[0].y] = group
@@ -79,4 +92,6 @@ func generate(n: int, m: int, clear_solution := true) -> GridModel:
 		grid.set_hint_row(i, grid.count_water_row(i))
 	for j in m:
 		grid.set_hint_col(j, grid.count_water_col(j))
+	if clear_solution:
+		grid.clear_water_air()
 	return grid

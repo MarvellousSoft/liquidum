@@ -58,14 +58,6 @@ offset_right = 204.0
 offset_bottom = 58.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Seed" type="Label" parent="."]
-layout_mode = 0
-offset_left = 103.0
-offset_top = 369.0
-offset_right = 173.0
-offset_bottom = 402.0
-text = "Seed: ?"
-
 [node name="AutoSolve" type="Button" parent="."]
 layout_mode = 0
 offset_left = 104.0
@@ -73,6 +65,14 @@ offset_top = 422.0
 offset_right = 194.0
 offset_bottom = 453.0
 text = "Auto-solve"
+
+[node name="Seed" type="TextEdit" parent="."]
+layout_mode = 0
+offset_left = 97.0
+offset_top = 368.0
+offset_right = 200.0
+offset_bottom = 402.0
+placeholder_text = "Fixed seed"
 
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]

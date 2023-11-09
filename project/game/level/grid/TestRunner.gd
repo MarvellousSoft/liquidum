@@ -18,8 +18,11 @@ func _on_tests_show_grids(s1: String, s2: String):
 
 
 func _on_gen_pressed():
-	var rseed := randi() % 1000
-	$Seed.text = "Seed: %d" % rseed
+	var rseed := randi() % 10000
+	if $Seed.text != "":
+		rseed = int($Seed.text)
+	else:
+		$Seed.placeholder_text = "Seed: %d" % rseed
 	var gen := Generator.new(rseed)
 	var g:= gen.generate(6, 6, false)
 	var sol_str := g.to_str()

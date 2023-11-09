@@ -281,6 +281,7 @@ func test_can_solve() -> void:
 	2....
 	._.L.
 	""")
+	assert_can_solve(".2.\n...\n...\n...\n...\n...\n...")
 
 func _flood_all(bef: String, aft: String) -> void:
 	var g := str_grid(bef)
@@ -293,10 +294,3 @@ func test_flood_all() -> void:
 	_flood_all("ww\n|.\nxx\nL.", "ww\n|.\nww\nL.")
 	_flood_all(".w\n|╲\n..\nL.", ".w\n|╲\n..\nL.")
 	_flood_all(".w\n|/\n..\nL.", ".w\n|/\nww\nL.")
-
-func test_gen() -> void:
-	var gen := Generator.new(11)
-	var g:= gen.generate(6, 6, false)
-	var sol_str := g.to_str()
-	g.clear_water_air()
-	show_grids.emit(sol_str, g.to_str())
