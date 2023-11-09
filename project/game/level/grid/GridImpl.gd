@@ -230,10 +230,10 @@ class CellWithLoc extends GridModel.CellModel:
 			var changes := grid._flood_water(i, j, corner, true)
 			grid._push_undo_changes(changes)
 	func put_air(corner: E.Corner, flood := false) -> void:
-		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if water_at(corner):
 			# TODO: Everything should go in the same undo
 			remove_water_or_air(corner)
+		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if pure.put_air(corner):
 			# No auto-flooding air
 			if flood:
@@ -242,11 +242,13 @@ class CellWithLoc extends GridModel.CellModel:
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes)
 	func remove_water_or_air(corner: E.Corner) -> void:
+		var changes: Array[Change] = []
 		if water_at(corner):
-			grid._flood_water(i, j, corner, false)
+			changes.append_array(grid._flood_water(i, j, corner, false))
 		var change := Change.new(i, j, pure.clone())
 		if pure.put_nothing(corner):
-			grid._push_undo_changes([change])
+			changes.append(change)
+		grid._push_undo_changes(changes)
 
 func rows() -> int:
 	return n
@@ -403,6 +405,7 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 		c.prev_cell = now_cell.clone()
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
+	assert(!flood_all())
 	return true
 
 func undo() -> bool:
