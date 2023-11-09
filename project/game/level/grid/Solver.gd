@@ -140,7 +140,7 @@ class ColComponent:
 		for i in cells.size():
 			var c: CellPosition = cells[-i]
 			count -= grid._pure_cell(c.i, c.j)._content_count_from(GridImpl.Content.Nothing, c.corner)
-			if count < 0:
+			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
 				grid.get_cell(c.i, c.j).put_air(c.corner)

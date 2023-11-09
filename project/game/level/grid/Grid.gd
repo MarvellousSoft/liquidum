@@ -24,9 +24,7 @@ class CellModel:
 	func block_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	# Counts the sides of the grid as walls
-	func wall_at(_side: E.Side) -> bool:
-		return GridModel.must_be_implemented()
-	func diag_wall_at(_diag: E.Diagonal) -> bool:
+	func wall_at(_wall: E.Walls) -> bool:
 		return GridModel.must_be_implemented()
 	# Puts water in the given diagonal and floods
 	func put_water(_corner: E.Corner) -> void:

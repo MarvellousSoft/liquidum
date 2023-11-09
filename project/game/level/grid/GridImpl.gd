@@ -115,7 +115,7 @@ class PureCell:
 		return _content_full(Content.Block)
 	func block_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Block
-	func diag_wall_at(diag: E.Diagonal) -> bool:
+	func _diag_wall_at(diag: E.Diagonal) -> bool:
 		match diag:
 			E.Diagonal.Dec: # \
 				return inverted and diag_wall
@@ -224,10 +224,14 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure.block_full()
 	func block_at(corner: E.Corner) -> bool:
 		return pure.block_at(corner)
-	func wall_at(side: E.Side) -> bool:
-		return grid.wall_at(i, j, side)
-	func diag_wall_at(diag: E.Diagonal) -> bool:
-		return pure.diag_wall_at(diag)
+	func wall_at(wall: E.Walls) -> bool:
+		match wall:
+			E.Top, E.Right, E.Bottom, E.Left:
+				return grid.wall_at(i, j, wall as E.Side)
+			E.Inc, E.Dec:
+				return pure._diag_wall_at(wall as E.Diagonal)
+		push_error("Bad wall %d" % wall)
+		return false
 	func put_water(corner: E.Corner) -> void:
 		if !water_at(corner):
 			var changes := grid._flood_water(i, j, corner, true)

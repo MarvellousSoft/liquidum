@@ -92,17 +92,17 @@ func test_simple() -> void:
 	check(!g.get_cell(1, 0).block_full())
 	check(g.get_cell(1, 0).block_at(BottomLeft))
 	# Check diag walls
-	check(!g.get_cell(0, 0).diag_wall_at(Dec))
-	check(g.get_cell(0, 1).diag_wall_at(Inc))
-	check(!g.get_cell(0, 1).diag_wall_at(Dec))
-	check(g.get_cell(1, 1).diag_wall_at(Dec))
+	check(!g.get_cell(0, 0).wall_at(E.Walls.DecDiag))
+	check(g.get_cell(0, 1).wall_at(E.Walls.IncDiag))
+	check(!g.get_cell(0, 1).wall_at(E.Walls.DecDiag))
+	check(g.get_cell(1, 1).wall_at(E.Walls.DecDiag))
 	# Check walls
-	check(g.get_cell(0, 0).wall_at(Left))
-	check(!g.get_cell(0, 0).wall_at(Right))
-	check(g.get_cell(0, 0).wall_at(Bottom))
-	check(g.get_cell(0, 0).wall_at(Top))
-	check(!g.get_cell(1, 1).wall_at(Left))
-	check(g.get_cell(1, 1).wall_at(Right))
+	check(g.get_cell(0, 0).wall_at(E.Walls.Left))
+	check(!g.get_cell(0, 0).wall_at(E.Walls.Right))
+	check(g.get_cell(0, 0).wall_at(E.Walls.Bottom))
+	check(g.get_cell(0, 0).wall_at(E.Walls.Top))
+	check(!g.get_cell(1, 1).wall_at(E.Walls.Left))
+	check(g.get_cell(1, 1).wall_at(E.Walls.Right))
 
 	assert_grid_eq(simple, g.to_str())
 

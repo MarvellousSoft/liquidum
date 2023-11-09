@@ -58,7 +58,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	var type := E.CellType.Single
 	for diag in E.Diagonal.values():
-		if cell_data.diag_wall_at(diag):
+		if cell_data.wall_at(diag):
 			type = diag
 	cell.setup(type, n, m)
 	
