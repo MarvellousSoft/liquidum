@@ -282,4 +282,12 @@ func test_can_solve() -> void:
 
 func _flood_all(bef: String, aft: String) -> void:
 	var g := str_grid(bef)
+	g.flood_all()
+	assert_grid_eq(g.to_str(), aft)
+	check(!g.flood_all())
 
+func test_flood_all() -> void:
+	_flood_all(".w\n|.\n..\nL.", "ww\n|.\nww\nL.")
+	_flood_all("ww\n|.\nxx\nL.", "ww\n|.\nww\nL.")
+	_flood_all(".w\n|╲\n..\nL.", ".w\n|╲\n..\nL.")
+	_flood_all(".w\n|/\n..\nL.", ".w\n|/\nww\nL.")
