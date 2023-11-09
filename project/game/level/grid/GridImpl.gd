@@ -655,18 +655,33 @@ func count_water_col(j: int) -> float:
 		count += _pure_cell(i, j).water_count()
 	return count
 
+func count_boat_row(i: int) -> int:
+	var count := 0
+	for j in m:
+		count += int(_pure_cell(i, j)._has_boat())
+	return count
+
+func count_boat_col(j: int) -> int:
+	var count := 0
+	for i in n:
+		count += int(_pure_cell(i, j)._has_boat())
+	return count
+
 func are_hints_satisfied() -> bool:
 	for i in n:
 		var hint := hint_rows[i]
-		if hint == -1:
-			continue
-		if count_water_row(i) != hint:
+		if hint != -1 and count_water_row(i) != hint:
 			return false
+		var hint_boat := hint_boat_rows[i]
+		if hint_boat != -1 and count_boat_row(i) != hint_boat:
+			return false
+		# Maybe I also need to check no boats are placed randomly without hints
 	for j in m:
 		var hint := hint_cols[j]
-		if hint == -1:
-			continue
-		if count_water_col(j) != hint:
+		if hint != -1 and count_water_col(j) != hint:
+			return false
+		var hint_boat := hint_boat_cols[j]
+		if hint_boat != -1 and count_boat_col(j) != hint_boat:
 			return false
 	return true
 
