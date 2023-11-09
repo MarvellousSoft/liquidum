@@ -135,3 +135,7 @@ func redo() -> bool:
 # Flood all water and air in the grid. Returns whether it did anything
 func flood_all() -> bool:
 	return GridModel.must_be_implemented()
+
+# Clear all water and air
+func clear_water_air() -> void:
+	return GridModel.must_be_implemented()

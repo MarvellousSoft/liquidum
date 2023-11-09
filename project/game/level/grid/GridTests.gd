@@ -223,10 +223,11 @@ func test_simple_solve() -> void:
 	check(!g.are_hints_satisfied())
 	SolverModel.new().apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
-	x.....
-	|╲_/./
-	xxxxww
-	L._.L.
+	...1.3.
+	2x.....
+	.|╲_/./
+	2xxxxww
+	.L._.L.
 	""")
 
 func test_solver_rows() -> void:
@@ -240,10 +241,11 @@ func test_solver_rows() -> void:
 	""")
 	solver.apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
-	wwxx
-	L.|.
-	wwwx
-	L._╲
+	.....
+	2wwxx
+	.L.|.
+	3wwwx
+	.L._╲
 	""")
 	solver.apply_strategies(str_grid("""
 	.....
@@ -291,3 +293,10 @@ func test_flood_all() -> void:
 	_flood_all("ww\n|.\nxx\nL.", "ww\n|.\nww\nL.")
 	_flood_all(".w\n|╲\n..\nL.", ".w\n|╲\n..\nL.")
 	_flood_all(".w\n|/\n..\nL.", ".w\n|/\nww\nL.")
+
+func test_gen() -> void:
+	var gen := Generator.new(11)
+	var g:= gen.generate(6, 6, false)
+	var sol_str := g.to_str()
+	g.clear_water_air()
+	show_grids.emit(sol_str, g.to_str())

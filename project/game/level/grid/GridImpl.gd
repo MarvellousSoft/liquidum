@@ -363,7 +363,7 @@ func _content_str(c: Content) -> String:
 	return '?'
 
 func _validate_hint(c1: String, c2: String) -> float:
-	c1 = _validate(c1, ".123456789")
+	c1 = _validate(c1, ".0123456789")
 	c2 = _validate(c2, ".0123456789")
 	if c1 != '.':
 		return float(c1 + c2.replace(".", "")) / 2.
@@ -400,12 +400,37 @@ func load_from_str(s: String) -> void:
 
 func to_str() -> String:
 	var builder := PackedStringArray()
+	var hints := hint_rows.any(func(h): return h != -1.) or hint_cols.any(func(h): return h != -1.)
+	if hints:
+		builder.append('.')
+		for j in m:
+			if hint_cols[j] == -1.:
+				builder.append('..')
+			else:
+				var h := int(hint_cols[j] * 2)
+				if h < 10:
+					builder.append("%d." % h)
+				else:
+					# Will crash if h >= 100
+					builder.append("%d" % h)
+		builder.append('\n')
 	for i in n:
+		var h := int(hint_rows[i] * 2)
+		if h >= 10:
+			builder.append("%d" % (h / 10))
+		elif h >= 0:
+			builder.append("%d" % h)
+		elif hints:
+			builder.append('.')
 		for j in m:
 			var cell := _pure_cell(i, j)
 			builder.append(_content_str(cell.c_left))
 			builder.append(_content_str(cell.c_right))
 		builder.append("\n")
+		if h >= 10:
+			builder.append("%d" % (h % 10))
+		elif hints:
+			builder.append('.')
 		for j in m:
 			var left := _has_wall_left(i, j)
 			var down := _has_wall_bottom(i, j)
@@ -623,3 +648,12 @@ func flood_all() -> bool:
 		_push_undo_changes(dfs.changes)
 		return true
 	return false
+
+func clear_water_air() -> void:
+	for i in n:
+		for j in m:
+			var c := _pure_cell(i, j)
+			if c.c_left == Content.Water or c.c_left == Content.Air:
+				c.c_left = Content.Nothing
+			if c.c_right == Content.Water or c.c_right == Content.Air:
+				c.c_right = Content.Nothing

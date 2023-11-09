@@ -18,6 +18,8 @@ func _ready():
 
 func setup(hints : Array):
 	var bar = Horizontal if is_horizontal else Vertical
+	for child in bar.get_children():
+		bar.remove_child(child)
 	for idx in hints.size():
 		var hint = hints[idx]
 		var new_hint = HINT.instantiate()

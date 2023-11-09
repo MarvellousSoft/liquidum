@@ -1,5 +1,8 @@
 extends Control
 
+@onready var g1 := $Grid1
+@onready var g2 := $Grid2
+
 # Runs tests, in the future, we can make this more extendable, test classes
 # and stuffs. But for now, this is enough.
 
@@ -7,8 +10,25 @@ func _on_run_pressed():
 	$Tests.run_all_tests()
 	print("All tests passed!")
 
-func _on_tests_show_grids(g1: String, g2: String):
-	$Grid1.show()
-	$Grid2.show()
-	$Grid1.setup(g1)
-	$Grid2.setup(g2)
+func _on_tests_show_grids(s1: String, s2: String):
+	g1.show()
+	g2.show()
+	g1.setup(s1)
+	g2.setup(s2)
+
+
+func _on_gen_pressed():
+	var rseed := randi() % 1000
+	$Seed.text = "Seed: %d" % rseed
+	var gen := Generator.new(rseed)
+	var g:= gen.generate(6, 6, false)
+	var sol_str := g.to_str()
+	g.clear_water_air()
+	g1.show()
+	g2.show()
+	g1.setup(sol_str)
+	g2.setup(g.to_str())
+
+
+func _on_auto_solve_pressed():
+	g2.auto_solve()

@@ -18,31 +18,63 @@ script = ExtResource("3_ftgq8")
 
 [node name="Run" type="Button" parent="."]
 layout_mode = 0
-offset_left = 202.0
-offset_top = 123.0
-offset_right = 283.0
-offset_bottom = 154.0
+offset_left = 96.0
+offset_top = 244.0
+offset_right = 177.0
+offset_bottom = 275.0
 text = "Run tests"
 
+[node name="Gen" type="Button" parent="."]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 320.0
+offset_right = 176.0
+offset_bottom = 351.0
+text = "Gen level"
+
 [node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.177083
-anchor_top = 0.322222
-anchor_right = 0.491146
-anchor_bottom = 0.822222
+layout_mode = 2
+anchors_preset = 0
+anchor_left = 0.244792
+anchor_top = 0.481481
+anchor_right = 0.244792
+anchor_bottom = 0.481481
+offset_left = 204.0
+offset_top = 58.0
+offset_right = 204.0
+offset_bottom = 58.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Grid2" parent="." instance=ExtResource("2_ojaat")]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.622396
-anchor_top = 0.305556
-anchor_right = 0.936458
-anchor_bottom = 0.805556
+layout_mode = 2
+anchors_preset = 0
+anchor_left = 0.727604
+anchor_top = 0.442593
+anchor_right = 0.727604
+anchor_bottom = 0.442593
+offset_left = 204.0
+offset_top = 58.0
+offset_right = 204.0
+offset_bottom = 58.0
 metadata/_edit_use_anchors_ = true
+
+[node name="Seed" type="Label" parent="."]
+layout_mode = 0
+offset_left = 103.0
+offset_top = 369.0
+offset_right = 173.0
+offset_bottom = 402.0
+text = "Seed: ?"
+
+[node name="AutoSolve" type="Button" parent="."]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 422.0
+offset_right = 194.0
+offset_bottom = 453.0
+text = "Auto-solve"
 
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
+[connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]
