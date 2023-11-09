@@ -72,11 +72,9 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	return cell
 
-
 func update() -> void:
 	update_visuals()
 	update_hints()
-
 
 func update_visuals() -> void:
 	for i in rows:

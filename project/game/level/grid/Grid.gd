@@ -38,6 +38,10 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func remove_wall(_wall: E.Walls) -> void:
 		return GridModel.must_be_implemented()
+	func has_boat() -> bool:
+		return GridModel.must_be_implemented()
+	func put_boat() -> bool:
+		return GridModel.must_be_implemented()
 
 func rows() -> int:
 	return GridModel.must_be_implemented()
@@ -57,20 +61,26 @@ func wall_at(_i: int, _j: int, _side: E.Side) -> bool:
 func hint_row(_i: int) -> float:
 	return GridModel.must_be_implemented()
 
-func hint_all_rows() -> Array:
+func hint_all_rows() -> Array[float]:
 	return GridModel.must_be_implemented()
 
 func set_hint_row(_i: int, _v: float) -> void:
+	return GridModel.must_be_implemented()
+
+func boat_hint_all_rows() -> Array[int]:
 	return GridModel.must_be_implemented()
 
 # -1 if there's no hint. 0.5 for diagonals
 func hint_col(_j: int) -> float:
 	return GridModel.must_be_implemented()
 
-func hint_all_cols() -> Array:
+func hint_all_cols() -> Array[float]:
 	return GridModel.must_be_implemented()
 
 func set_hint_col(_j: int, _v: float) -> void:
+	return GridModel.must_be_implemented()
+
+func boat_hint_all_cols() -> Array[int]:
 	return GridModel.must_be_implemented()
 
 # Is this a valid solution?
@@ -104,15 +114,17 @@ func count_water_col(_j: int) -> float:
 # If hints are desired, the string should be a (2N+1)x(2M+1) grid, and the first row and
 # first column should contain the hints multiplied by two. The hints are integers, up to
 # two characters long. (That's because hints in the actual game increment by 0.5)
-# The other characters must be '.', and any row or column may not have a hint.
+# The other characters must be '.', and any row or column may not have a hint. (0, 0) should be 'h'
 # (If the row hint has two characters, it must be one per line.)
+# For boat hint, the same follows, but the (0,0) characted must be 'b'. And the hints aren't
+# multiplied by two.
 # Example:
 # wwwx
 # L../
 # #..w
 # L._╲
 # Example with hints:
-# ...1.3.
+# h..1.3.
 # 2......
 # .|╲_/./
 # 2......

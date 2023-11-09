@@ -9,6 +9,9 @@ static func from_str(s: String) -> GridModel:
 	# Integer division round down makes this work even with hints
 	var rows_ := (s.count('\n') + 1) / 2
 	var cols_ := s.find('\n') / 2
+	if s[0] == 'b':
+		rows_ -= 1
+		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)
 	g.load_from_str(s)
 	return g
@@ -26,6 +29,8 @@ var m: int
 var pure_cells: Array[Array]
 var hint_rows: Array[float]
 var hint_cols: Array[float]
+var hint_boat_rows: Array[int]
+var hint_boat_cols: Array[int]
 # (N-1)xM Array[Array[bool]]
 var wall_bottom: Array[Array]
 # Nx(M-1) Array[Array[bool]]
@@ -54,10 +59,12 @@ func _init(n_: int, m_: int) -> void:
 			wall_bottom.append(row_down)
 	for i in n:
 		hint_rows.append(-1.)
+		hint_boat_rows.append(-1)
 	for j in m:
 		hint_cols.append(-1.)
+		hint_boat_cols.append(-1)
 
-enum Content { Nothing, Water, Air, Block }
+enum Content { Nothing, Water, Air, Block, Boat }
 
 class PureCell:
 	# By default, uses inc diagonal /, if inverted uses dec \
@@ -148,6 +155,17 @@ class PureCell:
 		return put_content(corner, Content.Air)
 	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
+	func _put_boat() -> bool:
+		if diag_wall:
+			return false
+		# Only things that can be replaced with boat
+		if c_left != Content.Nothing and c_left != Content.Air:
+			return false
+		c_left = Content.Boat
+		c_right = Content.Boat
+		return true
+	func _has_boat() -> bool:
+		return c_left == Content.Boat
 	func _content_count_from(c: Content, corner: E.Corner) -> float:
 		if !diag_wall:
 			return _content_count(c)
@@ -170,17 +188,20 @@ class PureCell:
 		cell.diag_wall = diag_wall
 		# last_seen doesn't need to be copied
 		return cell
-	func _block_top() -> bool:
-		return _content_at(E.Corner.TopLeft) == Content.Block or _content_at(E.Corner.TopRight) == Content.Block 
-	func _block_bottom() -> bool:
-			return _content_at(E.Corner.BottomLeft) == Content.Block or _content_at(E.Corner.BottomRight) == Content.Block 
-	func _block_left() -> bool:
-		return c_left == Content.Block
-	func _block_right() -> bool:
-		return c_right == Content.Block
+	func _content_top() -> Content:
+		return c_right if inverted else c_left
+	func _content_right() -> Content:
+		return c_right
+	func _content_bottom() -> Content:
+		return c_left if inverted else c_right
+	func _content_left() -> Content:
+		return c_left
 	func _valid_corner(corner: E.Corner) -> bool:
 		return !diag_wall or (E.corner_to_diag(corner) == E.Diagonal.Dec) == inverted
 	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
+		if new:
+			c_left = Content.Nothing
+			c_right = Content.Nothing
 		diag_wall = new
 		inverted = (diag == E.Diagonal.Dec)
 
@@ -266,6 +287,15 @@ class CellWithLoc extends GridModel.CellModel:
 		_change_wall(wall, true)
 	func remove_wall(wall: E.Walls) -> void:
 		_change_wall(wall, false)
+	func put_boat() -> bool:
+		if i == grid.rows() - 1:
+			return false
+		var c := grid.get_cell(i + 1, j)
+		if not (c.water_at(E.Corner.TopLeft) or c.water_at(E.Corner.TopRight)):
+			return false
+		return pure._put_boat()
+	func has_boat() -> bool:
+		return pure._has_boat()
 
 func rows() -> int:
 	return n
@@ -346,6 +376,8 @@ func _str_content(chr: String) -> Content:
 			return Content.Air
 		'#':
 			return Content.Block
+		'b':
+			return Content.Boat
 	assert(false, "Unknown content")
 	return Content.Nothing
 
@@ -359,28 +391,43 @@ func _content_str(c: Content) -> String:
 			return 'x'
 		Content.Block:
 			return '#'
+		Content.Boat:
+			return 'b'
 	assert(false, "Unknown content")
 	return '?'
 
-func _validate_hint(c1: String, c2: String) -> float:
+func _validate_hint(c1: String, c2: String) -> int:
 	c1 = _validate(c1, ".0123456789")
 	c2 = _validate(c2, ".0123456789")
 	if c1 != '.':
-		return float(c1 + c2.replace(".", "")) / 2.
+		return int(c1 + c2.replace(".", ""))
 	else:
 		assert(c2 == ".", "Invalid hint")
+		return -1
+
+func _validate_hint_float(c1: String, c2: String) -> float:
+	var h := _validate_hint(c1, c2)
+	if h == -1:
 		return -1.
+	else:
+		return float(h) / 2.
 
 func load_from_str(s: String) -> void:
 	var lines := s.dedent().strip_edges().split('\n', false)
-	assert(lines.size() == 2 * n || lines.size() == 2 * n + 1, "Invalid number of rows")
-	# 1 if has hints, 0 if not
-	var h := int(lines.size() == 2 * n + 1)
-	if h == 1:
+	# Offset because of hints
+	var hb := int(lines[0][0] == 'b')
+	var hh := int(lines[hb][hb] == 'h')
+	if hb == 1:
 		for i in n:
-			hint_rows[i] = _validate_hint(lines[2 * i + 1][0], lines[2 * i + 2][0])
+			hint_boat_rows[i] = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
 		for j in m:
-			hint_cols[j] = _validate_hint(lines[0][2 * j + 1], lines[0][2 * j + 2])
+			hint_boat_cols[j] = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
+	if hh == 1:
+		for i in n:
+			hint_rows[i] = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
+		for j in m:
+			hint_cols[j] = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
+	var h := hb + hh
 	for i in n:
 		for j in m:
 			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wx#')
@@ -398,39 +445,61 @@ func load_from_str(s: String) -> void:
 				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 	validate()
 
+func _col_hint(h: int) -> String:
+	if h < 0:
+		return ".."
+	if h < 10:
+		return "%d." % h
+	else:
+		# Will crash if h >= 100
+		return "%d" % h
+
+func _row_hint1(h: int) -> String:
+	if h < 0:
+		return "."
+	elif h >= 10:
+		return "%d" % (h / 10)
+	else:
+		return "%d" % h
+
+func _row_hint2(h: int) -> String:
+	if h >= 10:
+		return "%d" % (h % 10)
+	else:
+		return "."
+
 func to_str() -> String:
 	var builder := PackedStringArray()
+	var boat_hints := hint_boat_rows.any(func(h): return h != -1) or hint_boat_cols.any(func(h): return h != -1)
 	var hints := hint_rows.any(func(h): return h != -1.) or hint_cols.any(func(h): return h != -1.)
-	if hints:
-		builder.append('.')
+	if boat_hints:
+		builder.append('b')
+		if hints:
+			builder.append('.')
 		for j in m:
-			if hint_cols[j] == -1.:
-				builder.append('..')
-			else:
-				var h := int(hint_cols[j] * 2)
-				if h < 10:
-					builder.append("%d." % h)
-				else:
-					# Will crash if h >= 100
-					builder.append("%d" % h)
+			builder.append(_col_hint(hint_boat_cols[j]))
+		builder.append('\n')
+	if hints:
+		if boat_hints:
+			builder.append('.')
+		builder.append('h')
+		for j in m:
+			builder.append(_col_hint(hint_cols[j] * 2))
 		builder.append('\n')
 	for i in n:
-		var h := int(hint_rows[i] * 2)
-		if h >= 10:
-			builder.append("%d" % (h / 10))
-		elif h >= 0:
-			builder.append("%d" % h)
-		elif hints:
-			builder.append('.')
+		if boat_hints:
+			builder.append(_row_hint1(hint_boat_rows[i]))
+		if hints:
+			builder.append(_row_hint1(int(hint_rows[i] * 2)))
 		for j in m:
 			var cell := _pure_cell(i, j)
 			builder.append(_content_str(cell.c_left))
 			builder.append(_content_str(cell.c_right))
 		builder.append("\n")
-		if h >= 10:
-			builder.append("%d" % (h % 10))
-		elif hints:
-			builder.append('.')
+		if boat_hints:
+			builder.append(_row_hint2(hint_boat_rows[i]))
+		if hints:
+			builder.append(_row_hint2(int(hint_rows[i] * 2)))
 		for j in m:
 			var left := _has_wall_left(i, j)
 			var down := _has_wall_bottom(i, j)
@@ -528,7 +597,9 @@ class AddWaterDfs extends Dfs:
 		super(grid_)
 		min_i = min_i_
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
-		cell.put_water(corner)
+		match cell._content_at(corner):
+			Content.Nothing, Content.Air, Content.Boat, Content.Water:
+				cell.put_water(corner)
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
 		return i - 1 >= min_i
@@ -538,7 +609,9 @@ class AddWaterDfs extends Dfs:
 
 class AddAirDfs extends Dfs:
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
-		cell.put_air(corner)
+		match cell._content_at(corner):
+			Content.Water, Content.Nothing, Content.Air:
+				cell.put_air(corner)
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
@@ -556,10 +629,13 @@ class RemoveWaterDfs extends Dfs:
 	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		# Only keep going if we changed something
 		if i <= min_i:
-			if cell.water_at(corner):
-				return cell.put_nothing(corner)
-			else:
-				return false
+			match cell._content_at(corner):
+				Content.Water:
+					return cell.put_nothing(corner)
+				# Remove boat but don't continue
+				Content.Boat:
+					cell.put_nothing(corner)
+			return false
 		else:
 			return true
 	func _can_go_up(_i: int, _j: int) -> bool:
@@ -619,20 +695,26 @@ func is_col_hint_satisfied(j : int) -> bool:
 	return count_water_col(j) == hint
 
 func validate() -> void:
-	# For now, just check all blocks are surrounded by walls
+	# Blocks are surrounded by walls
 	for i in n:
 		for j in m:
 			var cell := _pure_cell(i, j)
-			if cell._block_left() != cell._block_right():
+			if (cell._content_left() == Content.Block) != (cell._content_right() == Content.Block):
 				assert(cell.diag_wall)
-			if !_has_wall_left(i, j) and cell._block_left():
-				assert(_pure_cell(i, j - 1).block_right())
-			if !_has_wall_right(i, j) and cell._block_right():
-				assert(_pure_cell(i, j + 1).block_left())
-			if !_has_wall_top(i, j) and cell._block_top():
-				assert(_pure_cell(i - 1, j)._block_bottom())
-			if !_has_wall_bottom(i, j) and cell._block_bottom():
-				assert(_pure_cell(i + 1, j)._block_top())
+			if !_has_wall_left(i, j) and cell._content_left() == Content.Block:
+				assert(_pure_cell(i, j - 1)._content_right() == Content.Block)
+			if !_has_wall_right(i, j) and cell._content_right() == Content.Block:
+				assert(_pure_cell(i, j + 1)._content_left() == Content.Block)
+			if !_has_wall_top(i, j) and cell._content_top() == Content.Block:
+				assert(_pure_cell(i - 1, j)._content_bottom() == Content.Block)
+			if !_has_wall_bottom(i, j) and cell._content_bottom() == Content.Block:
+				assert(_pure_cell(i + 1, j)._content_top() == Content.Block)
+	# Boats make sense
+	for i in n:
+		for j in m:
+			if get_cell(i, j).has_boat():
+				assert(not _pure_cell(i, j).diag_wall)
+				assert(i < n - 1 and _pure_cell(i + 1, j)._content_top() == Content.Water)
 
 func flood_all() -> bool:
 	var dfs := AddWaterDfs.new(self, 0)

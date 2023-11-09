@@ -6,7 +6,7 @@ const GRID = preload("res://game/level/Grid.tscn")
 
 func _ready():
 	setup("""
-.6.4.2.
+h6.4.2.
 1......
 .|....╲
 4......

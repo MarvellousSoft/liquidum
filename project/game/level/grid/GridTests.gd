@@ -202,7 +202,7 @@ L╲_╲_.
 
 func test_simple_solve() -> void:
 	var g := str_grid("""
-	...1.3.
+	h..1.3.
 	2......
 	.|╲_/./
 	2......
@@ -223,7 +223,7 @@ func test_simple_solve() -> void:
 	check(!g.are_hints_satisfied())
 	SolverModel.new().apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
-	...1.3.
+	h..1.3.
 	2x.....
 	.|╲_/./
 	2xxxxww
@@ -233,7 +233,7 @@ func test_simple_solve() -> void:
 func test_solver_rows() -> void:
 	var solver := SolverModel.new()
 	var g := str_grid("""
-	.....
+	h....
 	2....
 	.L.|.
 	3....
@@ -241,14 +241,14 @@ func test_solver_rows() -> void:
 	""")
 	solver.apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
-	.....
+	h....
 	2wwxx
 	.L.|.
 	3wwwx
 	.L._╲
 	""")
 	solver.apply_strategies(str_grid("""
-	.....
+	h....
 	2.ww.
 	.|╲./
 	.....
@@ -271,9 +271,9 @@ func test_remove_water_bug() -> void:
 	""")
 
 func test_can_solve() -> void:
-	assert_can_solve(".2.\n...\n...")
+	assert_can_solve("h2.\n...\n...")
 	assert_can_solve("""
-	.4...
+	h4...
 	2....
 	._.L.
 	2....
@@ -281,7 +281,7 @@ func test_can_solve() -> void:
 	2....
 	._.L.
 	""")
-	assert_can_solve(".2.\n...\n...\n...\n...\n...\n...")
+	assert_can_solve("h2.\n...\n...\n...\n...\n...\n...")
 
 func _flood_all(bef: String, aft: String) -> void:
 	var g := str_grid(bef)
@@ -294,3 +294,15 @@ func test_flood_all() -> void:
 	_flood_all("ww\n|.\nxx\nL.", "ww\n|.\nww\nL.")
 	_flood_all(".w\n|╲\n..\nL.", ".w\n|╲\n..\nL.")
 	_flood_all(".w\n|/\n..\nL.", ".w\n|/\nww\nL.")
+
+func test_boat_hint() -> void:
+	return
+	var s := """
+	b...
+	.h2.
+	10..
+	..|.
+	.2..
+	..L.
+	"""
+	assert_grid_eq(str_grid(s).to_str(), s)
