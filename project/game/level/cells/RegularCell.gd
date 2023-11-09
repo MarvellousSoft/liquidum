@@ -109,3 +109,7 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 				pressed_water.emit(row, column, which)
 			MOUSE_BUTTON_RIGHT:
 				pressed_air.emit(row, column, which)
+
+
+func _on_button_mouse_entered(which : E.Waters):
+	mouse_entered.emit(row, column, which)

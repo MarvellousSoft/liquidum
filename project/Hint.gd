@@ -6,6 +6,8 @@ const ERROR_COLOR = Color(.96, .19, .19)
 
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
+	E.Walls.Right: $Hints/Right,
+	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 }
 @onready var Number = $Number

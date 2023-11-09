@@ -26,6 +26,23 @@ rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 texture = ExtResource("2_8gvav")
 
+[node name="Right" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("2_8gvav")
+flip_h = true
+
+[node name="Bottom" type="TextureRect" parent="Hints"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+rotation = 1.5708
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("2_8gvav")
+flip_h = true
+
 [node name="Left" type="TextureRect" parent="Hints"]
 layout_mode = 0
 offset_right = 100.0

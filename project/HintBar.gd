@@ -30,12 +30,12 @@ func setup(hints : Array):
 		#Set graphical hints
 		if is_horizontal:
 			new_hint.set_hint_visibility(E.Top, false)
-			if idx == 0:
-				new_hint.set_hint_visibility(E.Left, false)
+			new_hint.set_hint_visibility(E.Bottom, false)
+			new_hint.set_hint_visibility(E.Left, idx == 0)
 		else:
 			new_hint.set_hint_visibility(E.Left, false)
-			if idx == 0:
-				new_hint.set_hint_visibility(E.Top, false)
+			new_hint.set_hint_visibility(E.Right, false)
+			new_hint.set_hint_visibility(E.Top,  idx == 0)
 
 func get_hint(idx : int) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical

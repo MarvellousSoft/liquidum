@@ -11,6 +11,12 @@ const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 var grid_logic : GridModel
 var rows : int
 var columns : int
+var mouse_hold_status : int
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if not event.pressed:
+			mouse_hold_status = E.MouseDragState.None
 
 func setup(level : String) -> void:
 	grid_logic = GridImpl.from_str(level)
@@ -55,6 +61,8 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	cell.pressed_water.connect(_on_cell_pressed_water)
 	cell.pressed_air.connect(_on_cell_pressed_air)
+	cell.mouse_entered.connect(_on_cell_mouse_entered)
+	
 	return cell
 
 
@@ -107,11 +115,14 @@ func get_cell(i: int, j: int) -> Node:
 
 func _on_cell_pressed_water(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
+	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.water_at(corner):
+		mouse_hold_status = E.MouseDragState.RemoveWater
 		cell_data.remove_water_or_air(corner)
 	else:
+		mouse_hold_status = E.MouseDragState.Water
 		cell_data.put_water(corner)
 	update()
 
@@ -121,8 +132,28 @@ func _on_cell_pressed_air(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.air_at(corner):
+		mouse_hold_status = E.MouseDragState.RemoveAir
 		cell_data.remove_water_or_air(corner)
 	else:
+		mouse_hold_status = E.MouseDragState.Air
 		cell_data.put_air(corner)
 	update()
 
+
+func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
+	if mouse_hold_status == E.MouseDragState.None:
+		return
+	
+	var cell_data := grid_logic.get_cell(i, j)
+	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
+	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
+		cell_data.put_water(corner)
+	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
+		cell_data.put_air(corner)
+	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
+		cell_data.remove_water_or_air(corner)
+	elif mouse_hold_status == E.MouseDragState.RemoveAir and cell_data.air_at(corner):
+		cell_data.remove_water_or_air(corner)
+	
+	update()
+	
