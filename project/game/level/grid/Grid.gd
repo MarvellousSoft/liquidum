@@ -4,8 +4,6 @@ static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")
 	return null
 
-
-
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -37,6 +35,10 @@ class CellModel:
 	func put_air(_corner: E.Corner) -> void:
 		return GridModel.must_be_implemented()
 	func remove_water_or_air(_corner: E.Corner) -> void:
+		return GridModel.must_be_implemented()
+	func put_wall(_wall: E.Walls) -> void:
+		return GridModel.must_be_implemented()
+	func remove_wall(_wall: E.Walls) -> void:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:

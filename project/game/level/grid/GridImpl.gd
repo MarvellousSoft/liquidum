@@ -27,7 +27,7 @@ var pure_cells: Array[Array]
 var hint_rows: Array[float]
 var hint_cols: Array[float]
 # (N-1)xM Array[Array[bool]]
-var wall_down: Array[Array]
+var wall_bottom: Array[Array]
 # Nx(M-1) Array[Array[bool]]
 var wall_right: Array[Array]
 # Optimization for DFSs
@@ -51,7 +51,7 @@ func _init(n_: int, m_: int) -> void:
 		pure_cells.append(row)
 		wall_right.append(row_right)
 		if i < n - 1:
-			wall_down.append(row_down)
+			wall_bottom.append(row_down)
 	for i in n:
 		hint_rows.append(-1.)
 	for j in m:
@@ -180,6 +180,9 @@ class PureCell:
 		return c_right == Content.Block
 	func _valid_corner(corner: E.Corner) -> bool:
 		return !diag_wall or (E.corner_to_diag(corner) == E.Diagonal.Dec) == inverted
+	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
+		diag_wall = new
+		inverted = (diag == E.Diagonal.Dec)
 
 class Change:
 	var i: int
@@ -249,6 +252,16 @@ class CellWithLoc extends GridModel.CellModel:
 		if pure.put_nothing(corner):
 			changes.append(change)
 		grid._push_undo_changes(changes)
+	func _change_wall(wall: E.Walls, new: bool) -> void:
+		match wall:
+			E.Top, E.Left, E.Right, E.Bottom:
+				return grid._change_wall(i, j, wall as E.Side, new)
+			E.Dec, E.Inc:
+				return pure._change_diag_wall(wall as E.Diagonal, new)
+	func put_wall(wall: E.Walls) -> void:
+		_change_wall(wall, true)
+	func remove_wall(wall: E.Walls) -> void:
+		_change_wall(wall, false)
 
 func rows() -> int:
 	return n
@@ -287,23 +300,33 @@ func wall_at(i: int, j: int, side: E.Side) -> bool:
 		E.Side.Right:
 			return _has_wall_right(i, j)
 		E.Side.Top:
-			return _has_wall_up(i, j)
+			return _has_wall_top(i, j)
 		E.Side.Bottom:
-			return _has_wall_down(i, j)
+			return _has_wall_bottom(i, j)
 	assert(false, "Invalid side")
 	return false
 
-func _has_wall_down(i: int, j: int) -> bool:
-	return i == n - 1 or wall_down[i][j]
+func _has_wall_bottom(i: int, j: int) -> bool:
+	return i == n - 1 or wall_bottom[i][j]
 
-func _has_wall_up(i: int, j: int) -> bool:
-	return i == 0 or _has_wall_down(i - 1, j)
+func _has_wall_top(i: int, j: int) -> bool:
+	return i == 0 or _has_wall_bottom(i - 1, j)
 
 func _has_wall_right(i: int, j: int) -> bool:
 	return j == m - 1 or wall_right[i][j]
 
 func _has_wall_left(i: int, j: int) -> bool:
 	return j == 0 or _has_wall_right(i, j - 1)
+
+func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
+	if side == E.Left:
+		return _change_wall(i, j - 1, E.Side.Right, new)
+	if side == E.Top:
+		return _change_wall(i - 1, j, E.Side.Bottom, new)
+	if side == E.Right and j >= 0 and j < m - 1:
+		wall_right[i][j] = new
+	if side == E.Bottom and i >= 0 and i < n - 1:
+		wall_bottom[i][j] = new
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
@@ -366,7 +389,7 @@ func load_from_str(s: String) -> void:
 			cell.inverted = (c4 == '╲')
 			cell.diag_wall = (c4 == '/' or c4 == '╲')
 			if i < n - 1:
-				wall_down[i][j] = (c3 == '_' or c3 == 'L')
+				wall_bottom[i][j] = (c3 == '_' or c3 == 'L')
 			if j > 0:
 				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 	validate()
@@ -381,7 +404,7 @@ func to_str() -> String:
 		builder.append("\n")
 		for j in m:
 			var left := _has_wall_left(i, j)
-			var down := _has_wall_down(i, j)
+			var down := _has_wall_bottom(i, j)
 			if left:
 				builder.append("L" if down else "|")
 			else:
@@ -463,10 +486,10 @@ class Dfs:
 		if !grid._has_wall_right(i, j) and !(cell.diag_wall and is_left):
 			flood(i, j + 1, BottomLeft if grid._pure_cell(i, j + 1).inverted else TopLeft)
 		# Try to flood down
-		if !grid._has_wall_down(i, j) and !(cell.diag_wall and is_top) and _can_go_down(i, j):
+		if !grid._has_wall_bottom(i, j) and !(cell.diag_wall and is_top) and _can_go_down(i, j):
 			flood(i + 1, j, TopRight if grid._pure_cell(i + 1, j).inverted else TopLeft)
 		# Try to flood up, if gravity helps
-		if !grid._has_wall_up(i, j) and !(cell.diag_wall and !is_top) and _can_go_up(i, j):
+		if !grid._has_wall_top(i, j) and !(cell.diag_wall and !is_top) and _can_go_up(i, j):
 			flood(i - 1, j, BottomLeft if grid._pure_cell(i - 1, j).inverted else BottomRight)
 
 class AddWaterDfs extends Dfs:
@@ -577,9 +600,9 @@ func validate() -> void:
 				assert(_pure_cell(i, j - 1).block_right())
 			if !_has_wall_right(i, j) and cell._block_right():
 				assert(_pure_cell(i, j + 1).block_left())
-			if !_has_wall_up(i, j) and cell._block_top():
+			if !_has_wall_top(i, j) and cell._block_top():
 				assert(_pure_cell(i - 1, j)._block_bottom())
-			if !_has_wall_down(i, j) and cell._block_bottom():
+			if !_has_wall_bottom(i, j) and cell._block_bottom():
 				assert(_pure_cell(i + 1, j)._block_top())
 
 func flood_all() -> bool:
