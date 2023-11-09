@@ -17,6 +17,13 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if not event.pressed:
 			mouse_hold_status = E.MouseDragState.None
+	elif grid_logic and event.is_action_pressed("undo"):
+		grid_logic.undo()
+		update()
+	elif grid_logic and event.is_action_pressed("redo"):
+		grid_logic.redo()
+		update()
+		
 
 func setup(level : String) -> void:
 	grid_logic = GridImpl.from_str(level)
