@@ -306,3 +306,12 @@ func test_boat_hint() -> void:
 	..L.
 	"""
 	assert_grid_eq(str_grid(s).to_str(), s)
+
+func test_boat_place_remove() -> void:
+	var g := GridImpl.create(3, 3)
+	assert(!g.get_cell(0, 1).put_boat())
+	g.get_cell(1, 0).put_water(BottomLeft)
+	assert(!g.get_cell(0, 1).has_boat())
+	assert(g.get_cell(0, 1).put_boat())
+	assert(g.get_cell(0, 1).has_boat())
+	# TODO test remove water flood
