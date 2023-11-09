@@ -110,3 +110,5 @@ layout_mode = 2
 
 [editable path="CenterContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/GridContainer/HintBarLeft"]
+[editable path="CenterContainer/GridContainer/Columns/Row1/RegularCell"]
+[editable path="CenterContainer/GridContainer/Columns/Row1/RegularCell2"]

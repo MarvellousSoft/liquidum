@@ -1,14 +1,18 @@
-[gd_scene load_steps=20 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=24 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/single_water.png" id="2_gil80"]
+[ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
 [ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/single_button_normal.png" id="2_yedx8"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/single_button_pressed.png" id="3_b1y6m"]
 [ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/topleft_water.png" id="3_qjmm0"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/single_button_hover.png" id="4_8abky"]
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/single_air.png" id="4_idwbg"]
+[ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/topright_water.png" id="5_8qkwp"]
 [ext_resource type="Texture2D" uid="uid://drtuy7jt7dfl2" path="res://assets/images/ui/topleft_air.png" id="5_jucil"]
+[ext_resource type="Texture2D" uid="uid://c0gt3ni02eqol" path="res://assets/images/ui/bottomright_water.png" id="5_uuq26"]
 [ext_resource type="Texture2D" uid="uid://dqki8j2vmoesq" path="res://assets/images/ui/single_button_disabled.png" id="5_venyn"]
+[ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/bottomleft_water.png" id="6_khw54"]
 [ext_resource type="Texture2D" uid="uid://cc5o7ctb2q2y3" path="res://assets/images/ui/diagonal_button_normal.png" id="6_tg4ma"]
 [ext_resource type="Texture2D" uid="uid://4bsr554e8gbo" path="res://assets/images/ui/topright_air.png" id="6_uh3ru"]
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/diagonal_button_pressed.png" id="7_jf17e"]
@@ -33,6 +37,7 @@ grow_vertical = 2
 script = ExtResource("1_102n5")
 
 [node name="BG" type="ColorRect" parent="."]
+z_index = -1
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
 offset_right = 40.0
@@ -42,7 +47,7 @@ offset_bottom = 40.0
 anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Waters"]
-visible = false
+material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
@@ -50,7 +55,7 @@ offset_bottom = 100.0
 texture = ExtResource("2_gil80")
 
 [node name="TopLeft" type="TextureRect" parent="Waters"]
-visible = false
+material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
@@ -59,34 +64,31 @@ pivot_offset = Vector2(50, 50)
 texture = ExtResource("3_qjmm0")
 
 [node name="TopRight" type="TextureRect" parent="Waters"]
-visible = false
+material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-rotation = 1.5708
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("3_qjmm0")
+texture = ExtResource("5_8qkwp")
 
 [node name="BottomRight" type="TextureRect" parent="Waters"]
-visible = false
+material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-rotation = 3.14159
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("3_qjmm0")
+texture = ExtResource("5_uuq26")
 
 [node name="BottomLeft" type="TextureRect" parent="Waters"]
-visible = false
+material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-rotation = 4.71239
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("3_qjmm0")
+texture = ExtResource("6_khw54")
 
 [node name="Airs" type="Control" parent="."]
 anchors_preset = 0

@@ -1,6 +1,7 @@
 extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mask.png")
+const SURFACE_THRESHOLD = 0.7
 
 signal pressed_water(i: int, j: int, which: E.Waters)
 signal pressed_air(i: int, j: int, which: E.Waters)
@@ -43,13 +44,35 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 
 var row : int
 var column : int
+var water_flags = {
+	E.Waters.Single: false,
+	E.Waters.TopLeft: false,
+	E.Waters.TopRight: false,
+	E.Waters.BottomLeft: false,
+	E.Waters.BottomRight: false,
+}
+
+
+func _ready():
+	for water in Waters.values():
+		water.material = water.material.duplicate()
+
+
+func _process(dt):
+	for corner in E.Waters.values():
+		if corner != E.Waters.None:
+			if water_flags[corner]:
+				increase_water_level(Waters[corner], dt)
+			else:
+				decrease_water_level(Waters[corner], dt)
 
 
 func setup(type : E.CellType, i : int, j : int) -> void:
 	row = i
 	column = j
 	for water in Waters.values():
-		water.hide()
+		water.show()
+		set_water_level(water, 0.0)
 	for air in Airs.values():
 		air.hide()
 	for buttons in Buttons.values():
@@ -76,9 +99,10 @@ func set_wall(wall : E.Walls) -> void:
 	if Hints.has(wall):
 		Hints[wall].hide()
 
+
 func remove_water():
-	for water in Waters.values():
-		water.hide()
+	for flag in water_flags.keys():
+		water_flags[flag] = false
 
 
 func set_water(water : E.Waters, value: bool) -> void:
@@ -86,7 +110,7 @@ func set_water(water : E.Waters, value: bool) -> void:
 		E.Waters.None:
 			remove_water()
 		_:
-			Waters[water].visible = value
+			water_flags[water] = value
 
 
 func remove_air():
@@ -100,6 +124,22 @@ func set_air(air : E.Waters, value: bool) -> void:
 			remove_air()
 		_:
 			Airs[air].visible = value
+
+
+func set_water_level(water, value) -> void:
+	water.material.set_shader_parameter("level", value)
+
+
+func increase_water_level(water, dt) -> void:
+	var level = water.material.get_shader_parameter("level")
+	level = min(level + dt, 1.0)
+	water.material.set_shader_parameter("level", level)
+
+
+func decrease_water_level(water, dt) -> void:
+	var level = water.material.get_shader_parameter("level")
+	level = max(level - dt, 0.0)
+	water.material.set_shader_parameter("level", level)
 
 
 func _on_button_gui_input(event, which : E.Waters) -> void:
