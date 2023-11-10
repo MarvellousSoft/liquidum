@@ -527,7 +527,11 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 	if undos.is_empty():
 		return false
 	var changes: Array[Change] = undos.pop_back().changes
+	var already_done = {}
 	for c in changes:
+		if already_done.has(Vector2i(c.i, c.j)):
+			continue
+		already_done[Vector2i(c.i, c.j)] = true
 		var now_cell: PureCell = pure_cells[c.i][c.j]
 		pure_cells[c.i][c.j] = c.prev_cell
 		# Maybe clone isn't necessary, but let's be safe

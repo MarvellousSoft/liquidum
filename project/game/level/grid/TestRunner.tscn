@@ -21,18 +21,18 @@ anchor_top = 0.182407
 anchor_right = -0.0817708
 anchor_bottom = 0.182407
 offset_left = 846.0
-offset_top = 371.0
+offset_top = 345.0
 offset_right = 846.0
-offset_bottom = 371.0
+offset_bottom = 345.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Grid2" parent="." instance=ExtResource("2_ojaat")]
 layout_mode = 2
 anchors_preset = 0
 anchor_left = 0.335417
-anchor_top = 0.192593
+anchor_top = 0.158333
 anchor_right = 0.335417
-anchor_bottom = 0.192593
+anchor_bottom = 0.158333
 offset_left = 846.0
 offset_top = 371.0
 offset_right = 846.0
