@@ -89,6 +89,9 @@ func boat_hint_all_cols() -> Array[int]:
 func are_hints_satisfied() -> bool:
 	return GridModel.must_be_implemented()
 
+func is_any_hint_broken() -> bool:
+	return GridModel.must_be_implemented()
+
 func count_water_row(_i: int) -> float:
 	return GridModel.must_be_implemented()
 

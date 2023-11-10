@@ -271,4 +271,53 @@ func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 		if not strategies.any(func(s): return s.apply_any()):
 			return
 		print("1 pass")
-		assert(_i < 20)
+		assert(_i < 40)
+
+enum SolveResult { SolvedUniqueNoGuess, SolvedUnique, SolvedMultiple, Unsolvable }
+
+func _make_guess(res: SolveResult) -> SolveResult:
+	match res:
+		SolveResult.SolvedUniqueNoGuess:
+			return SolveResult.SolvedUnique
+		_:
+			return res
+
+# Will apply strategies but also try to guess
+# If look_for_multiple = false, will not try to look for multiple solutions
+func full_solve(grid: GridModel, flush_undo := true, look_for_multiple := true) -> SolveResult:
+	if flush_undo:
+		grid.push_empty_undo()
+	apply_strategies(grid, false)
+	if grid.is_any_hint_broken():
+		return SolveResult.Unsolvable
+	if grid.are_hints_satisfied():
+		return SolveResult.SolvedUniqueNoGuess
+	for i in grid.rows():
+		for j in grid.cols():
+			for corner in E.Corner.values():
+				var c := grid.get_cell(i, j)
+				if c.nothing_at(corner):
+					# New undo stack
+					c.put_water(corner, true)
+					var r1 := full_solve(grid, false)
+					grid.undo()
+					# Unsolvable means there's definitely no water here. Tail recurse.
+					if r1 == SolveResult.Unsolvable:
+						c.put_air(corner, false)
+						return _make_guess(full_solve(grid, false))
+					elif not look_for_multiple:
+						grid.redo()
+						return r1
+					# Otherwise we need to try to solve with air
+					c.put_air(corner, true)
+					var r2 := full_solve(grid, false, false)
+					# It definitely had water
+					if r2 == SolveResult.Unsolvable:
+						grid.undo()
+						c.put_water(corner, false)
+						# TODO: Maybe here we could store the undo stack and reuse it
+						# Doesn't really make it much faster
+						return _make_guess(full_solve(grid, false))
+					# Could solve both ways, definitely not unique
+					return SolveResult.SolvedMultiple
+	return SolveResult.Unsolvable

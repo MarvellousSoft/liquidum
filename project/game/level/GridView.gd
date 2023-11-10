@@ -1,3 +1,4 @@
+class_name GridView
 extends Control
 
 signal updated
@@ -52,6 +53,11 @@ func get_grid_size() -> Vector2:
 func auto_solve(flush_undo := true, do_emit_signal := true) -> void:
 	SolverModel.new().apply_strategies(grid_logic, flush_undo)
 	update(do_emit_signal)
+
+func full_solve(flush_undo := true, do_emit_signal := true) -> SolverModel.SolveResult:
+	var result := SolverModel.new().full_solve(grid_logic, flush_undo)
+	update(do_emit_signal)
+	return result
 
 #Assumes grid_logic is already setup
 func setup_hints():

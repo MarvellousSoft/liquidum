@@ -1,7 +1,7 @@
 extends Control
 
-@onready var g1 := $Grid1
-@onready var g2 := $Grid2
+@onready var g1: GridView = $Grid1
+@onready var g2: GridView = $Grid2
 
 # Runs tests, in the future, we can make this more extendable, test classes
 # and stuffs. But for now, this is enough.
@@ -40,3 +40,8 @@ func _on_grid_2_updated():
 
 func _on_paste_pressed():
 	g2.setup(DisplayServer.clipboard_get())
+
+
+func _on_full_solve_pressed():
+	var r := g2.full_solve()
+	print("Level is %s" % SolverModel.SolveResult.find_key(r))

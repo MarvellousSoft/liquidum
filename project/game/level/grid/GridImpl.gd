@@ -220,37 +220,37 @@ class Changes:
 		changes = changes_
 
 class CellWithLoc extends GridModel.CellModel:
-	var pure: PureCell
 	var i: int
 	var j: int
 	var grid: GridImpl
-	func _init(pure_: PureCell, i_: int, j_: int, grid_: GridImpl) -> void:
-		self.pure = pure_
+	func _init(i_: int, j_: int, grid_: GridImpl) -> void:
 		self.i = i_
 		self.j = j_
 		self.grid = grid_
+	func pure() -> PureCell:
+		return grid._pure_cell(i, j)
 	func water_full() -> bool:
-		return pure.water_full()
+		return pure().water_full()
 	func water_at(corner: E.Corner) -> bool:
-		return pure.water_at(corner)
+		return pure().water_at(corner)
 	func air_full() -> bool:
-		return pure.air_full()
+		return pure().air_full()
 	func air_at(corner: E.Corner) -> bool:
-		return pure.air_at(corner)
+		return pure().air_at(corner)
 	func nothing_full() -> bool:
-		return pure.nothing_full()
+		return pure().nothing_full()
 	func nothing_at(corner: E.Corner) -> bool:
-		return pure.nothing_at(corner)
+		return pure().nothing_at(corner)
 	func block_full() -> bool:
-		return pure.block_full()
+		return pure().block_full()
 	func block_at(corner: E.Corner) -> bool:
-		return pure.block_at(corner)
+		return pure().block_at(corner)
 	func wall_at(wall: E.Walls) -> bool:
 		match wall:
 			E.Top, E.Right, E.Bottom, E.Left:
 				return grid.wall_at(i, j, wall as E.Side)
 			E.Inc, E.Dec:
-				return pure._diag_wall_at(wall as E.Diagonal)
+				return pure()._diag_wall_at(wall as E.Diagonal)
 		push_error("Bad wall %d" % wall)
 		return false
 	func put_water(corner: E.Corner, flush_undo := true) -> void:
@@ -262,8 +262,8 @@ class CellWithLoc extends GridModel.CellModel:
 			grid.push_empty_undo()
 		if water_at(corner):
 			remove_water_or_air(corner, false)
-		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
-		if pure.put_air(corner):
+		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
+		if pure().put_air(corner):
 			# No auto-flooding air
 			if flood:
 				var dfs := AddAirDfs.new(grid)
@@ -274,8 +274,8 @@ class CellWithLoc extends GridModel.CellModel:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))
-		var change := Change.new(i, j, pure.clone())
-		if pure.put_nothing(corner):
+		var change := Change.new(i, j, pure().clone())
+		if pure().put_nothing(corner):
 			changes.append(change)
 		grid._push_undo_changes(changes, flush_undo)
 	func _change_wall(wall: E.Walls, new: bool, _flush_undo: bool) -> void:
@@ -284,7 +284,7 @@ class CellWithLoc extends GridModel.CellModel:
 			E.Top, E.Left, E.Right, E.Bottom:
 				return grid._change_wall(i, j, wall as E.Side, new)
 			E.Dec, E.Inc:
-				return pure._change_diag_wall(wall as E.Diagonal, new)
+				return pure()._change_diag_wall(wall as E.Diagonal, new)
 	func put_wall(wall: E.Walls, flush_undo := true) -> void:
 		_change_wall(wall, true, flush_undo)
 	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
@@ -295,13 +295,13 @@ class CellWithLoc extends GridModel.CellModel:
 		var c := grid.get_cell(i + 1, j)
 		if not (c.water_at(E.Corner.TopLeft) or c.water_at(E.Corner.TopRight)):
 			return false
-		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
-		if pure._put_boat():
+		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
+		if pure()._put_boat():
 			grid._push_undo_changes(changes, flush_undo)
 			return true
 		return false
 	func has_boat() -> bool:
-		return pure._has_boat()
+		return pure()._has_boat()
 
 func rows() -> int:
 	return n
@@ -313,7 +313,7 @@ func _pure_cell(i: int, j: int) -> PureCell:
 	return pure_cells[i][j]
 
 func get_cell(i: int, j: int) -> CellModel:
-	return CellWithLoc.new(_pure_cell(i, j), i, j, self)
+	return CellWithLoc.new(i, j, self)
 
 func hint_row(i: int) -> float:
 	return hint_rows[i]
@@ -698,6 +698,21 @@ func are_hints_satisfied() -> bool:
 		if hint_boat != -1 and count_boat_col(j) != hint_boat:
 			return false
 	return true
+
+func is_any_hint_broken() -> bool:
+	for i in n:
+		if is_row_hint_wrong(i):
+			return true
+		var h := hint_boat_rows[i]
+		if h != -1 and count_boat_row(i) > h:
+			return false
+	for j in m:
+		if is_col_hint_wrong(j):
+			return true
+		var h := hint_boat_cols[j]
+		if h != -1 and count_boat_col(j) > h:
+			return false
+	return false
 
 func is_row_hint_wrong(i : int) -> bool:
 	var hint := hint_rows[i]

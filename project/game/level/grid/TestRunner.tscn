@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b5np4b83uqkua"]
 
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
-[ext_resource type="PackedScene" path="res://game/level/GridView.tscn" id="2_ojaat"]
+[ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_ojaat"]
 [ext_resource type="Script" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
 [node name="TestRunner" type="Control"]
@@ -12,6 +12,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xrxil")
+
+[node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
+layout_mode = 2
+anchors_preset = 0
+anchor_left = -0.0817708
+anchor_top = 0.182407
+anchor_right = -0.0817708
+anchor_bottom = 0.182407
+offset_left = 846.0
+offset_top = 371.0
+offset_right = 846.0
+offset_bottom = 371.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Grid2" parent="." instance=ExtResource("2_ojaat")]
+layout_mode = 2
+anchors_preset = 0
+anchor_left = 0.335417
+anchor_top = 0.192593
+anchor_right = 0.335417
+anchor_bottom = 0.192593
+offset_left = 846.0
+offset_top = 371.0
+offset_right = 846.0
+offset_bottom = 371.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Tests" type="Node" parent="."]
 script = ExtResource("3_ftgq8")
@@ -32,39 +58,13 @@ offset_right = 175.0
 offset_bottom = 337.0
 text = "Gen level"
 
-[node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
-layout_mode = 2
-anchors_preset = 0
-anchor_left = 0.244792
-anchor_top = 0.481481
-anchor_right = 0.244792
-anchor_bottom = 0.481481
-offset_left = 204.0
-offset_top = 58.0
-offset_right = 204.0
-offset_bottom = 58.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Grid2" parent="." instance=ExtResource("2_ojaat")]
-layout_mode = 2
-anchors_preset = 0
-anchor_left = 0.727604
-anchor_top = 0.442593
-anchor_right = 0.727604
-anchor_bottom = 0.442593
-offset_left = 204.0
-offset_top = 58.0
-offset_right = 204.0
-offset_bottom = 58.0
-metadata/_edit_use_anchors_ = true
-
 [node name="AutoSolve" type="Button" parent="."]
 layout_mode = 0
 offset_left = 96.0
 offset_top = 414.0
 offset_right = 186.0
 offset_bottom = 445.0
-text = "Auto-solve"
+text = "Simple Solve"
 
 [node name="Seed" type="TextEdit" parent="."]
 layout_mode = 0
@@ -90,9 +90,18 @@ offset_right = 270.0
 offset_bottom = 546.0
 text = "Paste from clipboard"
 
+[node name="FullSolve" type="Button" parent="."]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 568.0
+offset_right = 180.0
+offset_bottom = 599.0
+text = "Full solve"
+
+[connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
-[connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
+[connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]

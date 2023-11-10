@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cww4tk7afj31"]
+[gd_scene load_steps=4 format=3 uid="uid://qm8ijblbhiyt"]
 
 [ext_resource type="Script" path="res://game/level/GridView.gd" id="1_a7a5u"]
 [ext_resource type="PackedScene" uid="uid://bljmpbyn14lnb" path="res://game/level/hints/HintBar.tscn" id="2_q06jt"]
