@@ -43,6 +43,13 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 	E.Walls.DecDiag: $Walls/Dec,
 	E.Walls.IncDiag: $Walls/Inc,
 }
+@onready var Blocks = {
+	E.Waters.Single: $Blocks/Single,
+	E.Waters.TopLeft: $Blocks/TopLeft,
+	E.Waters.TopRight: $Blocks/TopRight,
+	E.Waters.BottomLeft: $Blocks/BottomLeft,
+	E.Waters.BottomRight: $Blocks/BottomRight,
+}
 
 var row : int
 var column : int
@@ -85,6 +92,8 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 		buttons.hide()
 	for wall in Walls.values():
 		wall.hide()
+	for block in Blocks.values():
+		block.hide()
 	type = new_type
 	match type:
 		E.CellType.Single:
@@ -109,6 +118,11 @@ func set_wall(wall : E.Walls) -> void:
 	Walls[wall].show()
 	if Hints.has(wall):
 		Hints[wall].hide()
+
+
+func set_block(block : E.Waters) -> void:
+	Blocks[block].show()
+	Buttons[block].hide()
 
 
 func remove_water():

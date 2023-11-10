@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=29 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/single_water.png" id="2_gil80"]
@@ -23,6 +23,11 @@
 [ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/left_wall.png" id="11_b6aso"]
 [ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/dec_diag.png" id="12_q2grv"]
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/left_wall_hint.png" id="16_r1v74"]
+[ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/single_block.png" id="24_062gv"]
+[ext_resource type="Texture2D" uid="uid://bg0odel7l3b84" path="res://assets/images/ui/topleft_block.png" id="25_8heo7"]
+[ext_resource type="Texture2D" uid="uid://q0ol3s5ovu68" path="res://assets/images/ui/topright_block.png" id="26_7n8k6"]
+[ext_resource type="Texture2D" uid="uid://caxkadwoqgsqg" path="res://assets/images/ui/bottomright_block.png" id="27_rw5f0"]
+[ext_resource type="Texture2D" uid="uid://cmvo5dnset77k" path="res://assets/images/ui/bottomleft_block.png" id="28_3g4fs"]
 
 [node name="RegularCell" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -302,6 +307,48 @@ offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("12_q2grv")
 flip_h = true
+
+[node name="Blocks" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Single" type="TextureRect" parent="Blocks"]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("24_062gv")
+
+[node name="TopLeft" type="TextureRect" parent="Blocks"]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("25_8heo7")
+
+[node name="TopRight" type="TextureRect" parent="Blocks"]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("26_7n8k6")
+
+[node name="BottomRight" type="TextureRect" parent="Blocks"]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("27_rw5f0")
+
+[node name="BottomLeft" type="TextureRect" parent="Blocks"]
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("28_3g4fs")
 
 [connection signal="gui_input" from="Buttons/Single" to="." method="_on_button_gui_input" binds= [11]]
 [connection signal="mouse_entered" from="Buttons/Single" to="." method="_on_button_mouse_entered" binds= [11]]

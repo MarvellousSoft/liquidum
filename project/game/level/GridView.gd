@@ -68,6 +68,12 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	for side in E.Side.values():
 		if cell_data.wall_at(side):
 			cell.set_wall(side)
+	if cell_data.block_full():
+		cell.set_block(E.Single)
+	else:
+		for corner in E.Corner.values():
+			if cell_data.block_at(corner):
+				cell.set_block(corner)
 	
 	cell.pressed_water.connect(_on_cell_pressed_water)
 	cell.pressed_air.connect(_on_cell_pressed_air)
