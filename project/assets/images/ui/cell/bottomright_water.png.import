@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b14xkj3uolvis"
-path="res://.godot/imported/left_wall.png-c4092b756ac2db2198d7dd9f35e5ff3a.ctex"
+uid="uid://c0gt3ni02eqol"
+path="res://.godot/imported/bottomright_water.png-a5a8ea511bee126304d724c7ebcc6160.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/left_wall.png"
-dest_files=["res://.godot/imported/left_wall.png-c4092b756ac2db2198d7dd9f35e5ff3a.ctex"]
+source_file="res://assets/images/ui/cell/bottomright_water.png"
+dest_files=["res://.godot/imported/bottomright_water.png-a5a8ea511bee126304d724c7ebcc6160.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

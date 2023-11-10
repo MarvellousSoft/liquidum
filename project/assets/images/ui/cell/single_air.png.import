@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chgjyudh56rir"
-path="res://.godot/imported/bottomleft_water.png-b28316c585da67f4c13d6524528a730e.ctex"
+uid="uid://dl5f8agso8p12"
+path="res://.godot/imported/single_air.png-05a6331311eae5b0cf02d27fdd47207e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/bottomleft_water.png"
-dest_files=["res://.godot/imported/bottomleft_water.png-b28316c585da67f4c13d6524528a730e.ctex"]
+source_file="res://assets/images/ui/cell/single_air.png"
+dest_files=["res://.godot/imported/single_air.png-05a6331311eae5b0cf02d27fdd47207e.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nhgptovy7kt8"
-path="res://.godot/imported/left_wall_hint.png-10d48e34d8b428ae9ba9e41dd471a9ed.ctex"
+uid="uid://3383tn6k31b5"
+path="res://.godot/imported/single_button_hover.png-f4ecefe8c7299957eb8e86b65dfe18ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/left_wall_hint.png"
-dest_files=["res://.godot/imported/left_wall_hint.png-10d48e34d8b428ae9ba9e41dd471a9ed.ctex"]
+source_file="res://assets/images/ui/cell/single_button_hover.png"
+dest_files=["res://.godot/imported/single_button_hover.png-f4ecefe8c7299957eb8e86b65dfe18ce.ctex"]
 
 [params]
 

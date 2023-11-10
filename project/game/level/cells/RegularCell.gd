@@ -1,6 +1,6 @@
 extends Cell
 
-const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mask.png")
+const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
 const WATER_SPEED_RATIO = 7.0
 const EPS = 0.1
@@ -50,6 +50,7 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 	E.Waters.BottomLeft: $Blocks/BottomLeft,
 	E.Waters.BottomRight: $Blocks/BottomRight,
 }
+@onready var Boat = $Boat
 
 var row : int
 var column : int
@@ -94,6 +95,7 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 		wall.hide()
 	for block in Blocks.values():
 		block.hide()
+	Boat.hide()
 	type = new_type
 	match type:
 		E.CellType.Single:
@@ -125,7 +127,11 @@ func set_block(block : E.Waters) -> void:
 	Buttons[block].hide()
 
 
-func remove_water():
+func set_boat(value) -> void:
+	Boat.visible = value
+
+
+func remove_water() -> void:
 	for flag in water_flags.keys():
 		water_flags[flag] = false
 
@@ -135,6 +141,7 @@ func set_water(water : E.Waters, value: bool) -> void:
 		E.Waters.None:
 			remove_water()
 		_:
+			set_boat(false)
 			water_flags[water] = value
 
 

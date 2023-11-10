@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drtuy7jt7dfl2"
-path="res://.godot/imported/topleft_air.png-2b637151421b96adf53463d758bc8abe.ctex"
+uid="uid://nf8qbqlxlkwm"
+path="res://.godot/imported/single_button_pressed.png-41c558293f1021d5d7478e6fd737b64c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/topleft_air.png"
-dest_files=["res://.godot/imported/topleft_air.png-2b637151421b96adf53463d758bc8abe.ctex"]
+source_file="res://assets/images/ui/cell/single_button_pressed.png"
+dest_files=["res://.godot/imported/single_button_pressed.png-41c558293f1021d5d7478e6fd737b64c.ctex"]
 
 [params]
 

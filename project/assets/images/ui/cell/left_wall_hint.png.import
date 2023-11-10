@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cc5o7ctb2q2y3"
-path="res://.godot/imported/diagonal_button_normal.png-a81add2762b6f1cd322d7b7d465e5e06.ctex"
+uid="uid://nhgptovy7kt8"
+path="res://.godot/imported/left_wall_hint.png-a28fbdc38d6da55e279ca1c4d90f13cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/diagonal_button_normal.png"
-dest_files=["res://.godot/imported/diagonal_button_normal.png-a81add2762b6f1cd322d7b7d465e5e06.ctex"]
+source_file="res://assets/images/ui/cell/left_wall_hint.png"
+dest_files=["res://.godot/imported/left_wall_hint.png-a28fbdc38d6da55e279ca1c4d90f13cd.ctex"]
 
 [params]
 

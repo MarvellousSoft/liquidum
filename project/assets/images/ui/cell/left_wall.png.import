@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2d8ap70x8y55"
-path="res://.godot/imported/dec_diag_hint.png-8e9096e66a632168af2e3a35a3027404.ctex"
+uid="uid://b14xkj3uolvis"
+path="res://.godot/imported/left_wall.png-f32086c55e8b000d2cf72ec46f548524.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/dec_diag_hint.png"
-dest_files=["res://.godot/imported/dec_diag_hint.png-8e9096e66a632168af2e3a35a3027404.ctex"]
+source_file="res://assets/images/ui/cell/left_wall.png"
+dest_files=["res://.godot/imported/left_wall.png-f32086c55e8b000d2cf72ec46f548524.ctex"]
 
 [params]
 

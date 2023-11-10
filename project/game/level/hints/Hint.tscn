@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://sogub73jvlos"]
 
 [ext_resource type="Script" path="res://Hint.gd" id="1_p6546"]
-[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/left_wall_hint.png" id="2_8gvav"]
+[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/left_wall_hint.png" id="2_cqqt4"]
 
 [node name="Hint" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -24,14 +24,14 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_8gvav")
+texture = ExtResource("2_cqqt4")
 
 [node name="Right" type="TextureRect" parent="Hints"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_8gvav")
+texture = ExtResource("2_cqqt4")
 flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Hints"]
@@ -40,7 +40,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_8gvav")
+texture = ExtResource("2_cqqt4")
 flip_h = true
 
 [node name="Left" type="TextureRect" parent="Hints"]
@@ -48,7 +48,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_8gvav")
+texture = ExtResource("2_cqqt4")
 
 [node name="Number" type="Label" parent="."]
 layout_mode = 0

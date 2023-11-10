@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl5f8agso8p12"
-path="res://.godot/imported/single_air.png-ef8974d1d1d1aab44e757cd5022fb778.ctex"
+uid="uid://cmvo5dnset77k"
+path="res://.godot/imported/bottomleft_block.png-26f49d05b816f4868be21fd2701402fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/single_air.png"
-dest_files=["res://.godot/imported/single_air.png-ef8974d1d1d1aab44e757cd5022fb778.ctex"]
+source_file="res://assets/images/ui/cell/bottomleft_block.png"
+dest_files=["res://.godot/imported/bottomleft_block.png-26f49d05b816f4868be21fd2701402fb.ctex"]
 
 [params]
 
