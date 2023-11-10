@@ -1,17 +1,17 @@
 [gd_scene load_steps=4 format=3 uid="uid://cww4tk7afj31"]
 
-[ext_resource type="Script" path="res://game/level/Grid.gd" id="1_goppg"]
-[ext_resource type="PackedScene" uid="uid://ducq8gqvrwpyh" path="res://game/level/cells/RegularCell.tscn" id="2_gkms7"]
-[ext_resource type="PackedScene" uid="uid://bljmpbyn14lnb" path="res://game/level/hints/HintBar.tscn" id="3_kepwh"]
+[ext_resource type="Script" path="res://game/level/GridView.gd" id="1_a7a5u"]
+[ext_resource type="PackedScene" uid="uid://bljmpbyn14lnb" path="res://game/level/hints/HintBar.tscn" id="2_q06jt"]
+[ext_resource type="PackedScene" uid="uid://ducq8gqvrwpyh" path="res://game/level/cells/RegularCell.tscn" id="3_68xyc"]
 
-[node name="Grid" type="Control"]
+[node name="GridView" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_goppg")
+script = ExtResource("1_a7a5u")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
@@ -30,7 +30,7 @@ modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="HintBarTop" parent="CenterContainer/GridContainer" instance=ExtResource("3_kepwh")]
+[node name="HintBarTop" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
 is_horizontal = true
 
@@ -42,7 +42,7 @@ modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="HintBarLeft" parent="CenterContainer/GridContainer" instance=ExtResource("3_kepwh")]
+[node name="HintBarLeft" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
 
 [node name="Horizontal" parent="CenterContainer/GridContainer/HintBarLeft" index="0"]
@@ -55,37 +55,37 @@ theme_override_constants/separation = 0
 [node name="Row1" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("2_gkms7")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("2_gkms7")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("2_gkms7")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
 [node name="Row2" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("2_gkms7")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("2_gkms7")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("2_gkms7")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
 [node name="Row3" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("2_gkms7")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("2_gkms7")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("2_gkms7")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
 [node name="RPanel" type="Panel" parent="CenterContainer/GridContainer"]

@@ -1,8 +1,6 @@
 extends Node2D
 
-const GRID = preload("res://game/level/Grid.tscn")
-
-@onready var GridNode = $CenterContainer/Grid
+@onready var GridNode = $CenterContainer/GridView
 
 func _ready():
 	setup("""
