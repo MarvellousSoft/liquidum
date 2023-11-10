@@ -32,7 +32,7 @@ class CellModel:
 	func put_water(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
 	# Puts air in the given diagonal
-	func put_air(_corner: E.Corner, _flush_undo := true) -> void:
+	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> void:
 		return GridModel.must_be_implemented()
 	func remove_water_or_air(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()

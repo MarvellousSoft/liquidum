@@ -336,3 +336,8 @@ func test_boat_place_remove() -> void:
 	assert(!g.get_cell(0, 1).has_boat())
 	g.undo()
 	assert(g.are_hints_satisfied())
+	# Air should flood through boats without deleting them
+	g.get_cell(0, 0).put_air(TopLeft, true, true)
+	assert(g.get_cell(0, 0).air_full())
+	assert(g.get_cell(0, 1).has_boat())
+	assert(g.get_cell(0, 2).air_full())
