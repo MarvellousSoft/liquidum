@@ -1,5 +1,7 @@
 extends Control
 
+signal updated
+
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 
 @onready var Columns = $CenterContainer/GridContainer/Columns
@@ -42,9 +44,9 @@ func setup(level : String) -> void:
 	update()
 
 
-func auto_solve() -> void:
-	SolverModel.new().apply_strategies(grid_logic)
-	update()
+func auto_solve(flush_undo := true, emit_signal := true) -> void:
+	SolverModel.new().apply_strategies(grid_logic, flush_undo)
+	update(emit_signal)
 
 #Assumes grid_logic is already setup
 func setup_hints():
@@ -74,9 +76,11 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	return cell
 
 
-func update() -> void:
+func update(emit_signal := true) -> void:
 	update_visuals()
 	update_hints()
+	if emit_signal:
+		updated.emit()
 
 
 func update_visuals() -> void:
@@ -293,4 +297,3 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		cell_data.remove_water_or_air(corner)
 	
 	update()
-	

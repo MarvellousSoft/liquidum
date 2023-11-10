@@ -229,9 +229,10 @@ class MediumColStrategy extends ColumnStrategy:
 		return any
 
 # Tries to solve the puzzle as much as possible
-func apply_strategies(grid: GridModel) -> void:
+func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 	# We'll merge all changes in the same undo here
-	grid.push_empty_undo()
+	if flush_undo:
+		grid.push_empty_undo()
 	var strategies: Array[Strategy] = [
 		BasicRowStrategy.new(grid),
 		BasicColStrategy.new(grid),

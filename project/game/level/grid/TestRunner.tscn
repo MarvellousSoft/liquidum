@@ -26,10 +26,10 @@ text = "Run tests"
 
 [node name="Gen" type="Button" parent="."]
 layout_mode = 0
-offset_left = 96.0
-offset_top = 320.0
-offset_right = 176.0
-offset_bottom = 351.0
+offset_left = 95.0
+offset_top = 306.0
+offset_right = 175.0
+offset_bottom = 337.0
 text = "Gen level"
 
 [node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
@@ -60,21 +60,30 @@ metadata/_edit_use_anchors_ = true
 
 [node name="AutoSolve" type="Button" parent="."]
 layout_mode = 0
-offset_left = 104.0
-offset_top = 422.0
-offset_right = 194.0
-offset_bottom = 453.0
+offset_left = 96.0
+offset_top = 414.0
+offset_right = 186.0
+offset_bottom = 445.0
 text = "Auto-solve"
 
 [node name="Seed" type="TextEdit" parent="."]
 layout_mode = 0
-offset_left = 97.0
-offset_top = 368.0
-offset_right = 200.0
-offset_bottom = 402.0
+offset_left = 96.0
+offset_top = 350.0
+offset_right = 199.0
+offset_bottom = 384.0
 placeholder_text = "Fixed seed"
+
+[node name="GodMode" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 458.0
+offset_right = 223.0
+offset_bottom = 489.0
+text = "God mode"
 
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
+[connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]

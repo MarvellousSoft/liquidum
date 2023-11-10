@@ -35,3 +35,8 @@ func _on_gen_pressed():
 
 func _on_auto_solve_pressed():
 	g2.auto_solve()
+
+
+func _on_grid_2_updated():
+	if $GodMode.button_pressed:
+		g2.auto_solve(false, false)
