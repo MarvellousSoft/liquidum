@@ -26,21 +26,23 @@ class CellModel:
 	# Counts the sides of the grid as walls
 	func wall_at(_wall: E.Walls) -> bool:
 		return GridModel.must_be_implemented()
-	# Puts water in the given diagonal and floods
-	func put_water(_corner: E.Corner) -> void:
+	# Puts water in the given diagonal and floods.
+	# The flush_undo parameter tells if this change should be separate from the previous change
+	# in the undo stack, useful for grouping multiple related changes in the same undo.
+	func put_water(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
 	# Puts air in the given diagonal
-	func put_air(_corner: E.Corner) -> void:
+	func put_air(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
-	func remove_water_or_air(_corner: E.Corner) -> void:
+	func remove_water_or_air(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
-	func put_wall(_wall: E.Walls) -> void:
+	func put_wall(_wall: E.Walls, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
-	func remove_wall(_wall: E.Walls) -> void:
+	func remove_wall(_wall: E.Walls, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
 	func has_boat() -> bool:
 		return GridModel.must_be_implemented()
-	func put_boat() -> bool:
+	func put_boat(_flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
@@ -148,6 +150,11 @@ func undo() -> bool:
 
 # Redo the latest undone changes
 func redo() -> bool:
+	return GridModel.must_be_implemented()
+
+# Push empty undo. Only useful when doing multiple operations with flush = false
+# It is safe to just have an empty undo, it will be ignored.
+func push_empty_undo() -> void:
 	return GridModel.must_be_implemented()
 
 # Flood all water and air in the grid. Returns whether it did anything

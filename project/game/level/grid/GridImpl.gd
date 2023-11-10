@@ -253,14 +253,15 @@ class CellWithLoc extends GridModel.CellModel:
 				return pure._diag_wall_at(wall as E.Diagonal)
 		push_error("Bad wall %d" % wall)
 		return false
-	func put_water(corner: E.Corner) -> void:
+	func put_water(corner: E.Corner, flush_undo := true) -> void:
 		if !water_at(corner):
 			var changes := grid._flood_water(i, j, corner, true)
-			grid._push_undo_changes(changes)
-	func put_air(corner: E.Corner, flood := false) -> void:
+			grid._push_undo_changes(changes, flush_undo)
+	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> void:
+		if flush_undo:
+			grid.push_empty_undo()
 		if water_at(corner):
-			# TODO: Everything should go in the same undo
-			remove_water_or_air(corner)
+			remove_water_or_air(corner, false)
 		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
 		if pure.put_air(corner):
 			# No auto-flooding air
@@ -268,32 +269,37 @@ class CellWithLoc extends GridModel.CellModel:
 				var dfs := AddAirDfs.new(grid)
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
-			grid._push_undo_changes(changes)
-	func remove_water_or_air(corner: E.Corner) -> void:
+			grid._push_undo_changes(changes, false)
+	func remove_water_or_air(corner: E.Corner, flush_undo := true) -> void:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))
 		var change := Change.new(i, j, pure.clone())
 		if pure.put_nothing(corner):
 			changes.append(change)
-		grid._push_undo_changes(changes)
-	func _change_wall(wall: E.Walls, new: bool) -> void:
+		grid._push_undo_changes(changes, flush_undo)
+	func _change_wall(wall: E.Walls, new: bool, _flush_undo: bool) -> void:
+		# TODO: Add walls to undo
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
 				return grid._change_wall(i, j, wall as E.Side, new)
 			E.Dec, E.Inc:
 				return pure._change_diag_wall(wall as E.Diagonal, new)
-	func put_wall(wall: E.Walls) -> void:
-		_change_wall(wall, true)
-	func remove_wall(wall: E.Walls) -> void:
-		_change_wall(wall, false)
-	func put_boat() -> bool:
+	func put_wall(wall: E.Walls, flush_undo := true) -> void:
+		_change_wall(wall, true, flush_undo)
+	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
+		_change_wall(wall, false, flush_undo)
+	func put_boat(flush_undo := true) -> bool:
 		if i == grid.rows() - 1:
 			return false
 		var c := grid.get_cell(i + 1, j)
 		if not (c.water_at(E.Corner.TopLeft) or c.water_at(E.Corner.TopRight)):
 			return false
-		return pure._put_boat()
+		var changes: Array[Change] = [Change.new(i, j, pure.clone())]
+		if pure._put_boat():
+			grid._push_undo_changes(changes, flush_undo)
+			return true
+		return false
 	func has_boat() -> bool:
 		return pure._has_boat()
 
@@ -516,6 +522,8 @@ func to_str() -> String:
 	return "".join(builder)
 
 func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
+	while not undos.is_empty() and (undos.back() as Changes).changes.is_empty():
+		undos.pop_back()
 	if undos.is_empty():
 		return false
 	var changes: Array[Change] = undos.pop_back().changes
@@ -529,6 +537,9 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 	assert(!flood_all())
 	return true
 
+func push_empty_undo() -> void:
+	_push_undo_changes([], true)
+
 func undo() -> bool:
 	return _undo_impl(undo_stack, redo_stack)
 
@@ -536,9 +547,12 @@ func redo() -> bool:
 	# Beautifully, redo works exactly the same as undo
 	return _undo_impl(redo_stack, undo_stack)
 
-func _push_undo_changes(changes: Array[Change]) -> void:
+func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
 	redo_stack.clear()
-	undo_stack.push_back(Changes.new(changes))
+	if flush_first or undo_stack.is_empty():
+		undo_stack.push_back(Changes.new(changes))
+	else:
+		undo_stack.back().changes.append_array(changes)
 
 
 func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Array[Change]:
@@ -742,7 +756,7 @@ func flood_all() -> bool:
 					dfs.min_i = i
 					dfs.flood(i, j, corner)
 	if !dfs.changes.is_empty():
-		_push_undo_changes(dfs.changes)
+		_push_undo_changes(dfs.changes, true)
 		return true
 	return false
 

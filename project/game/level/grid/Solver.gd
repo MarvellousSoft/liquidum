@@ -52,10 +52,10 @@ class RowComponent:
 		corner = corner_
 	func put_water() -> void:
 		print("[row] Put water on (%d, %d)" % [first.i, first.j])
-		first.put_water(corner)
+		first.put_water(corner, false)
 	func put_air() -> void:
 		print("[col] Put air on (%d, %d)" % [first.i, first.j])
-		first.put_air(corner, true)
+		first.put_air(corner, false, true)
 
 class RowDfs extends GridImpl.Dfs:
 	var row_i: int
@@ -137,7 +137,7 @@ class ColComponent:
 				push_error("Something's bad")
 			if count <= 0:
 				print("[col] Put water on (%d, %d)" % [c.i, c.j])
-				grid.get_cell(c.i, c.j).put_water(c.corner)
+				grid.get_cell(c.i, c.j).put_water(c.corner, false)
 				return
 	func put_air_on(grid: GridImpl, count: float) -> void:
 		print("Looking for air count %f" % count)
@@ -148,7 +148,7 @@ class ColComponent:
 				push_error("Something's bad")
 			if count <= 0:
 				print("[col] Put air on (%d, %d)" % [c.i, c.j])
-				(grid.get_cell(c.i, c.j) as GridImpl.CellWithLoc).put_air(c.corner, true)
+				(grid.get_cell(c.i, c.j) as GridImpl.CellWithLoc).put_air(c.corner, false, true)
 				return
 
 class ColDfs extends GridImpl.Dfs:
@@ -230,6 +230,8 @@ class MediumColStrategy extends ColumnStrategy:
 
 # Tries to solve the puzzle as much as possible
 func apply_strategies(grid: GridModel) -> void:
+	# We'll merge all changes in the same undo here
+	grid.push_empty_undo()
 	var strategies: Array[Strategy] = [
 		BasicRowStrategy.new(grid),
 		BasicColStrategy.new(grid),
