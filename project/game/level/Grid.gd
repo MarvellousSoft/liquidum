@@ -60,7 +60,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	for diag in E.Diagonal.values():
 		if cell_data.wall_at(diag):
 			type = diag
-	cell.setup(type, n, m)
+	cell.setup(self, type, n, m)
 	
 	for side in E.Side.values():
 		if cell_data.wall_at(side):
@@ -72,9 +72,11 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	return cell
 
+
 func update() -> void:
 	update_visuals()
 	update_hints()
+
 
 func update_visuals() -> void:
 	for i in rows:
@@ -114,8 +116,97 @@ func update_hints() -> void:
 		else:
 			hint.set_normal()
 
+
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
+
+
+func can_increase_water(i : int, j : int, corner : E.Waters):
+	match corner:
+		E.Waters.Single, E.Waters.BottomLeft, E.Waters.BottomRight:
+			if grid_logic.wall_at(i, j, E.Side.Bottom):
+				return true
+			#It can't be the lowest cell since it doesn't have bottom-wall
+			var lower_cell = get_cell(i + 1, j)
+			for which in [E.Waters.Single, E.Waters.TopLeft, E.Waters.TopRight]:
+				if lower_cell.get_water_flag(which) and\
+				   lower_cell.get_corner_water_level(which) >= 1.0:
+					return true
+			return false
+		E.Waters.TopLeft:
+			if grid_logic.wall_at(i, j, E.Side.Left):
+				return true
+			#It can't be the leftmost cell since it doesn't have left-wall
+			var left_cell = get_cell(i, j - 1)
+			var type = left_cell.get_type()
+			match type:
+				E.CellType.DecDiag:
+					return true
+				E.CellType.IncDiag:
+					return can_increase_water(i, j - 1, E.Waters.BottomRight)
+				E.CellType.Single:
+					return can_increase_water(i, j - 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
+		E.Waters.TopRight:
+			if grid_logic.wall_at(i, j, E.Side.Right):
+				return true
+			#It can't be the rightmost cell since it doesn't have right-wall
+			var right_cell = get_cell(i, j + 1)
+			var type = right_cell.get_type()
+			match type:
+				E.CellType.IncDiag:
+					return true
+				E.CellType.DecDiag:
+					return can_increase_water(i, j + 1, E.Waters.BottomLeft)
+				E.CellType.Single:
+					return can_increase_water(i, j + 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
+
+
+func can_decrease_water(i : int, j : int, corner : E.Waters):
+	match corner:
+		E.Waters.Single, E.Waters.TopLeft, E.Waters.TopRight:
+			if grid_logic.wall_at(i, j, E.Side.Top):
+				return true
+			#It can't be the uppermost cell since it doesn't have top-wall
+			var upper_cell = get_cell(i - 1, j)
+			for which in [E.Waters.Single, E.Waters.BottomLeft, E.Waters.BottomRight]:
+				if not upper_cell.get_water_flag(which) and\
+				   upper_cell.get_corner_water_level(which) <= 0.0:
+					return true
+			return false
+		E.Waters.BottomLeft:
+			if grid_logic.wall_at(i, j, E.Side.Left):
+				return true
+			#It can't be the leftmost cell since it doesn't have left-wall
+			var left_cell = get_cell(i, j - 1)
+			var type = left_cell.get_type()
+			match type:
+				E.CellType.IncDiag:
+					return true
+				E.CellType.DecDiag:
+					return can_decrease_water(i, j - 1, E.Waters.TopRight)
+				E.CellType.Single:
+					return can_decrease_water(i, j - 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
+		E.Waters.BottomRight:
+			if grid_logic.wall_at(i, j, E.Side.Right):
+				return true
+			#It can't be the rightmost cell since it doesn't have right-wall
+			var right_cell = get_cell(i, j + 1)
+			var type = right_cell.get_type()
+			match type:
+				E.CellType.DecDiag:
+					return true
+				E.CellType.IncDiag:
+					return can_decrease_water(i, j + 1, E.Waters.TopLeft)
+				E.CellType.Single:
+					return can_decrease_water(i, j + 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
 
 
 func _on_cell_pressed_water(i: int, j: int, which: E.Waters) -> void:

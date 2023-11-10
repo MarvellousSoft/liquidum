@@ -2,6 +2,8 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
+const WATER_SPEED_RATIO = 7.0
+const EPS = 0.1
 
 signal pressed_water(i: int, j: int, which: E.Waters)
 signal pressed_air(i: int, j: int, which: E.Waters)
@@ -44,6 +46,8 @@ signal pressed_air(i: int, j: int, which: E.Waters)
 
 var row : int
 var column : int
+var type : E.CellType
+var grid
 var water_flags = {
 	E.Waters.Single: false,
 	E.Waters.TopLeft: false,
@@ -59,15 +63,17 @@ func _ready():
 
 
 func _process(dt):
-	for corner in E.Waters.values():
-		if corner != E.Waters.None:
-			if water_flags[corner]:
-				increase_water_level(Waters[corner], dt)
-			else:
-				decrease_water_level(Waters[corner], dt)
+	if grid:
+		for corner in E.Waters.values():
+			if corner != E.Waters.None:
+				if water_flags[corner]:
+					increase_water_level(corner, dt)
+				else:
+					decrease_water_level(corner, dt)
 
 
-func setup(type : E.CellType, i : int, j : int) -> void:
+func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
+	grid = grid_ref
 	row = i
 	column = j
 	for water in Waters.values():
@@ -79,6 +85,7 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 		buttons.hide()
 	for wall in Walls.values():
 		wall.hide()
+	type = new_type
 	match type:
 		E.CellType.Single:
 			Buttons[E.Single].show()
@@ -92,6 +99,10 @@ func setup(type : E.CellType, i : int, j : int) -> void:
 			set_wall(E.Walls.DecDiag)
 		_:
 			push_error("Not a valid type of cell:" + str(type))
+
+
+func get_type() -> E.CellType:
+	return type
 
 
 func set_wall(wall : E.Walls) -> void:
@@ -126,20 +137,38 @@ func set_air(air : E.Waters, value: bool) -> void:
 			Airs[air].visible = value
 
 
+func get_water_flag(corner : E.Waters) -> bool:
+	return water_flags[corner]
+
+
+func get_corner_water_level(corner : E.Waters) -> float:
+	return Waters[corner].material.get_shader_parameter("level")
+
+
 func set_water_level(water, value) -> void:
 	water.material.set_shader_parameter("level", value)
 
 
-func increase_water_level(water, dt) -> void:
-	var level = water.material.get_shader_parameter("level")
-	level = min(level + dt, 1.0)
-	water.material.set_shader_parameter("level", level)
+func increase_water_level(corner : E.Waters, dt : float) -> void:
+	var water = Waters[corner] as Node
+	if grid.can_increase_water(row, column, corner):
+		var level = water.material.get_shader_parameter("level")
+		var ratio = clamp(WATER_SPEED_RATIO*dt, 0.0, 1.0)
+		level = lerp(level, 1.0, ratio)
+		if level > 1.0 - EPS:
+			level = 1.0
+		water.material.set_shader_parameter("level", level)
 
 
-func decrease_water_level(water, dt) -> void:
-	var level = water.material.get_shader_parameter("level")
-	level = max(level - dt, 0.0)
-	water.material.set_shader_parameter("level", level)
+func decrease_water_level(corner : E.Waters, dt : float) -> void:
+	var water = Waters[corner] as Node
+	if grid.can_decrease_water(row, column, corner):
+		var level = water.material.get_shader_parameter("level")
+		var ratio = clamp(WATER_SPEED_RATIO*dt, 0.0, 1.0)
+		level = lerp(level, 0.0, ratio)
+		if level < EPS:
+			level = 0.0
+		water.material.set_shader_parameter("level", level)
 
 
 func _on_button_gui_input(event, which : E.Waters) -> void:
