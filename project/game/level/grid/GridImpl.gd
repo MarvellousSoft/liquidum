@@ -5,7 +5,7 @@ static func create(rows_: int, cols_: int) -> GridModel:
 	return GridImpl.new(rows_, cols_)
 
 static func from_str(s: String) -> GridModel:
-	s = s.dedent().strip_edges()
+	s = s.replace('\r', '').dedent().strip_edges()
 	# Integer division round down makes this work even with hints
 	var rows_ := (s.count('\n') + 1) / 2
 	var cols_ := s.find('\n') / 2
@@ -490,7 +490,7 @@ func to_str() -> String:
 			builder.append('.')
 		builder.append('h')
 		for j in m:
-			builder.append(_col_hint(hint_cols[j] * 2))
+			builder.append(_col_hint(int(hint_cols[j] * 2)))
 		builder.append('\n')
 	for i in n:
 		if boat_hints:

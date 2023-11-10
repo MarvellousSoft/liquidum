@@ -202,9 +202,30 @@ class MediumRowStrategy extends RowStrategy:
 
 # Use subset sum to tell if some components MUST or CANT be present in the solution
 class AdvancedRowStrategy extends RowStrategy:
-	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
-		# TODO: Subset sum stuff
-		return false
+	func _apply_strategy(values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
+		var numbers: Array[float] = []
+		var size_to_cmp: Dictionary = {}
+		for c in values:
+			numbers.append(c.size)
+			var cmps = size_to_cmp.get(c.size, [])
+			cmps.append(c)
+			size_to_cmp[c.size] = cmps
+		var any := false
+		for size in size_to_cmp:
+			var new = numbers.duplicate()
+			# Remove only one size
+			new.erase(size)
+			# If removing a single size made it impossible, all MUST be used
+			if not SubsetSum.can_be_solved(water_left, new):
+				for cmp in size_to_cmp[size]:
+					cmp.put_water()
+				any = true
+			# If using a single size made it impossible, all CANT be used
+			elif not SubsetSum.can_be_solved(water_left - size, new):
+				for cmp in size_to_cmp[size]:
+					cmp.put_air()
+				any = true
+		return any
 
 # - Put air partially in components that are too big
 # - Put water everywhere if there's no more space for non-water
@@ -244,6 +265,7 @@ func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 		BasicColStrategy.new(grid),
 		MediumRowStrategy.new(grid),
 		MediumColStrategy.new(grid),
+		AdvancedRowStrategy.new(grid),
 	]
 	for _i in 50:
 		if not strategies.any(func(s): return s.apply_any()):

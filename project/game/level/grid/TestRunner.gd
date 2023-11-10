@@ -11,8 +11,6 @@ func _on_run_pressed():
 	print("All tests passed!")
 
 func _on_tests_show_grids(s1: String, s2: String):
-	g1.show()
-	g2.show()
 	g1.setup(s1)
 	g2.setup(s2)
 
@@ -27,8 +25,6 @@ func _on_gen_pressed():
 	var g:= gen.generate(6, 6, false)
 	var sol_str := g.to_str()
 	g.clear_water_air()
-	g1.show()
-	g2.show()
 	g1.setup(sol_str)
 	g2.setup(g.to_str())
 
@@ -40,3 +36,7 @@ func _on_auto_solve_pressed():
 func _on_grid_2_updated():
 	if $GodMode.button_pressed:
 		g2.auto_solve(false, false)
+
+
+func _on_paste_pressed():
+	g2.setup(DisplayServer.clipboard_get())

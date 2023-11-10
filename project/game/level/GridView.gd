@@ -44,9 +44,9 @@ func setup(level : String) -> void:
 	update()
 
 
-func auto_solve(flush_undo := true, emit_signal := true) -> void:
+func auto_solve(flush_undo := true, do_emit_signal := true) -> void:
 	SolverModel.new().apply_strategies(grid_logic, flush_undo)
-	update(emit_signal)
+	update(do_emit_signal)
 
 #Assumes grid_logic is already setup
 func setup_hints():
@@ -76,10 +76,10 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	return cell
 
 
-func update(emit_signal := true) -> void:
+func update(do_emit_signal := true) -> void:
 	update_visuals()
 	update_hints()
-	if emit_signal:
+	if do_emit_signal:
 		updated.emit()
 
 

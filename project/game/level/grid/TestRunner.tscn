@@ -82,8 +82,17 @@ offset_right = 223.0
 offset_bottom = 489.0
 text = "God mode"
 
+[node name="Paste" type="Button" parent="."]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 515.0
+offset_right = 270.0
+offset_bottom = 546.0
+text = "Paste from clipboard"
+
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]
+[connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]

@@ -42,7 +42,6 @@ func assert_grid_eq(a: String, b: String) -> void:
 	if a != b:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
 		show_grids.emit(a, b)
-		
 		fail_later_if(a != b)
 
 func assert_can_solve(s: String) -> void:
@@ -224,7 +223,7 @@ func test_simple_solve() -> void:
 	SolverModel.new().apply_strategies(g)
 	assert_grid_eq(g.to_str(), """
 	h..1.3.
-	2x.....
+	2xxxwwx
 	.|╲_/./
 	2xxxxww
 	.L._.L.
@@ -296,7 +295,6 @@ func test_flood_all() -> void:
 	_flood_all(".w\n|/\n..\nL.", ".w\n|/\nww\nL.")
 
 func test_boat_hint() -> void:
-	return
 	var s := """
 	b...
 	.h2.
@@ -341,3 +339,12 @@ func test_boat_place_remove() -> void:
 	assert(g.get_cell(0, 0).air_full())
 	assert(g.get_cell(0, 1).has_boat())
 	assert(g.get_cell(0, 2).air_full())
+
+func test_subset_sum() -> void:
+	assert_can_solve("""
+	h........2.
+	2..........
+	.L._._.|.L.
+	6..........
+	.L._.L._.L.
+	""")
