@@ -308,10 +308,31 @@ func test_boat_hint() -> void:
 	assert_grid_eq(str_grid(s).to_str(), s)
 
 func test_boat_place_remove() -> void:
-	var g := GridImpl.create(3, 3)
+	var g := str_grid("""
+	b.......
+	.h......
+	1.......
+	........
+	.6......
+	........
+	........
+	........
+	""")
 	assert(!g.get_cell(0, 1).put_boat())
 	g.get_cell(1, 0).put_water(BottomLeft)
+	assert(!g.are_hints_satisfied())
 	assert(!g.get_cell(0, 1).has_boat())
 	assert(g.get_cell(0, 1).put_boat())
 	assert(g.get_cell(0, 1).has_boat())
-	# TODO test remove water flood
+	assert(g.are_hints_satisfied())
+	# Water should destroy boat
+	g.get_cell(0, 0).put_water(BottomRight)
+	assert(!g.get_cell(0, 1).has_boat())
+	assert(g.get_cell(0, 1).water_full())
+	g.undo()
+	assert(g.are_hints_satisfied())
+	# Removing water should destroy boat
+	g.get_cell(1, 2).remove_water_or_air(TopRight)
+	assert(!g.get_cell(0, 1).has_boat())
+	g.undo()
+	assert(g.are_hints_satisfied())
