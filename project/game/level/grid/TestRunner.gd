@@ -13,6 +13,15 @@ func _on_run_pressed():
 func _on_tests_show_grids(s1: String, s2: String):
 	g1.setup(s1)
 	g2.setup(s2)
+	scale_grids()
+
+const desired_w := 780.
+
+func scale_grids() -> void:
+	await get_tree().process_frame
+	var s := desired_w / g1.get_grid_size().x
+	g1.scale = Vector2(s, s)
+	g2.scale = Vector2(s, s)
 
 
 func _on_gen_pressed():
@@ -22,11 +31,12 @@ func _on_gen_pressed():
 	else:
 		$Seed.placeholder_text = "Seed: %d" % rseed
 	var gen := Generator.new(rseed)
-	var g:= gen.generate(6, 6, false)
+	var g:= gen.generate(10, 10, false)
 	var sol_str := g.to_str()
 	g.clear_water_air()
 	g1.setup(sol_str)
 	g2.setup(g.to_str())
+	scale_grids()
 
 
 func _on_auto_solve_pressed():
@@ -40,6 +50,7 @@ func _on_grid_2_updated():
 
 func _on_paste_pressed():
 	g2.setup(DisplayServer.clipboard_get())
+	scale_grids()
 
 
 func _on_full_solve_pressed():
