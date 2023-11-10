@@ -200,6 +200,12 @@ class MediumRowStrategy extends RowStrategy:
 				any = true
 		return any
 
+# Use subset sum to tell if some components MUST or CANT be present in the solution
+class AdvancedRowStrategy extends RowStrategy:
+	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+		# TODO: Subset sum stuff
+		return false
+
 # - Put air partially in components that are too big
 # - Put water everywhere if there's no more space for non-water
 class BasicColStrategy extends ColumnStrategy:

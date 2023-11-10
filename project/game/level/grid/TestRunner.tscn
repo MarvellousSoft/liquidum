@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b5np4b83uqkua"]
 
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
-[ext_resource type="PackedScene" uid="uid://cww4tk7afj31" path="res://game/level/GridView.tscn" id="2_ojaat"]
+[ext_resource type="PackedScene" path="res://game/level/GridView.tscn" id="2_ojaat"]
 [ext_resource type="Script" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
 [node name="TestRunner" type="Control"]
