@@ -41,6 +41,7 @@ func setup(level : String) -> void:
 	setup_hints()
 	update()
 
+
 func auto_solve() -> void:
 	SolverModel.new().apply_strategies(grid_logic)
 	update()
@@ -173,10 +174,9 @@ func can_decrease_water(i : int, j : int, corner : E.Waters):
 			#It can't be the uppermost cell since it doesn't have top-wall
 			var upper_cell = get_cell(i - 1, j)
 			for which in [E.Waters.Single, E.Waters.BottomLeft, E.Waters.BottomRight]:
-				if not upper_cell.get_water_flag(which) and\
-				   upper_cell.get_corner_water_level(which) <= 0.0:
-					return true
-			return false
+				if upper_cell.get_corner_water_level(which) > 0.0:
+					return false
+			return true
 		E.Waters.BottomLeft:
 			if grid_logic.wall_at(i, j, E.Side.Left):
 				return true
