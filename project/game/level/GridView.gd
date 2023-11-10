@@ -294,12 +294,12 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
-		cell_data.put_water(corner)
+		cell_data.put_water(corner, false)
 	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
-		cell_data.put_air(corner)
+		cell_data.put_air(corner, false)
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
-		cell_data.remove_water_or_air(corner)
+		cell_data.remove_water_or_air(corner, false)
 	elif mouse_hold_status == E.MouseDragState.RemoveAir and cell_data.air_at(corner):
-		cell_data.remove_water_or_air(corner)
+		cell_data.remove_water_or_air(corner, false)
 	
 	update()
