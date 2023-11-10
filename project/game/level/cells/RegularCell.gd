@@ -152,11 +152,12 @@ func set_water_level(water, value) -> void:
 func increase_water_level(corner : E.Waters, dt : float) -> void:
 	var water = Waters[corner] as Node
 	var level = water.material.get_shader_parameter("level")
-	if level < 1.0 and grid.can_increase_water(row, column, corner):
+	var target = SURFACE_THRESHOLD if grid.is_at_surface(row, column, corner) else 1.0
+	if level != target and grid.can_increase_water(row, column, corner):
 		var ratio = clamp(WATER_SPEED_RATIO*dt, 0.0, 1.0)
-		level = lerp(level, 1.0, ratio)
-		if level > 1.0 - EPS:
-			level = 1.0
+		level = lerp(level, target, ratio)
+		if abs(level - target) <= EPS:
+			level = target
 		water.material.set_shader_parameter("level", level)
 
 

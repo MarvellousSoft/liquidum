@@ -130,8 +130,7 @@ func can_increase_water(i : int, j : int, corner : E.Waters):
 			#It can't be the lowest cell since it doesn't have bottom-wall
 			var lower_cell = get_cell(i + 1, j)
 			for which in [E.Waters.Single, E.Waters.TopLeft, E.Waters.TopRight]:
-				if lower_cell.get_water_flag(which) and\
-				   lower_cell.get_corner_water_level(which) >= 1.0:
+				if lower_cell.get_corner_water_level(which) >= 1.0:
 					return true
 			return false
 		E.Waters.TopLeft:
@@ -205,6 +204,48 @@ func can_decrease_water(i : int, j : int, corner : E.Waters):
 					return can_decrease_water(i, j + 1, E.Waters.TopLeft)
 				E.CellType.Single:
 					return can_decrease_water(i, j + 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
+
+
+func is_at_surface(i, j, corner):
+	match corner:
+		E.Waters.Single, E.Waters.TopLeft, E.Waters.TopRight:
+			if grid_logic.wall_at(i, j, E.Side.Top):
+				return true
+			var upper_cell = get_cell(i - 1, j)
+			for which in [E.Waters.Single, E.Waters.BottomLeft, E.Waters.BottomRight]:
+				if upper_cell.get_water_flag(which):
+					return false
+			return true
+		E.Waters.BottomLeft:
+			if grid_logic.wall_at(i, j, E.Side.Left):
+				return true
+			#It can't be the leftmost cell since it doesn't have left-wall
+			var left_cell = get_cell(i, j - 1)
+			var type = left_cell.get_type()
+			match type:
+				E.CellType.IncDiag:
+					return true
+				E.CellType.DecDiag:
+					return is_at_surface(i, j - 1, E.Waters.TopRight)
+				E.CellType.Single:
+					return is_at_surface(i, j - 1, E.Waters.Single)
+				_:
+					push_error("Not a valid type for cell:" + str(type))
+		E.Waters.BottomRight:
+			if grid_logic.wall_at(i, j, E.Side.Right):
+				return true
+			#It can't be the rightmost cell since it doesn't have right-wall
+			var right_cell = get_cell(i, j + 1)
+			var type = right_cell.get_type()
+			match type:
+				E.CellType.DecDiag:
+					return true
+				E.CellType.IncDiag:
+					return is_at_surface(i, j + 1, E.Waters.TopLeft)
+				E.CellType.Single:
+					return is_at_surface(i, j + 1, E.Waters.Single)
 				_:
 					push_error("Not a valid type for cell:" + str(type))
 
