@@ -4,6 +4,7 @@ signal updated
 
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 
+@onready var GridCont = $CenterContainer/GridContainer
 @onready var Columns = $CenterContainer/GridContainer/Columns
 @onready var HintBars = {
 	"top": $CenterContainer/GridContainer/HintBarTop,
@@ -42,6 +43,10 @@ func setup(level : String) -> void:
 			create_cell(new_row, cell_data, i, j)
 	setup_hints()
 	update()
+
+
+func get_grid_size() -> Vector2:
+	return GridCont.size
 
 
 func auto_solve(flush_undo := true, do_emit_signal := true) -> void:
