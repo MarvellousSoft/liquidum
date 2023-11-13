@@ -2,6 +2,7 @@ class_name GridView
 extends Control
 
 signal updated
+signal mistake_made
 
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 
@@ -293,8 +294,11 @@ func play_water_sound() -> void:
 	AudioManager.play_sfx("splash" + str(randi()%4 + 1))
 
 
-func highlight_error(_i: int, _j: int, _which: E.Waters) -> void:
+func highlight_error(i: int, j: int, which: E.Waters) -> void:
+	var cell = get_cell(i, j)
+	cell.play_error(which)
 	AudioManager.play_sfx("error")
+	emit_signal("mistake_made")
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
@@ -315,8 +319,10 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 		match brush_mode:
 			E.BrushMode.Water:
 				mouse_hold_status = E.MouseDragState.Water
-				cell_data.put_water(corner)
-				play_water_sound()
+				if cell_data.put_water(corner):
+					play_water_sound()
+				else:
+					highlight_error(i, j, which)
 			E.BrushMode.Boat:
 				if cell_data.has_boat():
 					mouse_hold_status = E.MouseDragState.RemoveBoat
@@ -325,8 +331,10 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 				else:
 					mouse_hold_status = E.MouseDragState.Boat
 					if which == E.Single:
-						cell_data.put_boat()
-						AudioManager.play_sfx("boat_put")
+						if cell_data.put_boat():
+							AudioManager.play_sfx("boat_put")
+						else:
+							highlight_error(i, j, which)
 					else:
 						highlight_error(i, j, which)
 	update()
@@ -346,8 +354,10 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		AudioManager.play_sfx("boat_remove")
 	else:
 		mouse_hold_status = E.MouseDragState.Air
-		cell_data.put_air(corner)
-		AudioManager.play_sfx("air_put")
+		if cell_data.put_air(corner):
+			AudioManager.play_sfx("air_put")
+		else:
+			highlight_error(i, j, which)
 	update()
 
 
@@ -358,14 +368,20 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
-		cell_data.put_water(corner, false)
-		play_water_sound()
+		if cell_data.put_water(corner, false):
+			play_water_sound()
+		else:
+			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
-		cell_data.put_air(corner, false)
-		AudioManager.play_sfx("air_put")
+		if cell_data.put_air(corner, false):
+			AudioManager.play_sfx("air_put")
+		else:
+			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
-		cell_data.put_boat(false)
-		AudioManager.play_sfx("boat_put")
+		if cell_data.put_boat(false):
+			AudioManager.play_sfx("boat_put")
+		else:
+			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
 		cell_data.remove_content(corner, false)
 		play_water_sound()

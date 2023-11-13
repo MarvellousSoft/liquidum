@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=53 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -29,6 +29,11 @@
 [ext_resource type="Texture2D" uid="uid://caxkadwoqgsqg" path="res://assets/images/ui/cell/bottomright_block.png" id="27_2tys2"]
 [ext_resource type="Texture2D" uid="uid://cmvo5dnset77k" path="res://assets/images/ui/cell/bottomleft_block.png" id="28_2yply"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="29_6b42n"]
+[ext_resource type="Texture2D" uid="uid://b4dkdprnvw65f" path="res://assets/images/ui/cell/error_single.png" id="30_varfe"]
+[ext_resource type="Texture2D" uid="uid://b4l1u3ehku21c" path="res://assets/images/ui/cell/error_topleft.png" id="31_am8uv"]
+[ext_resource type="Texture2D" uid="uid://bo5c5cv5neq84" path="res://assets/images/ui/cell/error_topright.png" id="32_6crl1"]
+[ext_resource type="Texture2D" uid="uid://b6xv6r8ictro7" path="res://assets/images/ui/cell/error_bottomright.png" id="33_ki4f0"]
+[ext_resource type="Texture2D" uid="uid://xrj0t4cirwx4" path="res://assets/images/ui/cell/error_bottomleft.png" id="34_vo2d5"]
 
 [sub_resource type="Animation" id="Animation_3g2u4"]
 length = 0.001
@@ -90,6 +95,191 @@ tracks/1/keys = {
 _data = {
 "RESET": SubResource("Animation_3g2u4"),
 "idle": SubResource("Animation_wjmlx")
+}
+
+[sub_resource type="Animation" id="Animation_whcw4"]
+resource_name = "error"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ucp6y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y6cvr"]
+_data = {
+"RESET": SubResource("Animation_ucp6y"),
+"error": SubResource("Animation_whcw4")
+}
+
+[sub_resource type="Animation" id="Animation_2hmw4"]
+resource_name = "error"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TopLeft:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8uirt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TopLeft:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5oaie"]
+_data = {
+"RESET": SubResource("Animation_8uirt"),
+"error": SubResource("Animation_2hmw4")
+}
+
+[sub_resource type="Animation" id="Animation_627e5"]
+resource_name = "error"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TopRight:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_htf7u"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TopRight:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_71fpu"]
+_data = {
+"RESET": SubResource("Animation_htf7u"),
+"error": SubResource("Animation_627e5")
+}
+
+[sub_resource type="Animation" id="Animation_m2xxj"]
+resource_name = "error"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../BottomRight:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mevw4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../BottomRight:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_366xd"]
+_data = {
+"RESET": SubResource("Animation_mevw4"),
+"error": SubResource("Animation_m2xxj")
+}
+
+[sub_resource type="Animation" id="Animation_6oxih"]
+resource_name = "error"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../BottomLeft:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7fk0h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../BottomLeft:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8oflq"]
+_data = {
+"RESET": SubResource("Animation_7fk0h"),
+"error": SubResource("Animation_6oxih")
 }
 
 [node name="RegularCell" type="Control"]
@@ -435,6 +625,89 @@ stretch_mode = 5
 autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_k3t6r")
+}
+
+[node name="Errors" type="Control" parent="."]
+z_index = 2
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Single" type="TextureRect" parent="Errors"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+mouse_filter = 2
+texture = ExtResource("30_varfe")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/Single"]
+libraries = {
+"": SubResource("AnimationLibrary_y6cvr")
+}
+
+[node name="TopLeft" type="TextureRect" parent="Errors"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("31_am8uv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopLeft"]
+root_node = NodePath("../../Single")
+libraries = {
+"": SubResource("AnimationLibrary_5oaie")
+}
+
+[node name="TopRight" type="TextureRect" parent="Errors"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("32_6crl1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopRight"]
+root_node = NodePath("../../Single")
+libraries = {
+"": SubResource("AnimationLibrary_71fpu")
+}
+
+[node name="BottomRight" type="TextureRect" parent="Errors"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("33_ki4f0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomRight"]
+root_node = NodePath("../../Single")
+libraries = {
+"": SubResource("AnimationLibrary_366xd")
+}
+
+[node name="BottomLeft" type="TextureRect" parent="Errors"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("34_vo2d5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomLeft"]
+root_node = NodePath("../../Single")
+libraries = {
+"": SubResource("AnimationLibrary_8oflq")
 }
 
 [connection signal="gui_input" from="Buttons/Single" to="." method="_on_button_gui_input" binds= [11]]

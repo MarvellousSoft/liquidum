@@ -3,8 +3,10 @@
 @tool
 class_name LocalizationKeys
 
-const KEY_PLACEHOLDER_NAME_AGE = "KEY_PLACEHOLDER_NAME_AGE"
+const TEST = "TEST"
+const MISTAKES = "MISTAKES"
 
 const KEYS = [
- "KEY_PLACEHOLDER_NAME_AGE"
+ "TEST",
+ "MISTAKES"
 ]

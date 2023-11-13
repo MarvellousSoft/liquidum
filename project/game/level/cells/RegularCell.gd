@@ -53,6 +53,13 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 	E.Waters.BottomRight: $Blocks/BottomRight,
 }
 @onready var Boat = $Boat
+@onready var Errors = {
+	E.Waters.Single: $Errors/Single,
+	E.Waters.TopLeft: $Errors/TopLeft,
+	E.Waters.TopRight: $Errors/TopRight,
+	E.Waters.BottomLeft: $Errors/BottomLeft,
+	E.Waters.BottomRight: $Errors/BottomRight,
+}
 @onready var BoatAnim = $Boat/AnimationPlayer
 
 var row : int
@@ -100,6 +107,8 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 		wall.hide()
 	for block in Blocks.values():
 		block.hide()
+	for error in Errors.values():
+		error.modulate.a = 0.0
 	Boat.hide()
 	type = new_type
 	match type:
@@ -115,6 +124,10 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 			set_wall(E.Walls.DecDiag)
 		_:
 			push_error("Not a valid type of cell:" + str(type))
+
+
+func play_error(which : E.Waters) -> void:
+	Errors[which].get_node("AnimationPlayer").play("error")
 
 
 func get_type() -> E.CellType:
@@ -150,7 +163,7 @@ func set_water(water : E.Waters, value: bool) -> void:
 			water_flags[water] = value
 
 
-func remove_air():
+func remove_air() -> void:
 	for air in Airs.values():
 		air.hide()
 
