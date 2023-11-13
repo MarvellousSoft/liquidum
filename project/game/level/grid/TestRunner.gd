@@ -65,7 +65,7 @@ func _on_grid_2_updated():
 
 
 func _on_paste_pressed():
-	g2.setup(DisplayServer.clipboard_get())
+	g2.setup(DisplayServer.clipboard_get(), GridModel.LoadMode.FreeEdit)
 	scale_grids()
 
 
