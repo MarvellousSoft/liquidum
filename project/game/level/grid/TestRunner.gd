@@ -25,13 +25,13 @@ func scale_grids() -> void:
 
 
 func _on_gen_pressed():
-	var rseed := randi() % 10000
+	var rseed := randi() % 100000
 	if $Seed.text != "":
 		rseed = int($Seed.text)
 	else:
 		$Seed.placeholder_text = "Seed: %d" % rseed
 	var gen := Generator.new(rseed)
-	var g:= gen.generate(10, 10, false)
+	var g:= gen.generate(6, 6, $Diags.button_pressed, false)
 	var sol_str := g.to_str()
 	g.clear_water_air()
 	g1.setup(sol_str)
