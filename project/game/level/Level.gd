@@ -1,17 +1,17 @@
 extends Node2D
 
-@onready var GridNode : GridView = $CenterContainer/GridView
+@onready var GridNode: GridView = $CenterContainer/GridView
 
 func _ready():
 	setup("""
 h6.4.2.
-1##....
+1##...w
 .L.|..╲
-4......
+4wwww..
 .|╲./|.
-4......
+4www..w
 .L../.╲
-3......
+3www...
 .L._╲|.""")
 
 

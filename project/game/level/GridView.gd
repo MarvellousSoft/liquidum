@@ -31,8 +31,8 @@ func _input(event):
 		update()
 		
 
-func setup(level : String) -> void:
-	grid_logic = GridImpl.from_str(level)
+func setup(level : String, with_solution := true, clear_solution := true) -> void:
+	grid_logic = GridImpl.from_str(level, with_solution, clear_solution)
 	rows = grid_logic.rows()
 	columns = grid_logic.cols() 
 	for child in Columns.get_children():

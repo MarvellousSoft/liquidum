@@ -33,7 +33,7 @@ func gen_puzzle() -> GridModel:
 		var gen := Generator.new(rseed)
 		var g := gen.generate($Rows.value, $Cols.value, $Diags.button_pressed, false)
 		if $Interesting.button_pressed and $Seed.text == "":
-			g.clear_water_air()
+			g.clear_content()
 			var r := SolverModel.new().full_solve(g)
 			if r != SolverModel.SolveResult.SolvedUnique:
 				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
@@ -48,9 +48,9 @@ func _on_gen_pressed() -> void:
 	var g := await gen_puzzle()
 	$SolvedType.text = ""
 	var sol_str := g.to_str()
-	g.clear_water_air()
-	g1.setup(sol_str)
-	g2.setup(g.to_str())
+	g.clear_content()
+	g1.setup(sol_str, true, false)
+	g2.setup(g.to_str(), false)
 	scale_grids()
 	$Gen.disabled = false
 

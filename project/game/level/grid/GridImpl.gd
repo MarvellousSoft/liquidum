@@ -4,7 +4,7 @@ extends GridModel
 static func create(rows_: int, cols_: int) -> GridModel:
 	return GridImpl.new(rows_, cols_)
 
-static func from_str(s: String) -> GridModel:
+static func from_str(s: String, with_solution := true, clear_solution := true) -> GridModel:
 	s = s.replace('\r', '').dedent().strip_edges()
 	# Integer division round down makes this work even with hints
 	var rows_ := (s.count('\n') + 1) / 2
@@ -13,7 +13,7 @@ static func from_str(s: String) -> GridModel:
 		rows_ -= 1
 		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)
-	g.load_from_str(s)
+	g.load_from_str(s, with_solution, clear_solution)
 	return g
 
 # Everything below is implementation details about grids.
@@ -41,6 +41,9 @@ var last_seen := 0
 var undo_stack: Array[Changes] = []
 var redo_stack: Array[Changes] = []
 
+var solution_c_left: Array[Array]
+var solution_c_right: Array[Array]
+
 func _init(n_: int, m_: int) -> void:
 	self.n = n_
 	self.m = m_
@@ -65,6 +68,20 @@ func _init(n_: int, m_: int) -> void:
 		hint_boat_cols.append(-1)
 
 enum Content { Nothing, Water, Air, Block, Boat }
+
+func _is_content_partial_solution(c: Content, sol: Content) -> bool:
+	match c:
+		Content.Block, Content.Water, Content.Boat:
+			return sol == c
+		Content.Nothing, Content.Air:
+			return true
+	return true
+
+func _content_sol(i: int, j: int, corner: E.Corner) -> Content:
+	if E.corner_is_left(corner):
+		return solution_c_left[i][j]
+	else:
+		return solution_c_right[i][j]
 
 class PureCell:
 	# By default, uses inc diagonal /, if inverted uses dec \
@@ -253,13 +270,18 @@ class CellWithLoc extends GridModel.CellModel:
 				return pure()._diag_wall_at(wall as E.Diagonal)
 		push_error("Bad wall %d" % wall)
 		return false
-	func put_water(corner: E.Corner, flush_undo := true) -> void:
+	func put_water(corner: E.Corner, flush_undo := true) -> bool:
+		if !grid.is_corner_partially_valid(Content.Water, i, j, corner):
+			return false
 		if !water_at(corner):
 			var changes := grid._flood_water(i, j, corner, true)
 			grid._push_undo_changes(changes, flush_undo)
-	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> void:
+		return true
+	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
+		if !grid.is_corner_partially_valid(Content.Air, i, j, corner):
+			return false
 		if water_at(corner):
 			remove_content(corner, false)
 		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
@@ -270,6 +292,7 @@ class CellWithLoc extends GridModel.CellModel:
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes, false)
+		return true
 	func remove_content(corner: E.Corner, flush_undo := true) -> void:
 		var changes: Array[Change] = []
 		if water_at(corner):
@@ -294,6 +317,8 @@ class CellWithLoc extends GridModel.CellModel:
 			return false
 		var c := grid.get_cell(i + 1, j)
 		if not (c.water_at(E.Corner.TopLeft) or c.water_at(E.Corner.TopRight)):
+			return false
+		if !grid.is_corner_partially_valid(Content.Boat, i, j, E.Corner.TopRight):
 			return false
 		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
 		if pure()._put_boat():
@@ -418,7 +443,7 @@ func _validate_hint_float(c1: String, c2: String) -> float:
 	else:
 		return float(h) / 2.
 
-func load_from_str(s: String) -> void:
+func load_from_str(s: String, with_solution := true, clear_solution := true) -> void:
 	var lines := s.dedent().strip_edges().split('\n', false)
 	# Offset because of hints
 	var hb := int(lines[0][0] == 'b')
@@ -450,6 +475,15 @@ func load_from_str(s: String) -> void:
 			if j > 0:
 				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 	validate()
+	if with_solution:
+		assert(are_hints_satisfied(), "Invalid solution")
+		solution_c_left.clear()
+		solution_c_right.clear()
+		for i in n:
+			solution_c_left.append(pure_cells[i].map(func(c): return c.c_left))
+			solution_c_right.append(pure_cells[i].map(func(c): return c.c_right))
+		if clear_solution:
+			clear_content()
 
 func _col_hint(h: int) -> String:
 	if h < 0:
@@ -742,6 +776,20 @@ func is_col_hint_satisfied(j : int) -> bool:
 		return true
 	return count_water_col(j) == hint
 
+# Use when level is created with with_solution
+func is_solution_partially_valid() -> bool:
+	assert(!solution_c_left.is_empty() or n == 0)
+	for i in n:
+		for j in m:
+			if not _is_content_partial_solution(_pure_cell(i, j).c_left, solution_c_left[i][j]):
+				return false
+			if not _is_content_partial_solution(_pure_cell(i, j).c_right, solution_c_right[i][j]):
+				return false
+	return true
+
+func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> bool:
+	return solution_c_left.is_empty() or _is_content_partial_solution(c, _content_sol(i, j, corner))
+
 func validate() -> void:
 	# Blocks are surrounded by walls
 	for i in n:
@@ -794,11 +842,11 @@ func flood_air(flush_undo := true) -> bool:
 		return true
 	return false
 
-func clear_water_air() -> void:
+func clear_content() -> void:
 	for i in n:
 		for j in m:
 			var c := _pure_cell(i, j)
-			if c.c_left == Content.Water or c.c_left == Content.Air:
+			if c.c_left != Content.Block:
 				c.c_left = Content.Nothing
-			if c.c_right == Content.Water or c.c_right == Content.Air:
+			if c.c_right != Content.Block:
 				c.c_right = Content.Nothing

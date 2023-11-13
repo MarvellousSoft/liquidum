@@ -29,10 +29,11 @@ class CellModel:
 	# Puts water in the given diagonal and floods.
 	# The flush_undo parameter tells if this change should be separate from the previous change
 	# in the undo stack, useful for grouping multiple related changes in the same undo.
-	func put_water(_corner: E.Corner, _flush_undo := true) -> void:
+	# Returns whether it was a valid move
+	func put_water(_corner: E.Corner, _flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
 	# Puts air in the given diagonal
-	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> void:
+	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:
 		return GridModel.must_be_implemented()
 	func remove_content(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
@@ -105,6 +106,9 @@ func count_boat_col(_j: int) -> int:
 	return GridModel.must_be_implemented()
 
 # Replace this grid with the one loaded from the string
+# with_solution is by default true, and it checks if the level is a solution, and then clears it
+# Always load levels with solution unless you're running a level editor
+#
 # The string should be a 2Nx2M grid, each cell represented by 4 characters
 # 12
 # 34
@@ -140,7 +144,7 @@ func count_boat_col(_j: int) -> int:
 # .|╲_/./
 # 2......
 # .L._.L.
-func load_from_str(_s: String) -> void:
+func load_from_str(_s: String, _with_solution := true, _clear_solution := true) -> void:
 	return GridModel.must_be_implemented()
 
 # Converts to string format as described on `load_from_str`
@@ -168,5 +172,5 @@ func flood_air(_flush_undo := true) -> bool:
 	return GridModel.must_be_implemented()
 
 # Clear all water and air
-func clear_water_air() -> void:
+func clear_content() -> void:
 	return GridModel.must_be_implemented()

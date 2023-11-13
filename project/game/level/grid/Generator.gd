@@ -153,5 +153,5 @@ func generate(n: int, m: int, diagonals := true, clear_solution := true) -> Grid
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
 	_randomly_place_water(grid)
 	if clear_solution:
-		grid.clear_water_air()
+		grid.clear_content()
 	return grid
