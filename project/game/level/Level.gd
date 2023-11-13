@@ -5,6 +5,7 @@ extends Node2D
 func _ready():
 	randomize()
 	setup("""
++boats=1
 h6.4.2.
 1##bb.w
 .L.|..╲

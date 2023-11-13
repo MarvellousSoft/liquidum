@@ -62,7 +62,7 @@ func get_cols(s: String) -> int:
 
 
 func str_grid(s: String) -> GridModel:
-	return GridImpl.from_str(s)
+	return GridImpl.from_str(s, false, false)
 
 func test_simple() -> void:
 	var simple := """
@@ -73,7 +73,7 @@ func test_simple() -> void:
 	"""
 	var g := GridImpl.create(2, 2)
 	check(!g.get_cell(0, 0).water_full())
-	g.load_from_str(simple)
+	g.load_from_str(simple, false, false)
 	# Check waters make sense
 	check(g.get_cell(0, 0).water_full())
 	for corner in [BottomLeft, BottomRight, TopLeft, TopRight]:
@@ -307,6 +307,7 @@ func test_boat_hint() -> void:
 
 func test_boat_place_remove() -> void:
 	var g := str_grid("""
+	+boats=1
 	b.......
 	.h......
 	1.......

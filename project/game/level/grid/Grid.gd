@@ -148,6 +148,9 @@ func count_boat_col(_j: int) -> int:
 # .|╲_/./
 # 2......
 # .L._.L.
+#
+# The string may begin with +key=value lines for extra data. The accept extra data is:
+# - boats: total number of boats in the solution. Defaults to 0.
 func load_from_str(_s: String, _with_solution := true, _clear_solution := true) -> void:
 	return GridModel.must_be_implemented()
 

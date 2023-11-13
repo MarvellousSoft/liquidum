@@ -6,10 +6,14 @@ static func create(rows_: int, cols_: int) -> GridModel:
 
 static func from_str(s: String, with_solution := true, clear_solution := true) -> GridModel:
 	s = s.replace('\r', '').dedent().strip_edges()
+	var my_s := s
+	while my_s[0] == '+':
+		my_s = my_s.split("\n", false, 1)[1]
 	# Integer division round down makes this work even with hints
-	var rows_ := (s.count('\n') + 1) / 2
-	var cols_ := s.find('\n') / 2
-	if s[0] == 'b':
+	var rows_ := (my_s.count('\n') + 1) / 2
+	var cols_ := my_s.find('\n') / 2
+	assert(rows_ > 0 and cols_ > 0)
+	if my_s[0] == 'b':
 		rows_ -= 1
 		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)
@@ -447,8 +451,19 @@ func _validate_hint_float(c1: String, c2: String) -> float:
 	else:
 		return float(h) / 2.
 
+func _parse_extra_data(line: String) -> void:
+	var kv := line.split("=", false, 2)
+	match kv[0]:
+		"+boats":
+			expected_boats = int(kv[1])
+		_:
+			push_error("Invalid data %s" % line)
+
 func load_from_str(s: String, with_solution := true, clear_solution := true) -> void:
 	var lines := s.dedent().strip_edges().split('\n', false)
+	while lines[0][0] == '+':
+		_parse_extra_data(lines[0])
+		lines.remove_at(0)
 	# Offset because of hints
 	var hb := int(lines[0][0] == 'b')
 	var hh := int(lines[hb][hb] == 'h')
@@ -479,6 +494,7 @@ func load_from_str(s: String, with_solution := true, clear_solution := true) -> 
 			if j > 0:
 				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 	validate()
+	
 	if with_solution:
 		assert(are_hints_satisfied(), "Invalid solution")
 		solution_c_left.clear()
@@ -514,6 +530,8 @@ func _row_hint2(h: int) -> String:
 
 func to_str() -> String:
 	var builder := PackedStringArray()
+	if expected_boats != 0:
+		builder.append("+boats=%d\n" % expected_boats)
 	var boat_hints := hint_boat_rows.any(func(h): return h != -1) or hint_boat_cols.any(func(h): return h != -1)
 	var hints := hint_rows.any(func(h): return h != -1.) or hint_cols.any(func(h): return h != -1.)
 	if boat_hints:
@@ -723,7 +741,16 @@ func count_boat_col(j: int) -> int:
 		count += int(_pure_cell(i, j)._has_boat())
 	return count
 
+func count_boats() -> int:
+	var count := 0
+	for i in n:
+		count += count_boat_row(i)
+	return count
+
 func are_hints_satisfied() -> bool:
+	if count_boats() != hint_all_boats():
+		print("%d/%d" % [count_boats(), hint_all_boats()])
+		return false
 	for i in n:
 		var hint := hint_rows[i]
 		if hint != -1 and count_water_row(i) != hint:
@@ -742,6 +769,8 @@ func are_hints_satisfied() -> bool:
 	return true
 
 func is_any_hint_broken() -> bool:
+	if count_boats() > hint_all_boats():
+		return true
 	for i in n:
 		if is_row_hint_wrong(i):
 			return true
