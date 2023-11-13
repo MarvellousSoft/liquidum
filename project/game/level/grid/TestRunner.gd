@@ -23,21 +23,36 @@ func scale_grids() -> void:
 	g1.scale = Vector2(s, s)
 	g2.scale = Vector2(s, s)
 
+func gen_puzzle() -> GridModel:
+	while true:
+		var rseed := randi() % 100000
+		if $Seed.text != "":
+			rseed = int($Seed.text)
+		else:
+			$Seed.placeholder_text = "Seed: %d" % rseed
+		var gen := Generator.new(rseed)
+		var g := gen.generate($Rows.value, $Cols.value, $Diags.button_pressed, false)
+		if $Interesting.button_pressed and $Seed.text == "":
+			g.clear_water_air()
+			var r := SolverModel.new().full_solve(g)
+			if r != SolverModel.SolveResult.SolvedUnique:
+				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
+				await get_tree().process_frame
+				continue
+		return g
+	assert(false, "Unreachable")
+	return null
 
-func _on_gen_pressed():
+func _on_gen_pressed() -> void:
+	$Gen.disabled = true
+	var g := await gen_puzzle()
 	$SolvedType.text = ""
-	var rseed := randi() % 100000
-	if $Seed.text != "":
-		rseed = int($Seed.text)
-	else:
-		$Seed.placeholder_text = "Seed: %d" % rseed
-	var gen := Generator.new(rseed)
-	var g:= gen.generate($Rows.value, $Cols.value, $Diags.button_pressed, false)
 	var sol_str := g.to_str()
 	g.clear_water_air()
 	g1.setup(sol_str)
 	g2.setup(g.to_str())
 	scale_grids()
+	$Gen.disabled = false
 
 
 func _on_auto_solve_pressed():

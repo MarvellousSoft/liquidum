@@ -51,10 +51,8 @@ class RowComponent:
 		first = first_
 		corner = corner_
 	func put_water() -> void:
-		print("[row] Put water on (%d, %d)" % [first.i, first.j])
 		first.put_water(corner, false)
 	func put_air() -> void:
-		print("[col] Put air on (%d, %d)" % [first.i, first.j])
 		first.put_air(corner, false, true)
 
 class RowDfs extends GridImpl.Dfs:
@@ -130,24 +128,20 @@ class ColComponent:
 	# Must be filled with water from left to right and air from right to left
 	var cells: Array[CellPosition]
 	func put_water_on(grid: GridImpl, count: float) -> void:
-		print("Looking for water count %f" % count)
 		for c in cells:
 			count -= grid._pure_cell(c.i, c.j)._content_count_from(GridImpl.Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
-				print("[col] Put water on (%d, %d)" % [c.i, c.j])
 				grid.get_cell(c.i, c.j).put_water(c.corner, false)
 				return
 	func put_air_on(grid: GridImpl, count: float) -> void:
-		print("Looking for air count %f" % count)
 		for i in cells.size():
 			var c: CellPosition = cells[-1 - i]
 			count -= grid._pure_cell(c.i, c.j)._content_count_from(GridImpl.Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
-				print("[col] Put air on (%d, %d)" % [c.i, c.j])
 				(grid.get_cell(c.i, c.j) as GridImpl.CellWithLoc).put_air(c.corner, false, true)
 				return
 
@@ -233,13 +227,11 @@ class BasicColStrategy extends ColumnStrategy:
 	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
 			for comp in values:
-				print("[basic] Put water on comp of size %d" % comp.size)
 				comp.put_water_on(grid, comp.size)
 			return true
 		var any := false
 		for comp in values:
 			if comp.size > water_left:
-				print("[basic] Put air on %d/%d comp" % [comp.size - water_left, comp.size])
 				comp.put_air_on(grid, comp.size - water_left)
 				any = true
 		return any
@@ -250,7 +242,6 @@ class MediumColStrategy extends ColumnStrategy:
 		var any := false
 		for comp in values:
 			if nothing_left - comp.size < water_left:
-				print("[medium] Put water on %d/%d comp" % [water_left - (nothing_left - comp.size), comp.size])
 				comp.put_water_on(grid, water_left - (nothing_left - comp.size))
 				any = true
 		return any
@@ -272,7 +263,6 @@ func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 	for _i in 50:
 		if not strategies.any(func(s): return s.apply_any()):
 			return
-		print("1 pass")
 		assert(_i < 40)
 
 enum SolveResult { SolvedUniqueNoGuess, SolvedUnique, SolvedMultiple, Unsolvable }
