@@ -31,6 +31,7 @@ var hint_rows: Array[float]
 var hint_cols: Array[float]
 var hint_boat_rows: Array[int]
 var hint_boat_cols: Array[int]
+var expected_boats: int = 0
 # (N-1)xM Array[Array[bool]]
 var wall_bottom: Array[Array]
 # Nx(M-1) Array[Array[bool]]
@@ -358,6 +359,9 @@ func hint_all_cols() -> Array:
 func set_hint_col(j: int, v: float) -> void:
 	hint_cols[j] = v
 
+func hint_all_boats() -> int:
+	return expected_boats
+
 func wall_at(i: int, j: int, side: E.Side) -> bool:
 	match side:
 		E.Side.Left:
@@ -461,8 +465,8 @@ func load_from_str(s: String, with_solution := true, clear_solution := true) -> 
 	var h := hb + hh
 	for i in n:
 		for j in m:
-			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wx#')
-			var c2 := _validate(lines[2 * i + h][2 * j + 1 + h], '.wx#')
+			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wxb#')
+			var c2 := _validate(lines[2 * i + h][2 * j + 1 + h], '.wxb#')
 			var c3 := _validate(lines[2 * i + 1 + h][2 * j + h], '.|_L')
 			var c4 := _validate(lines[2 * i + 1 + h][2 * j + 1 + h], '.╲/')
 			var cell := _pure_cell(i, j)
@@ -808,6 +812,8 @@ func validate() -> void:
 	# Boats make sense
 	for i in n:
 		for j in m:
+			var c := _pure_cell(i, j)
+			assert((c._content_left() == Content.Boat) == (c._content_right() == Content.Boat))
 			if get_cell(i, j).has_boat():
 				assert(not _pure_cell(i, j).diag_wall)
 				assert(i < n - 1 and _pure_cell(i + 1, j)._content_top() == Content.Water)

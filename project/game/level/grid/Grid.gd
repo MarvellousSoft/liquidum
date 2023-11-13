@@ -86,6 +86,10 @@ func set_hint_col(_j: int, _v: float) -> void:
 func boat_hint_all_cols() -> Array[int]:
 	return GridModel.must_be_implemented()
 
+# How many boats are in the level
+func hint_all_boats() -> int:
+	return GridModel.must_be_implemented()
+
 # Is this a valid solution?
 func are_hints_satisfied() -> bool:
 	return GridModel.must_be_implemented()

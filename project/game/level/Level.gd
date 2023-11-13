@@ -6,7 +6,7 @@ func _ready():
 	randomize()
 	setup("""
 h6.4.2.
-1##...w
+1##bb.w
 .L.|..╲
 4wwww..
 .|╲./|.
