@@ -13,7 +13,7 @@ static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> Gri
 	var rows_ := (my_s.count('\n') + 1) / 2
 	var cols_ := my_s.find('\n') / 2
 	assert(rows_ > 0 and cols_ > 0)
-	if my_s[0] == 'b':
+	if my_s[0] == 'b' and my_s.find('h') != -1:
 		rows_ -= 1
 		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)

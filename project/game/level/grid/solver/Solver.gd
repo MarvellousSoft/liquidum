@@ -252,6 +252,7 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 		return false
 	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
 		return false
+	c = grid._pure_cell(i + 1, j)
 	return c._content_top() == GridImpl.Content.Water or c._content_top() == GridImpl.Content.Nothing
 
 static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
@@ -351,7 +352,7 @@ func _make_guess(res: SolveResult) -> SolveResult:
 
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
-func full_solve(grid: GridModel, flush_undo := true, look_for_multiple := true) -> SolveResult:
+func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
 	if flush_undo:
 		grid.push_empty_undo()
 	apply_strategies(grid, false)
@@ -377,7 +378,7 @@ func full_solve(grid: GridModel, flush_undo := true, look_for_multiple := true) 
 						return r1
 					# Otherwise we need to try to solve with air
 					c.put_air(corner, true)
-					var r2 := full_solve(grid, false, false)
+					var r2 := full_solve(grid, false, min_boat_place, false)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
 						grid.undo()
@@ -387,4 +388,31 @@ func full_solve(grid: GridModel, flush_undo := true, look_for_multiple := true) 
 						return _make_guess(full_solve(grid, false))
 					# Could solve both ways, definitely not unique
 					return SolveResult.SolvedMultiple
+	# After we guessed all waters and airs, let's guess boats if we at least got the waters right
+	for i in grid.rows():
+		if grid.is_row_hint_wrong(i):
+			return SolveResult.Unsolvable 
+	for j in grid.cols():
+		if grid.is_col_hint_wrong(j):
+			return SolveResult.Unsolvable
+	for i in grid.rows():
+		for j in grid.cols():
+			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j):
+				continue
+			var c := grid.get_cell(i, j)
+			c.put_boat(true)
+			var r1 := full_solve(grid, false, Vector2i(i, j + 1))
+			grid.undo()
+			if r1 == SolveResult.Unsolvable:
+				return _make_guess(full_solve(grid, false, Vector2i(i, j + 1)))
+			elif not look_for_multiple:
+				grid.redo()
+				return r1
+			var r2 := full_solve(grid, false, Vector2i(i, j + 1), false)
+			if r2 == SolveResult.Unsolvable:
+				grid.undo()
+				c.put_boat(false)
+				return _make_guess(full_solve(grid, false, Vector2i(i, j + 1)))
+			return SolveResult.SolvedMultiple
+	# Can't really guess anything else
 	return SolveResult.Unsolvable

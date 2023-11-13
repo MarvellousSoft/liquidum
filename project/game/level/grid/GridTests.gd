@@ -318,6 +318,18 @@ func test_cant_solve() -> void:
 	....
 	""")
 
+func test_guess_boat() -> void:
+	var g := str_grid("""
+	+boats=1
+	b....
+	1....
+	.|...
+	.....
+	.L._.
+	""")
+	var r := SolverModel.new().full_solve(g)
+	check(g.are_hints_satisfied())
+
 func _flood_all(bef: String, aft: String) -> void:
 	var g := str_grid(bef)
 	g.flood_all()
