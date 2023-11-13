@@ -289,8 +289,12 @@ func is_at_surface(i: int, j: int, corner: E.Waters) -> bool:
 			return false
 
 
+func play_water_sound() -> void:
+	AudioManager.play_sfx("splash" + str(randi()%4 + 1))
+
+
 func highlight_error(_i: int, _j: int, _which: E.Waters) -> void:
-	pass
+	AudioManager.play_sfx("error")
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
@@ -303,6 +307,7 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 			E.BrushMode.Water:
 				mouse_hold_status = E.MouseDragState.RemoveWater
 				cell_data.remove_content(corner)
+				play_water_sound()
 			E.BrushMode.Boat:
 				mouse_hold_status = E.MouseDragState.Boat
 				highlight_error(i, j, which)
@@ -311,14 +316,17 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 			E.BrushMode.Water:
 				mouse_hold_status = E.MouseDragState.Water
 				cell_data.put_water(corner)
+				play_water_sound()
 			E.BrushMode.Boat:
 				if cell_data.has_boat():
 					mouse_hold_status = E.MouseDragState.RemoveBoat
 					cell_data.remove_content(E.Corner.BottomLeft)
+					AudioManager.play_sfx("boat_remove")
 				else:
 					mouse_hold_status = E.MouseDragState.Boat
 					if which == E.Single:
 						cell_data.put_boat()
+						AudioManager.play_sfx("boat_put")
 					else:
 						highlight_error(i, j, which)
 	update()
@@ -331,12 +339,15 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	if cell_data.air_at(corner):
 		mouse_hold_status = E.MouseDragState.RemoveAir
 		cell_data.remove_content(corner)
+		AudioManager.play_sfx("air_remove")
 	elif cell_data.has_boat():
 		mouse_hold_status = E.MouseDragState.RemoveBoat
 		cell_data.remove_content(corner)
+		AudioManager.play_sfx("boat_remove")
 	else:
 		mouse_hold_status = E.MouseDragState.Air
 		cell_data.put_air(corner)
+		AudioManager.play_sfx("air_put")
 	update()
 
 
@@ -348,15 +359,21 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
 		cell_data.put_water(corner, false)
+		play_water_sound()
 	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
 		cell_data.put_air(corner, false)
+		AudioManager.play_sfx("air_put")
 	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
 		cell_data.put_boat(false)
+		AudioManager.play_sfx("boat_put")
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
 		cell_data.remove_content(corner, false)
+		play_water_sound()
 	elif mouse_hold_status == E.MouseDragState.RemoveAir and cell_data.air_at(corner):
 		cell_data.remove_content(corner, false)
+		AudioManager.play_sfx("air_remove")
 	elif mouse_hold_status == E.MouseDragState.RemoveBoat and cell_data.has_boat():
 		cell_data.remove_content(corner, false)
+		AudioManager.play_sfx("boat_remove")
 	
 	update()

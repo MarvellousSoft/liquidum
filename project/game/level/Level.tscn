@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
-[ext_resource type="PackedScene" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
+[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")

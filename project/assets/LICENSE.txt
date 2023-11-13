@@ -1,7 +1,13 @@
-CC BY 3.0 License:
+If not specified below, all assets in our project are under the license:
+CC BY 3.0 License
 https://creativecommons.org/licenses/by/3.0/#
 
-The following assets have an specific license/atrtibution to them.
+The following assets have an specific license/attribution to them.
 
-- boat.png
+- images/ui/objects/boat.png
 by Delapouite under CC BY 3.0
+
+- audio/bgm/main.ogg
+Music Info: “Ocean”
+Audio Synthezx Group
+https://audio-sx.com

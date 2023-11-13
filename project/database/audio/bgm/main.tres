@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bokg5icp4e6yg"]
+
+[ext_resource type="AudioStream" uid="uid://b61ile1d3db2o" path="res://assets/audio/bgm/main.ogg" id="1_pdejm"]
+[ext_resource type="Script" path="res://database/audio/BGM.gd" id="2_f6icl"]
+
+[resource]
+script = ExtResource("2_f6icl")
+asset = ExtResource("1_pdejm")
+base_db = -20.0

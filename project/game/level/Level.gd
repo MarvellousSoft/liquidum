@@ -4,6 +4,7 @@ extends Node2D
 
 func _ready():
 	randomize()
+	AudioManager.play_bgm("main")
 	setup("""
 +boats=1
 h6.4.2.
