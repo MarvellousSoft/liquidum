@@ -5,8 +5,8 @@ const SURFACE_THRESHOLD = 0.7
 const WATER_SPEED_RATIO = 7.0
 const EPS = 0.1
 
-signal pressed_water(i: int, j: int, which: E.Waters)
-signal pressed_air(i: int, j: int, which: E.Waters)
+signal pressed_main_button(i: int, j: int, which: E.Waters)
+signal pressed_second_button(i: int, j: int, which: E.Waters)
 
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
@@ -197,9 +197,9 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
-				pressed_water.emit(row, column, which)
+				pressed_main_button.emit(row, column, which)
 			MOUSE_BUTTON_RIGHT:
-				pressed_air.emit(row, column, which)
+				pressed_second_button.emit(row, column, which)
 
 
 func _on_button_mouse_entered(which : E.Waters):

@@ -261,7 +261,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if flush_undo:
 			grid.push_empty_undo()
 		if water_at(corner):
-			remove_water_or_air(corner, false)
+			remove_content(corner, false)
 		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
 		if pure().put_air(corner):
 			# No auto-flooding air
@@ -270,7 +270,7 @@ class CellWithLoc extends GridModel.CellModel:
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes, false)
-	func remove_water_or_air(corner: E.Corner, flush_undo := true) -> void:
+	func remove_content(corner: E.Corner, flush_undo := true) -> void:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))

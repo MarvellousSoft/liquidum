@@ -1,0 +1,81 @@
+[gd_scene load_steps=11 format=3 uid="uid://plt8snslppc5"]
+
+[ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
+[ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
+[ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/single_water.png" id="3_wkdt7"]
+[ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="4_vjq41"]
+[ext_resource type="ButtonGroup" uid="uid://eg2sjee74x6q" path="res://assets/ui/BrushPickerButtonGroup.tres" id="5_06acy"]
+[ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush_picker_unpressed.png" id="6_h5p7k"]
+[ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush_picker_pressed.png" id="7_66ejo"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
+noise_type = 2
+fractal_gain = 0.4
+fractal_weighted_strength = 0.25
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bi3kj"]
+width = 500
+height = 500
+seamless = true
+seamless_blend_skirt = 0.4
+noise = SubResource("FastNoiseLite_t7cfv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1b4k5"]
+shader = ExtResource("2_v77ft")
+shader_parameter/level = 0.7
+shader_parameter/size = Vector2(100, 100)
+shader_parameter/wave_width = 50.0
+shader_parameter/wave_height = 5.0
+shader_parameter/depth = 40.0
+shader_parameter/water_color = Color(0.678431, 0.933333, 1, 1)
+shader_parameter/depth_color = Color(0, 0.615686, 1, 1)
+shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
+
+[node name="BrushPicker" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5hp8l")
+
+[node name="Water" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_1b4k5")
+layout_mode = 2
+offset_bottom = 100.0
+texture = ExtResource("3_wkdt7")
+
+[node name="Boat" type="TextureRect" parent="."]
+layout_mode = 2
+offset_left = 100.0
+offset_right = 200.0
+offset_bottom = 100.0
+texture = ExtResource("4_vjq41")
+expand_mode = 1
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 104.0
+offset_bottom = 100.0
+theme_override_constants/separation = 0
+
+[node name="Water" type="TextureButton" parent="Buttons"]
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("5_06acy")
+texture_normal = ExtResource("6_h5p7k")
+texture_pressed = ExtResource("7_66ejo")
+
+[node name="Boat" type="TextureButton" parent="Buttons"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("5_06acy")
+texture_normal = ExtResource("6_h5p7k")
+texture_pressed = ExtResource("7_66ejo")
+ignore_texture_size = true
+
+[connection signal="pressed" from="Buttons/Water" to="." method="_on_button_pressed" binds= [0]]
+[connection signal="pressed" from="Buttons/Boat" to="." method="_on_button_pressed" binds= [1]]

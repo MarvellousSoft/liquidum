@@ -175,7 +175,7 @@ L../.╲
 #ww...
 L╲_╲_.
 	""")
-	g.get_cell(3, 0).remove_water_or_air(TopRight)
+	g.get_cell(3, 0).remove_content(TopRight)
 	g.get_cell(1, 0).put_water(BottomLeft)
 	g.get_cell(1, 2).put_air(BottomRight)
 	g.get_cell(1, 1).put_air(BottomRight)
@@ -261,7 +261,7 @@ func test_remove_water_bug() -> void:
 	ww
 	L.
 	""")
-	g.get_cell(1, 0).remove_water_or_air(BottomLeft)
+	g.get_cell(1, 0).remove_content(BottomLeft)
 	assert_grid_eq(g.to_str(), """
 	xx
 	|.
@@ -330,7 +330,7 @@ func test_boat_place_remove() -> void:
 	g.undo()
 	assert(g.are_hints_satisfied())
 	# Removing water should destroy boat
-	g.get_cell(1, 2).remove_water_or_air(TopRight)
+	g.get_cell(1, 2).remove_content(TopRight)
 	assert(!g.get_cell(0, 1).has_boat())
 	g.undo()
 	assert(g.are_hints_satisfied())

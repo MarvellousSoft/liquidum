@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=4 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
+[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")
@@ -20,4 +21,11 @@ offset_right = 308.0
 offset_bottom = 591.0
 text = "Auto-solve!"
 
+[node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
+offset_left = 1252.0
+offset_top = 91.0
+offset_right = 1252.0
+offset_bottom = 91.0
+
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
+[connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]

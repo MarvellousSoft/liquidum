@@ -15,7 +15,9 @@ enum CellType { IncDiag = 9, DecDiag, Single }
 enum Walls { Top = 1, Right, Bottom, Left, IncDiag = 9, DecDiag }
 enum Waters { TopLeft = 5, TopRight, BottomRight, BottomLeft, Single = 11, None }
 
-enum MouseDragState { None, Water, Air, RemoveWater, RemoveAir }
+enum MouseDragState { None, Water, Air, Boat, RemoveWater, RemoveAir, RemoveBoat }
+
+enum BrushMode { Water, Boat }
 
 func corner_is_left(corner: E.Corner) -> bool:
 	return corner == Corner.TopLeft or corner == Corner.BottomLeft

@@ -120,7 +120,7 @@ func _randomly_place_water(grid: GridModel) -> void:
 			for corner in corners:
 				if randf() < 0.5:
 					if c.water_at(corner):
-						c.remove_water_or_air(corner)
+						c.remove_content(corner)
 					else:
 						c.put_water(corner)
 	for i in grid.rows():

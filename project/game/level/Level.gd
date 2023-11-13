@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var GridNode = $CenterContainer/GridView
+@onready var GridNode : GridView = $CenterContainer/GridView
 
 func _ready():
 	setup("""
@@ -21,3 +21,7 @@ func setup(level : String):
 
 func _on_solve_button_pressed():
 	GridNode.auto_solve()
+
+
+func _on_brush_picker_brushed_picked(mode : E.BrushMode):
+	GridNode.set_brush_mode(mode)

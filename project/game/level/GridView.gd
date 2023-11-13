@@ -11,11 +11,13 @@ const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 	"top": $CenterContainer/GridContainer/HintBarTop,
 	"left": $CenterContainer/GridContainer/HintBarLeft,
 }
+@onready var editor_mode := false
 
+var brush_mode : E.BrushMode = E.BrushMode.Water
 var grid_logic : GridModel
 var rows : int
 var columns : int
-var mouse_hold_status : int
+var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -59,6 +61,10 @@ func full_solve(flush_undo := true, do_emit_signal := true) -> SolverModel.Solve
 	update(do_emit_signal)
 	return result
 
+
+func set_brush_mode(mode : E.BrushMode) -> void:
+	brush_mode = mode
+
 #Assumes grid_logic is already setup
 func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
@@ -86,8 +92,8 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 			if cell_data.block_at(corner):
 				cell.set_block(corner)
 	
-	cell.pressed_water.connect(_on_cell_pressed_water)
-	cell.pressed_air.connect(_on_cell_pressed_air)
+	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
+	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
 	cell.mouse_entered.connect(_on_cell_mouse_entered)
 	
 	return cell
@@ -106,14 +112,21 @@ func update_visuals() -> void:
 			var cell_data := grid_logic.get_cell(i, j)
 			var cell := get_cell(i, j) as Cell
 			if cell_data.water_full():
-				cell.set_water(E.Single, true)
 				cell.remove_air()
+				cell.set_boat(false)
+				cell.set_water(E.Single, true)
 			elif cell_data.air_full():
 				cell.remove_water()
+				cell.set_boat(false)
 				cell.set_air(E.Single, true)
+			elif cell_data.has_boat():
+				cell.remove_water()
+				cell.remove_air()
+				cell.set_boat(true)
 			elif cell_data.nothing_full():
 				cell.remove_water()
 				cell.remove_air()
+				cell.set_boat(false)
 			else:
 				for corner in E.Corner.values():
 					cell.set_water(corner, cell_data.water_at(corner))
@@ -229,7 +242,7 @@ func can_decrease_water(i : int, j : int, corner : E.Waters):
 					push_error("Not a valid type for cell:" + str(type))
 
 
-func is_at_surface(i, j, corner):
+func is_at_surface(i: int, j: int, corner: E.Waters) -> bool:
 	match corner:
 		E.Waters.Single, E.Waters.TopLeft, E.Waters.TopRight:
 			if grid_logic.wall_at(i, j, E.Side.Top):
@@ -254,6 +267,7 @@ func is_at_surface(i, j, corner):
 					return is_at_surface(i, j - 1, E.Waters.Single)
 				_:
 					push_error("Not a valid type for cell:" + str(type))
+					return false
 		E.Waters.BottomRight:
 			if grid_logic.wall_at(i, j, E.Side.Right):
 				return true
@@ -269,29 +283,57 @@ func is_at_surface(i, j, corner):
 					return is_at_surface(i, j + 1, E.Waters.Single)
 				_:
 					push_error("Not a valid type for cell:" + str(type))
+					return false
+		_:
+			push_error("Not a valid corner for cell:" + str(corner))
+			return false
 
 
-func _on_cell_pressed_water(i: int, j: int, which: E.Waters) -> void:
+func highlight_error(i: int, j: int, which: E.Waters) -> void:
+	pass
+
+
+func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.water_at(corner):
-		mouse_hold_status = E.MouseDragState.RemoveWater
-		cell_data.remove_water_or_air(corner)
+		match brush_mode:
+			E.BrushMode.Water:
+				mouse_hold_status = E.MouseDragState.RemoveWater
+				cell_data.remove_content(corner)
+			E.BrushMode.Boat:
+				mouse_hold_status = E.MouseDragState.Boat
+				highlight_error(i, j, which)
 	else:
-		mouse_hold_status = E.MouseDragState.Water
-		cell_data.put_water(corner)
+		match brush_mode:
+			E.BrushMode.Water:
+				mouse_hold_status = E.MouseDragState.Water
+				cell_data.put_water(corner)
+			E.BrushMode.Boat:
+				if cell_data.has_boat():
+					mouse_hold_status = E.MouseDragState.RemoveBoat
+					cell_data.remove_content(E.Corner.BottomLeft)
+				else:
+					mouse_hold_status = E.MouseDragState.Boat
+					if which == E.Single:
+						cell_data.put_boat()
+					else:
+						highlight_error(i, j, which)
 	update()
 
 
-func _on_cell_pressed_air(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.air_at(corner):
 		mouse_hold_status = E.MouseDragState.RemoveAir
-		cell_data.remove_water_or_air(corner)
+		cell_data.remove_content(corner)
+	elif cell_data.has_boat():
+		mouse_hold_status = E.MouseDragState.RemoveBoat
+		cell_data.remove_content(corner)
 	else:
 		mouse_hold_status = E.MouseDragState.Air
 		cell_data.put_air(corner)
@@ -308,9 +350,13 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		cell_data.put_water(corner, false)
 	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
 		cell_data.put_air(corner, false)
+	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
+		cell_data.put_boat(false)
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
-		cell_data.remove_water_or_air(corner, false)
+		cell_data.remove_content(corner, false)
 	elif mouse_hold_status == E.MouseDragState.RemoveAir and cell_data.air_at(corner):
-		cell_data.remove_water_or_air(corner, false)
+		cell_data.remove_content(corner, false)
+	elif mouse_hold_status == E.MouseDragState.RemoveBoat and cell_data.has_boat():
+		cell_data.remove_content(corner, false)
 	
 	update()
