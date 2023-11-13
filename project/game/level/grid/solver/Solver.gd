@@ -246,6 +246,36 @@ class MediumColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
+# If hint is all possible boat locations, then put the boats
+class BoatRowStrategy extends RowStrategy:
+	func _boat_possible(i: int, j: int) -> bool:
+		var c := grid._pure_cell(i, j)
+		if c.cell_type() != E.CellType.Single:
+			return false
+		if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
+			return false
+		return c._content_top() == GridImpl.Content.Water or c._content_top() == GridImpl.Content.Nothing
+	func _apply(i: int) -> bool:
+		var hint := grid.hint_boat_rows[i]
+		if hint <= 0:
+			return false
+		var count := 0
+		for j in grid.cols():
+			if grid.get_cell(i, j).has_boat():
+				hint -= 1
+			elif _boat_possible(i, j):
+				count += 1
+		if hint > 0 and count == hint:
+			for j in grid.cols():
+				if _boat_possible(i, j):
+					# Put water down
+					var c := grid.get_cell(i + 1, j)
+					c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false)
+					# Put boat here
+					grid.get_cell(i, j).put_boat(false)
+			return true
+		return false
+
 # Tries to solve the puzzle as much as possible
 func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 	# We'll merge all changes in the same undo here
@@ -256,6 +286,7 @@ func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 	var strategies: Array[Strategy] = [
 		BasicRowStrategy.new(grid),
 		BasicColStrategy.new(grid),
+		BoatRowStrategy.new(grid),
 		MediumRowStrategy.new(grid),
 		MediumColStrategy.new(grid),
 		AdvancedRowStrategy.new(grid),

@@ -45,6 +45,8 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func put_boat(_flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
+	func cell_type() -> E.CellType:
+		return GridModel.must_be_implemented()
 
 func rows() -> int:
 	return GridModel.must_be_implemented()

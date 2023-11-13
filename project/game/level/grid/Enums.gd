@@ -28,3 +28,18 @@ func corner_to_diag(corner: E.Corner) -> E.Diagonal:
 		return E.Diagonal.Dec
 	else:
 		return E.Diagonal.Inc
+func diag_to_corner(cell: E.CellType, side: E.Side) -> E.Corner:
+	if cell == E.CellType.IncDiag:
+		match side:
+			E.Side.Top, E.Side.Left:
+				return E.Corner.TopLeft
+			E.Side.Bottom, E.Side.Right:
+				return E.Corner.BottomRight
+	else: # DecDiag or Single
+		match side:
+			E.Side.Top, E.Side.Right:
+				return E.Corner.TopRight
+			E.Side.Bottom, E.Side.Left:
+				return E.Corner.BottomLeft
+	assert(false, "Invalid side")
+	return E.Corner.TopLeft

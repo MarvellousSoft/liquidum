@@ -50,6 +50,7 @@ func assert_can_solve(s: String) -> void:
 	SolverModel.new().apply_strategies(g)
 	if !g.are_hints_satisfied():
 		fail_later_if(true)
+		print("Not satisfied:\n", g.to_str())
 		show_grids.emit(s, g.to_str())
 
 
@@ -281,6 +282,15 @@ func test_can_solve() -> void:
 	._.L.
 	""")
 	assert_can_solve("h2.\n...\n...\n...\n...\n...\n...")
+	assert_can_solve("""
+	+boats=1
+	b...
+	.h..
+	1...
+	....
+	....
+	....
+	""")
 
 func _flood_all(bef: String, aft: String) -> void:
 	var g := str_grid(bef)

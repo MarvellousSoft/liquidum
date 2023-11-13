@@ -226,6 +226,14 @@ class PureCell:
 			c_right = Content.Nothing
 		diag_wall = new
 		inverted = (diag == E.Diagonal.Dec)
+	func cell_type() -> E.CellType:
+		if diag_wall:
+			if inverted:
+				return E.CellType.DecDiag
+			else:
+				return E.CellType.IncDiag
+		else:
+			return E.CellType.Single
 
 class Change:
 	var i: int
@@ -332,6 +340,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return false
 	func has_boat() -> bool:
 		return pure()._has_boat()
+	func cell_type() -> E.CellType:
+		return pure().cell_type()
 
 func rows() -> int:
 	return n
