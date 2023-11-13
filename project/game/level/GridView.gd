@@ -289,7 +289,7 @@ func is_at_surface(i: int, j: int, corner: E.Waters) -> bool:
 			return false
 
 
-func highlight_error(i: int, j: int, which: E.Waters) -> void:
+func highlight_error(_i: int, _j: int, _which: E.Waters) -> void:
 	pass
 
 

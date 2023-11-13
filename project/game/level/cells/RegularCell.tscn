@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=33 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -32,9 +32,63 @@
 
 [sub_resource type="Animation" id="Animation_wjmlx"]
 resource_name = "idle"
+length = 3.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.6, 2.4, 3.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 38), Vector2(4, 40), Vector2(0, 38), Vector2(-4, 40), Vector2(0, 38)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8, 3.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.10472, 0.0, -0.10472, 0.0, 0.10472, 0.0, -0.10472, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3g2u4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 38)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k3t6r"]
 _data = {
+"RESET": SubResource("Animation_3g2u4"),
 "idle": SubResource("Animation_wjmlx")
 }
 
@@ -368,16 +422,17 @@ texture = ExtResource("28_2yply")
 modulate = Color(0, 0, 0, 1)
 z_index = 1
 layout_mode = 0
-offset_left = 1.0
 offset_top = 38.0
-offset_right = 99.0
+offset_right = 98.0
 offset_bottom = 124.0
+pivot_offset = Vector2(49, 43)
 mouse_filter = 2
 texture = ExtResource("29_6b42n")
 expand_mode = 3
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Boat"]
+autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_k3t6r")
 }

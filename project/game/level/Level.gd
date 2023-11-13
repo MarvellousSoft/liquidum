@@ -3,6 +3,7 @@ extends Node2D
 @onready var GridNode: GridView = $CenterContainer/GridView
 
 func _ready():
+	randomize()
 	setup("""
 h6.4.2.
 1##...w

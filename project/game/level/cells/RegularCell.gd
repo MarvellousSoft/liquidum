@@ -3,6 +3,8 @@ extends Cell
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
 const WATER_SPEED_RATIO = 7.0
+const MIN_BOAT_ANIM_SPEED = .7
+const MAX_BOAT_ANIM_SPEED = .9
 const EPS = 0.1
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
@@ -51,6 +53,7 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 	E.Waters.BottomRight: $Blocks/BottomRight,
 }
 @onready var Boat = $Boat
+@onready var BoatAnim = $Boat/AnimationPlayer
 
 var row : int
 var column : int
@@ -68,6 +71,8 @@ var water_flags = {
 func _ready():
 	for water in Waters.values():
 		water.material = water.material.duplicate()
+	BoatAnim.seek(randf_range(0.0, BoatAnim.current_animation_length), true)
+	BoatAnim.speed_scale = randf_range(MIN_BOAT_ANIM_SPEED, MAX_BOAT_ANIM_SPEED)
 
 
 func _process(dt):
