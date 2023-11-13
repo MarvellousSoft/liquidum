@@ -2,6 +2,7 @@ class_name Generator
 
 var rseed: int = randi()
 
+
 func _init(rseed_: int) -> void:
 	rseed = rseed_
 
@@ -58,6 +59,9 @@ func any_adj(g: Array[Array], cells: Array[Vector2i], adj_rule: AdjacencyRule) -
 	cells.shuffle()
 	for c in cells:
 		var adj := adj_rule.all_adj(c)
+		# Slight hack: Add the other side of the same cell to make diagonals less common
+		adj.append(Vector2i(c.x, c.y ^ 1))
+		adj.append(Vector2i(c.x, c.y ^ 1))
 		adj.shuffle()
 		for e in adj:
 			if e.x >= 0 and e.y >= 0 and e.x < g.size() and e.y < g[0].size() and g[e.x][e.y] == 0:

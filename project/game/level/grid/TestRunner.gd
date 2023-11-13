@@ -25,13 +25,14 @@ func scale_grids() -> void:
 
 
 func _on_gen_pressed():
+	$SolvedType.text = ""
 	var rseed := randi() % 100000
 	if $Seed.text != "":
 		rseed = int($Seed.text)
 	else:
 		$Seed.placeholder_text = "Seed: %d" % rseed
 	var gen := Generator.new(rseed)
-	var g:= gen.generate(6, 6, $Diags.button_pressed, false)
+	var g:= gen.generate($Rows.value, $Cols.value, $Diags.button_pressed, false)
 	var sol_str := g.to_str()
 	g.clear_water_air()
 	g1.setup(sol_str)
@@ -55,4 +56,6 @@ func _on_paste_pressed():
 
 func _on_full_solve_pressed():
 	var r := g2.full_solve()
-	print("Level is %s" % SolverModel.SolveResult.find_key(r))
+	var solve_type: String = SolverModel.SolveResult.find_key(r)
+	print("Level is %s" % solve_type)
+	$SolvedType.text = solve_type
