@@ -246,15 +246,23 @@ class MediumColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
+static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
+	var c := grid._pure_cell(i, j)
+	if c.cell_type() != E.CellType.Single:
+		return false
+	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
+		return false
+	return c._content_top() == GridImpl.Content.Water or c._content_top() == GridImpl.Content.Nothing
+
+static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
+	# Put water down
+	var c := grid.get_cell(i + 1, j)
+	c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false)
+	# Put boat here
+	grid.get_cell(i, j).put_boat(false)
+
 # If hint is all possible boat locations, then put the boats
 class BoatRowStrategy extends RowStrategy:
-	func _boat_possible(i: int, j: int) -> bool:
-		var c := grid._pure_cell(i, j)
-		if c.cell_type() != E.CellType.Single:
-			return false
-		if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-			return false
-		return c._content_top() == GridImpl.Content.Water or c._content_top() == GridImpl.Content.Nothing
 	func _apply(i: int) -> bool:
 		var hint := grid.hint_boat_rows[i]
 		if hint <= 0:
@@ -263,17 +271,52 @@ class BoatRowStrategy extends RowStrategy:
 		for j in grid.cols():
 			if grid.get_cell(i, j).has_boat():
 				hint -= 1
-			elif _boat_possible(i, j):
+			elif SolverModel._boat_possible(grid, i, j):
 				count += 1
 		if hint > 0 and count == hint:
 			for j in grid.cols():
-				if _boat_possible(i, j):
-					# Put water down
-					var c := grid.get_cell(i + 1, j)
-					c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false)
-					# Put boat here
-					grid.get_cell(i, j).put_boat(false)
+				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j):
+					SolverModel._put_boat(grid, i, j)
 			return true
+		return false
+
+class BoatColStrategy extends ColumnStrategy:
+	func _apply(j: int) -> bool:
+		var hint := grid.hint_boat_cols[j]
+		if hint <= 0:
+			return false
+		var i := grid.rows() - 1
+		var count := 0
+		while i >= 0:
+			if grid.get_cell(i, j).cell_type() != E.CellType.Single:
+				i -= 1
+				continue
+			if grid.get_cell(i, j).has_boat():
+				hint -= 1
+			elif SolverModel._boat_possible(grid, i, j):
+				count += 1
+			else:
+				i -= 1
+				continue
+			i -= 1
+			# Skip rest of this aquarium. Best effort, they might still be connected through the side.
+			while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
+				i -= 1
+		if hint > 0 and count == hint:
+			# We can put boats if the places they should go are clear
+			var any := false
+			for i_ in range(grid.rows() - 1, -1, -1):
+				i = i_
+				if grid.get_cell(i, j).cell_type() != E.CellType.Single:
+					continue
+				if grid.get_cell(i, j).has_boat():
+					continue
+				if SolverModel._boat_possible(grid, i, j):
+					if (!grid.get_cell(i, j).wall_at(E.Walls.Top) and SolverModel._boat_possible(grid, i - 1, j)) or SolverModel._boat_possible(grid, i + 1, j):
+						continue
+					SolverModel._put_boat(grid, i, j)
+					any = true
+			return any
 		return false
 
 # Tries to solve the puzzle as much as possible
@@ -287,6 +330,7 @@ func apply_strategies(grid: GridModel, flush_undo := true) -> void:
 		BasicRowStrategy.new(grid),
 		BasicColStrategy.new(grid),
 		BoatRowStrategy.new(grid),
+		BoatColStrategy.new(grid),
 		MediumRowStrategy.new(grid),
 		MediumColStrategy.new(grid),
 		AdvancedRowStrategy.new(grid),

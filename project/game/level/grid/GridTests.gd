@@ -44,14 +44,17 @@ func assert_grid_eq(a: String, b: String) -> void:
 		show_grids.emit(a, b)
 		fail_later_if(a != b)
 
-func assert_can_solve(s: String) -> void:
+func assert_can_solve(s: String, result := true) -> void:
 	var g := str_grid(s)
 	check(!g.are_hints_satisfied())
 	SolverModel.new().apply_strategies(g)
-	if !g.are_hints_satisfied():
+	if g.are_hints_satisfied() != result:
 		fail_later_if(true)
 		print("Not satisfied:\n", g.to_str())
 		show_grids.emit(s, g.to_str())
+
+func assert_cant_solve(s: String) -> void:
+	assert_can_solve(s, false)
 
 
 func get_rows(s : String) -> int:
@@ -287,6 +290,29 @@ func test_can_solve() -> void:
 	b...
 	.h..
 	1...
+	....
+	....
+	....
+	""")
+	assert_can_solve("""
+	+boats=1
+	b.1.
+	.h..
+	....
+	....
+	....
+	....
+	""")
+
+func test_cant_solve() -> void:
+	# Can't guess water level
+	assert_cant_solve("""
+	+boats=1
+	b.1.
+	.h..
+	....
+	....
+	....
 	....
 	....
 	....
