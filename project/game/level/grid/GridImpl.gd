@@ -779,6 +779,21 @@ func flood_all() -> bool:
 		return true
 	return false
 
+func flood_air(flush_undo := true) -> bool:
+	if flush_undo:
+		push_empty_undo()
+	var dfs := AddAirDfs.new(self)
+	for i in range(n - 1, -1, -1):
+		for j in m:
+			var c := _pure_cell(i, j)
+			for corner in E.Corner.values():
+				if c.last_seen(corner) < last_seen and c.air_at(corner):
+					dfs.flood(i, j, corner)
+	if !dfs.changes.is_empty():
+		_push_undo_changes(dfs.changes, false)
+		return true
+	return false
+
 func clear_water_air() -> void:
 	for i in n:
 		for j in m:
