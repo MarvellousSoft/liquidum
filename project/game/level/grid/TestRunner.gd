@@ -48,9 +48,8 @@ func _on_gen_pressed() -> void:
 	var g := await gen_puzzle()
 	$SolvedType.text = ""
 	var sol_str := g.to_str()
-	g.clear_content()
-	g1.setup(sol_str, true, false)
-	g2.setup(g.to_str(), false)
+	g1.setup(sol_str, GridModel.LoadMode.SolutionNoClear)
+	g2.setup(sol_str, GridModel.LoadMode.Solution)
 	scale_grids()
 	$Gen.disabled = false
 

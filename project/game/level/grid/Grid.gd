@@ -109,9 +109,19 @@ func count_boat_row(_i: int) -> int:
 func count_boat_col(_j: int) -> int:
 	return GridModel.must_be_implemented()
 
+enum LoadMode {
+	# Default. Must be a solution, and the water/air/boats are cleared after loading and validation.
+	Solution,
+	# Same as above, but doesn't clear the contents.
+	SolutionNoClear,
+	# Doesn't need to be a solution. Useful for level editing and testing.
+	FreeEdit,
+	# Load only the content. Useful for loading from a user save file.
+	ContentOnly,
+}
+
 # Replace this grid with the one loaded from the string
-# with_solution is by default true, and it checks if the level is a solution, and then clears it
-# Always load levels with solution unless you're running a level editor
+# Check LoadMode for how the string should be formatted in regard to the solution.
 #
 # The string should be a 2Nx2M grid, each cell represented by 4 characters
 # 12
@@ -151,7 +161,7 @@ func count_boat_col(_j: int) -> int:
 #
 # The string may begin with +key=value lines for extra data. The accept extra data is:
 # - boats: total number of boats in the solution. Defaults to 0.
-func load_from_str(_s: String, _with_solution := true, _clear_solution := true) -> void:
+func load_from_str(_s: String, _load_mode := LoadMode.Solution) -> void:
 	return GridModel.must_be_implemented()
 
 # Converts to string format as described on `load_from_str`

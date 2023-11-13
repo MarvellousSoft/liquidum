@@ -4,7 +4,7 @@ extends GridModel
 static func create(rows_: int, cols_: int) -> GridModel:
 	return GridImpl.new(rows_, cols_)
 
-static func from_str(s: String, with_solution := true, clear_solution := true) -> GridModel:
+static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> GridModel:
 	s = s.replace('\r', '').dedent().strip_edges()
 	var my_s := s
 	while my_s[0] == '+':
@@ -17,7 +17,7 @@ static func from_str(s: String, with_solution := true, clear_solution := true) -
 		rows_ -= 1
 		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)
-	g.load_from_str(s, with_solution, clear_solution)
+	g.load_from_str(s, load_mode)
 	return g
 
 # Everything below is implementation details about grids.
@@ -459,20 +459,22 @@ func _parse_extra_data(line: String) -> void:
 		_:
 			push_error("Invalid data %s" % line)
 
-func load_from_str(s: String, with_solution := true, clear_solution := true) -> void:
+func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
+	var content_only := (load_mode == GridModel.LoadMode.ContentOnly)
 	var lines := s.dedent().strip_edges().split('\n', false)
 	while lines[0][0] == '+':
-		_parse_extra_data(lines[0])
+		if not content_only:
+			_parse_extra_data(lines[0])
 		lines.remove_at(0)
 	# Offset because of hints
 	var hb := int(lines[0][0] == 'b')
 	var hh := int(lines[hb][hb] == 'h')
-	if hb == 1:
+	if hb == 1 and not content_only:
 		for i in n:
 			hint_boat_rows[i] = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
 		for j in m:
 			hint_boat_cols[j] = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
-	if hh == 1:
+	if hh == 1 and not content_only:
 		for i in n:
 			hint_rows[i] = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
 		for j in m:
@@ -485,24 +487,28 @@ func load_from_str(s: String, with_solution := true, clear_solution := true) -> 
 			var c3 := _validate(lines[2 * i + 1 + h][2 * j + h], '.|_L')
 			var c4 := _validate(lines[2 * i + 1 + h][2 * j + 1 + h], '.╲/')
 			var cell := _pure_cell(i, j)
-			cell.c_left = _str_content(c1)
-			cell.c_right = _str_content(c2)
-			cell.inverted = (c4 == '╲')
-			cell.diag_wall = (c4 == '/' or c4 == '╲')
-			if i < n - 1:
-				wall_bottom[i][j] = (c3 == '_' or c3 == 'L')
-			if j > 0:
-				wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
+			if not content_only or cell.c_left != Content.Block:
+				cell.c_left = _str_content(c1)
+			if not content_only or cell.c_right != Content.Block:
+				cell.c_right = _str_content(c2)
+			if not content_only:
+				cell.inverted = (c4 == '╲')
+				cell.diag_wall = (c4 == '/' or c4 == '╲')
+				if i < n - 1:
+					wall_bottom[i][j] = (c3 == '_' or c3 == 'L')
+				if j > 0:
+					wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
+	flood_all()
 	validate()
-	
-	if with_solution:
+
+	if load_mode == GridModel.LoadMode.Solution or load_mode == GridModel.LoadMode.SolutionNoClear:
 		assert(are_hints_satisfied(), "Invalid solution")
 		solution_c_left.clear()
 		solution_c_right.clear()
 		for i in n:
 			solution_c_left.append(pure_cells[i].map(func(c): return c.c_left))
 			solution_c_right.append(pure_cells[i].map(func(c): return c.c_right))
-		if clear_solution:
+		if load_mode != GridModel.LoadMode.SolutionNoClear:
 			clear_content()
 
 func _col_hint(h: int) -> String:
@@ -749,7 +755,7 @@ func count_boats() -> int:
 
 func are_hints_satisfied() -> bool:
 	if count_boats() != hint_all_boats():
-		print("%d/%d" % [count_boats(), hint_all_boats()])
+
 		return false
 	for i in n:
 		var hint := hint_rows[i]

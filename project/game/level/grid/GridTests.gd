@@ -62,7 +62,7 @@ func get_cols(s: String) -> int:
 
 
 func str_grid(s: String) -> GridModel:
-	return GridImpl.from_str(s, false, false)
+	return GridImpl.from_str(s, GridModel.LoadMode.FreeEdit)
 
 func test_simple() -> void:
 	var simple := """
@@ -73,7 +73,7 @@ func test_simple() -> void:
 	"""
 	var g := GridImpl.create(2, 2)
 	check(!g.get_cell(0, 0).water_full())
-	g.load_from_str(simple, false, false)
+	g.load_from_str(simple, GridModel.LoadMode.FreeEdit)
 	# Check waters make sense
 	check(g.get_cell(0, 0).water_full())
 	for corner in [BottomLeft, BottomRight, TopLeft, TopRight]:
@@ -349,3 +349,11 @@ func test_subset_sum() -> void:
 	6..........
 	.L._.L._.L.
 	""")
+
+func test_load_content_only() -> void:
+	var g := str_grid("..\n|.\n..\nL.\n")
+	assert_grid_eq(g.to_str(), "..\n|.\n..\nL.\n")
+	# Assume we saved the puzzle to file, and the user edited it to add a wall
+	# and make the level easier, let's not accept that
+	g.load_from_str("ww\nL.\n..\nL.\n", GridModel.LoadMode.ContentOnly)
+	assert_grid_eq(g.to_str(), "ww\n|.\nww\nL.")
