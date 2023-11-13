@@ -97,6 +97,21 @@ _data = {
 "idle": SubResource("Animation_wjmlx")
 }
 
+[sub_resource type="Animation" id="Animation_ucp6y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_whcw4"]
 resource_name = "error"
 length = 0.7
@@ -113,12 +128,18 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_ucp6y"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y6cvr"]
+_data = {
+"RESET": SubResource("Animation_ucp6y"),
+"error": SubResource("Animation_whcw4")
+}
+
+[sub_resource type="Animation" id="Animation_8uirt"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
+tracks/0/path = NodePath("../TopLeft:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -126,12 +147,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_y6cvr"]
-_data = {
-"RESET": SubResource("Animation_ucp6y"),
-"error": SubResource("Animation_whcw4")
 }
 
 [sub_resource type="Animation" id="Animation_2hmw4"]
@@ -150,12 +165,18 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_8uirt"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5oaie"]
+_data = {
+"RESET": SubResource("Animation_8uirt"),
+"error": SubResource("Animation_2hmw4")
+}
+
+[sub_resource type="Animation" id="Animation_htf7u"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../TopLeft:modulate")
+tracks/0/path = NodePath("../TopRight:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -163,12 +184,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_5oaie"]
-_data = {
-"RESET": SubResource("Animation_8uirt"),
-"error": SubResource("Animation_2hmw4")
 }
 
 [sub_resource type="Animation" id="Animation_627e5"]
@@ -187,12 +202,18 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_htf7u"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_71fpu"]
+_data = {
+"RESET": SubResource("Animation_htf7u"),
+"error": SubResource("Animation_627e5")
+}
+
+[sub_resource type="Animation" id="Animation_mevw4"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../TopRight:modulate")
+tracks/0/path = NodePath("../BottomRight:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -200,12 +221,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_71fpu"]
-_data = {
-"RESET": SubResource("Animation_htf7u"),
-"error": SubResource("Animation_627e5")
 }
 
 [sub_resource type="Animation" id="Animation_m2xxj"]
@@ -224,12 +239,18 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_mevw4"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_366xd"]
+_data = {
+"RESET": SubResource("Animation_mevw4"),
+"error": SubResource("Animation_m2xxj")
+}
+
+[sub_resource type="Animation" id="Animation_7fk0h"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../BottomRight:modulate")
+tracks/0/path = NodePath("../BottomLeft:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -237,12 +258,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_366xd"]
-_data = {
-"RESET": SubResource("Animation_mevw4"),
-"error": SubResource("Animation_m2xxj")
 }
 
 [sub_resource type="Animation" id="Animation_6oxih"]
@@ -259,21 +274,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_7fk0h"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../BottomLeft:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8oflq"]

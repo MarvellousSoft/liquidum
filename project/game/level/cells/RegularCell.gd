@@ -2,6 +2,7 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
+const BOAT_ALPHA_SPEED = 1.0
 const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7
 const MAX_BOAT_ANIM_SPEED = .9
@@ -73,6 +74,7 @@ var water_flags = {
 	E.Waters.BottomLeft: false,
 	E.Waters.BottomRight: false,
 }
+var boat_flag := false
 
 
 func _ready():
@@ -90,6 +92,10 @@ func _process(dt):
 					increase_water_level(corner, dt)
 				else:
 					decrease_water_level(corner, dt)
+				if boat_flag:
+					Boat.modulate.a = min(Boat.modulate.a + BOAT_ALPHA_SPEED*dt, 1.0)
+				else:
+					Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
 
 
 func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
@@ -109,7 +115,7 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 		block.hide()
 	for error in Errors.values():
 		error.modulate.a = 0.0
-	Boat.hide()
+	Boat.modulate.a = 0.0
 	type = new_type
 	match type:
 		E.CellType.Single:
@@ -146,7 +152,7 @@ func set_block(block : E.Waters) -> void:
 
 
 func set_boat(value) -> void:
-	Boat.visible = value
+	boat_flag = value
 
 
 func remove_water() -> void:
