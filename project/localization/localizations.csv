@@ -3,3 +3,8 @@ TEST,ALSKDJLAS,teste
 WATERS_COUNTER,Waters: ,Águas: 
 BOATS_COUNTER,Boats: ,Barcos: 
 MISTAKES_COUNTER,Mistakes: ,Erros: 
+MASTER_SOUND,Master Volume,Volume Geral
+BGM_SOUND,BGM Volume,Volume de Fundo
+SFX_SOUND,SFX Volume,Volume de Efeitos Sonoros
+FULLSCREEN,Fullscreen,Tela Cheia
+SAVE_AND_EXIT,Save & Exit,Salvar & Sair

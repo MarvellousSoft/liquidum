@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=8 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
+[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="5_1j60w"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_ke4fj"]
 
@@ -55,6 +56,8 @@ button_group = SubResource("ButtonGroup_ke4fj")
 
 [node name="Wall" parent="BrushPicker/Buttons" index="2"]
 button_group = SubResource("ButtonGroup_syhq8")
+
+[node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
 
 [connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]

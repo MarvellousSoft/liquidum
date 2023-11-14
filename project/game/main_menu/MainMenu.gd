@@ -4,6 +4,7 @@ extends Node2D
 
 func _ready():
 	FileManager.load_game()
+	await get_tree().process_frame
 	
 	Version.text = Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION

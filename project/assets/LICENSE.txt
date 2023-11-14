@@ -5,7 +5,15 @@ https://creativecommons.org/licenses/by/3.0/#
 The following assets have an specific license/attribution to them.
 
 - images/ui/objects/boat.png
+- images/ui/settings_button_normal.png
+- images/ui/settings_button_pressed.png
+- images/ui/settings_button_hover.png
 by Delapouite under CC BY 3.0
+
+- images/ui/checkbox_pressed.png
+- images/ui/checkbox_unpressed.png
+- images/ui/checkbox_hover.png
+by sbed under CC BY 3.0
 
 - audio/bgm/main.ogg
 Music Info: “Ocean”

@@ -52,7 +52,9 @@ func set_save_data(data):
 	AudioManager.set_bus_volume(AudioManager.MASTER_BUS, options.master_volume)
 	AudioManager.set_bus_volume(AudioManager.BGM_BUS, options.bgm_volume)
 	AudioManager.set_bus_volume(AudioManager.SFX_BUS, options.sfx_volume)
-
+	
+	if Global.is_fullscreen() != options.fullscreen:
+		Global.toggle_fullscreen()
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):

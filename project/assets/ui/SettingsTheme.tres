@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://dsx7oo1jar5n8"]
+
+[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="1_1sw1t"]
+
+[sub_resource type="FontVariation" id="FontVariation_dorkb"]
+base_font = ExtResource("1_1sw1t")
+spacing_top = 15
+
+[sub_resource type="FontVariation" id="FontVariation_blnni"]
+base_font = ExtResource("1_1sw1t")
+
+[resource]
+Button/colors/font_color = Color(0.85098, 1, 0.886275, 1)
+Button/font_sizes/font_size = 32
+Button/fonts/font = SubResource("FontVariation_dorkb")
+CheckBox/icons/checked = null
+CheckBox/icons/checked_disabled = null
+CheckBox/icons/unchecked = null
+CheckBox/icons/unchecked_disabled = null
+Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
+Label/font_sizes/font_size = 29
+Label/fonts/font = SubResource("FontVariation_blnni")
