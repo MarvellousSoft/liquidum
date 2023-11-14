@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bljmpbyn14lnb"]
 
-[ext_resource type="Script" path="res://HintBar.gd" id="1_tfe5l"]
+[ext_resource type="Script" path="res://game/level/hints/HintBar.gd" id="1_7js1u"]
 [ext_resource type="PackedScene" uid="uid://sogub73jvlos" path="res://game/level/hints/Hint.tscn" id="2_fgutn"]
 
 [sub_resource type="Animation" id="Animation_631g4"]
@@ -49,7 +49,7 @@ offset_right = -1920.0
 offset_bottom = -1080.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_tfe5l")
+script = ExtResource("1_7js1u")
 
 [node name="Horizontal" type="HBoxContainer" parent="."]
 layout_mode = 0
