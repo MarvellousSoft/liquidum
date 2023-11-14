@@ -856,34 +856,25 @@ func _hint_statusi(count: int, hint: int) -> E.HintStatus:
 func all_boats_hint_status() -> E.HintStatus:
 	return _hint_statusi(count_boats(), get_expected_boats())
 
-class HintStatusAggregator:
-	var any_wrong := false
-	var any_normal := false
-	func update(status: E.HintStatus) -> void:
-		if status == E.HintStatus.Wrong:
-			any_wrong = true
-		elif status == E.HintStatus.Normal:
-			any_normal = true
-	func final_status() -> E.HintStatus:
-		if any_wrong:
-			return E.HintStatus.Wrong
-		elif any_normal:
-			return E.HintStatus.Normal
-		else:
-			return E.HintStatus.Satisfied
+func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
+	if status1 == E.HintStatus.Wrong or status2 == E.HintStatus.Wrong:
+		return E.HintStatus.Wrong
+	if status1 == E.HintStatus.Normal or status2 == E.HintStatus.Normal:
+		return E.HintStatus.Normal
+	return E.HintStatus.Satisfied
 
 func all_hints_status() -> E.HintStatus:
-	var agg := HintStatusAggregator.new()
-	agg.update(all_boats_hint_status())
+	var s := E.HintStatus.Satisfied
+	s = merge_status(s, all_boats_hint_status())
 	for status in aquarium_hints_status():
-		agg.update(status)
+		s = merge_status(s, status)
 	for i in n:
-		agg.update(get_row_hint_status(i, E.HintContent.Water))
-		agg.update(get_row_hint_status(i, E.HintContent.Boat))
+		s = merge_status(s, get_row_hint_status(i, E.HintContent.Water))
+		s = merge_status(s, get_row_hint_status(i, E.HintContent.Boat))
 	for j in m:
-		agg.update(get_col_hint_status(j, E.HintContent.Water))
-		agg.update(get_col_hint_status(j, E.HintContent.Boat))
-	return agg.final_status()
+		s = merge_status(s, get_col_hint_status(j, E.HintContent.Water))
+		s = merge_status(s, get_col_hint_status(j, E.HintContent.Boat))
+	return s
 
 func are_hints_satisfied() -> bool:
 	return all_hints_status() == E.HintStatus.Satisfied
@@ -891,12 +882,54 @@ func are_hints_satisfied() -> bool:
 func is_any_hint_broken() -> bool:
 	return all_hints_status() == E.HintStatus.Wrong
 
+func _is_together(a: Array[bool]) -> bool:
+	var i := 0
+	while i < a.size() and not a[i]:
+		i += 1
+	while i < a.size() and a[i]:
+		i += 1
+	while i < a.size() and not a[i]:
+		i += 1
+	return i < a.size()
+
+
+func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
+	if hint == E.HintType.Any:
+		return true
+	var is_together := _is_together(a)
+	if hint == E.HintType.Together:
+		return is_together
+	else:
+		return not is_together
+
+func _status_and_then(status: E.HintStatus, cond: bool) -> E.HintStatus:
+	if not cond and status == E.HintStatus.Satisfied:
+		return E.HintStatus.Wrong
+	else:
+		return status
+
+func _row_bools(i: int, content: Content) -> Array[bool]:
+	var a: Array[bool] = []
+	for j in m:
+		a.append(_pure_cell(i, j)._content_left() == content)
+		a.append(_pure_cell(i, j)._content_right() == content)
+	return a
+
+func _col_bools(j: int, content: Content) -> Array[bool]:
+	var a: Array[bool] = []
+	for i in n:
+		a.append(_pure_cell(i, j)._content_top() == content)
+		a.append(_pure_cell(i, j)._content_bottom() == content)
+	return a
+	
 func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			return _hint_statusi(count_boat_row(i), hint_rows[i].boat_count)
+			var status := _hint_statusi(count_boat_row(i), hint_rows[i].boat_count)
+			return _status_and_then(status, _hint_type_ok(hint_rows[i].boat_count_type, _row_bools(i, Content.Boat)))
 		E.HintContent.Water:
-			return _hint_statusf(count_water_row(i), hint_rows[i].water_count)
+			var status := _hint_statusf(count_water_row(i), hint_rows[i].water_count)
+			return _status_and_then(status, _hint_type_ok(hint_rows[i].water_count_type, _row_bools(i, Content.Water)))
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong
@@ -904,9 +937,11 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			return _hint_statusi(count_boat_col(j), hint_cols[j].boat_count)
+			var status := _hint_statusi(count_boat_col(j), hint_cols[j].boat_count)
+			return _status_and_then(status, _hint_type_ok(hint_cols[j].boat_count_type, _col_bools(j, Content.Boat)))
 		E.HintContent.Water:
-			return _hint_statusf(count_water_col(j), hint_cols[j].water_count)
+			var status := _hint_statusf(count_water_col(j), hint_cols[j].water_count)
+			return _status_and_then(status, _hint_type_ok(hint_cols[j].water_count_type, _col_bools(j, Content.Water)))
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong
