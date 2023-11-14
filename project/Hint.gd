@@ -15,7 +15,7 @@ const ERROR_COLOR = Color(.96, .19, .19)
 
 var hint_type : E.HintType = E.HintType.Normal
 var is_boat := false
-var value := 0
+var hint_value := 0
 
 func _ready():
 	set_boat(false)
@@ -30,7 +30,7 @@ func set_boat(value):
 
 
 func set_value(new_value : float) -> void:
-	value = new_value
+	hint_value = new_value
 	update_label()
 
 
@@ -41,11 +41,11 @@ func set_hint_type(new_type : E.HintType) -> void:
 func update_label() -> void:
 	match hint_type:
 		E.HintType.Normal:
-			Number.text = str(value)
+			Number.text = str(hint_value)
 		E.HintType.Together:
-			Number.text = "{" + str(value) + "}"
+			Number.text = "{" + str(hint_value) + "}"
 		E.HintType.Separated:
-			Number.text = "-" + str(value) + "-"
+			Number.text = "-" + str(hint_value) + "-"
 
 
 func no_hint() -> void:

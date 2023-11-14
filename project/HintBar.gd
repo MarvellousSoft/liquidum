@@ -25,11 +25,11 @@ func setup(normal_hints : Array, boat_hints : Array) -> void:
 		var container = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
 		container.alignment = BoxContainer.ALIGNMENT_END
 		bar.add_child(container)
-		create_hint(container, normal_hints[i], is_horizontal, i == 0)
-		create_hint(container, boat_hints[i], is_horizontal, i == 0)
+		create_hint(container, normal_hints[i], i == 0)
+		create_hint(container, boat_hints[i], i == 0)
 
 
-func create_hint(container : Container, hint_value : float, is_horizontal : bool, first : bool) -> void:
+func create_hint(container : Container, hint_value : float, first : bool) -> void:
 	var new_hint = HINT.instantiate()
 	container.add_child(new_hint)
 	#Set value
