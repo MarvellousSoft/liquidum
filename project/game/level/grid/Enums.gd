@@ -15,7 +15,7 @@ enum CellType { IncDiag = 9, DecDiag, Single }
 enum Walls { Top = 1, Right, Bottom, Left, IncDiag = 9, DecDiag }
 enum Waters { TopLeft = 5, TopRight, BottomRight, BottomLeft, Single = 11, None }
 
-enum MouseDragState { None, Water, Air, Boat, RemoveWater, RemoveAir, RemoveBoat }
+enum MouseDragState { None, Water, Air, Boat, Wall, RemoveWater, RemoveAir, RemoveBoat, RemoveWall }
 
 enum BrushMode { Water, Boat, Wall }
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=57 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -34,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://bo5c5cv5neq84" path="res://assets/images/ui/cell/error_topright.png" id="32_6crl1"]
 [ext_resource type="Texture2D" uid="uid://b6xv6r8ictro7" path="res://assets/images/ui/cell/error_bottomright.png" id="33_ki4f0"]
 [ext_resource type="Texture2D" uid="uid://xrj0t4cirwx4" path="res://assets/images/ui/cell/error_bottomleft.png" id="34_vo2d5"]
+[ext_resource type="Texture2D" uid="uid://n6gna2yn0ruj" path="res://assets/images/ui/cell/cornergrabber.png" id="35_0sggb"]
 
 [sub_resource type="Animation" id="Animation_3g2u4"]
 length = 0.001
@@ -747,6 +748,53 @@ libraries = {
 "": SubResource("AnimationLibrary_8oflq")
 }
 
+[node name="CellCorners" type="Control" parent="."]
+modulate = Color(0, 0.843137, 0.843137, 0.505882)
+z_index = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TopLeft" type="TextureRect" parent="CellCorners"]
+layout_mode = 0
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("35_0sggb")
+
+[node name="TopRight" type="TextureRect" parent="CellCorners"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = -25.0
+offset_right = 125.0
+offset_bottom = 25.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("35_0sggb")
+
+[node name="BottomRight" type="TextureRect" parent="CellCorners"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 75.0
+offset_right = 125.0
+offset_bottom = 125.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("35_0sggb")
+
+[node name="BottomLeft" type="TextureRect" parent="CellCorners"]
+layout_mode = 0
+offset_left = -25.0
+offset_top = 75.0
+offset_right = 25.0
+offset_bottom = 125.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("35_0sggb")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_7yamt")
@@ -762,3 +810,11 @@ libraries = {
 [connection signal="mouse_entered" from="Buttons/BottomRight" to="." method="_on_button_mouse_entered" binds= [7]]
 [connection signal="gui_input" from="Buttons/BottomLeft" to="." method="_on_button_gui_input" binds= [8]]
 [connection signal="mouse_entered" from="Buttons/BottomLeft" to="." method="_on_button_mouse_entered" binds= [8]]
+[connection signal="gui_input" from="CellCorners/TopLeft" to="." method="_on_cell_corner_gui_input" binds= [5]]
+[connection signal="mouse_entered" from="CellCorners/TopLeft" to="." method="_on_cell_corner_mouse_entered" binds= [5]]
+[connection signal="gui_input" from="CellCorners/TopRight" to="." method="_on_cell_corner_gui_input" binds= [6]]
+[connection signal="mouse_entered" from="CellCorners/TopRight" to="." method="_on_cell_corner_mouse_entered" binds= [6]]
+[connection signal="gui_input" from="CellCorners/BottomRight" to="." method="_on_cell_corner_gui_input" binds= [7]]
+[connection signal="mouse_entered" from="CellCorners/BottomRight" to="." method="_on_cell_corner_mouse_entered" binds= [7]]
+[connection signal="gui_input" from="CellCorners/BottomLeft" to="." method="_on_cell_corner_gui_input" binds= [8]]
+[connection signal="mouse_entered" from="CellCorners/BottomLeft" to="." method="_on_cell_corner_mouse_entered" binds= [8]]

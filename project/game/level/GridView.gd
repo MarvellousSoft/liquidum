@@ -21,7 +21,7 @@ var grid_logic : GridModel
 var rows : int
 var columns : int
 var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
-
+var previous_wall_index := []
 
 func _ready():
 	reset()
@@ -31,6 +31,7 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if not event.pressed:
 			mouse_hold_status = E.MouseDragState.None
+			previous_wall_index = []
 	elif grid_logic and event.is_action_pressed("undo"):
 		grid_logic.undo()
 		update()
@@ -76,6 +77,10 @@ func full_solve(flush_undo := true, do_emit_signal := true) -> SolverModel.Solve
 
 func set_brush_mode(mode : E.BrushMode) -> void:
 	brush_mode = mode
+	if mode == E.BrushMode.Wall:
+		enable_wall_editor()
+	else:
+		disable_wall_editor()
 
 #Assumes grid_logic is already setup
 func setup_hints(i : int, j : int):
@@ -125,6 +130,9 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
 	cell.mouse_entered.connect(_on_cell_mouse_entered)
+	cell.pressed_main_corner_button.connect(_on_cell_pressed_main_corner_button)
+	cell.pressed_second_corner_button.connect(_on_cell_pressed_second_corner_button)
+	cell.mouse_entered_corner_button.connect(_on_cell_mouse_entered_corner_button)
 	
 	return cell
 
@@ -340,6 +348,22 @@ func highlight_error(i: int, j: int, which: E.Waters) -> void:
 	emit_signal("mistake_made")
 
 
+func enable_wall_editor():
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).enable_wall_editor()
+
+
+func disable_wall_editor():
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).disable_wall_editor()
+
+
+func get_wall_index(i : int, j : int, which : E.Corner) -> Array:
+	return []
+
+
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	assert(which != E.Waters.None)
 	
@@ -432,3 +456,18 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		AudioManager.play_sfx("boat_remove")
 	
 	update()
+
+func _on_cell_pressed_main_corner_button(i: int, j: int, which: E.Waters) -> void:
+	assert(which != E.Waters.None)
+	mouse_hold_status = E.MouseDragState.Wall
+	previous_wall_index = get_wall_index(i, j, which)
+
+
+func _on_cell_pressed_second_corner_button(i: int, j: int, which: E.Waters) -> void:
+	assert(which != E.Waters.None)
+	mouse_hold_status = E.MouseDragState.RemoveWall
+	previous_wall_index = get_wall_index(i, j, which)
+
+func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Waters) -> void:
+	assert(which != E.Waters.None)
+	printt(i, j, "entered", which)

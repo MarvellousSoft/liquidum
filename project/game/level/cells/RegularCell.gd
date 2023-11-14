@@ -11,6 +11,9 @@ const EPS = 0.1
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
+signal pressed_main_corner_button(i: int, j: int, which: E.Waters)
+signal pressed_second_corner_button(i: int, j: int, which: E.Waters)
+signal mouse_entered_corner_button(i: int, j: int, which: E.Waters)
 
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
@@ -62,6 +65,7 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 	E.Waters.BottomLeft: $Errors/BottomLeft,
 	E.Waters.BottomRight: $Errors/BottomRight,
 }
+@onready var CellCorners = $CellCorners 
 @onready var BoatAnim = $Boat/AnimationPlayer
 @onready var AnimPlayer = $AnimationPlayer
 
@@ -77,6 +81,7 @@ var water_flags = {
 	E.Waters.BottomRight: false,
 }
 var boat_flag := false
+var wall_editor_active := false
 
 
 func _ready():
@@ -104,6 +109,7 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 	grid = grid_ref
 	row = i
 	column = j
+	disable_wall_editor()
 	for water in Waters.values():
 		water.show()
 		set_water_level(water, 0.0)
@@ -136,6 +142,7 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 	await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
 	
 	AnimPlayer.play("startup")
+
 
 func play_error(which : E.Waters) -> void:
 	Errors[which].get_node("AnimationPlayer").play("error")
@@ -222,6 +229,16 @@ func decrease_water_level(corner : E.Waters, dt : float) -> void:
 		water.material.set_shader_parameter("level", level)
 
 
+func enable_wall_editor() -> void:
+	wall_editor_active = true
+	CellCorners.show()
+
+
+func disable_wall_editor() -> void:
+	wall_editor_active = false
+	CellCorners.hide()
+
+
 func _on_button_gui_input(event, which : E.Waters) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
@@ -233,3 +250,17 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 
 func _on_button_mouse_entered(which : E.Waters):
 	mouse_entered.emit(row, column, which)
+
+
+func _on_cell_corner_gui_input(event, which : E.Corner):
+	if wall_editor_active:
+		if event is InputEventMouseButton and event.pressed:
+			match event.button_index:
+				MOUSE_BUTTON_LEFT:
+					pressed_main_corner_button.emit(row, column, which)
+				MOUSE_BUTTON_RIGHT:
+					pressed_second_corner_button.emit(row, column, which)
+
+func _on_cell_corner_mouse_entered(which : E.Corner):
+	if wall_editor_active:
+		mouse_entered_corner_button.emit(row, column, which)
