@@ -455,9 +455,12 @@ func _content_str(c: Content) -> String:
 
 func _validate_hint(c1: String, c2: String) -> int:
 	c1 = _validate(c1, ".0123456789")
-	c2 = _validate(c2, ".0123456789")
+	c2 = _validate(c2, ".0123456789}-")
 	if c1 != '.':
-		return int(c1 + c2.replace(".", ""))
+		if c2.is_valid_int():
+			return int(c1 + c2)
+		else:
+			return int(c1)
 	else:
 		assert(c2 == ".", "Invalid hint")
 		return -1
@@ -468,6 +471,14 @@ func _validate_hint_float(c1: String, c2: String) -> float:
 		return -1.
 	else:
 		return float(h) / 2.
+
+func _validate_hint_type(c2: String) -> E.HintType:
+	if c2 == '}':
+		return E.HintType.Together
+	elif c2 == '-':
+		return E.HintType.Separated
+	else:
+		return E.HintType.Any
 
 func _parse_extra_data(line: String) -> void:
 	var kv := line.split("=", false, 2)
@@ -494,13 +505,17 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 	if hb == 1 and not content_only:
 		for i in n:
 			hint_rows[i].boat_count = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
+			hint_rows[i].boat_count_type = _validate_hint_type(lines[2 * i + 2 + hh][0])
 		for j in m:
 			hint_cols[j].boat_count = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
+			hint_cols[j].boat_count_type = _validate_hint_type(lines[0][2 * j + 2 + hh])
 	if hh == 1 and not content_only:
 		for i in n:
 			hint_rows[i].water_count = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
+			hint_rows[i].water_count_type = _validate_hint_type(lines[2 * i + 2 + hb][hb])
 		for j in m:
 			hint_cols[j].water_count = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
+			hint_cols[j].water_count_type = _validate_hint_type(lines[hb][2 * j + 2 + hb])
 	var h := hb + hh
 	for i in n:
 		for j in m:
@@ -890,7 +905,7 @@ func _is_together(a: Array[bool]) -> bool:
 		i += 1
 	while i < a.size() and not a[i]:
 		i += 1
-	return i < a.size()
+	return i == a.size()
 
 
 func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
@@ -926,10 +941,12 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
 			var status := _hint_statusi(count_boat_row(i), hint_rows[i].boat_count)
-			return _status_and_then(status, _hint_type_ok(hint_rows[i].boat_count_type, _row_bools(i, Content.Boat)))
+			var type := _hint_type_ok(hint_rows[i].boat_count_type, _row_bools(i, Content.Boat))
+			return _status_and_then(status, type)
 		E.HintContent.Water:
 			var status := _hint_statusf(count_water_row(i), hint_rows[i].water_count)
-			return _status_and_then(status, _hint_type_ok(hint_rows[i].water_count_type, _row_bools(i, Content.Water)))
+			var type := _hint_type_ok(hint_rows[i].water_count_type, _row_bools(i, Content.Water))
+			return _status_and_then(status, type)
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong

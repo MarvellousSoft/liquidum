@@ -420,3 +420,32 @@ func test_aquarium_hints() -> void:
 	g.get_cell(1, 0).put_water(TopLeft)
 	assert(g.aquarium_hints_status() == [Satisfied])
 	assert(g.are_hints_satisfied())
+
+func test_together_rules() -> void:
+	var g := str_grid("""
+	h......
+	4......
+	}L.L.L.
+	""")
+	g.get_cell(0, 0).put_water(TopRight)
+	g.get_cell(0, 2).put_water(TopRight)
+	assert(!g.are_hints_satisfied())
+	g.get_cell(0, 2).remove_content(TopRight)
+	g.get_cell(0, 1).put_water(TopRight)
+	assert(g.are_hints_satisfied())
+	# Same but vertical
+	g = str_grid("""
+	h4}
+	...
+	.L.
+	...
+	.L.
+	...
+	.L.
+	""")
+	g.get_cell(0, 0).put_water(TopRight)
+	g.get_cell(2, 0).put_water(TopRight)
+	assert(!g.are_hints_satisfied())
+	g.get_cell(2, 0).remove_content(TopRight)
+	g.get_cell(1, 0).put_water(TopRight)
+	assert(g.are_hints_satisfied())
