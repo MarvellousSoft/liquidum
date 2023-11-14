@@ -69,7 +69,11 @@ func get_cols(s: String) -> int:
 
 
 func str_grid(s: String) -> GridModel:
-	return GridImpl.from_str(s, GridModel.LoadMode.FreeEdit)
+	var g := GridImpl.from_str(s, GridModel.LoadMode.FreeEdit)
+	# Let's check it loads and unloads correctly
+	var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.FreeEdit)
+	assert(g.equal(g2))
+	return g
 
 func test_simple() -> void:
 	var simple := """

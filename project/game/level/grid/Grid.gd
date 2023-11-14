@@ -12,6 +12,11 @@ class LineHint:
 	# On columns this must always be Any
 	var boat_count_type: E.HintType
 
+class GridHints:
+	var total_water: float
+	var total_boats: int
+	var expected_aquariums: Array[float]
+
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -207,3 +212,9 @@ func flood_air(_flush_undo := true) -> bool:
 # Clear all water and air
 func clear_content() -> void:
 	return GridModel.must_be_implemented()
+
+# Export data in a saveable way (dictionary with inner dictionaries and arrays)
+func export_data() -> Dictionary:
+	return GridModel.must_be_implemented()
+
+# To import, use GridImpl.import_data

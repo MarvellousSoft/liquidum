@@ -4,6 +4,9 @@ extends GridModel
 static func create(rows_: int, cols_: int) -> GridModel:
 	return GridImpl.new(rows_, cols_)
 
+static func import_data(data: Dictionary, load_mode: LoadMode) -> GridModel:
+	return GridExporter.new().load_data(data, load_mode)
+
 static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> GridModel:
 	s = s.replace('\r', '').dedent().strip_edges()
 	var my_s := s
@@ -34,8 +37,7 @@ var pure_cells: Array[Array]
 # TODO: Rename to _row_hints
 var hint_rows: Array[LineHint]
 var hint_cols: Array[LineHint]
-var expected_waters: float = 0.0
-var expected_boats: int = 0
+var _grid_hints: GridHints
 # (N-1)xM Array[Array[bool]]
 var wall_bottom: Array[Array]
 # Nx(M-1) Array[Array[bool]]
@@ -45,14 +47,22 @@ var last_seen := 0
 # List of changes to undo and redo
 var undo_stack: Array[Changes] = []
 var redo_stack: Array[Changes] = []
-var expected_aquariums: Array[float] = []
 
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
 
 func _init(n_: int, m_: int) -> void:
+	setup(n_, m_)
+
+
+func setup(n_: int, m_: int) -> void:
 	self.n = n_
 	self.m = m_
+	pure_cells = []
+	wall_right = []
+	wall_bottom = []
+	hint_rows = []
+	hint_cols = []
 	for i in n:
 		var row: Array[PureCell] = []
 		var row_down: Array[bool] = []
@@ -80,6 +90,10 @@ func _init(n_: int, m_: int) -> void:
 		hint_col.boat_count = -1
 		hint_col.boat_count_type = E.HintType.Any
 		hint_cols.append(hint_col)
+	_grid_hints = GridHints.new()
+	_grid_hints.total_water = -1.
+	_grid_hints.total_boats = 0
+	_grid_hints.expected_aquariums = []
 
 enum Content { Nothing, Water, Air, Block, Boat }
 
@@ -243,6 +257,12 @@ class PureCell:
 				return E.CellType.IncDiag
 		else:
 			return E.CellType.Single
+	func equal(other: PureCell) -> bool:
+		if diag_wall != other.diag_wall or (diag_wall and inverted != other.inverted):
+			return false
+		if c_left != other.c_left or c_right != other.c_right:
+			return false
+		return true
 
 class Change:
 	var i: int
@@ -378,11 +398,13 @@ func row_hints() -> Array[LineHint]:
 func col_hints() -> Array[LineHint]:
 	return hint_cols
 
+# TODO: REMOVE
 func get_expected_boats() -> int:
-	return expected_boats
+	return _grid_hints.total_boats
 
+# TODO: REMOVE
 func get_expected_waters() -> float:
-	return expected_waters
+	return _grid_hints.total_water
 
 func wall_at(i: int, j: int, side: E.Side) -> bool:
 	match side:
@@ -484,11 +506,11 @@ func _parse_extra_data(line: String) -> void:
 	var kv := line.split("=", false, 2)
 	match kv[0]:
 		"+waters":
-			expected_waters = float(kv[1])
+			_grid_hints.total_water = float(kv[1])
 		"+boats":
-			expected_boats = int(kv[1])
+			_grid_hints.total_boats = int(kv[1])
 		"+aqua":
-			expected_aquariums.append(float(kv[1]))
+			_grid_hints.expected_aquariums.append(float(kv[1]))
 		_:
 			push_error("Invalid data %s" % line)
 
@@ -537,7 +559,9 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 					wall_right[i][j - 1] = (c3 == '|' or c3 == 'L')
 	flood_all()
 	validate()
+	_finish_loading(load_mode)
 
+func _finish_loading(load_mode: LoadMode) -> void:
 	if load_mode == GridModel.LoadMode.Solution or load_mode == GridModel.LoadMode.SolutionNoClear:
 		assert(are_hints_satisfied(), "Invalid solution")
 		solution_c_left.clear()
@@ -573,10 +597,10 @@ func _row_hint2(h: int) -> String:
 
 func to_str() -> String:
 	var builder := PackedStringArray()
-	if expected_waters != 0:
-		builder.append("+waters=%d\n" % expected_waters)
-	if expected_boats != 0:
-		builder.append("+boats=%d\n" % expected_boats)
+	if _grid_hints.total_water != -1:
+		builder.append("+waters=%d\n" % _grid_hints.total_water)
+	if _grid_hints.total_boats != 0:
+		builder.append("+boats=%d\n" % _grid_hints.total_boats)
 	var boat_hints := hint_rows.any(func(h): return h.boat_count != -1) or hint_cols.any(func(h): return h.boat_count != -1)
 	var hints := hint_rows.any(func(h): return h.water_count != -1.) or hint_cols.any(func(h): return h.water_count != -1.)
 	if boat_hints:
@@ -776,8 +800,9 @@ class CountWaterDfs extends Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
+# TODO: REMOVE
 func aquarium_hints() -> Array[float]:
-	return expected_aquariums
+	return _grid_hints.expected_aquariums
 
 func _all_aquariums_count() -> Array[float]:
 	var dfs := CountWaterDfs.new(self)
@@ -797,7 +822,7 @@ func aquarium_hints_status() -> Array[E.HintStatus]:
 	for aq in aqs:
 		count[aq] = count.get(aq, 0) + 1
 	var satisfied: Array[E.HintStatus] = []
-	for hint in expected_aquariums:
+	for hint in _grid_hints.expected_aquariums:
 		if count.get(hint, 0) > 0:
 			count[hint] -= 1
 			satisfied.append(E.HintStatus.Satisfied)
@@ -812,9 +837,9 @@ func aquarium_hints_status() -> Array[E.HintStatus]:
 	# Should already be sorted, but let's be sure
 	aqs.sort()
 	var j := 0
-	for i in expected_aquariums.size():
+	for i in _grid_hints.expected_aquariums.size():
 		if satisfied[i] == E.HintStatus.Normal:
-			if j < aqs.size() and aqs[j] <= expected_aquariums[i]:
+			if j < aqs.size() and aqs[j] <= _grid_hints.expected_aquariums[i]:
 				j += 1
 			else:
 				satisfied[i] = E.HintStatus.Wrong
@@ -980,6 +1005,7 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 func validate() -> void:
 	for j in m:
 		assert(col_hints()[j].boat_count_type == E.HintType.Any)
+	var expected_aquariums := _grid_hints.expected_aquariums
 	if !expected_aquariums.is_empty():
 		for i in expected_aquariums.size() - 1:
 			assert(expected_aquariums[i] <= expected_aquariums[i + 1])
@@ -1044,3 +1070,40 @@ func clear_content() -> void:
 				c.c_left = Content.Nothing
 			if c.c_right != Content.Block:
 				c.c_right = Content.Nothing
+
+func export_data() -> Dictionary:
+	return GridExporter.new().export_data(self)
+
+func _line_hint_eq(a: LineHint, b: LineHint) -> bool:
+	if a.boat_count != b.boat_count or a.boat_count_type != b.boat_count_type:
+		return false
+	if a.water_count != b.water_count or a.water_count_type != b.water_count_type:
+		return false
+	return true
+
+func equal(other: GridImpl) -> bool:
+	if n != other.n or m != other.m:
+		return false
+	for i in n:
+		for j in m:
+			if not _pure_cell(i, j).equal(other._pure_cell(i, j)):
+				return false
+	if _grid_hints.total_boats != other._grid_hints.total_boats:
+		return false
+	if _grid_hints.total_water != other._grid_hints.total_water:
+		return false
+	if _grid_hints.expected_aquariums != other._grid_hints.expected_aquariums:
+		return false
+	for i in n - 1:
+		if wall_bottom[i] != other.wall_bottom[i]:
+			return false
+	for i in n:
+		if wall_right[i] != other.wall_right[i]:
+			return false
+	for i in n:
+		if not _line_hint_eq(hint_rows[i], other.hint_rows[i]):
+			return false
+	for j in m:
+		if not _line_hint_eq(hint_cols[j], other.hint_cols[j]):
+			return false
+	return true
