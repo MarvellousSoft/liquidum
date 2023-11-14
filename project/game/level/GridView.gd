@@ -73,6 +73,14 @@ func setup_hints():
 	HintBars.left.setup(grid_logic.row_hints())
 
 
+func get_expected_waters() -> float:
+	return grid_logic.get_expected_waters()
+
+
+func get_expected_boats() -> float:
+	return grid_logic.get_expected_boats()
+
+#Assumes the expected waters is >= 0
 func get_missing_waters() -> float:
 	return grid_logic.get_expected_waters() - grid_logic.count_waters()
 

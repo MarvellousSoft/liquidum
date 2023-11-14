@@ -19,8 +19,13 @@ func add_count() -> void:
 
 
 func set_count(value : int) -> void:
-	count = value
-	update_label()
+	if count != value:
+		count = value
+		update_label()
+
+
+func set_unknown():
+	Counter.text = "?"
 
 
 func update_label() -> void:

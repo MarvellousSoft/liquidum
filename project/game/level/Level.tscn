@@ -51,5 +51,6 @@ grow_horizontal = 2
 layout_mode = 2
 
 [connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
+[connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
 [connection signal="brushed_picked" from="BrushPickerContainer/BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
