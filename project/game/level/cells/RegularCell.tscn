@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=56 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -282,7 +282,44 @@ _data = {
 "error": SubResource("Animation_6oxih")
 }
 
+[sub_resource type="Animation" id="Animation_i3tnc"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_so0f4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7yamt"]
+_data = {
+"RESET": SubResource("Animation_so0f4"),
+"startup": SubResource("Animation_i3tnc")
+}
+
 [node name="RegularCell" type="Control"]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
 anchors_preset = 15
@@ -708,6 +745,11 @@ texture = ExtResource("34_vo2d5")
 root_node = NodePath("../../Single")
 libraries = {
 "": SubResource("AnimationLibrary_8oflq")
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_7yamt")
 }
 
 [connection signal="gui_input" from="Buttons/Single" to="." method="_on_button_gui_input" binds= [11]]

@@ -13,6 +13,11 @@ func _ready():
 	MainLabel.text = tr(counter_name)
 
 
+func startup(delay : float) -> void:
+	await get_tree().create_timer(delay).timeout
+	AnimPlayer.play("startup")
+
+
 func add_count() -> void:
 	count += 1
 	update_label()

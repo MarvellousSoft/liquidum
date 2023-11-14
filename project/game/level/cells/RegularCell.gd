@@ -2,6 +2,7 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
+const STARTUP_DELAY = 0.1
 const BOAT_ALPHA_SPEED = 1.0
 const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7
@@ -62,6 +63,7 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 	E.Waters.BottomRight: $Errors/BottomRight,
 }
 @onready var BoatAnim = $Boat/AnimationPlayer
+@onready var AnimPlayer = $AnimationPlayer
 
 var row : int
 var column : int
@@ -130,7 +132,10 @@ func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
 			set_wall(E.Walls.DecDiag)
 		_:
 			push_error("Not a valid type of cell:" + str(type))
-
+	
+	await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
+	
+	AnimPlayer.play("startup")
 
 func play_error(which : E.Waters) -> void:
 	Errors[which].get_node("AnimationPlayer").play("error")

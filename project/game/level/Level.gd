@@ -1,5 +1,7 @@
 extends Node2D
 
+const COUNTER_DELAY_STARTUP = .3
+
 @onready var GridNode: GridView = $CenterContainer/GridView
 @onready var Counters = {
 	"water": $Counters/WaterCounter,
@@ -36,6 +38,10 @@ func setup(level : String):
 	Counters.water.visible = GridNode.get_expected_waters() != 0
 	Counters.boat.visible = GridNode.get_expected_boats() != 0
 	update_counters()
+	var delay = 0.0
+	for counter in Counters.values():
+		delay += COUNTER_DELAY_STARTUP
+		counter.startup(delay)
 	AudioManager.play_sfx("start_level")
 
 

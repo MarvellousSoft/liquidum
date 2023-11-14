@@ -1,6 +1,8 @@
 class_name GridView
 extends Control
 
+const STARTUP_DELAY = 0.1
+
 signal updated
 signal mistake_made
 
@@ -54,7 +56,7 @@ func setup(level : String, load_mode := GridModel.LoadMode.Solution) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
-	setup_hints()
+	setup_hints(rows, columns)
 	update()
 
 
@@ -76,12 +78,14 @@ func set_brush_mode(mode : E.BrushMode) -> void:
 	brush_mode = mode
 
 #Assumes grid_logic is already setup
-func setup_hints():
+func setup_hints(i : int, j : int):
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
 	HintBars.top.setup(grid_logic.col_hints())
 	HintBars.left.setup(grid_logic.row_hints())
-
-
+	var delay = STARTUP_DELAY * (i + 1) * j
+	HintBars.left.startup(delay + STARTUP_DELAY)
+	HintBars.top.startup(delay + STARTUP_DELAY*2)
+	
 func get_expected_waters() -> float:
 	return grid_logic.get_expected_waters()
 

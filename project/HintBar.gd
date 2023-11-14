@@ -6,6 +6,7 @@ const HINT = preload("res://game/level/hints/Hint.tscn")
 
 @onready var Horizontal = $Horizontal
 @onready var Vertical = $Vertical
+@onready var AnimPlayer = $AnimationPlayer
 
 func _ready():
 	Vertical.visible = not is_horizontal
@@ -31,6 +32,12 @@ func setup(hints : Array) -> void:
 	
 	await get_tree().process_frame
 	custom_minimum_size = bar.size
+
+
+func startup(delay : float) -> void:
+	await get_tree().create_timer(delay).timeout
+	AnimPlayer.play("startup")
+
 
 func create_hint(container : Container, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> void:
 	var new_hint = HINT.instantiate()

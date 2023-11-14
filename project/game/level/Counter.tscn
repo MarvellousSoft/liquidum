@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsgjxsq2lu5y2"]
+[gd_scene load_steps=9 format=3 uid="uid://bsgjxsq2lu5y2"]
 
 [ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="2_hnkmi"]
@@ -23,6 +23,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [34]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_irywk"]
 resource_name = "update_counter"
@@ -40,13 +52,30 @@ tracks/0/keys = {
 "values": [34, 50, 34]
 }
 
+[sub_resource type="Animation" id="Animation_eidh2"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_infr8"]
 _data = {
 "RESET": SubResource("Animation_ott8p"),
+"startup": SubResource("Animation_eidh2"),
 "update_counter": SubResource("Animation_irywk")
 }
 
 [node name="Counter" type="BoxContainer"]
+modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_bwmcc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
