@@ -25,10 +25,13 @@ func setup(normal_hints : Array, boat_hints : Array) -> void:
 		@warning_ignore("incompatible_ternary")
 		var container = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
 		container.alignment = BoxContainer.ALIGNMENT_END
+		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
 		create_hint(container, normal_hints[i], false, i == 0)
 		create_hint(container, boat_hints[i], true, i == 0)
-
+	
+	await get_tree().process_frame
+	custom_minimum_size = bar.size
 
 func create_hint(container : Container, hint_value : float, is_boat : bool, first : bool) -> void:
 	var new_hint = HINT.instantiate()

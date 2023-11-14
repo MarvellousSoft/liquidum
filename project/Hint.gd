@@ -50,6 +50,7 @@ func update_label() -> void:
 
 func no_hint() -> void:
 	Number.text = ""
+	hide()
 
 
 func set_hint_visibility(which : E.Walls, value : bool) -> void:
