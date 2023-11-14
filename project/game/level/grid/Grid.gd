@@ -1,5 +1,6 @@
 class_name GridModel
 
+
 static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")
 	return null
@@ -82,7 +83,11 @@ func set_hint_col(_j: int, _v: float) -> void:
 	return GridModel.must_be_implemented()
 
 # How many boats are in the level
-func hint_all_boats() -> int:
+func get_expected_boats() -> int:
+	return GridModel.must_be_implemented()
+
+# How many waters are in the level
+func get_expected_waters() -> float:
 	return GridModel.must_be_implemented()
 
 # Is this a valid solution?

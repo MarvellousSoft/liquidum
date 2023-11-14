@@ -73,6 +73,14 @@ func setup_hints():
 	HintBars.left.setup(grid_logic.row_hints())
 
 
+func get_missing_waters() -> float:
+	return grid_logic.get_expected_waters() - grid_logic.count_waters()
+
+
+func get_missing_boats() -> int:
+	return grid_logic.get_expected_boats() - grid_logic.count_boats()
+
+
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)

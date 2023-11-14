@@ -34,6 +34,7 @@ var pure_cells: Array[Array]
 # TODO: Rename to _row_hints
 var hint_rows: Array[LineHint]
 var hint_cols: Array[LineHint]
+var expected_waters: float = 0.0
 var expected_boats: int = 0
 # (N-1)xM Array[Array[bool]]
 var wall_bottom: Array[Array]
@@ -377,8 +378,11 @@ func row_hints() -> Array[LineHint]:
 func col_hints() -> Array[LineHint]:
 	return hint_cols
 
-func hint_all_boats() -> int:
+func get_expected_boats() -> int:
 	return expected_boats
+
+func get_expected_waters() -> float:
+	return expected_waters
 
 func wall_at(i: int, j: int, side: E.Side) -> bool:
 	match side:
@@ -468,6 +472,8 @@ func _validate_hint_float(c1: String, c2: String) -> float:
 func _parse_extra_data(line: String) -> void:
 	var kv := line.split("=", false, 2)
 	match kv[0]:
+		"+waters":
+			expected_waters = int(kv[1])
 		"+boats":
 			expected_boats = int(kv[1])
 		"+aqua":
@@ -552,6 +558,8 @@ func _row_hint2(h: int) -> String:
 
 func to_str() -> String:
 	var builder := PackedStringArray()
+	if expected_waters != 0:
+		builder.append("+waters=%d\n" % expected_waters)
 	if expected_boats != 0:
 		builder.append("+boats=%d\n" % expected_boats)
 	var boat_hints := hint_rows.any(func(h): return h.boat_count != -1) or hint_cols.any(func(h): return h.boat_count != -1)
@@ -812,8 +820,16 @@ func count_boats() -> int:
 		count += count_boat_row(i)
 	return count
 
+
+func count_waters() -> float:
+	var count := 0.0
+	for i in n:
+		count += count_water_row(i)
+	return count
+
+
 func are_hints_satisfied() -> bool:
-	if count_boats() != hint_all_boats():
+	if count_boats() != get_expected_boats():
 		return false
 	for i in n:
 		var hint := hint_rows[i].water_count
@@ -835,7 +851,7 @@ func are_hints_satisfied() -> bool:
 	return true
 
 func is_any_hint_broken() -> bool:
-	if count_boats() > hint_all_boats():
+	if count_boats() > get_expected_boats():
 		return true
 	for i in n:
 		if get_row_hint_status(i, E.HintContent.Water) == E.HintStatus.Wrong:
