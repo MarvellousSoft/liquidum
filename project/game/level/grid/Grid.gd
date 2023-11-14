@@ -111,6 +111,14 @@ func count_boat_row(_i: int) -> int:
 func count_boat_col(_j: int) -> int:
 	return GridModel.must_be_implemented()
 
+# There must be at least one aquarium with each of these water amounts. It's sorted.
+func aquarium_hints() -> Array[float]:
+	return GridModel.must_be_implemented()
+
+# Returns a boolean for each aquarium hint, whether it is satisfied. Same order as `aquarium_hints`.
+func satisfied_aquarium_hints() -> Array[bool]:
+	return GridModel.must_be_implemented()
+
 enum LoadMode {
 	# Default. Must be a solution, and the water/air/boats are cleared after loading and validation.
 	Solution,
