@@ -34,9 +34,8 @@ var n: int
 var m: int
 # NxM Array[Array[PureCell]] but GDscript doesn't support it
 var pure_cells: Array[Array]
-# TODO: Rename to _row_hints
-var hint_rows: Array[LineHint]
-var hint_cols: Array[LineHint]
+var _row_hints: Array[LineHint]
+var _col_hints: Array[LineHint]
 var _grid_hints: GridHints
 # (N-1)xM Array[Array[bool]]
 var wall_bottom: Array[Array]
@@ -61,8 +60,8 @@ func setup(n_: int, m_: int) -> void:
 	pure_cells = []
 	wall_right = []
 	wall_bottom = []
-	hint_rows = []
-	hint_cols = []
+	_row_hints = []
+	_col_hints = []
 	for i in n:
 		var row: Array[PureCell] = []
 		var row_down: Array[bool] = []
@@ -82,14 +81,14 @@ func setup(n_: int, m_: int) -> void:
 		hint_row.water_count_type = E.HintType.Any
 		hint_row.boat_count = -1
 		hint_row.boat_count_type = E.HintType.Any
-		hint_rows.append(hint_row)
+		_row_hints.append(hint_row)
 	for j in m:
 		var hint_col := LineHint.new()
 		hint_col.water_count = -1.
 		hint_col.water_count_type = E.HintType.Any
 		hint_col.boat_count = -1
 		hint_col.boat_count_type = E.HintType.Any
-		hint_cols.append(hint_col)
+		_col_hints.append(hint_col)
 	_grid_hints = GridHints.new()
 	_grid_hints.total_water = -1.
 	_grid_hints.total_boats = 0
@@ -386,17 +385,17 @@ func get_cell(i: int, j: int) -> CellModel:
 
 # TODO: Rename
 func set_hint_row(i: int, v: float) -> void:
-	hint_rows[i].water_count = v
+	_row_hints[i].water_count = v
 
 # TODO: Rename
 func set_hint_col(j: int, v: float) -> void:
-	hint_cols[j].water_count = v
+	_col_hints[j].water_count = v
 
 func row_hints() -> Array[LineHint]:
-	return hint_rows
+	return _row_hints
 
 func col_hints() -> Array[LineHint]:
-	return hint_cols
+	return _col_hints
 
 # TODO: REMOVE
 func get_expected_boats() -> int:
@@ -526,18 +525,18 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 	var hh := int(lines[hb][hb] == 'h')
 	if hb == 1 and not content_only:
 		for i in n:
-			hint_rows[i].boat_count = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
-			hint_rows[i].boat_count_type = _validate_hint_type(lines[2 * i + 2 + hh][0])
+			_row_hints[i].boat_count = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
+			_row_hints[i].boat_count_type = _validate_hint_type(lines[2 * i + 2 + hh][0])
 		for j in m:
-			hint_cols[j].boat_count = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
-			hint_cols[j].boat_count_type = _validate_hint_type(lines[0][2 * j + 2 + hh])
+			_col_hints[j].boat_count = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
+			_col_hints[j].boat_count_type = _validate_hint_type(lines[0][2 * j + 2 + hh])
 	if hh == 1 and not content_only:
 		for i in n:
-			hint_rows[i].water_count = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
-			hint_rows[i].water_count_type = _validate_hint_type(lines[2 * i + 2 + hb][hb])
+			_row_hints[i].water_count = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
+			_row_hints[i].water_count_type = _validate_hint_type(lines[2 * i + 2 + hb][hb])
 		for j in m:
-			hint_cols[j].water_count = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
-			hint_cols[j].water_count_type = _validate_hint_type(lines[hb][2 * j + 2 + hb])
+			_col_hints[j].water_count = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
+			_col_hints[j].water_count_type = _validate_hint_type(lines[hb][2 * j + 2 + hb])
 	var h := hb + hh
 	for i in n:
 		for j in m:
@@ -601,36 +600,36 @@ func to_str() -> String:
 		builder.append("+waters=%d\n" % _grid_hints.total_water)
 	if _grid_hints.total_boats != 0:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
-	var boat_hints := hint_rows.any(func(h): return h.boat_count != -1) or hint_cols.any(func(h): return h.boat_count != -1)
-	var hints := hint_rows.any(func(h): return h.water_count != -1.) or hint_cols.any(func(h): return h.water_count != -1.)
+	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1) or _col_hints.any(func(h): return h.boat_count != -1)
+	var hints := _row_hints.any(func(h): return h.water_count != -1.) or _col_hints.any(func(h): return h.water_count != -1.)
 	if boat_hints:
 		builder.append('b')
 		if hints:
 			builder.append('.')
 		for j in m:
-			builder.append(_col_hint(hint_cols[j].boat_count))
+			builder.append(_col_hint(_col_hints[j].boat_count))
 		builder.append('\n')
 	if hints:
 		if boat_hints:
 			builder.append('.')
 		builder.append('h')
 		for j in m:
-			builder.append(_col_hint(int(hint_cols[j].water_count * 2)))
+			builder.append(_col_hint(int(_col_hints[j].water_count * 2)))
 		builder.append('\n')
 	for i in n:
 		if boat_hints:
-			builder.append(_row_hint1(hint_rows[i].boat_count))
+			builder.append(_row_hint1(_row_hints[i].boat_count))
 		if hints:
-			builder.append(_row_hint1(int(hint_rows[i].water_count * 2)))
+			builder.append(_row_hint1(int(_row_hints[i].water_count * 2)))
 		for j in m:
 			var cell := _pure_cell(i, j)
 			builder.append(_content_str(cell.c_left))
 			builder.append(_content_str(cell.c_right))
 		builder.append("\n")
 		if boat_hints:
-			builder.append(_row_hint2(hint_rows[i].boat_count))
+			builder.append(_row_hint2(_row_hints[i].boat_count))
 		if hints:
-			builder.append(_row_hint2(int(hint_rows[i].water_count * 2)))
+			builder.append(_row_hint2(int(_row_hints[i].water_count * 2)))
 		for j in m:
 			var left := _has_wall_left(i, j)
 			var down := _has_wall_bottom(i, j)
@@ -800,9 +799,9 @@ class CountWaterDfs extends Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
-# TODO: REMOVE
-func aquarium_hints() -> Array[float]:
-	return _grid_hints.expected_aquariums
+
+func grid_hints() -> GridHints:
+	return _grid_hints
 
 func _all_aquariums_count() -> Array[float]:
 	var dfs := CountWaterDfs.new(self)
@@ -965,12 +964,12 @@ func _col_bools(j: int, content: Content) -> Array[bool]:
 func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			var status := _hint_statusi(count_boat_row(i), hint_rows[i].boat_count)
-			var type := _hint_type_ok(hint_rows[i].boat_count_type, _row_bools(i, Content.Boat))
+			var status := _hint_statusi(count_boat_row(i), _row_hints[i].boat_count)
+			var type := _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
 			return _status_and_then(status, type)
 		E.HintContent.Water:
-			var status := _hint_statusf(count_water_row(i), hint_rows[i].water_count)
-			var type := _hint_type_ok(hint_rows[i].water_count_type, _row_bools(i, Content.Water))
+			var status := _hint_statusf(count_water_row(i), _row_hints[i].water_count)
+			var type := _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
 			return _status_and_then(status, type)
 		_:
 			assert(false, "Bad content")
@@ -979,11 +978,11 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			var status := _hint_statusi(count_boat_col(j), hint_cols[j].boat_count)
-			return _status_and_then(status, _hint_type_ok(hint_cols[j].boat_count_type, _col_bools(j, Content.Boat)))
+			var status := _hint_statusi(count_boat_col(j), _col_hints[j].boat_count)
+			return _status_and_then(status, _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat)))
 		E.HintContent.Water:
-			var status := _hint_statusf(count_water_col(j), hint_cols[j].water_count)
-			return _status_and_then(status, _hint_type_ok(hint_cols[j].water_count_type, _col_bools(j, Content.Water)))
+			var status := _hint_statusf(count_water_col(j), _col_hints[j].water_count)
+			return _status_and_then(status, _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water)))
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong
@@ -1101,9 +1100,9 @@ func equal(other: GridImpl) -> bool:
 		if wall_right[i] != other.wall_right[i]:
 			return false
 	for i in n:
-		if not _line_hint_eq(hint_rows[i], other.hint_rows[i]):
+		if not _line_hint_eq(_row_hints[i], other._row_hints[i]):
 			return false
 	for j in m:
-		if not _line_hint_eq(hint_cols[j], other.hint_cols[j]):
+		if not _line_hint_eq(_col_hints[j], other._col_hints[j]):
 			return false
 	return true

@@ -77,8 +77,8 @@ func export_data(grid: GridImpl) -> Dictionary:
 	return {
 		version = SAVE_VERSION,
 		cells = _export_grid(grid.pure_cells, _export_pure_cell),
-		row_hints = grid.hint_rows.map(_export_line_hint),
-		col_hints = grid.hint_cols.map(_export_line_hint),
+		row_hints = grid._row_hints.map(_export_line_hint),
+		col_hints = grid._col_hints.map(_export_line_hint),
 
 		wall_bottom = _export_grid(grid.wall_bottom, _export_bool),
 		wall_right = _export_grid(grid.wall_right, _export_bool),
@@ -94,8 +94,8 @@ func load_data(data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
 	var m := 0 if n == 0 else grid.pure_cells[0].size()
 	grid.n = n
 	grid.m = m
-	grid.hint_rows.assign(data.row_hints.map(_load_line_hint))
-	grid.hint_cols.assign(data.col_hints.map(_load_line_hint))
+	grid._row_hints.assign(data.row_hints.map(_load_line_hint))
+	grid._col_hints.assign(data.col_hints.map(_load_line_hint))
 	grid.wall_bottom = _load_grid(data.wall_bottom, _load_bool)
 	grid.wall_right = _load_grid(data.wall_right, _load_bool)
 	grid._grid_hints = _load_grid_hints(data.grid_hints)

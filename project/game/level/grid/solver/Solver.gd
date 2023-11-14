@@ -265,7 +265,7 @@ static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
 # If hint is all possible boat locations, then put the boats
 class BoatRowStrategy extends RowStrategy:
 	func _apply(i: int) -> bool:
-		var hint := grid.hint_rows[i].boat_count
+		var hint := grid._row_hints[i].boat_count
 		if hint <= 0:
 			return false
 		var count := 0
@@ -283,7 +283,7 @@ class BoatRowStrategy extends RowStrategy:
 
 class BoatColStrategy extends ColumnStrategy:
 	func _apply(j: int) -> bool:
-		var hint := grid.hint_cols[j].boat_count
+		var hint := grid._col_hints[j].boat_count
 		if hint <= 0:
 			return false
 		var i := grid.rows() - 1

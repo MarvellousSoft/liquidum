@@ -120,8 +120,7 @@ func count_boat_row(_i: int) -> int:
 func count_boat_col(_j: int) -> int:
 	return GridModel.must_be_implemented()
 
-# There must be at least one aquarium with each of these water amounts. It's sorted.
-func aquarium_hints() -> Array[float]:
+func grid_hints() -> GridHints:
 	return GridModel.must_be_implemented()
 
 # Returns a boolean for each aquarium hint, whether it is satisfied. Same order as `aquarium_hints`.

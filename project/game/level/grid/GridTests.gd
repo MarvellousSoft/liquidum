@@ -416,7 +416,7 @@ func test_load_content_only() -> void:
 func test_aquarium_hints() -> void:
 	var g := str_grid("+aqua=1\n..\n..\n..\n..")
 	assert(!g.are_hints_satisfied())
-	assert(g.aquarium_hints() == [1.])
+	assert(g.grid_hints().expected_aquariums == [1.])
 	assert(g.aquarium_hints_status() == [Normal])
 	g.get_cell(0, 0).put_water(TopLeft)
 	assert(g.aquarium_hints_status() == [Wrong])
