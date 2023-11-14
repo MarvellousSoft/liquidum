@@ -10,13 +10,21 @@ const ERROR_COLOR = Color(.96, .19, .19)
 	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 }
-@onready var Number = $Number
+@onready var Number = $HBoxContainer/Number
+@onready var Boat = $HBoxContainer/Boat
 
+var hint_type : E.HintType = E.HintType.Normal
 
 func _ready():
+	set_boat(false)
 	set_normal()
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
+
+
+func set_boat(value):
+	Boat.visible = value
+
 
 func set_value(value : float) -> void:
 	Number.text = str(value)
