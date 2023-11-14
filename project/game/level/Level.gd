@@ -7,15 +7,16 @@ func _ready():
 	AudioManager.play_bgm("main")
 	setup("""
 +boats=1
-h6.4.2.
-1##bb.w
-.L.|..╲
-4wwww..
-.|╲./|.
-4www..w
-.L../.╲
-3www...
-.L._╲|.""")
+b.......
+.h6.4.2.
+11##bb.w
+..L.|..╲
+.4wwww..
+..|╲./|.
+.4www..w
+..L../.╲
+.3www...
+..L._╲|.""")
 
 
 func setup(level : String):

@@ -69,6 +69,7 @@ func set_brush_mode(mode : E.BrushMode) -> void:
 #Assumes grid_logic is already setup
 func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
+	printt(grid_logic.boat_hint_all_cols(), grid_logic.boat_hint_all_rows())
 	HintBars.top.setup(grid_logic.hint_all_cols(), grid_logic.boat_hint_all_cols())
 	HintBars.left.setup(grid_logic.hint_all_rows(), grid_logic.boat_hint_all_rows())
 
@@ -136,23 +137,27 @@ func update_visuals() -> void:
 
 func update_hints() -> void:
 	for i in rows:
-		var hint = HintBars.left.get_hint(i, false)
-		match grid_logic.get_row_hint_status(i, E.HintContent.Water):
-			E.HintStatus.Normal:
-				hint.set_normal()
-			E.HintStatus.Satisfied:
-				hint.set_satisfied()
-			E.HintStatus.Wrong:
-				hint.set_error()
+		for hint_type in [E.HintContent.Normal, E.HintContent.Boat]:
+			var hint = HintBars.left.get_hint(i, hint_type == E.HintType.Boat)
+			if hint:
+				match grid_logic.get_row_hint_status(i, hint_type):
+					E.HintStatus.Normal:
+						hint.set_normal()
+					E.HintStatus.Satisfied:
+						hint.set_satisfied()
+					E.HintStatus.Wrong:
+						hint.set_error()
 	for j in columns:
-		var hint = HintBars.top.get_hint(j, false)
-		match grid_logic.get_col_hint_status(j, E.HintContent.Water):
-			E.HintStatus.Normal:
-				hint.set_normal()
-			E.HintStatus.Satisfied:
-				hint.set_satisfied()
-			E.HintStatus.Wrong:
-				hint.set_error()
+		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
+			var hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
+			if hint:
+				match grid_logic.get_col_hint_status(j, hint_type):
+					E.HintStatus.Normal:
+						hint.set_normal()
+					E.HintStatus.Satisfied:
+						hint.set_satisfied()
+					E.HintStatus.Wrong:
+						hint.set_error()
 
 
 func get_cell(i: int, j: int) -> Node:

@@ -26,13 +26,14 @@ func setup(normal_hints : Array, boat_hints : Array) -> void:
 		var container = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
 		container.alignment = BoxContainer.ALIGNMENT_END
 		bar.add_child(container)
-		create_hint(container, normal_hints[i], i == 0)
-		create_hint(container, boat_hints[i], i == 0)
+		create_hint(container, normal_hints[i], false, i == 0)
+		create_hint(container, boat_hints[i], true, i == 0)
 
 
-func create_hint(container : Container, hint_value : float, first : bool) -> void:
+func create_hint(container : Container, hint_value : float, is_boat : bool, first : bool) -> void:
 	var new_hint = HINT.instantiate()
 	container.add_child(new_hint)
+	new_hint.set_boat(is_boat)
 	#Set value
 	if hint_value == -1:
 		new_hint.no_hint()
@@ -55,5 +56,5 @@ func get_hint(idx : int, is_boat : bool) -> Node:
 	for child in bar.get_child(idx).get_children():
 		if child.is_boat == is_boat:
 			return child
-	push_error("Couldn't find hint at pos %d and type of boat equal to %b" % [idx, is_boat])
+	#"Couldn't find hint of this type
 	return null

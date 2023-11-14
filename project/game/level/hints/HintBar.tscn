@@ -15,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_tfe5l")
 
 [node name="Horizontal" type="HBoxContainer" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -48,20 +49,26 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Vertical" type="VBoxContainer" parent="."]
-visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 0
 
-[node name="Hint" parent="Vertical" instance=ExtResource("2_fgutn")]
+[node name="HBoxContainer1" type="HBoxContainer" parent="Vertical"]
 layout_mode = 2
 
-[node name="Hint2" parent="Vertical" instance=ExtResource("2_fgutn")]
+[node name="Hint" parent="Vertical/HBoxContainer1" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
-[node name="Hint3" parent="Vertical" instance=ExtResource("2_fgutn")]
+[node name="Hint2" parent="Vertical/HBoxContainer1" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
-[node name="Hint4" parent="Vertical" instance=ExtResource("2_fgutn")]
+[node name="Hint3" parent="Vertical/HBoxContainer1" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Vertical"]
+layout_mode = 2
+alignment = 2
+
+[node name="Hint4" parent="Vertical/HBoxContainer2" instance=ExtResource("2_fgutn")]
 layout_mode = 2
