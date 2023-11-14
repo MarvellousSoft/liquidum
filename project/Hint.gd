@@ -15,7 +15,7 @@ const ERROR_COLOR = Color(.96, .19, .19)
 
 var hint_type : E.HintType = E.HintType.Normal
 var is_boat := false
-var hint_value := 0
+var hint_value := 0.0
 
 func _ready():
 	set_boat(false)

@@ -22,6 +22,7 @@ func setup(normal_hints : Array, boat_hints : Array) -> void:
 	for child in bar.get_children():
 		bar.remove_child(child)
 	for i in normal_hints.size():
+		@warning_ignore("incompatible_ternary")
 		var container = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
 		container.alignment = BoxContainer.ALIGNMENT_END
 		bar.add_child(container)

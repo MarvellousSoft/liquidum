@@ -855,9 +855,11 @@ func is_any_hint_broken() -> bool:
 	return false
 
 func get_row_hint_status(i : int, hint_type : E.HintType) -> E.HintStatus:
+	@warning_ignore("incompatible_ternary")
 	var hint = hint_boat_rows[i] if hint_type == E.HintType.Boat else hint_rows[i]
 	if hint == -1:
 		return E.HintStatus.Unknown
+	@warning_ignore("incompatible_ternary")
 	var count = count_boat_row(i) if hint_type == E.HintType.Boat else count_water_row(i)
 	if count < hint:
 		return E.HintStatus.Normal
@@ -867,9 +869,11 @@ func get_row_hint_status(i : int, hint_type : E.HintType) -> E.HintStatus:
 		return E.HintStatus.Satisfied
 
 func get_col_hint_status(j : int, hint_type : E.HintType) -> E.HintStatus:
+	@warning_ignore("incompatible_ternary")
 	var hint = hint_boat_cols[j] if hint_type == E.HintType.Boat else hint_cols[j]
 	if hint == -1:
 		return E.HintStatus.Unknown
+	@warning_ignore("incompatible_ternary")
 	var count = count_boat_col(j) if hint_type == E.HintType.Boat else count_water_col(j)
 	if count < hint:
 		return E.HintStatus.Normal
