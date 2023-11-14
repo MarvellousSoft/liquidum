@@ -75,6 +75,19 @@ func get_cell(_i: int, _j: int) -> CellModel:
 func wall_at(_i: int, _j: int, _side: E.Side) -> bool:
 	return GridModel.must_be_implemented()
 
+# Tries to create walls from vertex 1 to vertex 2. Might be straight or diagonal.
+# 0 <= i <= n
+# 0 <= j <= m
+# Might create multiple walls of the same type in a row.
+# Returns whether the walls were created or were invalid
+func put_wall_from_idx(_i1: int, _j1: int, _i2: int, _j2: int, _flush_undo := true) -> bool:
+	return GridModel.must_be_implemented()
+
+# Same as above but removes. Ignores walls that don't exist, returns false only if
+# vertices are invalid.
+func remove_wall_from_idx(_i1: int, _j1: int, _i2: int, _j2: int, _flush_undo := true) -> bool:
+	return GridModel.must_be_implemented()
+
 func row_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
