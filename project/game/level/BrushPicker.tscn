@@ -33,30 +33,28 @@ shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
 
 [node name="BrushPicker" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_5hp8l")
 
-[node name="Water" type="TextureRect" parent="."]
+[node name="Images" type="HBoxContainer" parent="."]
+layout_mode = 2
+offset_right = 204.0
+offset_bottom = 100.0
+
+[node name="Water" type="TextureRect" parent="Images"]
 material = SubResource("ShaderMaterial_1b4k5")
 layout_mode = 2
-offset_bottom = 100.0
 texture = ExtResource("3_wkdt7")
 
-[node name="Boat" type="TextureRect" parent="."]
+[node name="Boat" type="TextureRect" parent="Images"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-offset_left = 100.0
-offset_right = 200.0
-offset_bottom = 100.0
 texture = ExtResource("4_vjq41")
 expand_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 104.0
+layout_mode = 2
+offset_right = 200.0
 offset_bottom = 100.0
 theme_override_constants/separation = 0
 

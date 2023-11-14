@@ -1,13 +1,28 @@
 [gd_scene load_steps=8 format=3 uid="uid://bsgjxsq2lu5y2"]
 
-[ext_resource type="Script" path="res://game/level/MistakeCounter.gd" id="1_u52sf"]
-[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="2_mim3b"]
+[ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
+[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="2_hnkmi"]
 
 [sub_resource type="FontVariation" id="FontVariation_5wwqj"]
-base_font = ExtResource("2_mim3b")
+base_font = ExtResource("2_hnkmi")
 
 [sub_resource type="FontVariation" id="FontVariation_bdphc"]
-base_font = ExtResource("2_mim3b")
+base_font = ExtResource("2_hnkmi")
+
+[sub_resource type="Animation" id="Animation_ott8p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HBoxContainer/Counter:theme_override_font_sizes/font_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [34]
+}
 
 [sub_resource type="Animation" id="Animation_irywk"]
 resource_name = "update_counter"
@@ -25,43 +40,20 @@ tracks/0/keys = {
 "values": [34, 50, 34]
 }
 
-[sub_resource type="Animation" id="Animation_ott8p"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HBoxContainer/Counter:theme_override_font_sizes/font_size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [34]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_infr8"]
 _data = {
 "RESET": SubResource("Animation_ott8p"),
 "update_counter": SubResource("Animation_irywk")
 }
 
-[node name="MistakeCounter" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_u52sf")
+[node name="Counter" type="BoxContainer"]
+script = ExtResource("1_bwmcc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 81)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 
-[node name="MistakeLabel" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_5wwqj")
 theme_override_font_sizes/font_size = 34
