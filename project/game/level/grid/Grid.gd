@@ -171,6 +171,8 @@ enum LoadMode {
 #
 # The string may begin with +key=value lines for extra data. The accept extra data is:
 # - boats: total number of boats in the solution. Defaults to 0.
+# - aqua: Hint for the water count of a aquarium that MUST be present. May be present
+#   multiple times, but must be ordered.
 func load_from_str(_s: String, _load_mode := LoadMode.Solution) -> void:
 	return GridModel.must_be_implemented()
 

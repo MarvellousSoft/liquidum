@@ -405,3 +405,15 @@ func test_load_content_only() -> void:
 	# and make the level easier, let's not accept that
 	g.load_from_str("ww\nL.\n..\nL.\n", GridModel.LoadMode.ContentOnly)
 	assert_grid_eq(g.to_str(), "ww\n|.\nww\nL.")
+
+func test_aquarium_hints() -> void:
+	var g := str_grid("+aqua=1\n..\n..\n..\n..")
+	assert(!g.are_hints_satisfied())
+	assert(g.aquarium_hints() == [1.])
+	assert(g.satisfied_aquarium_hints() == [false])
+	g.get_cell(0, 0).put_water(TopLeft)
+	assert(g.satisfied_aquarium_hints() == [false])
+	g.undo()
+	g.get_cell(1, 0).put_water(TopLeft)
+	assert(g.satisfied_aquarium_hints() == [true])
+	assert(g.are_hints_satisfied())

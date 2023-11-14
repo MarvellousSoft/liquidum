@@ -45,6 +45,7 @@ var last_seen := 0
 # List of changes to undo and redo
 var undo_stack: Array[Changes] = []
 var redo_stack: Array[Changes] = []
+var expected_aquariums: Array[float] = []
 
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
@@ -466,6 +467,8 @@ func _parse_extra_data(line: String) -> void:
 	match kv[0]:
 		"+boats":
 			expected_boats = int(kv[1])
+		"+aqua":
+			expected_aquariums.append(float(kv[1]))
 		_:
 			push_error("Invalid data %s" % line)
 
@@ -648,6 +651,9 @@ class Dfs:
 		grid = grid_
 		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
 		grid.last_seen += 1
+	# Called when visiting this cell for the first time. It might be only half a cell
+	# or the whole cell. If this cell doesn't have a diagonal, this function is called
+	# only ONCE for it, be careful.
 	# Returns if it should continue going to nearby cells
 	func _cell_logic(_i: int, _j: int, _corner: E.Corner, _cell: PureCell) -> bool:
 		return GridModel.must_be_implemented()
@@ -733,6 +739,46 @@ class RemoveWaterDfs extends Dfs:
 	func _can_go_down(i: int, _j: int) -> bool:
 		return i >= min_i
 
+class CountWaterDfs extends Dfs:
+	var water_count: float
+	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+		water_count += cell._content_count_from(Content.Water, corner)
+		return true
+	# Walk whole aquarium
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	func _can_go_down(i: int, _j: int) -> bool:
+		return true
+
+func aquarium_hints() -> Array[float]:
+	return expected_aquariums
+
+func _all_aquariums_count() -> Array[float]:
+	var dfs := CountWaterDfs.new(self)
+	var counts: Array[float] = []
+	for i in n:
+		for j in m:
+			for corner in E.Corner.values():
+				if _pure_cell(i, j)._valid_corner(corner) and _pure_cell(i, j).last_seen(corner) < last_seen:
+					dfs.water_count = 0
+					dfs.flood(i, j, corner)
+					counts.append(dfs.water_count)
+	return counts
+
+func satisfied_aquarium_hints() -> Array[bool]:
+	var aqs := _all_aquariums_count()
+	var count: Dictionary = {}
+	for aq in aqs:
+		count[aq] = count.get(aq, 0) + 1
+	var satisfied: Array[bool] = []
+	for hint in expected_aquariums:
+		if count.get(hint, 0) > 0:
+			count[hint] -= 1
+			satisfied.append(true)
+		else:
+			satisfied.append(false)
+	return satisfied
+
 func count_water_row(i: int) -> float:
 	var count := 0.
 	for j in m:
@@ -765,7 +811,6 @@ func count_boats() -> int:
 
 func are_hints_satisfied() -> bool:
 	if count_boats() != hint_all_boats():
-
 		return false
 	for i in n:
 		var hint := hint_rows[i]
@@ -782,6 +827,8 @@ func are_hints_satisfied() -> bool:
 		var hint_boat := hint_boat_cols[j]
 		if hint_boat != -1 and count_boat_col(j) != hint_boat:
 			return false
+	if not satisfied_aquarium_hints().all(func(x): return x):
+		return false
 	return true
 
 func is_any_hint_broken() -> bool:
@@ -840,6 +887,9 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 	return solution_c_left.is_empty() or _is_content_partial_solution(c, _content_sol(i, j, corner))
 
 func validate() -> void:
+	if !expected_aquariums.is_empty():
+		for i in expected_aquariums.size() - 1:
+			assert(expected_aquariums[i] <= expected_aquariums[i + 1])
 	# Blocks are surrounded by walls
 	for i in n:
 		for j in m:
