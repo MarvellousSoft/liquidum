@@ -261,6 +261,7 @@ func _on_cell_corner_gui_input(event, which : E.Corner):
 				MOUSE_BUTTON_RIGHT:
 					pressed_second_corner_button.emit(row, column, which)
 
+
 func _on_cell_corner_mouse_entered(which : E.Corner):
 	if wall_editor_active:
 		mouse_entered_corner_button.emit(row, column, which)

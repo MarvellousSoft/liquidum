@@ -361,7 +361,18 @@ func disable_wall_editor():
 
 
 func get_wall_index(i : int, j : int, which : E.Corner) -> Array:
-	return []
+	match which:
+		E.Corner.TopLeft:
+			return [i, j]
+		E.Corner.TopRight:
+			return [i, j + 1]
+		E.Corner.BottomRight:
+			return [i + 1, j + 1]
+		E.Corner.BottomLeft:
+			return [i + 1, j]
+		_:
+			push_error("Not a valid corner: " + str(which))
+			return []
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
@@ -457,17 +468,25 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	update()
 
-func _on_cell_pressed_main_corner_button(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_pressed_main_corner_button(i: int, j: int, which: E.Corner) -> void:
 	assert(which != E.Waters.None)
 	mouse_hold_status = E.MouseDragState.Wall
 	previous_wall_index = get_wall_index(i, j, which)
 
 
-func _on_cell_pressed_second_corner_button(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_pressed_second_corner_button(i: int, j: int, which: E.Corner) -> void:
 	assert(which != E.Waters.None)
 	mouse_hold_status = E.MouseDragState.RemoveWall
 	previous_wall_index = get_wall_index(i, j, which)
 
-func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> void:
 	assert(which != E.Waters.None)
-	printt(i, j, "entered", which)
+	var new_index = get_wall_index(i, j, which)
+	if not previous_wall_index.is_empty():
+		if mouse_hold_status == E.MouseDragState.Wall:
+			grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
+										 new_index[0], new_index[1], false)
+		if mouse_hold_status == E.MouseDragState.RemoveWall:
+			grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
+											new_index[0], new_index[1], false)
+	previous_wall_index = new_index
