@@ -390,10 +390,10 @@ func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.
 					return SolveResult.SolvedMultiple
 	# After we guessed all waters and airs, let's guess boats if we at least got the waters right
 	for i in grid.rows():
-		if grid.is_row_hint_wrong(i):
+		if grid.get_row_hint_status(i, E.HintType.Normal) == E.HintStatus.Wrong:
 			return SolveResult.Unsolvable 
 	for j in grid.cols():
-		if grid.is_col_hint_wrong(j):
+		if grid.get_col_hint_status(j, E.HintType.Normal) == E.HintStatus.Wrong:
 			return SolveResult.Unsolvable
 	for i in grid.rows():
 		for j in grid.cols():

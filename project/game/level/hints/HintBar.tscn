@@ -20,19 +20,35 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 0
 
-[node name="Hint" parent="Horizontal" instance=ExtResource("2_fgutn")]
+[node name="VBoxContainer1" type="VBoxContainer" parent="Horizontal"]
+layout_mode = 2
+alignment = 2
+
+[node name="Hint2" parent="Horizontal/VBoxContainer1" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
-[node name="Hint2" parent="Horizontal" instance=ExtResource("2_fgutn")]
+[node name="Hint3" parent="Horizontal/VBoxContainer1" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
-[node name="Hint3" parent="Horizontal" instance=ExtResource("2_fgutn")]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Horizontal"]
+layout_mode = 2
+alignment = 2
+
+[node name="Hint4" parent="Horizontal/VBoxContainer3" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
-[node name="Hint4" parent="Horizontal" instance=ExtResource("2_fgutn")]
+[node name="VBoxContaine2" type="VBoxContainer" parent="Horizontal"]
+layout_mode = 2
+alignment = 2
+
+[node name="Hint" parent="Horizontal/VBoxContaine2" instance=ExtResource("2_fgutn")]
+layout_mode = 2
+
+[node name="Hint2" parent="Horizontal/VBoxContaine2" instance=ExtResource("2_fgutn")]
 layout_mode = 2
 
 [node name="Vertical" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0

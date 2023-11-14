@@ -69,8 +69,8 @@ func set_brush_mode(mode : E.BrushMode) -> void:
 #Assumes grid_logic is already setup
 func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
-	HintBars.top.setup(grid_logic.hint_all_cols())
-	HintBars.left.setup(grid_logic.hint_all_rows())
+	HintBars.top.setup(grid_logic.hint_all_cols(), grid_logic.boat_hint_all_cols())
+	HintBars.left.setup(grid_logic.hint_all_rows(), grid_logic.boat_hint_all_rows())
 
 
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
@@ -136,21 +136,23 @@ func update_visuals() -> void:
 
 func update_hints() -> void:
 	for i in rows:
-		var hint = HintBars.left.get_hint(i)
-		if grid_logic.is_row_hint_wrong(i):
-			hint.set_error()
-		elif grid_logic.is_row_hint_satisfied(i):
-			hint.set_satisfied()
-		else:
-			hint.set_normal()
+		var hint = HintBars.left.get_hint(i, false)
+		match grid_logic.get_row_hint_status(i, E.HintType.Normal):
+			E.HintStatus.Normal:
+				hint.set_normal()
+			E.HintStatus.Satisfied:
+				hint.set_satisfied()
+			E.HintStatus.Wrong:
+				hint.set_error()
 	for j in columns:
-		var hint = HintBars.top.get_hint(j)
-		if grid_logic.is_col_hint_wrong(j):
-			hint.set_error()
-		elif grid_logic.is_col_hint_satisfied(j):
-			hint.set_satisfied()
-		else:
-			hint.set_normal()
+		var hint = HintBars.top.get_hint(j, false)
+		match grid_logic.get_col_hint_status(j, E.HintType.Normal):
+			E.HintStatus.Normal:
+				hint.set_normal()
+			E.HintStatus.Satisfied:
+				hint.set_satisfied()
+			E.HintStatus.Wrong:
+				hint.set_error()
 
 
 func get_cell(i: int, j: int) -> Node:

@@ -362,6 +362,9 @@ func hint_row(i: int) -> float:
 func hint_all_rows() -> Array:
 	return hint_rows
 
+func boat_hint_all_rows() -> Array:
+	return hint_boat_rows
+
 func set_hint_row(i: int, v: float) -> void:
 	hint_rows[i] = v
 
@@ -370,6 +373,9 @@ func hint_col(j: int) -> float:
 
 func hint_all_cols() -> Array:
 	return hint_cols
+
+func boat_hint_all_cols() -> Array:
+	return hint_boat_cols
 
 func set_hint_col(j: int, v: float) -> void:
 	hint_cols[j] = v
@@ -835,42 +841,42 @@ func is_any_hint_broken() -> bool:
 	if count_boats() > hint_all_boats():
 		return true
 	for i in n:
-		if is_row_hint_wrong(i):
+		if get_row_hint_status(i, E.HintType.Normal) == E.HintStatus.Wrong:
 			return true
 		var h := hint_boat_rows[i]
 		if h != -1 and count_boat_row(i) > h:
 			return false
 	for j in m:
-		if is_col_hint_wrong(j):
+		if get_col_hint_status(j, E.HintType.Normal) == E.HintStatus.Wrong:
 			return true
 		var h := hint_boat_cols[j]
 		if h != -1 and count_boat_col(j) > h:
 			return false
 	return false
 
-func is_row_hint_wrong(i : int) -> bool:
-	var hint := hint_rows[i]
+func get_row_hint_status(i : int, hint_type : E.HintType) -> E.HintStatus:
+	var hint = hint_boat_rows[i] if hint_type == E.HintType.Boat else hint_rows[i]
 	if hint == -1:
-		return false
-	return count_water_row(i) > hint
+		return E.HintStatus.Unknown
+	var count = count_boat_row(i) if hint_type == E.HintType.Boat else count_water_row(i)
+	if count < hint:
+		return E.HintStatus.Normal
+	elif count > hint:
+		return E.HintStatus.Wrong
+	else:
+		return E.HintStatus.Satisfied
 
-func is_col_hint_wrong(j : int) -> bool:
-	var hint := hint_cols[j]
+func get_col_hint_status(j : int, hint_type : E.HintType) -> E.HintStatus:
+	var hint = hint_boat_cols[j] if hint_type == E.HintType.Boat else hint_cols[j]
 	if hint == -1:
-		return false
-	return count_water_col(j) > hint
-
-func is_row_hint_satisfied(i : int) -> bool:
-	var hint := hint_rows[i]
-	if hint == -1:
-		return true
-	return count_water_row(i) == hint
-
-func is_col_hint_satisfied(j : int) -> bool:
-	var hint := hint_cols[j]
-	if hint == -1:
-		return true
-	return count_water_col(j) == hint
+		return E.HintStatus.Unknown
+	var count = count_boat_col(j) if hint_type == E.HintType.Boat else count_water_col(j)
+	if count < hint:
+		return E.HintStatus.Normal
+	elif count > hint:
+		return E.HintStatus.Wrong
+	else:
+		return E.HintStatus.Satisfied
 
 # Use when level is created with with_solution
 func is_solution_partially_valid() -> bool:

@@ -14,6 +14,8 @@ const ERROR_COLOR = Color(.96, .19, .19)
 @onready var Boat = $HBoxContainer/Boat
 
 var hint_type : E.HintType = E.HintType.Normal
+var is_boat := false
+var value := 0
 
 func _ready():
 	set_boat(false)
@@ -23,11 +25,27 @@ func _ready():
 
 
 func set_boat(value):
+	is_boat = value
 	Boat.visible = value
 
 
-func set_value(value : float) -> void:
-	Number.text = str(value)
+func set_value(new_value : float) -> void:
+	value = new_value
+	update_label()
+
+
+func set_hint_type(new_type : E.HintType) -> void:
+	hint_type = new_type
+
+
+func update_label() -> void:
+	match hint_type:
+		E.HintType.Normal:
+			Number.text = str(value)
+		E.HintType.Together:
+			Number.text = "{" + str(value) + "}"
+		E.HintType.Separated:
+			Number.text = "-" + str(value) + "-"
 
 
 func no_hint() -> void:
