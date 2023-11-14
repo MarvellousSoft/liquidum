@@ -137,7 +137,7 @@ func update_visuals() -> void:
 func update_hints() -> void:
 	for i in rows:
 		var hint = HintBars.left.get_hint(i, false)
-		match grid_logic.get_row_hint_status(i, E.HintType.Normal):
+		match grid_logic.get_row_hint_status(i, E.HintContent.Water):
 			E.HintStatus.Normal:
 				hint.set_normal()
 			E.HintStatus.Satisfied:
@@ -146,7 +146,7 @@ func update_hints() -> void:
 				hint.set_error()
 	for j in columns:
 		var hint = HintBars.top.get_hint(j, false)
-		match grid_logic.get_col_hint_status(j, E.HintType.Normal):
+		match grid_logic.get_col_hint_status(j, E.HintContent.Water):
 			E.HintStatus.Normal:
 				hint.set_normal()
 			E.HintStatus.Satisfied:

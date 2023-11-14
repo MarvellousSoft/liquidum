@@ -841,26 +841,26 @@ func is_any_hint_broken() -> bool:
 	if count_boats() > hint_all_boats():
 		return true
 	for i in n:
-		if get_row_hint_status(i, E.HintType.Normal) == E.HintStatus.Wrong:
+		if get_row_hint_status(i, E.HintContent.Water) == E.HintStatus.Wrong:
 			return true
 		var h := hint_boat_rows[i]
 		if h != -1 and count_boat_row(i) > h:
 			return false
 	for j in m:
-		if get_col_hint_status(j, E.HintType.Normal) == E.HintStatus.Wrong:
+		if get_col_hint_status(j, E.HintContent.Water) == E.HintStatus.Wrong:
 			return true
 		var h := hint_boat_cols[j]
 		if h != -1 and count_boat_col(j) > h:
 			return false
 	return false
 
-func get_row_hint_status(i : int, hint_type : E.HintType) -> E.HintStatus:
+func get_row_hint_status(i : int, hint_type : E.HintContent) -> E.HintStatus:
 	@warning_ignore("incompatible_ternary")
-	var hint = hint_boat_rows[i] if hint_type == E.HintType.Boat else hint_rows[i]
+	var hint = hint_boat_rows[i] if hint_type == E.HintContent.Boat else hint_rows[i]
 	if hint == -1:
 		return E.HintStatus.Unknown
 	@warning_ignore("incompatible_ternary")
-	var count = count_boat_row(i) if hint_type == E.HintType.Boat else count_water_row(i)
+	var count = count_boat_row(i) if hint_type == E.HintContent.Boat else count_water_row(i)
 	if count < hint:
 		return E.HintStatus.Normal
 	elif count > hint:
@@ -868,13 +868,13 @@ func get_row_hint_status(i : int, hint_type : E.HintType) -> E.HintStatus:
 	else:
 		return E.HintStatus.Satisfied
 
-func get_col_hint_status(j : int, hint_type : E.HintType) -> E.HintStatus:
+func get_col_hint_status(j : int, hint_type : E.HintContent) -> E.HintStatus:
 	@warning_ignore("incompatible_ternary")
-	var hint = hint_boat_cols[j] if hint_type == E.HintType.Boat else hint_cols[j]
+	var hint = hint_boat_cols[j] if hint_type == E.HintContent.Boat else hint_cols[j]
 	if hint == -1:
 		return E.HintStatus.Unknown
 	@warning_ignore("incompatible_ternary")
-	var count = count_boat_col(j) if hint_type == E.HintType.Boat else count_water_col(j)
+	var count = count_boat_col(j) if hint_type == E.HintContent.Boat else count_water_col(j)
 	if count < hint:
 		return E.HintStatus.Normal
 	elif count > hint:

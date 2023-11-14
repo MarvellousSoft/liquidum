@@ -99,10 +99,10 @@ func are_hints_satisfied() -> bool:
 func is_any_hint_broken() -> bool:
 	return GridModel.must_be_implemented()
 
-func get_row_hint_status(_i : int, _hint_type : E.HintType) -> E.HintStatus:
+func get_row_hint_status(_i : int, _hint_type : E.HintContent) -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
-func get_col_hint_status(_j : int, _hint_type : E.HintType) -> E.HintStatus:
+func get_col_hint_status(_j : int, _hint_type : E.HintContent) -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
 func count_water_row(_i: int) -> float:

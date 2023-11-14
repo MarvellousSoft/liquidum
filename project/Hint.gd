@@ -13,7 +13,7 @@ const ERROR_COLOR = Color(.96, .19, .19)
 @onready var Number = $HBoxContainer/Number
 @onready var Boat = $HBoxContainer/Boat
 
-var hint_type : E.HintType = E.HintType.Normal
+var hint_type : E.HintType = E.HintType.Any
 var is_boat := false
 var hint_value := 0.0
 
@@ -40,7 +40,7 @@ func set_hint_type(new_type : E.HintType) -> void:
 
 func update_label() -> void:
 	match hint_type:
-		E.HintType.Normal:
+		E.HintType.Any:
 			Number.text = str(hint_value)
 		E.HintType.Together:
 			Number.text = "{" + str(hint_value) + "}"
