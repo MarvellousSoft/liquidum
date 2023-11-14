@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=6 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_ke4fj"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")
@@ -39,18 +41,18 @@ counter_name = "BOATS_COUNTER"
 [node name="MistakeCounter" parent="Counters" instance=ExtResource("4_m6y7y")]
 layout_mode = 2
 
-[node name="BrushPickerContainer" type="CenterContainer" parent="."]
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 20.0
-offset_right = 1920.0
-offset_bottom = 100.0
-grow_horizontal = 2
+[node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
+offset_bottom = 0.0
 
-[node name="BrushPicker" parent="BrushPickerContainer" instance=ExtResource("3_gfx50")]
-layout_mode = 2
+[node name="Water" parent="BrushPicker/Buttons" index="0"]
+button_group = SubResource("ButtonGroup_ke4fj")
+
+[node name="Boat" parent="BrushPicker/Buttons" index="1"]
+button_group = SubResource("ButtonGroup_ke4fj")
 
 [connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
-[connection signal="brushed_picked" from="BrushPickerContainer/BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+
+[editable path="BrushPicker"]

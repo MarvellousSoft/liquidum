@@ -20,6 +20,11 @@ var rows : int
 var columns : int
 var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 
+
+func _ready():
+	reset()
+
+
 func _input(event):
 	if event is InputEventMouseButton:
 		if not event.pressed:
@@ -30,14 +35,18 @@ func _input(event):
 	elif grid_logic and event.is_action_pressed("redo"):
 		grid_logic.redo()
 		update()
-		
+
+
+func reset() -> void:
+	for child in Columns.get_children():
+		Columns.remove_child(child)
+
 
 func setup(level : String, load_mode := GridModel.LoadMode.Solution) -> void:
 	grid_logic = GridImpl.from_str(level, load_mode)
 	rows = grid_logic.rows()
 	columns = grid_logic.cols() 
-	for child in Columns.get_children():
-		Columns.remove_child(child)
+	reset()
 	for i in rows:
 		var new_row = HBoxContainer.new()
 		new_row.add_theme_constant_override("separation", 0)
