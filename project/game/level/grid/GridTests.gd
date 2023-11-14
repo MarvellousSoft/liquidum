@@ -330,7 +330,7 @@ func test_guess_boat() -> void:
 	.....
 	.L._.
 	""")
-	var r := SolverModel.new().full_solve(g)
+	SolverModel.new().full_solve(g)
 	check(g.are_hints_satisfied())
 
 func _flood_all(bef: String, aft: String) -> void:

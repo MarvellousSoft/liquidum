@@ -32,7 +32,7 @@ class AdjacencyRule:
 class SquareAdj extends AdjacencyRule:
 	const dv := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
 	func all_adj(from: Vector2i) -> Array[Vector2i]:
-		var adj: Array[Vector2i]
+		var adj: Array[Vector2i] = []
 		adj.assign(dv.map(func(d): return from + d))
 		return adj
 
@@ -130,14 +130,17 @@ func _randomly_place_water(grid: GridModel) -> void:
 
 func generate(n: int, m: int, diagonals := true, clear_solution := true) -> GridModel:
 	seed(rseed)
-	var adj_rule: AdjacencyRule = DiagAdj.new(n, m) if diagonals else SquareAdj.new()
+	var adj_rule: AdjacencyRule
+	if diagonals:
+		adj_rule = DiagAdj.new(n, m)
+	else:
+		adj_rule = SquareAdj.new()
 	var g := _gen_grid_groups(n, 2 * m if diagonals else m, adj_rule)
 	var grid := GridImpl.create(n, m)
 	for i in n:
 		for j in m:
 			if diagonals:
 				var diag_adj: DiagAdj = adj_rule as DiagAdj
-				var inc := randf() < 0.5
 				if j < m - 1 and g[i][2 * j + 1] != g[i][2 * j + 2]:
 					grid.get_cell(i, j).put_wall(E.Walls.Right)
 				var from := Vector2i(i, 2 * j) if diag_adj.dec_diag[i][j] else Vector2i(i, 2 * j + 1)

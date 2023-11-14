@@ -473,7 +473,7 @@ func _parse_extra_data(line: String) -> void:
 	var kv := line.split("=", false, 2)
 	match kv[0]:
 		"+waters":
-			expected_waters = int(kv[1])
+			expected_waters = float(kv[1])
 		"+boats":
 			expected_boats = int(kv[1])
 		"+aqua":
@@ -752,13 +752,13 @@ class RemoveWaterDfs extends Dfs:
 
 class CountWaterDfs extends Dfs:
 	var water_count: float
-	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		water_count += cell._content_count_from(Content.Water, corner)
 		return true
 	# Walk whole aquarium
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
-	func _can_go_down(i: int, _j: int) -> bool:
+	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
 func aquarium_hints() -> Array[float]:
