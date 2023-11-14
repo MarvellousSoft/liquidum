@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/single_water.png" id="3_wkdt7"]
-[ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/objects/boat_brusher.png" id="4_qe7lc"]
-[ext_resource type="ButtonGroup" uid="uid://eg2sjee74x6q" path="res://assets/ui/BrushPickerButtonGroup.tres" id="5_06acy"]
-[ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush_picker_unpressed.png" id="6_h5p7k"]
-[ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush_picker_pressed.png" id="7_66ejo"]
-[ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush_picker_hover.png" id="8_uikjr"]
+[ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/brush/boat_brusher.png" id="4_83tnc"]
+[ext_resource type="Texture2D" uid="uid://b3o4hcgpf2wf1" path="res://assets/images/ui/brush/brish_picker_wall.png" id="5_lkn2k"]
+[ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush/brush_picker_unpressed.png" id="7_0ebh5"]
+[ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
+[ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
 noise_type = 2
@@ -141,7 +141,13 @@ texture = ExtResource("3_wkdt7")
 [node name="Boat" type="TextureRect" parent="Images"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("4_qe7lc")
+texture = ExtResource("4_83tnc")
+expand_mode = 1
+
+[node name="Wall" type="TextureRect" parent="Images"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("5_lkn2k")
 expand_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="."]
@@ -156,29 +162,34 @@ alignment = 1
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-button_group = ExtResource("5_06acy")
-texture_normal = ExtResource("6_h5p7k")
-texture_pressed = ExtResource("7_66ejo")
-texture_hover = ExtResource("8_uikjr")
-texture_focused = ExtResource("7_66ejo")
+action_mode = 0
+texture_normal = ExtResource("7_0ebh5")
+texture_pressed = ExtResource("8_pcm1q")
+texture_hover = ExtResource("9_aiaqv")
 
 [node name="Boat" type="TextureButton" parent="Buttons"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-button_pressed = true
-button_group = ExtResource("5_06acy")
-texture_normal = ExtResource("6_h5p7k")
-texture_pressed = ExtResource("7_66ejo")
-texture_hover = ExtResource("8_uikjr")
-texture_focused = ExtResource("7_66ejo")
+action_mode = 0
+texture_normal = ExtResource("7_0ebh5")
+texture_pressed = ExtResource("8_pcm1q")
+texture_hover = ExtResource("9_aiaqv")
+ignore_texture_size = true
+
+[node name="Wall" type="TextureButton" parent="Buttons"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("7_0ebh5")
+texture_pressed = ExtResource("8_pcm1q")
+texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_qwnij")
 }
-
-[connection signal="pressed" from="Buttons/Water" to="." method="_on_button_pressed" binds= [0]]
-[connection signal="pressed" from="Buttons/Boat" to="." method="_on_button_pressed" binds= [1]]

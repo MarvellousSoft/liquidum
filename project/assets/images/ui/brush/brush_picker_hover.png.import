@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt8n5wh745hss"
-path="res://.godot/imported/brush_picker_unpressed.png-60fcea3adc6bd34cbd2300421ef92858.ctex"
+uid="uid://cet38o0twsek0"
+path="res://.godot/imported/brush_picker_hover.png-66eed13be9a1790fb7b59bb4f73268f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/brush_picker_unpressed.png"
-dest_files=["res://.godot/imported/brush_picker_unpressed.png-60fcea3adc6bd34cbd2300421ef92858.ctex"]
+source_file="res://assets/images/ui/brush/brush_picker_hover.png"
+dest_files=["res://.godot/imported/brush_picker_hover.png-66eed13be9a1790fb7b59bb4f73268f4.ctex"]
 
 [params]
 

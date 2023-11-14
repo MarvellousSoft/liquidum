@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=7 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_ke4fj"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_syhq8"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")
@@ -43,12 +45,16 @@ layout_mode = 2
 
 [node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
 offset_bottom = 0.0
+editor_mode = true
 
 [node name="Water" parent="BrushPicker/Buttons" index="0"]
 button_group = SubResource("ButtonGroup_ke4fj")
 
 [node name="Boat" parent="BrushPicker/Buttons" index="1"]
 button_group = SubResource("ButtonGroup_ke4fj")
+
+[node name="Wall" parent="BrushPicker/Buttons" index="2"]
+button_group = SubResource("ButtonGroup_syhq8")
 
 [connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]

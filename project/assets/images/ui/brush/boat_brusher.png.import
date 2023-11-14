@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bixum37r787g3"
-path="res://.godot/imported/boat_brusher.png-1e62ab0b8038d71f6ef87b86a2198294.ctex"
+path="res://.godot/imported/boat_brusher.png-56872fac624b48ebf8bf013801afc00c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/objects/boat_brusher.png"
-dest_files=["res://.godot/imported/boat_brusher.png-1e62ab0b8038d71f6ef87b86a2198294.ctex"]
+source_file="res://assets/images/ui/brush/boat_brusher.png"
+dest_files=["res://.godot/imported/boat_brusher.png-56872fac624b48ebf8bf013801afc00c.ctex"]
 
 [params]
 

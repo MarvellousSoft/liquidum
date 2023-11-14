@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cet38o0twsek0"
-path="res://.godot/imported/brush_picker_hover.png-410825f2b8dcbe799851bb60fca9872a.ctex"
+uid="uid://b3o4hcgpf2wf1"
+path="res://.godot/imported/brish_picker_wall.png-88204155334276bff335d824ecb7d09b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/brush_picker_hover.png"
-dest_files=["res://.godot/imported/brush_picker_hover.png-410825f2b8dcbe799851bb60fca9872a.ctex"]
+source_file="res://assets/images/ui/brush/brish_picker_wall.png"
+dest_files=["res://.godot/imported/brish_picker_wall.png-88204155334276bff335d824ecb7d09b.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
