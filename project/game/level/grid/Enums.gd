@@ -20,7 +20,7 @@ enum MouseDragState { None, Water, Air, Boat, RemoveWater, RemoveAir, RemoveBoat
 enum BrushMode { Water, Boat }
 
 enum HintContent { Water, Boat }
-enum HintType { Together, Separated, Any }
+enum HintType { Any, Together, Separated }
 enum HintStatus { Normal, Wrong, Satisfied, Unknown }
 
 func corner_is_left(corner: E.Corner) -> bool:

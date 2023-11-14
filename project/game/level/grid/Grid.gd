@@ -4,6 +4,13 @@ static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")
 	return null
 
+class LineHint:
+	var water_count: float
+	var water_count_type: E.HintType
+	var boat_count: int
+	# On columns this must always be Any
+	var boat_count_type: E.HintType
+
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -62,30 +69,16 @@ func get_cell(_i: int, _j: int) -> CellModel:
 func wall_at(_i: int, _j: int, _side: E.Side) -> bool:
 	return GridModel.must_be_implemented()
 
-# -1 if there's no hint. 0.5 for diagonals
-func hint_row(_i: int) -> float:
+func row_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
-func hint_all_rows() -> Array[float]:
+func col_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
 func set_hint_row(_i: int, _v: float) -> void:
 	return GridModel.must_be_implemented()
 
-func boat_hint_all_rows() -> Array[int]:
-	return GridModel.must_be_implemented()
-
-# -1 if there's no hint. 0.5 for diagonals
-func hint_col(_j: int) -> float:
-	return GridModel.must_be_implemented()
-
-func hint_all_cols() -> Array[float]:
-	return GridModel.must_be_implemented()
-
 func set_hint_col(_j: int, _v: float) -> void:
-	return GridModel.must_be_implemented()
-
-func boat_hint_all_cols() -> Array[int]:
 	return GridModel.must_be_implemented()
 
 # How many boats are in the level

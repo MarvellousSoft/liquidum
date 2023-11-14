@@ -36,6 +36,7 @@ func set_value(new_value : float) -> void:
 
 func set_hint_type(new_type : E.HintType) -> void:
 	hint_type = new_type
+	update_label()
 
 
 func update_label() -> void:

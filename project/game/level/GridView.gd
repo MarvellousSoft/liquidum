@@ -69,8 +69,8 @@ func set_brush_mode(mode : E.BrushMode) -> void:
 #Assumes grid_logic is already setup
 func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
-	HintBars.top.setup(grid_logic.hint_all_cols(), grid_logic.boat_hint_all_cols())
-	HintBars.left.setup(grid_logic.hint_all_rows(), grid_logic.boat_hint_all_rows())
+	HintBars.top.setup(grid_logic.col_hints())
+	HintBars.left.setup(grid_logic.row_hints())
 
 
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:

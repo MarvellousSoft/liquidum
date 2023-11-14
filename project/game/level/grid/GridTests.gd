@@ -193,9 +193,9 @@ L../.╲
 #.....
 L╲_╲_.
 	""")
-	check(g.hint_col(0) == -1.)
+	check(g.col_hints()[0].water_count == -1.)
 	g.set_hint_col(0, 1.5)
-	check(g.hint_col(0) == 1.5)
+	check(g.col_hints()[0].water_count == 1.5)
 	g.set_hint_row(1, 1.)
 	check(g.are_hints_satisfied())
 	g.set_hint_col(2, 0.5)
@@ -212,11 +212,11 @@ func test_simple_solve() -> void:
 	.L._.L.
 """)
 	check(!g.are_hints_satisfied())
-	check(g.hint_col(0) == -1.)
-	check(g.hint_col(1) == 0.5)
-	check(g.hint_col(2) == 1.5)
-	check(g.hint_row(0) == 1.)
-	check(g.hint_row(1) == 1.)
+	check(g.col_hints()[0].water_count == -1.)
+	check(g.col_hints()[1].water_count == 0.5)
+	check(g.col_hints()[2].water_count == 1.5)
+	check(g.row_hints()[0].water_count == 1.)
+	check(g.row_hints()[1].water_count == 1.)
 	g.get_cell(0, 1).put_water(BottomRight)
 	g.get_cell(1, 2).put_water(BottomLeft)
 	# Successfully solved, hooray!

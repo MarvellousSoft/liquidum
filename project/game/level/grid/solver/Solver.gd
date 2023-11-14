@@ -16,7 +16,7 @@ class RowStrategy extends Strategy:
 	func _apply_strategy(_values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
-		if grid.hint_row(i) < 0:
+		if grid.row_hints()[i].water_count < 0:
 			return false
 		var dfs := RowDfs.new(i, grid)
 		var last_seen := grid.last_seen
@@ -32,7 +32,7 @@ class RowStrategy extends Strategy:
 		var nothing_left := 0.
 		for j in grid.cols():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := grid.hint_row(i) - grid.count_water_row(i)
+		var water_left := grid.row_hints()[i].water_count - grid.count_water_row(i)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(comps, water_left, nothing_left)
@@ -83,7 +83,7 @@ class ColumnStrategy extends Strategy:
 	func _apply_strategy(_values: Array[ColComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(j: int) -> bool:
-		if grid.hint_col(j) < 0:
+		if grid.col_hints()[j].water_count < 0:
 			return false
 		var dfs := ColDfs.new(j, grid)
 		var last_seen := grid.last_seen
@@ -103,7 +103,7 @@ class ColumnStrategy extends Strategy:
 		var nothing_left := 0.
 		for i in grid.rows():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := grid.hint_col(j) - grid.count_water_col(j)
+		var water_left := grid.col_hints()[j].water_count - grid.count_water_col(j)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(comps, water_left, nothing_left)
@@ -265,7 +265,7 @@ static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
 # If hint is all possible boat locations, then put the boats
 class BoatRowStrategy extends RowStrategy:
 	func _apply(i: int) -> bool:
-		var hint := grid.hint_boat_rows[i]
+		var hint := grid.hint_rows[i].boat_count
 		if hint <= 0:
 			return false
 		var count := 0
@@ -283,7 +283,7 @@ class BoatRowStrategy extends RowStrategy:
 
 class BoatColStrategy extends ColumnStrategy:
 	func _apply(j: int) -> bool:
-		var hint := grid.hint_boat_cols[j]
+		var hint := grid.hint_cols[j].boat_count
 		if hint <= 0:
 			return false
 		var i := grid.rows() - 1
