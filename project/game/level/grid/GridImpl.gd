@@ -776,18 +776,33 @@ func _all_aquariums_count() -> Array[float]:
 					counts.append(dfs.water_count)
 	return counts
 
-func satisfied_aquarium_hints() -> Array[bool]:
+func aquarium_hints_status() -> Array[E.HintStatus]:
 	var aqs := _all_aquariums_count()
 	var count: Dictionary = {}
 	for aq in aqs:
 		count[aq] = count.get(aq, 0) + 1
-	var satisfied: Array[bool] = []
+	var satisfied: Array[E.HintStatus] = []
 	for hint in expected_aquariums:
 		if count.get(hint, 0) > 0:
 			count[hint] -= 1
-			satisfied.append(true)
+			satisfied.append(E.HintStatus.Satisfied)
 		else:
-			satisfied.append(false)
+			# This might still be changed to Wrong
+			satisfied.append(E.HintStatus.Normal)
+	aqs.clear()
+	for size in count:
+		while count[size] >= 0:
+			count[size] -= 1
+			aqs.append(size)
+	# Should already be sorted, but let's be sure
+	aqs.sort()
+	var j := 0
+	for i in expected_aquariums.size():
+		if satisfied[i] == E.HintStatus.Normal:
+			if j < aqs.size() and aqs[j] <= expected_aquariums[i]:
+				j += 1
+			else:
+				satisfied[i] = E.HintStatus.Wrong
 	return satisfied
 
 func count_water_row(i: int) -> float:
@@ -820,7 +835,6 @@ func count_boats() -> int:
 		count += count_boat_row(i)
 	return count
 
-
 func count_waters() -> float:
 	var count := 0.0
 	for i in n:
@@ -828,68 +842,74 @@ func count_waters() -> float:
 	return count
 
 
-func are_hints_satisfied() -> bool:
-	if count_boats() != get_expected_boats():
-		return false
+func _hint_statusf(count: float, hint: float) -> E.HintStatus:
+	if hint == -1 or count == hint:
+		return E.HintStatus.Satisfied
+	elif count > hint:
+		return E.HintStatus.Wrong
+	else:
+		return E.HintStatus.Normal
+
+func _hint_statusi(count: int, hint: int) -> E.HintStatus:
+	return _hint_statusf(float(count), float(hint))
+
+func all_boats_hint_status() -> E.HintStatus:
+	return _hint_statusi(count_boats(), get_expected_boats())
+
+class HintStatusAggregator:
+	var any_wrong := false
+	var any_normal := false
+	func update(status: E.HintStatus) -> void:
+		if status == E.HintStatus.Wrong:
+			any_wrong = true
+		elif status == E.HintStatus.Normal:
+			any_normal = true
+	func final_status() -> E.HintStatus:
+		if any_wrong:
+			return E.HintStatus.Wrong
+		elif any_normal:
+			return E.HintStatus.Normal
+		else:
+			return E.HintStatus.Satisfied
+
+func all_hints_status() -> E.HintStatus:
+	var agg := HintStatusAggregator.new()
+	agg.update(all_boats_hint_status())
+	for status in aquarium_hints_status():
+		agg.update(status)
 	for i in n:
-		var hint := hint_rows[i].water_count
-		if hint != -1 and count_water_row(i) != hint:
-			return false
-		var hint_boat := hint_rows[i].boat_count
-		if hint_boat != -1 and count_boat_row(i) != hint_boat:
-			return false
-		# Maybe I also need to check no boats are placed randomly without hints
+		agg.update(get_row_hint_status(i, E.HintContent.Water))
+		agg.update(get_row_hint_status(i, E.HintContent.Boat))
 	for j in m:
-		var hint := hint_cols[j].water_count
-		if hint != -1 and count_water_col(j) != hint:
-			return false
-		var hint_boat := hint_cols[j].boat_count
-		if hint_boat != -1 and count_boat_col(j) != hint_boat:
-			return false
-	if not satisfied_aquarium_hints().all(func(x): return x):
-		return false
-	return true
+		agg.update(get_col_hint_status(j, E.HintContent.Water))
+		agg.update(get_col_hint_status(j, E.HintContent.Boat))
+	return agg.final_status()
+
+func are_hints_satisfied() -> bool:
+	return all_hints_status() == E.HintStatus.Satisfied
 
 func is_any_hint_broken() -> bool:
-	if count_boats() > get_expected_boats():
-		return true
-	for i in n:
-		if get_row_hint_status(i, E.HintContent.Water) == E.HintStatus.Wrong:
-			return true
-		var h := hint_rows[i].boat_count
-		if h != -1 and count_boat_row(i) > h:
-			return false
-	for j in m:
-		if get_col_hint_status(j, E.HintContent.Water) == E.HintStatus.Wrong:
-			return true
-		var h := hint_cols[j].boat_count
-		if h != -1 and count_boat_col(j) > h:
-			return false
-	return false
+	return all_hints_status() == E.HintStatus.Wrong
 
-func get_row_hint_status(i : int, hint_type : E.HintContent) -> E.HintStatus:
-	var hint = float(hint_rows[i].boat_count) if hint_type == E.HintContent.Boat else hint_rows[i].water_count
-	if hint == -1:
-		return E.HintStatus.Unknown
-	var count = float(count_boat_row(i)) if hint_type == E.HintContent.Boat else count_water_row(i)
-	if count < hint:
-		return E.HintStatus.Normal
-	elif count > hint:
-		return E.HintStatus.Wrong
-	else:
-		return E.HintStatus.Satisfied
+func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
+	match hint_content:
+		E.HintContent.Boat:
+			return _hint_statusi(count_boat_row(i), hint_rows[i].boat_count)
+		E.HintContent.Water:
+			return _hint_statusf(count_water_row(i), hint_rows[i].water_count)
+		_:
+			assert(false, "Bad content")
+			return E.HintStatus.Wrong
 
-func get_col_hint_status(j : int, hint_type : E.HintContent) -> E.HintStatus:
-	var hint = float(hint_cols[j].boat_count) if hint_type == E.HintContent.Boat else hint_cols[j].water_count
-	if hint == -1:
-		return E.HintStatus.Unknown
-	var count = float(count_boat_col(j)) if hint_type == E.HintContent.Boat else count_water_col(j)
-	if count < hint:
-		return E.HintStatus.Normal
-	elif count > hint:
-		return E.HintStatus.Wrong
-	else:
-		return E.HintStatus.Satisfied
+func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
+	match hint_content:
+		E.HintContent.Boat:
+			return _hint_statusi(count_boat_col(j), hint_cols[j].boat_count)
+		E.HintContent.Water:
+			return _hint_statusf(count_water_col(j), hint_cols[j].water_count)
+		_:
+			assert(false, "Bad content")
+			return E.HintStatus.Wrong
 
 # Use when level is created with with_solution
 func is_solution_partially_valid() -> bool:
@@ -906,6 +926,8 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 	return solution_c_left.is_empty() or _is_content_partial_solution(c, _content_sol(i, j, corner))
 
 func validate() -> void:
+	for j in m:
+		assert(col_hints()[j].boat_count_type == E.HintType.Any)
 	if !expected_aquariums.is_empty():
 		for i in expected_aquariums.size() - 1:
 			assert(expected_aquariums[i] <= expected_aquariums[i + 1])

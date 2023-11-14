@@ -120,7 +120,7 @@ func aquarium_hints() -> Array[float]:
 	return GridModel.must_be_implemented()
 
 # Returns a boolean for each aquarium hint, whether it is satisfied. Same order as `aquarium_hints`.
-func satisfied_aquarium_hints() -> Array[bool]:
+func aquarium_hints_status() -> Array[bool]:
 	return GridModel.must_be_implemented()
 
 enum LoadMode {

@@ -21,7 +21,7 @@ enum BrushMode { Water, Boat }
 
 enum HintContent { Water, Boat }
 enum HintType { Any, Together, Separated }
-enum HintStatus { Normal, Wrong, Satisfied, Unknown }
+enum HintStatus { Normal, Wrong, Satisfied }
 
 func corner_is_left(corner: E.Corner) -> bool:
 	return corner == Corner.TopLeft or corner == Corner.BottomLeft

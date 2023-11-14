@@ -13,6 +13,9 @@ const Top := E.Side.Top
 const Bottom := E.Side.Bottom
 const Dec := E.Diagonal.Dec
 const Inc := E.Diagonal.Inc
+const Satisfied := E.HintStatus.Satisfied
+const Wrong := E.HintStatus.Wrong
+const Normal := E.HintStatus.Normal
 
 var fail := 0
 
@@ -410,10 +413,10 @@ func test_aquarium_hints() -> void:
 	var g := str_grid("+aqua=1\n..\n..\n..\n..")
 	assert(!g.are_hints_satisfied())
 	assert(g.aquarium_hints() == [1.])
-	assert(g.satisfied_aquarium_hints() == [false])
+	assert(g.aquarium_hints_status() == [Normal])
 	g.get_cell(0, 0).put_water(TopLeft)
-	assert(g.satisfied_aquarium_hints() == [false])
+	assert(g.aquarium_hints_status() == [Wrong])
 	g.undo()
 	g.get_cell(1, 0).put_water(TopLeft)
-	assert(g.satisfied_aquarium_hints() == [true])
+	assert(g.aquarium_hints_status() == [Satisfied])
 	assert(g.are_hints_satisfied())
