@@ -123,6 +123,10 @@ func update(do_emit_signal := true) -> void:
 		updated.emit()
 
 
+func is_level_finished():
+	return grid_logic.are_hints_satisfied()
+
+
 func update_visuals() -> void:
 	for i in rows:
 		for j in columns:

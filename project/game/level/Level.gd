@@ -15,7 +15,7 @@ func _ready():
 	AudioManager.play_bgm("main")
 	setup("""
 +boats=1
-+waters=-1
++waters=10
 b.......
 .h6.4.2.
 11##bb.w
@@ -35,6 +35,7 @@ func setup(level : String):
 	Counters.water.visible = GridNode.get_expected_waters() != 0
 	Counters.boat.visible = GridNode.get_expected_boats() != 0
 	update_counters()
+	AudioManager.play_sfx("start_level")
 
 
 func update_counters() -> void:
@@ -42,6 +43,10 @@ func update_counters() -> void:
 		Counters.water.set_count(GridNode.get_missing_waters())
 	if update_expected_boats:
 		Counters.boat.set_count(GridNode.get_missing_boats())
+
+
+func win():
+	AudioManager.play_sfx("win_level")
 
 
 func _on_solve_button_pressed():
@@ -54,3 +59,5 @@ func _on_brush_picker_brushed_picked(mode : E.BrushMode):
 
 func _on_grid_updated():
 	update_counters()
+	if GridNode.is_level_finished():
+		win()
