@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7b2aqttx20gq"]
+
+[ext_resource type="Script" path="res://game/ui/TransitionManager.gd" id="1"]
+[ext_resource type="Material" uid="uid://ctkajpa32ml55" path="res://assets/shaders/TransitionShaderMaterial.tres" id="2_e4k7h"]
+
+[sub_resource type="Animation" id="3"]
+resource_name = "transition_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Effect:material:shader_parameter/cutoff")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_x27hb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Effect:material:shader_parameter/cutoff")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hg3bf"]
+_data = {
+"RESET": SubResource("Animation_x27hb"),
+"transition_out": SubResource("3")
+}
+
+[node name="TransitionManager" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1")
+
+[node name="Effect" type="ColorRect" parent="."]
+material = ExtResource("2_e4k7h")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 241.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hg3bf")
+}

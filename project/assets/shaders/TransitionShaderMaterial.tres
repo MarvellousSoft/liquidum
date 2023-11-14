@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ctkajpa32ml55"]
+
+[ext_resource type="Shader" path="res://assets/shaders/Transition.gdshader" id="1_gpmpg"]
+
+[resource]
+shader = ExtResource("1_gpmpg")
+shader_parameter/cutoff = 0.347
+shader_parameter/wave_size = 0.038
+shader_parameter/wave_frequency = 0.039
+shader_parameter/wave_speed = 12.534
+shader_parameter/wave_foam_size = 0.038
+shader_parameter/water_color = Color(0.141176, 0.372549, 0.972549, 1)
+shader_parameter/foam_color = Color(0, 0.0784314, 0.509804, 0.443137)

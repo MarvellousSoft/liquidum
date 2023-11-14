@@ -11,7 +11,8 @@ var update_expected_waters : bool
 var update_expected_boats : bool
 
 func _ready():
-	randomize()
+	await TransitionManager.transition_finished
+	
 	AudioManager.play_bgm("main")
 	setup("""
 +boats=1

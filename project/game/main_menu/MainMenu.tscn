@@ -5,9 +5,11 @@
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_il4q0")
 
-[node name="Label" type="Label" parent="."]
-offset_left = 242.0
-offset_top = 139.0
-offset_right = 282.0
-offset_bottom = 162.0
-text = "TEST"
+[node name="Version" type="Label" parent="."]
+offset_left = 1498.0
+offset_top = 997.0
+offset_right = 1898.0
+offset_bottom = 1059.0
+theme_override_font_sizes/font_size = 43
+text = "VERSION"
+horizontal_alignment = 2
