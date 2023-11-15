@@ -34,7 +34,7 @@ void fragment() {
 		(noise_1 * noise_2) * sin(depth_mask * PI), 0.0, 1.0);
 		
 	COLOR.rgb = screen_color * mix(water_color, depth_color, depth_mask);
-	COLOR.rgb = mix(COLOR.rgb, depth_color, depth_mask * 0.5);
+	COLOR.rgb = mix(COLOR.rgb, depth_color, depth_mask * 0.9);
 	COLOR.rgb += ray * 0.3;
 	float alpha = texture(TEXTURE, UV).a;
 	COLOR.a = smoothstep(0.0, 0.06, wave_mask);

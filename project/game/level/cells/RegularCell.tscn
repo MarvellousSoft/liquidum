@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
-[ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/single_water.png" id="3_voc0l"]
-[ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/cell/topleft_water.png" id="4_esc1j"]
-[ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/topright_water.png" id="5_aue7w"]
-[ext_resource type="Texture2D" uid="uid://c0gt3ni02eqol" path="res://assets/images/ui/cell/bottomright_water.png" id="6_c511e"]
-[ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/bottomleft_water.png" id="7_5sau3"]
-[ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/cell/single_air.png" id="8_m52rq"]
-[ext_resource type="Texture2D" uid="uid://drtuy7jt7dfl2" path="res://assets/images/ui/cell/topleft_air.png" id="9_4dm6r"]
-[ext_resource type="Texture2D" uid="uid://4bsr554e8gbo" path="res://assets/images/ui/cell/topright_air.png" id="10_6vroe"]
+[ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
+[ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/cell/water_topleft.png" id="4_lwpcm"]
+[ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/water_topright.png" id="5_l8l5q"]
+[ext_resource type="Texture2D" uid="uid://c0gt3ni02eqol" path="res://assets/images/ui/cell/water_bottomright.png" id="6_k26rs"]
+[ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/water_bottomleft.png" id="7_v8ssd"]
+[ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/cell/air_single.png" id="8_o2vuh"]
+[ext_resource type="Texture2D" uid="uid://drtuy7jt7dfl2" path="res://assets/images/ui/cell/air_topleft.png" id="9_xqw16"]
+[ext_resource type="Texture2D" uid="uid://4bsr554e8gbo" path="res://assets/images/ui/cell/air_topright.png" id="10_iqtow"]
 [ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/cell/single_button_normal.png" id="11_4w8p5"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/cell/single_button_pressed.png" id="12_8pxsf"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/cell/single_button_hover.png" id="13_0ph6y"]
@@ -19,15 +19,15 @@
 [ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/cell/diagonal_button_hover.png" id="17_g3cup"]
 [ext_resource type="Texture2D" uid="uid://dcyidkiwytat7" path="res://assets/images/ui/cell/diagonal_button_disabled.png" id="18_hjcq3"]
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/cell/diagonal_button_mask.png" id="19_sucjp"]
-[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/left_wall_hint.png" id="20_bknxy"]
-[ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/cell/dec_diag_hint.png" id="21_1yuel"]
-[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/left_wall.png" id="22_7sap8"]
-[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/cell/dec_diag.png" id="23_hmnlo"]
-[ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/single_block.png" id="24_df8xc"]
-[ext_resource type="Texture2D" uid="uid://bg0odel7l3b84" path="res://assets/images/ui/cell/topleft_block.png" id="25_1xspb"]
-[ext_resource type="Texture2D" uid="uid://q0ol3s5ovu68" path="res://assets/images/ui/cell/topright_block.png" id="26_hec6o"]
-[ext_resource type="Texture2D" uid="uid://caxkadwoqgsqg" path="res://assets/images/ui/cell/bottomright_block.png" id="27_2tys2"]
-[ext_resource type="Texture2D" uid="uid://cmvo5dnset77k" path="res://assets/images/ui/cell/bottomleft_block.png" id="28_2yply"]
+[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="20_6vhtd"]
+[ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/cell/wall_hint_dec_diag.png" id="21_23xke"]
+[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="22_43mpb"]
+[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/cell/wall_dec_diag.png" id="23_s1mmw"]
+[ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/block_single.png" id="24_0kqeq"]
+[ext_resource type="Texture2D" uid="uid://bg0odel7l3b84" path="res://assets/images/ui/cell/block_topleft.png" id="25_00o68"]
+[ext_resource type="Texture2D" uid="uid://q0ol3s5ovu68" path="res://assets/images/ui/cell/block_topright.png" id="26_lb8de"]
+[ext_resource type="Texture2D" uid="uid://caxkadwoqgsqg" path="res://assets/images/ui/cell/block_bottomright.png" id="27_fulr6"]
+[ext_resource type="Texture2D" uid="uid://cmvo5dnset77k" path="res://assets/images/ui/cell/block_bottomleft.png" id="28_6ngov"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="29_6b42n"]
 [ext_resource type="Texture2D" uid="uid://b4dkdprnvw65f" path="res://assets/images/ui/cell/error_single.png" id="30_varfe"]
 [ext_resource type="Texture2D" uid="uid://b4l1u3ehku21c" path="res://assets/images/ui/cell/error_topleft.png" id="31_am8uv"]
@@ -338,6 +338,7 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+color = Color(0.85098, 1, 0.886275, 1)
 
 [node name="Waters" type="Control" parent="."]
 anchors_preset = 0
@@ -348,7 +349,7 @@ custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-texture = ExtResource("3_voc0l")
+texture = ExtResource("3_7aqdv")
 
 [node name="TopLeft" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
@@ -357,7 +358,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("4_esc1j")
+texture = ExtResource("4_lwpcm")
 
 [node name="TopRight" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
@@ -366,7 +367,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("5_aue7w")
+texture = ExtResource("5_l8l5q")
 
 [node name="BottomRight" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
@@ -375,7 +376,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("6_c511e")
+texture = ExtResource("6_k26rs")
 
 [node name="BottomLeft" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
@@ -384,7 +385,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("7_5sau3")
+texture = ExtResource("7_v8ssd")
 
 [node name="Airs" type="Control" parent="."]
 anchors_preset = 0
@@ -395,7 +396,7 @@ custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-texture = ExtResource("8_m52rq")
+texture = ExtResource("8_o2vuh")
 
 [node name="TopLeft" type="TextureRect" parent="Airs"]
 visible = false
@@ -404,7 +405,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("9_4dm6r")
+texture = ExtResource("9_xqw16")
 
 [node name="TopRight" type="TextureRect" parent="Airs"]
 visible = false
@@ -413,7 +414,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("10_6vroe")
+texture = ExtResource("10_iqtow")
 
 [node name="BottomRight" type="TextureRect" parent="Airs"]
 visible = false
@@ -423,7 +424,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 3.14159
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("9_4dm6r")
+texture = ExtResource("9_xqw16")
 
 [node name="BottomLeft" type="TextureRect" parent="Airs"]
 visible = false
@@ -433,7 +434,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 3.14159
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("10_6vroe")
+texture = ExtResource("10_iqtow")
 
 [node name="Buttons" type="Control" parent="."]
 anchors_preset = 0
@@ -513,14 +514,14 @@ offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("20_bknxy")
+texture = ExtResource("20_6vhtd")
 
 [node name="Left" type="TextureRect" parent="Hints"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("20_bknxy")
+texture = ExtResource("20_6vhtd")
 
 [node name="Inc" type="TextureRect" parent="Hints"]
 visible = false
@@ -530,7 +531,7 @@ offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("21_1yuel")
+texture = ExtResource("21_23xke")
 
 [node name="Dec" type="TextureRect" parent="Hints"]
 visible = false
@@ -538,7 +539,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("21_1yuel")
+texture = ExtResource("21_23xke")
 
 [node name="Walls" type="Control" parent="."]
 anchors_preset = 0
@@ -554,7 +555,7 @@ offset_bottom = 97.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("22_7sap8")
+texture = ExtResource("22_43mpb")
 
 [node name="Right" type="TextureRect" parent="Walls"]
 layout_mode = 0
@@ -562,7 +563,7 @@ offset_left = 3.0
 offset_right = 103.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("22_7sap8")
+texture = ExtResource("22_43mpb")
 flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Walls"]
@@ -573,7 +574,7 @@ offset_bottom = 103.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("22_7sap8")
+texture = ExtResource("22_43mpb")
 flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
@@ -582,21 +583,21 @@ offset_left = -3.0
 offset_right = 97.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("22_7sap8")
+texture = ExtResource("22_43mpb")
 
 [node name="Dec" type="TextureRect" parent="Walls"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("23_hmnlo")
+texture = ExtResource("23_s1mmw")
 
 [node name="Inc" type="TextureRect" parent="Walls"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("23_hmnlo")
+texture = ExtResource("23_s1mmw")
 flip_h = true
 
 [node name="Blocks" type="Control" parent="."]
@@ -608,7 +609,7 @@ custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-texture = ExtResource("24_df8xc")
+texture = ExtResource("24_0kqeq")
 
 [node name="TopLeft" type="TextureRect" parent="Blocks"]
 visible = false
@@ -617,7 +618,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("25_1xspb")
+texture = ExtResource("25_00o68")
 
 [node name="TopRight" type="TextureRect" parent="Blocks"]
 visible = false
@@ -626,7 +627,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("26_hec6o")
+texture = ExtResource("26_lb8de")
 
 [node name="BottomRight" type="TextureRect" parent="Blocks"]
 visible = false
@@ -635,7 +636,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("27_2tys2")
+texture = ExtResource("27_fulr6")
 
 [node name="BottomLeft" type="TextureRect" parent="Blocks"]
 visible = false
@@ -644,7 +645,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("28_2yply")
+texture = ExtResource("28_6ngov")
 
 [node name="Boat" type="TextureRect" parent="."]
 modulate = Color(0, 0, 0, 1)

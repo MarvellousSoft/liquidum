@@ -9,5 +9,5 @@ shader_parameter/wave_size = 0.038
 shader_parameter/wave_frequency = 0.039
 shader_parameter/wave_speed = 12.534
 shader_parameter/wave_foam_size = 0.038
-shader_parameter/water_color = Color(0.141176, 0.372549, 0.972549, 1)
-shader_parameter/foam_color = Color(0, 0.0784314, 0.509804, 0.443137)
+shader_parameter/water_color = Color(0.192157, 0.690196, 0.690196, 1)
+shader_parameter/foam_color = Color(0.670588, 1, 0.819608, 1)

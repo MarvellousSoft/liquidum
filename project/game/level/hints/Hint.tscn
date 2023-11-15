@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://sogub73jvlos"]
 
-[ext_resource type="Script" path="res://game/level/hints/Hint.gd" id="1_p6546"]
-[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/left_wall_hint.png" id="2_cqqt4"]
+[ext_resource type="Script" path="res://game/level/hints/Hint.gd" id="1_s2nml"]
+[ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="2_3rujp"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_kqie2"]
 
 [node name="Hint" type="Control"]
@@ -14,7 +14,7 @@ offset_right = -1820.0
 offset_bottom = -980.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_p6546")
+script = ExtResource("1_s2nml")
 
 [node name="Hints" type="Control" parent="."]
 anchors_preset = 0
@@ -25,14 +25,14 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_cqqt4")
+texture = ExtResource("2_3rujp")
 
 [node name="Right" type="TextureRect" parent="Hints"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_cqqt4")
+texture = ExtResource("2_3rujp")
 flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Hints"]
@@ -41,7 +41,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_cqqt4")
+texture = ExtResource("2_3rujp")
 flip_h = true
 
 [node name="Left" type="TextureRect" parent="Hints"]
@@ -49,7 +49,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
-texture = ExtResource("2_cqqt4")
+texture = ExtResource("2_3rujp")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -68,7 +68,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Boat" type="TextureRect" parent="HBoxContainer"]
-modulate = Color(0, 0, 0, 1)
+modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(40, 20)
 layout_mode = 2
 texture = ExtResource("3_kqie2")

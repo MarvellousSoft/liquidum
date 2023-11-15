@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bg0odel7l3b84"
-path="res://.godot/imported/topleft_block.png-09dc2ce388a580c892d6e893fec4432a.ctex"
+path="res://.godot/imported/block_topleft.png-a3a0a45521c52d006e35ff04ac1a9038.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/cell/topleft_block.png"
-dest_files=["res://.godot/imported/topleft_block.png-09dc2ce388a580c892d6e893fec4432a.ctex"]
+source_file="res://assets/images/ui/cell/block_topleft.png"
+dest_files=["res://.godot/imported/block_topleft.png-a3a0a45521c52d006e35ff04ac1a9038.ctex"]
 
 [params]
 

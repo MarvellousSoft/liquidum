@@ -13,6 +13,7 @@ config_version=5
 config/name="Puzzle Aqua"
 run/main_scene="res://game/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
+boot_splash/bg_color=Color(0.0784314, 0.364706, 0.529412, 1)
 config/icon="res://icon.svg"
 
 [autoload]
@@ -24,6 +25,7 @@ TransitionManager="*res://game/ui/TransitionManager.tscn"
 FileManager="*res://game/file_manager/FileManager.gd"
 Profile="*res://game/file_manager/Profile.gd"
 E="*res://game/level/grid/Enums.gd"
+Background="*res://game/ui/Background.tscn"
 
 [debug]
 
