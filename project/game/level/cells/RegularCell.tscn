@@ -648,7 +648,7 @@ pivot_offset = Vector2(50, 50)
 texture = ExtResource("28_6ngov")
 
 [node name="Boat" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
+modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
 layout_mode = 0
 offset_top = 38.0

@@ -4,6 +4,11 @@ signal brushed_picked(mode : E.BrushMode)
 
 @export var editor_mode := false
 
+@onready var BGs = {
+	"water": $BGs/Water,
+	"boat": $BGs/Boat,
+	"wall": $BGs/Wall,
+}
 @onready var Images = {
 	"self": $Images,
 	"water": $Images/Water,
@@ -20,6 +25,7 @@ signal brushed_picked(mode : E.BrushMode)
 
 func _ready():
 	if not editor_mode:
+		BGs.wall.hide()
 		Images.wall.hide()
 		Buttons.wall.hide()
 	Buttons.water.connect("pressed", _on_button_pressed.bind(Buttons.water, E.BrushMode.Water))

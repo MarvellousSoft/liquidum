@@ -1,8 +1,8 @@
 extends Control
 
-const NORMAL_COLOR = Color(1.0, 1.0, 1.0)
-const SATISFIED_COLOR = Color(0.0, 1.0, 0.4)
-const ERROR_COLOR = Color(.96, .19, .19)
+const NORMAL_COLOR = Color("#d9ffe2ff")
+const SATISFIED_COLOR = Color("#61fc89ff")
+const ERROR_COLOR = Color("#ff6a6aff")
 
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,

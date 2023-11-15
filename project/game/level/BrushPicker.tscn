@@ -125,6 +125,29 @@ offset_right = 1920.0
 offset_bottom = 100.0
 script = ExtResource("1_5hp8l")
 
+[node name="BGs" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(1920, 0)
+layout_mode = 2
+offset_right = 1920.0
+offset_bottom = 100.0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Water" type="ColorRect" parent="BGs"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+color = Color(0.85098, 1, 0.886275, 1)
+
+[node name="Boat" type="ColorRect" parent="BGs"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+color = Color(0.85098, 1, 0.886275, 1)
+
+[node name="Wall" type="ColorRect" parent="BGs"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+color = Color(0.85098, 1, 0.886275, 1)
+
 [node name="Images" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(1920, 0)
 layout_mode = 2
