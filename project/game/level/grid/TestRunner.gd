@@ -49,8 +49,9 @@ func _on_gen_pressed() -> void:
 	$SolvedType.text = ""
 	var sol_str := g.to_str()
 	g1.setup(sol_str, GridModel.LoadMode.SolutionNoClear)
+	g.clear_content()
 	# Solver needs to play with it, can't be limited by the solution
-	g2.setup(sol_str, GridModel.LoadMode.FreeEdit)
+	g2.setup(g.to_str(), GridModel.LoadMode.FreeEdit)
 	scale_grids()
 	$Gen.disabled = false
 

@@ -489,4 +489,5 @@ func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> vo
 		if mouse_hold_status == E.MouseDragState.RemoveWall:
 			grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
 											new_index[0], new_index[1], false)
+	# TODO: Update walls on view
 	previous_wall_index = new_index

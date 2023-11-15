@@ -682,6 +682,63 @@ func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
 	else:
 		undo_stack.back().changes.append_array(changes)
 
+# Returns Array[(i, j, E.Walls)] a list of walls defined by these vertices.
+func _idx_to_cell_wall(i1: int, j1: int, i2: int, j2: int) -> Array[Vector3i]:
+	if mini(i1, i2) < 0 or min(j1, j2) < 0 or maxi(i1, i2) > n or maxi(j1, j2) > m:
+		return []
+	var ans: Array[Vector3i] = []
+	# horizontal
+	if i1 == i2:
+		for j in range(mini(j1, j2), maxi(j1, j2)):
+			if i1 == 0:
+				ans.append(Vector3i(i1, j, E.Walls.Top))
+			else:
+				ans.append(Vector3i(i1 - 1, j, E.Walls.Bottom))
+	# vertical
+	elif j1 == j2:
+		for i in range(mini(i1, i2), maxi(i1, i2)):
+			if j1 == 0:
+				ans.append(Vector3i(i, j1, E.Walls.Left))
+			else:
+				ans.append(Vector3i(i, j1 - 1, E.Walls.Right))
+	# inc diag
+	elif (i2 - i1) == (j1 - j2):
+		var j := maxi(j1, j2)
+		for i in range(mini(i1, i2), maxi(i1, i2)):
+			j -= 1
+			ans.append(Vector3i(i, j, E.Walls.IncDiag))
+	# dec diag
+	elif (i2 - i1) == (j2 - j1):
+		var j := mini(j1, j2)
+		for i in range(mini(i1, i2), maxi(i1, i2)):
+			ans.append(Vector3i(i, j, E.Walls.DecDiag))
+			j -= 1
+	#invalid
+	else:
+		pass
+	return ans
+
+func put_wall_from_idx(i1: int, j1: int, i2: int, j2: int, flush_undo := true) -> bool:
+	if flush_undo:
+		push_empty_undo()
+	var walls := _idx_to_cell_wall(i1, j1, i2, j2)
+	if walls.is_empty():
+		return false
+	for cw in walls:
+		get_cell(cw.x, cw.y).put_wall(cw.z, false)
+	return true
+
+# Same as above but removes. Ignores walls that don't exist, returns false only if
+# vertices are invalid.
+func remove_wall_from_idx(i1: int, j1: int, i2: int, j2: int, flush_undo := true) -> bool:
+	if flush_undo:
+		push_empty_undo()
+	var walls := _idx_to_cell_wall(i1, j1, i2, j2)
+	if walls.is_empty():
+		return false
+	for cw in walls:
+		get_cell(cw.x, cw.y).remove_wall(cw.z, false)
+	return true
 
 func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Array[Change]:
 	if add:
