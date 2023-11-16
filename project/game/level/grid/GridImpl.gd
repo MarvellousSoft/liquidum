@@ -244,8 +244,10 @@ class PureCell:
 		return !diag_wall or (E.corner_to_diag(corner) == E.Diagonal.Dec) == inverted
 	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
 		if new:
-			c_left = Content.Nothing
-			c_right = Content.Nothing
+			# Water and air are fine to keep. If changing diagonal let's purge everything.
+			if _has_boat() or (c_left != c_right and diag_wall and inverted != (diag == E.Diagonal.Dec)):
+				c_left = Content.Nothing
+				c_right = Content.Nothing
 		diag_wall = new
 		inverted = (diag == E.Diagonal.Dec)
 	func cell_type() -> E.CellType:
@@ -281,6 +283,22 @@ class CellChange extends Change:
 		grid.pure_cells[i][j] = prev_cell
 		# Maybe clone isn't necessary, but let's be safe
 		prev_cell = now_cell.clone()
+		return self
+
+class WallChange extends Change:
+	var i: int
+	var j: int
+	var side: E.Side
+	var present: bool
+	func _init(i_: int, j_: int, side_: E.Side, present_: bool) -> void:
+		i = i_
+		j = j_
+		side = side_
+		present = present_
+	func undo(grid: GridImpl) -> Change:
+		var now_present := grid.wall_at(i, j, side)
+		grid._change_wall(i, j, side, present)
+		present = now_present
 		return self
 
 class Changes:
@@ -353,13 +371,19 @@ class CellWithLoc extends GridModel.CellModel:
 		if pure().put_nothing(corner):
 			changes.append(change)
 		grid._push_undo_changes(changes, flush_undo)
-	func _change_wall(wall: E.Walls, new: bool, _flush_undo: bool) -> void:
-		# TODO: Add walls to undo
+	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool) -> void:
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
-				return grid._change_wall(i, j, wall as E.Side, new)
+				var c := WallChange.new(i, j, wall as E.Side, grid.wall_at(i, j, wall as E.Side))
+				grid._change_wall(i, j, wall as E.Side, new)
+				grid._push_undo_changes([c], flush_undo)
 			E.Dec, E.Inc:
-				return pure()._change_diag_wall(wall as E.Diagonal, new)
+				var c := CellChange.new(i, j, pure().clone())
+				pure()._change_diag_wall(wall as E.Diagonal, new)
+				grid._push_undo_changes([c], flush_undo)
+		if new == false:
+			# Removing walls might cause water to flood where it couldn't before
+			grid.flood_all(false)
 	func put_wall(wall: E.Walls, flush_undo := true) -> void:
 		_change_wall(wall, true, flush_undo)
 	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
@@ -576,6 +600,8 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 	_finish_loading(load_mode)
 
 func _finish_loading(load_mode: LoadMode) -> void:
+	undo_stack.clear()
+	redo_stack.clear()
 	if load_mode == GridModel.LoadMode.Solution or load_mode == GridModel.LoadMode.SolutionNoClear:
 		assert(are_hints_satisfied(), "Invalid solution")
 		solution_c_left.clear()
@@ -689,7 +715,7 @@ func redo() -> bool:
 
 func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
 	redo_stack.clear()
-	while not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
+	while flush_first and not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
 		undo_stack.pop_back()
 	if flush_first or undo_stack.is_empty():
 		undo_stack.push_back(Changes.new(changes))
@@ -1106,7 +1132,7 @@ func validate() -> void:
 				assert(not _pure_cell(i, j).diag_wall)
 				assert(i < n - 1 and _pure_cell(i + 1, j)._content_top() == Content.Water)
 
-func flood_all() -> bool:
+func flood_all(flush_undo := true) -> bool:
 	var dfs := AddWaterDfs.new(self, 0)
 	# Top down is important for correctness
 	for i in n:
@@ -1117,7 +1143,7 @@ func flood_all() -> bool:
 					dfs.min_i = i
 					dfs.flood(i, j, corner)
 	if !dfs.changes.is_empty():
-		_push_undo_changes(dfs.changes, true)
+		_push_undo_changes(dfs.changes, flush_undo)
 		return true
 	return false
 

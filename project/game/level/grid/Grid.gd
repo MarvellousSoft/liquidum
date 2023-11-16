@@ -228,7 +228,7 @@ func push_empty_undo() -> void:
 	return GridModel.must_be_implemented()
 
 # Flood all water in the grid. Returns whether it did anything
-func flood_all() -> bool:
+func flood_all(_flush_undo := true) -> bool:
 	return GridModel.must_be_implemented()
 
 func flood_air(_flush_undo := true) -> bool:

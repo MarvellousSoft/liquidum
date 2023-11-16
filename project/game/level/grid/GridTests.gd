@@ -372,7 +372,10 @@ func test_boat_place_remove() -> void:
 	........
 	........
 	""")
-	assert(!g.get_cell(0, 1).put_boat())
+	# Place water automatically below
+	assert(g.get_cell(0, 1).put_boat())
+	assert(g.get_cell(1, 0).water_full())
+	g.undo()
 	g.get_cell(1, 0).put_water(BottomLeft)
 	assert(!g.are_hints_satisfied())
 	assert(!g.get_cell(0, 1).has_boat())
@@ -453,3 +456,14 @@ func test_together_rules() -> void:
 	g.get_cell(2, 0).remove_content(TopRight)
 	g.get_cell(1, 0).put_water(TopRight)
 	assert(g.are_hints_satisfied())
+
+func test_put_wall() -> void:
+	var g := GridImpl.create(1, 2)
+	g.get_cell(0, 0).put_water(TopLeft)
+	g.get_cell(0, 0).put_wall(E.Walls.DecDiag)
+	assert(!g.get_cell(0, 0).water_full())
+	assert(g.get_cell(0, 0).water_at(BottomLeft))
+	g.get_cell(0, 0).remove_content(BottomLeft, false)
+	assert(g.get_cell(0, 0).water_at(TopRight))
+	g.remove_wall_from_idx(0, 0, 1, 1, false)
+	assert(g.get_cell(0, 0).water_at(BottomLeft))
