@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5np4b83uqkua"]
+[gd_scene load_steps=5 format=3 uid="uid://b5np4b83uqkua"]
 
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_ojaat"]
+[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
 [ext_resource type="Script" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
 [node name="TestRunner" type="Control"]
@@ -38,6 +39,9 @@ offset_top = 371.0
 offset_right = 846.0
 offset_bottom = 371.0
 metadata/_edit_use_anchors_ = true
+
+[node name="BrushPicker2" parent="." instance=ExtResource("3_1jrm3")]
+editor_mode = true
 
 [node name="Tests" type="Node" parent="."]
 script = ExtResource("3_ftgq8")
@@ -122,7 +126,7 @@ offset_right = 215.0
 offset_bottom = 688.0
 min_value = 1.0
 max_value = 20.0
-value = 6.0
+value = 4.0
 suffix = "rows"
 
 [node name="Cols" type="SpinBox" parent="."]
@@ -138,7 +142,7 @@ offset_right = 80.6
 offset_bottom = 556.68
 min_value = 1.0
 max_value = 20.0
-value = 6.0
+value = 4.0
 suffix = "cols"
 
 [node name="Interesting" type="CheckButton" parent="."]
@@ -150,6 +154,7 @@ offset_bottom = 337.0
 text = "Interesting"
 
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
+[connection signal="brushed_picked" from="BrushPicker2" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
