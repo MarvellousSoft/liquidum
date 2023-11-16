@@ -7,6 +7,7 @@ signal updated
 signal mistake_made
 
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
+const CELL_CORNER = preload("res://game/level/cells/CellCorner.tscn")
 const PREVIEW_DRAG_COLORS = {
 	"adding": Color("#61fc89df"),
 	"removing": Color("#ff6464df"),
@@ -20,6 +21,7 @@ const PREVIEW_DRAG_COLORS = {
 	"top": $CenterContainer/GridContainer/HintBarTop,
 	"left": $CenterContainer/GridContainer/HintBarLeft,
 }
+@onready var CellCornerGrid = $CellCornerGrid
 @onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
 
 var brush_mode : E.BrushMode = E.BrushMode.Water
@@ -53,12 +55,13 @@ func _input(event):
 func reset() -> void:
 	for child in Columns.get_children():
 		Columns.remove_child(child)
-
+	for child in CellCornerGrid.get_children():
+		CellCornerGrid.remove_child(child)
 
 func setup(level : String, load_mode := GridModel.LoadMode.Solution) -> void:
 	grid_logic = GridImpl.from_str(level, load_mode)
 	rows = grid_logic.rows()
-	columns = grid_logic.cols() 
+	columns = grid_logic.cols()
 	reset()
 	for i in rows:
 		var new_row = HBoxContainer.new()
@@ -67,9 +70,41 @@ func setup(level : String, load_mode := GridModel.LoadMode.Solution) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
-	setup_hints(rows, columns)
+	setup_hints()
+	setup_cell_corners()
 	update()
 
+#Assumes grid_logic is already setup
+func setup_hints():
+	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
+	HintBars.top.setup(grid_logic.col_hints())
+	HintBars.left.setup(grid_logic.row_hints())
+	var delay = STARTUP_DELAY * (rows + 1) * columns
+	HintBars.left.startup(delay + STARTUP_DELAY)
+	HintBars.top.startup(delay + STARTUP_DELAY*2)
+
+
+func setup_cell_corners() -> void:
+	await get_tree().process_frame
+	for child in CellCornerGrid.get_children():
+		CellCornerGrid.remove_child(child)
+	var sample_cell = get_cell(0,0)
+	var sample_corner = CELL_CORNER.instantiate()
+	CellCornerGrid.global_position = sample_cell.global_position
+	CellCornerGrid.position.y -= sample_corner.size.y/2
+	CellCornerGrid.position.x += sample_corner.size.x/2
+	CellCornerGrid.columns = columns + 1
+	CellCornerGrid.add_theme_constant_override("h_separation", sample_cell.size.x - sample_corner.size.x)
+	CellCornerGrid.add_theme_constant_override("v_separation", sample_cell.size.y - sample_corner.size.y)
+	for i in rows + 1:
+		for j in columns + 1:
+			var corner = CELL_CORNER.instantiate()
+			CellCornerGrid.add_child(corner)
+			corner.setup(i, j)
+			corner.pressed_main_button.connect(_on_cell_corner_pressed_main_button)
+			corner.pressed_second_button.connect(_on_cell_corner_pressed_second_button)
+			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
+	disable_wall_editor()
 
 func get_grid_size() -> Vector2:
 	return GridCont.size
@@ -92,15 +127,7 @@ func set_brush_mode(mode : E.BrushMode) -> void:
 	else:
 		disable_wall_editor()
 
-#Assumes grid_logic is already setup
-func setup_hints(i : int, j : int):
-	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
-	HintBars.top.setup(grid_logic.col_hints())
-	HintBars.left.setup(grid_logic.row_hints())
-	var delay = STARTUP_DELAY * (i + 1) * j
-	HintBars.left.startup(delay + STARTUP_DELAY)
-	HintBars.top.startup(delay + STARTUP_DELAY*2)
-	
+
 func get_expected_waters() -> float:
 	return grid_logic.get_expected_waters()
 
@@ -126,9 +153,6 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
 	cell.mouse_entered.connect(_on_cell_mouse_entered)
-	cell.pressed_main_corner_button.connect(_on_cell_pressed_main_corner_button)
-	cell.pressed_second_corner_button.connect(_on_cell_pressed_second_corner_button)
-	cell.mouse_entered_corner_button.connect(_on_cell_mouse_entered_corner_button)
 	
 	return cell
 
@@ -279,30 +303,12 @@ func highlight_error(i: int, j: int, which: E.Waters) -> void:
 
 
 func enable_wall_editor():
-	for i in rows:
-		for j in columns:
-			get_cell(i, j).enable_wall_editor()
+	CellCornerGrid.show()
 
 
 func disable_wall_editor():
-	for i in rows:
-		for j in columns:
-			get_cell(i, j).disable_wall_editor()
+	CellCornerGrid.hide()
 
-
-func get_wall_index(i : int, j : int, which : E.Corner) -> Array:
-	match which:
-		E.Corner.TopLeft:
-			return [i, j]
-		E.Corner.TopRight:
-			return [i, j + 1]
-		E.Corner.BottomRight:
-			return [i + 1, j + 1]
-		E.Corner.BottomLeft:
-			return [i + 1, j]
-		_:
-			push_error("Not a valid corner: " + str(which))
-			return []
 
 #Implementation assumes you have at least one cell at grid
 func get_global_position_by_index(index : Array) -> Vector2:
@@ -311,6 +317,7 @@ func get_global_position_by_index(index : Array) -> Vector2:
 	pos.x += index[1]*sample_cell.size.x
 	pos.y += index[0]*sample_cell.size.y
 	return pos
+
 
 func update_drag_preview() -> void:
 	if previous_wall_index and mouse_hold_status == E.MouseDragState.Wall:
@@ -323,8 +330,7 @@ func update_drag_preview() -> void:
 		DragPreview.points = []
 
 
-func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
-	
+func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	match brush_mode:
@@ -408,17 +414,18 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	update()
 
-func _on_cell_pressed_main_corner_button(i: int, j: int, which: E.Corner) -> void:
+
+func _on_cell_corner_pressed_main_button(i: int, j: int) -> void:
 	mouse_hold_status = E.MouseDragState.Wall
-	previous_wall_index = get_wall_index(i, j, which)
+	previous_wall_index = [i, j]
 
 
-func _on_cell_pressed_second_corner_button(i: int, j: int, which: E.Corner) -> void:
+func _on_cell_corner_pressed_second_button(i: int, j: int) -> void:
 	mouse_hold_status = E.MouseDragState.RemoveWall
-	previous_wall_index = get_wall_index(i, j, which)
+	previous_wall_index = [i, j]
 
-func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> void:
-	var new_index = get_wall_index(i, j, which)
+func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
+	var new_index = [i, j]
 	if not previous_wall_index.is_empty():
 		if mouse_hold_status == E.MouseDragState.Wall:
 			grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\

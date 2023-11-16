@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvauph5ly48yg"]
+
+[ext_resource type="Texture2D" uid="uid://n6gna2yn0ruj" path="res://assets/images/ui/cell/cornergrabber.png" id="1_mtb6s"]
+[ext_resource type="Script" path="res://game/level/cells/CellCorner.gd" id="2_1l5y6"]
+
+[node name="CellCorner" type="TextureRect"]
+modulate = Color(0.45098, 0.941176, 0.776471, 0.784314)
+use_parent_material = true
+offset_right = 50.0
+offset_bottom = 50.0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_mtb6s")
+script = ExtResource("2_1l5y6")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
