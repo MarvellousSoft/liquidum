@@ -198,7 +198,7 @@ func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
 
-func can_increase_water(i : int, j : int, corner : E.Waters):
+func can_increase_water(i : int, j : int, corner : E.Waters) -> bool:
 	match corner:
 		E.Waters.Single, E.Waters.BottomLeft, E.Waters.BottomRight:
 			if grid_logic.wall_at(i, j, E.Side.Bottom):
@@ -239,6 +239,7 @@ func can_increase_water(i : int, j : int, corner : E.Waters):
 					return can_increase_water(i, j + 1, E.Waters.Single)
 				_:
 					push_error("Not a valid type for cell:" + str(type))
+	return false
 
 
 func can_decrease_water(i : int, j : int, corner : E.Waters):
@@ -370,7 +371,6 @@ func get_wall_index(i : int, j : int, which : E.Corner) -> Array:
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
-	assert(which != E.Waters.None)
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
@@ -409,7 +409,6 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 
 
 func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
-	assert(which != E.Waters.None)
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.air_at(corner):
@@ -463,18 +462,15 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	update()
 
 func _on_cell_pressed_main_corner_button(i: int, j: int, which: E.Corner) -> void:
-	assert(which != E.Waters.None)
 	mouse_hold_status = E.MouseDragState.Wall
 	previous_wall_index = get_wall_index(i, j, which)
 
 
 func _on_cell_pressed_second_corner_button(i: int, j: int, which: E.Corner) -> void:
-	assert(which != E.Waters.None)
 	mouse_hold_status = E.MouseDragState.RemoveWall
 	previous_wall_index = get_wall_index(i, j, which)
 
 func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> void:
-	assert(which != E.Waters.None)
 	var new_index = get_wall_index(i, j, which)
 	if not previous_wall_index.is_empty():
 		if mouse_hold_status == E.MouseDragState.Wall:

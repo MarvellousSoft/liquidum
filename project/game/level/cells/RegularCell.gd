@@ -94,15 +94,14 @@ func _ready():
 func _process(dt):
 	if grid:
 		for corner in E.Waters.values():
-			if corner != E.Waters.None:
-				if water_flags[corner]:
-					increase_water_level(corner, dt)
-				else:
-					decrease_water_level(corner, dt)
-				if boat_flag:
-					Boat.modulate.a = min(Boat.modulate.a + BOAT_ALPHA_SPEED*dt, 1.0)
-				else:
-					Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
+			if water_flags[corner]:
+				increase_water_level(corner, dt)
+			else:
+				decrease_water_level(corner, dt)
+			if boat_flag:
+				Boat.modulate.a = min(Boat.modulate.a + BOAT_ALPHA_SPEED*dt, 1.0)
+			else:
+				Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
 
 
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int) -> void:
@@ -189,12 +188,8 @@ func remove_water() -> void:
 
 
 func set_water(water : E.Waters, value: bool) -> void:
-	match water:
-		E.Waters.None:
-			remove_water()
-		_:
-			set_boat(false)
-			water_flags[water] = value
+		set_boat(false)
+		water_flags[water] = value
 
 
 func remove_air() -> void:
@@ -203,11 +198,7 @@ func remove_air() -> void:
 
 
 func set_air(air : E.Waters, value: bool) -> void:
-	match air:
-		E.Waters.None:
-			remove_air()
-		_:
-			Airs[air].visible = value
+	Airs[air].visible = value
 
 
 func get_water_flag(corner : E.Waters) -> bool:
