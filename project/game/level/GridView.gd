@@ -106,6 +106,7 @@ func setup_cell_corners() -> void:
 			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
 	disable_wall_editor()
 
+
 func get_grid_size() -> Vector2:
 	return GridCont.size
 
@@ -303,11 +304,18 @@ func highlight_error(i: int, j: int, which: E.Waters) -> void:
 
 
 func enable_wall_editor():
-	CellCornerGrid.show()
+	for corner in CellCornerGrid.get_children():
+		corner.enable()
 
 
 func disable_wall_editor():
-	CellCornerGrid.hide()
+	for corner in CellCornerGrid.get_children():
+		corner.disable()
+
+
+func cell_corners_error(i1, j1, i2, j2) -> void:
+	CellCornerGrid.get_child(i1*(columns+1) + j1).error()
+	CellCornerGrid.get_child(i2*(columns+1) + j2).error()
 
 
 #Implementation assumes you have at least one cell at grid
@@ -428,13 +436,15 @@ func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
 	var new_index = [i, j]
 	if not previous_wall_index.is_empty():
 		if mouse_hold_status == E.MouseDragState.Wall:
-			grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
-										 new_index[0], new_index[1], false)
+			if not grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
+										 new_index[0], new_index[1], false):
+				cell_corners_error(i, j, previous_wall_index[0], previous_wall_index[1])
 			update_walls()
 			update(true, true)
 		if mouse_hold_status == E.MouseDragState.RemoveWall:
-			grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
-											new_index[0], new_index[1], false)
+			if not grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
+											new_index[0], new_index[1], false):
+				cell_corners_error(i, j, previous_wall_index[0], previous_wall_index[1])
 			update_walls()
 			update(true, true)
 	else:
