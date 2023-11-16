@@ -40,9 +40,9 @@ func _ready():
 	AnimPlayer.play("startup")
 
 
-func _on_button_pressed(mode : E.BrushMode):
+func _on_button_pressed(mode: E.BrushMode):
 	# Doing radio logic by hand since Godot`s isn`t working for some reason
 	for button in Buttons.keys():
 		if button != mode:
-			Buttons[mode].button_pressed = false
+			Buttons[button].button_pressed = false
 	brushed_picked.emit(mode)

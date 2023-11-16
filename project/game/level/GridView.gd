@@ -338,7 +338,7 @@ func update_drag_preview() -> void:
 		DragPreview.points = []
 
 
-func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:	
+func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	match brush_mode:
@@ -366,6 +366,17 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 					AudioManager.play_sfx("boat_put")
 				else:
 					highlight_error(i, j, which)
+		E.BrushMode.Block:
+			grid_logic.push_empty_undo()
+			if cell_data.block_at(corner):
+				mouse_hold_status = E.MouseDragState.RemoveBlock
+				print("removing")
+				cell_data.remove_content(corner, false)
+			else:
+				mouse_hold_status = E.MouseDragState.Block
+				if not cell_data.put_block(corner, false):
+					highlight_error(i, j, which)
+			get_cell(i, j).update_blocks(cell_data)
 	update()
 
 
@@ -380,6 +391,10 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		mouse_hold_status = E.MouseDragState.RemoveBoat
 		cell_data.remove_content(corner)
 		AudioManager.play_sfx("boat_remove")
+	elif cell_data.block_at(corner):
+		mouse_hold_status = E.MouseDragState.RemoveBlock
+		cell_data.remove_content(corner)
+		get_cell(i, j).update_blocks(cell_data)
 	else:
 		mouse_hold_status = E.MouseDragState.Air
 		if cell_data.put_air(corner):
@@ -410,6 +425,11 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			AudioManager.play_sfx("boat_put")
 		else:
 			highlight_error(i, j, which)
+	elif mouse_hold_status == E.MouseDragState.Block and cell_data.nothing_at(corner):
+		if cell_data.put_block(corner, false):
+			get_cell(i, j).update_blocks(cell_data)
+		else:
+			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
 		cell_data.remove_content(corner, false)
 		play_water_sound()
@@ -419,6 +439,9 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	elif mouse_hold_status == E.MouseDragState.RemoveBoat and cell_data.has_boat():
 		cell_data.remove_content(corner, false)
 		AudioManager.play_sfx("boat_remove")
+	elif mouse_hold_status == E.MouseDragState.RemoveBlock and cell_data.block_at(corner):
+		cell_data.remove_content(corner, false)
+		get_cell(i, j).update_blocks(cell_data)
 	
 	update()
 

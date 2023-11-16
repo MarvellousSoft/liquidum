@@ -608,6 +608,7 @@ custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+mouse_filter = 2
 texture = ExtResource("24_0kqeq")
 
 [node name="TopLeft" type="TextureRect" parent="Blocks"]
@@ -617,6 +618,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("25_00o68")
 
 [node name="TopRight" type="TextureRect" parent="Blocks"]
@@ -626,6 +628,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("26_lb8de")
 
 [node name="BottomRight" type="TextureRect" parent="Blocks"]
@@ -635,6 +638,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("27_fulr6")
 
 [node name="BottomLeft" type="TextureRect" parent="Blocks"]
@@ -644,6 +648,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("28_6ngov")
 
 [node name="Boat" type="TextureRect" parent="."]

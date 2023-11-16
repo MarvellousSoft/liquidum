@@ -158,20 +158,24 @@ func copy_data(data: GridModel.CellModel) -> void:
 			Buttons[E.BottomLeft].show()
 		_:
 			push_error("Not a valid type of cell:" + str(type))
+	update_blocks(data)
+
+
+func update_blocks(data: GridModel.CellModel) -> void:
+	for b in Blocks.values():
+		b.hide()
+	var any = false
 	if data.block_full():
 		set_block(E.Waters.Single)
+		any = true
 	else:
 		for corner in E.Corner.values():
 			if data.block_at(corner):
 				set_block(corner)
-
+				any  = true
 
 func set_block(block : E.Waters) -> void:
-	for b in Blocks.values():
-		b.hide()
 	Blocks[block].show()
-	Buttons[block].hide()
-
 
 func set_boat(value) -> void:
 	boat_flag = value

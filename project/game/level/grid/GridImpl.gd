@@ -169,13 +169,12 @@ class PureCell:
 		return diag == type
 	# Can't override block
 	func put_content(corner: E.Corner, content: Content) -> bool:
-		if _content_at(corner) == Content.Block:
-			return false
 		if not _valid_corner(corner):
 			return false
+
 		var prev_left := c_left
 		var prev_right := c_right
-		if corner == TopLeft or corner == BottomLeft:
+		if E.corner_is_left(corner):
 			if type == E.Single:
 				c_right = content
 			c_left = content
@@ -188,6 +187,8 @@ class PureCell:
 		return put_content(corner, Content.Water)
 	func put_air(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Air)
+	func put_block(corner: E.Corner) -> bool:
+		return put_content(corner, Content.Block)
 	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
 	func _put_boat() -> bool:
@@ -328,6 +329,14 @@ class CellWithLoc extends GridModel.CellModel:
 			var changes := grid._flood_water(i, j, corner, true)
 			grid._push_undo_changes(changes, flush_undo)
 		return true
+	func put_block(corner: E.Corner, flush_undo := true) -> bool:
+		if not grid.editor_mode():
+			return false
+		var change := CellChange.new(i, j, pure().clone())
+		if pure().put_block(corner):
+			grid._push_undo_changes([change], flush_undo)
+			return true
+		return false
 	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
@@ -345,13 +354,20 @@ class CellWithLoc extends GridModel.CellModel:
 			grid._push_undo_changes(changes, false)
 		return true
 	func remove_content(corner: E.Corner, flush_undo := true) -> void:
+		if block_at(corner) and not grid.editor_mode():
+			return
+		if flush_undo:
+			grid.push_empty_undo()
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))
 		var change := CellChange.new(i, j, pure().clone())
 		if pure().put_nothing(corner):
 			changes.append(change)
-		grid._push_undo_changes(changes, flush_undo)
+			# Removing block might trigger flooding
+			if change.prev_cell.block_at(corner):
+				grid.flood_all(false)
+		grid._push_undo_changes(changes, false)
 	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool) -> void:
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
@@ -459,6 +475,9 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 		wall_right[i][j] = new
 	if side == E.Bottom and i >= 0 and i < n - 1:
 		wall_bottom[i][j] = new
+
+func editor_mode() -> bool:
+	return solution_c_left.is_empty()
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
