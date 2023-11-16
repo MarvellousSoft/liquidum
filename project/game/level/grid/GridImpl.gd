@@ -264,6 +264,11 @@ class PureCell:
 		return true
 
 class Change:
+	# Undo the changes and return a change that redoes the changes. Might be self.
+	func undo(_grid: GridImpl) -> Change:
+		return GridModel.must_be_implemented()
+
+class CellChange extends Change:
 	var i: int
 	var j: int
 	var prev_cell: PureCell
@@ -271,6 +276,12 @@ class Change:
 		i = i_
 		j = j_
 		prev_cell = prev_cell_
+	func undo(grid: GridImpl) -> Change:
+		var now_cell: PureCell = grid.pure_cells[i][j]
+		grid.pure_cells[i][j] = prev_cell
+		# Maybe clone isn't necessary, but let's be safe
+		prev_cell = now_cell.clone()
+		return self
 
 class Changes:
 	var changes: Array[Change]
@@ -325,7 +336,7 @@ class CellWithLoc extends GridModel.CellModel:
 			return false
 		if water_at(corner):
 			remove_content(corner, false)
-		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
+		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
 		if pure().put_air(corner):
 			# No auto-flooding air
 			if flood:
@@ -338,7 +349,7 @@ class CellWithLoc extends GridModel.CellModel:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))
-		var change := Change.new(i, j, pure().clone())
+		var change := CellChange.new(i, j, pure().clone())
 		if pure().put_nothing(corner):
 			changes.append(change)
 		grid._push_undo_changes(changes, flush_undo)
@@ -365,7 +376,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if c.pure()._content_top() != Content.Water:
 			if not c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false):
 				return false
-		var change: Change = Change.new(i, j, pure().clone())
+		var change: Change = CellChange.new(i, j, pure().clone())
 		if pure()._put_boat():
 			grid._push_undo_changes([change], false)
 			return true
@@ -654,16 +665,13 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 		undos.pop_back()
 	if undos.is_empty():
 		return false
-	var changes: Array[Change] = undos.pop_back().changes
-	var already_done = {}
-	for c in changes:
-		if already_done.has(Vector2i(c.i, c.j)):
-			continue
-		already_done[Vector2i(c.i, c.j)] = true
-		var now_cell: PureCell = pure_cells[c.i][c.j]
-		pure_cells[c.i][c.j] = c.prev_cell
-		# Maybe clone isn't necessary, but let's be safe
-		c.prev_cell = now_cell.clone()
+	var changes: Array[Change] = (undos.pop_back() as Changes).changes
+	# We apply undo changes in reverse order. Specially relevant when a single
+	# thing is changed more than once
+	changes.reverse()
+	for i in changes.size():
+		changes[i] = changes[i].undo(self)
+
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
 	assert(!flood_all())
@@ -782,7 +790,7 @@ class Dfs:
 		var prev_cell := cell.clone()
 		self._cell_logic(i, j, corner, cell)
 		if !cell.eq(prev_cell):
-			changes.append(Change.new(i, j, prev_cell))
+			changes.append(CellChange.new(i, j, prev_cell))
 		var is_left := E.corner_is_left(corner)
 		var is_top := E.corner_is_top(corner)
 		# Try to flood left
