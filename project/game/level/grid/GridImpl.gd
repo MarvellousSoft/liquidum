@@ -354,16 +354,20 @@ class CellWithLoc extends GridModel.CellModel:
 	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
 		_change_wall(wall, false, flush_undo)
 	func put_boat(flush_undo := true) -> bool:
+		if flush_undo:
+			grid.push_empty_undo()
 		if i == grid.rows() - 1:
-			return false
-		var c := grid.get_cell(i + 1, j)
-		if not (c.water_at(E.Corner.TopLeft) or c.water_at(E.Corner.TopRight)):
 			return false
 		if !grid.is_corner_partially_valid(Content.Boat, i, j, E.Corner.TopRight):
 			return false
-		var changes: Array[Change] = [Change.new(i, j, pure().clone())]
+		# Put water below if necessary
+		var c := grid.get_cell(i + 1, j)
+		if c.pure()._content_top() != Content.Water:
+			if not c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false):
+				return false
+		var change: Change = Change.new(i, j, pure().clone())
 		if pure()._put_boat():
-			grid._push_undo_changes(changes, flush_undo)
+			grid._push_undo_changes([change], false)
 			return true
 		return false
 	func has_boat() -> bool:
@@ -677,10 +681,12 @@ func redo() -> bool:
 
 func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
 	redo_stack.clear()
+	while not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
+		undo_stack.pop_back()
 	if flush_first or undo_stack.is_empty():
 		undo_stack.push_back(Changes.new(changes))
 	else:
-		undo_stack.back().changes.append_array(changes)
+		(undo_stack.back() as Changes).changes.append_array(changes)
 
 # Returns Array[(i, j, E.Walls)] a list of walls defined by these vertices.
 func _idx_to_cell_wall(i1: int, j1: int, i2: int, j2: int) -> Array[Vector3i]:
