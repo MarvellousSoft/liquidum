@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://plt8snslppc5"]
+[gd_scene load_steps=16 format=3 uid="uid://plt8snslppc5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_puwdh"]
 [ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/brush/boat_brusher.png" id="4_83tnc"]
 [ext_resource type="Texture2D" uid="uid://b3o4hcgpf2wf1" path="res://assets/images/ui/brush/brish_picker_wall.png" id="5_lkn2k"]
+[ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/block_single.png" id="6_gg8t8"]
 [ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush/brush_picker_unpressed.png" id="7_0ebh5"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
@@ -148,6 +149,11 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 color = Color(0.85098, 1, 0.886275, 1)
 
+[node name="Block" type="ColorRect" parent="BGs"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+color = Color(0.85098, 1, 0.886275, 1)
+
 [node name="Images" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(1920, 0)
 layout_mode = 2
@@ -172,6 +178,12 @@ expand_mode = 1
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_lkn2k")
+expand_mode = 1
+
+[node name="Block" type="TextureRect" parent="Images"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("6_gg8t8")
 expand_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="."]
@@ -203,6 +215,17 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 
 [node name="Wall" type="TextureButton" parent="Buttons"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("7_0ebh5")
+texture_pressed = ExtResource("8_pcm1q")
+texture_hover = ExtResource("9_aiaqv")
+ignore_texture_size = true
+
+[node name="Block" type="TextureButton" parent="Buttons"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
