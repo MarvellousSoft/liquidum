@@ -1,0 +1,112 @@
+[1mdiff --git a/project/game/level/GridView.gd b/project/game/level/GridView.gd[m
+[1mindex d2589e9..11c8a1e 100644[m
+[1m--- a/project/game/level/GridView.gd[m
+[1m+++ b/project/game/level/GridView.gd[m
+[36m@@ -110,16 +110,9 @@[m [mfunc get_missing_boats() -> int:[m
+ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:[m
+ 	var cell = REGULAR_CELL.instantiate()[m
+ 	new_row.add_child(cell)[m
+[32m+[m
+[32m+[m	[32mcell.setup(self, cell_data, n, m)[m
+ 	[m
+[31m-	var type := E.CellType.Single[m
+[31m-	for diag in E.Diagonal.values():[m
+[31m-		if cell_data.wall_at(diag):[m
+[31m-			type = diag[m
+[31m-	cell.setup(self, type, n, m)[m
+[31m-	[m
+[31m-	for side in E.Side.values():[m
+[31m-		if cell_data.wall_at(side):[m
+[31m-			cell.set_wall(side)[m
+ 	if cell_data.block_full():[m
+ 		cell.set_block(E.Single)[m
+ 	else:[m
+[36m@@ -492,5 +485,4 @@[m [mfunc _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> vo[m
+ 	else:[m
+ 		# First wall should be its own undo part[m
+ 		grid_logic.push_empty_undo()[m
+[31m-	# TODO: Update walls on view[m
+ 	previous_wall_index = new_index[m
+[1mdiff --git a/project/game/level/cells/RegularCell.gd b/project/game/level/cells/RegularCell.gd[m
+[1mindex 2e9f2fe..51e4d91 100644[m
+[1m--- a/project/game/level/cells/RegularCell.gd[m
+[1m+++ b/project/game/level/cells/RegularCell.gd[m
+[36m@@ -72,7 +72,7 @@[m [msignal mouse_entered_corner_button(i: int, j: int, which: E.Waters)[m
+ var row : int[m
+ var column : int[m
+ var type : E.CellType[m
+[31m-var grid[m
+[32m+[m[32mvar grid: GridView[m
+ var water_flags = {[m
+ 	E.Waters.Single: false,[m
+ 	E.Waters.TopLeft: false,[m
+[36m@@ -105,7 +105,7 @@[m [mfunc _process(dt):[m
+ 					Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)[m
+ [m
+ [m
+[31m-func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:[m
+[32m+[m[32mfunc setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int) -> void:[m
+ 	grid = grid_ref[m
+ 	row = i[m
+ 	column = j[m
+[36m@@ -115,29 +115,12 @@[m [mfunc setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:[m
+ 		set_water_level(water, 0.0)[m
+ 	for air in Airs.values():[m
+ 		air.hide()[m
+[31m-	for buttons in Buttons.values():[m
+[31m-		buttons.hide()[m
+[31m-	for wall in Walls.values():[m
+[31m-		wall.hide()[m
+ 	for block in Blocks.values():[m
+ 		block.hide()[m
+ 	for error in Errors.values():[m
+ 		error.modulate.a = 0.0[m
+ 	Boat.modulate.a = 0.0[m
+[31m-	type = new_type[m
+[31m-	match type:[m
+[31m-		E.CellType.Single:[m
+[31m-			Buttons[E.Single].show()[m
+[31m-		E.CellType.IncDiag:[m
+[31m-			Buttons[E.TopLeft].show()[m
+[31m-			Buttons[E.BottomRight].show()[m
+[31m-			set_wall(E.Walls.IncDiag)[m
+[31m-		E.CellType.DecDiag:[m
+[31m-			Buttons[E.TopRight].show()[m
+[31m-			Buttons[E.BottomLeft].show()[m
+[31m-			set_wall(E.Walls.DecDiag)[m
+[31m-		_:[m
+[31m-			push_error("Not a valid type of cell:" + str(type))[m
+[32m+[m	[32mcopy_data(data)[m
+ 	[m
+ 	await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout[m
+ 	[m
+[36m@@ -152,10 +135,25 @@[m [mfunc get_type() -> E.CellType:[m
+ 	return type[m
+ [m
+ [m
+[31m-func set_wall(wall : E.Walls) -> void:[m
+[31m-	Walls[wall].show()[m
+[31m-	if Hints.has(wall):[m
+[31m-		Hints[wall].hide()[m
+[32m+[m[32mfunc copy_data(data: GridModel.CellModel) -> void:[m
+[32m+[m	[32mfor wall in E.Walls.values():[m
+[32m+[m		[32mWalls[wall].set_visible(data.wall_at(wall))[m
+[32m+[m		[32mif Hints.has(wall):[m
+[32m+[m			[32mHints[wall].set_visible(not data.wall_at(wall))[m
+[32m+[m	[32mtype = data.cell_type()[m
+[32m+[m	[32mfor button in Buttons.values():[m
+[32m+[m		[32mbutton.hide()[m
+[32m+[m	[32mmatch type:[m
+[32m+[m		[32mE.CellType.Single:[m
+[32m+[m			[32mButtons[E.Single].show()[m
+[32m+[m		[32mE.CellType.IncDiag:[m
+[32m+[m			[32mButtons[E.TopLeft].show()[m
+[32m+[m			[32mButtons[E.BottomRight].show()[m
+[32m+[m		[32mE.CellType.DecDiag:[m
+[32m+[m			[32mButtons[E.TopRight].show()[m
+[32m+[m			[32mButtons[E.BottomLeft].show()[m
+[32m+[m		[32m_:[m
+[32m+[m			[32mpush_error("Not a valid type of cell:" + str(type))[m
+ [m
+ [m
+ func set_block(block : E.Waters) -> void:[m

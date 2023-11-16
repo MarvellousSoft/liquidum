@@ -110,22 +110,8 @@ func get_missing_boats() -> int:
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
-	
-	var type := E.CellType.Single
-	for diag in E.Diagonal.values():
-		if cell_data.wall_at(diag):
-			type = diag
-	cell.setup(self, type, n, m)
-	
-	for side in E.Side.values():
-		if cell_data.wall_at(side):
-			cell.set_wall(side)
-	if cell_data.block_full():
-		cell.set_block(E.Single)
-	else:
-		for corner in E.Corner.values():
-			if cell_data.block_at(corner):
-				cell.set_block(corner)
+
+	cell.setup(self, cell_data, n, m)
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
@@ -137,8 +123,8 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	return cell
 
 
-func update(do_emit_signal := true) -> void:
-	update_visuals()
+func update(do_emit_signal := true, fast_update := false) -> void:
+	update_visuals(fast_update)
 	update_hints()
 	if do_emit_signal:
 		updated.emit()
@@ -147,8 +133,14 @@ func update(do_emit_signal := true) -> void:
 func is_level_finished():
 	return grid_logic.are_hints_satisfied()
 
+func update_walls() -> void:
+	for i in rows:
+		for j in columns:
+			var cell_data := grid_logic.get_cell(i, j)
+			var cell := get_cell(i, j) as Cell
+			cell.copy_data(cell_data)
 
-func update_visuals() -> void:
+func update_visuals(fast_update := false) -> void:
 	for i in rows:
 		for j in columns:
 			var cell_data := grid_logic.get_cell(i, j)
@@ -173,6 +165,8 @@ func update_visuals() -> void:
 				for corner in E.Corner.values():
 					cell.set_water(corner, cell_data.water_at(corner))
 					cell.set_air(corner, cell_data.air_at(corner))
+			if fast_update:
+				cell.fast_update_waters()
 
 
 func update_hints() -> void:
@@ -486,11 +480,14 @@ func _on_cell_mouse_entered_corner_button(i: int, j: int, which: E.Corner) -> vo
 		if mouse_hold_status == E.MouseDragState.Wall:
 			grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
 										 new_index[0], new_index[1], false)
+			update_walls()
+			update(true, true)
 		if mouse_hold_status == E.MouseDragState.RemoveWall:
 			grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
 											new_index[0], new_index[1], false)
+			update_walls()
+			update(true, true)
 	else:
 		# First wall should be its own undo part
 		grid_logic.push_empty_undo()
-	# TODO: Update walls on view
 	previous_wall_index = new_index

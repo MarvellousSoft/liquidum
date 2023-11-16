@@ -39,8 +39,8 @@ signal mouse_entered_corner_button(i: int, j: int, which: E.Waters)
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
 	E.Walls.Left:$Hints/Left,
-	E.Walls.DecDiag: $Hints/Dec,
-	E.Walls.IncDiag: $Hints/Inc,
+	#E.Walls.DecDiag: $Hints/Dec,
+	#E.Walls.IncDiag: $Hints/Inc,
 }
 @onready var Walls = {
 	E.Walls.Top: $Walls/Top,
@@ -72,7 +72,7 @@ signal mouse_entered_corner_button(i: int, j: int, which: E.Waters)
 var row : int
 var column : int
 var type : E.CellType
-var grid
+var grid: GridView
 var water_flags = {
 	E.Waters.Single: false,
 	E.Waters.TopLeft: false,
@@ -105,44 +105,32 @@ func _process(dt):
 					Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
 
 
-func setup(grid_ref : Node, new_type : E.CellType, i : int, j : int) -> void:
+func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int) -> void:
 	grid = grid_ref
 	row = i
 	column = j
 	disable_wall_editor()
 	for water in Waters.values():
 		water.show()
-		set_water_level(water, 0.0)
+		set_water_level(water, 0.)
 	for air in Airs.values():
 		air.hide()
-	for buttons in Buttons.values():
-		buttons.hide()
-	for wall in Walls.values():
-		wall.hide()
-	for block in Blocks.values():
-		block.hide()
+
 	for error in Errors.values():
 		error.modulate.a = 0.0
 	Boat.modulate.a = 0.0
-	type = new_type
-	match type:
-		E.CellType.Single:
-			Buttons[E.Single].show()
-		E.CellType.IncDiag:
-			Buttons[E.TopLeft].show()
-			Buttons[E.BottomRight].show()
-			set_wall(E.Walls.IncDiag)
-		E.CellType.DecDiag:
-			Buttons[E.TopRight].show()
-			Buttons[E.BottomLeft].show()
-			set_wall(E.Walls.DecDiag)
-		_:
-			push_error("Not a valid type of cell:" + str(type))
+	copy_data(data)
 	
 	await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
 	
 	AnimPlayer.play("startup")
 
+func fast_update_waters() -> void:
+	for flag in water_flags.keys():
+		if water_flags[flag]:
+			set_water_level(Waters[flag], SURFACE_THRESHOLD if grid.is_at_surface(row, column, flag) else 1.0)
+		else:
+			set_water_level(Waters[flag], 0.)
 
 func play_error(which : E.Waters) -> void:
 	Errors[which].get_node("AnimationPlayer").play("error")
@@ -152,13 +140,41 @@ func get_type() -> E.CellType:
 	return type
 
 
-func set_wall(wall : E.Walls) -> void:
-	Walls[wall].show()
-	if Hints.has(wall):
-		Hints[wall].hide()
+func copy_data(data: GridModel.CellModel) -> void:
+	# Need to remove water when changing walls
+	remove_water()
+	remove_air()
+	set_boat(false)
+	for wall in E.Walls.values():
+		var has_wall := data.wall_at(wall)
+		Walls[wall].set_visible(has_wall)
+		if Hints.has(wall):
+			Hints[wall].set_visible(not has_wall)
+	type = data.cell_type()
+	for button in Buttons.values():
+		button.hide()
+	match type:
+		E.CellType.Single:
+			Buttons[E.Single].show()
+		E.CellType.IncDiag:
+			Buttons[E.TopLeft].show()
+			Buttons[E.BottomRight].show()
+		E.CellType.DecDiag:
+			Buttons[E.TopRight].show()
+			Buttons[E.BottomLeft].show()
+		_:
+			push_error("Not a valid type of cell:" + str(type))
+	if data.block_full():
+		set_block(E.Waters.Single)
+	else:
+		for corner in E.Corner.values():
+			if data.block_at(corner):
+				set_block(corner)
 
 
 func set_block(block : E.Waters) -> void:
+	for b in Blocks.values():
+		b.hide()
 	Blocks[block].show()
 	Buttons[block].hide()
 
@@ -202,7 +218,7 @@ func get_corner_water_level(corner : E.Waters) -> float:
 	return Waters[corner].material.get_shader_parameter("level")
 
 
-func set_water_level(water, value) -> void:
+func set_water_level(water: TextureRect, value: float) -> void:
 	water.material.set_shader_parameter("level", value)
 
 
