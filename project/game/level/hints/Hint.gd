@@ -10,14 +10,17 @@ const ERROR_COLOR = Color("#ff6a6aff")
 	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 }
-@onready var Number = $HBoxContainer/Number
-@onready var Boat = $HBoxContainer/Boat
+@onready var ToggleVisibility = $VBoxContainer/ToggleVisibility
+@onready var Number = $VBoxContainer/HBoxContainer/Number
+@onready var Boat = $VBoxContainer/HBoxContainer/Boat
 
 var hint_type : E.HintType = E.HintType.Any
 var is_boat := false
 var hint_value := 0.0
+var editor_mode := false
 
 func _ready():
+	disable_editor()
 	set_boat(false)
 	set_normal()
 	for side in Hints.keys():
@@ -68,3 +71,13 @@ func set_satisfied() -> void:
 
 func set_error() -> void:
 	Number.add_theme_color_override("font_color", ERROR_COLOR)
+
+
+func enable_editor() -> void:
+	editor_mode = true
+	ToggleVisibility.show()
+
+
+func disable_editor() -> void:
+	editor_mode = true
+	ToggleVisibility.hide()

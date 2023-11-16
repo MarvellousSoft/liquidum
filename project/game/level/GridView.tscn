@@ -113,6 +113,7 @@ offset_left = -177.0
 offset_top = -168.0
 offset_right = 248.0
 offset_bottom = 257.0
+mouse_filter = 2
 theme_override_constants/h_separation = 50
 theme_override_constants/v_separation = 50
 columns = 4

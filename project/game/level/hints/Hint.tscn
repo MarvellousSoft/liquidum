@@ -51,13 +51,24 @@ offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 texture = ExtResource("2_3rujp")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 alignment = 1
 
-[node name="Number" type="Label" parent="HBoxContainer"]
+[node name="ToggleVisibility" type="TextureButton" parent="VBoxContainer"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture_normal = ExtResource("3_kqie2")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Number" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -67,7 +78,7 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Boat" type="TextureRect" parent="HBoxContainer"]
+[node name="Boat" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(40, 20)
 layout_mode = 2
