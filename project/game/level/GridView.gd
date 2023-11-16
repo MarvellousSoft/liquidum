@@ -327,37 +327,31 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
-	if cell_data.water_at(corner):
-		match brush_mode:
-			E.BrushMode.Water:
+	match brush_mode:
+		E.BrushMode.Water:
+			grid_logic.push_empty_undo()
+			if cell_data.water_at(corner):
 				mouse_hold_status = E.MouseDragState.RemoveWater
-				cell_data.remove_content(corner)
+				cell_data.remove_content(corner, false)
 				play_water_sound()
-			E.BrushMode.Boat:
-				mouse_hold_status = E.MouseDragState.Boat
-				highlight_error(i, j, which)
-	else:
-		match brush_mode:
-			E.BrushMode.Water:
+			else:
 				mouse_hold_status = E.MouseDragState.Water
-				if cell_data.put_water(corner):
+				if cell_data.put_water(corner, false):
 					play_water_sound()
 				else:
 					highlight_error(i, j, which)
-			E.BrushMode.Boat:
-				if cell_data.has_boat():
-					mouse_hold_status = E.MouseDragState.RemoveBoat
-					cell_data.remove_content(E.Corner.BottomLeft)
-					AudioManager.play_sfx("boat_remove")
+		E.BrushMode.Boat:
+			grid_logic.push_empty_undo()
+			if cell_data.has_boat():
+				mouse_hold_status = E.MouseDragState.RemoveBoat
+				cell_data.remove_content(E.Corner.BottomLeft, false)
+				AudioManager.play_sfx("boat_remove")
+			else:
+				mouse_hold_status = E.MouseDragState.Boat
+				if cell_data.put_boat(false):
+					AudioManager.play_sfx("boat_put")
 				else:
-					mouse_hold_status = E.MouseDragState.Boat
-					if which == E.Single:
-						if cell_data.put_boat():
-							AudioManager.play_sfx("boat_put")
-						else:
-							highlight_error(i, j, which)
-					else:
-						highlight_error(i, j, which)
+					highlight_error(i, j, which)
 	update()
 
 
