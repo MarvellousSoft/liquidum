@@ -10,7 +10,9 @@ const ERROR_COLOR = Color("#ff6a6aff")
 	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 }
-@onready var ToggleVisibility = $VBoxContainer/ToggleVisibility
+@onready var EditorButtons = $VBoxContainer/EditorButtons
+@onready var ToggleHintType = $VBoxContainer/EditorButtons/ToggleHintType
+@onready var ToggleVisibility = $VBoxContainer/EditorButtons/ToggleVisibility
 @onready var Number = $VBoxContainer/HBoxContainer/Number
 @onready var Boat = $VBoxContainer/HBoxContainer/Boat
 
@@ -75,9 +77,9 @@ func set_error() -> void:
 
 func enable_editor() -> void:
 	editor_mode = true
-	ToggleVisibility.show()
+	EditorButtons.show()
 
 
 func disable_editor() -> void:
 	editor_mode = true
-	ToggleVisibility.hide()
+	EditorButtons.hide()
