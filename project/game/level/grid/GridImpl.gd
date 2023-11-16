@@ -372,7 +372,7 @@ class CellWithLoc extends GridModel.CellModel:
 	func put_boat(flush_undo := true) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
-		if i == grid.rows() - 1:
+		if wall_at(E.Walls.Bottom) or pure().cell_type() != E.Single:
 			return false
 		if !grid.is_corner_partially_valid(Content.Boat, i, j, E.Corner.TopRight):
 			return false
