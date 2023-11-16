@@ -13,8 +13,11 @@ class LineHint:
 	var boat_count_type: E.HintType
 
 class GridHints:
+	# Total water in the grid
 	var total_water: float
+	# Total boats in the grid
 	var total_boats: int
+	# Aquariums with these amount of water must be present. Sorted.
 	var expected_aquariums: Array[float]
 
 class CellModel:
@@ -108,6 +111,15 @@ func get_expected_boats() -> int:
 func get_expected_waters() -> float:
 	return GridModel.must_be_implemented()
 
+func all_boats_hint_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
+func all_waters_hint_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
+func all_hints_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
 # Is this a valid solution?
 func are_hints_satisfied() -> bool:
 	return GridModel.must_be_implemented()
@@ -136,8 +148,9 @@ func count_boat_col(_j: int) -> int:
 func grid_hints() -> GridHints:
 	return GridModel.must_be_implemented()
 
-# Returns a boolean for each aquarium hint, whether it is satisfied. Same order as `aquarium_hints`.
-func aquarium_hints_status() -> Array[bool]:
+# Returns a boolean for each aquarium hint, whether it is satisfied. Same order as
+# `grid_hints().expected_aquariums`.
+func aquarium_hints_status() -> Array[E.HintStatus]:
 	return GridModel.must_be_implemented()
 
 enum LoadMode {

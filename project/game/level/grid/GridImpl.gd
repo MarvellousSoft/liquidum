@@ -952,6 +952,9 @@ func _hint_statusi(count: int, hint: int) -> E.HintStatus:
 func all_boats_hint_status() -> E.HintStatus:
 	return _hint_statusi(count_boats(), get_expected_boats())
 
+func all_waters_hint_status() -> E.HintStatus:
+	return _hint_statusf(count_waters(), get_expected_waters())
+
 func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
 	if status1 == E.HintStatus.Wrong or status2 == E.HintStatus.Wrong:
 		return E.HintStatus.Wrong
@@ -962,6 +965,7 @@ func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
 func all_hints_status() -> E.HintStatus:
 	var s := E.HintStatus.Satisfied
 	s = merge_status(s, all_boats_hint_status())
+	s = merge_status(s, all_waters_hint_status())
 	for status in aquarium_hints_status():
 		s = merge_status(s, status)
 	for i in n:
