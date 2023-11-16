@@ -7,6 +7,12 @@ signal updated
 signal mistake_made
 
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
+const PREVIEW_DRAG_COLORS = {
+	"adding": Color("#61fc89df"),
+	"removing": Color("#ff6464df"),
+}
+
+@export var editor_mode := false
 
 @onready var GridCont = $CenterContainer/GridContainer
 @onready var Columns = $CenterContainer/GridContainer/Columns
@@ -14,7 +20,7 @@ const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 	"top": $CenterContainer/GridContainer/HintBarTop,
 	"left": $CenterContainer/GridContainer/HintBarLeft,
 }
-@onready var editor_mode := false
+@onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
 
 var brush_mode : E.BrushMode = E.BrushMode.Water
 var grid_logic : GridModel
@@ -25,6 +31,10 @@ var previous_wall_index := []
 
 func _ready():
 	reset()
+
+
+func _process(_dt):
+	update_drag_preview()
 
 
 func _input(event):
@@ -368,6 +378,24 @@ func get_wall_index(i : int, j : int, which : E.Corner) -> Array:
 		_:
 			push_error("Not a valid corner: " + str(which))
 			return []
+
+#Implementation assumes you have at least one cell at grid
+func get_global_position_by_index(index : Array) -> Vector2:
+	var sample_cell = get_cell(0,0)
+	var pos = Columns.global_position
+	pos.x += index[1]*sample_cell.size.x
+	pos.y += index[0]*sample_cell.size.y
+	return pos
+
+func update_drag_preview() -> void:
+	if previous_wall_index and mouse_hold_status == E.MouseDragState.Wall:
+		DragPreview.default_color = PREVIEW_DRAG_COLORS.adding
+		DragPreview.points = [get_global_position_by_index(previous_wall_index), get_global_mouse_position()]
+	elif previous_wall_index and mouse_hold_status == E.MouseDragState.RemoveWall:
+		DragPreview.default_color = PREVIEW_DRAG_COLORS.removing
+		DragPreview.points = [get_global_position_by_index(previous_wall_index), get_global_mouse_position()]
+	else:
+		DragPreview.points = []
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
