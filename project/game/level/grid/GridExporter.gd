@@ -14,8 +14,7 @@ func _load_pure_cell(data: Dictionary) -> GridImpl.PureCell:
 	var cell := GridImpl.PureCell.empty()
 	cell.c_left = data.c_left
 	cell.c_right = data.c_right
-	cell.diag_wall = (data.cell_type != E.CellType.Single)
-	cell.inverted = (data.cell_type == E.CellType.DecDiag)
+	cell.type = data.cell_type
 	return cell
 
 func _export_grid(grid: Array[Array], inner_export: Callable) -> Array:

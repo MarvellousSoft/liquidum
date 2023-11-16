@@ -111,11 +111,9 @@ func _content_sol(i: int, j: int, corner: E.Corner) -> Content:
 		return solution_c_right[i][j]
 
 class PureCell:
-	# By default, uses inc diagonal /, if inverted uses dec \
-	var inverted: bool
 	var c_left := Content.Nothing
 	var c_right := Content.Nothing
-	var diag_wall: bool
+	var type: E.CellType = E.CellType.Single
 	# Last seen by a dfs
 	var last_seen_left := 0
 	var last_seen_right := 0
@@ -127,7 +125,7 @@ class PureCell:
 		else:
 			return last_seen_right
 	func set_last_seen(corner: E.Corner, val: int) -> void:
-		if !diag_wall:
+		if type == E.Single:
 			last_seen_left = val
 			last_seen_right = val
 		elif E.corner_is_left(corner):
@@ -135,21 +133,22 @@ class PureCell:
 		else:
 			last_seen_right = val
 	func _content_at(corner: E.Corner) -> Content:
-		if c_left == c_right and !diag_wall:
-			return c_left
+		# Maybe c_left != c_right if it's not properly flooded
+		if type == E.Single:
+			return c_left if E.corner_is_left(corner) else c_right
 		match corner:
 			E.TopLeft:
-				return c_left if !inverted else Content.Nothing
+				return c_left if type == E.Inc else Content.Nothing
 			E.TopRight:
-				return c_right if inverted else Content.Nothing
+				return c_right if type == E.Dec else Content.Nothing
 			E.BottomLeft:
-				return c_left if inverted else Content.Nothing
+				return c_left if type == E.Dec else Content.Nothing
 			E.BottomRight:
-				return c_right if !inverted else Content.Nothing
+				return c_right if type == E.Inc else Content.Nothing
 		assert(false, "Invalid corner")
 		return Content.Nothing
 	func _content_full(content: Content) -> bool:
-		return !diag_wall and c_left == content and c_right == content
+		return type == E.Single and c_left == content and c_right == content
 	func water_full() -> bool:
 		return _content_full(Content.Water)
 	func water_at(corner: E.Corner) -> bool:
@@ -167,29 +166,21 @@ class PureCell:
 	func block_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Block
 	func _diag_wall_at(diag: E.Diagonal) -> bool:
-		match diag:
-			E.Diagonal.Dec: # \
-				return inverted and diag_wall
-			E.Diagonal.Inc: # /
-				return !inverted and diag_wall
-		assert(false, "Invalid diagonal")
-		return false
+		return diag == type
 	# Can't override block
 	func put_content(corner: E.Corner, content: Content) -> bool:
 		if _content_at(corner) == Content.Block:
 			return false
+		if not _valid_corner(corner):
+			return false
 		var prev_left := c_left
 		var prev_right := c_right
 		if corner == TopLeft or corner == BottomLeft:
-			if diag_wall:
-				assert(!inverted if corner == TopLeft else inverted, "Invalid corner")
-			elif c_right != Content.Block:
+			if type == E.Single:
 				c_right = content
 			c_left = content
 		else:
-			if diag_wall:
-				assert(!inverted if corner == BottomRight else inverted, "Invalid corner")
-			elif c_left != Content.Block:
+			if type == E.Single:
 				c_left = content
 			c_right = content
 		return prev_left != c_left or prev_right != c_right
@@ -200,7 +191,7 @@ class PureCell:
 	func put_nothing(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Nothing)
 	func _put_boat() -> bool:
-		if diag_wall:
+		if type != E.Single:
 			return false
 		# Only things that can be replaced with boat
 		if c_left != Content.Nothing and c_left != Content.Air:
@@ -211,7 +202,7 @@ class PureCell:
 	func _has_boat() -> bool:
 		return c_left == Content.Boat
 	func _content_count_from(c: Content, corner: E.Corner) -> float:
-		if !diag_wall:
+		if type == E.Single:
 			return _content_count(c)
 		if !_valid_corner(corner):
 			return 0.
@@ -223,47 +214,37 @@ class PureCell:
 	func nothing_count() -> float:
 		return _content_count(Content.Nothing)
 	func eq(other: PureCell) -> bool:
-		return c_left == other.c_left and c_right == other.c_right and inverted == other.inverted and diag_wall == other.diag_wall
+		return c_left == other.c_left and c_right == other.c_right and type == other.type
 	func clone() -> PureCell:
 		var cell := PureCell.empty()
 		cell.c_left = c_left
 		cell.c_right = c_right
-		cell.inverted = inverted
-		cell.diag_wall = diag_wall
+		cell.type = type
 		# last_seen doesn't need to be copied
 		return cell
 	func _content_top() -> Content:
-		return c_right if inverted else c_left
+		return c_right if type == E.Dec else c_left
 	func _content_right() -> Content:
 		return c_right
 	func _content_bottom() -> Content:
-		return c_left if inverted else c_right
+		return c_left if type == E.Dec else c_right
 	func _content_left() -> Content:
 		return c_left
 	func _valid_corner(corner: E.Corner) -> bool:
-		return !diag_wall or (E.corner_to_diag(corner) == E.Diagonal.Dec) == inverted
+		return type == E.Single or E.corner_to_diag(corner) == type
 	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
 		if new:
 			# Water and air are fine to keep. If changing diagonal let's purge everything.
-			if _has_boat() or (c_left != c_right and diag_wall and inverted != (diag == E.Diagonal.Dec)):
+			if _has_boat() or (c_left != c_right and type != E.Single and type != diag):
 				c_left = Content.Nothing
 				c_right = Content.Nothing
-		diag_wall = new
-		inverted = (diag == E.Diagonal.Dec)
-	func cell_type() -> E.CellType:
-		if diag_wall:
-			if inverted:
-				return E.CellType.DecDiag
-			else:
-				return E.CellType.IncDiag
+			type = diag as E.CellType
 		else:
-			return E.CellType.Single
+			type = E.CellType.Single
+	func cell_type() -> E.CellType:
+		return type
 	func equal(other: PureCell) -> bool:
-		if diag_wall != other.diag_wall or (diag_wall and inverted != other.inverted):
-			return false
-		if c_left != other.c_left or c_right != other.c_right:
-			return false
-		return true
+		return eq(other)
 
 class Change:
 	# Undo the changes and return a change that redoes the changes. Might be self.
@@ -589,8 +570,12 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 			if not content_only or cell.c_right != Content.Block:
 				cell.c_right = _str_content(c2)
 			if not content_only:
-				cell.inverted = (c4 == '╲')
-				cell.diag_wall = (c4 == '/' or c4 == '╲')
+				if c4 == '╲':
+					cell.type = E.CellType.DecDiag
+				elif c4 == '/':
+					cell.type = E.CellType.IncDiag
+				else:
+					cell.type = E.CellType.Single
 				if i < n - 1:
 					wall_bottom[i][j] = (c3 == '_' or c3 == 'L')
 				if j > 0:
@@ -679,10 +664,10 @@ func to_str() -> String:
 			else:
 				builder.append("_" if down else ".")
 			var cell := _pure_cell(i, j)
-			if cell.diag_wall:
-				builder.append("╲" if cell.inverted else "/")
-			else:
+			if cell.type == E.Single:
 				builder.append(".")
+			else:
+				builder.append("╲" if cell.type == E.Dec else "/")
 		builder.append("\n")
 	return "".join(builder)
 
@@ -820,17 +805,17 @@ class Dfs:
 		var is_left := E.corner_is_left(corner)
 		var is_top := E.corner_is_top(corner)
 		# Try to flood left
-		if !grid._has_wall_left(i, j) and !(cell.diag_wall and !is_left):
-			flood(i, j - 1, TopRight if grid._pure_cell(i, j - 1).inverted else BottomRight)
+		if !grid._has_wall_left(i, j) and !(cell.type != E.Single and !is_left):
+			flood(i, j - 1, E.diag_to_corner(grid._pure_cell(i, j - 1).type, E.Side.Right))
 		# Try to flood right
-		if !grid._has_wall_right(i, j) and !(cell.diag_wall and is_left):
-			flood(i, j + 1, BottomLeft if grid._pure_cell(i, j + 1).inverted else TopLeft)
+		if !grid._has_wall_right(i, j) and !(cell.type != E.Single and is_left):
+			flood(i, j + 1, E.diag_to_corner(grid._pure_cell(i, j + 1).type, E.Side.Left))
 		# Try to flood down
-		if !grid._has_wall_bottom(i, j) and !(cell.diag_wall and is_top) and _can_go_down(i, j):
-			flood(i + 1, j, TopRight if grid._pure_cell(i + 1, j).inverted else TopLeft)
+		if !grid._has_wall_bottom(i, j) and !(cell.type != E.Single and is_top) and _can_go_down(i, j):
+			flood(i + 1, j, E.diag_to_corner(grid._pure_cell(i + 1, j).type, E.Side.Top))
 		# Try to flood up, if gravity helps
-		if !grid._has_wall_top(i, j) and !(cell.diag_wall and !is_top) and _can_go_up(i, j):
-			flood(i - 1, j, BottomLeft if grid._pure_cell(i - 1, j).inverted else BottomRight)
+		if !grid._has_wall_top(i, j) and !(cell.type != E.Single and !is_top) and _can_go_up(i, j):
+			flood(i - 1, j, E.diag_to_corner(grid._pure_cell(i - 1, j).type, E.Side.Bottom))
 
 class AddWaterDfs extends Dfs:
 	# Water can go up to level min_i because of physics
@@ -1114,7 +1099,7 @@ func validate() -> void:
 		for j in m:
 			var cell := _pure_cell(i, j)
 			if (cell._content_left() == Content.Block) != (cell._content_right() == Content.Block):
-				assert(cell.diag_wall)
+				assert(cell.type != E.Single)
 			if !_has_wall_left(i, j) and cell._content_left() == Content.Block:
 				assert(_pure_cell(i, j - 1)._content_right() == Content.Block)
 			if !_has_wall_right(i, j) and cell._content_right() == Content.Block:
@@ -1129,7 +1114,7 @@ func validate() -> void:
 			var c := _pure_cell(i, j)
 			assert((c._content_left() == Content.Boat) == (c._content_right() == Content.Boat))
 			if get_cell(i, j).has_boat():
-				assert(not _pure_cell(i, j).diag_wall)
+				assert(_pure_cell(i, j).type == E.Single)
 				assert(i < n - 1 and _pure_cell(i + 1, j)._content_top() == Content.Water)
 
 func flood_all(flush_undo := true) -> bool:

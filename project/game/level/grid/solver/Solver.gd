@@ -65,7 +65,7 @@ class RowDfs extends GridImpl.Dfs:
 		if cell.block_at(corner) or cell.air_at(corner):
 			return false
 		if i == row_i and !cell.water_at(corner):
-			comp.size += (1 + int(!cell.diag_wall)) * 0.5
+			comp.size += (1 + int(cell.type == E.Single)) * 0.5
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
 		return i > row_i

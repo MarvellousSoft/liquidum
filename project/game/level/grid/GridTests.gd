@@ -24,12 +24,15 @@ func run_all_tests() -> void:
 		var t_name: String = method["name"]
 		if t_name.begins_with("test_"):
 			print("Running %s" % t_name)
+			var prev_fail := fail
 			call(t_name)
-			if fail > 0:
-				call_deferred("do_fail")
+			if fail > prev_fail:
+				print("FAILED!")
 
-func do_fail() -> void:
-	assert(false)
+	if fail > 0:
+		print("Some tests failed :(")
+	else:
+		print("All tests passed!")
 
 func check(cond: bool) -> void:
 	if not cond and fail == 0:

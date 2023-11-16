@@ -8,7 +8,6 @@ extends Control
 
 func _on_run_pressed():
 	$Tests.run_all_tests()
-	print("All tests passed!")
 
 func _on_tests_show_grids(s1: String, s2: String):
 	g1.setup(s1)
