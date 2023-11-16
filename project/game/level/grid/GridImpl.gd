@@ -378,9 +378,12 @@ class CellWithLoc extends GridModel.CellModel:
 				var c := CellChange.new(i, j, pure().clone())
 				pure()._change_diag_wall(wall as E.Diagonal, new)
 				grid._push_undo_changes([c], flush_undo)
-		if new == false:
+		if new:
+			grid.fix_invalid_boats(false)
+		else:
 			# Removing walls might cause water to flood where it couldn't before
 			grid.flood_all(false)
+		grid.validate()
 	func put_wall(wall: E.Walls, flush_undo := true) -> void:
 		_change_wall(wall, true, flush_undo)
 	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
@@ -406,6 +409,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure()._has_boat()
 	func cell_type() -> E.CellType:
 		return pure().cell_type()
+	func _has_boat_invalid_pos() -> bool:
+		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
 
 func rows() -> int:
 	return n
@@ -1146,10 +1151,21 @@ func flood_all(flush_undo := true) -> bool:
 				if c.last_seen(corner) < last_seen and c.water_at(corner):
 					dfs.min_i = i
 					dfs.flood(i, j, corner)
+	if flush_undo:
+		push_empty_undo()
 	if !dfs.changes.is_empty():
-		_push_undo_changes(dfs.changes, flush_undo)
-		return true
-	return false
+		_push_undo_changes(dfs.changes, false)
+	return fix_invalid_boats(false) or !dfs.changes.is_empty()
+
+func fix_invalid_boats(flush_undo := true) -> bool:
+	var removed_boat := false
+	for i in n:
+		for j in m:
+			var c := get_cell(i, j)
+			if c._has_boat_invalid_pos():
+				c.remove_content(E.Corner.TopLeft, false)
+				removed_boat = true
+	return removed_boat
 
 func flood_air(flush_undo := true) -> bool:
 	if flush_undo:

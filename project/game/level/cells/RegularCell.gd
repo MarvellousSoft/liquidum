@@ -187,8 +187,8 @@ func remove_water() -> void:
 
 
 func set_water(water : E.Waters, value: bool) -> void:
-		set_boat(false)
-		water_flags[water] = value
+	set_boat(false)
+	water_flags[water] = value
 
 
 func remove_air() -> void:

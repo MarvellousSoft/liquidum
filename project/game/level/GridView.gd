@@ -44,11 +44,13 @@ func _input(event):
 		if not event.pressed:
 			mouse_hold_status = E.MouseDragState.None
 			previous_wall_index = []
-	elif grid_logic and event.is_action_pressed("undo"):
+	elif grid_logic and event.is_action_pressed(&"undo"):
 		grid_logic.undo()
+		update_walls()
 		update()
-	elif grid_logic and event.is_action_pressed("redo"):
+	elif grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
+		update_walls()
 		update()
 
 
