@@ -72,9 +72,9 @@ func get_cols(s: String) -> int:
 
 
 func str_grid(s: String) -> GridModel:
-	var g := GridImpl.from_str(s, GridModel.LoadMode.FreeEdit)
+	var g := GridImpl.from_str(s, GridModel.LoadMode.Testing)
 	# Let's check it loads and unloads correctly
-	var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.FreeEdit)
+	var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 	assert(g.equal(g2))
 	return g
 
@@ -87,7 +87,7 @@ func test_simple() -> void:
 	"""
 	var g := GridImpl.create(2, 2)
 	check(!g.get_cell(0, 0).water_full())
-	g.load_from_str(simple, GridModel.LoadMode.FreeEdit)
+	g.load_from_str(simple, GridModel.LoadMode.Testing)
 	# Check waters make sense
 	check(g.get_cell(0, 0).water_full())
 	for corner in [BottomLeft, BottomRight, TopLeft, TopRight]:

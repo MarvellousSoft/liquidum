@@ -32,7 +32,7 @@ b.......
 
 
 func setup(level : String):
-	GridNode.setup(level, GridModel.LoadMode.FreeEdit)
+	GridNode.setup(level, GridModel.LoadMode.Editor)
 	update_expected_waters = GridNode.get_expected_waters() > 0
 	update_expected_boats = GridNode.get_expected_boats() > 0
 	Counters.water.visible = GridNode.get_expected_waters() != 0

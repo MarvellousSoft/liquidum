@@ -207,10 +207,17 @@ func update_visuals(fast_update := false) -> void:
 
 
 func update_hints() -> void:
+	var row_hints := grid_logic.row_hints()
 	for i in rows:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
 			var hint = HintBars.left.get_hint(i, hint_type == E.HintContent.Boat)
 			if hint:
+				var val := float(row_hints[i].boat_count) if hint_type == E.HintContent.Boat else row_hints[i].water_count
+				hint.set_value(val)
+				if val > 0.5:
+					hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
+				else:
+					hint.set_hint_type(E.HintType.Any)
 				match grid_logic.get_row_hint_status(i, hint_type):
 					E.HintStatus.Normal:
 						hint.set_normal()
@@ -218,10 +225,17 @@ func update_hints() -> void:
 						hint.set_satisfied()
 					E.HintStatus.Wrong:
 						hint.set_error()
+	var col_hints := grid_logic.col_hints()
 	for j in columns:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
 			var hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
 			if hint:
+				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
+				hint.set_value(val)
+				if hint_type != E.HintContent.Boat and val > 0.5:
+					hint.set_hint_type(col_hints[j].water_count_type)
+				else:
+					hint.set_hint_type(E.HintType.Any)
 				match grid_logic.get_col_hint_status(j, hint_type):
 					E.HintStatus.Normal:
 						hint.set_normal()

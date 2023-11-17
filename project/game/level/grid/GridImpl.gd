@@ -49,6 +49,7 @@ var redo_stack: Array[Changes] = []
 
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
+var auto_update_hints: bool = false
 
 func _init(n_: int, m_: int) -> void:
 	setup(n_, m_)
@@ -342,6 +343,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if !water_at(corner):
 			var changes := grid._flood_water(i, j, corner, true)
 			grid._push_undo_changes(changes, flush_undo)
+		grid.maybe_update_hints()
 		return true
 	func put_block(corner: E.Corner, flush_undo := true) -> bool:
 		if not grid.editor_mode():
@@ -351,13 +353,12 @@ class CellWithLoc extends GridModel.CellModel:
 		var change := CellChange.new(i, j, pure().clone())
 		var single := pure().cell_type() == E.Single
 		for side in E.Side.values():
-			print("Maybe %s" % E.Side.find_key(side))
 			if not wall_at(side) and (single or E.corner_is_side(corner, side)):
-				print("YES")
 				put_wall(side, false)
 		if pure().put_block(corner):
 			grid._push_undo_changes([change], false)
 			return true
+		grid.maybe_update_hints()
 		return false
 	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
 		if flush_undo:
@@ -374,6 +375,7 @@ class CellWithLoc extends GridModel.CellModel:
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes, false)
+		grid.maybe_update_hints()
 		return true
 	func remove_content(corner: E.Corner, flush_undo := true) -> void:
 		if block_at(corner) and not grid.editor_mode():
@@ -396,6 +398,7 @@ class CellWithLoc extends GridModel.CellModel:
 			if change.prev_cell.block_at(corner):
 				grid.flood_all(false)
 		grid._push_undo_changes(changes, false)
+		grid.maybe_update_hints()
 	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool) -> void:
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
@@ -414,6 +417,7 @@ class CellWithLoc extends GridModel.CellModel:
 			# Removing walls might cause water to flood where it couldn't before
 			grid.flood_all(false)
 		grid.validate()
+		grid.maybe_update_hints()
 	func put_wall(wall: E.Walls, flush_undo := true) -> bool:
 		_change_wall(wall, true, flush_undo)
 		return true
@@ -435,6 +439,7 @@ class CellWithLoc extends GridModel.CellModel:
 		var change: Change = CellChange.new(i, j, pure().clone())
 		if pure()._put_boat():
 			grid._push_undo_changes([change], false)
+			grid.maybe_update_hints()
 			return true
 		return false
 	func has_boat() -> bool:
@@ -458,11 +463,13 @@ func get_cell(i: int, j: int) -> CellModel:
 
 # TODO: Rename
 func set_hint_row(i: int, v: float) -> void:
-	_row_hints[i].water_count = v
+	if not editor_mode() or not auto_update_hints:
+		_row_hints[i].water_count = v
 
 # TODO: Rename
 func set_hint_col(j: int, v: float) -> void:
-	_col_hints[j].water_count = v
+	if not editor_mode() or not auto_update_hints:
+		_col_hints[j].water_count = v
 
 func row_hints() -> Array[LineHint]:
 	return _row_hints
@@ -515,6 +522,23 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 
 func editor_mode() -> bool:
 	return solution_c_left.is_empty()
+
+func maybe_update_hints() -> void:
+	if not editor_mode() or not auto_update_hints:
+		return
+	_grid_hints.total_boats = count_boats()
+	_grid_hints.total_water = count_waters()
+	_grid_hints.expected_aquariums = _all_aquariums_count()
+	for i in n:
+		_row_hints[i].boat_count = count_boat_row(i)
+		_row_hints[i].boat_count_type = E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
+		_row_hints[i].water_count = count_water_row(i)
+		_row_hints[i].water_count_type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
+	for j in m:
+		_col_hints[j].boat_count = count_boat_col(j)
+		_col_hints[j].boat_count_type = E.HintType.Together if _is_together(_col_bools(j, Content.Boat)) else E.HintType.Separated
+		_col_hints[j].water_count = count_water_col(j)
+		_col_hints[j].water_count_type = E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
@@ -652,6 +676,9 @@ func _finish_loading(load_mode: LoadMode) -> void:
 			solution_c_right.append(pure_cells[i].map(func(c): return c.c_right))
 		if load_mode != GridModel.LoadMode.SolutionNoClear:
 			clear_content()
+	if load_mode == LoadMode.Editor:
+		auto_update_hints = true
+	maybe_update_hints()
 
 func _col_hint(h: int) -> String:
 	if h < 0:
@@ -742,6 +769,7 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
 	assert(!flood_all(false))
+	maybe_update_hints()
 	return true
 
 func push_empty_undo() -> void:

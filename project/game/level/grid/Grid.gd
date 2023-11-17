@@ -158,8 +158,10 @@ enum LoadMode {
 	Solution,
 	# Same as above, but doesn't clear the contents.
 	SolutionNoClear,
-	# Doesn't need to be a solution. Useful for level editing and testing.
-	FreeEdit,
+	# Doesn't need to be a solution. Rules auto-update. Useful for level editing.
+	Editor,
+	# For testing. Hints don't auto update.
+	Testing,
 	# Load only the content. Useful for loading from a user save file.
 	ContentOnly,
 }
