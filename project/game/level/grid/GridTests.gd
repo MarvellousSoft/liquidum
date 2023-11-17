@@ -472,3 +472,18 @@ func test_put_wall() -> void:
 	assert(g.get_cell(0, 0).water_at(TopRight))
 	g.remove_wall_from_idx(0, 0, 1, 1, false)
 	assert(g.get_cell(0, 0).water_at(BottomLeft))
+	g = GridImpl.create(3, 3)
+	g.put_wall_from_idx(3, 3, 0, 0)
+	var dec_dig := """
+	......
+	|╲....
+	......
+	|..╲..
+	......
+	L._._╲
+	"""
+	assert_grid_eq(g.to_str(), dec_dig)
+	g.undo()
+	assert_grid_eq(g.to_str(), GridImpl.create(3, 3).to_str())
+	g.put_wall_from_idx(0, 0, 3, 3)
+	assert_grid_eq(g.to_str(), dec_dig)

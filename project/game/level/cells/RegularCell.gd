@@ -164,15 +164,12 @@ func copy_data(data: GridModel.CellModel) -> void:
 func update_blocks(data: GridModel.CellModel) -> void:
 	for b in Blocks.values():
 		b.hide()
-	var any = false
 	if data.block_full():
 		set_block(E.Waters.Single)
-		any = true
 	else:
 		for corner in E.Corner.values():
 			if data.block_at(corner):
 				set_block(corner)
-				any  = true
 
 func set_block(block : E.Waters) -> void:
 	Blocks[block].show()

@@ -10,8 +10,8 @@ func _on_run_pressed():
 	$Tests.run_all_tests()
 
 func _on_tests_show_grids(s1: String, s2: String):
-	g1.setup(s1)
-	g2.setup(s2)
+	g1.setup(s1, GridModel.LoadMode.FreeEdit)
+	g2.setup(s2, GridModel.LoadMode.FreeEdit)
 	scale_grids()
 
 const desired_w := 780.

@@ -246,6 +246,8 @@ class PureCell:
 		return type
 	func equal(other: PureCell) -> bool:
 		return eq(other)
+	func to_str() -> String:
+		return "PureCell(%s, %s, %s)" % [E.CellType.find_key(type), Content.find_key(c_left), Content.find_key(c_right)]
 
 class Change:
 	# Undo the changes and return a change that redoes the changes. Might be self.
@@ -261,10 +263,10 @@ class CellChange extends Change:
 		j = j_
 		prev_cell = prev_cell_
 	func undo(grid: GridImpl) -> Change:
-		var now_cell: PureCell = grid.pure_cells[i][j]
-		grid.pure_cells[i][j] = prev_cell
 		# Maybe clone isn't necessary, but let's be safe
-		prev_cell = now_cell.clone()
+		var new_cell: PureCell = grid.pure_cells[i][j].clone()
+		grid.pure_cells[i][j] = prev_cell
+		prev_cell = new_cell
 		return self
 
 class WallChange extends Change:
@@ -709,7 +711,7 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
-	assert(!flood_all())
+	assert(!flood_all(false))
 	return true
 
 func push_empty_undo() -> void:
@@ -761,7 +763,7 @@ func _idx_to_cell_wall(i1: int, j1: int, i2: int, j2: int) -> Array[Vector3i]:
 		var j := mini(j1, j2)
 		for i in range(mini(i1, i2), maxi(i1, i2)):
 			ans.append(Vector3i(i, j, E.Walls.DecDiag))
-			j -= 1
+			j += 1
 	#invalid
 	else:
 		pass
@@ -1158,6 +1160,8 @@ func flood_all(flush_undo := true) -> bool:
 	return fix_invalid_boats(false) or !dfs.changes.is_empty()
 
 func fix_invalid_boats(flush_undo := true) -> bool:
+	if flush_undo:
+		push_empty_undo()
 	var removed_boat := false
 	for i in n:
 		for j in m:
