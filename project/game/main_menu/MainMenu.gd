@@ -8,8 +8,22 @@ func _ready():
 	
 	Version.text = Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION
-	
 	randomize()
-	TransitionManager.change_scene("res://game/level/Level.tscn")
+	
+	var level = preload("res://game/level/Level.tscn").instantiate()
+	level.level_string = """
++boats=1
++waters=10
+B.......
+.h6.4.2.
+11##bb.w
+..L.|..╲
+.4wwww..
+..|╲./|.
+.4www..w
+..L../.╲
+.3www...
+..L._╲|."""
+	TransitionManager.change_scene(level)
 
 

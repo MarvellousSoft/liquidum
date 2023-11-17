@@ -2,8 +2,8 @@ extends CanvasLayer
 
 signal transition_finished
 
-@onready var Effect = $Effect
-@onready var AnimPlayer = $AnimationPlayer
+@onready var Effect: ColorRect = $Effect
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 
 var active = false
 
@@ -13,7 +13,7 @@ func _ready():
 	visible = false
 
 
-func change_scene(scene_path):
+func change_scene(scene: Node) -> void:
 	active = true
 	visible = true
 	AudioManager.play_sfx("wave_in")
@@ -23,7 +23,8 @@ func change_scene(scene_path):
 	
 	await AnimPlayer.animation_finished
 	
-	get_tree().change_scene_to_file(scene_path)
+	get_tree().unload_current_scene()
+	get_tree().root.add_child(scene)
 	
 	await get_tree().create_timer(.2).timeout
 	
@@ -35,4 +36,4 @@ func change_scene(scene_path):
 	visible = false
 	active = false
 	
-	emit_signal("transition_finished")
+	transition_finished.emit()

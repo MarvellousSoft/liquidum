@@ -12,23 +12,13 @@ const COUNTER_DELAY_STARTUP = .3
 var update_expected_waters : bool
 var update_expected_boats : bool
 
+var level_string := ""
+
 func _ready():
 	await TransitionManager.transition_finished
 	
 	AudioManager.play_bgm("main")
-	setup("""
-+boats=1
-+waters=10
-B.......
-.h6.4.2.
-11##bb.w
-..L.|..╲
-.4wwww..
-..|╲./|.
-.4www..w
-..L../.╲
-.3www...
-..L._╲|.""")
+	setup(level_string)
 
 
 func setup(level : String):
