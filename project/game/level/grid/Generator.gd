@@ -23,8 +23,6 @@ func any_empty(g: Array[Array]) -> Vector2i:
 				return Vector2i(i, j)
 	return Vector2i(-1, -1)
 
-
-
 class AdjacencyRule:
 	func all_adj(_from: Vector2i) -> Array[Vector2i]:
 		return GridModel.must_be_implemented()

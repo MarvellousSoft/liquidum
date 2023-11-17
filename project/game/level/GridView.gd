@@ -234,16 +234,19 @@ func update_hints() -> void:
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
+
 func _connections_down(i: int, j: int, corner: E.Waters) -> Array[int]:
 	var conns: Array[int] = []
 	var single := (corner == E.Waters.Single)
 	# Check down
 	if !grid_logic.wall_at(i, j, E.Side.Bottom) and (single or !E.corner_is_top(corner as E.Corner)):
 		conns.append(j)
+	# Check down right
 	if !grid_logic.wall_at(i, j, E.Side.Right) and (single or !E.corner_is_left(corner as E.Corner)):
 		var c := grid_logic.get_cell(i, j + 1)
 		if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Bottom):
 			conns.append(j + 1)
+	# Check down left
 	if !grid_logic.wall_at(i, j, E.Side.Left) and (single or E.corner_is_left(corner as E.Corner)):
 		var c := grid_logic.get_cell(i, j - 1)
 		if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Bottom):
@@ -256,10 +259,12 @@ func _connections_up(i: int, j: int, corner: E.Waters) -> Array[int]:
 	# Check down
 	if !grid_logic.wall_at(i, j, E.Side.Top) and (single or E.corner_is_top(corner as E.Corner)):
 		conns.append(j)
+	# Check up right
 	if !grid_logic.wall_at(i, j, E.Side.Right) and (single or !E.corner_is_left(corner as E.Corner)):
 		var c := grid_logic.get_cell(i, j + 1)
 		if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Top):
 			conns.append(j + 1)
+	# Check up left
 	if !grid_logic.wall_at(i, j, E.Side.Left) and (single or E.corner_is_left(corner as E.Corner)):
 		var c := grid_logic.get_cell(i, j - 1)
 		if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Top):
@@ -378,6 +383,7 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 				mouse_hold_status = E.MouseDragState.Block
 				if not cell_data.put_block(corner, false):
 					highlight_error(i, j, which)
+			update_walls()
 			get_cell(i, j).update_blocks(cell_data)
 	update()
 
@@ -429,6 +435,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Block and cell_data.nothing_at(corner):
 		if cell_data.put_block(corner, false):
+			update_walls()
 			get_cell(i, j).update_blocks(cell_data)
 		else:
 			highlight_error(i, j, which)
@@ -443,6 +450,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		AudioManager.play_sfx("boat_remove")
 	elif mouse_hold_status == E.MouseDragState.RemoveBlock and cell_data.block_at(corner):
 		cell_data.remove_content(corner, false)
+		update_walls()
 		get_cell(i, j).update_blocks(cell_data)
 	
 	update()

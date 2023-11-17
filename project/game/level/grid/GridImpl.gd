@@ -224,13 +224,25 @@ class PureCell:
 		# last_seen doesn't need to be copied
 		return cell
 	func _content_top() -> Content:
-		return c_right if type == E.Dec else c_left
+		return _content_side(E.Side.Top)
 	func _content_right() -> Content:
 		return c_right
 	func _content_bottom() -> Content:
-		return c_left if type == E.Dec else c_right
+		return _content_side(E.Side.Bottom)
 	func _content_left() -> Content:
 		return c_left
+	func _content_side(side: E.Side) -> Content:
+		match side:
+			E.Top:
+				return c_right if type == E.Dec else c_left
+			E.Right:
+				return c_right
+			E.Bottom:
+				return c_left if type == E.Dec else c_right
+			E.Left:
+				return c_left
+		assert(false, "Invalid size")
+		return Content.Nothing
 	func _valid_corner(corner: E.Corner) -> bool:
 		return type == E.Single or E.corner_to_diag(corner) == type
 	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
@@ -334,9 +346,17 @@ class CellWithLoc extends GridModel.CellModel:
 	func put_block(corner: E.Corner, flush_undo := true) -> bool:
 		if not grid.editor_mode():
 			return false
+		if flush_undo:
+			grid.push_empty_undo()
 		var change := CellChange.new(i, j, pure().clone())
+		var single := pure().cell_type() == E.Single
+		for side in E.Side.values():
+			print("Maybe %s" % E.Side.find_key(side))
+			if not wall_at(side) and (single or E.corner_is_side(corner, side)):
+				print("YES")
+				put_wall(side, false)
 		if pure().put_block(corner):
-			grid._push_undo_changes([change], flush_undo)
+			grid._push_undo_changes([change], false)
 			return true
 		return false
 	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
@@ -363,6 +383,12 @@ class CellWithLoc extends GridModel.CellModel:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false))
+		if block_at(corner):
+			# Add walls when removing block as well in case there was a nonwall between two blocks
+			var single := pure().cell_type() == E.Single
+			for side in E.Side.values():
+				if not wall_at(side) and (single or E.corner_is_side(corner, side)):
+					put_wall(side)
 		var change := CellChange.new(i, j, pure().clone())
 		if pure().put_nothing(corner):
 			changes.append(change)
@@ -383,13 +409,17 @@ class CellWithLoc extends GridModel.CellModel:
 		if new:
 			grid.fix_invalid_boats(false)
 		else:
+			# Maybe some block is invalid
+			grid.fix_block_walls()
 			# Removing walls might cause water to flood where it couldn't before
 			grid.flood_all(false)
 		grid.validate()
-	func put_wall(wall: E.Walls, flush_undo := true) -> void:
+	func put_wall(wall: E.Walls, flush_undo := true) -> bool:
 		_change_wall(wall, true, flush_undo)
-	func remove_wall(wall: E.Walls, flush_undo := true) -> void:
+		return true
+	func remove_wall(wall: E.Walls, flush_undo := true) -> bool:
 		_change_wall(wall, false, flush_undo)
+		return true
 	func put_boat(flush_undo := true) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
@@ -853,6 +883,8 @@ class AddWaterDfs extends Dfs:
 		match cell._content_at(corner):
 			Content.Nothing, Content.Air, Content.Boat, Content.Water:
 				cell.put_water(corner)
+			Content.Block:
+				return false
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
 		return i - 1 >= min_i
@@ -1170,6 +1202,15 @@ func fix_invalid_boats(flush_undo := true) -> bool:
 				c.remove_content(E.Corner.TopLeft, false)
 				removed_boat = true
 	return removed_boat
+
+func fix_block_walls() -> void:
+	for i in n:
+		for j in m:
+			var c := get_cell(i, j)
+			if not c.wall_at(E.Walls.Right) and (c.pure()._content_right() == Content.Block or _pure_cell(i, j + 1)._content_left() == Content.Block):
+				c.put_wall(E.Walls.Right, false)
+			if not c.wall_at(E.Walls.Bottom) and (c.pure()._content_bottom() == Content.Block or _pure_cell(i + 1, j)._content_top() == Content.Block):
+				c.put_wall(E.Walls.Bottom, false)
 
 func flood_air(flush_undo := true) -> bool:
 	if flush_undo:
