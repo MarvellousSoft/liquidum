@@ -16,7 +16,7 @@ static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> Gri
 	var rows_ := (my_s.count('\n') + 1) / 2
 	var cols_ := my_s.find('\n') / 2
 	assert(rows_ > 0 and cols_ > 0)
-	if my_s[0] == 'b' and my_s.find('h') != -1:
+	if my_s[0] == 'B' and my_s.find('h') != -1:
 		rows_ -= 1
 		cols_ -= 1
 	var g := GridImpl.new(rows_, cols_)
@@ -621,7 +621,7 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 			_parse_extra_data(lines[0])
 		lines.remove_at(0)
 	# Offset because of hints
-	var hb := int(lines[0][0] == 'b')
+	var hb := int(lines[0][0] == 'B')
 	var hh := int(lines[hb][hb] == 'h')
 	if hb == 1 and not content_only:
 		for i in n:
@@ -712,7 +712,7 @@ func to_str() -> String:
 	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1) or _col_hints.any(func(h): return h.boat_count != -1)
 	var hints := _row_hints.any(func(h): return h.water_count != -1.) or _col_hints.any(func(h): return h.water_count != -1.)
 	if boat_hints:
-		builder.append('b')
+		builder.append('B')
 		if hints:
 			builder.append('.')
 		for j in m:
@@ -883,9 +883,11 @@ class Dfs:
 		cell.set_last_seen(corner, grid.last_seen)
 		# Try to flood the same cell
 		var prev_cell := cell.clone()
-		self._cell_logic(i, j, corner, cell)
+		var keep_going := self._cell_logic(i, j, corner, cell)
 		if !cell.eq(prev_cell):
 			changes.append(CellChange.new(i, j, prev_cell))
+		if not keep_going:
+			return
 		var is_left := E.corner_is_left(corner)
 		var is_top := E.corner_is_top(corner)
 		# Try to flood left

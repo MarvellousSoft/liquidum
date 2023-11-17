@@ -191,7 +191,7 @@ enum LoadMode {
 # two characters long. (That's because hints in the actual game increment by 0.5)
 # The other characters must be '.', and any row or column may not have a hint. (0, 0) should be 'h'
 # (If the row hint has two characters, it must be one per line.)
-# For boat hint, the same follows, but the (0,0) characted must be 'b'. And the hints aren't
+# For boat hint, the same follows, but the (0,0) characted must be 'B'. And the hints aren't
 # multiplied by two.
 # Example:
 # wwwx

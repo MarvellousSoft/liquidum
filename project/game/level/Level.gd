@@ -19,7 +19,7 @@ func _ready():
 	setup("""
 +boats=1
 +waters=10
-b.......
+B.......
 .h6.4.2.
 11##bb.w
 ..L.|..╲
