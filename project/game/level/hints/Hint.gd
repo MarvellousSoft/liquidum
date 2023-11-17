@@ -24,7 +24,7 @@ var editor_mode := false
 func _ready():
 	disable_editor()
 	set_boat(false)
-	set_normal()
+	set_status(E.HintStatus.Normal)
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
 
@@ -62,17 +62,14 @@ func no_hint() -> void:
 func set_hint_visibility(which : E.Walls, value : bool) -> void:
 	Hints[which].visible = value
 
-
-func set_normal() -> void:
-	Number.add_theme_color_override("font_color", NORMAL_COLOR)
-
-
-func set_satisfied() -> void:
-	Number.add_theme_color_override("font_color", SATISFIED_COLOR)
-
-
-func set_error() -> void:
-	Number.add_theme_color_override("font_color", ERROR_COLOR)
+func set_status(status: E.HintStatus) -> void:
+	match status:
+		E.HintStatus.Normal:
+			Number.add_theme_color_override("font_color", NORMAL_COLOR)
+		E.HintStatus.Satisfied:
+			Number.add_theme_color_override("font_color", SATISFIED_COLOR)
+		E.HintStatus.Wrong:
+			Number.add_theme_color_override("font_color", ERROR_COLOR)
 
 
 func enable_editor() -> void:

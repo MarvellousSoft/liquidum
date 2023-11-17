@@ -218,13 +218,7 @@ func update_hints() -> void:
 					hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
 				else:
 					hint.set_hint_type(E.HintType.Any)
-				match grid_logic.get_row_hint_status(i, hint_type):
-					E.HintStatus.Normal:
-						hint.set_normal()
-					E.HintStatus.Satisfied:
-						hint.set_satisfied()
-					E.HintStatus.Wrong:
-						hint.set_error()
+				hint.set_status(grid_logic.get_row_hint_status(i, hint_type))
 	var col_hints := grid_logic.col_hints()
 	for j in columns:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
@@ -236,13 +230,7 @@ func update_hints() -> void:
 					hint.set_hint_type(col_hints[j].water_count_type)
 				else:
 					hint.set_hint_type(E.HintType.Any)
-				match grid_logic.get_col_hint_status(j, hint_type):
-					E.HintStatus.Normal:
-						hint.set_normal()
-					E.HintStatus.Satisfied:
-						hint.set_satisfied()
-					E.HintStatus.Wrong:
-						hint.set_error()
+				hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
 
 
 func get_cell(i: int, j: int) -> Node:
