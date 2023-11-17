@@ -531,14 +531,24 @@ func maybe_update_hints() -> void:
 	_grid_hints.expected_aquariums = _all_aquariums_count()
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
-		_row_hints[i].boat_count_type = E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
+		var type := E.HintType.Any
+		if _row_hints[i].boat_count > 1:
+			type = E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
+		_row_hints[i].boat_count_type = type
 		_row_hints[i].water_count = count_water_row(i)
-		_row_hints[i].water_count_type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
+		type = E.HintType.Any
+		if _row_hints[i].water_count > 0.5:
+			type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
+		_row_hints[i].water_count_type = type
 	for j in m:
 		_col_hints[j].boat_count = count_boat_col(j)
-		_col_hints[j].boat_count_type = E.HintType.Together if _is_together(_col_bools(j, Content.Boat)) else E.HintType.Separated
+		# This is always Any
+		_col_hints[j].boat_count_type = E.HintType.Any
 		_col_hints[j].water_count = count_water_col(j)
-		_col_hints[j].water_count_type = E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
+		var type := E.HintType.Any
+		if _col_hints[j].water_count > 0.5:
+			type = E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
+		_col_hints[j].water_count_type = type
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
@@ -983,6 +993,7 @@ func _all_aquariums_count() -> Array[float]:
 					dfs.water_count = 0
 					dfs.flood(i, j, corner)
 					counts.append(dfs.water_count)
+	counts.sort()
 	return counts
 
 func aquarium_hints_status() -> Array[E.HintStatus]:

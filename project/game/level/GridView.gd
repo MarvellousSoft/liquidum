@@ -214,11 +214,11 @@ func update_hints() -> void:
 			if hint:
 				var val := float(row_hints[i].boat_count) if hint_type == E.HintContent.Boat else row_hints[i].water_count
 				hint.set_value(val)
-				if val > 0.5:
-					hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
+				hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
+				if not editor_mode:
+					hint.set_status(grid_logic.get_row_hint_status(i, hint_type))
 				else:
-					hint.set_hint_type(E.HintType.Any)
-				hint.set_status(grid_logic.get_row_hint_status(i, hint_type))
+					hint.set_status(E.HintStatus.Normal)
 	var col_hints := grid_logic.col_hints()
 	for j in columns:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
@@ -226,11 +226,11 @@ func update_hints() -> void:
 			if hint:
 				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
 				hint.set_value(val)
-				if hint_type != E.HintContent.Boat and val > 0.5:
-					hint.set_hint_type(col_hints[j].water_count_type)
+				hint.set_hint_type(col_hints[j].water_count_type)
+				if not editor_mode:
+					hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
 				else:
-					hint.set_hint_type(E.HintType.Any)
-				hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
+					hint.set_status(E.HintStatus.Normal)
 
 
 func get_cell(i: int, j: int) -> Node:

@@ -19,6 +19,7 @@ offset_bottom = 1080.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
 layout_mode = 2
+editor_mode = true
 
 [node name="SolveButton" type="Button" parent="."]
 offset_left = 147.0
