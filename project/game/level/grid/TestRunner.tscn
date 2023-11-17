@@ -41,7 +41,6 @@ offset_bottom = 371.0
 metadata/_edit_use_anchors_ = true
 
 [node name="BrushPicker2" parent="." instance=ExtResource("3_1jrm3")]
-editor_mode = true
 
 [node name="Tests" type="Node" parent="."]
 script = ExtResource("3_ftgq8")

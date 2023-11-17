@@ -13,7 +13,7 @@ const PREVIEW_DRAG_COLORS = {
 	"removing": Color("#ff6464df"),
 }
 
-@export var editor_mode := false
+var editor_mode := false
 
 @onready var GridCont = $CenterContainer/GridContainer
 @onready var Columns = $CenterContainer/GridContainer/Columns
@@ -60,8 +60,9 @@ func reset() -> void:
 	for child in CellCornerGrid.get_children():
 		CellCornerGrid.remove_child(child)
 
-func setup(level : String, load_mode := GridModel.LoadMode.Solution) -> void:
-	grid_logic = GridImpl.from_str(level, load_mode)
+func setup(grid_logic_: GridModel) -> void:
+	grid_logic = grid_logic_
+	editor_mode = grid_logic.editor_mode()
 	rows = grid_logic.rows()
 	columns = grid_logic.cols()
 	reset()
@@ -226,7 +227,7 @@ func update_hints() -> void:
 			if hint:
 				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
 				hint.set_value(val)
-				hint.set_hint_type(col_hints[j].water_count_type)
+				hint.set_hint_type(col_hints[j].boat_count_type if hint_type == E.HintContent.Boat else col_hints[j].water_count_type)
 				if not editor_mode:
 					hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
 				else:

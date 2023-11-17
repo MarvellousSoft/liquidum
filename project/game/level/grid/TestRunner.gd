@@ -6,12 +6,15 @@ extends Control
 # Runs tests, in the future, we can make this more extendable, test classes
 # and stuffs. But for now, this is enough.
 
+func _ready() -> void:
+	$BrushPicker.setup(true)
+
 func _on_run_pressed():
 	$Tests.run_all_tests()
 
 func _on_tests_show_grids(s1: String, s2: String):
-	g1.setup(s1, GridModel.LoadMode.Testing)
-	g2.setup(s2, GridModel.LoadMode.Testing)
+	g1.setup(GridImpl.from_str(s1, GridModel.LoadMode.Testing))
+	g2.setup(GridImpl.from_str(s2, GridModel.LoadMode.Testing))
 	scale_grids()
 
 const desired_w := 780.
@@ -47,10 +50,10 @@ func _on_gen_pressed() -> void:
 	var g := await gen_puzzle()
 	$SolvedType.text = ""
 	var sol_str := g.to_str()
-	g1.setup(sol_str, GridModel.LoadMode.SolutionNoClear)
+	g1.setup(GridImpl.from_str(sol_str, GridModel.LoadMode.SolutionNoClear))
 	g.clear_content()
 	# Solver needs to play with it, can't be limited by the solution
-	g2.setup(g.to_str(), GridModel.LoadMode.Editor)
+	g2.setup(GridImpl.from_str(g.to_str(), GridModel.LoadMode.Editor))
 	scale_grids()
 	$Gen.disabled = false
 
@@ -65,7 +68,7 @@ func _on_grid_2_updated():
 
 
 func _on_paste_pressed():
-	g2.setup(DisplayServer.clipboard_get(), GridModel.LoadMode.Editor)
+	g2.setup(GridImpl.from_str(DisplayServer.clipboard_get(), GridModel.LoadMode.Editor))
 	scale_grids()
 
 

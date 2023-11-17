@@ -11,7 +11,7 @@ func _ready():
 	randomize()
 	
 	var level = preload("res://game/level/Level.tscn").instantiate()
-	level.level_string = """
+	level.grid = GridImpl.from_str("""
 +boats=1
 +waters=10
 B.......
@@ -23,7 +23,7 @@ B.......
 .4www..w
 ..L../.╲
 .3www...
-..L._╲|."""
+..L._╲|.""", GridModel.LoadMode.Editor)
 	TransitionManager.change_scene(level)
 
 

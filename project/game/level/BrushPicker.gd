@@ -2,7 +2,7 @@ extends Control
 
 signal brushed_picked(mode : E.BrushMode)
 
-@export var editor_mode := false
+var editor_mode := false
 
 @onready var BGs = {
 	E.BrushMode.Water: $BGs/Water,
@@ -27,18 +27,20 @@ signal brushed_picked(mode : E.BrushMode)
 @onready var AnimPlayer = $AnimationPlayer
 
 func _ready():
-	if not editor_mode:
-		for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
-			BGs[editor_button].hide()
-			Images[editor_button].hide()
-			Buttons[editor_button].hide()
+	setup(editor_mode)
 	for button in E.BrushMode.values():
 		(Buttons[button] as TextureButton).pressed.connect(_on_button_pressed.bind(button))
-	
-	Buttons[E.BrushMode.Water].button_pressed = true
-	custom_minimum_size = ButtonsContainer.size
 	AnimPlayer.play("startup")
 
+func setup(editor_mode_: bool) -> void:
+	editor_mode = editor_mode_
+	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
+		BGs[editor_button].set_visible(editor_mode)
+		Images[editor_button].set_visible(editor_mode)
+		Buttons[editor_button].set_visible(editor_mode)
+	for button in Buttons.keys():
+		Buttons[button].button_pressed = (button == E.BrushMode.Water)
+	custom_minimum_size = ButtonsContainer.size
 
 func _on_button_pressed(mode: E.BrushMode):
 	# Doing radio logic by hand since Godot`s isn`t working for some reason
