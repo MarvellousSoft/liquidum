@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://sogub73jvlos"]
+[gd_scene load_steps=8 format=3 uid="uid://sogub73jvlos"]
 
 [ext_resource type="Script" path="res://game/level/hints/Hint.gd" id="1_s2nml"]
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="2_3rujp"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_kqie2"]
-[ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/cell/air_single.png" id="3_n0or6"]
+[ext_resource type="PackedScene" uid="uid://dsijy48kaftba" path="res://game/level/hints/HintOptionButton.tscn" id="3_trrfp"]
+[ext_resource type="Texture2D" uid="uid://bvlr02m8etbqm" path="res://assets/images/ui/hint/button_hint_type.png" id="6_o4fwo"]
+[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="8_8moqx"]
+
+[sub_resource type="FontVariation" id="FontVariation_tqca2"]
+base_font = ExtResource("8_8moqx")
 
 [node name="Hint" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -54,52 +59,56 @@ texture = ExtResource("2_3rujp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
+offset_top = 9.0
 offset_right = 100.0
-offset_bottom = 100.0
+offset_bottom = 89.0
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="EditorButtons" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="ToggleVisibility" type="TextureButton" parent="VBoxContainer/EditorButtons"]
-custom_minimum_size = Vector2(30, 30)
+[node name="ToggleVisibility" parent="VBoxContainer/EditorButtons" instance=ExtResource("3_trrfp")]
 layout_mode = 2
-toggle_mode = true
-button_pressed = true
-texture_normal = ExtResource("3_n0or6")
-texture_pressed = ExtResource("3_kqie2")
-ignore_texture_size = true
-stretch_mode = 0
 
-[node name="ToggleHintType" type="TextureButton" parent="VBoxContainer/EditorButtons"]
-custom_minimum_size = Vector2(30, 30)
+[node name="ToggleHintType" parent="VBoxContainer/EditorButtons" instance=ExtResource("3_trrfp")]
 layout_mode = 2
-toggle_mode = true
-button_pressed = true
-texture_normal = ExtResource("3_n0or6")
-texture_pressed = ExtResource("3_kqie2")
-ignore_texture_size = true
-stretch_mode = 0
+texture_pressed = ExtResource("6_o4fwo")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HintsContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 alignment = 1
 
-[node name="Number" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Number" type="RichTextLabel" parent="VBoxContainer/HintsContainer"]
+unique_name_in_owner = true
+clip_contents = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+size_flags_vertical = 4
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 15
-theme_override_font_sizes/font_size = 35
-text = "10"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_fonts/normal_font = SubResource("FontVariation_tqca2")
+theme_override_font_sizes/normal_font_size = 21
+bbcode_enabled = true
+text = "[font_size={12}]
+[/font_size][color=#ffffffff]{[/color]10[color=#fffffff]}[/color]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
 
-[node name="Boat" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+[node name="Boat" type="TextureRect" parent="VBoxContainer/HintsContainer"]
+unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(40, 20)
 layout_mode = 2
 texture = ExtResource("3_kqie2")
 expand_mode = 1
 stretch_mode = 5
+
+[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleVisibility" to="." method="_on_visibility_toggled"]
+[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleHintType" to="." method="_on_hint_type_toggled"]
+
+[editable path="VBoxContainer/EditorButtons/ToggleHintType"]

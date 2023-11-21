@@ -13,8 +13,6 @@ const PREVIEW_DRAG_COLORS = {
 	"removing": Color("#ff6464df"),
 }
 
-var editor_mode := false
-
 @onready var GridCont = $CenterContainer/GridContainer
 @onready var Columns = $CenterContainer/GridContainer/Columns
 @onready var HintBars = {
@@ -30,6 +28,7 @@ var rows : int
 var columns : int
 var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 var previous_wall_index := []
+var editor_mode := false
 
 func _ready():
 	reset()
@@ -80,8 +79,8 @@ func setup(grid_logic_: GridModel) -> void:
 #Assumes grid_logic is already setup
 func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
-	HintBars.top.setup(grid_logic.col_hints())
-	HintBars.left.setup(grid_logic.row_hints())
+	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
+	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
 	var delay = STARTUP_DELAY * (rows + 1) * columns
 	HintBars.left.startup(delay + STARTUP_DELAY)
 	HintBars.top.startup(delay + STARTUP_DELAY*2)
