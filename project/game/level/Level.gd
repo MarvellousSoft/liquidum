@@ -4,6 +4,7 @@ extends Node2D
 const COUNTER_DELAY_STARTUP = .3
 
 @onready var GridNode: GridView = %GridView
+@onready var TimerContainer = %TimerContainer
 @onready var TimerLabel = %TimerLabel
 @onready var CountersPanel = %CountersPanel
 @onready var Counters = {
@@ -39,7 +40,7 @@ func set_timer_secs(_timer_secs_: float) -> void:
 
 
 func _process(dt):
-	if process_game:
+	if process_game and not grid.editor_mode():
 		running_time += dt
 		update_timer_label()
 
@@ -47,6 +48,8 @@ func _process(dt):
 func setup():
 	running_time = 0
 	
+	$BrushPicker.setup(grid.editor_mode())
+	GridNode.setup(grid)
 	if not grid.editor_mode():
 		$PlaytestButton.hide()
 		if not level_name.is_empty():
@@ -56,13 +59,19 @@ func setup():
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
 				set_timer_secs(save.timer_secs)
-	$BrushPicker.setup(grid.editor_mode())
-	GridNode.setup(grid)
-	update_expected_waters = GridNode.get_expected_waters() > 0
-	update_expected_boats = GridNode.get_expected_boats() > 0
-	Counters.water.visible = GridNode.get_expected_waters() != -1
-	Counters.boat.visible = GridNode.get_expected_boats() != 0
-	CountersPanel.visible = Counters.water.visible or Counters.boat.visible
+		update_expected_waters = GridNode.get_expected_waters() > 0
+		update_expected_boats = GridNode.get_expected_boats() > 0
+		Counters.water.visible = GridNode.get_expected_waters() != -1
+		Counters.boat.visible = GridNode.get_expected_boats() != 0
+		CountersPanel.visible = Counters.water.visible or Counters.boat.visible
+	else:
+		Counters.water.visible = true
+		Counters.boat.visible = true
+		Counters.water.enable_editor()
+		Counters.boat.enable_editor()
+		Counters.mistake.hide()
+		TimerContainer.hide()
+	
 	update_counters()
 	
 	AnimPlayer.play("startup")

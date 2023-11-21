@@ -95,6 +95,7 @@ offset_right = 456.0
 offset_bottom = 105.0
 
 [node name="TimerContainer" type="HBoxContainer" parent="TopInfo"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_right = 192.0
 offset_bottom = 81.0
@@ -127,12 +128,12 @@ offset_right = 497.0
 offset_bottom = 89.0
 check_for_satisfied = false
 
-[node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="0"]
+[node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 20
 
-[node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
+[node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 20
 
 [node name="SolveButton" type="Button" parent="."]
@@ -174,10 +175,11 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 0
+theme_override_constants/margin_bottom = -19
 
 [node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
@@ -212,4 +214,5 @@ libraries = {
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 
 [editable path="TopInfo/MistakeCounter"]
+[editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]
