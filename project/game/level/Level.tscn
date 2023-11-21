@@ -77,9 +77,9 @@ _data = {
 script = ExtResource("1_3c5y1")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
-offset_top = 252.0
-offset_right = 1920.0
-offset_bottom = 1080.0
+offset_top = 450.0
+offset_right = 3840.0
+offset_bottom = 2160.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
 unique_name_in_owner = true
@@ -102,7 +102,7 @@ offset_bottom = 81.0
 
 [node name="TimerIcon" type="TextureRect" parent="TopInfo/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(400, 300)
 layout_mode = 2
 texture = ExtResource("8_hu2r6")
 expand_mode = 1
@@ -115,17 +115,17 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_constants/line_spacing = 15
 theme_override_fonts/font = SubResource("FontVariation_hmnss")
-theme_override_font_sizes/font_size = 35
+theme_override_font_sizes/font_size = 145
 text = "00:00"
 vertical_alignment = 2
 
 [node name="MistakeCounter" parent="TopInfo" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 261.0
-offset_top = 8.0
-offset_right = 497.0
-offset_bottom = 89.0
+offset_left = 936.0
+offset_top = 51.0
+offset_right = 1580.0
+offset_bottom = 201.0
 check_for_satisfied = false
 
 [node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
@@ -141,28 +141,31 @@ offset_left = 147.0
 offset_top = 521.0
 offset_right = 308.0
 offset_bottom = 591.0
+theme = ExtResource("3_ceab8")
 text = "Auto-solve!"
 
 [node name="BackButton" type="Button" parent="."]
-offset_left = 147.0
-offset_top = 614.0
-offset_right = 308.0
-offset_bottom = 672.0
+offset_left = 155.0
+offset_top = 742.0
+offset_right = 409.0
+offset_bottom = 879.0
+theme = ExtResource("3_ceab8")
 text = "Back"
 
 [node name="PlaytestButton" type="Button" parent="."]
-offset_left = 147.0
-offset_top = 690.0
-offset_right = 308.0
-offset_bottom = 752.0
+offset_left = 152.0
+offset_top = 964.0
+offset_right = 591.0
+offset_bottom = 1101.0
+theme = ExtResource("3_ceab8")
 text = "Playtest"
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
-offset_left = 1549.0
-offset_top = 219.0
-offset_right = 1806.0
-offset_bottom = 480.0
+offset_left = 3139.0
+offset_top = 373.0
+offset_right = 3804.0
+offset_bottom = 673.0
 alignment = 1
 
 [node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]

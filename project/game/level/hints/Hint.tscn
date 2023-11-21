@@ -11,7 +11,7 @@
 base_font = ExtResource("8_8moqx")
 
 [node name="Hint" type="Control"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,14 +30,14 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("2_3rujp")
 
 [node name="Right" type="TextureRect" parent="Hints"]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("2_3rujp")
 flip_h = true
 
@@ -46,7 +46,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("2_3rujp")
 flip_h = true
 
@@ -54,19 +54,20 @@ flip_h = true
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("2_3rujp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_top = 9.0
-offset_right = 100.0
-offset_bottom = 89.0
+offset_top = 50.0
+offset_right = 500.0
+offset_bottom = 450.0
 theme_override_constants/separation = 2
 alignment = 1
 
 [node name="EditorButtons" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="ToggleVisibility" parent="VBoxContainer/EditorButtons" instance=ExtResource("3_trrfp")]
@@ -88,11 +89,12 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/default_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 15
+theme_override_constants/line_separation = 8
+theme_override_constants/outline_size = 45
 theme_override_fonts/normal_font = SubResource("FontVariation_tqca2")
-theme_override_font_sizes/normal_font_size = 21
+theme_override_font_sizes/normal_font_size = 113
 bbcode_enabled = true
-text = "[font_size={12}]
+text = "[font_size={50}]
 [/font_size][color=#ffffffff]{[/color]10[color=#fffffff]}[/color]"
 fit_content = true
 scroll_active = false
@@ -102,7 +104,7 @@ shortcut_keys_enabled = false
 [node name="Boat" type="TextureRect" parent="VBoxContainer/HintsContainer"]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
-custom_minimum_size = Vector2(40, 20)
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 texture = ExtResource("3_kqie2")
 expand_mode = 1

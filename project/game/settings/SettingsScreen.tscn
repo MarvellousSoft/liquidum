@@ -173,7 +173,6 @@ _data = {
 script = ExtResource("1_bstu8")
 
 [node name="BG" type="ColorRect" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -189,7 +188,6 @@ libraries = {
 }
 
 [node name="Settings" type="Control" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
@@ -271,11 +269,11 @@ layout_mode = 2
 text = "SAVE_AND_EXIT"
 
 [node name="PauseButton" type="TextureButton" parent="."]
-offset_left = 1807.0
-offset_top = 29.0
-offset_right = 2319.0
-offset_bottom = 541.0
-scale = Vector2(0.15, 0.15)
+offset_left = 3590.0
+offset_top = 43.0
+offset_right = 4102.0
+offset_bottom = 555.0
+scale = Vector2(0.4, 0.4)
 texture_normal = ExtResource("3_53c0p")
 texture_pressed = ExtResource("4_fa5hr")
 texture_hover = ExtResource("5_epp2n")

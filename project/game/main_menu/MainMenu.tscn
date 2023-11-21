@@ -1,41 +1,49 @@
-[gd_scene load_steps=2 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=3 format=3 uid="uid://c0quvd77qfdsd"]
 
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_8bxuf")
 script = ExtResource("1_il4q0")
 
 [node name="Version" type="Label" parent="."]
-offset_left = 1498.0
-offset_top = 997.0
-offset_right = 1898.0
-offset_bottom = 1059.0
-theme_override_font_sizes/font_size = 43
+offset_left = 2563.0
+offset_top = 1969.0
+offset_right = 3813.0
+offset_bottom = 2137.0
+theme_override_font_sizes/font_size = 120
 text = "VERSION"
 horizontal_alignment = 2
 
-[node name="Level1Button" type="Button" parent="."]
-offset_left = 439.0
-offset_top = 232.0
-offset_right = 501.0
-offset_bottom = 263.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 252.0
+offset_top = 157.0
+offset_right = 902.0
+offset_bottom = 857.0
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Level1Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+focus_mode = 0
 text = "Level 1"
 
-[node name="Level2Button" type="Button" parent="."]
-offset_left = 439.0
-offset_top = 274.0
-offset_right = 501.0
-offset_bottom = 305.0
+[node name="Level2Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
 text = "Level 2
 "
 
-[node name="EditorButton" type="Button" parent="."]
-offset_left = 439.0
-offset_top = 193.0
-offset_right = 538.0
-offset_bottom = 224.0
+[node name="EditorButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
 text = "Level Editor"
 
-[connection signal="pressed" from="Level1Button" to="." method="_on_level_button_pressed" binds= ["level1_1"]]
-[connection signal="pressed" from="Level2Button" to="." method="_on_level_button_pressed" binds= ["level1_2"]]
-[connection signal="pressed" from="EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]

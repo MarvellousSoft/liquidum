@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://game/level/hints/HintOptionButton.gd" id="3_dgaqe"]
 
 [node name="HintOptionButton" type="TextureButton"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(150, 150)
 focus_mode = 0
 toggle_mode = true
 button_pressed = true
@@ -18,8 +18,8 @@ script = ExtResource("3_dgaqe")
 [node name="BG" type="ColorRect" parent="."]
 show_behind_parent = true
 layout_mode = 0
-offset_right = 30.0
-offset_bottom = 30.0
+offset_right = 150.0
+offset_bottom = 150.0
 mouse_filter = 2
 color = Color(0.85098, 1, 0.886275, 0.588235)
 

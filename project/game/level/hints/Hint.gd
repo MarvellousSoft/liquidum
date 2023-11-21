@@ -2,7 +2,7 @@ extends Control
 
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
-const NUMBER_HEADER = """[font_size={12}]
+const NUMBER_HEADER = """[font_size={50}]
 [/font_size]"""
 
 @onready var Hints = {

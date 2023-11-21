@@ -76,7 +76,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8, 1.6, 2.4, 3.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 38), Vector2(4, 40), Vector2(0, 38), Vector2(-4, 40), Vector2(0, 38)]
+"values": [Vector2(0, 190), Vector2(4, 200), Vector2(0, 190), Vector2(-4, 200), Vector2(0, 190)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -320,20 +320,20 @@ _data = {
 
 [node name="RegularCell" type="Control"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1920.0
-offset_bottom = -1080.0
+offset_right = -3340.0
+offset_bottom = -1660.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_102n5")
 
 [node name="BG" type="ColorRect" parent="."]
 z_index = -1
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -344,7 +344,7 @@ anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -361,7 +361,7 @@ texture = ExtResource("4_lwpcm")
 
 [node name="TopRight" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -370,7 +370,7 @@ texture = ExtResource("5_l8l5q")
 
 [node name="BottomRight" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -379,7 +379,7 @@ texture = ExtResource("6_k26rs")
 
 [node name="BottomLeft" type="TextureRect" parent="Waters"]
 material = ExtResource("2_oggd4")
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -391,7 +391,7 @@ anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Airs"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -399,7 +399,7 @@ texture = ExtResource("8_o2vuh")
 
 [node name="TopLeft" type="TextureRect" parent="Airs"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -408,7 +408,7 @@ texture = ExtResource("9_xqw16")
 
 [node name="TopRight" type="TextureRect" parent="Airs"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -417,7 +417,7 @@ texture = ExtResource("10_iqtow")
 
 [node name="BottomRight" type="TextureRect" parent="Airs"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -427,7 +427,7 @@ texture = ExtResource("9_xqw16")
 
 [node name="BottomLeft" type="TextureRect" parent="Airs"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -439,10 +439,11 @@ texture = ExtResource("10_iqtow")
 anchors_preset = 0
 
 [node name="Single" type="TextureButton" parent="Buttons"]
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 focus_mode = 0
 texture_normal = ExtResource("11_4w8p5")
 texture_pressed = ExtResource("12_8pxsf")
@@ -453,7 +454,7 @@ texture_disabled = ExtResource("14_g5ol0")
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
@@ -466,7 +467,7 @@ layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 255)
 focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
@@ -479,7 +480,7 @@ layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
 rotation = 3.14159
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
@@ -492,7 +493,7 @@ layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
 rotation = -1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
@@ -511,32 +512,34 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("20_6vhtd")
 
 [node name="Left" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("20_6vhtd")
 
 [node name="Inc" type="TextureRect" parent="Hints"]
 visible = false
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("21_23xke")
 
 [node name="Dec" type="TextureRect" parent="Hints"]
 visible = false
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("21_23xke")
 
@@ -548,11 +551,10 @@ mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_top = -3.0
-offset_right = 100.0
-offset_bottom = 97.0
+offset_right = 500.0
+offset_bottom = 500.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_43mpb")
 
@@ -561,26 +563,26 @@ layout_mode = 0
 offset_left = 3.0
 offset_right = 103.0
 offset_bottom = 100.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_43mpb")
 flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_top = 3.0
-offset_right = 100.0
-offset_bottom = 103.0
+offset_right = 500.0
+offset_bottom = 500.0
 rotation = 1.5708
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_43mpb")
 flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_left = -3.0
-offset_right = 97.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_43mpb")
 
@@ -588,6 +590,7 @@ texture = ExtResource("22_43mpb")
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("23_s1mmw")
 
@@ -595,6 +598,7 @@ texture = ExtResource("23_s1mmw")
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("23_s1mmw")
 flip_h = true
@@ -604,30 +608,30 @@ anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Blocks"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("24_0kqeq")
 
 [node name="TopLeft" type="TextureRect" parent="Blocks"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("25_00o68")
 
 [node name="TopRight" type="TextureRect" parent="Blocks"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("26_lb8de")
 
@@ -635,19 +639,19 @@ texture = ExtResource("26_lb8de")
 visible = false
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("27_fulr6")
 
 [node name="BottomLeft" type="TextureRect" parent="Blocks"]
 visible = false
-custom_minimum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("28_6ngov")
 
@@ -656,9 +660,9 @@ modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
 layout_mode = 0
 offset_top = 38.0
-offset_right = 98.0
-offset_bottom = 124.0
-pivot_offset = Vector2(49, 43)
+offset_right = 490.0
+offset_bottom = 468.001
+pivot_offset = Vector2(245, 215)
 mouse_filter = 2
 texture = ExtResource("29_6b42n")
 expand_mode = 3

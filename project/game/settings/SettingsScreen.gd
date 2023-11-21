@@ -9,10 +9,12 @@ signal pause_toggled(active : bool)
 	"sfx": $Settings/VBoxContainer/SFXSoundContainer/HSlider,
 }
 @onready var Fullscreen = $Settings/VBoxContainer/FullscreenContainer/CheckBox
+@onready var  BG = $BG
 
 var active := false
 
 func _ready():
+	BG.hide()
 	setup_values()
 
 

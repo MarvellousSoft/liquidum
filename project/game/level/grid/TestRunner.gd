@@ -1,5 +1,7 @@
 extends Control
 
+const DESIRED_W := 780.0
+
 @onready var g1: GridView = $Grid1
 @onready var g2: GridView = $Grid2
 
@@ -17,11 +19,10 @@ func _on_tests_show_grids(s1: String, s2: String):
 	g2.setup(GridImpl.from_str(s2, GridModel.LoadMode.Testing))
 	scale_grids()
 
-const desired_w := 780.
 
 func scale_grids() -> void:
 	await get_tree().process_frame
-	var s := desired_w / g1.get_grid_size().x
+	var s := DESIRED_W / g1.get_grid_size().x
 	g1.scale = Vector2(s, s)
 	g2.scale = Vector2(s, s)
 

@@ -2,6 +2,7 @@ class_name Level
 extends Node2D
 
 const COUNTER_DELAY_STARTUP = .3
+const DESIRED_GRID_W = 1200
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -46,6 +47,7 @@ func setup():
 	
 	$BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
+	scale_grid()
 	if not grid.editor_mode():
 		$PlaytestButton.hide()
 		if not level_name.is_empty():
@@ -84,6 +86,12 @@ func setup():
 
 func editor_mode() -> bool:
 	return GridNode.editor_mode
+
+
+func scale_grid() -> void:
+	await get_tree().process_frame
+	var s := DESIRED_GRID_W / GridNode.get_grid_size().x
+	GridNode.scale = Vector2(s, s)
 
 
 func update_counters() -> void:
