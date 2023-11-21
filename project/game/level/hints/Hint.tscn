@@ -86,6 +86,7 @@ unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 4
+theme_override_colors/default_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 15
 theme_override_fonts/normal_font = SubResource("FontVariation_tqca2")

@@ -72,7 +72,8 @@ func set_hint_type(new_type : E.HintType) -> void:
 
 
 func alpha_t(text : String, alpha : float) -> String:
-	var color = Color(1.0, 1.0, 1.0, alpha)
+	var color = NORMAL_COLOR
+	color.a = alpha
 	return "[color=%s]%s[/color]" % ["#"+color.to_html(true),text]
 
 
@@ -82,9 +83,15 @@ func update_label() -> void:
 		E.HintType.Any:
 			Number.text += str(hint_value)
 		E.HintType.Together:
-			Number.text += alpha_t("{", hint_alpha) + str(hint_value) + alpha_t("}", hint_alpha)
+			if editor_mode:
+				Number.text += alpha_t("{", hint_alpha) + str(hint_value) + alpha_t("}", hint_alpha)
+			else:
+				Number.text += "{" + str(hint_value) + "}"
 		E.HintType.Separated:
-			Number.text += alpha_t("-", hint_alpha) + str(hint_value) + alpha_t("-", hint_alpha)
+			if editor_mode:
+				Number.text += alpha_t("-", hint_alpha) + str(hint_value) + alpha_t("-", hint_alpha)
+			else:
+				Number.text += "-" + str(hint_value) + "-"
 
 
 func no_hint() -> void:
