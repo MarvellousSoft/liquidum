@@ -1,5 +1,6 @@
 +boats=1
 +waters=6
++aqua=1.5:2
 B.......
 .h6.4.2.
 11##bb.w

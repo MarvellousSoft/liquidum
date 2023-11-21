@@ -646,7 +646,7 @@ func maybe_update_hints() -> void:
 		return
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
-	_grid_hints.expected_aquariums = all_aquariums_count()
+	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
 		var type := E.HintType.Any
@@ -1104,7 +1104,7 @@ class CountWaterDfs extends Dfs:
 func grid_hints() -> GridHints:
 	return _grid_hints
 
-func all_aquariums_count() -> Dictionary:
+func all_aquarium_counts() -> Dictionary:
 	var dfs := CountWaterDfs.new(self)
 	var counts: Dictionary = {}
 	for i in n:
@@ -1117,7 +1117,7 @@ func all_aquariums_count() -> Dictionary:
 	return counts
 
 func aquarium_hints_status() -> E.HintStatus:
-	var aqs := all_aquariums_count()
+	var aqs := all_aquarium_counts()
 	for hint_size in _grid_hints.expected_aquariums:
 		var hint_count: int = _grid_hints.expected_aquariums[hint_size]
 		if hint_count != -1 and hint_count != aqs.get(hint_size, 0):

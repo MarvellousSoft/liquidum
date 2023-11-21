@@ -12,7 +12,7 @@ const COUNTER_DELAY_STARTUP = .3
 	"boat": %BoatCounter,
 	"mistake": %MistakeCounter,
 }
-@onready var AquariumHints = %AquariumHintContainer
+@onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
 
 var update_expected_waters : bool
@@ -75,7 +75,7 @@ func setup():
 		delay += COUNTER_DELAY_STARTUP
 		counter.startup(delay)
 	delay += COUNTER_DELAY_STARTUP
-	AquariumHints.startup(delay)
+	AquariumHints.startup(delay, grid.grid_hints().expected_aquariums, grid.all_aquarium_counts(), GridNode.editor_mode)
 	
 	AudioManager.play_sfx("start_level")
 	
@@ -91,6 +91,8 @@ func update_counters() -> void:
 		Counters.water.set_count(GridNode.get_expected_waters() if GridNode.editor_mode else GridNode.get_missing_waters())
 	if update_expected_boats:
 		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
+	AquariumHints.update_values(GridNode.grid_logic.grid_hints().expected_aquariums, GridNode.grid_logic.all_aquarium_counts(), GridNode.editor_mode)
+	
 
 
 func update_timer_label() -> void:
