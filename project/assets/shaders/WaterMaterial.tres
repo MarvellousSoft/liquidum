@@ -16,11 +16,11 @@ noise = SubResource("FastNoiseLite_t7cfv")
 
 [resource]
 shader = ExtResource("1_hnm2t")
-shader_parameter/level = 0.46
+shader_parameter/level = 0.7
 shader_parameter/size = Vector2(100, 100)
 shader_parameter/wave_width = 50.0
 shader_parameter/wave_height = 5.0
-shader_parameter/depth = 40.0
+shader_parameter/depth = 30.0
 shader_parameter/water_color = Color(0.670588, 1, 0.819608, 1)
 shader_parameter/depth_color = Color(0.0784314, 0.364706, 0.529412, 1)
 shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")

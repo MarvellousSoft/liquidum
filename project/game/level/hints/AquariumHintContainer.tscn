@@ -52,19 +52,16 @@ _data = {
 
 [node name="AquariumHintContainer" type="Control"]
 modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(660, 730)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 theme = ExtResource("1_wjtfv")
 script = ExtResource("1_5rypm")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 657.0
+offset_bottom = 729.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -107,15 +104,12 @@ text = "AMOUNT"
 layout_mode = 2
 
 [node name="AquariumHint" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="AquariumHint2" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

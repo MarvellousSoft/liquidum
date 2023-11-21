@@ -59,7 +59,10 @@ func set_unknown():
 
 func update_label() -> void:
 	Counter.text = str(count)
-	AnimPlayer.play("update_counter")
+	if counter_name == "MISTAKES_COUNTER":
+		AnimPlayer.play("update_counter_big")
+	else:
+		AnimPlayer.play("update_counter")
 	if check_for_satisfied:
 		if count == 0:
 			Counter.add_theme_color_override("font_color", Global.COLORS.satisfied)

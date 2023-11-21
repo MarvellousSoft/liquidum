@@ -2,7 +2,7 @@ class_name Level
 extends Node2D
 
 const COUNTER_DELAY_STARTUP = .3
-const DESIRED_GRID_W = 1200
+const DESIRED_GRID_W = 1050
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer

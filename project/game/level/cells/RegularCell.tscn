@@ -395,6 +395,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("8_o2vuh")
 
 [node name="TopLeft" type="TextureRect" parent="Airs"]
@@ -403,7 +404,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("9_xqw16")
 
 [node name="TopRight" type="TextureRect" parent="Airs"]
@@ -412,7 +413,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("10_iqtow")
 
 [node name="BottomRight" type="TextureRect" parent="Airs"]
@@ -422,7 +423,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 3.14159
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("9_xqw16")
 
 [node name="BottomLeft" type="TextureRect" parent="Airs"]
@@ -432,7 +433,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 rotation = 3.14159
-pivot_offset = Vector2(50, 50)
+pivot_offset = Vector2(250, 250)
 texture = ExtResource("10_iqtow")
 
 [node name="Buttons" type="Control" parent="."]
@@ -551,8 +552,9 @@ mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Walls"]
 layout_mode = 0
+offset_top = -13.0
 offset_right = 500.0
-offset_bottom = 500.0
+offset_bottom = 487.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
@@ -560,9 +562,9 @@ texture = ExtResource("22_43mpb")
 
 [node name="Right" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_left = 3.0
-offset_right = 103.0
-offset_bottom = 100.0
+offset_left = 13.0
+offset_right = 513.0
+offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_43mpb")
@@ -570,8 +572,9 @@ flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Walls"]
 layout_mode = 0
+offset_top = 13.0
 offset_right = 500.0
-offset_bottom = 500.0
+offset_bottom = 513.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
@@ -580,7 +583,8 @@ flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
 layout_mode = 0
-offset_right = 500.0
+offset_left = -13.0
+offset_right = 487.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2

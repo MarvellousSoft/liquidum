@@ -102,45 +102,50 @@ offset_bottom = 81.0
 
 [node name="TimerIcon" type="TextureRect" parent="TopInfo/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(400, 300)
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
+size_flags_vertical = 4
 texture = ExtResource("8_hu2r6")
 expand_mode = 1
 
 [node name="TimerLabel" type="Label" parent="TopInfo/TimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/line_spacing = 15
+theme_override_constants/outline_size = 36
+theme_override_constants/line_spacing = 49
 theme_override_fonts/font = SubResource("FontVariation_hmnss")
-theme_override_font_sizes/font_size = 145
+theme_override_font_sizes/font_size = 80
 text = "00:00"
 vertical_alignment = 2
 
 [node name="MistakeCounter" parent="TopInfo" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 936.0
-offset_top = 51.0
-offset_right = 1580.0
-offset_bottom = 201.0
+offset_left = 581.0
+offset_top = 4.0
+offset_right = 1253.0
+offset_bottom = 154.0
 check_for_satisfied = false
 
 [node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 20
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 96
 
 [node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="2"]
-theme_override_constants/outline_size = 20
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 100
 
 [node name="SolveButton" type="Button" parent="."]
 offset_left = 147.0
 offset_top = 521.0
 offset_right = 308.0
 offset_bottom = 591.0
+focus_mode = 0
 theme = ExtResource("3_ceab8")
 text = "Auto-solve!"
 
@@ -149,6 +154,7 @@ offset_left = 155.0
 offset_top = 742.0
 offset_right = 409.0
 offset_bottom = 879.0
+focus_mode = 0
 theme = ExtResource("3_ceab8")
 text = "Back"
 
@@ -157,20 +163,24 @@ offset_left = 152.0
 offset_top = 964.0
 offset_right = 591.0
 offset_bottom = 1101.0
+focus_mode = 0
 theme = ExtResource("3_ceab8")
 text = "Playtest"
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
-offset_left = 3139.0
-offset_top = 373.0
-offset_right = 3804.0
-offset_bottom = 673.0
+offset_left = 3069.0
+offset_top = 404.0
+offset_right = 3768.0
+offset_bottom = 1664.0
+theme_override_constants/separation = 50
 alignment = 1
 
 [node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme = ExtResource("3_ceab8")
 
 [node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
@@ -197,6 +207,7 @@ counter_name = "BOATS_COUNTER"
 [node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("6_dltj2")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
 offset_bottom = 0.0
