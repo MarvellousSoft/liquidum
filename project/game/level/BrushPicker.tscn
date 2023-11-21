@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_puwdh"]
 [ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/brush/boat_brusher.png" id="4_83tnc"]
 [ext_resource type="Texture2D" uid="uid://b3o4hcgpf2wf1" path="res://assets/images/ui/brush/brish_picker_wall.png" id="5_lkn2k"]
-[ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/block_single.png" id="6_gg8t8"]
+[ext_resource type="Texture2D" uid="uid://bngcg8vy5gjtq" path="res://assets/images/ui/brush/brish_picker_block.png" id="6_ksqdr"]
 [ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush/brush_picker_unpressed.png" id="7_0ebh5"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
@@ -183,7 +183,7 @@ expand_mode = 1
 [node name="Block" type="TextureRect" parent="Images"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("6_gg8t8")
+texture = ExtResource("6_ksqdr")
 expand_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="."]
