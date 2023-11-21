@@ -58,6 +58,13 @@ var auto_update_hints_: bool = false
 func _init(n_: int, m_: int) -> void:
 	setup(n_, m_)
 
+func _empty_line_hint() -> LineHint:
+	var hint := LineHint.new()
+	hint.water_count = -1.
+	hint.water_count_type = E.HintType.Any
+	hint.boat_count = -1
+	hint.boat_count_type = E.HintType.Any
+	return hint
 
 func setup(n_: int, m_: int) -> void:
 	self.n = n_
@@ -81,19 +88,9 @@ func setup(n_: int, m_: int) -> void:
 		if i < n - 1:
 			wall_bottom.append(row_down)
 	for i in n:
-		var hint_row := LineHint.new()
-		hint_row.water_count = -1.
-		hint_row.water_count_type = E.HintType.Any
-		hint_row.boat_count = -1
-		hint_row.boat_count_type = E.HintType.Any
-		_row_hints.append(hint_row)
+		_row_hints.append(_empty_line_hint())
 	for j in m:
-		var hint_col := LineHint.new()
-		hint_col.water_count = -1.
-		hint_col.water_count_type = E.HintType.Any
-		hint_col.boat_count = -1
-		hint_col.boat_count_type = E.HintType.Any
-		_col_hints.append(hint_col)
+		_col_hints.append(_empty_line_hint())
 	_grid_hints = GridHints.new()
 	_grid_hints.total_water = -1.
 	_grid_hints.total_boats = 0
@@ -302,6 +299,21 @@ class WallChange extends Change:
 		present = now_present
 		return self
 
+class AddRowChange extends Change:
+	func undo(grid: GridImpl) -> Change:
+		return grid._do_rem_row()
+
+class RemRowChange extends Change:
+	var prev_row: Array[PureCell]
+	var prev_wall_bottom: Array[bool]
+	var prev_wall_right: Array[bool]
+	func _init(prev_row_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool]) -> void:
+		prev_row = prev_row_
+		prev_wall_bottom = prev_wall_bottom_
+		prev_wall_right = prev_wall_right_
+	func undo(grid: GridImpl) -> Change:
+		return grid._do_add_row(prev_row, prev_wall_bottom, prev_wall_right)
+
 class Changes:
 	var changes: Array[Change]
 	func _init(changes_: Array[Change]) -> void:
@@ -474,6 +486,49 @@ func set_hint_row(i: int, v: float) -> void:
 func set_hint_col(j: int, v: float) -> void:
 	if not editor_mode() or not auto_update_hints():
 		_col_hints[j].water_count = v
+
+func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool]) -> AddRowChange:
+	assert(editor_mode())
+	if row.is_empty():
+		for _i in m:
+			row.append(PureCell.empty())
+	if new_wall_bottom.is_empty():
+		new_wall_bottom.resize(m)
+	if new_wall_right.is_empty():
+		new_wall_right.resize(m - 1)
+	n += 1
+	pure_cells.append(row)
+	wall_bottom.append(new_wall_bottom)
+	wall_right.append(new_wall_right)
+	_row_hints.append(_empty_line_hint())
+	maybe_update_hints()
+	validate()
+	return AddRowChange.new()
+
+func _do_rem_row() -> RemRowChange:
+	assert(editor_mode())
+	n -= 1
+	var prev_row: Array[PureCell] = pure_cells.pop_back()
+	var prev_wall_bottom: Array[bool] = wall_bottom.pop_back()
+	var prev_wall_right: Array[bool] = wall_right.pop_back()
+	maybe_update_hints()
+	validate()
+	return RemRowChange.new(prev_row, prev_wall_bottom, prev_wall_right)
+
+func add_row(flush_undo := true) -> void:
+	var change := _do_add_row([], [], [])
+	_push_undo_changes([change], flush_undo)
+	flood_all(false)
+
+func rem_row(flush_undo := true) -> void:
+	var change := _do_rem_row()
+	_push_undo_changes([change], flush_undo)
+
+func add_col(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
+
+func rem_col(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
 
 func row_hints() -> Array[LineHint]:
 	return _row_hints

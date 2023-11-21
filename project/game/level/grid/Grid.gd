@@ -105,6 +105,18 @@ func set_hint_row(_i: int, _v: float) -> void:
 func set_hint_col(_j: int, _v: float) -> void:
 	return GridModel.must_be_implemented()
 
+func add_row(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
+
+func rem_row(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
+
+func add_col(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
+
+func rem_col(_flush_undo := true) -> void:
+	return GridModel.must_be_implemented()
+
 # How many boats are in the level
 func get_expected_boats() -> int:
 	return GridModel.must_be_implemented()

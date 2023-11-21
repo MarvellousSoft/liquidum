@@ -502,3 +502,16 @@ func test_put_air_with_boat() -> void:
 	w.xx
 	L/L.
 	""")
+
+func test_resize() -> void:
+	const initial := "ww\nL."
+	var g := str_grid(initial)
+	g.add_row()
+	const with_row := "ww\n|.\nww\nL."
+	assert_grid_eq(g.to_str(), with_row)
+	g.undo()
+	assert_grid_eq(g.to_str(), initial)
+	g.redo()
+	g.add_row()
+	g.rem_row()
+	assert_grid_eq(g.to_str(), with_row)
