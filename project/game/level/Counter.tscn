@@ -86,6 +86,8 @@ theme = ExtResource("2_wetut")
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 0
 theme_override_fonts/font = SubResource("FontVariation_5wwqj")
 theme_override_font_sizes/font_size = 34
 text = "MISTAKES"

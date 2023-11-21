@@ -1,21 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://c756pq70jsksf"]
 
 [ext_resource type="Script" path="res://game/level/hints/AquariumHintContainer.gd" id="1_5rypm"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_wjtfv"]
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="2_58800"]
 [ext_resource type="PackedScene" uid="uid://0jpojxe5ekxf" path="res://game/level/hints/AquariumHint.tscn" id="3_6cjw2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4e0x"]
-bg_color = Color(0.670588, 1, 0.819608, 0.235294)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0.0352941, 0.141176, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-anti_aliasing_size = 2.5
 
 [sub_resource type="FontVariation" id="FontVariation_o6mv5"]
 base_font = ExtResource("2_58800")
@@ -25,21 +13,6 @@ base_font = ExtResource("2_58800")
 
 [sub_resource type="FontVariation" id="FontVariation_n0dxx"]
 base_font = ExtResource("2_58800")
-
-[sub_resource type="Animation" id="Animation_v31lt"]
-resource_name = "startup"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_7ug84"]
 length = 0.001
@@ -56,6 +29,21 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_v31lt"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yituc"]
 _data = {
 "RESET": SubResource("Animation_7ug84"),
@@ -70,13 +58,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_wjtfv")
 script = ExtResource("1_5rypm")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_o4e0x")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2

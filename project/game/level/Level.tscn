@@ -1,25 +1,138 @@
-[gd_scene load_steps=9 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=14 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="1_3c5y1"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="3_ceab8"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="5_1j60w"]
 [ext_resource type="PackedScene" uid="uid://c756pq70jsksf" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
+[ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
+[ext_resource type="FontFile" uid="uid://ct713e8v675x8" path="res://assets/fonts/Regular.ttf" id="9_nexwh"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_ke4fj"]
+[sub_resource type="FontVariation" id="FontVariation_hmnss"]
+base_font = ExtResource("9_nexwh")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_syhq8"]
+[sub_resource type="Animation" id="Animation_4ayxj"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HintsContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TopInfo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1qr1w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HintsContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TopInfo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
+_data = {
+"RESET": SubResource("Animation_1qr1w"),
+"startup": SubResource("Animation_4ayxj")
+}
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3c5y1")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
+offset_top = 252.0
 offset_right = 1920.0
 offset_bottom = 1080.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
+unique_name_in_owner = true
 layout_mode = 2
+
+[node name="TopInfo" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 456.0
+offset_bottom = 105.0
+
+[node name="TimerContainer" type="HBoxContainer" parent="TopInfo"]
+layout_mode = 2
+offset_right = 192.0
+offset_bottom = 81.0
+
+[node name="TimerIcon" type="TextureRect" parent="TopInfo/TimerContainer"]
+modulate = Color(0.85098, 1, 0.886275, 1)
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+texture = ExtResource("8_hu2r6")
+expand_mode = 1
+
+[node name="TimerLabel" type="Label" parent="TopInfo/TimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/line_spacing = 15
+theme_override_fonts/font = SubResource("FontVariation_hmnss")
+theme_override_font_sizes/font_size = 35
+text = "00:00"
+vertical_alignment = 2
+
+[node name="MistakeCounter" parent="TopInfo" instance=ExtResource("4_m6y7y")]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 261.0
+offset_top = 8.0
+offset_right = 497.0
+offset_bottom = 89.0
+
+[node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="0"]
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+
+[node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
+theme_override_constants/outline_size = 20
 
 [node name="SolveButton" type="Button" parent="."]
 offset_left = 147.0
@@ -42,48 +155,60 @@ offset_right = 308.0
 offset_bottom = 752.0
 text = "Playtest"
 
-[node name="Counters" type="VBoxContainer" parent="."]
-offset_left = 1625.0
-offset_top = 159.0
-offset_right = 1861.0
-offset_bottom = 410.0
+[node name="HintsContainer" type="VBoxContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_left = 1549.0
+offset_top = 219.0
+offset_right = 1806.0
+offset_bottom = 480.0
+alignment = 1
 
-[node name="WaterCounter" parent="Counters" instance=ExtResource("4_m6y7y")]
+[node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_ceab8")
+
+[node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 0
+
+[node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+unique_name_in_owner = true
 layout_mode = 2
 counter_name = "WATERS_COUNTER"
 
-[node name="BoatCounter" parent="Counters" instance=ExtResource("4_m6y7y")]
+[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="MistakeCounter" parent="Counters" instance=ExtResource("4_m6y7y")]
+[node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("6_dltj2")]
+unique_name_in_owner = true
 layout_mode = 2
-
-[node name="AquariumHintContainer" parent="." instance=ExtResource("6_dltj2")]
-offset_left = 1542.0
-offset_top = 442.0
-offset_right = 1542.0
-offset_bottom = 442.0
 
 [node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
 offset_bottom = 0.0
 
-[node name="Water" parent="BrushPicker/Buttons" index="0"]
-button_group = SubResource("ButtonGroup_ke4fj")
-
-[node name="Boat" parent="BrushPicker/Buttons" index="1"]
-button_group = SubResource("ButtonGroup_ke4fj")
-
-[node name="Wall" parent="BrushPicker/Buttons" index="2"]
-button_group = SubResource("ButtonGroup_syhq8")
-
 [node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
 
-[connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_b8al2")
+}
+
+[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 
+[editable path="TopInfo/MistakeCounter"]
 [editable path="BrushPicker"]

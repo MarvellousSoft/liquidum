@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal pause_toggled(active : bool)
+
 @onready var AnimPlayer = $AnimationPlayer
 @onready var SoundSettings = {
 	"master": $Settings/VBoxContainer/MasterSoundContainer/HSlider,
@@ -26,6 +28,7 @@ func toggle_pause() -> void:
 	else:
 		save_values()
 		AnimPlayer.play("disable")
+	emit_signal("pause_toggled", active)
 
 
 func save_values():

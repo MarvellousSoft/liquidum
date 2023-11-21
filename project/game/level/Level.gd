@@ -3,17 +3,21 @@ extends Node2D
 
 const COUNTER_DELAY_STARTUP = .3
 
-@onready var GridNode: GridView = $CenterContainer/GridView
+@onready var GridNode: GridView = %GridView
+@onready var TimerLabel = %TimerLabel
+@onready var CountersPanel = %CountersPanel
 @onready var Counters = {
-	"water": $Counters/WaterCounter,
-	"boat": $Counters/BoatCounter,
-	"mistake": $Counters/MistakeCounter,
+	"water": %WaterCounter,
+	"boat": %BoatCounter,
+	"mistake": %MistakeCounter,
 }
-@onready var AquariumHints = $AquariumHintContainer
+@onready var AquariumHints = %AquariumHintContainer
+@onready var AnimPlayer = $AnimationPlayer
 
 var update_expected_waters : bool
 var update_expected_boats : bool
-
+var process_game := false
+var running_time : float
 var grid: GridModel = null
 var level_name := ""
 
@@ -34,7 +38,15 @@ func set_timer_secs(_timer_secs_: float) -> void:
 	pass
 
 
+func _process(dt):
+	if process_game:
+		running_time += dt
+		update_timer_label()
+
+
 func setup():
+	running_time = 0
+	
 	if not grid.editor_mode():
 		$PlaytestButton.hide()
 		if not level_name.is_empty():
@@ -51,13 +63,19 @@ func setup():
 	Counters.water.visible = GridNode.get_expected_waters() != 0
 	Counters.boat.visible = GridNode.get_expected_boats() != 0
 	update_counters()
-	var delay = 0.0
+	
+	AnimPlayer.play("startup")
+	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
 		delay += COUNTER_DELAY_STARTUP
 		counter.startup(delay)
 	delay += COUNTER_DELAY_STARTUP
 	AquariumHints.startup(delay)
+	
 	AudioManager.play_sfx("start_level")
+	
+	process_game = true
+
 
 func editor_mode() -> bool:
 	return GridNode.editor_mode
@@ -69,6 +87,16 @@ func update_counters() -> void:
 	if update_expected_boats:
 		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
 
+
+func update_timer_label() -> void:
+	var t = int(running_time)
+	var hours = t/3600
+	var minutes = t%3600/60
+	var seconds = t%60
+	if hours > 0:
+		TimerLabel.text = "%02d:%02d:%02d" % [hours,minutes,seconds]
+	else:
+		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
 
 func win():
 	AudioManager.play_sfx("win_level")
@@ -96,3 +124,7 @@ func _on_back_button_pressed() -> void:
 	if not level_name.is_empty():
 		FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, 0.0))
 	TransitionManager.pop_scene()
+
+
+func _on_settings_screen_pause_toggled(active):
+	process_game = not active

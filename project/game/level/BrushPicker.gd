@@ -4,25 +4,19 @@ signal brushed_picked(mode : E.BrushMode)
 
 var editor_mode := false
 
-@onready var BGs = {
-	E.BrushMode.Water: $BGs/Water,
-	E.BrushMode.Boat: $BGs/Boat,
-	E.BrushMode.Wall: $BGs/Wall,
-	E.BrushMode.Block: $BGs/Block,
-}
 @onready var Images = {
-	"self": $Images,
-	E.BrushMode.Water: $Images/Water,
-	E.BrushMode.Boat: $Images/Boat,
-	E.BrushMode.Wall: $Images/Wall,
-	E.BrushMode.Block: $Images/Block,
+	"self": $CenterContainer/PanelContainer/Images,
+	E.BrushMode.Water: $CenterContainer/PanelContainer/Images/Water,
+	E.BrushMode.Boat: $CenterContainer/PanelContainer/Images/Boat,
+	E.BrushMode.Wall: $CenterContainer/PanelContainer/Images/Wall,
+	E.BrushMode.Block: $CenterContainer/PanelContainer/Images/Block,
 }
-@onready var ButtonsContainer = $Buttons
+@onready var ButtonsContainer = $CenterContainer/PanelContainer/Buttons
 @onready var Buttons = {
-	E.BrushMode.Water: $Buttons/Water,
-	E.BrushMode.Boat: $Buttons/Boat,
-	E.BrushMode.Wall: $Buttons/Wall,
-	E.BrushMode.Block: $Buttons/Block,
+	E.BrushMode.Water: $CenterContainer/PanelContainer/Buttons/Water,
+	E.BrushMode.Boat: $CenterContainer/PanelContainer/Buttons/Boat,
+	E.BrushMode.Wall: $CenterContainer/PanelContainer/Buttons/Wall,
+	E.BrushMode.Block: $CenterContainer/PanelContainer/Buttons/Block,
 }
 @onready var AnimPlayer = $AnimationPlayer
 
@@ -35,7 +29,6 @@ func _ready():
 func setup(editor_mode_: bool) -> void:
 	editor_mode = editor_mode_
 	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
-		BGs[editor_button].set_visible(editor_mode)
 		Images[editor_button].set_visible(editor_mode)
 		Buttons[editor_button].set_visible(editor_mode)
 	for button in Buttons.keys():

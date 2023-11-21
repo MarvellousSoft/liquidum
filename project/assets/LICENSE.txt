@@ -15,6 +15,9 @@ by Delapouite under CC BY 3.0
 - images/ui/checkbox_hover.png
 by sbed under CC BY 3.0
 
+- images/ui/objects/timer_icon.png
+by Lorc under CC BY 3.0
+
 - audio/bgm/main.ogg
 Music Info: “Ocean”
 Audio Synthezx Group

@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://plt8snslppc5"]
+[gd_scene load_steps=17 format=3 uid="uid://plt8snslppc5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_6301b"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_puwdh"]
 [ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/brush/boat_brusher.png" id="4_83tnc"]
@@ -50,7 +51,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Images/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("CenterContainer/PanelContainer/Images/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -90,7 +91,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Images/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("CenterContainer/PanelContainer/Images/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -124,77 +125,52 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 1920.0
 offset_bottom = 100.0
+theme = ExtResource("1_6301b")
 script = ExtResource("1_5hp8l")
 
-[node name="BGs" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(1920, 0)
-layout_mode = 2
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 100.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Images" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Water" type="ColorRect" parent="BGs"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-color = Color(0.85098, 1, 0.886275, 1)
-
-[node name="Boat" type="ColorRect" parent="BGs"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-color = Color(0.85098, 1, 0.886275, 1)
-
-[node name="Wall" type="ColorRect" parent="BGs"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-color = Color(0.85098, 1, 0.886275, 1)
-
-[node name="Block" type="ColorRect" parent="BGs"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-color = Color(0.85098, 1, 0.886275, 1)
-
-[node name="Images" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(1920, 0)
-layout_mode = 2
-offset_right = 204.0
-offset_bottom = 100.0
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="Water" type="TextureRect" parent="Images"]
+[node name="Water" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 material = SubResource("ShaderMaterial_swcqc")
 layout_mode = 2
 texture = ExtResource("3_puwdh")
 
-[node name="Boat" type="TextureRect" parent="Images"]
+[node name="Boat" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_83tnc")
 expand_mode = 1
 
-[node name="Wall" type="TextureRect" parent="Images"]
+[node name="Wall" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_lkn2k")
 expand_mode = 1
 
-[node name="Block" type="TextureRect" parent="Images"]
+[node name="Block" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("6_ksqdr")
 expand_mode = 1
 
-[node name="Buttons" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(1920, 0)
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
 layout_mode = 2
-offset_right = 200.0
-offset_bottom = 100.0
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Water" type="TextureButton" parent="Buttons"]
+[node name="Water" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
@@ -203,7 +179,7 @@ texture_normal = ExtResource("7_0ebh5")
 texture_pressed = ExtResource("8_pcm1q")
 texture_hover = ExtResource("9_aiaqv")
 
-[node name="Boat" type="TextureButton" parent="Buttons"]
+[node name="Boat" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
@@ -214,7 +190,7 @@ texture_pressed = ExtResource("8_pcm1q")
 texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 
-[node name="Wall" type="TextureButton" parent="Buttons"]
+[node name="Wall" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
@@ -225,7 +201,7 @@ texture_pressed = ExtResource("8_pcm1q")
 texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 
-[node name="Block" type="TextureButton" parent="Buttons"]
+[node name="Block" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
