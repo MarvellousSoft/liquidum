@@ -60,9 +60,9 @@ func _level_dir() -> String:
 func _level_file(level: String) -> String:
 	return "%s.save" % level
 
-func load_level(level_name: String, load_mode: GridModel.LoadMode) -> LevelSaveData:
-	return LevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name)), load_mode)
+func load_level(level_name: String) -> UserLevelSaveData:
+	return UserLevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name)))
 
-func save_level(level_name: String, data: LevelSaveData) -> void:
+func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())
 
