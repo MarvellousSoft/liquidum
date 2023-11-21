@@ -1,8 +1,11 @@
 class_name GridImpl
 extends GridModel
 
-static func create(rows_: int, cols_: int) -> GridModel:
-	return GridImpl.new(rows_, cols_)
+static func empty_editor(rows_: int, cols_: int) -> GridModel:
+	var g := GridImpl.new(rows_, cols_)
+	g.auto_update_hints_ = true
+	g.maybe_update_hints()
+	return g
 
 static func import_data(data: Dictionary, load_mode: LoadMode) -> GridModel:
 	return GridExporter.new().load_data(data, load_mode)
@@ -49,7 +52,7 @@ var redo_stack: Array[Changes] = []
 
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
-var auto_update_hints: bool = false
+var auto_update_hints_: bool = false
 
 func _init(n_: int, m_: int) -> void:
 	setup(n_, m_)
@@ -463,12 +466,12 @@ func get_cell(i: int, j: int) -> CellModel:
 
 # TODO: Rename
 func set_hint_row(i: int, v: float) -> void:
-	if not editor_mode() or not auto_update_hints:
+	if not editor_mode() or not auto_update_hints():
 		_row_hints[i].water_count = v
 
 # TODO: Rename
 func set_hint_col(j: int, v: float) -> void:
-	if not editor_mode() or not auto_update_hints:
+	if not editor_mode() or not auto_update_hints():
 		_col_hints[j].water_count = v
 
 func row_hints() -> Array[LineHint]:
@@ -524,7 +527,7 @@ func editor_mode() -> bool:
 	return solution_c_left.is_empty()
 
 func maybe_update_hints() -> void:
-	if not editor_mode() or not auto_update_hints:
+	if not editor_mode() or not auto_update_hints():
 		return
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
@@ -687,9 +690,11 @@ func _finish_loading(load_mode: LoadMode) -> void:
 			solution_c_right.append(pure_cells[i].map(func(c): return c.c_right))
 		if load_mode != GridModel.LoadMode.SolutionNoClear:
 			clear_content()
-	if load_mode == LoadMode.Editor:
-		auto_update_hints = true
+	auto_update_hints_ = load_mode == LoadMode.Editor
 	maybe_update_hints()
+
+func auto_update_hints() -> bool:
+	return editor_mode() and auto_update_hints_
 
 func _col_hint(h: int) -> String:
 	if h < 0:
@@ -998,7 +1003,6 @@ func all_aquariums_count() -> Dictionary:
 
 func aquarium_hints_status() -> E.HintStatus:
 	var aqs := all_aquariums_count()
-	var satisfied: Array[E.HintStatus] = []
 	for hint_size in _grid_hints.expected_aquariums:
 		var hint_count: int = _grid_hints.expected_aquariums[hint_size]
 		if hint_count != -1 and hint_count != aqs.get(hint_size, 0):
@@ -1006,13 +1010,13 @@ func aquarium_hints_status() -> E.HintStatus:
 	return E.HintStatus.Satisfied
 
 func count_water_row(i: int) -> float:
-	var count := 0.
+	var count: float = 0.
 	for j in m:
 		count += _pure_cell(i, j).water_count()
 	return count
 
 func count_water_col(j: int) -> float:
-	var count := 0.
+	var count: float = 0.
 	for i in n:
 		count += _pure_cell(i, j).water_count()
 	return count
@@ -1168,10 +1172,6 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 func validate() -> void:
 	for j in m:
 		assert(col_hints()[j].boat_count_type == E.HintType.Any)
-	var expected_aquariums := _grid_hints.expected_aquariums
-	if !expected_aquariums.is_empty():
-		for i in expected_aquariums.size() - 1:
-			assert(expected_aquariums[i] <= expected_aquariums[i + 1])
 	# Blocks are surrounded by walls
 	for i in n:
 		for j in m:

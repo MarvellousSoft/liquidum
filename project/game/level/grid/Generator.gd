@@ -134,7 +134,7 @@ func generate(n: int, m: int, diagonals := true, clear_solution := true) -> Grid
 	else:
 		adj_rule = SquareAdj.new()
 	var g := _gen_grid_groups(n, 2 * m if diagonals else m, adj_rule)
-	var grid := GridImpl.create(n, m)
+	var grid := GridImpl.new(n, m)
 	for i in n:
 		for j in m:
 			if diagonals:

@@ -380,7 +380,6 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 			grid_logic.push_empty_undo()
 			if cell_data.block_at(corner):
 				mouse_hold_status = E.MouseDragState.RemoveBlock
-				print("removing")
 				cell_data.remove_content(corner, false)
 			else:
 				mouse_hold_status = E.MouseDragState.Block

@@ -58,7 +58,7 @@ func _level_dir() -> String:
 	return "%s/levels" % _profile_dir()
 
 func _level_file(level: String) -> String:
-	return "%s.save"
+	return "%s.save" % level
 
 func load_level(level_name: String, load_mode: GridModel.LoadMode) -> LevelSaveData:
 	return LevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name)), load_mode)

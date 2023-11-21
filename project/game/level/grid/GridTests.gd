@@ -85,7 +85,7 @@ func test_simple() -> void:
 	#..w
 	L╲_╲
 	"""
-	var g := GridImpl.create(2, 2)
+	var g := GridImpl.new(2, 2)
 	check(!g.get_cell(0, 0).water_full())
 	g.load_from_str(simple, GridModel.LoadMode.Testing)
 	# Check waters make sense
@@ -463,7 +463,7 @@ func test_together_rules() -> void:
 	assert(g.are_hints_satisfied())
 
 func test_put_wall() -> void:
-	var g := GridImpl.create(1, 2)
+	var g := GridImpl.new(1, 2)
 	g.get_cell(0, 0).put_water(TopLeft)
 	g.get_cell(0, 0).put_wall(E.Walls.DecDiag)
 	assert(!g.get_cell(0, 0).water_full())
@@ -472,7 +472,7 @@ func test_put_wall() -> void:
 	assert(g.get_cell(0, 0).water_at(TopRight))
 	g.remove_wall_from_idx(0, 0, 1, 1, false)
 	assert(g.get_cell(0, 0).water_at(BottomLeft))
-	g = GridImpl.create(3, 3)
+	g = GridImpl.new(3, 3)
 	g.put_wall_from_idx(3, 3, 0, 0)
 	var dec_dig := """
 	......
@@ -484,7 +484,7 @@ func test_put_wall() -> void:
 	"""
 	assert_grid_eq(g.to_str(), dec_dig)
 	g.undo()
-	assert_grid_eq(g.to_str(), GridImpl.create(3, 3).to_str())
+	assert_grid_eq(g.to_str(), GridImpl.new(3, 3).to_str())
 	g.put_wall_from_idx(0, 0, 3, 3)
 	assert_grid_eq(g.to_str(), dec_dig)
 

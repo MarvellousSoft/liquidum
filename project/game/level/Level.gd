@@ -16,6 +16,11 @@ var update_expected_boats : bool
 
 var grid: GridModel = null
 
+static func with_grid(grid_: GridModel) -> Level:
+	var level: Level = preload("res://game/level/Level.tscn").instantiate()
+	level.grid = grid_
+	return level
+
 func _ready():
 	await TransitionManager.transition_finished
 	
@@ -70,8 +75,7 @@ func _on_grid_updated():
 		win()
 
 func _on_playtest_button_pressed():
-	var new_level: Level = preload("res://game/level/Level.tscn").instantiate()
-	new_level.grid = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
+	var new_level := Level.with_grid(GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution))
 	TransitionManager.push_scene(new_level)
 
 
