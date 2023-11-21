@@ -13,7 +13,6 @@ func save_and_quit() -> void:
 func save_game() -> void:
 	save_profile()
 
-
 func load_game() -> void:
 	load_profile()
 

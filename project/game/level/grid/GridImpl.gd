@@ -93,7 +93,7 @@ func setup(n_: int, m_: int) -> void:
 	_grid_hints = GridHints.new()
 	_grid_hints.total_water = -1.
 	_grid_hints.total_boats = 0
-	_grid_hints.expected_aquariums = []
+	_grid_hints.expected_aquariums = {}
 
 enum Content { Nothing, Water, Air, Block, Boat }
 
@@ -528,7 +528,7 @@ func maybe_update_hints() -> void:
 		return
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
-	_grid_hints.expected_aquariums = _all_aquariums_count()
+	_grid_hints.expected_aquariums = all_aquariums_count()
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
 		var type := E.HintType.Any
@@ -619,7 +619,8 @@ func _parse_extra_data(line: String) -> void:
 		"+boats":
 			_grid_hints.total_boats = int(kv[1])
 		"+aqua":
-			_grid_hints.expected_aquariums.append(float(kv[1]))
+			var sv := kv[1].split(":", false, 2)
+			_grid_hints.expected_aquariums[float(sv[0])] = int(sv[1])
 		_:
 			push_error("Invalid data %s" % line)
 
@@ -983,47 +984,26 @@ class CountWaterDfs extends Dfs:
 func grid_hints() -> GridHints:
 	return _grid_hints
 
-func _all_aquariums_count() -> Array[float]:
+func all_aquariums_count() -> Dictionary:
 	var dfs := CountWaterDfs.new(self)
-	var counts: Array[float] = []
+	var counts: Dictionary = {}
 	for i in n:
 		for j in m:
 			for corner in E.Corner.values():
 				if _pure_cell(i, j)._valid_corner(corner) and _pure_cell(i, j).last_seen(corner) < last_seen:
 					dfs.water_count = 0
 					dfs.flood(i, j, corner)
-					counts.append(dfs.water_count)
-	counts.sort()
+					counts[dfs.water_count] = counts.get(dfs.water_count, 0) + 1
 	return counts
 
-func aquarium_hints_status() -> Array[E.HintStatus]:
-	var aqs := _all_aquariums_count()
-	var count: Dictionary = {}
-	for aq in aqs:
-		count[aq] = count.get(aq, 0) + 1
+func aquarium_hints_status() -> E.HintStatus:
+	var aqs := all_aquariums_count()
 	var satisfied: Array[E.HintStatus] = []
-	for hint in _grid_hints.expected_aquariums:
-		if count.get(hint, 0) > 0:
-			count[hint] -= 1
-			satisfied.append(E.HintStatus.Satisfied)
-		else:
-			# This might still be changed to Wrong
-			satisfied.append(E.HintStatus.Normal)
-	aqs.clear()
-	for size in count:
-		while count[size] >= 0:
-			count[size] -= 1
-			aqs.append(size)
-	# Should already be sorted, but let's be sure
-	aqs.sort()
-	var j := 0
-	for i in _grid_hints.expected_aquariums.size():
-		if satisfied[i] == E.HintStatus.Normal:
-			if j < aqs.size() and aqs[j] <= _grid_hints.expected_aquariums[i]:
-				j += 1
-			else:
-				satisfied[i] = E.HintStatus.Wrong
-	return satisfied
+	for hint_size in _grid_hints.expected_aquariums:
+		var hint_count: int = _grid_hints.expected_aquariums[hint_size]
+		if hint_count != -1 and hint_count != aqs.get(hint_size, 0):
+			return E.HintStatus.Normal
+	return E.HintStatus.Satisfied
 
 func count_water_row(i: int) -> float:
 	var count := 0.
@@ -1090,8 +1070,7 @@ func all_hints_status() -> E.HintStatus:
 	var s := E.HintStatus.Satisfied
 	s = merge_status(s, all_boats_hint_status())
 	s = merge_status(s, all_waters_hint_status())
-	for status in aquarium_hints_status():
-		s = merge_status(s, status)
+	s = merge_status(s, aquarium_hints_status())
 	for i in n:
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Water))
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Boat))

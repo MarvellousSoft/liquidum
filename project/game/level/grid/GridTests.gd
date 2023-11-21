@@ -422,15 +422,15 @@ func test_load_content_only() -> void:
 	assert_grid_eq(g.to_str(), "ww\n|.\nww\nL.")
 
 func test_aquarium_hints() -> void:
-	var g := str_grid("+aqua=1\n..\n..\n..\n..")
+	var g := str_grid("+aqua=1:1\n..\n..\n..\n..")
 	assert(!g.are_hints_satisfied())
-	assert(g.grid_hints().expected_aquariums == [1.])
-	assert(g.aquarium_hints_status() == [Normal])
+	assert(g.grid_hints().expected_aquariums == {1.: 1})
+	assert(g.aquarium_hints_status() == Normal)
 	g.get_cell(0, 0).put_water(TopLeft)
-	assert(g.aquarium_hints_status() == [Wrong])
+	assert(g.aquarium_hints_status() == Normal)
 	g.undo()
 	g.get_cell(1, 0).put_water(TopLeft)
-	assert(g.aquarium_hints_status() == [Satisfied])
+	assert(g.aquarium_hints_status() == Satisfied)
 	assert(g.are_hints_satisfied())
 
 func test_together_rules() -> void:

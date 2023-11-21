@@ -17,8 +17,10 @@ class GridHints:
 	var total_water: float
 	# Total boats in the grid
 	var total_boats: int
-	# Aquariums with these amount of water must be present. Sorted.
-	var expected_aquariums: Array[float]
+	# If a size is present here, exactly these many aquariums of this size must
+	# exist in the solution. All other sizes are unrestricted.
+	# Dictionary[float, int]
+	var expected_aquariums: Dictionary
 
 class CellModel:
 	func water_full() -> bool:
@@ -148,9 +150,12 @@ func count_boat_col(_j: int) -> int:
 func grid_hints() -> GridHints:
 	return GridModel.must_be_implemented()
 
-# Returns a boolean for each aquarium hint, whether it is satisfied. Same order as
-# `grid_hints().expected_aquariums`.
-func aquarium_hints_status() -> Array[E.HintStatus]:
+# Dictionary[float, int], the count of the sizes of each aquarium
+func all_aquarium_counts() -> Dictionary:
+	return GridModel.must_be_implemented()
+
+# Whether all expected aquarium hints are satisfied.
+func aquarium_hints_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
 enum LoadMode {

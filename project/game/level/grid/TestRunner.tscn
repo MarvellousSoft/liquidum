@@ -40,7 +40,7 @@ offset_right = 846.0
 offset_bottom = 371.0
 metadata/_edit_use_anchors_ = true
 
-[node name="BrushPicker2" parent="." instance=ExtResource("3_1jrm3")]
+[node name="BrushPicker" parent="." instance=ExtResource("3_1jrm3")]
 
 [node name="Tests" type="Node" parent="."]
 script = ExtResource("3_ftgq8")
@@ -153,7 +153,7 @@ offset_bottom = 337.0
 text = "Interesting"
 
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
-[connection signal="brushed_picked" from="BrushPicker2" to="Grid2" method="set_brush_mode"]
+[connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
