@@ -12,6 +12,9 @@ const BGM_SOUND = "BGM_SOUND"
 const SFX_SOUND = "SFX_SOUND"
 const FULLSCREEN = "FULLSCREEN"
 const SAVE_AND_EXIT = "SAVE_AND_EXIT"
+const AQUARIUMS = "AQUARIUMS"
+const SIZE = "SIZE"
+const AMOUNT = "AMOUNT"
 
 const KEYS = [
  "TEST",
@@ -22,5 +25,8 @@ const KEYS = [
  "BGM_SOUND",
  "SFX_SOUND",
  "FULLSCREEN",
- "SAVE_AND_EXIT"
+ "SAVE_AND_EXIT",
+ "AQUARIUMS",
+ "SIZE",
+ "AMOUNT"
 ]

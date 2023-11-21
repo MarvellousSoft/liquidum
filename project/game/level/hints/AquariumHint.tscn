@@ -1,0 +1,186 @@
+[gd_scene load_steps=14 format=3 uid="uid://0jpojxe5ekxf"]
+
+[ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
+[ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_utjnr"]
+[ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/water_bottomleft.png" id="3_f3pmc"]
+[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="3_xrcsw"]
+[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="4_4kw1v"]
+[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/cell/wall_dec_diag.png" id="5_wjeep"]
+
+[sub_resource type="FontVariation" id="FontVariation_aaqvh"]
+base_font = ExtResource("3_xrcsw")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
+noise_type = 2
+fractal_gain = 0.4
+fractal_weighted_strength = 0.25
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bi3kj"]
+width = 500
+height = 500
+seamless = true
+seamless_blend_skirt = 0.4
+noise = SubResource("FastNoiseLite_t7cfv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qre3a"]
+shader = ExtResource("2_utjnr")
+shader_parameter/level = 0.0
+shader_parameter/size = Vector2(100, 100)
+shader_parameter/wave_width = 50.0
+shader_parameter/wave_height = 5.0
+shader_parameter/depth = 40.0
+shader_parameter/water_color = Color(0.670588, 1, 0.819608, 1)
+shader_parameter/depth_color = Color(0.0784314, 0.364706, 0.529412, 1)
+shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
+
+[sub_resource type="Animation" id="Animation_jehb0"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Water:material:shader_parameter/level")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.5]
+}
+
+[sub_resource type="Animation" id="Animation_2wtmy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Water:material:shader_parameter/level")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_geoow"]
+_data = {
+"RESET": SubResource("Animation_2wtmy"),
+"startup": SubResource("Animation_jehb0")
+}
+
+[node name="AquariumHint" type="HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1520.0
+offset_bottom = -1010.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 9
+script = ExtResource("1_f56ld")
+
+[node name="Size" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/line_spacing = 28
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 30
+text = "3.5"
+vertical_alignment = 2
+
+[node name="Water" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_qre3a")
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_f3pmc")
+expand_mode = 1
+
+[node name="WallLeft" type="TextureRect" parent="Water"]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+
+[node name="WallBottom" type="TextureRect" parent="Water"]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+rotation = -1.5708
+pivot_offset = Vector2(35, 35)
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+
+[node name="WallDiag" type="TextureRect" parent="Water"]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+texture = ExtResource("5_wjeep")
+expand_mode = 1
+
+[node name="Separator" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="ExpectedAmount" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 25
+theme_override_constants/line_spacing = 26
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 40
+text = "x4"
+vertical_alignment = 2
+
+[node name="Separator2" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="TargetAmount" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_constants/line_spacing = 24
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 35
+text = "(4)"
+vertical_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_geoow")
+}

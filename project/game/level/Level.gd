@@ -9,6 +9,7 @@ const COUNTER_DELAY_STARTUP = .3
 	"boat": $Counters/BoatCounter,
 	"mistake": $Counters/MistakeCounter,
 }
+@onready var AquariumHints = $AquariumHintContainer
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -36,6 +37,8 @@ func setup():
 	for counter in Counters.values():
 		delay += COUNTER_DELAY_STARTUP
 		counter.startup(delay)
+	delay += COUNTER_DELAY_STARTUP
+	AquariumHints.startup(delay)
 	AudioManager.play_sfx("start_level")
 
 func editor_mode() -> bool:
@@ -63,7 +66,7 @@ func _on_brush_picker_brushed_picked(mode : E.BrushMode):
 
 func _on_grid_updated():
 	update_counters()
-	if GridNode.is_level_finished():
+	if GridNode.is_level_finished() and not editor_mode():
 		win()
 
 func _on_playtest_button_pressed():
