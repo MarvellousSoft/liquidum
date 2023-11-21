@@ -60,8 +60,9 @@ func setup():
 	GridNode.setup(grid)
 	update_expected_waters = GridNode.get_expected_waters() > 0
 	update_expected_boats = GridNode.get_expected_boats() > 0
-	Counters.water.visible = GridNode.get_expected_waters() != 0
+	Counters.water.visible = GridNode.get_expected_waters() != -1
 	Counters.boat.visible = GridNode.get_expected_boats() != 0
+	CountersPanel.visible = Counters.water.visible or Counters.boat.visible
 	update_counters()
 	
 	AnimPlayer.play("startup")
