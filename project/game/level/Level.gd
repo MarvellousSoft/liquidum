@@ -44,12 +44,15 @@ func setup():
 		counter.startup(delay)
 	AudioManager.play_sfx("start_level")
 
+func editor_mode() -> bool:
+	return GridNode.editor_mode
+
 
 func update_counters() -> void:
 	if update_expected_waters:
-		Counters.water.set_count(GridNode.get_missing_waters())
+		Counters.water.set_count(GridNode.get_expected_waters() if GridNode.editor_mode else GridNode.get_missing_waters())
 	if update_expected_boats:
-		Counters.boat.set_count(GridNode.get_missing_boats())
+		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
 
 
 func win():

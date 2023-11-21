@@ -6,28 +6,19 @@ extends Control
 @onready var MainLabel = $HBoxContainer/Label
 @onready var AnimPlayer = $AnimationPlayer
 
-var count := 0
-
+var count: float = 0.0
 
 func _ready():
 	MainLabel.text = tr(counter_name)
-
 
 func startup(delay : float) -> void:
 	await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
 
-
-func add_count() -> void:
-	count += 1
-	update_label()
-
-
-func set_count(value : int) -> void:
+func set_count(value: float) -> void:
 	if count != value:
 		count = value
 		update_label()
-
 
 func set_unknown():
 	Counter.text = "?"
