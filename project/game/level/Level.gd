@@ -34,10 +34,6 @@ func _ready():
 	AudioManager.play_bgm("main")
 	setup()
 
-func set_timer_secs(_timer_secs_: float) -> void:
-	# TODO: Timer
-	pass
-
 
 func _process(dt):
 	if process_game and not grid.editor_mode():
@@ -58,7 +54,8 @@ func setup():
 				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
-				set_timer_secs(save.timer_secs)
+
+				running_time = save.timer_secs
 		update_expected_waters = GridNode.get_expected_waters() > 0
 		update_expected_boats = GridNode.get_expected_boats() > 0
 		Counters.water.visible = GridNode.get_expected_waters() != -1
@@ -71,9 +68,8 @@ func setup():
 		Counters.boat.enable_editor()
 		Counters.mistake.hide()
 		TimerContainer.hide()
-	
 	update_counters()
-	
+
 	AnimPlayer.play("startup")
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
@@ -132,7 +128,7 @@ func _on_playtest_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	if not level_name.is_empty():
-		FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, 0.0))
+		FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
 	TransitionManager.pop_scene()
 
 
