@@ -66,7 +66,6 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="EditorButtons" type="HBoxContainer" parent="VBoxContainer"]
-visible = false
 layout_mode = 2
 alignment = 1
 
