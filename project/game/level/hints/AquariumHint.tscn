@@ -94,12 +94,11 @@ _data = {
 }
 
 [node name="AquariumHint" type="HBoxContainer"]
-modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1520.0
-offset_bottom = -1010.0
+offset_right = -3395.0
+offset_bottom = -1960.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 9
@@ -109,16 +108,16 @@ script = ExtResource("1_f56ld")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
+theme_override_constants/outline_size = 40
 theme_override_constants/line_spacing = 28
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 80
 text = "3.5"
 vertical_alignment = 2
 
 [node name="Water" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_qre3a")
-custom_minimum_size = Vector2(70, 70)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -127,56 +126,56 @@ expand_mode = 1
 
 [node name="WallLeft" type="TextureRect" parent="Water"]
 layout_mode = 0
-offset_right = 70.0
-offset_bottom = 70.0
+offset_right = 200.0
+offset_bottom = 200.0
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
 [node name="WallBottom" type="TextureRect" parent="Water"]
 layout_mode = 0
-offset_right = 70.0
-offset_bottom = 70.0
+offset_right = 200.0
+offset_bottom = 200.0
 rotation = -1.5708
-pivot_offset = Vector2(35, 35)
+pivot_offset = Vector2(100, 100)
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
 [node name="WallDiag" type="TextureRect" parent="Water"]
 layout_mode = 0
-offset_right = 70.0
-offset_bottom = 70.0
+offset_right = 200.0
+offset_bottom = 200.0
 texture = ExtResource("5_wjeep")
 expand_mode = 1
 
 [node name="Separator" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 
 [node name="ExpectedAmount" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 25
+theme_override_constants/outline_size = 50
 theme_override_constants/line_spacing = 26
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 90
 text = "x4"
 vertical_alignment = 2
 
 [node name="Separator2" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(2, 0)
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
 [node name="CurrentAmount" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
+theme_override_constants/outline_size = 45
 theme_override_constants/line_spacing = 24
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
-theme_override_font_sizes/font_size = 35
+theme_override_font_sizes/font_size = 88
 text = "(4)"
 vertical_alignment = 2
 

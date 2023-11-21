@@ -80,7 +80,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_fonts/font = SubResource("FontVariation_o6mv5")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 76
 text = "AQUARIUMS"
 horizontal_alignment = 1
 
@@ -93,14 +93,14 @@ alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
 theme_override_fonts/font = SubResource("FontVariation_st5oh")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 52
 text = "SIZE"
 
 [node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
 theme_override_fonts/font = SubResource("FontVariation_n0dxx")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 52
 text = "AMOUNT"
 
 [node name="HintContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
