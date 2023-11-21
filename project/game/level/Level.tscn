@@ -27,11 +27,19 @@ offset_right = 308.0
 offset_bottom = 591.0
 text = "Auto-solve!"
 
-[node name="PlaytestOrBack" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="."]
 offset_left = 147.0
 offset_top = 614.0
 offset_right = 308.0
 offset_bottom = 672.0
+text = "Back"
+
+[node name="PlaytestButton" type="Button" parent="."]
+offset_left = 147.0
+offset_top = 690.0
+offset_right = 308.0
+offset_bottom = 752.0
+text = "Playtest"
 
 [node name="Counters" type="VBoxContainer" parent="."]
 offset_left = 1625.0
@@ -67,7 +75,8 @@ button_group = SubResource("ButtonGroup_syhq8")
 [connection signal="mistake_made" from="CenterContainer/GridView" to="Counters/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
-[connection signal="pressed" from="PlaytestOrBack" to="." method="_on_playtest_or_back_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 
 [editable path="BrushPicker"]

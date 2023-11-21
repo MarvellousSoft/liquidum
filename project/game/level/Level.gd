@@ -1,3 +1,4 @@
+class_name Level
 extends Node2D
 
 const COUNTER_DELAY_STARTUP = .3
@@ -13,7 +14,6 @@ var update_expected_waters : bool
 var update_expected_boats : bool
 
 var grid: GridModel = null
-var back_grid: GridModel = null
 
 func _ready():
 	await TransitionManager.transition_finished
@@ -23,14 +23,8 @@ func _ready():
 
 
 func setup():
-	if back_grid:
-		$PlaytestOrBack.text = "Back"
-		$PlaytestOrBack.show()
-	elif grid.editor_mode():
-		$PlaytestOrBack.text = "Playtest"
-		$PlaytestOrBack.show()
-	else:
-		$PlaytestOrBack.hide()
+	if not grid.editor_mode():
+		$PlaytestButton.hide()
 	$BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	update_expected_waters = GridNode.get_expected_waters() > 0
@@ -72,15 +66,11 @@ func _on_grid_updated():
 	if GridNode.is_level_finished():
 		win()
 
+func _on_playtest_button_pressed():
+	var new_level: Level = preload("res://game/level/Level.tscn").instantiate()
+	new_level.grid = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
+	TransitionManager.push_scene(new_level)
 
-func _on_playtest_or_back_pressed():
-	if back_grid != null:
-		grid = back_grid
-		back_grid = null
-		$PlaytestOrBack.text = "Playtest"
-	else:
-		back_grid = grid
-		grid = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
-		$PlaytestOrBack.text = "Back"
-	setup()
 
+func _on_back_button_pressed():
+	TransitionManager.pop_scene()
