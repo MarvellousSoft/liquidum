@@ -496,16 +496,6 @@ func _pure_cell(i: int, j: int) -> PureCell:
 func get_cell(i: int, j: int) -> CellModel:
 	return CellWithLoc.new(i, j, self)
 
-# TODO: Rename
-func set_hint_row(i: int, v: float) -> void:
-	if not editor_mode() or not auto_update_hints():
-		_row_hints[i].water_count = v
-
-# TODO: Rename
-func set_hint_col(j: int, v: float) -> void:
-	if not editor_mode() or not auto_update_hints():
-		_col_hints[j].water_count = v
-
 func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddRowChange:
 	assert(editor_mode())
 	if row.is_empty():

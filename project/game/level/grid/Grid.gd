@@ -99,12 +99,6 @@ func row_hints() -> Array[LineHint]:
 func col_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
-func set_hint_row(_i: int, _v: float) -> void:
-	return GridModel.must_be_implemented()
-
-func set_hint_col(_j: int, _v: float) -> void:
-	return GridModel.must_be_implemented()
-
 func add_row(_flush_undo := true) -> void:
 	return GridModel.must_be_implemented()
 

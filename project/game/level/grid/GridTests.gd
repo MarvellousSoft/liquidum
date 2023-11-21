@@ -204,13 +204,13 @@ L../.╲
 L╲_╲_.
 	""")
 	check(g.col_hints()[0].water_count == -1.)
-	g.set_hint_col(0, 1.5)
+	g.col_hints()[0].water_count = 1.5
 	check(g.col_hints()[0].water_count == 1.5)
-	g.set_hint_row(1, 1.)
+	g.row_hints()[1].water_count = 1.
 	check(g.are_hints_satisfied())
-	g.set_hint_col(2, 0.5)
+	g.col_hints()[2].water_count = 0.5
 	check(g.are_hints_satisfied())
-	g.set_hint_row(0, 0.5)
+	g.row_hints()[0].water_count = 0.5
 	check(!g.are_hints_satisfied())
 
 func test_simple_solve() -> void:
