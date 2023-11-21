@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://dlcfb4y7xjjl3"]
 
-[ext_resource type="Script" path="res://game/level/Level.gd" id="1_pgux8"]
+[ext_resource type="Script" path="res://game/level/Level.gd" id="1_efb3o"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="3_ceab8"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
@@ -74,7 +74,7 @@ _data = {
 }
 
 [node name="Level" type="Node2D"]
-script = ExtResource("1_pgux8")
+script = ExtResource("1_efb3o")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 offset_top = 450.0
@@ -173,7 +173,7 @@ offset_left = 3069.0
 offset_top = 404.0
 offset_right = 3768.0
 offset_bottom = 1664.0
-theme_override_constants/separation = 50
+theme_override_constants/separation = 60
 alignment = 1
 
 [node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]
@@ -188,7 +188,7 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = -19
+theme_override_constants/margin_bottom = 0
 
 [node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer"]
 layout_mode = 2

@@ -47,7 +47,6 @@ func setup():
 	
 	$BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
-	scale_grid()
 	if not grid.editor_mode():
 		$PlaytestButton.hide()
 		if not level_name.is_empty():
@@ -81,6 +80,7 @@ func setup():
 	
 	AudioManager.play_sfx("start_level")
 	
+	scale_grid()
 	process_game = true
 
 
