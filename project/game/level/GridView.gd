@@ -307,6 +307,7 @@ func play_water_sound() -> void:
 
 
 func highlight_error(i: int, j: int, which: E.Waters) -> void:
+	mouse_hold_status = E.MouseDragState.None
 	var cell = get_cell(i, j)
 	cell.play_error(which)
 	AudioManager.play_sfx("error")
