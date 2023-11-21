@@ -29,7 +29,7 @@ func update_translation():
 	TranslationServer.set_locale(LANGUAGES[get_option("locale")].locale)
 
 
-func get_save_data():
+func get_save_data() -> Dictionary:
 	var data = {
 		"time": Time.get_datetime_dict_from_system(),
 		"version": VERSION,

@@ -136,7 +136,7 @@ func get_expected_waters() -> float:
 	return grid_logic.get_expected_waters()
 
 
-func get_expected_boats() -> float:
+func get_expected_boats() -> int:
 	return grid_logic.get_expected_boats()
 
 #Assumes the expected waters is >= 0
