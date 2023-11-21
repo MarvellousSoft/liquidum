@@ -121,12 +121,8 @@ func _randomly_place_water(grid: GridModel) -> void:
 						c.remove_content(corner)
 					else:
 						c.put_water(corner)
-	for i in grid.rows():
-		grid.set_hint_row(i, grid.count_water_row(i))
-	for j in grid.cols():
-		grid.set_hint_col(j, grid.count_water_col(j))
 
-func generate(n: int, m: int, diagonals := true, clear_solution := true) -> GridModel:
+func generate(n: int, m: int, diagonals := true) -> GridModel:
 	seed(rseed)
 	var adj_rule: AdjacencyRule
 	if diagonals:
@@ -134,7 +130,7 @@ func generate(n: int, m: int, diagonals := true, clear_solution := true) -> Grid
 	else:
 		adj_rule = SquareAdj.new()
 	var g := _gen_grid_groups(n, 2 * m if diagonals else m, adj_rule)
-	var grid := GridImpl.new(n, m)
+	var grid := GridImpl.empty_editor(n, m)
 	for i in n:
 		for j in m:
 			if diagonals:
@@ -153,6 +149,4 @@ func generate(n: int, m: int, diagonals := true, clear_solution := true) -> Grid
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
 	_randomly_place_water(grid)
-	if clear_solution:
-		grid.clear_content()
 	return grid

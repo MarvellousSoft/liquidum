@@ -837,7 +837,7 @@ func _row_hint2(h: int) -> String:
 func to_str() -> String:
 	var builder := PackedStringArray()
 	if _grid_hints.total_water != -1:
-		builder.append("+waters=%d\n" % _grid_hints.total_water)
+		builder.append("+waters=%.1f\n" % _grid_hints.total_water)
 	if _grid_hints.total_boats != 0:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
 	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1) or _col_hints.any(func(h): return h.boat_count != -1)

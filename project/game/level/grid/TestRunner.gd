@@ -34,10 +34,11 @@ func gen_puzzle() -> GridModel:
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
 		var gen := Generator.new(rseed)
-		var g := gen.generate($Rows.value, $Cols.value, $Diags.button_pressed, false)
+		var g := gen.generate($Rows.value, $Cols.value, $Diags.button_pressed)
 		if $Interesting.button_pressed and $Seed.text == "":
-			g.clear_content()
-			var r := SolverModel.new().full_solve(g)
+			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
+			g2.clear_content()
+			var r := SolverModel.new().full_solve(g2)
 			if r != SolverModel.SolveResult.SolvedUnique:
 				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
 				await get_tree().process_frame
@@ -54,7 +55,7 @@ func _on_gen_pressed() -> void:
 	g1.setup(GridImpl.from_str(sol_str, GridModel.LoadMode.SolutionNoClear))
 	g.clear_content()
 	# Solver needs to play with it, can't be limited by the solution
-	g2.setup(GridImpl.from_str(g.to_str(), GridModel.LoadMode.Editor))
+	g2.setup(GridImpl.from_str(g.to_str(), GridModel.LoadMode.Testing))
 	scale_grids()
 	$Gen.disabled = false
 
