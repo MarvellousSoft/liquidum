@@ -84,19 +84,23 @@ func export_data(grid: GridImpl) -> Dictionary:
 		grid_hints = _export_grid_hints(grid._grid_hints),
 	}
 
-func load_data(data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
+func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
 	if SAVE_VERSION != data.version:
 		push_warning("Invalid version")
-	var grid := GridImpl.new(0, 0)
+	var content_only := (load_mode == GridModel.LoadMode.ContentOnly)
 	grid.pure_cells = _load_grid(data.cells, _load_pure_cell)
 	var n := grid.pure_cells.size()
 	var m := 0 if n == 0 else grid.pure_cells[0].size()
-	grid.n = n
-	grid.m = m
-	grid._row_hints.assign(data.row_hints.map(_load_line_hint))
-	grid._col_hints.assign(data.col_hints.map(_load_line_hint))
-	grid.wall_bottom = _load_grid(data.wall_bottom, _load_bool)
-	grid.wall_right = _load_grid(data.wall_right, _load_bool)
-	grid._grid_hints = _load_grid_hints(data.grid_hints)
+	if content_only:
+		assert(grid.n == n)
+		assert(grid.m == m)
+	else:
+		grid.n = n
+		grid.m = m
+		grid._row_hints.assign(data.row_hints.map(_load_line_hint))
+		grid._col_hints.assign(data.col_hints.map(_load_line_hint))
+		grid.wall_bottom = _load_grid(data.wall_bottom, _load_bool)
+		grid.wall_right = _load_grid(data.wall_right, _load_bool)
+		grid._grid_hints = _load_grid_hints(data.grid_hints)
 	grid._finish_loading(load_mode)
 	return grid

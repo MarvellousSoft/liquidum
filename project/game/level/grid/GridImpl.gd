@@ -8,7 +8,8 @@ static func empty_editor(rows_: int, cols_: int) -> GridModel:
 	return g
 
 static func import_data(data: Dictionary, load_mode: LoadMode) -> GridModel:
-	return GridExporter.new().load_data(data, load_mode)
+	assert(load_mode != LoadMode.ContentOnly)
+	return GridExporter.new().load_data(GridImpl.new(0, 0), data, load_mode)
 
 static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> GridModel:
 	s = s.replace('\r', '').dedent().strip_edges()

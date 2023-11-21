@@ -12,7 +12,7 @@ func _ready():
 func _on_level_button_pressed(level_name: String) -> void:
 	# TODO: In the future, don't use from_str, but instead import_data
 	var grid_str := FileAccess.get_file_as_string("res://game/levels/%s.txt" % level_name)
-	var grid := GridImpl.from_str(grid_str)
+	var grid := GridImpl.from_str(grid_str, GridModel.LoadMode.Solution)
 	var level := Level.with_grid(grid, level_name)
 	TransitionManager.push_scene(level)
 

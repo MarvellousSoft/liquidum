@@ -5,6 +5,10 @@ const VERSION := 1
 var full_name: String
 var grid: GridModel
 
+func _init(full_name_: String, grid_: GridModel) -> void:
+	full_name = full_name_
+	grid = grid_
+
 func get_data() -> Dictionary:
 	return {
 		version = VERSION,
@@ -15,7 +19,5 @@ func get_data() -> Dictionary:
 func load_data(data: Dictionary) -> LevelData:
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
-	var level := LevelData.new()
-	level.full_name = data.full_name
-	level.grid = GridModel.import_data(level.grid)
-	return level
+	return LevelData.new(data.full_name, GridModel.import_data(data.grid))
+
