@@ -54,7 +54,6 @@ func setup():
 				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
-
 				running_time = save.timer_secs
 		update_expected_waters = GridNode.get_expected_waters() > 0
 		update_expected_boats = GridNode.get_expected_boats() > 0

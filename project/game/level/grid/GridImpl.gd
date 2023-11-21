@@ -307,12 +307,31 @@ class RemRowChange extends Change:
 	var prev_row: Array[PureCell]
 	var prev_wall_bottom: Array[bool]
 	var prev_wall_right: Array[bool]
-	func _init(prev_row_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool]) -> void:
+	var prev_hint: LineHint
+	func _init(prev_row_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
 		prev_row = prev_row_
 		prev_wall_bottom = prev_wall_bottom_
 		prev_wall_right = prev_wall_right_
+		prev_hint = prev_hint_
 	func undo(grid: GridImpl) -> Change:
-		return grid._do_add_row(prev_row, prev_wall_bottom, prev_wall_right)
+		return grid._do_add_row(prev_row, prev_wall_bottom, prev_wall_right, prev_hint)
+
+class AddColChange extends Change:
+	func undo(grid: GridImpl) -> Change:
+		return grid._do_rem_col()
+
+class RemColChange extends Change:
+	var prev_col: Array[PureCell]
+	var prev_wall_bottom: Array[bool]
+	var prev_wall_right: Array[bool]
+	var prev_hint: LineHint
+	func _init(prev_col_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
+		prev_col = prev_col_
+		prev_wall_bottom = prev_wall_bottom_
+		prev_wall_right = prev_wall_right_
+		prev_hint = prev_hint_
+	func undo(grid: GridImpl) -> Change:
+		return grid._do_add_col(prev_col, prev_wall_bottom, prev_wall_right, prev_hint)
 
 class Changes:
 	var changes: Array[Change]
@@ -487,10 +506,10 @@ func set_hint_col(j: int, v: float) -> void:
 	if not editor_mode() or not auto_update_hints():
 		_col_hints[j].water_count = v
 
-func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool]) -> AddRowChange:
+func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddRowChange:
 	assert(editor_mode())
 	if row.is_empty():
-		for _i in m:
+		for _j in m:
 			row.append(PureCell.empty())
 	if new_wall_bottom.is_empty():
 		new_wall_bottom.resize(m)
@@ -500,7 +519,7 @@ func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_ri
 	pure_cells.append(row)
 	wall_bottom.append(new_wall_bottom)
 	wall_right.append(new_wall_right)
-	_row_hints.append(_empty_line_hint())
+	_row_hints.append(new_line_hint)
 	maybe_update_hints()
 	validate()
 	return AddRowChange.new()
@@ -511,12 +530,13 @@ func _do_rem_row() -> RemRowChange:
 	var prev_row: Array[PureCell] = pure_cells.pop_back()
 	var prev_wall_bottom: Array[bool] = wall_bottom.pop_back()
 	var prev_wall_right: Array[bool] = wall_right.pop_back()
+	var hint: LineHint = _row_hints.pop_back()
 	maybe_update_hints()
 	validate()
-	return RemRowChange.new(prev_row, prev_wall_bottom, prev_wall_right)
+	return RemRowChange.new(prev_row, prev_wall_bottom, prev_wall_right, hint)
 
 func add_row(flush_undo := true) -> void:
-	var change := _do_add_row([], [], [])
+	var change := _do_add_row([], [], [], _empty_line_hint())
 	_push_undo_changes([change], flush_undo)
 	flood_all(false)
 
@@ -524,11 +544,50 @@ func rem_row(flush_undo := true) -> void:
 	var change := _do_rem_row()
 	_push_undo_changes([change], flush_undo)
 
-func add_col(_flush_undo := true) -> void:
-	return GridModel.must_be_implemented()
+func _do_add_col(col: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddColChange:
+	assert(editor_mode())
+	if col.is_empty():
+		for _i in n:
+			col.append(PureCell.empty())
+	if new_wall_bottom.is_empty():
+		new_wall_bottom.resize(n - 1)
+	if new_wall_right.is_empty():
+		new_wall_right.resize(n)
+	m += 1
+	for i in n:
+		pure_cells[i].append(col[i])
+		if i != n - 1:
+			wall_bottom[i].append(new_wall_bottom[i])
+		wall_right[i].append(new_wall_right[i])
+	_col_hints.append(new_line_hint)
+	maybe_update_hints()
+	validate()
+	return AddColChange.new()
 
-func rem_col(_flush_undo := true) -> void:
-	return GridModel.must_be_implemented()
+func _do_rem_col() -> RemColChange:
+	assert(editor_mode())
+	m -= 1
+	var prev_col: Array[PureCell] = []
+	var prev_wall_bottom: Array[bool] = []
+	var prev_wall_right: Array[bool] = []
+	for i in n:
+		prev_col.append(pure_cells[i].pop_back().clone())
+		if i != n - 1:
+			prev_wall_bottom.append(wall_bottom[i].pop_back())
+		prev_wall_right.append(wall_right[i].pop_back())
+	var hint: LineHint = _col_hints.pop_back()
+	maybe_update_hints()
+	validate()
+	return RemColChange.new(prev_col, prev_wall_bottom, prev_wall_right, hint)
+
+func add_col(flush_undo := true) -> void:
+	var change := _do_add_col([], [], [], _empty_line_hint())
+	_push_undo_changes([change], flush_undo)
+	flood_all(false)
+
+func rem_col(flush_undo := true) -> void:
+	var change := _do_rem_col()
+	_push_undo_changes([change], flush_undo)
 
 func row_hints() -> Array[LineHint]:
 	return _row_hints
