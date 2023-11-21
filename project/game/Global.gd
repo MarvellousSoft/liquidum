@@ -1,5 +1,11 @@
 extends Node
 
+const COLORS = {
+	"normal": Color("#d9ffe2ff"),
+	"satisfied": Color("#61fc89ff"),
+	"error": Color("#ff6a6aff"),
+}
+
 var previous_windowed_pos = false
 
 func is_fullscreen():

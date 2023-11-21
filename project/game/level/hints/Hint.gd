@@ -2,9 +2,6 @@ extends Control
 
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
-const NORMAL_COLOR = Color("#d9ffe2ff")
-const SATISFIED_COLOR = Color("#61fc89ff")
-const ERROR_COLOR = Color("#ff6a6aff")
 const NUMBER_HEADER = """[font_size={12}]
 [/font_size]"""
 
@@ -72,7 +69,7 @@ func set_hint_type(new_type : E.HintType) -> void:
 
 
 func alpha_t(text : String, alpha : float) -> String:
-	var color = NORMAL_COLOR
+	var color = Global.COLORS.normal
 	color.a = alpha
 	return "[color=%s]%s[/color]" % ["#"+color.to_html(true),text]
 
@@ -106,11 +103,11 @@ func set_hint_visibility(which : E.Walls, value : bool) -> void:
 func set_status(status: E.HintStatus) -> void:
 	match status:
 		E.HintStatus.Normal:
-			Number.add_theme_color_override("default_color", NORMAL_COLOR)
+			Number.add_theme_color_override("default_color", Global.COLORS.normal)
 		E.HintStatus.Satisfied:
-			Number.add_theme_color_override("default_color", SATISFIED_COLOR)
+			Number.add_theme_color_override("default_color", Global.COLORS.satisfied)
 		E.HintStatus.Wrong:
-			Number.add_theme_color_override("default_color", ERROR_COLOR)
+			Number.add_theme_color_override("default_color", Global.COLORS.error)
 
 
 func enable_editor() -> void:
