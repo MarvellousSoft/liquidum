@@ -63,6 +63,11 @@ func set_value(new_value : float) -> void:
 
 func set_hint_type(new_type : E.HintType) -> void:
 	hint_type = new_type
+	if hint_type == E.HintType.Any:
+		ToggleHintType.hide()
+	else:
+		ToggleHintType.show()
+	
 	update_label()
 
 
