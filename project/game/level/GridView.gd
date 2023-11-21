@@ -73,8 +73,8 @@ func setup(grid_logic_: GridModel) -> void:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
 	setup_hints()
-	setup_cell_corners()
 	update()
+	setup_cell_corners()
 
 #Assumes grid_logic is already setup
 func setup_hints():
@@ -92,10 +92,10 @@ func setup_cell_corners() -> void:
 		CellCornerGrid.remove_child(child)
 	var sample_cell = get_cell(0,0)
 	var sample_corner = CELL_CORNER.instantiate()
-	CellCornerGrid.global_position = sample_cell.global_position
-	CellCornerGrid.position.y += sample_corner.size.y/2
-	CellCornerGrid.position.x += sample_corner.size.x/2
 	CellCornerGrid.columns = columns + 1
+	CellCornerGrid.global_position = sample_cell.global_position
+#	CellCornerGrid.position.x += 9*sample_corner.size.x/6
+#	CellCornerGrid.position.y += 9*sample_corner.size.y/6
 	CellCornerGrid.add_theme_constant_override("h_separation", sample_cell.size.x - sample_corner.size.x)
 	CellCornerGrid.add_theme_constant_override("v_separation", sample_cell.size.y - sample_corner.size.y)
 	for i in rows + 1:

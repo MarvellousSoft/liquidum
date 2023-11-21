@@ -108,11 +108,9 @@ layout_mode = 2
 
 [node name="CellCornerGrid" type="GridContainer" parent="."]
 z_index = 1
-layout_mode = 0
-offset_left = -177.0
-offset_top = -168.0
-offset_right = 248.0
-offset_bottom = 257.0
+layout_mode = 1
+offset_right = 1150.0
+offset_bottom = 1150.0
 mouse_filter = 2
 theme_override_constants/h_separation = 50
 theme_override_constants/v_separation = 50
