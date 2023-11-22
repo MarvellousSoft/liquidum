@@ -31,10 +31,11 @@ static func with_grid(grid_: GridModel, level_name_: String) -> Level:
 
 func _ready():
 	await TransitionManager.transition_finished
-	
 	AudioManager.play_bgm("main")
 	setup()
 
+func _enter_tree():
+	scale_grid()
 
 func _process(dt):
 	if process_game and not grid.editor_mode():
@@ -116,6 +117,7 @@ func setup() -> void:
 	AudioManager.play_sfx("start_level")
 	
 	scale_grid()
+
 	process_game = true
 
 
