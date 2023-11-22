@@ -97,10 +97,7 @@ func load_editor_level(id: String) -> LevelData:
 
 const DATA_DIR := "res://database/levels"
 
-func _json(file: String) -> String:
-	return file + ".json"
-
-func load_level_data(level_name: String) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(DATA_DIR, _json(level_name)))
+func load_level_data(section: int, level: int) -> LevelData:
+	var data := LevelData.load_data(_load_json_data("%s/%02d" % [DATA_DIR, section], "%02d.json" % level))
 	assert(not data.full_name.is_empty())
 	return data

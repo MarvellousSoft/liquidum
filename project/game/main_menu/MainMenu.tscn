@@ -48,6 +48,6 @@ text = "Level Editor"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
 
-[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= ["1_1"]]
-[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= ["1_2"]]
+[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= [1, 1]]
+[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= [1, 2]]
 [connection signal="pressed" from="VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
