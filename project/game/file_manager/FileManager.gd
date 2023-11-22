@@ -28,7 +28,6 @@ func _load_json_data(dir_name: String, file_name: String) -> Variant:
 	var file := FileAccess.open(file_name, FileAccess.READ)
 	if file == null:
 		push_error("Error trying to open profile whilst loading: %d" % FileAccess.get_open_error())
-		assert(false)
 		return null
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != Error.OK:
@@ -81,7 +80,7 @@ func load_editor_levels() -> Dictionary:
 				ans[id] = EditorLevelMetadata.load_data(_load_json_data(_editor_dir(), file))
 	return ans
 
-func _editor_file(id: String) -> String:
+func _data_file(id: String) -> String:
 	return "%s.level" % id
 
 func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelData) -> void:
@@ -89,9 +88,19 @@ func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelDat
 		_save_json_data(_editor_dir(), id + METADATA, metadata.get_data())
 	if data != null:
 		assert(data.full_name.is_empty())
-		_save_json_data(_editor_dir(), _editor_file(id), data.get_data())
+		_save_json_data(_editor_dir(), _data_file(id), data.get_data())
 
 func load_editor_level(id: String) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(_editor_dir(), _editor_file(id)))
+	var data := LevelData.load_data(_load_json_data(_editor_dir(), _data_file(id)))
 	assert(data == null or data.full_name.is_empty())
+	return data
+
+const DATA_DIR := "res://game/levels"
+
+func _json(file: String) -> String:
+	return file + ".json"
+
+func load_level_data(level_name: String) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(DATA_DIR, _json(level_name)))
+	assert(not data.full_name.is_empty())
 	return data

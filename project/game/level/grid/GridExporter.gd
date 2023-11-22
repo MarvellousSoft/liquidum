@@ -69,7 +69,9 @@ func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
 	var hints := GridModel.GridHints.new()
 	hints.total_water = float(data.total_water)
 	hints.total_boats = int(data.total_boats)
-	hints.expected_aquariums = data.expected_aquariums
+	# Need to convert keys to floats
+	for size in data.expected_aquariums:
+		hints.expected_aquariums[float(size)] = int(data.expected_aquariums[size])
 	return hints
 
 func export_data(grid: GridImpl) -> Dictionary:

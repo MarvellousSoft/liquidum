@@ -657,6 +657,7 @@ func maybe_update_hints() -> void:
 		if _col_hints[j].water_count > 0.5:
 			type = E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
 		_col_hints[j].water_count_type = type
+	assert(are_hints_satisfied())
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])

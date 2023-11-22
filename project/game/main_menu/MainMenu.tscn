@@ -45,6 +45,6 @@ layout_mode = 2
 focus_mode = 0
 text = "Level Editor"
 
-[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= ["level1_1"]]
-[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= ["level1_2"]]
+[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= ["1_1"]]
+[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= ["1_2"]]
 [connection signal="pressed" from="VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
