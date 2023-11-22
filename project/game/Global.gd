@@ -8,6 +8,11 @@ const COLORS = {
 
 var previous_windowed_pos = false
 
+func _input(event):
+	if event.is_action_pressed("toggle_fullscreen"):
+		toggle_fullscreen()
+
+
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
 
@@ -20,10 +25,10 @@ func toggle_fullscreen():
 	Profile.set_option("fullscreen", window.mode != Window.MODE_WINDOWED, true)
 	window.borderless =  window.mode != Window.MODE_WINDOWED
 	if window.mode == Window.MODE_WINDOWED:
-		var size = Vector2(640, 480)
+		var size = DisplayServer.screen_get_size()*.8
 		window.size = size
 		if previous_windowed_pos:
 			window.position = previous_windowed_pos
 		else:
-			window.position = Vector2(100, 400)
+			window.position = Vector2(50, 50)
 		window.set_current_screen(cur_screen)

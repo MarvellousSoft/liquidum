@@ -15,7 +15,6 @@ var active := false
 
 func _ready():
 	BG.hide()
-	setup_values()
 
 
 func _input(event):
@@ -24,8 +23,10 @@ func _input(event):
 
 
 func toggle_pause() -> void:
+	print(Global.is_fullscreen())
 	active = not active
 	if active:
+		setup_values()
 		AnimPlayer.play("enable")
 	else:
 		save_values()

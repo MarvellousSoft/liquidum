@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=4 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
+[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -44,6 +45,8 @@ text = "Level 2
 layout_mode = 2
 focus_mode = 0
 text = "Level Editor"
+
+[node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
 
 [connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= ["1_1"]]
 [connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= ["1_2"]]
