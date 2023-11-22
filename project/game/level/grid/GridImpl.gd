@@ -3,8 +3,7 @@ extends GridModel
 
 static func empty_editor(rows_: int, cols_: int) -> GridModel:
 	var g := GridImpl.new(rows_, cols_)
-	g.auto_update_hints_ = true
-	g.maybe_update_hints()
+	g.set_auto_update_hints(true)
 	return g
 
 static func import_data(data: Dictionary, load_mode: LoadMode) -> GridModel:

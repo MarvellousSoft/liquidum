@@ -29,7 +29,12 @@ func _on_create_new_level_pressed() -> void:
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
 	var level_name := "Level %d" % (LevelNode.get_child_count() + 1)
 	var metadata := EditorLevelMetadata.new(level_name)
-	var grid := GridImpl.empty_editor(5, 5)
+	var grid := GridImpl.new(5, 5)
+	grid.grid_hints().total_boats = -1
+	for i in grid.rows():
+		grid.row_hints()[i].water_count = 0
+	for j in grid.cols():
+		grid.col_hints()[j].water_count = 0
 	var data := LevelData.new("", grid.export_data())
 	FileManager.save_editor_level(new_id, metadata, data)
 	load_all_levels()
