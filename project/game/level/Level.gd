@@ -1,5 +1,5 @@
 class_name Level
-extends Node2D
+extends Control
 
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1050
@@ -84,8 +84,8 @@ func setup() -> void:
 				running_time = save.timer_secs
 	$BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
+	$LeftButtons/PlaytestButton.visible = editor_mode()
 	if not editor_mode():
-		$PlaytestButton.hide()
 		update_expected_waters = GridNode.get_expected_waters() > 0
 		update_expected_boats = GridNode.get_expected_boats() > 0
 		Counters.water.visible = GridNode.get_expected_waters() != -1
@@ -218,6 +218,13 @@ func maybe_save() -> void:
 			grid_logic.set_auto_update_hints(true)
 		else:
 			FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
+
+func reset_level() -> void:
+	GridNode.grid_logic.clear_all()
+	GridNode.setup(GridNode.grid_logic)
+	running_time = 0
+	Counters.mistake.set_count(0)
+	maybe_save()
 
 func _on_back_button_pressed() -> void:
 	maybe_save()

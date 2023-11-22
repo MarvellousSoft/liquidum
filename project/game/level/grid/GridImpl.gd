@@ -1365,6 +1365,22 @@ func clear_content() -> void:
 				c.c_left = Content.Nothing
 			if c.c_right != Content.Block:
 				c.c_right = Content.Nothing
+	undo_stack.clear()
+	redo_stack.clear()
+
+func clear_all() -> void:
+	if not editor_mode():
+		return clear_content()
+	for i in n:
+		for j in m:
+			pure_cells[i][j] = PureCell.empty()
+			if i < n - 1:
+				wall_bottom[i][j] = false
+			if j < m - 1:
+				wall_right[i][j] = false
+	undo_stack.clear()
+	redo_stack.clear()
+	maybe_update_hints()
 
 func export_data() -> Dictionary:
 	return GridExporter.new().export_data(self)

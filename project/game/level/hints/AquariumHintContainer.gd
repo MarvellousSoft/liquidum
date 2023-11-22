@@ -29,13 +29,13 @@ func set_should_be_visible(sizes: Dictionary) -> void:
 
 func _visible() -> Dictionary:
 	var ans := {}
-	for size in visible_sizes():
-		ans[size] = true
+	for sz in visible_sizes():
+		ans[sz] = true
 	return ans
 
 func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, auto_start := true) -> void:
-	var is_visible := _visible()
-	for sz in is_visible:
+	var visible_ := _visible()
+	for sz in visible_:
 		if not expected.has(sz):
 			expected[sz] = 0
 	while HintContainer.get_child_count() < expected.size():
@@ -52,4 +52,4 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 	for i in sizes.size():
 		var c := HintContainer.get_child(i)
 		c.set_values(sizes[i], expected[sizes[i]], current.get(sizes[i], 0), editor_mode)
-		c.set_should_be_visible(is_visible.has(sizes[i]))
+		c.set_should_be_visible(visible_.has(sizes[i]))

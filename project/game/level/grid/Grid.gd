@@ -251,6 +251,10 @@ func flood_air(_flush_undo := true) -> bool:
 func clear_content() -> void:
 	return GridModel.must_be_implemented()
 
+# Same as clear_content on normal levels, but also clears walls on editor levels
+func clear_all() -> void:
+	return GridModel.must_be_implemented()
+
 # Whether this allows editing walls and blocks
 func editor_mode() -> bool:
 	return GridModel.must_be_implemented()
