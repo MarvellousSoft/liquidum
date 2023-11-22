@@ -236,6 +236,18 @@ func update_hints() -> void:
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
+func water_row_hints_should_be_visible() -> Array[bool]:
+	return HintBars.left.should_be_visible(false)
+
+func water_col_hints_should_be_visible() -> Array[bool]:
+	return HintBars.top.should_be_visible(false)
+
+func boat_row_hints_should_be_visible() -> Array[bool]:
+	return HintBars.left.should_be_visible(true)
+
+func boat_col_hints_should_be_visible() -> Array[bool]:
+	return HintBars.top.should_be_visible(true)
+
 
 func _connections_down(i: int, j: int, corner: E.Waters) -> Array[int]:
 	var conns: Array[int] = []

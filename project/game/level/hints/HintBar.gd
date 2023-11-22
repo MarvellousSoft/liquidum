@@ -22,8 +22,7 @@ func setup(hints : Array, editor_mode : bool) -> void:
 	for child in bar.get_children():
 		bar.remove_child(child)
 	for i in hints.size():
-		@warning_ignore("incompatible_ternary")
-		var container = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
+		var container: BoxContainer = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
@@ -64,6 +63,14 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 	else:
 		new_hint.disable_editor()
 
+func should_be_visible(is_boat: bool) -> Array[bool]:
+	var bar = Horizontal if is_horizontal else Vertical
+	var ans: Array[bool] = []
+	for container in bar.get_children():
+		for child in container.get_children():
+			if child.is_boat == is_boat:
+				ans.append(child.should_be_visible())
+	return ans
 
 func get_hint(idx : int, is_boat : bool) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical

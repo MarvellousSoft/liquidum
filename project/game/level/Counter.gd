@@ -36,6 +36,9 @@ func enable_editor():
 func disable_editor():
 	VisibilityButton.hide()
 
+func should_be_visible() -> bool:
+	return VisibilityButton.is_pressed()
+
 
 func startup(delay : float) -> void:
 	await get_tree().create_timer(delay).timeout

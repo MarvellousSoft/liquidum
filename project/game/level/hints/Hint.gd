@@ -64,8 +64,10 @@ func set_hint_type(new_type : E.HintType) -> void:
 		ToggleHintType.hide()
 	else:
 		ToggleHintType.show()
-	
 	update_label()
+
+func should_be_visible() -> bool:
+	return hint_visibility_active
 
 
 func alpha_t(text : String, alpha : float) -> String:

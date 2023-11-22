@@ -22,7 +22,7 @@ func _on_tests_show_grids(s1: String, s2: String):
 
 func scale_grids() -> void:
 	await get_tree().process_frame
-	var s := DESIRED_W / g1.get_grid_size().x
+	var s := DESIRED_W / g2.get_grid_size().x
 	g1.scale = Vector2(s, s)
 	g2.scale = Vector2(s, s)
 
@@ -70,7 +70,7 @@ func _on_grid_2_updated():
 
 
 func _on_paste_pressed():
-	g2.setup(GridImpl.from_str(DisplayServer.clipboard_get(), GridModel.LoadMode.Editor))
+	g2.setup(GridImpl.from_str(DisplayServer.clipboard_get(), GridModel.LoadMode.Solution))
 	scale_grids()
 
 
