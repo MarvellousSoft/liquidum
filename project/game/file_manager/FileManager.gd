@@ -95,7 +95,7 @@ func load_editor_level(id: String) -> LevelData:
 	assert(data == null or data.full_name.is_empty())
 	return data
 
-const DATA_DIR := "res://game/levels"
+const DATA_DIR := "res://database/levels"
 
 func _json(file: String) -> String:
 	return file + ".json"
