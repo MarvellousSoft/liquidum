@@ -9,11 +9,12 @@ func _ready():
 	Version.text = Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION
 
+
 func _on_level_button_pressed(level_name: String) -> void:
 	var level_data := FileManager.load_level_data(level_name)
 	var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 	# TODO: Display level_data.full_name somewhere
-	var level := Level.with_grid(grid, level_name)
+	var level = Global.create_level(grid, level_name)
 	TransitionManager.push_scene(level)
 
 

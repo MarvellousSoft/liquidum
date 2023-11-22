@@ -21,7 +21,7 @@ func load_all_levels() -> void:
 		LevelNode.add_child(button)
 
 func load_level(id: String) -> void:
-	var level := Level.with_grid(GridImpl.empty_editor(1, 1), id)
+	var level = Global.create_level(GridImpl.empty_editor(1, 1), id)
 	TransitionManager.push_scene(level)
 
 

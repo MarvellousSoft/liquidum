@@ -23,12 +23,6 @@ var running_time : float
 var grid: GridModel = null
 var level_name := ""
 
-static func with_grid(grid_: GridModel, level_name_: String) -> Level:
-	var level: Level = preload("res://game/level/Level.tscn").instantiate()
-	level.grid = grid_
-	level.level_name = level_name_
-	return level
-
 func _ready():
 	await TransitionManager.transition_finished
 	AudioManager.play_bgm("main")
@@ -203,7 +197,7 @@ func _get_solution_grid() -> GridModel:
 	return new_grid
 
 func _on_playtest_button_pressed() -> void:
-	var new_level := Level.with_grid(_get_solution_grid(), "")
+	var new_level = Global.create_level(_get_solution_grid(), "")
 	TransitionManager.push_scene(new_level)
 
 func maybe_save() -> void:
