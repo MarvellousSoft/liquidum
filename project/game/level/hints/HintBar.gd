@@ -26,7 +26,7 @@ func setup(hints : Array, editor_mode : bool) -> void:
 	for child in bar.get_children():
 		bar.remove_child(child)
 	for i in hints.size():
-		var container: BoxContainer = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
+		var container := (VBoxContainer.new() as BoxContainer) if is_horizontal else (HBoxContainer.new() as BoxContainer)
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)

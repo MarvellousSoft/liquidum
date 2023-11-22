@@ -45,17 +45,22 @@ func _process(dt):
 func setup():
 	running_time = 0
 	
-	$BrushPicker.setup(grid.editor_mode())
-	GridNode.setup(grid)
-	if not grid.editor_mode():
-		$PlaytestButton.hide()
-		if not level_name.is_empty():
+	if not level_name.is_empty():
+		if grid.editor_mode():
+			var data := FileManager.load_editor_level(level_name)
+			if data != null:
+				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Editor)
+		else:
 			var save := FileManager.load_level(level_name)
 			if save != null:
 				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
+	$BrushPicker.setup(grid.editor_mode())
+	GridNode.setup(grid)
+	if not editor_mode():
+		$PlaytestButton.hide()
 		update_expected_waters = GridNode.get_expected_waters() > 0
 		update_expected_boats = GridNode.get_expected_boats() > 0
 		Counters.water.visible = GridNode.get_expected_waters() != -1
@@ -160,7 +165,10 @@ func _on_playtest_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	if not level_name.is_empty():
-		FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
+		if editor_mode():
+			FileManager.save_editor_level(level_name, null, LevelData.new("", GridNode.grid_logic.export_data()))
+		else:
+			FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
 	TransitionManager.pop_scene()
 
 

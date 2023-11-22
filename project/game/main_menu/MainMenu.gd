@@ -18,6 +18,5 @@ func _on_level_button_pressed(level_name: String) -> void:
 
 
 func _on_editor_button_pressed():
-	var grid := GridImpl.empty_editor(5, 5)
-	var level := Level.with_grid(grid, "")
-	TransitionManager.push_scene(level)
+	var editor_hub = preload("res://game/main_menu/EditorHub.tscn").instantiate()
+	TransitionManager.push_scene(editor_hub)

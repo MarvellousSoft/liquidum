@@ -1,6 +1,7 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://c6108lc3jg2cv"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c6108lc3jg2cv"]
 
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="1_n4tbg"]
+[ext_resource type="FontFile" uid="uid://ct713e8v675x8" path="res://assets/fonts/Regular.ttf" id="2_0a4w0"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_n4tbg")
@@ -84,4 +85,7 @@ Button/fonts/font = SubResource("FontVariation_7w16d")
 Button/styles/hover = SubResource("StyleBoxFlat_d8vqq")
 Button/styles/normal = SubResource("StyleBoxFlat_xqp5v")
 Button/styles/pressed = SubResource("StyleBoxFlat_ah4gh")
+Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
+Label/font_sizes/font_size = 82
+Label/fonts/font = ExtResource("2_0a4w0")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")

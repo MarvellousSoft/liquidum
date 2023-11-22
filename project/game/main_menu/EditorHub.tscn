@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://4263yf3prywo"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_1fhxp"]
+[ext_resource type="Script" path="res://game/main_menu/EditorHub.gd" id="2_48sol"]
+
+[node name="EditorHub" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_1fhxp")
+script = ExtResource("2_48sol")
+
+[node name="YourLevels" type="Label" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 415.0
+offset_right = 800.0
+offset_bottom = 525.0
+text = "Your levels"
+
+[node name="CreateNewLevel" type="Button" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 178.0
+offset_right = 1150.0
+offset_bottom = 315.0
+text = "Create new level"
+
+[node name="LevelNode" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 588.0
+offset_right = 1150.0
+offset_bottom = 2041.0
+
+[connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]

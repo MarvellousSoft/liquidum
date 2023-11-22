@@ -3,21 +3,23 @@ class_name LevelData
 const VERSION := 1
 
 var full_name: String
-var grid: GridModel
+var grid_data: Dictionary
 
-func _init(full_name_: String, grid_: GridModel) -> void:
+func _init(full_name_: String, grid_data_: Dictionary) -> void:
 	full_name = full_name_
-	grid = grid_
+	grid_data = grid_data_
 
 func get_data() -> Dictionary:
 	return {
 		version = VERSION,
 		full_name = full_name,
-		grid = grid.export_data(),
+		grid_data = grid_data,
 	}
 
-func load_data(data: Dictionary) -> LevelData:
+static func load_data(data: Variant) -> LevelData:
+	if data == null:
+		return null
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
-	return LevelData.new(data.full_name, GridModel.import_data(data.grid))
+	return LevelData.new(data.full_name, data.grid_data)
 
