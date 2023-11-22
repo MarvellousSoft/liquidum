@@ -1,3 +1,4 @@
+class_name HintBar
 extends Control
 
 const HINT = preload("res://game/level/hints/Hint.tscn")
@@ -7,6 +8,9 @@ const HINT = preload("res://game/level/hints/Hint.tscn")
 @onready var Horizontal = $Horizontal
 @onready var Vertical = $Vertical
 @onready var AnimPlayer = $AnimationPlayer
+
+const VALUE_VISIBLE := 1
+const TYPE_VISIBLE := 2
 
 func _ready():
 	Vertical.visible = not is_horizontal
@@ -63,14 +67,20 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 	else:
 		new_hint.disable_editor()
 
-func should_be_visible(is_boat: bool) -> Array[bool]:
+func should_be_visible(is_boat: bool) -> Array[int]:
 	var bar = Horizontal if is_horizontal else Vertical
-	var ans: Array[bool] = []
+	var ans: Array[int] = []
 	for container in bar.get_children():
 		for child in container.get_children():
 			if child.is_boat == is_boat:
-				ans.append(child.should_be_visible())
+				var val := 0
+				if child.should_be_visible():
+					val |= VALUE_VISIBLE
+				if child.should_have_type():
+					val |= TYPE_VISIBLE
+				ans.append(val)
 	return ans
+
 
 func get_hint(idx : int, is_boat : bool) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical

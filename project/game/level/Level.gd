@@ -130,6 +130,16 @@ func _on_grid_updated():
 	if GridNode.is_level_finished() and not editor_mode():
 		win()
 
+func _update_line_hint(line_hint: GridModel.LineHint, boat_flags: int, water_flags: int) -> void:
+	if not (boat_flags & HintBar.VALUE_VISIBLE):
+		line_hint.boat_count = -1
+	if not (boat_flags & HintBar.TYPE_VISIBLE):
+		line_hint.boat_count_type = E.HintType.Any
+	if not (water_flags & HintBar.VALUE_VISIBLE):
+		line_hint.water_count = -1.0
+	if not (water_flags & HintBar.TYPE_VISIBLE):
+		line_hint.water_count_type = E.HintType.Any
+
 func _on_playtest_button_pressed() -> void:
 	var new_grid := GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
 	if not Counters.water.should_be_visible():
@@ -139,18 +149,11 @@ func _on_playtest_button_pressed() -> void:
 	var boat_visible := GridNode.boat_row_hints_should_be_visible()
 	var water_visible := GridNode.water_row_hints_should_be_visible()
 	for i in new_grid.rows():
-		if not boat_visible[i]:
-			new_grid.row_hints()[i].boat_count = -1
-		if not water_visible[i]:
-			new_grid.row_hints()[i].water_count = -1.0
+		_update_line_hint(new_grid.row_hints()[i], boat_visible[i], water_visible[i])
 	boat_visible = GridNode.boat_col_hints_should_be_visible()
 	water_visible = GridNode.water_col_hints_should_be_visible()
 	for j in new_grid.cols():
-		if not boat_visible[j]:
-			new_grid.col_hints()[j].boat_count = -1
-		if not water_visible[j]:
-			new_grid.col_hints()[j].water_count = -1.0
-	print(new_grid.to_str())
+		_update_line_hint(new_grid.col_hints()[j], boat_visible[j], water_visible[j])
 	var new_level := Level.with_grid(new_grid, "")
 	TransitionManager.push_scene(new_level)
 

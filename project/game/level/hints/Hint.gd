@@ -69,6 +69,9 @@ func set_hint_type(new_type : E.HintType) -> void:
 func should_be_visible() -> bool:
 	return hint_visibility_active
 
+func should_have_type() -> bool:
+	return hint_type_active
+
 
 func alpha_t(text : String, alpha : float) -> String:
 	var color = Global.COLORS.normal
