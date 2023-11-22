@@ -11,12 +11,14 @@ const NUMBER_HEADER = """[font_size={50}]
 	E.Walls.Bottom: $Hints/Bottom,
 	E.Walls.Left:$Hints/Left,
 }
+@onready var ContentContainer = $VBoxContainer
 @onready var EditorButtons = $VBoxContainer/EditorButtons
 @onready var ToggleHintType = $VBoxContainer/EditorButtons/ToggleHintType
 @onready var ToggleVisibility = $VBoxContainer/EditorButtons/ToggleVisibility
 @onready var HintsContainer = $VBoxContainer/HintsContainer
 @onready var Number = %Number
 @onready var Boat = %Boat
+@onready var DummyLabel = %DummyLabel
 
 var editor_mode := false
 var hint_type : E.HintType = E.HintType.Any
@@ -25,9 +27,11 @@ var hint_value := 0.0
 var hint_type_active := true
 var hint_visibility_active := true
 var hint_alpha := 1.0
+var is_dummy := false
 
 func _ready():
 	disable_editor()
+	DummyLabel.hide()
 	set_boat(false)
 	set_status(E.HintStatus.Normal)
 	for side in Hints.keys():
@@ -35,6 +39,9 @@ func _ready():
 
 
 func _process(dt):
+	if is_dummy:
+		return
+	
 	if hint_type_active:
 		if hint_alpha < 1.0:
 			hint_alpha = min(hint_alpha + ALPHA_SPEED*dt, 1.0)
@@ -99,6 +106,13 @@ func update_label() -> void:
 func no_hint() -> void:
 	Number.text = ""
 	hide()
+
+
+func dummy_hint() -> void:
+	is_dummy = true
+	show()
+	DummyLabel.show()
+	ContentContainer.hide()
 
 
 func set_hint_visibility(which : E.Walls, value : bool) -> void:

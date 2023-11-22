@@ -30,9 +30,11 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
-		create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
+		var water_hint = create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
 		create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
-	
+		if hints[i].boat_count == -1 and hints[i].water_count == -1:
+			water_hint.dummy_hint()
+		
 	await get_tree().process_frame
 	custom_minimum_size = bar.size
 
@@ -42,7 +44,7 @@ func startup(delay : float) -> void:
 	AnimPlayer.play("startup")
 
 
-func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> void:
+func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> Node:
 	var new_hint = HINT.instantiate()
 	container.add_child(new_hint)
 	new_hint.set_boat(is_boat)
@@ -66,6 +68,8 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 		new_hint.enable_editor()
 	else:
 		new_hint.disable_editor()
+	
+	return new_hint
 
 func should_be_visible(is_boat: bool) -> Array[int]:
 	var bar = Horizontal if is_horizontal else Vertical
