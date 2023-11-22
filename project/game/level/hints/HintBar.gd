@@ -30,8 +30,8 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
-		create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
 		create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
+		create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
 	
 	await get_tree().process_frame
 	custom_minimum_size = bar.size
