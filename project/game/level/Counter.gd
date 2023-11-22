@@ -21,7 +21,7 @@ func _ready():
 
 
 func _process(dt):
-	if visibility_active:
+	if should_be_visible():
 		MainLabel.modulate.a = min(MainLabel.modulate.a + ALPHA_SPEED*dt, 1.0)
 		Counter.modulate.a = min(Counter.modulate.a + ALPHA_SPEED*dt, 1.0)
 	else:
@@ -38,6 +38,9 @@ func disable_editor():
 
 func should_be_visible() -> bool:
 	return VisibilityButton.is_pressed()
+
+func set_should_be_visible(b: bool) -> void:
+	VisibilityButton.set_pressed_no_signal(b)
 
 
 func startup(delay : float) -> void:
@@ -73,7 +76,3 @@ func update_label() -> void:
 			Counter.add_theme_color_override("font_color", Global.COLORS.normal)
 		else:
 			Counter.add_theme_color_override("font_color", Global.COLORS.error)
-
-
-func _on_visibility_button_toggled(button_pressed):
-	visibility_active = button_pressed

@@ -17,6 +17,7 @@ func load_all_levels() -> void:
 		button.name = id
 		button.text = levels[id].full_name
 		button.pressed.connect(load_level.bind(id))
+		button.focus_mode = Control.FOCUS_NONE
 		LevelNode.add_child(button)
 
 func load_level(id: String) -> void:

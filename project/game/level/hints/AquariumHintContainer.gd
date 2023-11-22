@@ -23,6 +23,10 @@ func visible_sizes() -> Array[float]:
 			ans.append(child.aquarium_size)
 	return ans
 
+func set_should_be_visible(sizes: Dictionary) -> void:
+	for child in HintContainer.get_children():
+		child.set_should_be_visible(sizes.has(child.aquarium_size))
+
 func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, auto_start := true) -> void:
 	while HintContainer.get_child_count() < expected.size():
 		var c := preload("res://game/level/hints/AquariumHint.tscn").instantiate()

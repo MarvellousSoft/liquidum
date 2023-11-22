@@ -85,6 +85,21 @@ func should_be_visible(is_boat: bool) -> Array[int]:
 				ans.append(val)
 	return ans
 
+const WATER_COUNT_VISIBLE := 1
+const WATER_TYPE_VISIBLE := 2
+const BOAT_COUNT_VISIBLE := 4
+const BOAT_TYPE_VISIBLE := 8
+
+func set_visibility(arr: Array[int]) -> void:
+	var bar = Horizontal if is_horizontal else Vertical
+	assert(arr.size() == bar.get_child_count())
+	for i in arr.size():
+		for child in bar.get_child(i).get_children():
+			if child.is_boat:
+				child.set_visibility(bool(arr[i] & BOAT_COUNT_VISIBLE), bool(arr[i] & BOAT_TYPE_VISIBLE))
+			else:
+				child.set_visibility(bool(arr[i] & WATER_COUNT_VISIBLE), bool(arr[i] & WATER_TYPE_VISIBLE))
+
 
 func get_hint(idx : int, is_boat : bool) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical

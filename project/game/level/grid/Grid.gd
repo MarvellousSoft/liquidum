@@ -255,6 +255,9 @@ func clear_content() -> void:
 func editor_mode() -> bool:
 	return GridModel.must_be_implemented()
 
+func set_auto_update_hints(_b: bool) -> void:
+	return GridModel.must_be_implemented()
+
 # Export data in a saveable way (dictionary with inner dictionaries and arrays)
 func export_data() -> Dictionary:
 	return GridModel.must_be_implemented()

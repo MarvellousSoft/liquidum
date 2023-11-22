@@ -110,6 +110,7 @@ script = ExtResource("1_f56ld")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
+button_pressed = false
 
 [node name="BG" parent="VisibilityButton" index="0"]
 custom_minimum_size = Vector2(50, 50)

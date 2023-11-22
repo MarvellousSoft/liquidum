@@ -14,6 +14,9 @@ func startup(delay: float) -> void:
 func should_be_visible() -> bool:
 	return VisibilityButton.visible and VisibilityButton.is_pressed()
 
+func set_should_be_visible(b: bool) -> void:
+	VisibilityButton.set_pressed(b)
+
 func set_values(aq_size: float, amount: int, current: int, editor_mode: bool) -> void:
 	VisibilityButton.visible = editor_mode
 	aquarium_size = aq_size

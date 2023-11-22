@@ -41,15 +41,39 @@ func _process(dt):
 		running_time += dt
 		update_timer_label()
 
+func _hint_to_flag(hint: GridModel.LineHint) -> int:
+	var val := 0
+	if hint.water_count != -1.:
+		val |= HintBar.WATER_COUNT_VISIBLE
+	if hint.water_count_type != E.HintType.Any:
+		val |= HintBar.WATER_TYPE_VISIBLE
+	if hint.boat_count != -1:
+		val |= HintBar.BOAT_COUNT_VISIBLE
+	if hint.boat_count_type != E.HintType.Any:
+		val |= HintBar.BOAT_TYPE_VISIBLE
+	return val
 
-func setup():
+func setup() -> void:
 	running_time = 0
+	
+	var visible_aquarium_sizes = null
+	var row_visible: Array[int] = []
+	var col_visible: Array[int] = []
+	var total_water_visible := false
+	var total_boat_visible := false
 	
 	if not level_name.is_empty():
 		if grid.editor_mode():
 			var data := FileManager.load_editor_level(level_name)
 			if data != null:
-				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Editor)
+				# Load with Testing to get hints then change to editor
+				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Testing)
+				total_water_visible = (grid.grid_hints().total_water != -1.)
+				total_boat_visible = (grid.grid_hints().total_boats != -1)
+				visible_aquarium_sizes = grid.grid_hints().expected_aquariums
+				row_visible.assign(grid.row_hints().map(_hint_to_flag))
+				col_visible.assign(grid.col_hints().map(_hint_to_flag))
+				grid.set_auto_update_hints(true)
 		else:
 			var save := FileManager.load_level(level_name)
 			if save != null:
@@ -70,7 +94,9 @@ func setup():
 		Counters.water.visible = true
 		Counters.boat.visible = true
 		Counters.water.enable_editor()
+		Counters.water.set_should_be_visible(total_water_visible)
 		Counters.boat.enable_editor()
+		Counters.boat.set_should_be_visible(total_boat_visible)
 		Counters.mistake.hide()
 		TimerContainer.hide()
 	update_counters()
@@ -82,6 +108,10 @@ func setup():
 		counter.startup(delay)
 	delay += COUNTER_DELAY_STARTUP
 	AquariumHints.startup(delay, grid.grid_hints().expected_aquariums, grid.all_aquarium_counts(), GridNode.editor_mode)
+	if editor_mode() and visible_aquarium_sizes != null:
+		AquariumHints.set_should_be_visible(visible_aquarium_sizes)
+	if editor_mode() and not row_visible.is_empty():
+		GridNode.set_counters_visibility(row_visible, col_visible)
 	
 	AudioManager.play_sfx("start_level")
 	
@@ -105,7 +135,6 @@ func update_counters() -> void:
 	if update_expected_boats:
 		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
 	AquariumHints.update_values(GridNode.grid_logic.grid_hints().expected_aquariums, GridNode.grid_logic.all_aquarium_counts(), GridNode.editor_mode)
-	
 
 
 func update_timer_label() -> void:
@@ -145,9 +174,7 @@ func _update_line_hint(line_hint: GridModel.LineHint, boat_flags: int, water_fla
 	if not (water_flags & HintBar.TYPE_VISIBLE):
 		line_hint.water_count_type = E.HintType.Any
 
-func _get_solution_grid() -> GridModel:
-	assert(editor_mode())
-	var new_grid := GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
+func _update_visibilities(new_grid: GridModel) -> void:
 	if not Counters.water.should_be_visible():
 		new_grid.grid_hints().total_water = -1
 	if not Counters.boat.should_be_visible():
@@ -162,9 +189,15 @@ func _get_solution_grid() -> GridModel:
 		_update_line_hint(new_grid.col_hints()[j], boat_visible[j], water_visible[j])
 	var aquariums := new_grid.grid_hints().expected_aquariums
 	aquariums.clear()
-	var all_sizes := grid.all_aquarium_counts()
+	var all_sizes := GridNode.grid_logic.all_aquarium_counts()
 	for aq_size in AquariumHints.visible_sizes():
 		aquariums[aq_size] = all_sizes.get(aq_size, 0)
+	
+
+func _get_solution_grid() -> GridModel:
+	assert(editor_mode())
+	var new_grid := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Solution)
+	_update_visibilities(new_grid)
 	return new_grid
 
 func _on_playtest_button_pressed() -> void:
@@ -175,7 +208,12 @@ func maybe_save() -> void:
 	if not level_name.is_empty():
 		print("Saving the level...")
 		if editor_mode():
-			FileManager.save_editor_level(level_name, null, LevelData.new("", GridNode.grid_logic.export_data()))
+			# Let's put the visibility info in the grid
+			var grid_logic := GridNode.grid_logic
+			grid_logic.set_auto_update_hints(false)
+			_update_visibilities(grid_logic)
+			FileManager.save_editor_level(level_name, null, LevelData.new("", grid_logic.export_data()))
+			grid_logic.set_auto_update_hints(true)
 		else:
 			FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
 

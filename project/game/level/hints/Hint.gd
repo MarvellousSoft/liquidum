@@ -79,6 +79,10 @@ func should_be_visible() -> bool:
 func should_have_type() -> bool:
 	return hint_type_active
 
+func set_visibility(vis: bool, type: bool) -> void:
+	ToggleVisibility.set_pressed(vis)
+	ToggleHintType.set_pressed(type)
+
 
 func alpha_t(text : String, alpha : float) -> String:
 	var color = Global.COLORS.normal
@@ -132,6 +136,8 @@ func set_status(status: E.HintStatus) -> void:
 func enable_editor() -> void:
 	editor_mode = true
 	EditorButtons.show()
+	if is_boat:
+		ToggleVisibility.set_pressed(false)
 
 
 func disable_editor() -> void:

@@ -799,6 +799,11 @@ func _finish_loading(load_mode: LoadMode) -> void:
 	auto_update_hints_ = load_mode == LoadMode.Editor
 	maybe_update_hints()
 
+func set_auto_update_hints(b: bool) -> void:
+	auto_update_hints_ = b
+	if b:
+		maybe_update_hints()
+
 func auto_update_hints() -> bool:
 	return editor_mode() and auto_update_hints_
 

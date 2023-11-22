@@ -23,6 +23,7 @@ offset_left = 310.0
 offset_top = 178.0
 offset_right = 1150.0
 offset_bottom = 315.0
+focus_mode = 0
 text = "CREATE_NEW_LEVEL"
 
 [node name="LevelNode" type="VBoxContainer" parent="."]
@@ -39,6 +40,7 @@ offset_left = 1805.0
 offset_top = 178.0
 offset_right = 2093.0
 offset_bottom = 315.0
+focus_mode = 0
 text = "BACK"
 
 [connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]

@@ -124,7 +124,4 @@ libraries = {
 "": SubResource("AnimationLibrary_infr8")
 }
 
-[connection signal="pressed" from="HBoxContainer/VisibilityButton" to="." method="_on_visibility_button_pressed"]
-[connection signal="toggled" from="HBoxContainer/VisibilityButton" to="." method="_on_visibility_button_toggled"]
-
 [editable path="HBoxContainer/VisibilityButton"]

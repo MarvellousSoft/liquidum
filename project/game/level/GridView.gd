@@ -233,6 +233,10 @@ func update_hints() -> void:
 					hint.set_status(E.HintStatus.Normal)
 
 
+func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
+	HintBars.left.set_visibility(row)
+	HintBars.top.set_visibility(col)
+
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
