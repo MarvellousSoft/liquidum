@@ -15,6 +15,9 @@ const SAVE_AND_EXIT = "SAVE_AND_EXIT"
 const AQUARIUMS = "AQUARIUMS"
 const SIZE = "SIZE"
 const AMOUNT = "AMOUNT"
+const BACK = "BACK"
+const CREATE_NEW_LEVEL = "CREATE_NEW_LEVEL"
+const YOUR_LEVELS = "YOUR_LEVELS"
 
 const KEYS = [
  "TEST",
@@ -28,5 +31,8 @@ const KEYS = [
  "SAVE_AND_EXIT",
  "AQUARIUMS",
  "SIZE",
- "AMOUNT"
+ "AMOUNT",
+ "BACK",
+ "CREATE_NEW_LEVEL",
+ "YOUR_LEVELS"
 ]

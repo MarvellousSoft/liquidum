@@ -15,7 +15,7 @@ offset_left = 310.0
 offset_top = 415.0
 offset_right = 800.0
 offset_bottom = 525.0
-text = "Your levels"
+text = "YOUR_LEVELS"
 
 [node name="CreateNewLevel" type="Button" parent="."]
 layout_mode = 0
@@ -23,7 +23,7 @@ offset_left = 310.0
 offset_top = 178.0
 offset_right = 1150.0
 offset_bottom = 315.0
-text = "Create new level"
+text = "CREATE_NEW_LEVEL"
 
 [node name="LevelNode" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -31,5 +31,15 @@ offset_left = 310.0
 offset_top = 588.0
 offset_right = 1150.0
 offset_bottom = 2041.0
+theme_override_constants/separation = 70
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1805.0
+offset_top = 178.0
+offset_right = 2093.0
+offset_bottom = 315.0
+text = "BACK"
 
 [connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

@@ -32,3 +32,7 @@ func _on_create_new_level_pressed() -> void:
 	var data := LevelData.new("", grid.export_data())
 	FileManager.save_editor_level(new_id, metadata, data)
 	load_all_levels()
+
+
+func _on_back_pressed():
+	TransitionManager.pop_scene()
