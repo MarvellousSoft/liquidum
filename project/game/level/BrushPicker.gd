@@ -26,6 +26,14 @@ func _ready():
 		(Buttons[button] as TextureButton).pressed.connect(_on_button_pressed.bind(button))
 	AnimPlayer.play("startup")
 
+
+func _input(event):
+	if event.is_action_pressed("pick_prev_brush"):
+		pick_previous_brush()
+	elif event.is_action_pressed("pick_next_brush"):
+		pick_next_brush()
+
+
 func setup(editor_mode_: bool) -> void:
 	editor_mode = editor_mode_
 	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
@@ -34,6 +42,44 @@ func setup(editor_mode_: bool) -> void:
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == E.BrushMode.Water)
 	custom_minimum_size = ButtonsContainer.size
+
+
+func pick_next_brush() -> void:
+	var valid_buttons = []
+	for button_key in Buttons.keys():
+		var button_node = Buttons[button_key]
+		if button_node.visible:
+			valid_buttons.push_back(button_key)
+	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
+	
+	var i = 0
+	for button_key in valid_buttons:
+		var button_node = Buttons[button_key]
+		i += 1
+		if button_node.button_pressed:
+			break
+	i = i % valid_buttons.size()
+	Buttons[valid_buttons[i]].button_pressed = true
+	_on_button_pressed(valid_buttons[i])
+
+
+func pick_previous_brush() -> void:
+	var valid_buttons = []
+	for button_key in Buttons.keys():
+		var button_node = Buttons[button_key]
+		if button_node.visible:
+			valid_buttons.push_front(button_key)
+	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
+	
+	var i = 0
+	for button_key in valid_buttons:
+		var button_node = Buttons[button_key]
+		i += 1
+		if button_node.button_pressed:
+			break
+	i = i % valid_buttons.size()
+	Buttons[valid_buttons[i]].button_pressed = true
+	_on_button_pressed(valid_buttons[i])
 
 func _on_button_pressed(mode: E.BrushMode):
 	# Doing radio logic by hand since Godot`s isn`t working for some reason

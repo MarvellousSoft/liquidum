@@ -48,9 +48,9 @@ flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_top = 6.0
+offset_top = 5.0
 offset_right = 500.0
-offset_bottom = 506.0
+offset_bottom = 505.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("2_3rujp")
