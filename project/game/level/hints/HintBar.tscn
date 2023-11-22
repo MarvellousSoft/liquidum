@@ -78,6 +78,7 @@ layout_mode = 2
 
 [node name="VBoxContaine2" type="VBoxContainer" parent="Horizontal"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 2
 
 [node name="Hint" parent="Horizontal/VBoxContaine2" instance=ExtResource("2_fgutn")]
@@ -94,6 +95,7 @@ theme_override_constants/separation = 0
 
 [node name="HBoxContainer1" type="HBoxContainer" parent="Vertical"]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="Hint" parent="Vertical/HBoxContainer1" instance=ExtResource("2_fgutn")]
 layout_mode = 2
@@ -106,6 +108,7 @@ layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Vertical"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 2
 
 [node name="Hint4" parent="Vertical/HBoxContainer2" instance=ExtResource("2_fgutn")]

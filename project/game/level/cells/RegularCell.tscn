@@ -504,14 +504,14 @@ texture_click_mask = ExtResource("19_sucjp")
 
 [node name="Hints" type="Control" parent="."]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 500.0
+offset_bottom = 500.0
 mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_right = 500.0
+offset_bottom = 500.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2

@@ -28,7 +28,7 @@ columns = 3
 
 [node name="TLPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="HintBarTop" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
@@ -37,7 +37,7 @@ is_horizontal = true
 
 [node name="TRPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="HintBarLeft" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
@@ -88,22 +88,22 @@ layout_mode = 2
 
 [node name="RPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="BPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="BRPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="CellCornerGrid" type="GridContainer" parent="."]
@@ -112,8 +112,8 @@ layout_mode = 1
 offset_right = 1150.0
 offset_bottom = 1150.0
 mouse_filter = 2
-theme_override_constants/h_separation = 50
-theme_override_constants/v_separation = 50
+theme_override_constants/h_separation = 250
+theme_override_constants/v_separation = 250
 columns = 4
 
 [node name="CellCorner" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]

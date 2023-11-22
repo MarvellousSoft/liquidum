@@ -94,8 +94,8 @@ func setup_cell_corners() -> void:
 	var sample_corner = CELL_CORNER.instantiate()
 	CellCornerGrid.columns = columns + 1
 	CellCornerGrid.global_position = sample_cell.global_position
-#	CellCornerGrid.position.x += 9*sample_corner.size.x/6
-#	CellCornerGrid.position.y += 9*sample_corner.size.y/6
+	CellCornerGrid.position.x += sample_corner.size.x/2
+	CellCornerGrid.position.y += sample_corner.size.y/2
 	CellCornerGrid.add_theme_constant_override("h_separation", sample_cell.size.x - sample_corner.size.x)
 	CellCornerGrid.add_theme_constant_override("v_separation", sample_cell.size.y - sample_corner.size.y)
 	for i in rows + 1:
@@ -348,8 +348,8 @@ func cell_corners_error(i1, j1, i2, j2) -> void:
 func get_global_position_by_index(index : Array) -> Vector2:
 	var sample_cell = get_cell(0,0)
 	var pos = Columns.global_position
-	pos.x += index[1]*sample_cell.size.x
-	pos.y += index[0]*sample_cell.size.y
+	pos.x += index[1]*sample_cell.size.x * scale.x
+	pos.y += index[0]*sample_cell.size.y * scale.y
 	return pos
 
 
