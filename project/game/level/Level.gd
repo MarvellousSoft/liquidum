@@ -145,7 +145,8 @@ func _update_line_hint(line_hint: GridModel.LineHint, boat_flags: int, water_fla
 	if not (water_flags & HintBar.TYPE_VISIBLE):
 		line_hint.water_count_type = E.HintType.Any
 
-func _on_playtest_button_pressed() -> void:
+func _get_solution_grid() -> GridModel:
+	assert(editor_mode())
 	var new_grid := GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Solution)
 	if not Counters.water.should_be_visible():
 		new_grid.grid_hints().total_water = -1
@@ -159,7 +160,15 @@ func _on_playtest_button_pressed() -> void:
 	water_visible = GridNode.water_col_hints_should_be_visible()
 	for j in new_grid.cols():
 		_update_line_hint(new_grid.col_hints()[j], boat_visible[j], water_visible[j])
-	var new_level := Level.with_grid(new_grid, "")
+	var aquariums := new_grid.grid_hints().expected_aquariums
+	aquariums.clear()
+	var all_sizes := grid.all_aquarium_counts()
+	for aq_size in AquariumHints.visible_sizes():
+		aquariums[aq_size] = all_sizes.get(aq_size, 0)
+	return new_grid
+
+func _on_playtest_button_pressed() -> void:
+	var new_level := Level.with_grid(_get_solution_grid(), "")
 	TransitionManager.push_scene(new_level)
 
 func maybe_save() -> void:

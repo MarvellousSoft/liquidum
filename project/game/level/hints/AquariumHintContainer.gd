@@ -14,7 +14,14 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	update_values(expected, current, editor_mode, false)
 	for child in HintContainer.get_children():
 		child.startup(delay)
-		delay += HINT_DELAY 
+		delay += HINT_DELAY
+
+func visible_sizes() -> Array[float]:
+	var ans: Array[float] = []
+	for child in HintContainer.get_children():
+		if child.should_be_visible():
+			ans.append(child.aquarium_size)
+	return ans
 
 func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, auto_start := true) -> void:
 	while HintContainer.get_child_count() < expected.size():

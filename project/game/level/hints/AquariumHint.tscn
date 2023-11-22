@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://dhrvbdlu1caw2"]
+[gd_scene load_steps=15 format=3 uid="uid://dhrvbdlu1caw2"]
 
 [ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
+[ext_resource type="PackedScene" uid="uid://bxiiha43788p7" path="res://game/level/hints/HintOptionButton.tscn" id="2_lgxd6"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_utjnr"]
 [ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/water_bottomleft.png" id="3_f3pmc"]
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="3_xrcsw"]
@@ -105,6 +106,14 @@ grow_vertical = 2
 theme_override_constants/separation = 9
 script = ExtResource("1_f56ld")
 
+[node name="VisibilityButton" parent="." instance=ExtResource("2_lgxd6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="BG" parent="VisibilityButton" index="0"]
+custom_minimum_size = Vector2(50, 50)
+
 [node name="Size" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -184,3 +193,5 @@ vertical_alignment = 2
 libraries = {
 "": SubResource("AnimationLibrary_geoow")
 }
+
+[editable path="VisibilityButton"]
