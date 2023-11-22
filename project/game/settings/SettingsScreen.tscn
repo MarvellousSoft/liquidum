@@ -1,13 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://dr18tk67tc6uq"]
+[gd_scene load_steps=14 format=3 uid="uid://dr18tk67tc6uq"]
 
 [ext_resource type="Script" path="res://game/settings/SettingsScreen.gd" id="1_bstu8"]
 [ext_resource type="Theme" uid="uid://dsx7oo1jar5n8" path="res://assets/ui/SettingsTheme.tres" id="2_5ky7v"]
 [ext_resource type="Texture2D" uid="uid://ciuyao6wf8s54" path="res://assets/images/ui/settings/settings_button_normal.png" id="3_53c0p"]
-[ext_resource type="Texture2D" uid="uid://du6ind16neblt" path="res://assets/images/ui/settings/checkbox_unpressed_small.png" id="3_imvmh"]
-[ext_resource type="Texture2D" uid="uid://nk5pe5tlatlp" path="res://assets/images/ui/settings/checkbox_pressed_small.png" id="4_e5dyi"]
+[ext_resource type="Texture2D" uid="uid://dlxn50psp55f3" path="res://assets/images/ui/settings/checkbox_unpressed.png" id="3_l1rea"]
 [ext_resource type="Texture2D" uid="uid://bxwmppfcxxjb2" path="res://assets/images/ui/settings/settings_button_pressed.png" id="4_fa5hr"]
+[ext_resource type="Texture2D" uid="uid://guhcktb4xm66" path="res://assets/images/ui/settings/checkbox_pressed.png" id="4_puohg"]
 [ext_resource type="Texture2D" uid="uid://c3va1ykebf8as" path="res://assets/images/ui/settings/settings_button_hover.png" id="5_epp2n"]
-[ext_resource type="Texture2D" uid="uid://b1d6b16biv1u8" path="res://assets/images/ui/settings/checkbox_hover_small.png" id="5_pmp3w"]
+[ext_resource type="Texture2D" uid="uid://mdkrgn1ytnhh" path="res://assets/images/ui/settings/checkbox_hover.png" id="5_nre0q"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_um142"]
 
 [sub_resource type="Animation" id="Animation_mqb4d"]
 length = 0.001
@@ -173,6 +174,7 @@ _data = {
 script = ExtResource("1_bstu8")
 
 [node name="BG" type="ColorRect" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,6 +190,7 @@ libraries = {
 }
 
 [node name="Settings" type="Control" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
@@ -195,77 +198,78 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("2_5ky7v")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Settings"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 495.0
-offset_top = 96.0
-offset_right = 1258.0
-offset_bottom = 1019.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 40
+[node name="CenterContainer" type="CenterContainer" parent="Settings"]
+layout_mode = 0
+offset_right = 3840.0
+offset_bottom = 2160.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 97
 alignment = 1
 
-[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/VBoxContainer"]
+[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/VBoxContainer/MasterSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/MasterSoundContainer"]
 layout_mode = 2
 text = "MASTER_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/VBoxContainer/MasterSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/MasterSoundContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Settings/VBoxContainer/BGMSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/BGMSoundContainer"]
 layout_mode = 2
 text = "BGM_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/VBoxContainer/BGMSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/BGMSoundContainer"]
 layout_mode = 2
 
-[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/VBoxContainer"]
+[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/VBoxContainer/SFXSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/SFXSoundContainer"]
 layout_mode = 2
 text = "SFX_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/VBoxContainer/SFXSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/SFXSoundContainer"]
 layout_mode = 2
 
-[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
+[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/VBoxContainer/FullscreenContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/FullscreenContainer"]
+custom_minimum_size = Vector2(200, 210)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.21
 focus_mode = 0
 toggle_mode = true
-texture_normal = ExtResource("3_imvmh")
-texture_pressed = ExtResource("4_e5dyi")
-texture_hover = ExtResource("5_pmp3w")
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/VBoxContainer/FullscreenContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/FullscreenContainer"]
 layout_mode = 2
+theme_override_constants/line_spacing = 47
 text = "FULLSCREEN"
 horizontal_alignment = 1
+vertical_alignment = 2
 
-[node name="SaveNQuitButton" type="Button" parent="Settings/VBoxContainer"]
+[node name="SaveNQuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("6_um142")
 text = "SAVE_AND_EXIT"
 
 [node name="PauseButton" type="TextureButton" parent="."]
@@ -278,9 +282,9 @@ texture_normal = ExtResource("3_53c0p")
 texture_pressed = ExtResource("4_fa5hr")
 texture_hover = ExtResource("5_epp2n")
 
-[connection signal="value_changed" from="Settings/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
-[connection signal="value_changed" from="Settings/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
-[connection signal="value_changed" from="Settings/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
-[connection signal="toggled" from="Settings/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
-[connection signal="pressed" from="Settings/VBoxContainer/SaveNQuitButton" to="." method="_on_save_n_quit_button_pressed"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_save_n_quit_button_pressed"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

@@ -1,10 +1,37 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://dsx7oo1jar5n8"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://dsx7oo1jar5n8"]
 
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="1_1sw1t"]
+[ext_resource type="Texture2D" uid="uid://c4rw43qeo0sjc" path="res://assets/images/ui/settings/slider_grabber_normal.png" id="2_6v628"]
+[ext_resource type="Texture2D" uid="uid://bkfk4nnoesxml" path="res://assets/images/ui/settings/slider_grabber_disabled.png" id="3_qiexf"]
+[ext_resource type="Texture2D" uid="uid://cdaxqbm7a7kgc" path="res://assets/images/ui/settings/slider_grabber_highlight.png" id="4_ilxwh"]
 
 [sub_resource type="FontVariation" id="FontVariation_dorkb"]
 base_font = ExtResource("1_1sw1t")
 spacing_top = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h5y1j"]
+bg_color = Color(0.85098, 1, 0.886275, 1)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0, 0.0352941, 0.141176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1tofi"]
+bg_color = Color(0.27451, 0.811765, 0.701961, 1)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0, 0.0352941, 0.141176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rnmwq"]
+bg_color = Color(0.85098, 1, 0.886275, 1)
+border_width_left = 40
+border_width_top = 40
+border_width_right = 40
+border_width_bottom = 40
+border_color = Color(0, 0.0352941, 0.141176, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_blnni"]
 base_font = ExtResource("1_1sw1t")
@@ -13,10 +40,12 @@ base_font = ExtResource("1_1sw1t")
 Button/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Button/font_sizes/font_size = 32
 Button/fonts/font = SubResource("FontVariation_dorkb")
-CheckBox/icons/checked = null
-CheckBox/icons/checked_disabled = null
-CheckBox/icons/unchecked = null
-CheckBox/icons/unchecked_disabled = null
+HSlider/icons/grabber = ExtResource("2_6v628")
+HSlider/icons/grabber_disabled = ExtResource("3_qiexf")
+HSlider/icons/grabber_highlight = ExtResource("4_ilxwh")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_h5y1j")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_1tofi")
+HSlider/styles/slider = SubResource("StyleBoxFlat_rnmwq")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
-Label/font_sizes/font_size = 29
+Label/font_sizes/font_size = 90
 Label/fonts/font = SubResource("FontVariation_blnni")

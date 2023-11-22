@@ -4,11 +4,11 @@ signal pause_toggled(active : bool)
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var SoundSettings = {
-	"master": $Settings/VBoxContainer/MasterSoundContainer/HSlider,
-	"bgm": $Settings/VBoxContainer/BGMSoundContainer/HSlider,
-	"sfx": $Settings/VBoxContainer/SFXSoundContainer/HSlider,
+	"master": $Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider,
+	"bgm": $Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider,
+	"sfx": $Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider,
 }
-@onready var Fullscreen = $Settings/VBoxContainer/FullscreenContainer/CheckBox
+@onready var Fullscreen = $Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox
 @onready var  BG = $BG
 
 var active := false
