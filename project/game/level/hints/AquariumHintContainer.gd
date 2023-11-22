@@ -27,7 +27,17 @@ func set_should_be_visible(sizes: Dictionary) -> void:
 	for child in HintContainer.get_children():
 		child.set_should_be_visible(sizes.has(child.aquarium_size))
 
+func _visible() -> Dictionary:
+	var ans := {}
+	for size in visible_sizes():
+		ans[size] = true
+	return ans
+
 func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, auto_start := true) -> void:
+	var is_visible := _visible()
+	for sz in is_visible:
+		if not expected.has(sz):
+			expected[sz] = 0
 	while HintContainer.get_child_count() < expected.size():
 		var c := preload("res://game/level/hints/AquariumHint.tscn").instantiate()
 		HintContainer.add_child(c)
@@ -40,4 +50,6 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 	var sizes := expected.keys()
 	sizes.sort()
 	for i in sizes.size():
-		HintContainer.get_child(i).set_values(sizes[i], expected[sizes[i]], current.get(sizes[i], 0), editor_mode)
+		var c := HintContainer.get_child(i)
+		c.set_values(sizes[i], expected[sizes[i]], current.get(sizes[i], 0), editor_mode)
+		c.set_should_be_visible(is_visible.has(sizes[i]))
