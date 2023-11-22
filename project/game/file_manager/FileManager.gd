@@ -2,8 +2,8 @@ extends Node
 
 var current_profile := "default"
 
-func _notification(what) -> void:
-	if what == MainLoop.NOTIFICATION_CRASH:
+func _notification(what: int) -> void:
+	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
 		save_profile()
 
 func save_and_quit() -> void:

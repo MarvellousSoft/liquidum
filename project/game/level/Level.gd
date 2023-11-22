@@ -162,15 +162,25 @@ func _on_playtest_button_pressed() -> void:
 	var new_level := Level.with_grid(new_grid, "")
 	TransitionManager.push_scene(new_level)
 
-
-func _on_back_button_pressed() -> void:
+func maybe_save() -> void:
 	if not level_name.is_empty():
+		print("Saving the level...")
 		if editor_mode():
 			FileManager.save_editor_level(level_name, null, LevelData.new("", GridNode.grid_logic.export_data()))
 		else:
 			FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
+
+func _on_back_button_pressed() -> void:
+	maybe_save()
 	TransitionManager.pop_scene()
 
 
 func _on_settings_screen_pause_toggled(active):
 	process_game = not active
+
+func _notification(what: int) -> void:
+	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
+		maybe_save()
+
+func _on_autosaver_timeout():
+	maybe_save()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://dlcfb4y7xjjl3"]
 
-[ext_resource type="Script" path="res://game/level/Level.gd" id="1_efb3o"]
+[ext_resource type="Script" path="res://game/level/Level.gd" id="1_08rx7"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="3_ceab8"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
@@ -74,7 +74,7 @@ _data = {
 }
 
 [node name="Level" type="Node2D"]
-script = ExtResource("1_efb3o")
+script = ExtResource("1_08rx7")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 offset_top = 450.0
@@ -219,6 +219,10 @@ libraries = {
 "": SubResource("AnimationLibrary_b8al2")
 }
 
+[node name="Autosaver" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="pressed" from="SolveButton" to="." method="_on_solve_button_pressed"]
@@ -226,6 +230,7 @@ libraries = {
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
+[connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
 [editable path="TopInfo/MistakeCounter"]
 [editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]

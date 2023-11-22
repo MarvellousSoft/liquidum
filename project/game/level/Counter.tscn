@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
 [ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="2_hnkmi"]
 [ext_resource type="Theme" uid="uid://cdi6swfl8433" path="res://assets/ui/CounterTheme.tres" id="2_wetut"]
-[ext_resource type="PackedScene" uid="uid://dsijy48kaftba" path="res://game/level/hints/HintOptionButton.tscn" id="3_86ios"]
+[ext_resource type="PackedScene" path="res://game/level/hints/HintOptionButton.tscn" id="3_86ios"]
 
 [sub_resource type="FontVariation" id="FontVariation_5wwqj"]
 base_font = ExtResource("2_hnkmi")
