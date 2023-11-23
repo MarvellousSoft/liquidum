@@ -31,7 +31,6 @@ func _ready():
 	GridNode.show()
 	AudioManager.play_bgm("main")
 	setup()
-	$DevButtons.visible = Global.is_dev_mode()
 
 func _enter_tree():
 	scale_grid()
@@ -54,6 +53,7 @@ func _hint_to_flag(hint: GridModel.LineHint) -> int:
 	return val
 
 func setup() -> void:
+	$DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	
 	var visible_aquarium_sizes = null
@@ -160,6 +160,8 @@ func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 
 
 func _on_grid_updated() -> void:
+	if $DevButtons.god_mode_enabled():
+		GridNode.auto_solve(false, false)
 	update_counters()
 	if GridNode.is_level_finished() and not editor_mode():
 		win()
@@ -245,10 +247,15 @@ func _on_autosaver_timeout():
 # Dev stuff
 
 func _on_dev_buttons_full_solve():
-	var r: SolverModel.SolveResult = GridNode.grid_logic.full_solve()
+	var r: SolverModel.SolveResult = GridNode.full_solve(true, false)
 	var solve_type: String = SolverModel.SolveResult.find_key(r)
 	$DevButtons/FullSolveType.text = solve_type
 
 
 func _on_dev_buttons_use_strategies():
-	GridNode.auto_solve()
+	GridNode.auto_solve(true, false)
+
+
+func _on_dev_buttons_generate(interesting: bool) -> void:
+	# TODO
+	pass

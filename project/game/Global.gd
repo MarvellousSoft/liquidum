@@ -9,12 +9,22 @@ const COLORS = {
 
 var previous_windowed_pos = false
 var _dev_mode := false
+var dev_mode_label: Label
 
 func _input(event):
 	if event.is_action_pressed(&"toggle_fullscreen"):
 		toggle_fullscreen()
 	if event.is_action_pressed(&"toggle_dev_mode"):
 		_dev_mode = not _dev_mode and OS.is_debug_build()
+		dev_mode_label.visible = _dev_mode
+
+func _ready() -> void:
+	dev_mode_label = Label.new()
+	dev_mode_label.text = "dev mode"
+	dev_mode_label.scale = Vector2(5, 5)
+	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
+	dev_mode_label.visible = false
+	add_child(dev_mode_label)
 
 func is_dev_mode() -> bool:
 	return OS.is_debug_build() and _dev_mode

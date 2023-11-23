@@ -24,7 +24,7 @@ text = "Full solve"
 layout_mode = 2
 text = "Solving manually"
 
-[node name="God mode" type="CheckButton" parent="."]
+[node name="GodMode" type="CheckButton" parent="."]
 layout_mode = 2
 text = "God mode"
 
@@ -38,4 +38,5 @@ text = "Interesting"
 
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="pressed" from="GodMode" to="." method="_on_god_mode_pressed"]
 [connection signal="pressed" from="Generate" to="." method="_on_generate_pressed"]

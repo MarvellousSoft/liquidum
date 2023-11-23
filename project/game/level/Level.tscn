@@ -135,9 +135,6 @@ offset_right = 1253.0
 offset_bottom = 154.0
 check_for_satisfied = false
 
-[node name="BG" parent="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton" index="0"]
-color = Color(0.85098, 1, 0.886275, 0.588235)
-
 [node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -172,10 +169,10 @@ text = "Back"
 
 [node name="DevButtons" parent="." instance=ExtResource("7_q4003")]
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 602.0
-offset_bottom = 1166.0
+offset_left = 64.0
+offset_top = 1457.0
+offset_right = 733.0
+offset_bottom = 2623.0
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -240,6 +237,7 @@ autostart = true
 [connection signal="pressed" from="LeftButtons/PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="pressed" from="LeftButtons/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
+[connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
