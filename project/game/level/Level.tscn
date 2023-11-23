@@ -84,7 +84,7 @@ script = ExtResource("2_wvis2")
 layout_mode = 0
 offset_top = 450.0
 offset_right = 3840.0
-offset_bottom = 2160.0
+offset_bottom = 1970.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
 unique_name_in_owner = true
@@ -127,7 +127,6 @@ vertical_alignment = 2
 
 [node name="MistakeCounter" parent="TopInfo" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 offset_left = 581.0
 offset_top = 4.0
@@ -202,13 +201,11 @@ alignment = 1
 
 [node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 counter_name = "WATERS_COUNTER"
 
 [node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 

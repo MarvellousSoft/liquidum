@@ -2,7 +2,7 @@ class_name Level
 extends Control
 
 const COUNTER_DELAY_STARTUP = .3
-const DESIRED_GRID_W = 1700
+const DESIRED_GRID_W = 1300
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
