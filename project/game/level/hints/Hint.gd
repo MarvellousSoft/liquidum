@@ -2,8 +2,6 @@ extends Control
 
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
-const NUMBER_HEADER = """[font_size={50}]
-[/font_size]"""
 
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
@@ -91,7 +89,7 @@ func alpha_t(text : String, alpha : float) -> String:
 
 
 func update_label() -> void:
-	Number.text = NUMBER_HEADER
+	Number.text = ""
 	match hint_type:
 		E.HintType.Any:
 			Number.text += str(hint_value)

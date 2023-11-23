@@ -2,19 +2,19 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bl8xrrduc4deb"
-path="res://.godot/imported/Bold.ttf-1fe2ee79f1f2b2ebde1ad6fa195f3581.fontdata"
+uid="uid://vgpg1gbatn5o"
+path="res://.godot/imported/Bold.otf-ae9b667e81a914f4a60be3c8b7d25132.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Bold.ttf"
-dest_files=["res://.godot/imported/Bold.ttf-1fe2ee79f1f2b2ebde1ad6fa195f3581.fontdata"]
+source_file="res://assets/fonts/Bold.otf"
+dest_files=["res://.godot/imported/Bold.otf-ae9b667e81a914f4a60be3c8b7d25132.fontdata"]
 
 [params]
 
 Rendering=null
 antialiasing=1
-generate_mipmaps=true
+generate_mipmaps=false
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48

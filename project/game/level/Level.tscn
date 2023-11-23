@@ -6,12 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="5_1j60w"]
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="5_2usht"]
 [ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
-[ext_resource type="FontFile" uid="uid://ct713e8v675x8" path="res://assets/fonts/Regular.ttf" id="9_nexwh"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
-base_font = ExtResource("9_nexwh")
+base_font = ExtResource("5_2usht")
 
 [sub_resource type="Animation" id="Animation_1qr1w"]
 length = 0.001

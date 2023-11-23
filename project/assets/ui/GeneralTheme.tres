@@ -1,10 +1,9 @@
 [gd_resource type="Theme" load_steps=8 format=3 uid="uid://c6108lc3jg2cv"]
 
-[ext_resource type="FontFile" uid="uid://bl8xrrduc4deb" path="res://assets/fonts/Bold.ttf" id="1_n4tbg"]
-[ext_resource type="FontFile" uid="uid://ct713e8v675x8" path="res://assets/fonts/Regular.ttf" id="2_0a4w0"]
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
-base_font = ExtResource("1_n4tbg")
+base_font = ExtResource("1_x6xj1")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8vqq"]
 bg_color = Color(0.133333, 0.513726, 0.6, 0.513726)
@@ -19,9 +18,6 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 corner_detail = 20
-expand_margin_left = 30.0
-expand_margin_top = 44.0
-expand_margin_right = 30.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqp5v"]
 bg_color = Color(0.133333, 0.513726, 0.6, 1)
@@ -36,9 +32,6 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 corner_detail = 20
-expand_margin_left = 30.0
-expand_margin_top = 44.0
-expand_margin_right = 30.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ah4gh"]
 bg_color = Color(0.0352941, 0.211765, 0.34902, 1)
@@ -53,9 +46,9 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 corner_detail = 20
-expand_margin_left = 30.0
-expand_margin_top = 44.0
-expand_margin_right = 30.0
+
+[sub_resource type="FontVariation" id="FontVariation_qs55u"]
+base_font = ExtResource("1_x6xj1")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vcc8j"]
 bg_color = Color(0.85098, 1, 0.886275, 0.235294)
@@ -87,5 +80,5 @@ Button/styles/normal = SubResource("StyleBoxFlat_xqp5v")
 Button/styles/pressed = SubResource("StyleBoxFlat_ah4gh")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82
-Label/fonts/font = ExtResource("2_0a4w0")
+Label/fonts/font = SubResource("FontVariation_qs55u")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")
