@@ -22,6 +22,8 @@ var process_game := false
 var running_time : float
 var grid: GridModel = null
 var level_name := ""
+# Has completion data but outdated grid data
+var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
 
 func _ready():
 	await TransitionManager.transition_finished
@@ -76,6 +78,7 @@ func setup() -> void:
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
+				dummy_save = save
 	$BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	$LeftButtons/PlaytestButton.visible = editor_mode()
@@ -143,19 +146,21 @@ func update_timer_label() -> void:
 	else:
 		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
 
-func win():
+func win() -> void:
 	AudioManager.play_sfx("win_level")
+	dummy_save.save_completion(Counters.mistake.count, running_time)
+	maybe_save()
 
 
 func _on_solve_button_pressed():
 	GridNode.auto_solve()
 
 
-func _on_brush_picker_brushed_picked(mode : E.BrushMode):
+func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
 
 
-func _on_grid_updated():
+func _on_grid_updated() -> void:
 	update_counters()
 	if GridNode.is_level_finished() and not editor_mode():
 		win()
@@ -211,7 +216,10 @@ func maybe_save() -> void:
 			FileManager.save_editor_level(level_name, null, LevelData.new("", grid_logic.export_data()))
 			grid_logic.set_auto_update_hints(true)
 		else:
-			FileManager.save_level(level_name, UserLevelSaveData.new(GridNode.grid_logic.export_data(), Counters.mistake.count, running_time))
+			dummy_save.grid_data = GridNode.grid_logic.export_data()
+			dummy_save.mistakes = Counters.mistake.count
+			dummy_save.timer_secs = running_time
+			FileManager.save_level(level_name, dummy_save)
 
 func reset_level() -> void:
 	GridNode.grid_logic.clear_all()

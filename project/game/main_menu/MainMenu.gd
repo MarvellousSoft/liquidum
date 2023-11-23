@@ -12,7 +12,7 @@ func _ready():
 
 func _on_level_button_pressed(section: int, level: int) -> void:
 	var level_data := FileManager.load_level_data(section, level)
-	var level_name := "level%02d_%02d" % [section, level]
+	var level_name := LevelLister.level_name(section, level)
 	var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 	# TODO: Display level_data.full_name somewhere
 	var level_node := Global.create_level(grid, level_name)
