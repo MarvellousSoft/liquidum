@@ -23,11 +23,12 @@ func _assert_dir(dir: String) -> void:
 	if not DirAccess.dir_exists_absolute(dir):
 		DirAccess.make_dir_recursive_absolute(dir)
 
-func _load_json_data(dir_name: String, file_name: String) -> Variant:
+func _load_json_data(dir_name: String, file_name: String, error_non_existing := true) -> Variant:
 	file_name = "%s/%s" % [dir_name, file_name]
 	var file := FileAccess.open(file_name, FileAccess.READ)
 	if file == null:
-		push_error("Error trying to open profile whilst loading: %d" % FileAccess.get_open_error())
+		if not error_non_existing or FileAccess.get_open_error() != Error.ERR_FILE_NOT_FOUND:
+			push_error("Error trying to open profile whilst loading: %d" % FileAccess.get_open_error())
 		return null
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != Error.OK:
@@ -61,7 +62,7 @@ func _level_file(level: String) -> String:
 	return "%s.save" % level
 
 func load_level(level_name: String) -> UserLevelSaveData:
-	return UserLevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name)))
+	return UserLevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name), false))
 
 func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())

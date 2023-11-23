@@ -256,6 +256,6 @@ func _on_dev_buttons_use_strategies():
 	GridNode.auto_solve(true, false)
 
 
-func _on_dev_buttons_generate(interesting: bool) -> void:
+func _on_dev_buttons_generate(_interesting: bool) -> void:
 	# TODO
 	pass
