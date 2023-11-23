@@ -100,7 +100,7 @@ func _process(dt):
 				Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
 
 
-func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int) -> void:
+func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor_mode : bool) -> void:
 	grid = grid_ref
 	row = i
 	column = j
@@ -115,9 +115,11 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int) -> voi
 	Boat.modulate.a = 0.0
 	copy_data(data)
 	
-	await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
-	
-	AnimPlayer.play("startup")
+	if not editor_mode:
+		await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
+		AnimPlayer.play("startup")
+	else:
+		modulate.a = 1.0
 
 func fast_update_waters() -> void:
 	for flag in water_flags.keys():

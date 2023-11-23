@@ -85,8 +85,8 @@ func setup_hints():
 	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
 	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
 	var delay = STARTUP_DELAY * (rows + 1) * columns
-	HintBars.left.startup(delay + STARTUP_DELAY)
-	HintBars.top.startup(delay + STARTUP_DELAY*2)
+	HintBars.left.startup(editor_mode, delay + STARTUP_DELAY)
+	HintBars.top.startup(editor_mode, delay + STARTUP_DELAY*2)
 
 
 func setup_cell_corners() -> void:
@@ -154,7 +154,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 
-	cell.setup(self, cell_data, n, m)
+	cell.setup(self, cell_data, n, m, editor_mode)
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)

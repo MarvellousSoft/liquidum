@@ -24,13 +24,15 @@ use_top_left = true
 
 [node name="MainGridContainer" type="GridContainer" parent="CenterContainer"]
 layout_mode = 2
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 40
 columns = 2
 
 [node name="GridContainer" type="GridContainer" parent="CenterContainer/MainGridContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 3
+columns = 2
 
 [node name="TLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
@@ -40,11 +42,6 @@ layout_mode = 2
 [node name="HintBarTop" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
 is_horizontal = true
-
-[node name="TRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
 
 [node name="HintBarLeft" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
@@ -92,70 +89,64 @@ layout_mode = 2
 [node name="RegularCell3" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
-[node name="BLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
-[node name="BPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
-[node name="BRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
 [node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
-layout_mode = 2
-size_flags_vertical = 0
-focus_mode = 0
-theme_override_font_sizes/font_size = 200
-text = "+"
+theme_override_constants/separation = 67
 
 [node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 8
 focus_mode = 0
-theme_override_font_sizes/font_size = 200
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 70
+theme_override_font_sizes/font_size = 210
 text = "-
 "
+
+[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 8
+focus_mode = 0
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 70
+theme_override_font_sizes/font_size = 210
+text = "+"
 
 [node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
-layout_mode = 2
-size_flags_horizontal = 0
-focus_mode = 0
-theme_override_font_sizes/font_size = 200
-text = "+"
-
 [node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_horizontal = 8
 focus_mode = 0
-theme_override_font_sizes/font_size = 200
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 70
+theme_override_font_sizes/font_size = 210
 text = "-
 "
 
+[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 70
+theme_override_font_sizes/font_size = 210
+text = "+"
+
 [node name="FillerPanel" type="Panel" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
 
@@ -226,10 +217,10 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_add_col"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_rem_col"]
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_add_row"]
+[connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_add_col"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_rem_row"]
+[connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_add_row"]
 
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarLeft"]

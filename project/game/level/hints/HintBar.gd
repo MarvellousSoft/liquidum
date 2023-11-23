@@ -40,9 +40,12 @@ func setup(hints : Array, editor_mode : bool) -> void:
 	custom_minimum_size = bar.size
 
 
-func startup(delay : float) -> void:
-	await get_tree().create_timer(delay).timeout
-	AnimPlayer.play("startup")
+func startup(editor_mode : bool, delay : float) -> void:
+	if not editor_mode:
+		await get_tree().create_timer(delay).timeout
+		AnimPlayer.play("startup")
+	else:
+		modulate.a = 1.0
 
 
 func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> Node:
