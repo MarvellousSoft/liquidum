@@ -44,7 +44,7 @@ func _input(event):
 			mouse_hold_status = E.MouseDragState.None
 			previous_wall_index = []
 	elif grid_logic and event.is_action_pressed(&"undo"):
-		grid_logic.undo()		
+		grid_logic.undo()
 		update()
 	elif grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
@@ -159,9 +159,12 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 
 
 func update(do_emit_signal := true, fast_update := false) -> void:
-	update_walls()
-	update_visuals(fast_update)
-	update_hints()
+	if grid_logic.rows() != rows or grid_logic.cols() != columns:
+		setup(grid_logic)
+	else:
+		update_walls()
+		update_visuals(fast_update)
+		update_hints()
 	if do_emit_signal:
 		updated.emit()
 
@@ -400,7 +403,6 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 				mouse_hold_status = E.MouseDragState.Block
 				if not cell_data.put_block(corner, false):
 					highlight_error(i, j, which)
-			update_walls()
 			get_cell(i, j).update_blocks(cell_data)
 	update()
 
@@ -452,7 +454,6 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Block and cell_data.nothing_at(corner):
 		if cell_data.put_block(corner, false):
-			update_walls()
 			get_cell(i, j).update_blocks(cell_data)
 		else:
 			highlight_error(i, j, which)
@@ -467,7 +468,6 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		AudioManager.play_sfx("boat_remove")
 	elif mouse_hold_status == E.MouseDragState.RemoveBlock and cell_data.block_at(corner):
 		cell_data.remove_content(corner, false)
-		update_walls()
 		get_cell(i, j).update_blocks(cell_data)
 	
 	update()
@@ -503,16 +503,16 @@ func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
 
 func _add_col():
 	grid_logic.add_col()
-	setup(grid_logic)
+	update()
 
 func _rem_row():
 	grid_logic.rem_row()
-	setup(grid_logic)
+	update()
 
 func _rem_col():
 	grid_logic.rem_col()
-	setup(grid_logic)
+	update()
 
 func _add_row():
 	grid_logic.add_row()
-	setup(grid_logic)
+	update()

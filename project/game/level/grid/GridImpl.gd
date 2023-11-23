@@ -516,9 +516,13 @@ func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_ri
 func _do_rem_row() -> RemRowChange:
 	assert(editor_mode())
 	n -= 1
-	var prev_row: Array[PureCell] = pure_cells.pop_back()
-	var prev_wall_bottom: Array[bool] = wall_bottom.pop_back()
-	var prev_wall_right: Array[bool] = wall_right.pop_back()
+	var prev_row: Array[PureCell] = []
+	var prev_wall_bottom: Array[bool] = []
+	var prev_wall_right: Array[bool] = []
+	# Why is this sometimes Array and not Array[PureCell]?
+	prev_row.assign(pure_cells.pop_back())
+	prev_wall_bottom.assign(wall_bottom.pop_back())
+	prev_wall_right.assign(wall_right.pop_back())
 	var hint: LineHint = _row_hints.pop_back()
 	maybe_update_hints()
 	validate()
@@ -530,6 +534,8 @@ func add_row(flush_undo := true) -> void:
 	flood_all(false)
 
 func rem_row(flush_undo := true) -> void:
+	if n == 1:
+		return
 	var change := _do_rem_row()
 	_push_undo_changes([change], flush_undo)
 
@@ -575,6 +581,8 @@ func add_col(flush_undo := true) -> void:
 	flood_all(false)
 
 func rem_col(flush_undo := true) -> void:
+	if m == 1:
+		return
 	var change := _do_rem_col()
 	_push_undo_changes([change], flush_undo)
 
