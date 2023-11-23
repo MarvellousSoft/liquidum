@@ -53,6 +53,7 @@ var redo_stack: Array[Changes] = []
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
 var auto_update_hints_: bool = false
+var _force_editor_mode := false
 
 func _init(n_: int, m_: int) -> void:
 	setup(n_, m_)
@@ -596,6 +597,9 @@ func row_hints() -> Array[LineHint]:
 func col_hints() -> Array[LineHint]:
 	return _col_hints
 
+func force_editor_mode(b := true) -> void:
+	_force_editor_mode = b
+
 # TODO: REMOVE
 func get_expected_boats() -> int:
 	return _grid_hints.total_boats
@@ -640,7 +644,7 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 		wall_bottom[i][j] = new
 
 func editor_mode() -> bool:
-	return solution_c_left.is_empty()
+	return _force_editor_mode or solution_c_left.is_empty()
 
 func maybe_update_hints() -> void:
 	if not editor_mode() or not auto_update_hints():
@@ -1281,7 +1285,7 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 
 # Use when level is created with with_solution
 func is_solution_partially_valid() -> bool:
-	assert(!solution_c_left.is_empty() or n == 0)
+	assert(!editor_mode() or n == 0)
 	for i in n:
 		for j in m:
 			if not _is_content_partial_solution(_pure_cell(i, j).c_left, solution_c_left[i][j]):
@@ -1291,7 +1295,7 @@ func is_solution_partially_valid() -> bool:
 	return true
 
 func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> bool:
-	return solution_c_left.is_empty() or _is_content_partial_solution(c, _content_sol(i, j, corner))
+	return editor_mode() or _is_content_partial_solution(c, _content_sol(i, j, corner))
 
 func validate() -> void:
 	for j in m:

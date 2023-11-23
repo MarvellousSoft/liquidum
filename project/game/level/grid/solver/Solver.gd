@@ -353,6 +353,7 @@ func _make_guess(res: SolveResult) -> SolveResult:
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
 func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
+	assert(grid.editor_mode() and not grid.auto_update_hints())
 	if flush_undo:
 		grid.push_empty_undo()
 	apply_strategies(grid, false)

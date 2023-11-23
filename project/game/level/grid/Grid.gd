@@ -259,6 +259,9 @@ func clear_all() -> void:
 func editor_mode() -> bool:
 	return GridModel.must_be_implemented()
 
+func force_editor_mode(_b := true) -> void:
+	return GridModel.must_be_implemented()
+
 func set_auto_update_hints(_b: bool) -> void:
 	return GridModel.must_be_implemented()
 
