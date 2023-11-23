@@ -1,18 +1,24 @@
 class_name GridView
 extends Control
 
-const STARTUP_DELAY = 0.1
 
 signal updated
 signal mistake_made
+signal updated_size
 
+const STARTUP_DELAY = 0.1
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 const CELL_CORNER = preload("res://game/level/cells/CellCorner.tscn")
 const PREVIEW_DRAG_COLORS = {
 	"adding": Color("#61fc89df"),
 	"removing": Color("#ff6464df"),
 }
+const MIN_GRID_R = 1
+const MAX_GRID_R = 10
+const MIN_GRID_C = 1
+const MAX_GRID_C = 10
 
+@onready var MainGridCont = $CenterContainer/MainGridContainer
 @onready var GridCont = $CenterContainer/MainGridContainer/GridContainer
 @onready var Columns = $CenterContainer/MainGridContainer/GridContainer/Columns
 @onready var HintBars = {
@@ -113,7 +119,7 @@ func setup_cell_corners() -> void:
 
 
 func get_grid_size() -> Vector2:
-	return GridCont.size
+	return MainGridCont.size
 
 
 func auto_solve(flush_undo := true, do_emit_signal := true) -> void:
@@ -328,11 +334,19 @@ func play_water_sound() -> void:
 	AudioManager.play_sfx("splash" + str(randi()%4 + 1))
 
 
-func highlight_error(i: int, j: int, which: E.Waters) -> void:
+func generic_error() -> void:
+	for i in rows:
+		for j in columns:
+			highlight_error(i, j, E.Waters.Single, false)
+	AudioManager.play_sfx("error")
+
+
+func highlight_error(i: int, j: int, which: E.Waters, play_sfx := true) -> void:
 	mouse_hold_status = E.MouseDragState.None
 	var cell = get_cell(i, j)
 	cell.play_error(which)
-	AudioManager.play_sfx("error")
+	if play_sfx:
+		AudioManager.play_sfx("error")
 	emit_signal("mistake_made")
 
 
@@ -507,20 +521,36 @@ func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
 
 
 func _add_col():
-	grid_logic.add_col()
-	update()
+	if grid_logic.cols() < MAX_GRID_C:
+		grid_logic.add_col()
+		update()
+		emit_signal("updated_size")
+	else:
+		generic_error()
 
 
 func _rem_row():
-	grid_logic.rem_row()
-	update()
+	if grid_logic.rows() > MIN_GRID_R:
+		grid_logic.rem_row()
+		update()
+		emit_signal("updated_size")
+	else:
+		generic_error()
 
 
 func _rem_col():
-	grid_logic.rem_col()
-	update()
+	if grid_logic.cols() > MIN_GRID_C:
+		grid_logic.rem_col()
+		update()
+		emit_signal("updated_size")
+	else:
+		generic_error()
 
 
 func _add_row():
-	grid_logic.add_row()
-	update()
+	if grid_logic.rows() < MAX_GRID_R:
+		grid_logic.add_row()
+		update()
+		emit_signal("updated_size")
+	else:
+		generic_error()

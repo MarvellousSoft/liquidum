@@ -233,6 +233,7 @@ autostart = true
 
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
+[connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="pressed" from="LeftButtons/ResetButton" to="." method="reset_level"]
 [connection signal="pressed" from="LeftButtons/PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="pressed" from="LeftButtons/BackButton" to="." method="_on_back_button_pressed"]

@@ -2,7 +2,7 @@ class_name Level
 extends Control
 
 const COUNTER_DELAY_STARTUP = .3
-const DESIRED_GRID_W = 1050
+const DESIRED_GRID_W = 1700
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -33,7 +33,8 @@ func _ready():
 	setup()
 
 func _enter_tree():
-	scale_grid()
+	if GridNode:
+		scale_grid()
 
 func _process(dt):
 	if process_game and not grid.editor_mode():
@@ -126,9 +127,15 @@ func editor_mode() -> bool:
 
 
 func scale_grid() -> void:
+	var prev_a = GridNode.modulate.a
+	GridNode.modulate.a = 0.0
+	
 	await get_tree().process_frame
-	var s := DESIRED_GRID_W / GridNode.get_grid_size().x
+	
+	var g_size = GridNode.get_grid_size()
+	var s = min( DESIRED_GRID_W / g_size.x, DESIRED_GRID_W / g_size.y )
 	GridNode.scale = Vector2(s, s)
+	GridNode.modulate.a = prev_a
 
 
 func update_counters() -> void:
@@ -244,7 +251,6 @@ func _notification(what: int) -> void:
 func _on_autosaver_timeout():
 	maybe_save()
 
-# Dev stuff
 
 func _on_dev_buttons_full_solve():
 	var r: SolverModel.SolveResult = GridNode.full_solve(true, false)
@@ -259,3 +265,6 @@ func _on_dev_buttons_use_strategies():
 func _on_dev_buttons_generate(_interesting: bool) -> void:
 	# TODO
 	pass
+
+func _on_grid_view_updated_size():
+	scale_grid()
