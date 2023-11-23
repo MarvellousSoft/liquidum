@@ -1,6 +1,10 @@
 class_name HintBar
 extends Control
 
+# Add or remove row/column depending on the HintBar orientation
+signal add_line()
+signal rem_line()
+
 const HINT = preload("res://game/level/hints/Hint.tscn")
 
 @export var is_horizontal := false
@@ -19,7 +23,26 @@ func _ready():
 		Vertical.remove_child(child)
 	for child in Horizontal.get_children():
 		Horizontal.remove_child(child)
+	_setup_resize_buttons()
 
+func _setup_resize_buttons() -> void:
+	var bar = Horizontal if is_horizontal else Vertical
+	var box: BoxContainer = VBoxContainer.new() if is_horizontal else HBoxContainer.new()
+	var add_button := Global.create_button("+")
+	var rem_button := Global.create_button("-")
+	add_button.pressed.connect(_add_line)
+	rem_button.pressed.connect(_rem_line)
+	box.add_child(add_button)
+	box.add_child(rem_button)
+	box.name = "ResizeButtons"
+	# Internal so we don't remove it by accident
+	bar.add_child(box, false, Node.INTERNAL_MODE_BACK)
+
+func _add_line() -> void:
+	add_line.emit()
+
+func _rem_line() -> void:
+	rem_line.emit()
 
 func setup(hints : Array, editor_mode : bool) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
@@ -34,7 +57,9 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
 		if hints[i].boat_count == -1 and hints[i].water_count == -1:
 			water_hint.dummy_hint()
-		
+
+	bar.get_node("ResizeButtons").visible = editor_mode
+
 	await get_tree().process_frame
 	custom_minimum_size = bar.size
 

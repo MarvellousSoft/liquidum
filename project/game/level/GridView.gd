@@ -502,3 +502,20 @@ func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
 		# First wall should be its own undo part
 		grid_logic.push_empty_undo()
 	previous_wall_index = new_index
+
+
+func _add_col():
+	grid_logic.add_col()
+	setup(grid_logic)
+
+func _rem_row():
+	grid_logic.rem_row()
+	setup(grid_logic)
+
+func _rem_col():
+	grid_logic.rem_col()
+	setup(grid_logic)
+
+func _add_row():
+	grid_logic.add_row()
+	setup(grid_logic)

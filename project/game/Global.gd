@@ -20,6 +20,11 @@ func create_level(grid_: GridModel, level_name_: String) -> Node:
 	level.level_name = level_name_
 	return level
 
+func create_button(text: String) -> Button:
+	var button := Button.new()
+	button.focus_mode = Control.FOCUS_NONE
+	button.text = text
+	return button
 
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN

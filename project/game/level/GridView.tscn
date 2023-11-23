@@ -173,6 +173,11 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
+[connection signal="add_line" from="CenterContainer/GridContainer/HintBarTop" to="." method="_add_col"]
+[connection signal="rem_line" from="CenterContainer/GridContainer/HintBarTop" to="." method="_rem_col"]
+[connection signal="add_line" from="CenterContainer/GridContainer/HintBarLeft" to="." method="_add_row"]
+[connection signal="rem_line" from="CenterContainer/GridContainer/HintBarLeft" to="." method="_rem_row"]
+
 [editable path="CenterContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/GridContainer/HintBarLeft"]
 [editable path="CenterContainer/GridContainer/Columns/Row1/RegularCell"]
