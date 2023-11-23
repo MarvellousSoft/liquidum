@@ -82,6 +82,7 @@ _data = {
 }
 
 [node name="Counter" type="BoxContainer"]
+modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_bwmcc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

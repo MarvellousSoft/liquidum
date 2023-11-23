@@ -42,4 +42,5 @@ Button/styles/pressed = ExtResource("4_7wtpn")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82
 Label/fonts/font = SubResource("FontVariation_qs55u")
+LineEdit/font_sizes/font_size = 82
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")

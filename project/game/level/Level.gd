@@ -53,7 +53,7 @@ func _hint_to_flag(hint: GridModel.LineHint) -> int:
 		val |= HintBar.BOAT_TYPE_VISIBLE
 	return val
 
-func setup() -> void:
+func setup(try_load := true) -> void:
 	$DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	
@@ -63,7 +63,7 @@ func setup() -> void:
 	var total_water_visible := false
 	var total_boat_visible := false
 	
-	if not level_name.is_empty():
+	if not level_name.is_empty() and try_load:
 		if grid.editor_mode():
 			var data := FileManager.load_editor_level(level_name)
 			if data != null:
@@ -251,6 +251,8 @@ func _notification(what: int) -> void:
 func _on_autosaver_timeout():
 	maybe_save()
 
+func _on_grid_view_updated_size():
+	scale_grid()
 
 func _on_dev_buttons_full_solve():
 	var r: SolverModel.SolveResult = GridNode.full_solve(true, false)
@@ -262,9 +264,10 @@ func _on_dev_buttons_use_strategies():
 	GridNode.auto_solve(true, false)
 
 
-func _on_dev_buttons_generate(_interesting: bool) -> void:
-	# TODO
-	pass
-
-func _on_grid_view_updated_size():
-	scale_grid()
+func _on_dev_buttons_generate() -> void:
+	if not editor_mode():
+		return
+	var new_grid: GridModel = await $DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols())
+	if new_grid != null:
+		grid = new_grid
+		setup(false)
