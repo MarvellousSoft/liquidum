@@ -97,12 +97,12 @@ func update_label() -> void:
 			if editor_mode:
 				Number.text += alpha_t("{", hint_alpha) + str(hint_value) + alpha_t("}", hint_alpha)
 			else:
-				Number.text += "{" + str(hint_value) + "}"
+				Number.text += "{ " + str(hint_value) + " }"
 		E.HintType.Separated:
 			if editor_mode:
-				Number.text += alpha_t("-", hint_alpha) + str(hint_value) + alpha_t("-", hint_alpha)
+				Number.text += alpha_t("- ", hint_alpha) + str(hint_value) + alpha_t(" -", hint_alpha)
 			else:
-				Number.text += "-" + str(hint_value) + "-"
+				Number.text += "- " + str(hint_value) + " -"
 
 
 func no_hint() -> void:

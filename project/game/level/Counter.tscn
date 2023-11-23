@@ -82,7 +82,6 @@ _data = {
 }
 
 [node name="Counter" type="BoxContainer"]
-modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_bwmcc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -103,7 +102,6 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 0
-theme_override_constants/line_spacing = 40
 theme_override_fonts/font = SubResource("FontVariation_5wwqj")
 theme_override_font_sizes/font_size = 70
 text = "MISTAKES"
@@ -112,7 +110,6 @@ vertical_alignment = 2
 [node name="Counter" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 theme_override_constants/outline_size = 45
-theme_override_constants/line_spacing = 40
 theme_override_fonts/font = SubResource("FontVariation_bdphc")
 theme_override_font_sizes/font_size = 70
 text = "0"

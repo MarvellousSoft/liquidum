@@ -96,10 +96,9 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/default_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/line_separation = -18
-theme_override_constants/outline_size = 45
+theme_override_constants/outline_size = 64
 theme_override_fonts/normal_font = SubResource("FontVariation_tqca2")
-theme_override_font_sizes/normal_font_size = 113
+theme_override_font_sizes/normal_font_size = 128
 bbcode_enabled = true
 text = "[color=#ffffffff]{[/color]10[color=#fffffff]}[/color]"
 fit_content = true
@@ -119,12 +118,11 @@ stretch_mode = 5
 [node name="DummyLabel" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
-offset_top = 119.0
 offset_right = 500.0
 offset_bottom = 500.0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 48
+theme_override_constants/outline_size = 64
 theme_override_fonts/font = SubResource("FontVariation_k7l4k")
 theme_override_font_sizes/font_size = 200
 text = "?"

@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://qm8ijblbhiyt"]
+[gd_scene load_steps=12 format=3 uid="uid://qm8ijblbhiyt"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_1r4dl"]
 [ext_resource type="Script" path="res://game/level/GridView.gd" id="1_a7a5u"]
 [ext_resource type="PackedScene" uid="uid://bljmpbyn14lnb" path="res://game/level/hints/HintBar.tscn" id="2_q06jt"]
 [ext_resource type="PackedScene" uid="uid://ducq8gqvrwpyh" path="res://game/level/cells/RegularCell.tscn" id="3_68xyc"]
 [ext_resource type="PackedScene" uid="uid://dvauph5ly48yg" path="res://game/level/cells/CellCorner.tscn" id="4_tc07c"]
+[ext_resource type="StyleBox" uid="uid://w8cqsiejchla" path="res://assets/ui/NegativeButtonNormalStyle.tres" id="5_lbb5x"]
+[ext_resource type="StyleBox" uid="uid://cq8rna3kxgycu" path="res://assets/ui/NegativeButtonHoverStyle.tres" id="6_gvyph"]
+[ext_resource type="StyleBox" uid="uid://bo7xt6vgeh2hc" path="res://assets/ui/NegativeButtonPressedStyle.tres" id="7_8e5in"]
+[ext_resource type="StyleBox" uid="uid://c0cteq2yo5wub" path="res://assets/ui/PositiveButtonNormalStyle.tres" id="8_s30ge"]
+[ext_resource type="StyleBox" uid="uid://c3mn1jux1l2u3" path="res://assets/ui/PositiveButtonHoverStyle.tres" id="9_uydqk"]
+[ext_resource type="StyleBox" uid="uid://citb7ivyjv8tc" path="res://assets/ui/PositiveButtonPressedStyle.tres" id="10_f8tbb"]
 
 [node name="GridView" type="Control"]
 layout_mode = 3
@@ -92,7 +98,7 @@ layout_mode = 2
 [node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 67
+theme_override_constants/separation = 10
 
 [node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
 custom_minimum_size = Vector2(300, 0)
@@ -102,6 +108,9 @@ focus_mode = 0
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
+theme_override_styles/normal = ExtResource("5_lbb5x")
+theme_override_styles/hover = ExtResource("6_gvyph")
+theme_override_styles/pressed = ExtResource("7_8e5in")
 text = "-
 "
 
@@ -113,13 +122,16 @@ focus_mode = 0
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
+theme_override_styles/normal = ExtResource("8_s30ge")
+theme_override_styles/hover = ExtResource("9_uydqk")
+theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
 [node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_constants/separation = 50
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
@@ -130,6 +142,9 @@ focus_mode = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
+theme_override_styles/normal = ExtResource("5_lbb5x")
+theme_override_styles/hover = ExtResource("6_gvyph")
+theme_override_styles/pressed = ExtResource("7_8e5in")
 text = "-
 "
 
@@ -142,6 +157,9 @@ focus_mode = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
+theme_override_styles/normal = ExtResource("8_s30ge")
+theme_override_styles/hover = ExtResource("9_uydqk")
+theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
 [node name="FillerPanel" type="Panel" parent="CenterContainer/MainGridContainer"]

@@ -13,13 +13,13 @@ dest_files=["res://.godot/imported/Bold.otf-ae9b667e81a914f4a60be3c8b7d25132.fon
 [params]
 
 Rendering=null
-antialiasing=1
-generate_mipmaps=false
-multichannel_signed_distance_field=false
-msdf_pixel_range=8
-msdf_size=48
+antialiasing=2
+generate_mipmaps=true
+multichannel_signed_distance_field=true
+msdf_pixel_range=48
+msdf_size=128
 allow_system_fallback=true
-force_autohinter=false
+force_autohinter=true
 hinting=1
 subpixel_positioning=1
 oversampling=0.0
@@ -27,7 +27,13 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[]
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "Nova Configuração",
+"size": Vector2i(16, 0),
+"variation_embolden": 0.0
+}]
 language_support={}
 script_support={}
 opentype_features={}
