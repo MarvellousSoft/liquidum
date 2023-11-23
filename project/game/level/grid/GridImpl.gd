@@ -391,8 +391,8 @@ class CellWithLoc extends GridModel.CellModel:
 				put_wall(side, false)
 		if pure().put_block(corner):
 			grid._push_undo_changes([change], false)
+			grid.maybe_update_hints()
 			return true
-		grid.maybe_update_hints()
 		return false
 	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
 		if flush_undo:
@@ -648,6 +648,7 @@ func maybe_update_hints() -> void:
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
+	print(all_aquarium_counts())
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
 		var type := E.HintType.Any
@@ -1117,7 +1118,8 @@ func all_aquarium_counts() -> Dictionary:
 	for i in n:
 		for j in m:
 			for corner in E.Corner.values():
-				if _pure_cell(i, j)._valid_corner(corner) and _pure_cell(i, j).last_seen(corner) < last_seen:
+				var c := _pure_cell(i, j)
+				if c._valid_corner(corner) and c.last_seen(corner) < last_seen and not c.block_at(corner):
 					dfs.water_count = 0
 					dfs.flood(i, j, corner)
 					counts[dfs.water_count] = counts.get(dfs.water_count, 0) + 1
