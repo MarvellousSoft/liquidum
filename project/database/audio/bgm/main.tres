@@ -6,4 +6,4 @@
 [resource]
 script = ExtResource("2_f6icl")
 asset = ExtResource("1_pdejm")
-base_db = -20.0
+base_db = 0.0

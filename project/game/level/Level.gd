@@ -29,7 +29,6 @@ func _ready():
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
-	AudioManager.play_bgm("main")
 	setup()
 
 func _enter_tree():

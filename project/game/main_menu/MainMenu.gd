@@ -6,6 +6,9 @@ extends Control
 
 func _ready():
 	FileManager.load_game()
+	
+	AudioManager.play_bgm("main")
+	
 	await get_tree().process_frame
 	
 	Version.text = Profile.VERSION
