@@ -44,12 +44,10 @@ func _input(event):
 			mouse_hold_status = E.MouseDragState.None
 			previous_wall_index = []
 	elif grid_logic and event.is_action_pressed(&"undo"):
-		grid_logic.undo()
-		update_walls()
+		grid_logic.undo()		
 		update()
 	elif grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
-		update_walls()
 		update()
 
 
@@ -161,6 +159,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 
 
 func update(do_emit_signal := true, fast_update := false) -> void:
+	update_walls()
 	update_visuals(fast_update)
 	update_hints()
 	if do_emit_signal:
@@ -490,13 +489,11 @@ func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
 			if not grid_logic.put_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
 										 new_index[0], new_index[1], false):
 				cell_corners_error(i, j, previous_wall_index[0], previous_wall_index[1])
-			update_walls()
 			update(true, true)
 		if mouse_hold_status == E.MouseDragState.RemoveWall:
 			if not grid_logic.remove_wall_from_idx(previous_wall_index[0], previous_wall_index[1],\
 											new_index[0], new_index[1], false):
 				cell_corners_error(i, j, previous_wall_index[0], previous_wall_index[1])
-			update_walls()
 			update(true, true)
 	else:
 		# First wall should be its own undo part
