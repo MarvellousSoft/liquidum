@@ -135,6 +135,7 @@ func scale_grid() -> void:
 	var s = min( DESIRED_GRID_W / g_size.x, DESIRED_GRID_W / g_size.y )
 	GridNode.scale = Vector2(s, s)
 	GridNode.modulate.a = prev_a
+	GridNode.setup_cell_corners()
 
 
 func update_counters() -> void:
@@ -214,7 +215,6 @@ func _on_playtest_button_pressed() -> void:
 
 func maybe_save() -> void:
 	if not level_name.is_empty():
-		print("Saving the level...")
 		if editor_mode():
 			# Let's put the visibility info in the grid
 			var grid_logic := GridNode.grid_logic

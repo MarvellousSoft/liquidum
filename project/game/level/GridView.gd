@@ -38,6 +38,7 @@ var columns : int
 var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 var previous_wall_index := []
 var editor_mode := false
+var wall_brush_active := false
 
 func _ready():
 	reset()
@@ -103,8 +104,8 @@ func setup_cell_corners() -> void:
 	var sample_corner = CELL_CORNER.instantiate()
 	CellCornerGrid.columns = columns + 1
 	CellCornerGrid.global_position = sample_cell.global_position
-	CellCornerGrid.position.x += sample_corner.size.x/2
-	CellCornerGrid.position.y += sample_corner.size.y/2
+	CellCornerGrid.position.x -= sample_corner.size.x/2
+	CellCornerGrid.position.y -= sample_corner.size.y/2
 	CellCornerGrid.add_theme_constant_override("h_separation", sample_cell.size.x - sample_corner.size.x)
 	CellCornerGrid.add_theme_constant_override("v_separation", sample_cell.size.y - sample_corner.size.y)
 	for i in rows + 1:
@@ -115,7 +116,11 @@ func setup_cell_corners() -> void:
 			corner.pressed_main_button.connect(_on_cell_corner_pressed_main_button)
 			corner.pressed_second_button.connect(_on_cell_corner_pressed_second_button)
 			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
-	disable_wall_editor()
+	
+	if not wall_brush_active:
+		disable_wall_editor()
+	else:
+		enable_wall_editor()
 
 
 func get_grid_size() -> Vector2:
@@ -137,8 +142,10 @@ func full_solve(flush_undo := true, do_emit_signal := true) -> SolverModel.Solve
 func set_brush_mode(mode : E.BrushMode) -> void:
 	brush_mode = mode
 	if mode == E.BrushMode.Wall:
+		wall_brush_active = true
 		enable_wall_editor()
 	else:
+		wall_brush_active = false
 		disable_wall_editor()
 
 

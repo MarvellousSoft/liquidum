@@ -62,4 +62,5 @@ func _on_fullscreen_toggled(button_pressed):
 
 
 func _on_save_n_quit_button_pressed():
+	save_values()
 	FileManager.save_and_quit()

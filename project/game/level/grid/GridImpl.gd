@@ -652,7 +652,6 @@ func maybe_update_hints() -> void:
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
-	print(all_aquarium_counts())
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
 		var type := E.HintType.Any
