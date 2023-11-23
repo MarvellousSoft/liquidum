@@ -13,14 +13,17 @@ const PREVIEW_DRAG_COLORS = {
 	"removing": Color("#ff6464df"),
 }
 
-@onready var GridCont = $CenterContainer/GridContainer
-@onready var Columns = $CenterContainer/GridContainer/Columns
+@onready var GridCont = $CenterContainer/MainGridContainer/GridContainer
+@onready var Columns = $CenterContainer/MainGridContainer/GridContainer/Columns
 @onready var HintBars = {
-	"top": $CenterContainer/GridContainer/HintBarTop,
-	"left": $CenterContainer/GridContainer/HintBarLeft,
+	"top": $CenterContainer/MainGridContainer/GridContainer/HintBarTop,
+	"left": $CenterContainer/MainGridContainer/GridContainer/HintBarLeft,
 }
 @onready var CellCornerGrid = $CellCornerGrid
 @onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
+@onready var EditColumnSize = %EditColumnSize
+@onready var EditRowSize = %EditRowSize
+@onready var FillerPanel = %FillerPanel
 
 var brush_mode : E.BrushMode = E.BrushMode.Water
 var grid_logic : GridModel
@@ -62,6 +65,8 @@ func setup(grid_logic_: GridModel) -> void:
 	editor_mode = grid_logic.editor_mode()
 	rows = grid_logic.rows()
 	columns = grid_logic.cols()
+	for node in [EditColumnSize, EditRowSize, FillerPanel]:
+		node.visible = editor_mode
 	reset()
 	for i in rows:
 		var new_row = HBoxContainer.new()
@@ -505,13 +510,16 @@ func _add_col():
 	grid_logic.add_col()
 	update()
 
+
 func _rem_row():
 	grid_logic.rem_row()
 	update()
 
+
 func _rem_col():
 	grid_logic.rem_col()
 	update()
+
 
 func _add_row():
 	grid_logic.add_row()

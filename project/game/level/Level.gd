@@ -26,7 +26,9 @@ var level_name := ""
 var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
 
 func _ready():
+	GridNode.hide()
 	await TransitionManager.transition_finished
+	GridNode.show()
 	AudioManager.play_bgm("main")
 	setup()
 
