@@ -28,7 +28,7 @@ func _load_json_data(dir_name: String, file_name: String, error_non_existing := 
 	var file := FileAccess.open(file_name, FileAccess.READ)
 	if file == null:
 		if not error_non_existing or FileAccess.get_open_error() != Error.ERR_FILE_NOT_FOUND:
-			push_error("Error trying to open profile whilst loading: %d" % FileAccess.get_open_error())
+			push_error("Error trying to open %s whilst loading: %d" % [file_name, FileAccess.get_open_error()])
 		return null
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != Error.OK:
