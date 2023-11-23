@@ -532,6 +532,8 @@ func add_row(flush_undo := true) -> void:
 	var change := _do_add_row([], [], [], _empty_line_hint())
 	_push_undo_changes([change], flush_undo)
 	flood_all(false)
+	maybe_update_hints()
+	validate()
 
 func rem_row(flush_undo := true) -> void:
 	if n == 1:
@@ -579,6 +581,8 @@ func add_col(flush_undo := true) -> void:
 	var change := _do_add_col([], [], [], _empty_line_hint())
 	_push_undo_changes([change], flush_undo)
 	flood_all(false)
+	maybe_update_hints()
+	validate()
 
 func rem_col(flush_undo := true) -> void:
 	if m == 1:
