@@ -250,8 +250,6 @@ alignment = 1
 [node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/FullscreenContainer"]
 custom_minimum_size = Vector2(200, 210)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.21
 focus_mode = 0
 toggle_mode = true
 texture_normal = ExtResource("3_l1rea")
