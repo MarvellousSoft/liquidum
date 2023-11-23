@@ -8,11 +8,16 @@ const COLORS = {
 }
 
 var previous_windowed_pos = false
+var _dev_mode := false
 
 func _input(event):
-	if event.is_action_pressed("toggle_fullscreen"):
+	if event.is_action_pressed(&"toggle_fullscreen"):
 		toggle_fullscreen()
+	if event.is_action_pressed(&"toggle_dev_mode"):
+		_dev_mode = not _dev_mode and OS.is_debug_build()
 
+func is_dev_mode() -> bool:
+	return OS.is_debug_build() and _dev_mode
 
 func create_level(grid_: GridModel, level_name_: String) -> Node:
 	var level : Level = LEVEL_SCENE.instantiate()

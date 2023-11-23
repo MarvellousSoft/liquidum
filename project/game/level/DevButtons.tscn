@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmoq6gbc66ke5"]
+
+[ext_resource type="Script" path="res://game/level/DevButtons.gd" id="1_3brnm"]
+
+[node name="DevButtons" type="VBoxContainer"]
+offset_left = 94.0
+offset_top = 1428.0
+offset_right = 696.0
+offset_bottom = 2594.0
+scale = Vector2(0.5, 0.5)
+theme_override_constants/separation = 50
+script = ExtResource("1_3brnm")
+
+[node name="Strategies" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Strategies"
+
+[node name="FullSolve" type="Button" parent="."]
+layout_mode = 2
+text = "Full solve"
+
+[node name="FullSolveType" type="Label" parent="."]
+layout_mode = 2
+text = "Solving manually"
+
+[node name="God mode" type="CheckButton" parent="."]
+layout_mode = 2
+text = "God mode"
+
+[node name="Generate" type="Button" parent="."]
+layout_mode = 2
+text = "Generate"
+
+[node name="Interesting" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Interesting"
+
+[connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
+[connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="pressed" from="Generate" to="." method="_on_generate_pressed"]

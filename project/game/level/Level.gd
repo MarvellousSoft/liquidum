@@ -31,6 +31,7 @@ func _ready():
 	GridNode.show()
 	AudioManager.play_bgm("main")
 	setup()
+	$DevButtons.visible = Global.is_dev_mode()
 
 func _enter_tree():
 	scale_grid()
@@ -154,10 +155,6 @@ func win() -> void:
 	maybe_save()
 
 
-func _on_solve_button_pressed():
-	GridNode.auto_solve()
-
-
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
 
@@ -244,3 +241,14 @@ func _notification(what: int) -> void:
 
 func _on_autosaver_timeout():
 	maybe_save()
+
+# Dev stuff
+
+func _on_dev_buttons_full_solve():
+	var r: SolverModel.SolveResult = GridNode.grid_logic.full_solve()
+	var solve_type: String = SolverModel.SolveResult.find_key(r)
+	$DevButtons/FullSolveType.text = solve_type
+
+
+func _on_dev_buttons_use_strategies():
+	GridNode.auto_solve()
