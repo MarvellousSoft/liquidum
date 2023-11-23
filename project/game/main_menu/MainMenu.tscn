@@ -20,7 +20,7 @@ theme_override_font_sizes/font_size = 120
 text = "VERSION"
 horizontal_alignment = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="LevelButtons" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 252.0
 offset_top = 157.0
@@ -29,25 +29,11 @@ offset_bottom = 857.0
 theme_override_constants/separation = 100
 alignment = 1
 
-[node name="Level1Button" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 6
-focus_mode = 0
-text = "Level 1"
-
-[node name="Level2Button" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-text = "Level 2
-"
-
-[node name="EditorButton" type="Button" parent="VBoxContainer"]
+[node name="EditorButton" type="Button" parent="LevelButtons"]
 layout_mode = 2
 focus_mode = 0
 text = "Level Editor"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
 
-[connection signal="pressed" from="VBoxContainer/Level1Button" to="." method="_on_level_button_pressed" binds= [1, 1]]
-[connection signal="pressed" from="VBoxContainer/Level2Button" to="." method="_on_level_button_pressed" binds= [1, 2]]
-[connection signal="pressed" from="VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="pressed" from="LevelButtons/EditorButton" to="." method="_on_editor_button_pressed"]

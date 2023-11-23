@@ -5,7 +5,7 @@ static func level_name(section: int, level: int) -> String:
 
 static func section_complete(section: int) -> bool:
 	var count_uncompleted := 0
-	for i in 100:
+	for i in range(1, 100):
 		if not FileManager.has_level_data(section, i) or count_uncompleted > 2:
 			break
 		var save := FileManager.load_level(LevelLister.level_name(section, i))

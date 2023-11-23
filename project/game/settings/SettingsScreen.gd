@@ -23,7 +23,6 @@ func _input(event):
 
 
 func toggle_pause() -> void:
-	print(Global.is_fullscreen())
 	active = not active
 	if active:
 		setup_values()
