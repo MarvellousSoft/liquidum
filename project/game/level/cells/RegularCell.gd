@@ -100,6 +100,16 @@ func _process(dt):
 				Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
 
 
+func enable():
+	for button in Buttons.values():
+		button.disabled = false  
+
+
+func disable():
+	for button in Buttons.values():
+		button.disabled = true
+
+
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor_mode : bool) -> void:
 	grid = grid_ref
 	row = i
@@ -121,12 +131,14 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	else:
 		modulate.a = 1.0
 
+
 func fast_update_waters() -> void:
 	for flag in water_flags.keys():
 		if water_flags[flag]:
 			set_water_level(Waters[flag], SURFACE_THRESHOLD if grid.is_at_surface(row, column, flag) else 1.0)
 		else:
 			set_water_level(Waters[flag], 0.)
+
 
 func play_error(which : E.Waters) -> void:
 	Errors[which].get_node("AnimationPlayer").play("error")
@@ -173,8 +185,10 @@ func update_blocks(data: GridModel.CellModel) -> void:
 			if data.block_at(corner):
 				set_block(corner)
 
+
 func set_block(block : E.Waters) -> void:
 	Blocks[block].show()
+
 
 func set_boat(value) -> void:
 	boat_flag = value
@@ -235,6 +249,8 @@ func decrease_water_level(corner : E.Waters, dt : float) -> void:
 
 
 func _on_button_gui_input(event, which : E.Waters) -> void:
+	if Buttons[which].disabled:
+		return
 	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:

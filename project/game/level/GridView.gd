@@ -67,6 +67,7 @@ func reset() -> void:
 	for child in CellCornerGrid.get_children():
 		CellCornerGrid.remove_child(child)
 
+
 func setup(grid_logic_: GridModel) -> void:
 	grid_logic = grid_logic_
 	editor_mode = grid_logic.editor_mode()
@@ -82,9 +83,16 @@ func setup(grid_logic_: GridModel) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j)
+
 	setup_hints()
-	update()
 	setup_cell_corners()
+	update()
+	if not editor_mode:
+		disable()
+		var sample_cell = get_cell(0,0)
+		var delay = (rows+1)*columns*sample_cell.STARTUP_DELAY
+		await get_tree().create_timer(delay).timeout
+		enable()
 
 #Assumes grid_logic is already setup
 func setup_hints():
@@ -121,6 +129,18 @@ func setup_cell_corners() -> void:
 		disable_wall_editor()
 	else:
 		enable_wall_editor()
+
+
+func enable() -> void:
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).enable()
+
+
+func disable() -> void:
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).disable()
 
 
 func get_grid_size() -> Vector2:
