@@ -11,8 +11,8 @@ const HIDE_ALPHA = 0.5
 }
 @onready var ContentContainer = $VBoxContainer
 @onready var EditorButtons = $VBoxContainer/EditorButtons
-@onready var ToggleHintType = $VBoxContainer/EditorButtons/ToggleHintType
-@onready var ToggleVisibility = $VBoxContainer/EditorButtons/ToggleVisibility
+@onready var ToggleHintType: TextureButton = $VBoxContainer/EditorButtons/ToggleHintType
+@onready var ToggleVisibility: TextureButton = $VBoxContainer/EditorButtons/ToggleVisibility
 @onready var HintsContainer = $VBoxContainer/HintsContainer
 @onready var Number = %Number
 @onready var Boat = %Boat
@@ -22,8 +22,6 @@ var editor_mode := false
 var hint_type : E.HintType = E.HintType.Any
 var is_boat := false
 var hint_value := 0.0
-var hint_type_active := true
-var hint_visibility_active := true
 var hint_alpha := 1.0
 var is_dummy := false
 
@@ -40,7 +38,7 @@ func _process(dt):
 	if is_dummy:
 		return
 	
-	if hint_type_active:
+	if ToggleHintType.is_pressed():
 		if hint_alpha < 1.0:
 			hint_alpha = min(hint_alpha + ALPHA_SPEED*dt, 1.0)
 			update_label()
@@ -48,7 +46,7 @@ func _process(dt):
 		if hint_alpha > 0.0:
 			hint_alpha = max(hint_alpha - ALPHA_SPEED*dt, 0.0)
 			update_label()
-	if hint_visibility_active:
+	if ToggleVisibility.is_pressed():
 		HintsContainer.modulate.a = min(HintsContainer.modulate.a + ALPHA_SPEED*dt, 1.0)
 	else:
 		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
@@ -72,10 +70,10 @@ func set_hint_type(new_type : E.HintType) -> void:
 	update_label()
 
 func should_be_visible() -> bool:
-	return hint_visibility_active
+	return ToggleVisibility.is_pressed()
 
 func should_have_type() -> bool:
-	return hint_type_active
+	return ToggleHintType.is_pressed()
 
 func set_visibility(vis: bool, type: bool) -> void:
 	ToggleVisibility.set_pressed(vis)
@@ -141,11 +139,3 @@ func enable_editor() -> void:
 func disable_editor() -> void:
 	editor_mode = false
 	EditorButtons.hide()
-
-
-func _on_visibility_toggled(button_pressed):
-	hint_visibility_active = button_pressed
-
-
-func _on_hint_type_toggled(button_pressed):
-	hint_type_active = button_pressed

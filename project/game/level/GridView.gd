@@ -282,17 +282,11 @@ func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
-func water_row_hints_should_be_visible() -> Array[int]:
-	return HintBars.left.should_be_visible(false)
+func col_hints_should_be_visible() -> Array[int]:
+	return HintBars.top.should_be_visible()
 
-func water_col_hints_should_be_visible() -> Array[int]:
-	return HintBars.top.should_be_visible(false)
-
-func boat_row_hints_should_be_visible() -> Array[int]:
-	return HintBars.left.should_be_visible(true)
-
-func boat_col_hints_should_be_visible() -> Array[int]:
-	return HintBars.top.should_be_visible(true)
+func row_hints_should_be_visible() -> Array[int]:
+	return HintBars.left.should_be_visible()
 
 
 func _connections_down(i: int, j: int, corner: E.Waters) -> Array[int]:

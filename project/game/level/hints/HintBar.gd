@@ -9,9 +9,6 @@ const HINT = preload("res://game/level/hints/Hint.tscn")
 @onready var Vertical = $Vertical
 @onready var AnimPlayer = $AnimationPlayer
 
-const VALUE_VISIBLE := 1
-const TYPE_VISIBLE := 2
-
 func _ready():
 	Vertical.visible = not is_horizontal
 	Horizontal.visible = is_horizontal
@@ -75,24 +72,23 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 	
 	return new_hint
 
-func should_be_visible(is_boat: bool) -> Array[int]:
-	var bar = Horizontal if is_horizontal else Vertical
-	var ans: Array[int] = []
-	for container in bar.get_children():
-		for child in container.get_children():
-			if child.is_boat == is_boat:
-				var val := 0
-				if child.should_be_visible():
-					val |= VALUE_VISIBLE
-				if child.should_have_type():
-					val |= TYPE_VISIBLE
-				ans.append(val)
-	return ans
-
 const WATER_COUNT_VISIBLE := 1
 const WATER_TYPE_VISIBLE := 2
 const BOAT_COUNT_VISIBLE := 4
 const BOAT_TYPE_VISIBLE := 8
+
+func should_be_visible() -> Array[int]:
+	var bar = Horizontal if is_horizontal else Vertical
+	var ans: Array[int] = []
+	for container in bar.get_children():
+		var val := 0
+		for child in container.get_children():
+			if child.should_be_visible():
+				val |= BOAT_COUNT_VISIBLE if child.is_boat else WATER_COUNT_VISIBLE
+			if child.should_have_type():
+				val |= BOAT_TYPE_VISIBLE if child.is_boat else WATER_TYPE_VISIBLE 
+		ans.append(val)
+	return ans
 
 func set_visibility(arr: Array[int]) -> void:
 	var bar = Horizontal if is_horizontal else Vertical

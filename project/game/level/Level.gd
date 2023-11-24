@@ -41,27 +41,12 @@ func _process(dt):
 		running_time += dt
 		update_timer_label()
 
-func _hint_to_flag(hint: GridModel.LineHint) -> int:
-	var val := 0
-	if hint.water_count != -1.:
-		val |= HintBar.WATER_COUNT_VISIBLE
-	if hint.water_count_type != E.HintType.Any:
-		val |= HintBar.WATER_TYPE_VISIBLE
-	if hint.boat_count != -1:
-		val |= HintBar.BOAT_COUNT_VISIBLE
-	if hint.boat_count_type != E.HintType.Any:
-		val |= HintBar.BOAT_TYPE_VISIBLE
-	return val
 
 func setup(try_load := true) -> void:
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	
-	var visible_aquarium_sizes = null
-	var row_visible: Array[int] = []
-	var col_visible: Array[int] = []
-	var total_water_visible := false
-	var total_boat_visible := false
+	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
 	if not level_name.is_empty() and try_load:
 		if grid.editor_mode():
@@ -69,11 +54,7 @@ func setup(try_load := true) -> void:
 			if data != null:
 				# Load with Testing to get hints then change to editor
 				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Testing)
-				total_water_visible = (grid.grid_hints().total_water != -1.)
-				total_boat_visible = (grid.grid_hints().total_boats != -1)
-				visible_aquarium_sizes = grid.grid_hints().expected_aquariums
-				row_visible.assign(grid.row_hints().map(_hint_to_flag))
-				col_visible.assign(grid.col_hints().map(_hint_to_flag))
+				visibility = HintVisibility.from_grid(grid)
 				grid.set_auto_update_hints(true)
 		else:
 			var save := FileManager.load_level(level_name)
@@ -96,9 +77,7 @@ func setup(try_load := true) -> void:
 		Counters.water.visible = true
 		Counters.boat.visible = true
 		Counters.water.enable_editor()
-		Counters.water.set_should_be_visible(total_water_visible)
 		Counters.boat.enable_editor()
-		Counters.boat.set_should_be_visible(total_boat_visible)
 		Counters.mistake.hide()
 		TimerContainer.hide()
 	update_counters()
@@ -110,10 +89,8 @@ func setup(try_load := true) -> void:
 		counter.startup(delay)
 	delay += COUNTER_DELAY_STARTUP
 	AquariumHints.startup(delay, grid.grid_hints().expected_aquariums, grid.all_aquarium_counts(), GridNode.editor_mode)
-	if editor_mode() and visible_aquarium_sizes != null:
-		AquariumHints.set_should_be_visible(visible_aquarium_sizes)
-	if editor_mode() and not row_visible.is_empty():
-		GridNode.set_counters_visibility(row_visible, col_visible)
+	_apply_visibility(visibility)
+
 	
 	AudioManager.play_sfx("start_level")
 	
@@ -174,35 +151,91 @@ func _on_grid_updated() -> void:
 	if GridNode.is_level_finished() and not editor_mode():
 		win()
 
-func _update_line_hint(line_hint: GridModel.LineHint, boat_flags: int, water_flags: int) -> void:
-	if not (boat_flags & HintBar.VALUE_VISIBLE):
-		line_hint.boat_count = -1
-	if not (boat_flags & HintBar.TYPE_VISIBLE):
-		line_hint.boat_count_type = E.HintType.Any
-	if not (water_flags & HintBar.VALUE_VISIBLE):
-		line_hint.water_count = -1.0
-	if not (water_flags & HintBar.TYPE_VISIBLE):
-		line_hint.water_count_type = E.HintType.Any
+
+class HintVisibility:
+	var total_water: bool = false
+	var total_boats: bool = false
+	var expected_aquariums: Array[float] = []
+	var row: Array[int]
+	var col: Array[int]
+	static func default(n: int, m: int) -> HintVisibility:
+		var h := HintVisibility.new()
+		for i in n:
+			h.row.append(HintBar.WATER_COUNT_VISIBLE)
+		for j in m:
+			h.col.append(HintBar.WATER_COUNT_VISIBLE)
+		return h
+	static func from_grid(grid: GridModel) -> HintVisibility:
+		var h := HintVisibility.new()
+		h.total_water = (grid.grid_hints().total_water != -1.)
+		h.total_boats = (grid.grid_hints().total_boats != -1)
+		h.expected_aquariums.assign(grid.grid_hints().expected_aquariums.keys())
+		h.row.assign(grid.row_hints().map(HintVisibility._hint_to_flag))
+		h.col.assign(grid.col_hints().map(HintVisibility._hint_to_flag))
+		return h
+	static func _hint_to_flag(hint: GridModel.LineHint) -> int:
+		var val := 0
+		if hint.water_count != -1.:
+			val |= HintBar.WATER_COUNT_VISIBLE
+		if hint.water_count_type != E.HintType.Any:
+			val |= HintBar.WATER_TYPE_VISIBLE
+		if hint.boat_count != -1:
+			val |= HintBar.BOAT_COUNT_VISIBLE
+		if hint.boat_count_type != E.HintType.Any:
+			val |= HintBar.BOAT_TYPE_VISIBLE
+		return val
+	func _update_line_hint(line_hint: GridModel.LineHint, flags: int) -> void:
+		if not (flags & HintBar.BOAT_COUNT_VISIBLE):
+			line_hint.boat_count = -1
+		if not (flags & HintBar.BOAT_TYPE_VISIBLE):
+			line_hint.boat_count_type = E.HintType.Any
+		if not (flags & HintBar.WATER_COUNT_VISIBLE):
+			line_hint.water_count = -1.0
+		if not (flags & HintBar.WATER_TYPE_VISIBLE):
+			line_hint.water_count_type = E.HintType.Any
+	func apply_to_grid(grid: GridModel) -> void:
+		var ghints := grid.grid_hints()
+		if not total_water:
+			ghints.total_water = -1
+		if not total_boats:
+			ghints.total_boats = -1
+		var all_aqs := grid.all_aquarium_counts()
+		ghints.expected_aquariums.clear()
+		for aq in expected_aquariums:
+			ghints.expected_aquariums = all_aqs.get(aq, 0)
+		for i in grid.rows():
+			_update_line_hint(grid.row_hints()[i], row[i])
+		for j in grid.cols():
+			_update_line_hint(grid.col_hints()[j], col[j])
+	func prn() -> void:
+		print("water %s\nboats %s\naqs %s\nrow %s\ncol %s" % [total_water, total_boats, expected_aquariums, row, col])
+
+func _apply_visibility(h: HintVisibility) -> void:
+	if not editor_mode():
+		return
+	print("APPLY")
+	h.prn()
+	Counters.water.set_should_be_visible(h.total_water)
+	Counters.boat.set_should_be_visible(h.total_boats)
+	var aqs := {}
+	for aq in h.expected_aquariums:
+		aqs[aq] = true
+	AquariumHints.set_should_be_visible(aqs)
+	GridNode.set_counters_visibility(h.row, h.col)
+
+func _hint_visibility() -> HintVisibility:
+	var h := HintVisibility.new()
+	h.total_water = Counters.water.should_be_visible()
+	h.total_boats = Counters.boat.should_be_visible()
+	h.expected_aquariums = AquariumHints.visible_sizes()
+	h.row = GridNode.row_hints_should_be_visible()
+	h.col = GridNode.col_hints_should_be_visible()
+	print("SAVE")
+	h.prn()
+	return h
 
 func _update_visibilities(new_grid: GridModel) -> void:
-	if not Counters.water.should_be_visible():
-		new_grid.grid_hints().total_water = -1
-	if not Counters.boat.should_be_visible():
-		new_grid.grid_hints().total_boats = -1
-	var boat_visible := GridNode.boat_row_hints_should_be_visible()
-	var water_visible := GridNode.water_row_hints_should_be_visible()
-	for i in new_grid.rows():
-		_update_line_hint(new_grid.row_hints()[i], boat_visible[i], water_visible[i])
-	boat_visible = GridNode.boat_col_hints_should_be_visible()
-	water_visible = GridNode.water_col_hints_should_be_visible()
-	for j in new_grid.cols():
-		_update_line_hint(new_grid.col_hints()[j], boat_visible[j], water_visible[j])
-	var aquariums := new_grid.grid_hints().expected_aquariums
-	aquariums.clear()
-	var all_sizes := GridNode.grid_logic.all_aquarium_counts()
-	for aq_size in AquariumHints.visible_sizes():
-		aquariums[aq_size] = all_sizes.get(aq_size, 0)
-	
+	_hint_visibility().apply_to_grid(new_grid)
 
 func _get_solution_grid() -> GridModel:
 	assert(editor_mode())
@@ -266,7 +299,7 @@ func _on_dev_buttons_use_strategies():
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
 		return
-	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols())
+	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
 		grid = new_grid
 		setup(false)

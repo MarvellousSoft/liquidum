@@ -129,7 +129,4 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleVisibility" to="." method="_on_visibility_toggled"]
-[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleHintType" to="." method="_on_hint_type_toggled"]
-
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]

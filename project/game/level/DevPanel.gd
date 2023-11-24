@@ -40,7 +40,7 @@ func _enter_tree() -> void:
 	visible = Global.is_dev_mode() or self == get_tree().current_scene
 
 
-func _gen_puzzle(rows: int, cols: int) -> GridModel:
+func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	var time := Time.get_unix_time_from_system()
 	var strategies := selected_strategies()
 	while true:
@@ -66,9 +66,11 @@ func _gen_puzzle(rows: int, cols: int) -> GridModel:
 	assert(false, "Unreachable")
 	return null
 
-func gen_level(rows: int, cols: int) -> GridModel:
+
+
+func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	$Generate.disabled = true
-	var g := await _gen_puzzle(rows, cols)
+	var g := await _gen_puzzle(rows, cols, hints)
 	$FullSolveType.text = ""
 	$Generate.disabled = false
 	return g
