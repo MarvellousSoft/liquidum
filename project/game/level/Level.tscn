@@ -233,6 +233,7 @@ autostart = true
 [connection signal="pressed" from="LeftButtons/ResetButton" to="." method="reset_level"]
 [connection signal="pressed" from="LeftButtons/PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="pressed" from="LeftButtons/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="check_interesting" from="DevButtons" to="." method="_on_dev_buttons_check_interesting"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]

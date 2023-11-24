@@ -5,6 +5,7 @@ signal use_strategies()
 signal full_solve()
 signal generate()
 signal randomize_water()
+signal check_interesting()
 
 func set_solve_type(type: SolverModel.SolveResult) -> void:
 	$FullSolveType.text = SolverModel.SolveResult.find_key(type)
@@ -19,10 +20,17 @@ func selected_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $IsInteresting]:
 		node.visible = editor_mode
 
+func do_check_interesting(g: GridModel) -> void:
+	if not g.editor_mode():
+		return
+	var r := SolverModel.new().full_solve(g, selected_strategies())
+	$IsInteresting.text = "%s %s" % [IS_INTERESTING, "✅" if r == SolverModel.SolveResult.SolvedUnique else "❌"]
+
 @onready var StrategyList: MenuButton = $StrategyList
+const IS_INTERESTING := "Is interesting?"
 
 func _ready() -> void:
 	var popup := StrategyList.get_popup()
@@ -73,7 +81,9 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	$Generate.disabled = true
 	var g := await _gen_puzzle(rows, cols, hints)
-	$FullSolveType.text = ""
+	if g != null:
+		$FullSolveType.text = ""
+		$IsInteresting.text = IS_INTERESTING
 	$Generate.disabled = false
 	return g
 
@@ -96,3 +106,7 @@ func _on_god_mode_pressed():
 
 func _on_randomize_water_pressed():
 	randomize_water.emit()
+
+
+func _on_is_interesting_pressed():
+	check_interesting.emit()

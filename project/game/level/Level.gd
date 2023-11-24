@@ -303,3 +303,10 @@ func _on_dev_buttons_randomize_water():
 	if editor_mode():
 		Generator.randomize_water(GridNode.grid_logic)
 		GridNode.update()
+
+
+func _on_dev_buttons_check_interesting():
+	var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
+	g2.clear_content()
+	_update_visibilities(g2)
+	$DevButtons.do_check_interesting(g2)
