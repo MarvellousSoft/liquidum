@@ -3,6 +3,9 @@ class_name SolverModel
 const Content := GridImpl.Content
 
 class Strategy:
+	var grid: GridImpl
+	func _init(grid_: GridImpl) -> void:
+		grid = grid_
 	func apply_any() -> bool:
 		return GridModel.must_be_implemented()
 	static func description() -> String:
@@ -10,14 +13,11 @@ class Strategy:
 
 # Strategy for a single row
 class RowStrategy extends Strategy:
-	var grid: GridImpl
-	func _init(grid_: GridImpl) -> void:
-		grid = grid_
 	# values is an array of component, that is, all triangles
 	# are in the same aquarium. Each of the triangles in the component MUST be
 	# flooded all at once with water or air. Each distinct componene IS completely
 	# independent.
-	func _apply_strategy(_values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
+	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
 		if grid.row_hints()[i].water_count < 0:
@@ -40,7 +40,7 @@ class RowStrategy extends Strategy:
 		var water_left := grid.row_hints()[i].water_count - grid.count_water_row(i)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
-		return self._apply_strategy(comps, water_left, nothing_left)
+		return self._apply_strategy(i, comps, water_left, nothing_left)
 	func apply_any() -> bool:
 		var any := false
 		for i in grid.rows():
@@ -79,9 +79,6 @@ class RowDfs extends GridImpl.Dfs:
 
 # Strategy for a single column
 class ColumnStrategy extends Strategy:
-	var grid: GridImpl
-	func _init(grid_: GridImpl) -> void:
-		grid = grid_
 	# values is an array of component, that is, all triangles
 	# are in the same aquarium. Each of the triangles in the component MUST be
 	# flooded in order water or air. Each distinct componene MAY BE dependent.
@@ -180,15 +177,16 @@ class BasicRowStrategy extends RowStrategy:
 		return """
 		- Put air in components that are too big
 		- Put water everywhere if there's no more space for air
+		- Put air if component has exact size and rule is separate
 		"""
-	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+	func _apply_strategy(i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
 			for comp in values:
 				comp.put_water()
 			return true
 		var any := false
 		for comp in values:
-			if comp.size > water_left:
+			if comp.size > water_left or (comp.size == water_left and grid.row_hints()[i].water_count_type == E.HintType.Separated):
 				comp.put_air()
 				any = true
 		return any
@@ -196,7 +194,7 @@ class BasicRowStrategy extends RowStrategy:
 class MediumRowStrategy extends RowStrategy:
 	static func description() -> String:
 		return "If a component is so big it MUST be filled, fill it."
-	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+	func _apply_strategy(_i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
 			if comp.size <= water_left and (nothing_left - comp.size) < water_left:
@@ -207,7 +205,7 @@ class MediumRowStrategy extends RowStrategy:
 class AdvancedRowStrategy extends RowStrategy:
 	static func description() -> String:
 		return "Use subset sum to tell if some components MUST or CANT be present in the solution"
-	func _apply_strategy(values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
+	func _apply_strategy(_i:int, values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
 		var numbers: Array[float] = []
 		var size_to_cmp: Dictionary = {}
 		for c in values:
@@ -341,70 +339,112 @@ class BoatColStrategy extends ColumnStrategy:
 			return any
 		return false
 
-class TogetherRowStrategy extends RowStrategy:
+# Logic for both row and column is the same, so let's make it generic
+# Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
+class TogetherStrategy extends Strategy:
 	static func description() -> String:
 		return """
-		- If there's water in the row, far away cells can't have water
+		- If there's water in the {line}, far away cells can't have water
 		- If there's water and its close to the border, we might need to expand it to the other side
-		- If there's two waters in the row, they must be connected
+		- If there's two waters in the {line}, they must be connected
 		"""
-	func _content(i: int, j2: int) -> Content:
-		var c := grid._pure_cell(i, j2 / 2)
-		return c._content_right() if bool(j2 & 1) else c._content_left()
-	func _corner(i: int, j2: int) -> E.Corner:
-		return E.diag_to_corner(grid.get_cell(i, j2 / 2).cell_type(), E.Side.Right if bool(j2 & 1) else E.Side.Left)
-	func _apply(i: int) -> bool:
-		if grid.row_hints()[i].water_count_type != E.HintType.Together:
+	func _cell(_a: int, _b: int) -> GridImpl.CellWithLoc:
+		return GridModel.must_be_implemented()
+	func _left() -> E.Side:
+		return GridModel.must_be_implemented()
+	func _right() -> E.Side:
+		return GridModel.must_be_implemented()
+	func _a_len() -> int:
+		return GridModel.must_be_implemented()
+	func _b_len() -> int:
+		return GridModel.must_be_implemented()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return GridModel.must_be_implemented()
+	func _count_water_a(_a: int) -> float:
+		return GridModel.must_be_implemented()
+	func _content(a: int, b2: int) -> Content:
+		var c := _cell(a, b2 / 2).pure()
+		return c._content_side(_right()) if bool(b2 & 1) else c._content_side(_left())
+	func _corner(a: int, b2: int) -> E.Corner:
+		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
+	func _apply(a: int) -> bool:
+		if _a_hints()[a].water_count_type != E.HintType.Together:
 			return false
-		var leftmost := 2 * grid.cols()
+		var leftmost := 2 * _b_len()
 		var rightmost := -1
-		for j in grid.cols():
-			var c := grid._pure_cell(i, j)
-			if c._content_left() == Content.Water:
-				leftmost = min(leftmost, 2 * j)
-				rightmost = max(rightmost, 2 * j)
-			if c._content_right() == Content.Water:
-				leftmost = min(leftmost, 2 * j + 1)
-				rightmost = max(rightmost, 2 * j + 1)
+		for b in _b_len():
+			var c := _cell(a, b).pure()
+			if c._content_side(_left()) == Content.Water:
+				leftmost = min(leftmost, 2 * b)
+				rightmost = max(rightmost, 2 * b)
+			if c._content_side(_right()) == Content.Water:
+				leftmost = min(leftmost, 2 * b + 1)
+				rightmost = max(rightmost, 2 * b + 1)
 		if rightmost == -1:
 			return false
 		var any := false
 		# Merge all waters together
-		for j2 in range(leftmost + 1, rightmost):
-			var content := _content(i, j2)
+		for b2 in range(leftmost + 1, rightmost):
+			var content := _content(a, b2)
 			if content != Content.Water:
 				any = true
-				grid.get_cell(i, j2 / 2).put_water(_corner(i, j2), false)
+				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
 		if any:
 			return true
 		# Mark far away cells as empty
-		var min_j2 := leftmost
-		while min_j2 > 0 and _content(i, min_j2 - 1) == Content.Nothing:
-			min_j2 -= 1
-		var max_j2 := rightmost
-		while max_j2 < 2 * grid.cols() - 1 and _content(i, max_j2 + 1) == Content.Nothing:
-			max_j2 += 1
+		var min_b2 := leftmost
+		while min_b2 > 0 and _content(a, min_b2 - 1) == Content.Nothing:
+			min_b2 -= 1
+		var max_b2 := rightmost
+		while max_b2 < 2 * _b_len() - 1 and _content(a, max_b2 + 1) == Content.Nothing:
+			max_b2 += 1
 
-		var water_left2 := int(2 * (grid.row_hints()[i].water_count - grid.count_water_row(i)))
-		var no_j2 := range(rightmost + water_left2 + 1, max_j2 + 1) # Far to the right
-		no_j2.append_array(range(leftmost - water_left2 - 1, min_j2 - 1, -1)) # Far to the left
-		no_j2.append_array(range(0, min_j2)) # Before block/air
-		no_j2.append_array(range(max_j2 + 1, 2 * grid.cols())) # After block/air
-		for j2 in no_j2:
-			if _content(i, j2) == Content.Nothing:
+		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		var no_b2 := range(rightmost + water_left2 + 1, max_b2 + 1) # Far to the right
+		no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
+		no_b2.append_array(range(0, min_b2)) # Before block/air
+		no_b2.append_array(range(max_b2 + 1, 2 * _b_len())) # After block/air
+		for b2 in no_b2:
+			if _content(a, b2) == Content.Nothing:
 				any = true
-				grid.get_cell(i, j2 / 2).put_air(_corner(i, j2), false, true)
+				_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
 		# Mark nearby cells as full if close to the "border"
-		var yes_j2 := []
-		if leftmost - min_j2 < water_left2:
-			yes_j2.append_array(range(rightmost + 1, rightmost + 1 + water_left2 - (leftmost - min_j2)))
-		if max_j2 - rightmost < water_left2:
-			yes_j2.append_array(range(leftmost - (water_left2 - (max_j2 - rightmost)), leftmost))
-		for j2 in yes_j2:
-			if _content(i, j2) != Content.Water:
+		var yes_b2 := []
+		if leftmost - min_b2 < water_left2:
+			yes_b2.append_array(range(rightmost + 1, rightmost + 1 + water_left2 - (leftmost - min_b2)))
+		if max_b2 - rightmost < water_left2:
+			yes_b2.append_array(range(leftmost - (water_left2 - (max_b2 - rightmost)), leftmost))
+		for b2 in yes_b2:
+			if _content(a, b2) != Content.Water:
 				any = true
-				grid.get_cell(i, j2 / 2).put_water(_corner(i, j2), false)
+				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
 		return any
+
+	func apply_any() -> bool:
+		var any := false
+		for a in _a_len():
+			if _apply(a):
+				any = true
+		return any
+
+
+class TogetherRowStrategy extends TogetherStrategy:
+	static func description() -> String:
+		return TogetherStrategy.description().format({line = "row"})
+	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
+		return grid.get_cell(a, b) as GridImpl.CellWithLoc
+	func _left() -> E.Side:
+		return E.Side.Left
+	func _right() -> E.Side:
+		return E.Side.Right
+	func _a_len() -> int:
+		return grid.rows()
+	func _b_len() -> int:
+		return grid.cols()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return grid.row_hints()
+	func _count_water_a(a: int) -> float:
+		return grid.count_water_row(a)
 
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
