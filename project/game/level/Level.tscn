@@ -235,6 +235,7 @@ autostart = true
 [connection signal="pressed" from="LeftButtons/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
+[connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]

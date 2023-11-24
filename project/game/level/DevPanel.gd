@@ -4,6 +4,7 @@ extends VBoxContainer
 signal use_strategies()
 signal full_solve()
 signal generate()
+signal randomize_water()
 
 func set_solve_type(type: SolverModel.SolveResult) -> void:
 	$FullSolveType.text = SolverModel.SolveResult.find_key(type)
@@ -18,7 +19,7 @@ func selected_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater]:
 		node.visible = editor_mode
 
 @onready var StrategyList: MenuButton = $StrategyList
@@ -91,3 +92,7 @@ func _on_generate_pressed():
 
 func _on_god_mode_pressed():
 	use_strategies.emit()
+
+
+func _on_randomize_water_pressed():
+	randomize_water.emit()

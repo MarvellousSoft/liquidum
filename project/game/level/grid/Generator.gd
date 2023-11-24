@@ -102,7 +102,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			left -= 1
 	return g
 
-func _randomly_place_water(grid: GridModel) -> void:
+static func randomize_water(grid: GridModel) -> void:
 	var i_order := range(grid.rows())
 	i_order.shuffle()
 	for i in i_order:
@@ -119,7 +119,7 @@ func _randomly_place_water(grid: GridModel) -> void:
 				if randf() < 0.5:
 					if c.water_at(corner):
 						c.remove_content(corner)
-					else:
+					elif c.nothing_at(corner):
 						c.put_water(corner)
 
 func generate(n: int, m: int, diagonals := true) -> GridModel:
@@ -148,5 +148,5 @@ func generate(n: int, m: int, diagonals := true) -> GridModel:
 					grid.get_cell(i, j).put_wall(E.Walls.Right)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
-	_randomly_place_water(grid)
+	Generator.randomize_water(grid)
 	return grid

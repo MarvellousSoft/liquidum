@@ -289,7 +289,6 @@ func _on_dev_buttons_full_solve():
 func _on_dev_buttons_use_strategies():
 	GridNode.apply_strategies(DevButtons.selected_strategies(), true, false)
 
-
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
 		return
@@ -297,4 +296,10 @@ func _on_dev_buttons_generate() -> void:
 	if new_grid != null:
 		grid = new_grid
 		GridNode.grid_logic = grid
+		GridNode.update()
+
+
+func _on_dev_buttons_randomize_water():
+	if editor_mode():
+		Generator.randomize_water(GridNode.grid_logic)
 		GridNode.update()
