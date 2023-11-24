@@ -177,7 +177,6 @@ class BasicRowStrategy extends RowStrategy:
 		return """
 		- Put air in components that are too big
 		- Put water everywhere if there's no more space for air
-		- Put air if component has exact size and rule is separate
 		"""
 	func _apply_strategy(i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
@@ -186,7 +185,7 @@ class BasicRowStrategy extends RowStrategy:
 			return true
 		var any := false
 		for comp in values:
-			if comp.size > water_left or (comp.size == water_left and grid.row_hints()[i].water_count_type == E.HintType.Separated):
+			if comp.size > water_left:
 				comp.put_air()
 				any = true
 		return any

@@ -593,3 +593,10 @@ func test_solve_together() -> void:
 	.L/
 	""")
 
+func test_wrong_rule() -> void:
+	# This was a bug once
+	assert_can_solve("""
+	h1...
+	3w...
+	-L/L.
+	""")
