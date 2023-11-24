@@ -176,10 +176,10 @@ offset_bottom = 2623.0
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 3069.0
-offset_top = 404.0
-offset_right = 3768.0
-offset_bottom = 1664.0
+offset_left = 2979.0
+offset_top = 512.0
+offset_right = 3678.0
+offset_bottom = 1772.0
 theme_override_constants/separation = 60
 alignment = 1
 
@@ -187,7 +187,6 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
 theme = ExtResource("3_ceab8")
 
 [node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]

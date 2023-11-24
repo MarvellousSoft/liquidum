@@ -4,7 +4,7 @@ extends Control
 const HINT_DELAY = .3
 
 @onready var AnimPlayer = $AnimationPlayer
-@onready var HintContainer = $PanelContainer/MarginContainer/VBox/HintContainer
+@onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 
 func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
 	await get_tree().create_timer(delay).timeout

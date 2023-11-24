@@ -51,7 +51,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Water:material:shader_parameter/level")
+tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -78,7 +78,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Water:material:shader_parameter/level")
+tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -99,11 +99,13 @@ modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -3259.0
+offset_left = -4.5
+offset_right = -3154.5
 offset_bottom = -1960.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 9
+theme_override_constants/separation = 11
+alignment = 1
 script = ExtResource("1_f56ld")
 
 [node name="VisibilityButton" parent="." instance=ExtResource("2_lgxd6")]
@@ -115,34 +117,38 @@ button_pressed = false
 [node name="BG" parent="VisibilityButton" index="0"]
 custom_minimum_size = Vector2(50, 50)
 
-[node name="Size" type="Label" parent="."]
+[node name="LeftContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 2
+
+[node name="Size" type="Label" parent="LeftContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 40
-theme_override_constants/line_spacing = 28
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 70
 text = "3.5"
 vertical_alignment = 2
 
-[node name="Water" type="TextureRect" parent="."]
+[node name="Water" type="TextureRect" parent="LeftContainer"]
 material = SubResource("ShaderMaterial_qre3a")
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 texture = ExtResource("3_f3pmc")
 expand_mode = 1
 
-[node name="WallLeft" type="TextureRect" parent="Water"]
+[node name="WallLeft" type="TextureRect" parent="LeftContainer/Water"]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 150.0
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
-[node name="WallBottom" type="TextureRect" parent="Water"]
+[node name="WallBottom" type="TextureRect" parent="LeftContainer/Water"]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 150.0
@@ -151,40 +157,46 @@ pivot_offset = Vector2(75, 75)
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
-[node name="WallDiag" type="TextureRect" parent="Water"]
+[node name="WallDiag" type="TextureRect" parent="LeftContainer/Water"]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 150.0
 texture = ExtResource("5_wjeep")
 expand_mode = 1
 
-[node name="Separator" type="Panel" parent="."]
+[node name="MiddleSeparator" type="Panel" parent="."]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 
-[node name="ExpectedAmount" type="Label" parent="."]
+[node name="RightContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 2
+
+[node name="ExpectedAmount" type="Label" parent="RightContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 50
-theme_override_constants/line_spacing = 26
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
 theme_override_font_sizes/font_size = 70
 text = "x4"
 vertical_alignment = 2
 
-[node name="Separator2" type="Panel" parent="."]
+[node name="Separator2" type="Panel" parent="RightContainer"]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="CurrentAmount" type="Label" parent="."]
+[node name="CurrentAmount" type="Label" parent="RightContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 45
-theme_override_constants/line_spacing = 24
 theme_override_fonts/font = SubResource("FontVariation_aaqvh")
 theme_override_font_sizes/font_size = 70
 text = "(4)"

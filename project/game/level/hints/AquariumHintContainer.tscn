@@ -60,14 +60,14 @@ script = ExtResource("1_5rypm")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_right = 657.0
-offset_bottom = 729.0
+offset_right = 780.0
+offset_bottom = 952.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
+theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
@@ -83,7 +83,7 @@ horizontal_alignment = 1
 
 [node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 88
+theme_override_constants/separation = 117
 alignment = 1
 
 [node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
@@ -100,19 +100,26 @@ theme_override_fonts/font = SubResource("FontVariation_n0dxx")
 theme_override_font_sizes/font_size = 52
 text = "AMOUNT"
 
-[node name="HintContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox"]
+custom_minimum_size = Vector2(680, 700)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="HintContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 30
+
+[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("3_6cjw2")]
 layout_mode = 2
 
-[node name="AquariumHint" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-layout_mode = 2
-
-[node name="AquariumHint2" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-layout_mode = 2
-
-[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/HintContainer" instance=ExtResource("3_6cjw2")]
-layout_mode = 2
+[node name="Size" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3/LeftContainer" index="0"]
+text = "3"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_yituc")
 }
+
+[editable path="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3"]
+[editable path="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3/VisibilityButton"]
