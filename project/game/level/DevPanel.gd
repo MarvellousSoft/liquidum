@@ -46,6 +46,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 	while true:
 		if Time.get_unix_time_from_system() > time + 10:
 			print("Took too long generating")
+			$Seed.placeholder_text = "Gave up"
 			return null
 		var rseed := randi() % 100000
 		if $Seed.text != "":
@@ -57,9 +58,9 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		if $Interesting.button_pressed and $Seed.text == "":
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
+			hints.apply_to_grid(g2)
 			var r := SolverModel.new().full_solve(g2, strategies)
 			if r != SolverModel.SolveResult.SolvedUnique:
-				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
 				await get_tree().process_frame
 				continue
 		return g

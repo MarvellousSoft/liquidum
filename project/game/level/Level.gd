@@ -207,14 +207,10 @@ class HintVisibility:
 			_update_line_hint(grid.row_hints()[i], row[i])
 		for j in grid.cols():
 			_update_line_hint(grid.col_hints()[j], col[j])
-	func prn() -> void:
-		print("water %s\nboats %s\naqs %s\nrow %s\ncol %s" % [total_water, total_boats, expected_aquariums, row, col])
 
 func _apply_visibility(h: HintVisibility) -> void:
 	if not editor_mode():
 		return
-	print("APPLY")
-	h.prn()
 	Counters.water.set_should_be_visible(h.total_water)
 	Counters.boat.set_should_be_visible(h.total_boats)
 	var aqs := {}
@@ -230,8 +226,6 @@ func _hint_visibility() -> HintVisibility:
 	h.expected_aquariums = AquariumHints.visible_sizes()
 	h.row = GridNode.row_hints_should_be_visible()
 	h.col = GridNode.col_hints_should_be_visible()
-	print("SAVE")
-	h.prn()
 	return h
 
 func _update_visibilities(new_grid: GridModel) -> void:
@@ -302,4 +296,5 @@ func _on_dev_buttons_generate() -> void:
 	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
 		grid = new_grid
-		setup(false)
+		GridNode.grid_logic = grid
+		GridNode.update()
