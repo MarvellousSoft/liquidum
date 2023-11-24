@@ -532,7 +532,7 @@ func test_resize() -> void:
 	g.rem_col()
 	assert_grid_eq(g.to_str(), with_row)
 
-func test_solve_together_row() -> void:
+func test_solve_together() -> void:
 	var s := ["TogetherRow"]
 	assert_can_solve("""
 	h....
@@ -556,5 +556,40 @@ func test_solve_together_row() -> void:
 	h....
 	3.ww.
 	.L/L/
+	""")
+	# Same but for columns
+	s = ["TogetherCol"]
+	assert_can_solve("""
+	h3}
+	.w.
+	.L/
+	.w.
+	.L/
+	""", s)
+	assert_grid_eq(apply_strategies("""
+	h2}
+	..w
+	.L/
+	...
+	.L/
+	""", s).to_str(), """
+	h2.
+	..w
+	.L/
+	..x
+	.L/
+	""")
+	assert_grid_eq(apply_strategies("""
+	h3}
+	..w
+	.L/
+	...
+	.L/
+	""", s).to_str(), """
+	h3.
+	..w
+	.L/
+	.w.
+	.L/
 	""")
 

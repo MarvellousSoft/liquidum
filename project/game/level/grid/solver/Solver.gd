@@ -446,6 +446,24 @@ class TogetherRowStrategy extends TogetherStrategy:
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_row(a)
 
+class TogetherColStrategy extends TogetherStrategy:
+	static func description() -> String:
+		return TogetherStrategy.description().format({line = "column"})
+	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
+		return grid.get_cell(b, a) as GridImpl.CellWithLoc
+	func _left() -> E.Side:
+		return E.Side.Top
+	func _right() -> E.Side:
+		return E.Side.Bottom
+	func _a_len() -> int:
+		return grid.cols()
+	func _b_len() -> int:
+		return grid.rows()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return grid.col_hints()
+	func _count_water_a(a: int) -> float:
+		return grid.count_water_col(a)
+
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
 	BasicCol = BasicColStrategy,
@@ -455,6 +473,7 @@ const STRATEGY_LIST := {
 	MediumCol = MediumColStrategy,
 	AdvancedRow = AdvancedRowStrategy,
 	TogetherRow = TogetherRowStrategy,
+	TogetherCol = TogetherColStrategy,
 }
 
 # Tries to solve the puzzle as much as possible
