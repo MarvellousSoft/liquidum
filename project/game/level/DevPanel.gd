@@ -1,3 +1,4 @@
+class_name DevPanel
 extends VBoxContainer
 
 signal use_strategies()
@@ -10,15 +11,38 @@ func set_solve_type(type: SolverModel.SolveResult) -> void:
 func god_mode_enabled() -> bool:
 	return $GodMode.is_pressed()
 
+func selected_strategies() -> Array:
+	var popup := StrategyList.get_popup()
+	return range(popup.item_count).filter(func(i): return popup.is_item_checked(i)).map(func(i): return popup.get_item_text(i))
+
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
 		node.visible = not editor_mode
 	for node in [$Generate, $Interesting, $Seed, $Diags]:
 		node.visible = editor_mode
 
+@onready var StrategyList: MenuButton = $StrategyList
+
+func _ready() -> void:
+	var popup := StrategyList.get_popup()
+	popup.index_pressed.connect(_toggled_strategy)
+	var i := 0
+	for strategy in SolverModel.STRATEGY_LIST:
+		popup.add_check_item(strategy)
+		popup.set_item_checked(i, true)
+		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
+		i += 1
+
+func _toggled_strategy(index: int) -> void:
+	StrategyList.get_popup().toggle_item_checked(index)
+
+func _enter_tree() -> void:
+	visible = Global.is_dev_mode() or self == get_tree().current_scene
+
 
 func _gen_puzzle(rows: int, cols: int) -> GridModel:
 	var time := Time.get_unix_time_from_system()
+	var strategies := selected_strategies()
 	while true:
 		if Time.get_unix_time_from_system() > time + 10:
 			print("Took too long generating")
@@ -33,7 +57,7 @@ func _gen_puzzle(rows: int, cols: int) -> GridModel:
 		if $Interesting.button_pressed and $Seed.text == "":
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
-			var r := SolverModel.new().full_solve(g2)
+			var r := SolverModel.new().full_solve(g2, strategies)
 			if r != SolverModel.SolveResult.SolvedUnique:
 				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
 				await get_tree().process_frame
@@ -48,9 +72,6 @@ func gen_level(rows: int, cols: int) -> GridModel:
 	$FullSolveType.text = ""
 	$Generate.disabled = false
 	return g
-
-func _enter_tree():
-	visible = Global.is_dev_mode()
 
 
 func _on_strategies_pressed():

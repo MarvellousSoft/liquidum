@@ -26,47 +26,17 @@ func scale_grids() -> void:
 	g1.scale = Vector2(s, s)
 	g2.scale = Vector2(s, s)
 
-func gen_puzzle() -> GridModel:
-	while true:
-		var rseed := randi() % 100000
-		if $Seed.text != "":
-			rseed = int($Seed.text)
-		else:
-			$Seed.placeholder_text = "Seed: %d" % rseed
-		var gen := Generator.new(rseed)
-		var g := gen.generate($Rows.value, $Cols.value, $Diags.button_pressed)
-		if $Interesting.button_pressed and $Seed.text == "":
-			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-			g2.clear_content()
-			var r := SolverModel.new().full_solve(g2)
-			if r != SolverModel.SolveResult.SolvedUnique:
-				print("Generated %s. Trying again." % SolverModel.SolveResult.find_key(r))
-				await get_tree().process_frame
-				continue
-		return g
-	assert(false, "Unreachable")
-	return null
-
-func _on_gen_pressed() -> void:
-	$Gen.disabled = true
-	var g := await gen_puzzle()
-	$SolvedType.text = ""
-	var sol_str := g.to_str()
-	g1.setup(GridImpl.from_str(sol_str, GridModel.LoadMode.SolutionNoClear))
-	g.clear_content()
-	# Solver needs to play with it, can't be limited by the solution
-	g2.setup(GridImpl.from_str(g.to_str(), GridModel.LoadMode.Testing))
-	scale_grids()
-	$Gen.disabled = false
+func all_strategies() -> Array:
+	return SolverModel.STRATEGY_LIST.keys()
 
 
 func _on_auto_solve_pressed():
-	g2.auto_solve()
+	g2.apply_strategies(all_strategies())
 
 
 func _on_grid_2_updated():
 	if $GodMode.button_pressed:
-		g2.auto_solve(false, false)
+		g2.apply_strategies(all_strategies(), false, false)
 
 
 func _on_paste_pressed():
@@ -75,7 +45,7 @@ func _on_paste_pressed():
 
 
 func _on_full_solve_pressed():
-	var r := g2.full_solve()
+	var r := g2.full_solve(all_strategies())
 	var solve_type: String = SolverModel.SolveResult.find_key(r)
 	print("Level is %s" % solve_type)
 	$SolvedType.text = solve_type

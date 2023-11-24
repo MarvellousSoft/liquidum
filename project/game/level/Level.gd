@@ -15,6 +15,7 @@ const DESIRED_GRID_W = 1300
 }
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
+@onready var DevButtons: DevPanel = $DevButtons
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -53,7 +54,7 @@ func _hint_to_flag(hint: GridModel.LineHint) -> int:
 	return val
 
 func setup(try_load := true) -> void:
-	$DevButtons.setup(grid.editor_mode())
+	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	
 	var visible_aquarium_sizes = null
@@ -167,8 +168,8 @@ func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 
 
 func _on_grid_updated() -> void:
-	if $DevButtons.god_mode_enabled():
-		GridNode.auto_solve(false, false)
+	if DevButtons.god_mode_enabled():
+		GridNode.apply_strategies(DevButtons.selected_strategies(), false, false)
 	update_counters()
 	if GridNode.is_level_finished() and not editor_mode():
 		win()
@@ -254,19 +255,18 @@ func _on_grid_view_updated_size():
 	scale_grid()
 
 func _on_dev_buttons_full_solve():
-	var r: SolverModel.SolveResult = GridNode.full_solve(true, false)
-	var solve_type: String = SolverModel.SolveResult.find_key(r)
-	$DevButtons/FullSolveType.text = solve_type
+	var r: SolverModel.SolveResult = GridNode.full_solve(DevButtons.selected_strategies(), true, false)
+	DevButtons.set_solve_type(r)
 
 
 func _on_dev_buttons_use_strategies():
-	GridNode.auto_solve(true, false)
+	GridNode.apply_strategies(DevButtons.selected_strategies(), true, false)
 
 
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
 		return
-	var new_grid: GridModel = await $DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols())
+	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols())
 	if new_grid != null:
 		grid = new_grid
 		setup(false)

@@ -50,10 +50,13 @@ func assert_grid_eq(a: String, b: String) -> void:
 		show_grids.emit(a, b)
 		fail_later_if(a != b)
 
+func all_strategies() -> Array:
+	return SolverModel.STRATEGY_LIST.keys()
+
 func assert_can_solve(s: String, result := true) -> void:
 	var g := str_grid(s)
 	check(!g.are_hints_satisfied())
-	SolverModel.new().apply_strategies(g)
+	SolverModel.new().apply_strategies(g, all_strategies())
 	if g.are_hints_satisfied() != result:
 		fail_later_if(true)
 		print("Not satisfied:\n", g.to_str())
@@ -234,7 +237,7 @@ func test_simple_solve() -> void:
 	g.undo()
 	g.undo()
 	check(!g.are_hints_satisfied())
-	SolverModel.new().apply_strategies(g)
+	SolverModel.new().apply_strategies(g, all_strategies())
 	assert_grid_eq(g.to_str(), """
 	h..1.3.
 	2xxxwwx
@@ -252,7 +255,7 @@ func test_solver_rows() -> void:
 	3....
 	.L._╲
 	""")
-	solver.apply_strategies(g)
+	solver.apply_strategies(g, all_strategies())
 	assert_grid_eq(g.to_str(), """
 	h....
 	2wwxx
@@ -266,7 +269,7 @@ func test_solver_rows() -> void:
 	.|╲./
 	.....
 	.L._.
-	"""))
+	"""), all_strategies())
 
 func test_remove_water_bug() -> void:
 	var g := str_grid("""
@@ -337,7 +340,7 @@ func test_guess_boat() -> void:
 	.....
 	.L._.
 	""")
-	SolverModel.new().full_solve(g)
+	SolverModel.new().full_solve(g, all_strategies())
 	check(g.are_hints_satisfied())
 
 func _flood_all(bef: String, aft: String) -> void:

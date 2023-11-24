@@ -1,22 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmoq6gbc66ke5"]
+[gd_scene load_steps=3 format=3 uid="uid://cwlbk71x1xkkg"]
 
-[ext_resource type="Script" path="res://game/level/DevButtons.gd" id="1_3brnm"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_rfbu6"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_bh5km"]
+[ext_resource type="Script" path="res://game/level/DevPanel.gd" id="2_3k7ls"]
 
-[node name="DevButtons" type="VBoxContainer"]
-offset_left = 94.0
-offset_top = 1428.0
-offset_right = 696.0
-offset_bottom = 2594.0
+[node name="DevPanel" type="VBoxContainer"]
+offset_left = 109.0
+offset_top = 416.0
+offset_right = 777.0
+offset_bottom = 1910.0
 scale = Vector2(0.5, 0.5)
-theme = ExtResource("1_rfbu6")
+theme = ExtResource("1_bh5km")
 theme_override_constants/separation = 50
-script = ExtResource("1_3brnm")
+script = ExtResource("2_3k7ls")
 
 [node name="Strategies" type="Button" parent="."]
 layout_mode = 2
 focus_mode = 0
 text = "Strategies"
+
+[node name="StrategyList" type="MenuButton" parent="."]
+layout_mode = 2
+text = "Used strategies"
 
 [node name="FullSolve" type="Button" parent="."]
 layout_mode = 2

@@ -3,6 +3,8 @@ class_name SolverModel
 class Strategy:
 	func apply_any() -> bool:
 		return GridModel.must_be_implemented()
+	static func description() -> String:
+		return "No description"
 
 # Strategy for a single row
 class RowStrategy extends Strategy:
@@ -169,9 +171,13 @@ class ColDfs extends GridImpl.Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return false
 
-# - Put air in components that are too big
-# - Put water everywhere if there's no more space for air
+
 class BasicRowStrategy extends RowStrategy:
+	static func description() -> String:
+		return """
+		- Put air in components that are too big
+		- Put water everywhere if there's no more space for air
+		"""
 	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
 			for comp in values:
@@ -184,8 +190,9 @@ class BasicRowStrategy extends RowStrategy:
 				any = true
 		return any
 
-# If a component is so big it MUST be filled, fill it.
 class MediumRowStrategy extends RowStrategy:
+	static func description() -> String:
+		return "If a component is so big it MUST be filled, fill it."
 	func _apply_strategy(values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
@@ -194,8 +201,9 @@ class MediumRowStrategy extends RowStrategy:
 				any = true
 		return any
 
-# Use subset sum to tell if some components MUST or CANT be present in the solution
 class AdvancedRowStrategy extends RowStrategy:
+	static func description() -> String:
+		return "Use subset sum to tell if some components MUST or CANT be present in the solution"
 	func _apply_strategy(values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
 		var numbers: Array[float] = []
 		var size_to_cmp: Dictionary = {}
@@ -221,9 +229,13 @@ class AdvancedRowStrategy extends RowStrategy:
 				any = true
 		return any
 
-# - Put air partially in components that are too big
-# - Put water everywhere if there's no more space for non-water
+
 class BasicColStrategy extends ColumnStrategy:
+	static func description() -> String:
+		return """
+		- Put air partially in components that are bigger than the hint
+		- Put water everywhere if there's no more space for non-water
+		"""
 	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
 			for comp in values:
@@ -236,8 +248,9 @@ class BasicColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
-# If a component is so big it MUST be partially filled, fill it.
 class MediumColStrategy extends ColumnStrategy:
+	static func description() -> String:
+		return "If a component is so big it MUST be partially filled, fill it."
 	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
@@ -246,6 +259,7 @@ class MediumColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
+# This cell is empty and we could put water below it
 static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 	var c := grid._pure_cell(i, j)
 	if c.cell_type() != E.CellType.Single:
@@ -262,8 +276,9 @@ static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
 	# Put boat here
 	grid.get_cell(i, j).put_boat(false)
 
-# If hint is all possible boat locations, then put the boats
 class BoatRowStrategy extends RowStrategy:
+	static func description() -> String:
+		return "If hint is all possible boat locations, then put the boats"
 	func _apply(i: int) -> bool:
 		var hint := grid._row_hints[i].boat_count
 		if hint <= 0:
@@ -282,11 +297,14 @@ class BoatRowStrategy extends RowStrategy:
 		return false
 
 class BoatColStrategy extends ColumnStrategy:
+	static func description() -> String:
+		return "If hint is all possible aquariums, put boats in the ones where it's clear"
 	func _apply(j: int) -> bool:
 		var hint := grid._col_hints[j].boat_count
 		if hint <= 0:
 			return false
 		var i := grid.rows() - 1
+		# Aquariums that CAN have boats. The boat position might not be clear.
 		var count := 0
 		while i >= 0:
 			if grid.get_cell(i, j).cell_type() != E.CellType.Single:
@@ -320,28 +338,32 @@ class BoatColStrategy extends ColumnStrategy:
 			return any
 		return false
 
+const STRATEGY_LIST := {
+	BasicRow = BasicRowStrategy,
+	BasicCol = BasicColStrategy,
+	BoatRow = BoatRowStrategy,
+	BoatCol = BoatColStrategy,
+	MediumRow = MediumRowStrategy,
+	MediumCol = MediumColStrategy,
+	AdvancedRow = AdvancedRowStrategy
+}
+
 # Tries to solve the puzzle as much as possible
-func apply_strategies(grid: GridModel, flush_undo := true) -> void:
+func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> void:
 	# We'll merge all changes in the same undo here
 	if flush_undo:
 		grid.push_empty_undo()
 	# Player may have left incomplete airs
 	grid.flood_air(false)
-	var strategies: Array[Strategy] = [
-		BasicRowStrategy.new(grid),
-		BasicColStrategy.new(grid),
-		BoatRowStrategy.new(grid),
-		BoatColStrategy.new(grid),
-		MediumRowStrategy.new(grid),
-		MediumColStrategy.new(grid),
-		AdvancedRowStrategy.new(grid),
-	]
+	var strategies: Array[Strategy] = []
+	strategies.assign(strategies_names.map(func(name): return STRATEGY_LIST.get(name).new(grid)))
 	for _i in 50:
 		if not strategies.any(func(s): return s.apply_any()):
 			return
 		assert(_i < 40)
 
 enum SolveResult { SolvedUniqueNoGuess, SolvedUnique, SolvedMultiple, Unsolvable }
+
 
 func _make_guess(res: SolveResult) -> SolveResult:
 	match res:
@@ -352,11 +374,11 @@ func _make_guess(res: SolveResult) -> SolveResult:
 
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
-func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
+func full_solve(grid: GridModel, strategy_list: Array, flush_undo := true, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
 	assert(grid.editor_mode() and not grid.auto_update_hints())
 	if flush_undo:
 		grid.push_empty_undo()
-	apply_strategies(grid, false)
+	apply_strategies(grid, strategy_list, false)
 	if grid.is_any_hint_broken():
 		return SolveResult.Unsolvable
 	if grid.are_hints_satisfied():
@@ -368,25 +390,25 @@ func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.
 				if c.nothing_at(corner):
 					# New undo stack
 					c.put_water(corner, true)
-					var r1 := full_solve(grid, false)
+					var r1 := full_solve(grid, strategy_list, false)
 					grid.undo()
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
 						c.put_air(corner, false)
-						return _make_guess(full_solve(grid, false))
-					elif not look_for_multiple:
+						return _make_guess(full_solve(grid, strategy_list, false))
+					elif not look_for_multiple or r1 == SolveResult.SolvedMultiple:
 						grid.redo()
 						return r1
 					# Otherwise we need to try to solve with air
 					c.put_air(corner, true)
-					var r2 := full_solve(grid, false, min_boat_place, false)
+					var r2 := full_solve(grid, strategy_list, false, min_boat_place, false)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
 						grid.undo()
 						c.put_water(corner, false)
 						# TODO: Maybe here we could store the undo stack and reuse it
 						# Doesn't really make it much faster
-						return _make_guess(full_solve(grid, false))
+						return _make_guess(full_solve(grid, strategy_list, false))
 					# Could solve both ways, definitely not unique
 					return SolveResult.SolvedMultiple
 	# After we guessed all waters and airs, let's guess boats if we at least got the waters right
@@ -402,18 +424,18 @@ func full_solve(grid: GridModel, flush_undo := true, min_boat_place := Vector2i.
 				continue
 			var c := grid.get_cell(i, j)
 			c.put_boat(true)
-			var r1 := full_solve(grid, false, Vector2i(i, j + 1))
+			var r1 := full_solve(grid, strategy_list, false, Vector2i(i, j + 1))
 			grid.undo()
 			if r1 == SolveResult.Unsolvable:
-				return _make_guess(full_solve(grid, false, Vector2i(i, j + 1)))
-			elif not look_for_multiple:
+				return _make_guess(full_solve(grid, strategy_list, false, Vector2i(i, j + 1)))
+			elif not look_for_multiple or r1 == SolveResult.SolvedMultiple:
 				grid.redo()
 				return r1
-			var r2 := full_solve(grid, false, Vector2i(i, j + 1), false)
+			var r2 := full_solve(grid, strategy_list, false, Vector2i(i, j + 1), false)
 			if r2 == SolveResult.Unsolvable:
 				grid.undo()
 				c.put_boat(false)
-				return _make_guess(full_solve(grid, false, Vector2i(i, j + 1)))
+				return _make_guess(full_solve(grid, strategy_list, false, Vector2i(i, j + 1)))
 			return SolveResult.SolvedMultiple
 	# Can't really guess anything else
 	return SolveResult.Unsolvable

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="5_1j60w"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="5_2usht"]
 [ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
-[ext_resource type="PackedScene" uid="uid://cmoq6gbc66ke5" path="res://game/level/DevButtons.tscn" id="7_q4003"]
+[ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="7_q4003"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]

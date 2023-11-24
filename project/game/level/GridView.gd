@@ -147,13 +147,13 @@ func get_grid_size() -> Vector2:
 	return MainGridCont.size
 
 
-func auto_solve(flush_undo := true, do_emit_signal := true) -> void:
-	SolverModel.new().apply_strategies(grid_logic, flush_undo)
+func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := true) -> void:
+	SolverModel.new().apply_strategies(grid_logic, strategies, flush_undo)
 	update(do_emit_signal)
 
-func full_solve(flush_undo := true, do_emit_signal := true) -> SolverModel.SolveResult:
+func full_solve(strategies: Array, flush_undo := true, do_emit_signal := true) -> SolverModel.SolveResult:
 	grid_logic.force_editor_mode(true)
-	var result := SolverModel.new().full_solve(grid_logic, flush_undo)
+	var result := SolverModel.new().full_solve(grid_logic, strategies, flush_undo)
 	grid_logic.force_editor_mode(false)
 	update(do_emit_signal)
 	return result

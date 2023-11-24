@@ -53,14 +53,6 @@ offset_right = 177.0
 offset_bottom = 275.0
 text = "Run tests"
 
-[node name="Gen" type="Button" parent="."]
-layout_mode = 0
-offset_left = 95.0
-offset_top = 306.0
-offset_right = 175.0
-offset_bottom = 337.0
-text = "Gen level"
-
 [node name="AutoSolve" type="Button" parent="."]
 layout_mode = 0
 offset_left = 96.0
@@ -68,14 +60,6 @@ offset_top = 414.0
 offset_right = 186.0
 offset_bottom = 445.0
 text = "Simple Solve"
-
-[node name="Seed" type="TextEdit" parent="."]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 350.0
-offset_right = 223.0
-offset_bottom = 384.0
-placeholder_text = "Fixed seed"
 
 [node name="GodMode" type="CheckButton" parent="."]
 layout_mode = 0
@@ -108,55 +92,10 @@ offset_top = 568.0
 offset_right = 301.0
 offset_bottom = 599.0
 
-[node name="Diags" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 616.0
-offset_right = 144.0
-offset_bottom = 640.0
-button_pressed = true
-text = "Diags"
-
-[node name="Rows" type="SpinBox" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 657.0
-offset_right = 215.0
-offset_bottom = 688.0
-min_value = 1.0
-max_value = 20.0
-value = 4.0
-suffix = "rows"
-
-[node name="Cols" type="SpinBox" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.07
-anchor_top = 0.154
-anchor_right = 0.07
-anchor_bottom = 0.154
-offset_left = -34.4
-offset_top = 525.68
-offset_right = 80.6
-offset_bottom = 556.68
-min_value = 1.0
-max_value = 20.0
-value = 4.0
-suffix = "cols"
-
-[node name="Interesting" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 180.0
-offset_top = 306.0
-offset_right = 313.0
-offset_bottom = 337.0
-text = "Interesting"
-
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
-[connection signal="pressed" from="Gen" to="." method="_on_gen_pressed"]
 [connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
 [connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]
