@@ -44,3 +44,4 @@ Label/font_sizes/font_size = 82
 Label/fonts/font = SubResource("FontVariation_qs55u")
 LineEdit/font_sizes/font_size = 82
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")
+PopupMenu/font_sizes/font_size = 50

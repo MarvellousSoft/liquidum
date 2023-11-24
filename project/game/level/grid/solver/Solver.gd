@@ -1,5 +1,7 @@
 class_name SolverModel
 
+const Content := GridImpl.Content
+
 class Strategy:
 	func apply_any() -> bool:
 		return GridModel.must_be_implemented()
@@ -24,7 +26,8 @@ class RowStrategy extends Strategy:
 		var last_seen := grid.last_seen
 		var comps: Array[RowComponent] = []
 		for j in grid.cols():
-			for corner in E.Corner.values():
+			# Deliberately going from left to right
+			for corner in [E.TopLeft, E.BottomLeft, E.TopRight, E.BottomRight]:
 				var cell := grid._pure_cell(i, j)
 				if cell.last_seen(corner) < grid.last_seen and cell._valid_corner(corner) and cell.nothing_at(corner):
 					dfs.comp = RowComponent.new(grid.get_cell(i, j), corner)
@@ -131,7 +134,7 @@ class ColComponent:
 	var cells: Array[CellPosition]
 	func put_water_on(grid: GridImpl, count: float) -> void:
 		for c in cells:
-			count -= grid._pure_cell(c.i, c.j)._content_count_from(GridImpl.Content.Nothing, c.corner)
+			count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
@@ -140,7 +143,7 @@ class ColComponent:
 	func put_air_on(grid: GridImpl, count: float) -> void:
 		for i in cells.size():
 			var c: CellPosition = cells[-1 - i]
-			count -= grid._pure_cell(c.i, c.j)._content_count_from(GridImpl.Content.Nothing, c.corner)
+			count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
@@ -156,7 +159,7 @@ class ColDfs extends GridImpl.Dfs:
 	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
 		if cell.block_at(corner) or cell.air_at(corner):
 			return false
-		var nothing := cell._content_count_from(GridImpl.Content.Nothing, corner)
+		var nothing := cell._content_count_from(Content.Nothing, corner)
 		if j == col_j and nothing > 0:
 			comp.size += nothing
 			comp.cells.append(CellPosition.new(i, j, corner))
@@ -267,7 +270,7 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
 		return false
 	c = grid._pure_cell(i + 1, j)
-	return c._content_top() == GridImpl.Content.Water or c._content_top() == GridImpl.Content.Nothing
+	return c._content_top() == Content.Water or c._content_top() == Content.Nothing
 
 static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
 	# Put water down
@@ -338,6 +341,71 @@ class BoatColStrategy extends ColumnStrategy:
 			return any
 		return false
 
+class TogetherRowStrategy extends RowStrategy:
+	static func description() -> String:
+		return """
+		- If there's water in the row, far away cells can't have water
+		- If there's water and its close to the border, we might need to expand it to the other side
+		- If there's two waters in the row, they must be connected
+		"""
+	func _content(i: int, j2: int) -> Content:
+		var c := grid._pure_cell(i, j2 / 2)
+		return c._content_right() if bool(j2 & 1) else c._content_left()
+	func _corner(i: int, j2: int) -> E.Corner:
+		return E.diag_to_corner(grid.get_cell(i, j2 / 2).cell_type(), E.Side.Right if bool(j2 & 1) else E.Side.Left)
+	func _apply(i: int) -> bool:
+		if grid.row_hints()[i].water_count_type != E.HintType.Together:
+			return false
+		var leftmost := 2 * grid.cols()
+		var rightmost := -1
+		for j in grid.cols():
+			var c := grid._pure_cell(i, j)
+			if c._content_left() == Content.Water:
+				leftmost = min(leftmost, 2 * j)
+				rightmost = max(rightmost, 2 * j)
+			if c._content_right() == Content.Water:
+				leftmost = min(leftmost, 2 * j + 1)
+				rightmost = max(rightmost, 2 * j + 1)
+		if rightmost == -1:
+			return false
+		var any := false
+		# Merge all waters together
+		for j2 in range(leftmost + 1, rightmost):
+			var content := _content(i, j2)
+			if content != Content.Water:
+				any = true
+				grid.get_cell(i, j2 / 2).put_water(_corner(i, j2), false)
+		if any:
+			return true
+		# Mark far away cells as empty
+		var min_j2 := leftmost
+		while min_j2 > 0 and _content(i, min_j2 - 1) == Content.Nothing:
+			min_j2 -= 1
+		var max_j2 := rightmost
+		while max_j2 < 2 * grid.cols() - 1 and _content(i, max_j2 + 1) == Content.Nothing:
+			max_j2 += 1
+
+		var water_left2 := int(2 * (grid.row_hints()[i].water_count - grid.count_water_row(i)))
+		var no_j2 := range(rightmost + water_left2 + 1, max_j2 + 1) # Far to the right
+		no_j2.append_array(range(leftmost - water_left2 - 1, min_j2 - 1, -1)) # Far to the left
+		no_j2.append_array(range(0, min_j2)) # Before block/air
+		no_j2.append_array(range(max_j2 + 1, 2 * grid.cols())) # After block/air
+		for j2 in no_j2:
+			if _content(i, j2) == Content.Nothing:
+				any = true
+				grid.get_cell(i, j2 / 2).put_air(_corner(i, j2), false, true)
+		# Mark nearby cells as full if close to the "border"
+		var yes_j2 := []
+		if leftmost - min_j2 < water_left2:
+			yes_j2.append_array(range(rightmost + 1, rightmost + 1 + water_left2 - (leftmost - min_j2)))
+		if max_j2 - rightmost < water_left2:
+			yes_j2.append_array(range(leftmost - (water_left2 - (max_j2 - rightmost)), leftmost))
+		for j2 in yes_j2:
+			if _content(i, j2) != Content.Water:
+				any = true
+				grid.get_cell(i, j2 / 2).put_water(_corner(i, j2), false)
+		return any
+
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
 	BasicCol = BasicColStrategy,
@@ -345,7 +413,8 @@ const STRATEGY_LIST := {
 	BoatCol = BoatColStrategy,
 	MediumRow = MediumRowStrategy,
 	MediumCol = MediumColStrategy,
-	AdvancedRow = AdvancedRowStrategy
+	AdvancedRow = AdvancedRowStrategy,
+	TogetherRow = TogetherRowStrategy,
 }
 
 # Tries to solve the puzzle as much as possible
@@ -356,7 +425,7 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 	# Player may have left incomplete airs
 	grid.flood_air(false)
 	var strategies: Array[Strategy] = []
-	strategies.assign(strategies_names.map(func(name): return STRATEGY_LIST.get(name).new(grid)))
+	strategies.assign(strategies_names.map(func(name): return STRATEGY_LIST[name].new(grid)))
 	for _i in 50:
 		if not strategies.any(func(s): return s.apply_any()):
 			return

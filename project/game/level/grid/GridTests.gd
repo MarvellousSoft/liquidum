@@ -53,17 +53,23 @@ func assert_grid_eq(a: String, b: String) -> void:
 func all_strategies() -> Array:
 	return SolverModel.STRATEGY_LIST.keys()
 
-func assert_can_solve(s: String, result := true) -> void:
+func apply_strategies(s: String, strategies := []) -> GridImpl:
 	var g := str_grid(s)
 	check(!g.are_hints_satisfied())
-	SolverModel.new().apply_strategies(g, all_strategies())
+	if strategies.is_empty():
+		strategies = all_strategies()
+	SolverModel.new().apply_strategies(g, strategies)
+	return g
+
+func assert_can_solve(s: String, strategies := [], result := true) -> void:
+	var g := apply_strategies(s, strategies)
 	if g.are_hints_satisfied() != result:
 		fail_later_if(true)
 		print("Not satisfied:\n", g.to_str())
 		show_grids.emit(s, g.to_str())
 
-func assert_cant_solve(s: String) -> void:
-	assert_can_solve(s, false)
+func assert_cant_solve(s: String, strategies := []) -> void:
+	assert_can_solve(s, strategies, false)
 
 
 func get_rows(s : String) -> int:
@@ -525,3 +531,30 @@ func test_resize() -> void:
 	g.redo()
 	g.rem_col()
 	assert_grid_eq(g.to_str(), with_row)
+
+func test_solve_together_row() -> void:
+	var s := ["TogetherRow"]
+	assert_can_solve("""
+	h....
+	3w.w.
+	}L/L/
+	""", s)
+	assert_grid_eq(apply_strategies("""
+	h....
+	2.w..
+	}L/L/
+	""", s).to_str(), """
+	h....
+	2.w.x
+	.L/L/
+	""")
+	assert_grid_eq(apply_strategies("""
+	h....
+	3.w..
+	}L/L/
+	""", s).to_str(), """
+	h....
+	3.ww.
+	.L/L/
+	""")
+
