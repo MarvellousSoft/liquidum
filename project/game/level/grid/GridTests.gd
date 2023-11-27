@@ -65,7 +65,7 @@ func assert_can_solve(s: String, strategies := [], result := true) -> void:
 	var g := apply_strategies(s, strategies)
 	if g.are_hints_satisfied() != result:
 		fail_later_if(true)
-		print("Not satisfied:\n", g.to_str())
+		print("Not solved:\n", g.to_str())
 		show_grids.emit(s, g.to_str())
 
 func assert_cant_solve(s: String, strategies := []) -> void:
@@ -600,3 +600,33 @@ func test_wrong_rule() -> void:
 	3w...
 	-L/L.
 	""")
+
+func test_separate_rule() -> void:
+	var s := ["BasicRow", "SeparateRow"]
+	# Disregard aquarium of size 2
+	assert_can_solve("""
+	h....
+	2....
+	-L/_/
+	""", s)
+	# Put air in nearby aquariums because it would be together
+	assert_can_solve("""
+	h........
+	3..w....#
+	-L.L/_/_/
+	""", s)
+	# Can't fill middle or it would be together
+	assert_can_solve("""
+	h....
+	3.w.w
+	-L/L/
+	""", s)
+	s = ["BasicCol", "SeparateCol"]
+	# Kinda same but for cols
+	assert_can_solve("""
+	h2-
+	...
+	.|/
+	..#
+	.L/
+	""", s)

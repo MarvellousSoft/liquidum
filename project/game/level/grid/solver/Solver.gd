@@ -178,7 +178,7 @@ class BasicRowStrategy extends RowStrategy:
 		- Put air in components that are too big
 		- Put water everywhere if there's no more space for air
 		"""
-	func _apply_strategy(i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+	func _apply_strategy(_i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		if water_left == nothing_left:
 			for comp in values:
 				comp.put_water()
@@ -463,6 +463,130 @@ class TogetherColStrategy extends TogetherStrategy:
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
+class SeparateStrategy extends Strategy:
+	static func description() -> String:
+		return """
+		If adding water to a single cell would cause the waters to be together and
+		fullfill the hint, we can't add water to that cell.
+		"""
+	func _cell(_a: int, _b: int) -> GridImpl.CellWithLoc:
+		return GridModel.must_be_implemented()
+	func _left() -> E.Side:
+		return GridModel.must_be_implemented()
+	func _right() -> E.Side:
+		return GridModel.must_be_implemented()
+	func _a_len() -> int:
+		return GridModel.must_be_implemented()
+	func _b_len() -> int:
+		return GridModel.must_be_implemented()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return GridModel.must_be_implemented()
+	func _count_water_a(_a: int) -> float:
+		return GridModel.must_be_implemented()
+	func _content(a: int, b2: int) -> Content:
+		var c := _cell(a, b2 / 2).pure()
+		return c._content_side(_right()) if bool(b2 & 1) else c._content_side(_left())
+	func _corner(a: int, b2: int) -> E.Corner:
+		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
+	func _wall_right(a: int, b2: int) -> bool:
+		var c := _cell(a, b2 / 2)
+		return c.wall_at(_right() as E.Walls) if bool(b2 & 1) else (c.cell_type() != E.CellType.Single)
+	# Adding water to this cell will flood water to how many half-cells?
+	func _will_flood_how_many(a: int, b2: int) -> int:
+		if _content(a, b2) != Content.Nothing:
+			return 0
+		var b2_min := b2
+		var b2_max := b2
+		# Always floods right or down
+		while not _wall_right(a, b2_max) and _content(a, b2_max + 1) == Content.Nothing:
+			b2_max += 1
+		# Only floods left, not up
+		if _left() == E.Side.Left:
+			while b2_min > 0 and not _wall_right(a, b2_min - 1) and _content(a, b2_min - 1) == Content.Nothing:
+				b2_min -= 1
+		# But up it still "floods" the same cell if it doesn't have a diagonal
+		else:
+			if bool(b2_min & 1) and _cell(a, (b2_min - 1) / 2).cell_type() == E.CellType.Single:
+				b2_min -= 1
+		return b2_max - b2_min + 1
+
+	func _apply(a: int) -> bool:
+		if _a_hints()[a].water_count_type != E.HintType.Separated:
+			return false
+		var leftmost := 2 * _b_len()
+		var rightmost := -1
+		for b in _b_len():
+			var c := _cell(a, b).pure()
+			if c._content_side(_left()) == Content.Water:
+				leftmost = min(leftmost, 2 * b)
+				rightmost = max(rightmost, 2 * b)
+			if c._content_side(_right()) == Content.Water:
+				leftmost = min(leftmost, 2 * b + 1)
+				rightmost = max(rightmost, 2 * b + 1)
+		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		if rightmost == -1:
+			# We can mark connected components of size exactly the hint as air
+			# because otherwise it would be together. This will work differently in rows and cols.
+			var any := false
+			for b2 in _b_len():
+				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
+					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+					any = true
+			return any
+		for b2 in range(leftmost + 1, rightmost):
+			if _content(a, b2) != Content.Water:
+				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
+					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+					return true
+				return false
+		var any := false
+		if leftmost > 0 and _content(a, leftmost - 1) == Content.Nothing and _will_flood_how_many(a, leftmost - 1) == water_left2:
+			_cell(a, (leftmost - 1) / 2).put_air(_corner(a, leftmost - 1), false, true)
+			any = true
+		if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
+			_cell(a, (rightmost + 1) / 2).put_air(_corner(a, rightmost + 1), false, true)
+			any = true
+		return any
+
+	func apply_any() -> bool:
+		var any := false
+		for a in _a_len():
+			if _apply(a):
+				any = true
+		return any
+
+class SeparateRowStrategy extends SeparateStrategy:
+	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
+		return grid.get_cell(a, b) as GridImpl.CellWithLoc
+	func _left() -> E.Side:
+		return E.Side.Left
+	func _right() -> E.Side:
+		return E.Side.Right
+	func _a_len() -> int:
+		return grid.rows()
+	func _b_len() -> int:
+		return grid.cols()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return grid.row_hints()
+	func _count_water_a(a: int) -> float:
+		return grid.count_water_row(a)
+
+class SeparateColStrategy extends SeparateStrategy:
+	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
+		return grid.get_cell(b, a) as GridImpl.CellWithLoc
+	func _left() -> E.Side:
+		return E.Side.Top
+	func _right() -> E.Side:
+		return E.Side.Bottom
+	func _a_len() -> int:
+		return grid.cols()
+	func _b_len() -> int:
+		return grid.rows()
+	func _a_hints() -> Array[GridModel.LineHint]:
+		return grid.col_hints()
+	func _count_water_a(a: int) -> float:
+		return grid.count_water_col(a)
+
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
 	BasicCol = BasicColStrategy,
@@ -473,6 +597,8 @@ const STRATEGY_LIST := {
 	AdvancedRow = AdvancedRowStrategy,
 	TogetherRow = TogetherRowStrategy,
 	TogetherCol = TogetherColStrategy,
+	SeparateRow = SeparateRowStrategy,
+	SeparateCol = SeparateColStrategy,
 }
 
 # Tries to solve the puzzle as much as possible
@@ -482,12 +608,19 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 		grid.push_empty_undo()
 	# Player may have left incomplete airs
 	grid.flood_air(false)
-	var strategies: Array[Strategy] = []
-	strategies.assign(strategies_names.map(func(name): return STRATEGY_LIST[name].new(grid)))
-	for _i in 50:
-		if not strategies.any(func(s): return s.apply_any()):
-			return
-		assert(_i < 40)
+	var strategies := {}
+	for name in strategies_names:
+		strategies[name] = STRATEGY_LIST[name].new(grid)
+	for t in 50:
+		var any := false
+		for name in strategies_names:
+			if strategies[name].apply_any():
+				if t > 30:
+					print("Applied %s" % name)
+				any = true
+		if not any:
+			break
+		assert(t < 40)
 
 enum SolveResult { SolvedUniqueNoGuess, SolvedUnique, SolvedMultiple, Unsolvable }
 

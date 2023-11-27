@@ -1073,7 +1073,7 @@ class AddAirDfs extends Dfs:
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
 	# TODO: This is incomplete, because we need to move down through water to other "tunnels"
-	# But it's hard because we need to be careful about buckets
+	# But it's hard because we need to be careful about buckets, so let's be conservative
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return false
 
