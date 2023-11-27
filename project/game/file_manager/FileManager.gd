@@ -40,6 +40,13 @@ func change_current_profile(profile: String) -> void:
 	save_current_profile()
 	load_profile()
 
+func clear_whole_profile(profile: String) -> void:
+	clear_profile(profile)
+	LevelLister.clear_all_level_saves(profile)
+	if profile == current_profile:
+		# Reload stuff if necessary
+		change_current_profile(profile)
+
 func _profile_dir(profile := "") -> String:
 	if profile.is_empty():
 		profile = current_profile
@@ -69,8 +76,14 @@ func _save_json_data(dir_name: String, file_name: String, data: Dictionary) -> v
 		push_error("Error trying to open file %s/%s whilst saving: %d" % [dir_name, file_name, FileAccess.get_open_error()])
 	file.store_string(JSON.stringify(data))
 
+func _delete_file(dir_name: String, file_name: String) -> void:
+	file_name = "%s/%s" % [dir_name, file_name]
+	if FileAccess.file_exists(file_name):
+		DirAccess.remove_absolute(file_name)
+
 const PROFILE_FILE := "profile.save"
 
+# TODO: Rename to settings
 func load_profile() -> void:
 	if not FileAccess.file_exists("%s/%s" % [_profile_dir(), PROFILE_FILE]):
 		push_warning("Profile file not found. Starting a new profile file.")
@@ -79,7 +92,10 @@ func load_profile() -> void:
 
 func save_profile() -> void:
 	var profile_data := Profile.get_save_data()
-	_save_json_data(_profile_dir(), "profile.save", profile_data)
+	_save_json_data(_profile_dir(), PROFILE_FILE, profile_data)
+
+func clear_profile(profile: String) -> void:
+	_delete_file(_profile_dir(profile), PROFILE_FILE)
 
 func _level_dir(profile := "") -> String:
 	return "%s/levels" % _profile_dir(profile)
@@ -92,6 +108,9 @@ func load_level(level_name: String, profile := "") -> UserLevelSaveData:
 
 func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())
+
+func clear_level(level_name: String, profile: String) -> void:
+	_delete_file(_level_dir(profile), _level_file(level_name))
 
 func _editor_dir() -> String:
 	return "%s/editor" % _profile_dir()

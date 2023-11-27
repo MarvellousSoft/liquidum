@@ -42,3 +42,12 @@ static func count_completed_levels(profile_name: String) -> int:
 			if save != null and save.completed():
 				count += 1
 	return count
+
+static func clear_all_level_saves(profile_name: String) -> void:
+	for section in range(1, 50):
+		if not FileManager.has_level_data(section, 1):
+			break
+		for level in range(1, 50):
+			if not FileManager.has_level_data(section, level):
+				break
+			FileManager.clear_level(LevelLister.level_name(section, level), profile_name)

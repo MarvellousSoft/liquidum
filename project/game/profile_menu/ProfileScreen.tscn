@@ -20,6 +20,7 @@ offset_left = 33.0
 offset_top = 42.0
 offset_right = 291.0
 offset_bottom = 167.0
+focus_mode = 0
 text = "BACK"
 
 [node name="ProfilesText" type="Label" parent="."]
@@ -51,6 +52,9 @@ layout_mode = 2
 profile_name = "whale"
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="delete" from="Profiles/Fish" to="." method="delete_profile"]
 [connection signal="select" from="Profiles/Fish" to="." method="select_profile"]
+[connection signal="delete" from="Profiles/Turtle" to="." method="delete_profile"]
 [connection signal="select" from="Profiles/Turtle" to="." method="select_profile"]
+[connection signal="delete" from="Profiles/Whale" to="." method="delete_profile"]
 [connection signal="select" from="Profiles/Whale" to="." method="select_profile"]

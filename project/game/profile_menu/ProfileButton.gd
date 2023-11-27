@@ -4,6 +4,7 @@ extends Control
 @onready var button: Button = $SelectButton
 
 signal select(profile: String)
+signal delete(profile: String)
 
 func _ready() -> void:
 	assert(not profile_name.is_empty())
@@ -18,3 +19,8 @@ func _ready() -> void:
 
 func _on_select_button_pressed():
 	select.emit(profile_name)
+
+
+func _on_delete_button_pressed() -> void:
+	# TODO: Ask for confirmation
+	delete.emit(profile_name)
