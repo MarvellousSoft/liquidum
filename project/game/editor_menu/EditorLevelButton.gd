@@ -15,6 +15,6 @@ func _on_open_button_pressed():
 
 
 func _on_delete_button_pressed():
-	if ConfirmationScreen.start_confimation():
+	if ConfirmationScreen.start_confirmation():
 		if await ConfirmationScreen.pressed:
 			delete.emit(id)
