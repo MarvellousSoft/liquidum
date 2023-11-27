@@ -24,7 +24,6 @@ func load_level(id: String) -> void:
 	var level = Global.create_level(GridImpl.empty_editor(1, 1), id)
 	TransitionManager.push_scene(level)
 
-
 func _on_create_new_level_pressed() -> void:
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
 	var level_name := "Level %d" % (LevelNode.get_child_count() + 1)

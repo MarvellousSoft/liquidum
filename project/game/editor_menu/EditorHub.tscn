@@ -1,14 +1,14 @@
 [gd_scene load_steps=4 format=3 uid="uid://4263yf3prywo"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_1fhxp"]
-[ext_resource type="Script" path="res://game/main_menu/EditorHub.gd" id="2_48sol"]
-[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_6v3sh"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_sq1cy"]
+[ext_resource type="Script" path="res://game/editor_menu/EditorHub.gd" id="2_mul0o"]
+[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_qaoyn"]
 
 [node name="EditorHub" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-theme = ExtResource("1_1fhxp")
-script = ExtResource("2_48sol")
+theme = ExtResource("1_sq1cy")
+script = ExtResource("2_mul0o")
 
 [node name="YourLevels" type="Label" parent="."]
 layout_mode = 0
@@ -44,7 +44,7 @@ offset_bottom = 315.0
 focus_mode = 0
 text = "BACK"
 
-[node name="SettingsScreen" parent="." instance=ExtResource("3_6v3sh")]
+[node name="SettingsScreen" parent="." instance=ExtResource("3_qaoyn")]
 
 [connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

@@ -46,7 +46,7 @@ func _on_level_button_pressed(section: int, level: int) -> void:
 	TransitionManager.push_scene(level_node)
 
 func _on_editor_button_pressed():
-	var editor_hub = preload("res://game/main_menu/EditorHub.tscn").instantiate()
+	var editor_hub = preload("res://game/editor_menu/EditorHub.tscn").instantiate()
 	TransitionManager.push_scene(editor_hub)
 
 
