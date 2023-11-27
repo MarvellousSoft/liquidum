@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://bl27lmc6g415t"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_jfir4"]
+[ext_resource type="Script" path="res://game/profile_menu/ProfileScreen.gd" id="2_4oxw6"]
+[ext_resource type="PackedScene" uid="uid://be6w11mud00mj" path="res://game/profile_menu/ProfileButton.tscn" id="3_irva6"]
+
+[node name="ProfileScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_jfir4")
+script = ExtResource("2_4oxw6")
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 42.0
+offset_right = 291.0
+offset_bottom = 167.0
+text = "BACK"
+
+[node name="ProfilesText" type="Label" parent="."]
+layout_mode = 0
+offset_left = 291.0
+offset_top = 405.0
+offset_right = 1165.0
+offset_bottom = 503.0
+text = "AVAILABLE_PROFILES"
+
+[node name="Profiles" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 291.0
+offset_top = 542.0
+offset_right = 1295.0
+offset_bottom = 1811.0
+theme_override_constants/separation = 35
+
+[node name="Fish" parent="Profiles" instance=ExtResource("3_irva6")]
+layout_mode = 2
+profile_name = "fish"
+
+[node name="Turtle" parent="Profiles" instance=ExtResource("3_irva6")]
+layout_mode = 2
+profile_name = "turtle"
+
+[node name="Whale" parent="Profiles" instance=ExtResource("3_irva6")]
+layout_mode = 2
+profile_name = "whale"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="select" from="Profiles/Fish" to="." method="select_profile"]
+[connection signal="select" from="Profiles/Turtle" to="." method="select_profile"]
+[connection signal="select" from="Profiles/Whale" to="." method="select_profile"]

@@ -2,7 +2,7 @@ extends Control
 
 @onready var Version: Label = $Version
 @onready var LevelButtons: VBoxContainer = $LevelButtons
-
+@onready var ProfileButton: Button = $ProfileButton
 
 func _ready():
 	FileManager.load_game()
@@ -16,6 +16,10 @@ func _ready():
 
 func _enter_tree() -> void:
 	call_deferred("update_open_levels")
+	call_deferred("update_profile_button")
+
+func update_profile_button() -> void:
+	ProfileButton.text = "%s: %s" % [tr("PROFILE"), FileManager.current_profile]
 
 func update_open_levels() -> void:
 	while LevelButtons.get_child_count() > 1:
@@ -44,3 +48,8 @@ func _on_level_button_pressed(section: int, level: int) -> void:
 func _on_editor_button_pressed():
 	var editor_hub = preload("res://game/main_menu/EditorHub.tscn").instantiate()
 	TransitionManager.push_scene(editor_hub)
+
+
+func _on_profile_button_pressed():
+	var profile := preload("res://game/profile_menu/ProfileScreen.tscn").instantiate()
+	TransitionManager.push_scene(profile)

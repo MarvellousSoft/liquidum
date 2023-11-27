@@ -14,3 +14,8 @@ AMOUNT,Amount,Quant.
 BACK,Back,Voltar
 CREATE_NEW_LEVEL,Create new level,Criar nível novo
 YOUR_LEVELS,Your levels,Seus níveis
+PROFILE,Profile,Perfil
+AVAILABLE_PROFILES,Available profiles:,Perfis disponíveis:
+SELECT,Select,Selecionar
+SELECTED,Selected,Selecionado
+LEVELS_COMPLETED,levels completed,níveis completos

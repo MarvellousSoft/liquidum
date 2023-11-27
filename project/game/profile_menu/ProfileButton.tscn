@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://be6w11mud00mj"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_5qrc8"]
+[ext_resource type="Script" path="res://game/profile_menu/ProfileButton.gd" id="2_y0epb"]
+
+[node name="ProfileButton" type="HBoxContainer"]
+offset_right = 1618.0
+offset_bottom = 125.0
+theme = ExtResource("1_5qrc8")
+theme_override_constants/separation = 50
+script = ExtResource("2_y0epb")
+metadata/_edit_group_ = true
+
+[node name="SelectButton" type="Button" parent="."]
+layout_mode = 2
+text = "SELECT"
+
+[node name="ProfileInfo" type="Label" parent="."]
+layout_mode = 2
+text = "profile: X LEVELS_COMPLETED"
+
+[connection signal="pressed" from="SelectButton" to="." method="_on_select_button_pressed"]

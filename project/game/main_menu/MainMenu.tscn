@@ -36,4 +36,21 @@ text = "Level Editor"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
 
+[node name="ProfileButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 3329.0
+offset_top = 1795.0
+offset_right = 3791.0
+offset_bottom = 1920.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "PROFILE: ?"
+
 [connection signal="pressed" from="LevelButtons/EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
