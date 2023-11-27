@@ -1,6 +1,7 @@
 extends Node
 
-var current_profile := "default"
+const DEFAULT_PROFILE := "fish"
+var current_profile := DEFAULT_PROFILE
 
 func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
@@ -11,10 +12,30 @@ func save_and_quit() -> void:
 	get_tree().quit()
 
 func save_game() -> void:
+	save_current_profile()
 	save_profile()
 
 func load_game() -> void:
+	load_current_profile()
 	load_profile()
+
+const CURRENT_PROFILE := "user://cur_profile.txt"
+
+func load_current_profile() -> void:
+	if not FileAccess.file_exists(CURRENT_PROFILE):
+		current_profile = DEFAULT_PROFILE
+		save_current_profile()
+		return
+	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.READ)
+	var profile_name := file.get_as_text().strip_edges()
+	if profile_name.is_valid_identifier():
+		current_profile = profile_name
+	else:
+		current_profile = DEFAULT_PROFILE
+
+func save_current_profile() -> void:
+	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.WRITE)
+	file.store_string(current_profile)
 
 func _profile_dir() -> String:
 	return "user://%s" % current_profile
