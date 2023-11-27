@@ -37,8 +37,10 @@ func save_current_profile() -> void:
 	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.WRITE)
 	file.store_string(current_profile)
 
-func _profile_dir() -> String:
-	return "user://%s" % current_profile
+func _profile_dir(profile := "") -> String:
+	if profile.is_empty():
+		profile = current_profile
+	return "user://%s" % profile
 
 func _assert_dir(dir: String) -> void:
 	if not DirAccess.dir_exists_absolute(dir):
@@ -76,14 +78,14 @@ func save_profile() -> void:
 	var profile_data := Profile.get_save_data()
 	_save_json_data(_profile_dir(), "profile.save", profile_data)
 
-func _level_dir() -> String:
-	return "%s/levels" % _profile_dir()
+func _level_dir(profile := "") -> String:
+	return "%s/levels" % _profile_dir(profile)
 
 func _level_file(level: String) -> String:
 	return "%s.save" % level
 
-func load_level(level_name: String) -> UserLevelSaveData:
-	return UserLevelSaveData.load_data(_load_json_data(_level_dir(), _level_file(level_name), false))
+func load_level(level_name: String, profile := "") -> UserLevelSaveData:
+	return UserLevelSaveData.load_data(_load_json_data(_level_dir(profile), _level_file(level_name), false))
 
 func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())

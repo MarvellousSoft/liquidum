@@ -7,7 +7,7 @@ signal select(profile: String)
 
 func _ready() -> void:
 	assert(not profile_name.is_empty())
-	$ProfileInfo.text = "%s: %d %s" % [profile_name, 0, tr("LEVELS_COMPLETED")]
+	$ProfileInfo.text = "%s: %d %s" % [profile_name, LevelLister.count_completed_levels(profile_name), tr(&"LEVELS_COMPLETED")]
 	if FileManager.current_profile == profile_name:
 		button.disabled = true
 		button.text = "SELECTED"
