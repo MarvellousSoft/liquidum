@@ -1,6 +1,8 @@
 class_name DevPanel
 extends VBoxContainer
 
+const IS_INTERESTING := "Is interesting?"
+
 signal use_strategies()
 signal full_solve()
 signal generate()
@@ -8,30 +10,9 @@ signal randomize_water()
 signal check_interesting()
 signal load_grid(g: GridModel)
 
-func set_solve_type(type: SolverModel.SolveResult) -> void:
-	$FullSolveType.text = SolverModel.SolveResult.find_key(type)
-
-func god_mode_enabled() -> bool:
-	return $GodMode.is_pressed()
-
-func selected_strategies() -> Array:
-	var popup := StrategyList.get_popup()
-	return range(popup.item_count).filter(func(i): return popup.is_item_checked(i)).map(func(i): return popup.get_item_text(i))
-
-func setup(editor_mode: bool) -> void:
-	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
-		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $IsInteresting, $Paste]:
-		node.visible = editor_mode
-
-func do_check_interesting(g: GridModel) -> void:
-	if not g.editor_mode():
-		return
-	var r := SolverModel.new().full_solve(g, selected_strategies())
-	$IsInteresting.text = "%s %s" % [IS_INTERESTING, "✅" if r == SolverModel.SolveResult.SolvedUnique else "❌"]
 
 @onready var StrategyList: MenuButton = $StrategyList
-const IS_INTERESTING := "Is interesting?"
+
 
 func _ready() -> void:
 	var popup := StrategyList.get_popup()
@@ -43,8 +24,11 @@ func _ready() -> void:
 		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
 		i += 1
 
+
 func _toggled_strategy(index: int) -> void:
+	AudioManager.play_sfx("button_pressed")
 	StrategyList.get_popup().toggle_item_checked(index)
+
 
 func _enter_tree() -> void:
 	visible = Global.is_dev_mode() or self == get_tree().current_scene
@@ -78,6 +62,32 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 	return null
 
 
+func set_solve_type(type: SolverModel.SolveResult) -> void:
+	$FullSolveType.text = SolverModel.SolveResult.find_key(type)
+
+
+func god_mode_enabled() -> bool:
+	return $GodMode.is_pressed()
+
+
+func selected_strategies() -> Array:
+	var popup := StrategyList.get_popup()
+	return range(popup.item_count).filter(func(i): return popup.is_item_checked(i)).map(func(i): return popup.get_item_text(i))
+
+
+func setup(editor_mode: bool) -> void:
+	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
+		node.visible = not editor_mode
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $IsInteresting, $Paste]:
+		node.visible = editor_mode
+
+
+func do_check_interesting(g: GridModel) -> void:
+	if not g.editor_mode():
+		return
+	var r := SolverModel.new().full_solve(g, selected_strategies())
+	$IsInteresting.text = "%s %s" % [IS_INTERESTING, "✅" if r == SolverModel.SolveResult.SolvedUnique else "❌"]
+
 
 func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	$Generate.disabled = true
@@ -90,29 +100,40 @@ func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 
 
 func _on_strategies_pressed():
+	AudioManager.play_sfx("button_pressed")
 	use_strategies.emit()
 
 
 func _on_full_solve_pressed():
+	AudioManager.play_sfx("button_pressed")
 	full_solve.emit()
 
 
 func _on_generate_pressed():
+	AudioManager.play_sfx("button_pressed")
 	generate.emit()
 
 
 func _on_god_mode_pressed():
+	AudioManager.play_sfx("button_pressed")
 	use_strategies.emit()
 
 
 func _on_randomize_water_pressed():
+	AudioManager.play_sfx("button_pressed")
 	randomize_water.emit()
 
 
 func _on_is_interesting_pressed():
+	AudioManager.play_sfx("button_pressed")
 	check_interesting.emit()
 
 
 func _on_paste_pressed():
 	var g := GridImpl.from_str(DisplayServer.clipboard_get(), GridModel.LoadMode.Editor)
 	load_grid.emit(g)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
+

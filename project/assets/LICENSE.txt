@@ -22,3 +22,11 @@ by Lorc under CC BY 3.0
 Music Info: “Ocean”
 Audio Synthezx Group
 https://audio-sx.com
+
+- audio/sfx/remove_block.wav
+- audio/sfx/put_block.wav
+- audio/sfx/toggle_settings.wav
+- audio/sfx/checkbox_in.wav
+- audio/sfx/checkbox_out.wav
+- audio/sfx/change_brush.wav
+by Little Robot Sound Factory, www.littlerobotsoundfactory.com

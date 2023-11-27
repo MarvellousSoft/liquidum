@@ -61,6 +61,9 @@ offset_bottom = 2090.0
 focus_mode = 0
 text = "EXIT"
 
+[connection signal="mouse_entered" from="LevelButtons/EditorButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="LevelButtons/EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="mouse_entered" from="ExitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

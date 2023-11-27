@@ -44,12 +44,18 @@ func start_confirmation(override_title := "", override_yes := "", override_no :=
 	return true
 
 func _on_yes_pressed():
+	AudioManager.play_sfx("button_pressed")
 	active = false
 	AnimPlayer.play("disable")
 	pressed.emit(true)
 
 
 func _on_no_pressed():
+	AudioManager.play_sfx("button_pressed")
 	active = false
 	AnimPlayer.play("disable")
 	pressed.emit(false)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

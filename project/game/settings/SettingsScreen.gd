@@ -25,9 +25,11 @@ func _input(event):
 func toggle_pause() -> void:
 	active = not active
 	if active:
+		AudioManager.play_sfx("enable_settings")
 		setup_values()
 		AnimPlayer.play("enable")
 	else:
+		AudioManager.play_sfx("disable_settings")
 		save_values()
 		AnimPlayer.play("disable")
 	emit_signal("pause_toggled", active)
@@ -59,8 +61,17 @@ func _on_pause_button_pressed():
 func _on_fullscreen_toggled(button_pressed):
 	if Global.is_fullscreen() != button_pressed:
 		Global.toggle_fullscreen()
+		if button_pressed:
+			AudioManager.play_sfx("checkbox_pressed")
+		else:
+			AudioManager.play_sfx("checkbox_unpressed")
 
 
 func _on_save_n_quit_button_pressed():
+	AudioManager.play_sfx("button_pressed")
 	save_values()
 	FileManager.save_and_quit()
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

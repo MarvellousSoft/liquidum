@@ -18,3 +18,7 @@ func _on_delete_button_pressed():
 	if ConfirmationScreen.start_confirmation():
 		if await ConfirmationScreen.pressed:
 			delete.emit(id)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

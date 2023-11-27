@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://b8xv38m6l8g5n"]
+
+[ext_resource type="AudioStream" uid="uid://ci1txfofh7eat" path="res://assets/audio/sfx/remove_block.wav" id="1_xd1nc"]
+[ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_1ptcu"]
+
+[resource]
+script = ExtResource("2_1ptcu")
+asset = ExtResource("1_xd1nc")
+base_db = 0.0
+random_db_var = 0.0
+base_pitch = 0.6
+random_pitch_var = 0.01

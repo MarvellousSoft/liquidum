@@ -316,3 +316,8 @@ func _on_dev_buttons_load_grid(g: GridModel) -> void:
 	grid = g
 	GridNode.grid_logic = g
 	GridNode.update()
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
+

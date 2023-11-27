@@ -267,6 +267,7 @@ vertical_alignment = 2
 
 [node name="SaveNQuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("6_um142")
 text = "SAVE_AND_EXIT"
 
@@ -276,13 +277,20 @@ offset_top = 43.0
 offset_right = 4102.0
 offset_bottom = 555.0
 scale = Vector2(0.4, 0.4)
+focus_mode = 0
 texture_normal = ExtResource("3_53c0p")
 texture_pressed = ExtResource("4_fa5hr")
 texture_hover = ExtResource("5_epp2n")
 
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_save_n_quit_button_pressed"]
+[connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

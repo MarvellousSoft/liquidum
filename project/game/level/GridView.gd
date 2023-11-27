@@ -441,10 +441,13 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 			if cell_data.block_at(corner):
 				mouse_hold_status = E.MouseDragState.RemoveBlock
 				cell_data.remove_content(corner, false)
+				AudioManager.play_sfx("block_remove")
 			else:
 				mouse_hold_status = E.MouseDragState.Block
 				if not cell_data.put_block(corner, false):
 					highlight_error(i, j, which)
+				else:
+					AudioManager.play_sfx("block_put")
 			get_cell(i, j).update_blocks(cell_data)
 	update()
 
@@ -464,6 +467,7 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		mouse_hold_status = E.MouseDragState.RemoveBlock
 		cell_data.remove_content(corner)
 		get_cell(i, j).update_blocks(cell_data)
+		AudioManager.play_sfx("block_remove")
 	else:
 		mouse_hold_status = E.MouseDragState.Air
 		if cell_data.put_air(corner):

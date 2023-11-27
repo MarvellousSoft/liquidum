@@ -1,11 +1,11 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://468kna07tn0t"]
 
-[ext_resource type="AudioStream" uid="uid://8inqxrttn00w" path="res://assets/audio/sfx/put_boat.wav" id="1_0plco"]
+[ext_resource type="AudioStream" uid="uid://d3e4qtevmbhg5" path="res://assets/audio/sfx/put_air.wav" id="1_kvmfi"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_hm0ev"]
 
 [resource]
 script = ExtResource("2_hm0ev")
-asset = ExtResource("1_0plco")
+asset = ExtResource("1_kvmfi")
 base_db = 0.0
 random_db_var = 0.0
 base_pitch = 1.0

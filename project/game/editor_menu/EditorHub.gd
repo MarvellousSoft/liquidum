@@ -5,6 +5,7 @@ extends Control
 func _ready() -> void:
 	load_all_levels()
 
+
 func load_all_levels() -> void:
 	var levels := FileManager.load_editor_levels()
 	for child in LevelNode.get_children():
@@ -19,15 +20,20 @@ func load_all_levels() -> void:
 		button.delete.connect(delete_level)
 		LevelNode.add_child(button)
 
+
 func load_level(id: String) -> void:
+	AudioManager.play_sfx("button_pressed")
 	var level = Global.create_level(GridImpl.empty_editor(1, 1), id)
 	TransitionManager.push_scene(level)
+
 
 func delete_level(id: String) -> void:
 	FileManager.clear_editor_level(id)
 	load_all_levels()
 
+
 func _on_create_new_level_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
 	var level_name := "Level %d" % (LevelNode.get_child_count() + 1)
 	var metadata := EditorLevelMetadata.new(level_name)
@@ -43,4 +49,9 @@ func _on_create_new_level_pressed() -> void:
 
 
 func _on_back_pressed():
+	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

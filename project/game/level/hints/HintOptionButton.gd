@@ -19,8 +19,13 @@ func _process(dt):
 
 
 func _on_mouse_entered():
+	AudioManager.play_sfx("button_hover")
 	hover = true
 
 
 func _on_mouse_exited():
 	hover = false
+
+
+func _on_toggled(_button_pressed):
+	AudioManager.play_sfx("button_pressed")

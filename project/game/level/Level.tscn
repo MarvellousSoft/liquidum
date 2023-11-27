@@ -236,7 +236,6 @@ autostart = true
 [connection signal="check_interesting" from="DevButtons" to="." method="_on_dev_buttons_check_interesting"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
-[connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]

@@ -230,5 +230,7 @@ libraries = {
 "": SubResource("AnimationLibrary_sb0jh")
 }
 
+[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_pressed"]
+[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/HBoxContainer/No" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Content/CenterContainer/VBoxContainer/HBoxContainer/No" to="." method="_on_no_pressed"]

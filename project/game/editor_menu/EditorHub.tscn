@@ -46,5 +46,7 @@ text = "BACK"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_qaoyn")]
 
+[connection signal="mouse_entered" from="CreateNewLevel" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]
+[connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

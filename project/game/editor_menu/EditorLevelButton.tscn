@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcdc1uvu7weq5"]
+[gd_scene load_steps=3 format=3 uid="uid://v7gwn05ed1kv"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_d6ccn"]
 [ext_resource type="Script" path="res://game/editor_menu/EditorLevelButton.gd" id="2_ol4g6"]
@@ -23,5 +23,7 @@ text = "Level ??"
 layout_mode = 2
 text = "X"
 
+[connection signal="mouse_entered" from="OpenButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="OpenButton" to="." method="_on_open_button_pressed"]
+[connection signal="mouse_entered" from="DeleteButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]
