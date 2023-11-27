@@ -22,5 +22,6 @@ func _on_select_button_pressed():
 
 
 func _on_delete_button_pressed() -> void:
-	# TODO: Ask for confirmation
-	delete.emit(profile_name)
+	if ConfirmationScreen.start_confirmation():
+		if await ConfirmationScreen.pressed:
+			delete.emit(profile_name)
