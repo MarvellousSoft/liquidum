@@ -310,3 +310,9 @@ func _on_dev_buttons_check_interesting():
 	g2.clear_content()
 	_update_visibilities(g2)
 	$DevButtons.do_check_interesting(g2)
+
+
+func _on_dev_buttons_load_grid(g: GridModel) -> void:
+	grid = g
+	GridNode.grid_logic = g
+	GridNode.update()

@@ -6,6 +6,7 @@ signal full_solve()
 signal generate()
 signal randomize_water()
 signal check_interesting()
+signal load_grid(g: GridModel)
 
 func set_solve_type(type: SolverModel.SolveResult) -> void:
 	$FullSolveType.text = SolverModel.SolveResult.find_key(type)
@@ -20,7 +21,7 @@ func selected_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $FullSolve, $FullSolveType, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $IsInteresting]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $IsInteresting, $Paste]:
 		node.visible = editor_mode
 
 func do_check_interesting(g: GridModel) -> void:
@@ -110,3 +111,8 @@ func _on_randomize_water_pressed():
 
 func _on_is_interesting_pressed():
 	check_interesting.emit()
+
+
+func _on_paste_pressed():
+	var g := GridImpl.from_str(DisplayServer.clipboard_get(), GridModel.LoadMode.Editor)
+	load_grid.emit(g)
