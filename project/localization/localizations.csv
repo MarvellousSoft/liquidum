@@ -1,5 +1,10 @@
 keys,en,pt_BR
-TEST,ALSKDJLAS,teste
+TEST,Test,teste
+YES,Yes,Yes
+NO,No,Não
+EXIT,Exit,Sair
+EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?
+DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?
 WATERS_COUNTER,Waters: ,Águas: 
 BOATS_COUNTER,Boats: ,Barcos: 
 MISTAKES_COUNTER,Mistakes: ,Erros: 

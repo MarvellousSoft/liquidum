@@ -53,3 +53,9 @@ func _on_editor_button_pressed():
 func _on_profile_button_pressed():
 	var profile := preload("res://game/profile_menu/ProfileScreen.tscn").instantiate()
 	TransitionManager.push_scene(profile)
+
+
+func _on_exit_button_pressed():
+	if ConfirmationScreen.start_confirmation("EXIT_CONFIRMATION"):
+		if await ConfirmationScreen.pressed:
+			get_tree().quit()

@@ -52,5 +52,15 @@ grow_vertical = 2
 focus_mode = 0
 text = "PROFILE: ?"
 
+[node name="ExitButton" type="Button" parent="."]
+layout_mode = 2
+offset_left = 90.0
+offset_top = 1965.0
+offset_right = 740.0
+offset_bottom = 2090.0
+focus_mode = 0
+text = "EXIT"
+
 [connection signal="pressed" from="LevelButtons/EditorButton" to="." method="_on_editor_button_pressed"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

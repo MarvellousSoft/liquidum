@@ -26,6 +26,7 @@ FileManager="*res://game/file_manager/FileManager.gd"
 Profile="*res://game/file_manager/Profile.gd"
 E="*res://game/level/grid/Enums.gd"
 Background="*res://game/ui/Background.tscn"
+ConfirmationScreen="*res://game/ui/ConfirmationScreen.tscn"
 
 [debug]
 
