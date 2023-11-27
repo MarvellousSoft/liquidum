@@ -15,9 +15,9 @@ func _ready():
 
 
 func _input(event):
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("ui_accept") and active:
 		_on_yes_pressed()
-	elif event.is_action_pressed("ui_cancel"):
+	elif event.is_action_pressed("ui_cancel") and active:
 		_on_no_pressed()
 
 
