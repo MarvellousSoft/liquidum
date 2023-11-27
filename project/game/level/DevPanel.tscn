@@ -58,6 +58,11 @@ text = "Randomize Water"
 layout_mode = 2
 text = "Is interesting?"
 
+[node name="Paste" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Paste clipboard"
+
 [connection signal="mouse_entered" from="Strategies" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
@@ -74,3 +79,5 @@ text = "Is interesting?"
 [connection signal="pressed" from="RandomizeWater" to="." method="_on_randomize_water_pressed"]
 [connection signal="mouse_entered" from="IsInteresting" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="IsInteresting" to="." method="_on_is_interesting_pressed"]
+[connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
