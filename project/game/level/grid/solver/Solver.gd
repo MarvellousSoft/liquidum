@@ -367,7 +367,7 @@ class TogetherStrategy extends Strategy:
 	func _corner(a: int, b2: int) -> E.Corner:
 		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
 	func _apply(a: int) -> bool:
-		if _a_hints()[a].water_count_type != E.HintType.Together:
+		if _a_hints()[a].water_count_type != E.HintType.Together or _a_hints()[a].water_count == -1.:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
@@ -399,6 +399,7 @@ class TogetherStrategy extends Strategy:
 			max_b2 += 1
 
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		assert(water_left2 >= 0)
 		var no_b2 := range(rightmost + water_left2 + 1, max_b2 + 1) # Far to the right
 		no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
 		no_b2.append_array(range(0, min_b2)) # Before block/air
@@ -410,9 +411,9 @@ class TogetherStrategy extends Strategy:
 		# Mark nearby cells as full if close to the "border"
 		var yes_b2 := []
 		if leftmost - min_b2 < water_left2:
-			yes_b2.append_array(range(rightmost + 1, rightmost + 1 + water_left2 - (leftmost - min_b2)))
+			yes_b2.append_array(range(rightmost + 1, min(rightmost + 1 + water_left2 - (leftmost - min_b2), 2 * _b_len())))
 		if max_b2 - rightmost < water_left2:
-			yes_b2.append_array(range(leftmost - (water_left2 - (max_b2 - rightmost)), leftmost))
+			yes_b2.append_array(range(max(0, leftmost - (water_left2 - (max_b2 - rightmost))), leftmost))
 		for b2 in yes_b2:
 			if _content(a, b2) != Content.Water:
 				any = true
@@ -511,7 +512,7 @@ class SeparateStrategy extends Strategy:
 		return b2_max - b2_min + 1
 
 	func _apply(a: int) -> bool:
-		if _a_hints()[a].water_count_type != E.HintType.Separated:
+		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
