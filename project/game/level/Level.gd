@@ -202,7 +202,7 @@ class HintVisibility:
 		var all_aqs := grid.all_aquarium_counts()
 		ghints.expected_aquariums.clear()
 		for aq in expected_aquariums:
-			ghints.expected_aquariums = all_aqs.get(aq, 0)
+			ghints.expected_aquariums[aq] = all_aqs.get(aq, 0)
 		for i in grid.rows():
 			_update_line_hint(grid.row_hints()[i], row[i])
 		for j in grid.cols():
