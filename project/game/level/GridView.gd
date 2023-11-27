@@ -6,7 +6,7 @@ signal updated
 signal mistake_made
 signal updated_size
 
-const STARTUP_DELAY = 0.1
+const STARTUP_DELAY = 0.07
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 const CELL_CORNER = preload("res://game/level/cells/CellCorner.tscn")
 const PREVIEW_DRAG_COLORS = {

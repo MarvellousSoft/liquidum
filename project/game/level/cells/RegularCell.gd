@@ -2,7 +2,7 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
-const STARTUP_DELAY = 0.1
+const STARTUP_DELAY = 0.07
 const BOAT_ALPHA_SPEED = 1.0
 const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7

@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=54 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -13,11 +13,9 @@
 [ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/cell/single_button_normal.png" id="11_4w8p5"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/cell/single_button_pressed.png" id="12_8pxsf"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/cell/single_button_hover.png" id="13_0ph6y"]
-[ext_resource type="Texture2D" uid="uid://dqki8j2vmoesq" path="res://assets/images/ui/cell/single_button_disabled.png" id="14_g5ol0"]
 [ext_resource type="Texture2D" uid="uid://cc5o7ctb2q2y3" path="res://assets/images/ui/cell/diagonal_button_normal.png" id="15_2vt7g"]
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/cell/diagonal_button_pressed.png" id="16_g5nkk"]
 [ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/cell/diagonal_button_hover.png" id="17_g3cup"]
-[ext_resource type="Texture2D" uid="uid://dcyidkiwytat7" path="res://assets/images/ui/cell/diagonal_button_disabled.png" id="18_hjcq3"]
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/cell/diagonal_button_mask.png" id="19_sucjp"]
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="20_6vhtd"]
 [ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/cell/wall_hint_dec_diag.png" id="21_23xke"]
@@ -449,7 +447,6 @@ focus_mode = 0
 texture_normal = ExtResource("11_4w8p5")
 texture_pressed = ExtResource("12_8pxsf")
 texture_hover = ExtResource("13_0ph6y")
-texture_disabled = ExtResource("14_g5ol0")
 
 [node name="TopLeft" type="TextureButton" parent="Buttons"]
 layout_mode = 0
@@ -460,7 +457,6 @@ focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
-texture_disabled = ExtResource("18_hjcq3")
 texture_click_mask = ExtResource("19_sucjp")
 
 [node name="TopRight" type="TextureButton" parent="Buttons"]
@@ -473,7 +469,6 @@ focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
-texture_disabled = ExtResource("18_hjcq3")
 texture_click_mask = ExtResource("19_sucjp")
 
 [node name="BottomRight" type="TextureButton" parent="Buttons"]
@@ -486,7 +481,6 @@ focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
-texture_disabled = ExtResource("18_hjcq3")
 texture_click_mask = ExtResource("19_sucjp")
 
 [node name="BottomLeft" type="TextureButton" parent="Buttons"]
@@ -499,7 +493,6 @@ focus_mode = 0
 texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
-texture_disabled = ExtResource("18_hjcq3")
 texture_click_mask = ExtResource("19_sucjp")
 
 [node name="Hints" type="Control" parent="."]
