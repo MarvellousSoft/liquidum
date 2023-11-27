@@ -13,16 +13,19 @@ func load_all_levels() -> void:
 	var ids := levels.keys()
 	ids.sort_custom(func(a, b): return levels[a].full_name < levels[b].full_name)
 	for id in ids:
-		var button := Button.new()
-		button.name = id
-		button.text = levels[id].full_name
-		button.pressed.connect(load_level.bind(id))
-		button.focus_mode = Control.FOCUS_NONE
+		var button := preload("res://game/editor_menu/EditorLevelButton.tscn").instantiate()
+		button.setup(id, levels[id].full_name)
+		button.open.connect(load_level)
+		button.delete.connect(delete_level)
 		LevelNode.add_child(button)
 
 func load_level(id: String) -> void:
 	var level = Global.create_level(GridImpl.empty_editor(1, 1), id)
 	TransitionManager.push_scene(level)
+
+func delete_level(id: String) -> void:
+	FileManager.clear_editor_level(id)
+	load_all_levels()
 
 func _on_create_new_level_pressed() -> void:
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))

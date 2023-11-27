@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcdc1uvu7weq5"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_d6ccn"]
+[ext_resource type="Script" path="res://game/editor_menu/EditorLevelButton.gd" id="2_ol4g6"]
+
+[node name="EditorLevelButton" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -1996.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_d6ccn")
+theme_override_constants/separation = 30
+script = ExtResource("2_ol4g6")
+
+[node name="OpenButton" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Level ??"
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 2
+text = "X"
+
+[connection signal="pressed" from="OpenButton" to="." method="_on_open_button_pressed"]
+[connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

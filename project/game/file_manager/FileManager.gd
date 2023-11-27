@@ -40,6 +40,7 @@ func change_current_profile(profile: String) -> void:
 	save_current_profile()
 	load_profile()
 
+# Does not clear editor levels
 func clear_whole_profile(profile: String) -> void:
 	clear_profile(profile)
 	LevelLister.clear_all_level_saves(profile)
@@ -112,8 +113,8 @@ func save_level(level_name: String, data: UserLevelSaveData) -> void:
 func clear_level(level_name: String, profile: String) -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
 
-func _editor_dir() -> String:
-	return "%s/editor" % _profile_dir()
+func _editor_dir(profile := "") -> String:
+	return "%s/editor" % _profile_dir(profile)
 
 const METADATA := ".metadata"
 
@@ -140,6 +141,10 @@ func load_editor_level(id: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_editor_dir(), _data_file(id)))
 	assert(data == null or data.full_name.is_empty())
 	return data
+
+func clear_editor_level(id: String, profile := "") -> void:
+	_delete_file(_editor_dir(profile), _data_file(id))
+	_delete_file(_editor_dir(profile), id + METADATA)
 
 const DATA_DIR := "res://database/levels"
 
