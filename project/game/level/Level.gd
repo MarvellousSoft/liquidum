@@ -135,6 +135,7 @@ func update_timer_label() -> void:
 		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
 
 func win() -> void:
+	running_time = false
 	AudioManager.play_sfx("win_level")
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save()
