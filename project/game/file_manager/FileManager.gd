@@ -23,9 +23,7 @@ const CURRENT_PROFILE := "user://cur_profile.txt"
 
 func load_current_profile() -> void:
 	if not FileAccess.file_exists(CURRENT_PROFILE):
-		current_profile = DEFAULT_PROFILE
-		save_current_profile()
-		return
+		return change_current_profile(DEFAULT_PROFILE)
 	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.READ)
 	var profile_name := file.get_as_text().strip_edges()
 	if profile_name.is_valid_identifier():
@@ -36,6 +34,11 @@ func load_current_profile() -> void:
 func save_current_profile() -> void:
 	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.WRITE)
 	file.store_string(current_profile)
+
+func change_current_profile(profile: String) -> void:
+	current_profile = profile
+	save_current_profile()
+	load_profile()
 
 func _profile_dir(profile := "") -> String:
 	if profile.is_empty():
