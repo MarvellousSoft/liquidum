@@ -7,6 +7,11 @@ const HINT_DELAY = .3
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 
 func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
+	if not editor_mode and expected.is_empty():
+		hide()
+		return
+	show()
+	
 	await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
 	
