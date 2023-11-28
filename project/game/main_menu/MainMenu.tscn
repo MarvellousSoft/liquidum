@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=6 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
+[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="3_2f32g"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
+shader = ExtResource("3_2f32g")
+shader_parameter/wave_count = 9.0
+shader_parameter/speed = 0.7
+shader_parameter/height = 0.005
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -10,29 +17,79 @@ anchors_preset = 0
 theme = ExtResource("1_8bxuf")
 script = ExtResource("1_il4q0")
 
-[node name="Version" type="Label" parent="."]
-layout_mode = 0
-offset_left = 2563.0
-offset_top = 1969.0
-offset_right = 3813.0
-offset_bottom = 2137.0
-theme_override_font_sizes/font_size = 120
-text = "VERSION"
-horizontal_alignment = 2
+[node name="Title" type="Control" parent="."]
+anchors_preset = 0
 
-[node name="LevelButtons" type="VBoxContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="Title"]
 layout_mode = 0
-offset_left = 252.0
-offset_top = 157.0
-offset_right = 902.0
-offset_bottom = 857.0
-theme_override_constants/separation = 100
+offset_top = 441.0
+offset_right = 3860.0
+offset_bottom = 941.0
+
+[node name="TitleLabel" type="Label" parent="Title/CenterContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/shadow_offset_x = 20
+theme_override_constants/shadow_offset_y = 20
+theme_override_constants/shadow_outline_size = 30
+theme_override_font_sizes/font_size = 500
+text = "Liquidum"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ShaderEffect" type="ColorRect" parent="Title"]
+material = SubResource("ShaderMaterial_hu5ly")
+layout_mode = 0
+offset_left = -51.0
+offset_top = -133.0
+offset_right = 3949.0
+offset_bottom = 1067.0
+
+[node name="MainButtonsContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1000.0
+offset_right = 3860.0
+offset_bottom = 2000.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 65
 alignment = 1
 
-[node name="EditorButton" type="Button" parent="LevelButtons"]
+[node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 focus_mode = 0
-text = "Level Editor"
+text = "PLAY_BUTTON"
+
+[node name="EditorButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+text = "LEVEL_EDITOR_BUTTON"
+
+[node name="ExitButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "EXIT_BUTTON"
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 0
+offset_left = 2576.0
+offset_top = 1987.0
+offset_right = 3826.0
+offset_bottom = 2155.0
+theme_override_font_sizes/font_size = 90
+text = "VERSION"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
 
@@ -43,27 +100,20 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 3329.0
-offset_top = 1795.0
-offset_right = 3791.0
-offset_bottom = 1920.0
+offset_left = 82.0
+offset_top = 58.0
+offset_right = 544.0
+offset_bottom = 183.0
 grow_horizontal = 0
 grow_vertical = 2
 focus_mode = 0
 text = "PROFILE: ?"
 
-[node name="ExitButton" type="Button" parent="."]
-layout_mode = 2
-offset_left = 90.0
-offset_top = 1965.0
-offset_right = 740.0
-offset_bottom = 2090.0
-focus_mode = 0
-text = "EXIT"
-
-[connection signal="mouse_entered" from="LevelButtons/EditorButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="LevelButtons/EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_exit_button_pressed"]
+[connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
+[connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
-[connection signal="mouse_entered" from="ExitButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

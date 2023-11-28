@@ -1,7 +1,6 @@
 extends Control
 
 @onready var Version: Label = $Version
-@onready var LevelButtons: VBoxContainer = $LevelButtons
 @onready var ProfileButton: Button = $ProfileButton
 
 func _ready():
@@ -16,7 +15,7 @@ func _ready():
 
 
 func _enter_tree() -> void:
-	call_deferred("update_open_levels")
+	#call_deferred("update_open_levels")
 	call_deferred("update_profile_button")
 
 
@@ -24,22 +23,22 @@ func update_profile_button() -> void:
 	ProfileButton.text = "%s: %s" % [tr("PROFILE"), FileManager.current_profile]
 
 
-func update_open_levels() -> void:
-	while LevelButtons.get_child_count() > 1:
-		var c := LevelButtons.get_child(LevelButtons.get_child_count() - 1)
-		LevelButtons.remove_child(c)
-		c.queue_free()
-	for section in range(1, 100):
-		var mx := LevelLister.get_max_unlocked_level(section)
-		if mx == 0:
-			break
-		for i in range(1, mx + 1):
-			var button := Button.new()
-			button.text = "%d - %d" % [section, i]
-			button.pressed.connect(_on_level_button_pressed.bind(section, i))
-			button.mouse_entered.connect(_on_button_mouse_entered)
-			button.focus_mode = Control.FOCUS_NONE
-			LevelButtons.add_child(button)
+#func update_open_levels() -> void:
+#	while LevelButtons.get_child_count() > 1:
+#		var c := LevelButtons.get_child(LevelButtons.get_child_count() - 1)
+#		LevelButtons.remove_child(c)
+#		c.queue_free()
+#	for section in range(1, 100):
+#		var mx := LevelLister.get_max_unlocked_level(section)
+#		if mx == 0:
+#			break
+#		for i in range(1, mx + 1):
+#			var button := Button.new()
+#			button.text = "%d - %d" % [section, i]
+#			button.pressed.connect(_on_level_button_pressed.bind(section, i))
+#			button.mouse_entered.connect(_on_button_mouse_entered)
+#			button.focus_mode = Control.FOCUS_NONE
+#			LevelButtons.add_child(button)
 
 func _on_level_button_pressed(section: int, level: int) -> void:
 	AudioManager.play_sfx("button_pressed")
