@@ -33,6 +33,11 @@ func _ready():
 	AnimPlayer.seek(randf_range(0.0, AnimPlayer.current_animation_length))
 
 
+func _input(event):
+	if event.is_action_pressed("pause") and focused:
+		_on_back_button_pressed()
+
+
 func _process(dt):
 	if focused:
 		for node in [Levels, BackButton]:

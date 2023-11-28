@@ -1,5 +1,7 @@
 extends Control
 
+enum STATES {MAIN_MENU, LEVEL_HUB}
+
 const CAM_POS = {
 	"menu": Vector2(1930, 1080),
 	"level_hub": Vector2(1930, -1280),
@@ -12,8 +14,11 @@ const NORMAL_ZOOM = 1.0
 @onready var Version: Label = $Version
 @onready var ProfileButton: Button = $ProfileButton
 @onready var Camera = $Camera2D
+@onready var LevelHub = $LevelHub
+@onready var Settings = $SettingsScreen
 
 var cam_target_zoom = NORMAL_ZOOM
+var cur_state = STATES.MAIN_MENU
 
 func _ready():
 	randomize()
@@ -36,6 +41,14 @@ func _process(dt):
 			z = cam_target_zoom
 		Camera.zoom.x = z
 		Camera.zoom.y = z
+
+
+func _unhandled_input(event):
+	if event.is_action_pressed("pause"):
+		if cur_state == STATES.MAIN_MENU:
+			Settings.toggle_pause()
+		elif cur_state == STATES.LEVEL_HUB and not LevelHub.level_focused:
+			_on_back_button_pressed()
 
 
 func _enter_tree() -> void:
@@ -73,11 +86,13 @@ func _on_button_mouse_entered():
 func _on_play_pressed():
 	AudioManager.play_sfx("button_pressed")
 	Camera.position = CAM_POS.level_hub
+	cur_state = STATES.LEVEL_HUB
 
 
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
 	Camera.position = CAM_POS.menu
+	cur_state = STATES.MAIN_MENU
 
 
 func _on_level_hub_enable_focus(pos, _my_section):

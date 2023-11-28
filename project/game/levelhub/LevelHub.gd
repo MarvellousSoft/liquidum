@@ -5,6 +5,7 @@ signal disable_focus()
 
 @onready var Sections = $Sections
 
+var level_focused := false
 
 func _ready():
 	update_sections()
@@ -23,8 +24,12 @@ func update_sections():
 
 
 func _on_level_section_enable_focus(pos, my_section):
+	level_focused = true
 	enable_focus.emit(pos, my_section)
 
 
 func _on_level_section_disable_focus():
 	disable_focus.emit()
+	#Wait a frame to any back button event wont also trigger on level hub
+	await get_tree().process_frame
+	level_focused = false

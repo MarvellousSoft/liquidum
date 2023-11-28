@@ -17,11 +17,6 @@ func _ready():
 	BG.hide()
 
 
-func _input(event):
-	if event.is_action_pressed("pause"):
-		toggle_pause()
-
-
 func toggle_pause() -> void:
 	active = not active
 	if active:
