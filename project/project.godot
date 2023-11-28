@@ -27,6 +27,7 @@ Profile="*res://game/file_manager/Profile.gd"
 E="*res://game/level/grid/Enums.gd"
 Background="*res://game/ui/Background.tscn"
 ConfirmationScreen="*res://game/ui/ConfirmationScreen.tscn"
+SteamManager="*res://game/steam/SteamManager.gd"
 
 [debug]
 
