@@ -29,7 +29,6 @@ func _ready():
 	Levels.modulate.a = 0.0
 	Levels.hide()
 	MouseBlocker.hide()
-	AnimPlayer.play("float", -1, randf_range(.5, .75))
 	AnimPlayer.seek(randf_range(0.0, AnimPlayer.current_animation_length))
 
 
@@ -69,6 +68,7 @@ func setup(section, unlocked_levels) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
 		button.setup(section, i, i <= unlocked_levels)
+		button.pressed.connect(unfocus)
 
 
 func enable() -> void:

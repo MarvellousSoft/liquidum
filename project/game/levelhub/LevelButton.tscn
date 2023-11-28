@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7s60"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlw1d"]
 bg_color = Color(0.670588, 1, 0.819608, 1)
 border_width_left = 50
 border_width_top = 50
@@ -23,13 +23,13 @@ expand_margin_bottom = 50.0
 shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
 anti_aliasing_size = 7.338
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j7da"]
-bg_color = Color(0.439216, 0.929412, 0.929412, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k2t2"]
+bg_color = Color(0.670588, 1, 0.819608, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
 border_width_bottom = 50
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+border_color = Color(0.85098, 1, 0.886275, 1)
 corner_radius_top_left = 170
 corner_radius_top_right = 170
 corner_radius_bottom_right = 170
@@ -39,17 +39,15 @@ expand_margin_left = 90.0
 expand_margin_top = 50.0
 expand_margin_right = 90.0
 expand_margin_bottom = 50.0
-shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
-shadow_size = 20
 anti_aliasing_size = 7.338
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h33ih"]
-bg_color = Color(0.113725, 0.45098, 0.45098, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6kju"]
+bg_color = Color(0.85098, 1, 0.886275, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
 border_width_bottom = 50
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+border_color = Color(0, 0.0352941, 0.141176, 1)
 corner_radius_top_left = 170
 corner_radius_top_right = 170
 corner_radius_bottom_right = 170
@@ -59,8 +57,6 @@ expand_margin_left = 90.0
 expand_margin_top = 50.0
 expand_margin_right = 90.0
 expand_margin_bottom = 50.0
-shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
-shadow_size = 20
 anti_aliasing_size = 7.338
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q23fe"]
@@ -112,9 +108,9 @@ theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
 theme_override_colors/font_outline_color = Color(0.0784314, 0.364706, 0.529412, 1)
 theme_override_constants/outline_size = 60
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_b7s60")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2j7da")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_h33ih")
+theme_override_styles/normal = SubResource("StyleBoxFlat_mlw1d")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1k2t2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i6kju")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_q23fe")
 text = "1"
 
@@ -129,4 +125,5 @@ offset_bottom = 389.145
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
 
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

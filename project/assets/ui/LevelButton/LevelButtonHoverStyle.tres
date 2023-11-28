@@ -1,0 +1,19 @@
+[gd_resource type="StyleBoxFlat" format=3 uid="uid://c34230wpfap6f"]
+
+[resource]
+bg_color = Color(0.670588, 1, 0.819608, 1)
+border_width_left = 50
+border_width_top = 50
+border_width_right = 50
+border_width_bottom = 50
+border_color = Color(0.85098, 1, 0.886275, 1)
+corner_radius_top_left = 170
+corner_radius_top_right = 170
+corner_radius_bottom_right = 170
+corner_radius_bottom_left = 170
+corner_detail = 20
+expand_margin_left = 90.0
+expand_margin_top = 50.0
+expand_margin_right = 90.0
+expand_margin_bottom = 50.0
+anti_aliasing_size = 7.338

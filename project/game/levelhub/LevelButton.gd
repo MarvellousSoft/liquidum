@@ -1,5 +1,20 @@
 extends Control
 
+const STYLES = {
+	"normal": {
+		"normal": preload("res://assets/ui/LevelButton/LevelButtonNormalStyle.tres"),
+		"hover": preload("res://assets/ui/LevelButton/LevelButtonHoverStyle.tres"),
+		"pressed": preload("res://assets/ui/LevelButton/LevelButtonPressedStyle.tres"),
+	},
+	"completed": {
+		"normal": preload("res://assets/ui/LevelButton/LevelButtonCompletedNormalStyle.tres"),
+		"hover": preload("res://assets/ui/LevelButton/LevelButtonCompletedHoverStyle.tres"),
+		"pressed": preload("res://assets/ui/LevelButton/LevelButtonCompletedPressedStyle.tres"),
+	}
+}
+
+signal pressed
+
 @onready var MainButton = $Button
 @onready var ShaderEffect = $Button/ShaderEffect
 
@@ -20,8 +35,16 @@ func setup(section : int, level : int, active : bool) -> void:
 	if active:
 		enable()
 		data = LevelLister.get_game_level_data(section, level)
+		change_style_boxes(data and data.completed())
 	else:
 		disable()
+
+
+func change_style_boxes(completed : bool) -> void:
+	var styles = STYLES.completed if completed else STYLES.normal
+	MainButton.add_theme_stylebox_override("normal", styles.normal)
+	MainButton.add_theme_stylebox_override("hover", styles.hover)
+	MainButton.add_theme_stylebox_override("pressed", styles.pressed)
 
 
 func set_effect_alpha(value : float) -> void:
@@ -45,3 +68,11 @@ func _on_button_pressed():
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var level_node := Global.create_level(grid, level_name, level_data.full_name)
 		TransitionManager.push_scene(level_node)
+		
+		#Wait a bit transition animation to send signal
+		await get_tree().create_timer(.5).timeout
+		pressed.emit()
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
