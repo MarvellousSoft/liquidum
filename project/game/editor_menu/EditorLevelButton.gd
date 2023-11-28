@@ -1,6 +1,7 @@
 extends Control
 
-signal open(id: String)
+signal play(id: String)
+signal edit(id: String)
 signal delete(id: String)
 
 var id: String
@@ -9,14 +10,13 @@ var id: String
 
 func setup(id_: String, full_name: String) -> void:
 	id = id_
-	$OpenButton.text = full_name
+	$PlayButton.text = full_name
 
 func _ready() -> void:
 	UploadButton.disabled = not SteamManager.enabled
 
-func _on_open_button_pressed():
-	open.emit(id)
-
+func _on_play_button_pressed():
+	play.emit(id)
 
 func _on_delete_button_pressed():
 	if ConfirmationScreen.start_confirmation():
@@ -42,3 +42,6 @@ func _on_upload_button_pressed() -> void:
 		pass
 	UploadButton.disabled = false
 
+
+func _on_edit_button_pressed():
+	edit.emit(id)

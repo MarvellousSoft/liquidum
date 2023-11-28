@@ -157,6 +157,7 @@ layout_mode = 2
 text = "Reset"
 
 [node name="PlaytestButton" type="Button" parent="LeftButtons"]
+visible = false
 layout_mode = 2
 focus_mode = 0
 text = "Playtest"

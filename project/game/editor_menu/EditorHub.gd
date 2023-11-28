@@ -16,14 +16,22 @@ func load_all_levels() -> void:
 	for id in ids:
 		var button := preload("res://game/editor_menu/EditorLevelButton.tscn").instantiate()
 		button.setup(id, levels[id].full_name)
-		button.open.connect(load_level)
+		button.edit.connect(load_level)
+		button.play.connect(play_level)
 		button.delete.connect(delete_level)
 		LevelNode.add_child(button)
 
 
 func load_level(id: String) -> void:
 	AudioManager.play_sfx("button_pressed")
-	var level = Global.create_level(GridImpl.empty_editor(1, 1), id, "")
+	# Will be loaded
+	var level := Global.create_level(GridImpl.empty_editor(1, 1), id, "")
+	TransitionManager.push_scene(level)
+
+func play_level(id: String) -> void:
+	AudioManager.play_sfx("button_pressed")
+	var data := FileManager.load_editor_level(id)
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), "", data.full_name)
 	TransitionManager.push_scene(level)
 
 
