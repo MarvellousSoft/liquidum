@@ -5,6 +5,7 @@ extends Control
 
 var my_section := -1
 var my_level := -1
+var data = false
 
 
 func _ready():
@@ -18,6 +19,7 @@ func setup(section : int, level : int, active : bool) -> void:
 	MainButton.text = str(level)
 	if active:
 		enable()
+		data = LevelLister.get_game_level_data(section, level)
 	else:
 		disable()
 

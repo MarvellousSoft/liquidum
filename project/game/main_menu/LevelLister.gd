@@ -15,6 +15,12 @@ static func get_levels_in_section(section: int) -> int:
 	return i - 1
 
 
+static func get_game_level_data(section : int, level : int):
+	if not FileManager.has_level_data(section, level):
+		push_error("Not a valid level (section %s - level %s)" % [str(section), str(level)])
+	return FileManager.load_level(LevelLister.level_name(section, level))
+
+
 static func section_complete(section: int) -> bool:
 	var count_uncompleted := 0
 	for i in range(1, 100):
