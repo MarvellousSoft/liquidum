@@ -15,10 +15,11 @@ func _ready() -> void:
 
 func load_level() -> LevelData:
 	var info := Steam.getItemInstallInfo(id)
+	if not info.ret:
+		return null
 	var folder := ProjectSettings.localize_path(info.folder)
-	if info.ret == true and DirAccess.dir_exists_absolute(folder):
-		return FileManager.load_workshop_level(folder)
-	return null
+	return FileManager.load_workshop_level(folder)
+
 
 func try_check_download() -> void:
 	var level := load_level()
@@ -27,8 +28,6 @@ func try_check_download() -> void:
 		Open.disabled = false
 	else:
 		Steam.downloadItem(id, true)
-
-
 
 func _on_open_pressed() -> void:
 	var level_data := load_level()
