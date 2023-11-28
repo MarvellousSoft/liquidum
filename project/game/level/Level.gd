@@ -29,17 +29,24 @@ var level_name := ""
 var full_name: String
 # Has completion data but outdated grid data
 var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
+var workshop_id := -1
 
 func _ready():
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
 	setup()
+	if workshop_id != -1 and SteamManager.enabled:
+		Steam.startPlaytimeTracking([workshop_id])
 
 func _enter_tree():
 	%PlaytestButton.visible = false
 	if GridNode:
 		scale_grid()
+
+func _exit_tree() -> void:
+	if workshop_id != -1 and SteamManager.enabled:
+		Steam.stopPlaytimeTracking([workshop_id])
 
 func _process(dt):
 	if process_game and not grid.editor_mode():
