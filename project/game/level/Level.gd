@@ -13,6 +13,8 @@ const DESIRED_GRID_W = 1300
 	"boat": %BoatCounter,
 	"mistake": %MistakeCounter,
 }
+@onready var PlaytestButton = %PlaytestButton
+@onready var BrushPicker = %BrushPicker
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
 @onready var DevButtons: DevPanel = $DevButtons
@@ -35,6 +37,7 @@ func _ready():
 	setup()
 
 func _enter_tree():
+	%PlaytestButton.visible = false
 	if GridNode:
 		scale_grid()
 
@@ -67,9 +70,9 @@ func setup(try_load := true) -> void:
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
 				dummy_save = save
-	$BrushPicker.setup(grid.editor_mode())
+	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
-	$LeftButtons/PlaytestButton.visible = editor_mode()
+	PlaytestButton.visible = editor_mode()
 	if not editor_mode():
 		update_expected_waters = GridNode.get_expected_waters() > 0
 		update_expected_boats = GridNode.get_expected_boats() > 0
@@ -136,6 +139,7 @@ func update_timer_label() -> void:
 		TimerLabel.text = "%02d:%02d:%02d" % [hours,minutes,seconds]
 	else:
 		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
+
 
 func win() -> void:
 	running_time = false
@@ -212,6 +216,7 @@ class HintVisibility:
 		for j in grid.cols():
 			_update_line_hint(grid.col_hints()[j], col[j])
 
+
 func _apply_visibility(h: HintVisibility) -> void:
 	if not editor_mode():
 		return
@@ -223,6 +228,7 @@ func _apply_visibility(h: HintVisibility) -> void:
 	AquariumHints.set_should_be_visible(aqs)
 	GridNode.set_counters_visibility(h.row, h.col)
 
+
 func _hint_visibility() -> HintVisibility:
 	var h := HintVisibility.new()
 	h.total_water = Counters.water.should_be_visible()
@@ -232,8 +238,10 @@ func _hint_visibility() -> HintVisibility:
 	h.col = GridNode.col_hints_should_be_visible()
 	return h
 
+
 func _update_visibilities(new_grid: GridModel) -> void:
 	_hint_visibility().apply_to_grid(new_grid)
+
 
 func _get_solution_grid() -> GridModel:
 	assert(editor_mode())
@@ -241,9 +249,11 @@ func _get_solution_grid() -> GridModel:
 	_update_visibilities(new_grid)
 	return new_grid
 
+
 func _on_playtest_button_pressed() -> void:
 	var new_level = Global.create_level(_get_solution_grid(), "", full_name)
 	TransitionManager.push_scene(new_level)
+
 
 func maybe_save() -> void:
 	if not level_name.is_empty():
@@ -261,6 +271,9 @@ func maybe_save() -> void:
 			FileManager.save_level(level_name, dummy_save)
 
 func reset_level() -> void:
+	if ConfirmationScreen.start_confirmation("CONFIRM_RESET_LEVEL"):
+		if not await ConfirmationScreen.pressed:
+			return
 	GridNode.grid_logic.clear_all()
 	GridNode.setup(GridNode.grid_logic)
 	running_time = 0
