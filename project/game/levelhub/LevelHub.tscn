@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://3tdi0fi37paw"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelHub.gd" id="1_35tjk"]
-[ext_resource type="PackedScene" uid="uid://dns62u0n4j1k3" path="res://game/levelhub/LevelSession.tscn" id="2_quts5"]
+[ext_resource type="PackedScene" uid="uid://dns62u0n4j1k3" path="res://game/levelhub/LevelSection.tscn" id="2_6hlcq"]
 
 [node name="LevelHub" type="Control"]
 layout_mode = 3
@@ -12,85 +12,91 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_35tjk")
 
-[node name="Sessions" type="Control" parent="."]
+[node name="Sections" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.8, 0.8)
 
-[node name="LevelSession1" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection1" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 963.75
 offset_top = 781.25
 offset_right = 923.75
 offset_bottom = 741.25
 
-[node name="LevelSession2" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection2" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 2361.25
 offset_top = 637.5
 offset_right = 2321.25
 offset_bottom = 597.5
 
-[node name="Button" parent="Sessions/LevelSession2" index="0"]
+[node name="Button" parent="Sections/LevelSection2" index="0"]
 text = "2"
 
-[node name="LevelSession3" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection3" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 3617.5
 offset_top = 778.75
 offset_right = 3577.5
 offset_bottom = 738.75
 
-[node name="Button" parent="Sessions/LevelSession3" index="0"]
+[node name="Button" parent="Sections/LevelSection3" index="0"]
 text = "3"
 
-[node name="LevelSession4" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection4" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 1288.75
 offset_top = 1743.75
 offset_right = 1248.75
 offset_bottom = 1703.75
 
-[node name="Button" parent="Sessions/LevelSession4" index="0"]
+[node name="Button" parent="Sections/LevelSection4" index="0"]
 text = "4"
 
-[node name="LevelSession5" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection5" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 2498.75
 offset_top = 1591.25
 offset_right = 2458.75
 offset_bottom = 1551.25
 
-[node name="Button" parent="Sessions/LevelSession5" index="0"]
+[node name="Button" parent="Sections/LevelSection5" index="0"]
 text = "5"
 
-[node name="LevelSession6" parent="Sessions" instance=ExtResource("2_quts5")]
+[node name="LevelSection6" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 3705.0
 offset_top = 1772.5
 offset_right = 3665.0
 offset_bottom = 1732.5
 
-[node name="Button" parent="Sessions/LevelSession6" index="0"]
+[node name="Button" parent="Sections/LevelSection6" index="0"]
 text = "6"
 
-[connection signal="disable_focus" from="Sessions/LevelSession1" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession1" to="." method="_on_level_session_enable_focus"]
-[connection signal="disable_focus" from="Sessions/LevelSession2" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession2" to="." method="_on_level_session_enable_focus"]
-[connection signal="disable_focus" from="Sessions/LevelSession3" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession3" to="." method="_on_level_session_enable_focus"]
-[connection signal="disable_focus" from="Sessions/LevelSession4" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession4" to="." method="_on_level_session_enable_focus"]
-[connection signal="disable_focus" from="Sessions/LevelSession5" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession5" to="." method="_on_level_session_enable_focus"]
-[connection signal="disable_focus" from="Sessions/LevelSession6" to="." method="_on_level_session_disable_focus"]
-[connection signal="enable_focus" from="Sessions/LevelSession6" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection1" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection1" to="." method="_on_level_section_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection2" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection2" to="." method="_on_level_section_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection3" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection3" to="." method="_on_level_section_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection4" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection4" to="." method="_on_level_section_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection5" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection5" to="." method="_on_level_section_enable_focus"]
+[connection signal="disable_focus" from="Sections/LevelSection6" to="." method="_on_level_section_disable_focus"]
+[connection signal="enable_focus" from="Sections/LevelSection6" to="." method="_on_level_section_enable_focus"]
 
-[editable path="Sessions/LevelSession1"]
-[editable path="Sessions/LevelSession2"]
-[editable path="Sessions/LevelSession3"]
-[editable path="Sessions/LevelSession4"]
-[editable path="Sessions/LevelSession5"]
-[editable path="Sessions/LevelSession6"]
+[editable path="Sections/LevelSection1"]
+[editable path="Sections/LevelSection1/Levels/LevelButton1"]
+[editable path="Sections/LevelSection2"]
+[editable path="Sections/LevelSection2/Levels/LevelButton1"]
+[editable path="Sections/LevelSection3"]
+[editable path="Sections/LevelSection3/Levels/LevelButton1"]
+[editable path="Sections/LevelSection4"]
+[editable path="Sections/LevelSection4/Levels/LevelButton1"]
+[editable path="Sections/LevelSection5"]
+[editable path="Sections/LevelSection5/Levels/LevelButton1"]
+[editable path="Sections/LevelSection6"]
+[editable path="Sections/LevelSection6/Levels/LevelButton1"]

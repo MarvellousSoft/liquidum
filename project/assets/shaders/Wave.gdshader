@@ -15,6 +15,7 @@ uniform float blendingAmount = 0.6;
 // other
 uniform sampler2D noise;
 uniform vec4 wave_color : source_color;
+uniform float alpha : hint_range(0.0, 1.0) = 1.0;
 
 
 
@@ -44,7 +45,7 @@ void fragment() {
 
 
 	color.a *= 1.0 * alphaScalar * (ripple + ns.x * ns.y);
-	color.a = max(color.a - (ns.y * 0.45), 0.0) * wave_color.a;
+	color.a = max(color.a - (ns.y * 0.45), 0.0) * wave_color.a * alpha;
 
     COLOR = color;
 }

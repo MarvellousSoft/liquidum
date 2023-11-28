@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://dns62u0n4j1k3"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_enftx"]
-[ext_resource type="Script" path="res://game/levelhub/LevelSession.gd" id="1_esrw0"]
-[ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_2ci1h"]
-[ext_resource type="PackedScene" uid="uid://bjsmnin37pr8t" path="res://game/levelhub/LevelButton.tscn" id="4_gq81p"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
+[ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
+[ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
+[ext_resource type="PackedScene" uid="uid://bjsmnin37pr8t" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijmyt"]
 bg_color = Color(0.192157, 0.690196, 0.690196, 1)
@@ -86,7 +86,7 @@ shadow_size = 20
 anti_aliasing_size = 7.338
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1121v"]
-shader = ExtResource("3_2ci1h")
+shader = ExtResource("3_nwex1")
 shader_parameter/amplitude = 0.47
 shader_parameter/frequency = 7.63
 shader_parameter/rippleRate = 2.4
@@ -94,6 +94,7 @@ shader_parameter/waveAmplitude = 10.0
 shader_parameter/waveFrequency = 20.0
 shader_parameter/blendingAmount = 1.0
 shader_parameter/wave_color = Color(0.670588, 1, 0.819608, 1)
+shader_parameter/alpha = 1.0
 
 [sub_resource type="Animation" id="Animation_i0d6d"]
 length = 0.001
@@ -133,7 +134,7 @@ _data = {
 "float": SubResource("Animation_fsyhn")
 }
 
-[node name="LevelSession" type="Control"]
+[node name="LevelSection" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -142,8 +143,8 @@ offset_right = -3840.0
 offset_bottom = -2160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_enftx")
-script = ExtResource("1_esrw0")
+theme = ExtResource("1_8nqmb")
+script = ExtResource("2_5vo2a")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
@@ -169,7 +170,17 @@ offset_left = -154.749
 offset_top = -110.855
 offset_right = 345.251
 offset_bottom = 389.145
+mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
+
+[node name="MouseBlocker" type="ColorRect" parent="Button"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = -101.0
+offset_top = -65.0
+offset_right = 299.0
+offset_bottom = 335.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "float"
@@ -182,40 +193,60 @@ libraries = {
 anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
-[node name="LevelButton1" parent="Levels" instance=ExtResource("4_gq81p")]
-offset_left = -394.0
-offset_top = -838.0
-offset_right = -394.0
-offset_bottom = -838.0
+[node name="LevelButton1" parent="Levels" instance=ExtResource("4_2vvp1")]
+offset_left = -666.0
+offset_top = -828.0
+offset_right = -666.0
+offset_bottom = -828.0
 
-[node name="LevelButton2" parent="Levels" instance=ExtResource("4_gq81p")]
-offset_left = 730.0
-offset_top = -740.0
-offset_right = 730.0
-offset_bottom = -740.0
+[node name="LevelButton2" parent="Levels" instance=ExtResource("4_2vvp1")]
+offset_left = 640.0
+offset_top = -800.0
+offset_right = 640.0
+offset_bottom = -800.0
 
-[node name="LevelButton3" parent="Levels" instance=ExtResource("4_gq81p")]
-offset_left = 1236.0
-offset_top = 210.0
-offset_right = 1236.0
-offset_bottom = 210.0
+[node name="LevelButton3" parent="Levels" instance=ExtResource("4_2vvp1")]
+offset_left = 1114.0
+offset_top = 18.0
+offset_right = 1114.0
+offset_bottom = 18.0
 
-[node name="LevelButton4" parent="Levels" instance=ExtResource("4_gq81p")]
-offset_left = 410.0
-offset_top = 1104.0
-offset_right = 410.0
-offset_bottom = 1104.0
+[node name="LevelButton4" parent="Levels" instance=ExtResource("4_2vvp1")]
+offset_left = 550.0
+offset_top = 660.0
+offset_right = 550.0
+offset_bottom = 660.0
 
-[node name="LevelButton5" parent="Levels" instance=ExtResource("4_gq81p")]
-offset_left = -782.0
-offset_top = 852.0
-offset_right = -782.0
-offset_bottom = 852.0
+[node name="LevelButton5" parent="Levels" instance=ExtResource("4_2vvp1")]
+offset_left = -640.0
+offset_top = 600.0
+offset_right = -640.0
+offset_bottom = 600.0
 
-[node name="LevelButton6" parent="Levels" instance=ExtResource("4_gq81p")]
+[node name="LevelButton6" parent="Levels" instance=ExtResource("4_2vvp1")]
 offset_left = -1136.0
 offset_top = -146.0
 offset_right = -1136.0
 offset_bottom = -146.0
 
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -791.0
+offset_top = -447.0
+offset_right = -329.0
+offset_bottom = -322.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+focus_mode = 0
+text = "BACK"
+
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+
+[editable path="Levels/LevelButton1"]

@@ -92,6 +92,7 @@ shader_parameter/waveAmplitude = 10.0
 shader_parameter/waveFrequency = 20.0
 shader_parameter/blendingAmount = 1.0
 shader_parameter/wave_color = Color(0.670588, 1, 0.819608, 0.34902)
+shader_parameter/alpha = 1.0
 
 [node name="LevelButton" type="Control"]
 layout_mode = 3
@@ -123,4 +124,7 @@ offset_left = -154.749
 offset_top = -110.855
 offset_right = 345.251
 offset_bottom = 389.145
+mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
