@@ -100,6 +100,7 @@ theme = ExtResource("1_ocbvr")
 script = ExtResource("1_iig44")
 
 [node name="Button" type="Button" parent="."]
+layout_mode = 0
 offset_right = 189.0
 offset_bottom = 273.0
 focus_mode = 0

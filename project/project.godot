@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Puzzle Aqua"
+config/name="Liquidum"
 run/main_scene="res://game/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 boot_splash/bg_color=Color(0.192157, 0.690196, 0.690196, 1)

@@ -4,6 +4,8 @@ const CAM_POS = {
 	"menu": Vector2(1930, 1080),
 	"level_hub": Vector2(1930, -1280),
 }
+const EPS = .01
+const ZOOM_LERP = 4.0
 const LEVEL_ZOOM = 3.0
 const NORMAL_ZOOM = 1.0
 
@@ -26,7 +28,13 @@ func _ready():
 
 
 func _process(dt):
-	pass
+	var z = Camera.zoom.x
+	if z != cam_target_zoom:
+		z = lerp(z, cam_target_zoom, clamp(ZOOM_LERP*dt, 0.0, 1.0))
+		if abs(z - cam_target_zoom) <= EPS:
+			z = cam_target_zoom
+		Camera.zoom.x = z
+		Camera.zoom.y = z
 
 
 func _enter_tree() -> void:
