@@ -13,6 +13,7 @@ var options = {
 	"bgm_volume": 1.0,
 	"sfx_volume": 1.0,
 	"fullscreen": true,
+	"previous_windowed_pos": false,
 	"locale": 0,
 }
 

@@ -49,7 +49,7 @@ func toggle_fullscreen():
 	var window = get_window()
 	var cur_screen = window.get_current_screen()
 	if window.mode == Window.MODE_WINDOWED:
-		previous_windowed_pos = window.position
+		Profile.set_option("previous_windowed_pos", window.position)
 	window.mode = Window.MODE_FULLSCREEN if window.mode == Window.MODE_WINDOWED else Window.MODE_WINDOWED
 	Profile.set_option("fullscreen", window.mode != Window.MODE_WINDOWED, true)
 	window.borderless =  window.mode != Window.MODE_WINDOWED
@@ -57,8 +57,9 @@ func toggle_fullscreen():
 		var s_size = DisplayServer.screen_get_size()
 		var size = s_size*.8
 		window.size = size
-		if previous_windowed_pos:
-			window.position = previous_windowed_pos
+		var prev = Profile.get_option("previous_windowed_pos")
+		if prev:
+			window.position = prev
 		else:
 			window.position = Vector2(s_size.x/2 - size.x/2, size.y/2)
 		window.set_current_screen(cur_screen)
