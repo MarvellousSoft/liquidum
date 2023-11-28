@@ -10,6 +10,11 @@ const EPS = .001
 const ZOOM_LERP = 4.0
 const LEVEL_ZOOM = 2.6
 const NORMAL_ZOOM = 1.0
+const ICONS = {
+	"fish": preload("res://assets/images/ui/icons/double-fish.png"),
+	"turtle": preload("res://assets/images/ui/icons/turtle.png"),
+	"shrimp": preload("res://assets/images/ui/icons/shrimp.png"),
+}
 
 @onready var Version: Label = $Version
 @onready var ProfileButton: Button = $ProfileButton
@@ -44,7 +49,7 @@ func _process(dt):
 
 
 func _unhandled_input(event):
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("return"):
 		if cur_state == STATES.MAIN_MENU:
 			Settings.toggle_pause()
 		elif cur_state == STATES.LEVEL_HUB and not LevelHub.level_focused:
@@ -52,12 +57,16 @@ func _unhandled_input(event):
 
 
 func _enter_tree() -> void:
-	#call_deferred("update_open_levels")
+	call_deferred("update_level_hub")
 	call_deferred("update_profile_button")
 
 
+func update_level_hub():
+	LevelHub.update_sections()
+
+
 func update_profile_button() -> void:
-	ProfileButton.text = "%s: %s" % [tr("PROFILE"), FileManager.current_profile]
+	ProfileButton.icon = ICONS[FileManager.current_profile]
 
 
 func _on_editor_button_pressed():

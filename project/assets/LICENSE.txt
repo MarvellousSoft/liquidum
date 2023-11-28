@@ -8,6 +8,8 @@ The following assets have an specific license/attribution to them.
 - images/ui/settings_button_normal.png
 - images/ui/settings_button_pressed.png
 - images/ui/settings_button_hover.png
+- images/ui/icons/double-fish.png
+- images/ui/icons/shrimp.png
 by Delapouite under CC BY 3.0
 
 - images/ui/checkbox_pressed.png
@@ -16,6 +18,7 @@ by Delapouite under CC BY 3.0
 by sbed under CC BY 3.0
 
 - images/ui/objects/timer_icon.png
+- images/ui/icons/turtle.png
 by Lorc under CC BY 3.0
 
 - audio/bgm/main.ogg

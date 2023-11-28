@@ -1,27 +1,32 @@
 extends Control
 
 @export var profile_name: String
-@onready var button: Button = $SelectButton
+@onready var MainButton: Button = $SelectButton
+@onready var Selected = $SelectButton/Selected
 
 signal select(profile: String)
 signal delete(profile: String)
 
 func _ready() -> void:
 	assert(not profile_name.is_empty())
-	$ProfileInfo.text = "%s: %d %s" % [profile_name, LevelLister.count_completed_levels(profile_name), tr(&"LEVELS_COMPLETED")]
+	$ProfileInfo.text = "%d %s" % [LevelLister.count_completed_levels(profile_name), tr(&"LEVELS_COMPLETED")]
 	if FileManager.current_profile == profile_name:
-		button.disabled = true
-		button.text = "SELECTED"
+		Selected.show()
 	else:
-		button.disabled = false
-		button.text = "SELECT"
+		Selected.hide()
 
 
 func _on_select_button_pressed():
+	AudioManager.play_sfx("button_pressed")
 	select.emit(profile_name)
 
 
 func _on_delete_button_pressed() -> void:
-	if ConfirmationScreen.start_confirmation():
+	AudioManager.play_sfx("button_back")
+	if ConfirmationScreen.start_confirmation("CONFIRM_DELETE_PROFILE"):
 		if await ConfirmationScreen.pressed:
 			delete.emit(profile_name)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

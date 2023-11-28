@@ -34,7 +34,7 @@ func _ready():
 
 
 func _input(event):
-	if event.is_action_pressed("pause") and focused:
+	if event.is_action_pressed("return") and focused:
 		_on_back_button_pressed()
 
 

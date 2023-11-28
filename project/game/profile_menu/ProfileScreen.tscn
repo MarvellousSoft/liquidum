@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bl27lmc6g415t"]
+[gd_scene load_steps=7 format=3 uid="uid://bl27lmc6g415t"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_jfir4"]
 [ext_resource type="Script" path="res://game/profile_menu/ProfileScreen.gd" id="2_4oxw6"]
 [ext_resource type="PackedScene" uid="uid://be6w11mud00mj" path="res://game/profile_menu/ProfileButton.tscn" id="3_irva6"]
+[ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_y8aab"]
+[ext_resource type="Texture2D" uid="uid://2oksbkw01gll" path="res://assets/images/ui/icons/turtle.png" id="5_0ooa3"]
+[ext_resource type="Texture2D" uid="uid://dbm5kpqt3p0hu" path="res://assets/images/ui/icons/shrimp.png" id="6_hojuy"]
 
 [node name="ProfileScreen" type="Control"]
 layout_mode = 3
@@ -16,45 +19,66 @@ script = ExtResource("2_4oxw6")
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 33.0
-offset_top = 42.0
-offset_right = 291.0
-offset_bottom = 167.0
+offset_left = 115.0
+offset_top = 95.0
+offset_right = 373.0
+offset_bottom = 220.0
 focus_mode = 0
 text = "BACK"
 
-[node name="ProfilesText" type="Label" parent="."]
+[node name="Title" type="Label" parent="."]
 layout_mode = 0
-offset_left = 291.0
-offset_top = 405.0
-offset_right = 1165.0
-offset_bottom = 503.0
-text = "AVAILABLE_PROFILES"
+offset_top = 376.0
+offset_right = 3860.0
+offset_bottom = 609.0
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 100
+theme_override_font_sizes/font_size = 150
+text = "CHANGE_PROFILE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Profiles" type="VBoxContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
-offset_left = 291.0
-offset_top = 542.0
-offset_right = 1295.0
-offset_bottom = 1811.0
-theme_override_constants/separation = 35
+offset_top = 800.0
+offset_right = 3860.0
+offset_bottom = 1840.0
 
-[node name="Fish" parent="Profiles" instance=ExtResource("3_irva6")]
+[node name="Profiles" type="HBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 250
+alignment = 1
+
+[node name="Fish" parent="CenterContainer/Profiles" instance=ExtResource("3_irva6")]
 layout_mode = 2
 profile_name = "fish"
 
-[node name="Turtle" parent="Profiles" instance=ExtResource("3_irva6")]
+[node name="SelectButton" parent="CenterContainer/Profiles/Fish" index="0"]
+icon = ExtResource("4_y8aab")
+
+[node name="Turtle" parent="CenterContainer/Profiles" instance=ExtResource("3_irva6")]
 layout_mode = 2
 profile_name = "turtle"
 
-[node name="Whale" parent="Profiles" instance=ExtResource("3_irva6")]
-layout_mode = 2
-profile_name = "whale"
+[node name="SelectButton" parent="CenterContainer/Profiles/Turtle" index="0"]
+icon = ExtResource("5_0ooa3")
 
+[node name="Shrimp" parent="CenterContainer/Profiles" instance=ExtResource("3_irva6")]
+layout_mode = 2
+profile_name = "shrimp"
+
+[node name="SelectButton" parent="CenterContainer/Profiles/Shrimp" index="0"]
+icon = ExtResource("6_hojuy")
+
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="delete" from="Profiles/Fish" to="." method="delete_profile"]
-[connection signal="select" from="Profiles/Fish" to="." method="select_profile"]
-[connection signal="delete" from="Profiles/Turtle" to="." method="delete_profile"]
-[connection signal="select" from="Profiles/Turtle" to="." method="select_profile"]
-[connection signal="delete" from="Profiles/Whale" to="." method="delete_profile"]
-[connection signal="select" from="Profiles/Whale" to="." method="select_profile"]
+[connection signal="delete" from="CenterContainer/Profiles/Fish" to="." method="delete_profile"]
+[connection signal="select" from="CenterContainer/Profiles/Fish" to="." method="select_profile"]
+[connection signal="delete" from="CenterContainer/Profiles/Turtle" to="." method="delete_profile"]
+[connection signal="select" from="CenterContainer/Profiles/Turtle" to="." method="select_profile"]
+[connection signal="delete" from="CenterContainer/Profiles/Shrimp" to="." method="delete_profile"]
+[connection signal="select" from="CenterContainer/Profiles/Shrimp" to="." method="select_profile"]
+
+[editable path="CenterContainer/Profiles/Fish"]
+[editable path="CenterContainer/Profiles/Turtle"]
+[editable path="CenterContainer/Profiles/Shrimp"]

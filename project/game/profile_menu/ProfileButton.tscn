@@ -1,29 +1,53 @@
-[gd_scene load_steps=3 format=3 uid="uid://be6w11mud00mj"]
+[gd_scene load_steps=8 format=3 uid="uid://be6w11mud00mj"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_5qrc8"]
 [ext_resource type="Script" path="res://game/profile_menu/ProfileButton.gd" id="2_y0epb"]
+[ext_resource type="StyleBox" uid="uid://w8cqsiejchla" path="res://assets/ui/NegativeButtonNormalStyle.tres" id="3_pwy8f"]
+[ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_rpuc4"]
+[ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="4_1lb5w"]
+[ext_resource type="StyleBox" uid="uid://cq8rna3kxgycu" path="res://assets/ui/NegativeButtonHoverStyle.tres" id="6_ms7wt"]
+[ext_resource type="StyleBox" uid="uid://bo7xt6vgeh2hc" path="res://assets/ui/NegativeButtonPressedStyle.tres" id="7_legko"]
 
-[node name="ProfileButton" type="HBoxContainer"]
+[node name="ProfileButton" type="VBoxContainer"]
 offset_right = 1618.0
 offset_bottom = 125.0
 theme = ExtResource("1_5qrc8")
-theme_override_constants/separation = 50
+theme_override_constants/separation = 91
 script = ExtResource("2_y0epb")
 metadata/_edit_group_ = true
 
 [node name="SelectButton" type="Button" parent="."]
 layout_mode = 2
+size_flags_horizontal = 4
 focus_mode = 0
-text = "SELECT"
+icon = ExtResource("3_rpuc4")
+icon_alignment = 1
+
+[node name="Selected" type="TextureRect" parent="SelectButton"]
+layout_mode = 0
+offset_left = -75.0
+offset_top = -55.0
+offset_right = 615.0
+offset_bottom = 595.0
+mouse_filter = 0
+texture = ExtResource("4_1lb5w")
 
 [node name="DeleteButton" type="Button" parent="."]
+custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
+size_flags_horizontal = 4
 focus_mode = 0
+theme_override_styles/normal = ExtResource("3_pwy8f")
+theme_override_styles/hover = ExtResource("6_ms7wt")
+theme_override_styles/pressed = ExtResource("7_legko")
 text = "X"
 
 [node name="ProfileInfo" type="Label" parent="."]
 layout_mode = 2
-text = "profile: X LEVELS_COMPLETED"
+text = "X LEVELS_COMPLETED"
+horizontal_alignment = 1
 
+[connection signal="mouse_entered" from="SelectButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="SelectButton" to="." method="_on_select_button_pressed"]
+[connection signal="mouse_entered" from="DeleteButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

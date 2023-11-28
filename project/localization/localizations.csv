@@ -22,7 +22,6 @@ BACK,Back,Voltar
 CREATE_NEW_LEVEL,Create new level,Criar nível novo
 YOUR_LEVELS,Your levels,Seus níveis
 PROFILE,Profile,Perfil
-AVAILABLE_PROFILES,Available profiles:,Perfis disponíveis:
-SELECT,Select,Selecionar
-SELECTED,Selected,Selecionado
+CHANGE_PROFILE,Change Profile,Trocar Perfil
+CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?
 LEVELS_COMPLETED,levels completed,níveis completos
