@@ -113,18 +113,21 @@ func save_level(level_name: String, data: UserLevelSaveData) -> void:
 func clear_level(level_name: String, profile: String) -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
 
-func _editor_dir(profile := "") -> String:
+func _editor_metadata_dir(profile := "") -> String:
 	return "%s/editor" % _profile_dir(profile)
+
+func _editor_level_dir(id: String, profile := "") -> String:
+	return "%s/%s" % [_editor_metadata_dir(profile), id]
 
 const METADATA := ".metadata"
 
 func load_editor_levels() -> Dictionary:
 	var ans = {}
-	if DirAccess.dir_exists_absolute(_editor_dir()):
-		for file in DirAccess.get_files_at(_editor_dir()):
+	if DirAccess.dir_exists_absolute(_editor_metadata_dir()):
+		for file in DirAccess.get_files_at(_editor_metadata_dir()):
 			if file.ends_with(METADATA):
 				var id := file.substr(0, file.length() - METADATA.length())
-				ans[id] = EditorLevelMetadata.load_data(_load_json_data(_editor_dir(), file))
+				ans[id] = EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), file))
 	return ans
 
 func _data_file(id: String) -> String:
@@ -132,19 +135,19 @@ func _data_file(id: String) -> String:
 
 func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelData) -> void:
 	if metadata != null:
-		_save_json_data(_editor_dir(), id + METADATA, metadata.get_data())
+		_save_json_data(_editor_metadata_dir(), id + METADATA, metadata.get_data())
 	if data != null:
 		assert(data.full_name.is_empty())
-		_save_json_data(_editor_dir(), _data_file(id), data.get_data())
+		_save_json_data(_editor_level_dir(id), _data_file(id), data.get_data())
 
 func load_editor_level(id: String) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(_editor_dir(), _data_file(id)))
+	var data := LevelData.load_data(_load_json_data(_editor_level_dir(id), _data_file(id)))
 	assert(data == null or data.full_name.is_empty())
 	return data
 
 func clear_editor_level(id: String, profile := "") -> void:
-	_delete_file(_editor_dir(profile), _data_file(id))
-	_delete_file(_editor_dir(profile), id + METADATA)
+	_delete_file(_editor_level_dir(id, profile), _data_file(id))
+	_delete_file(_editor_metadata_dir(profile), id + METADATA)
 
 const DATA_DIR := "res://database/levels"
 
