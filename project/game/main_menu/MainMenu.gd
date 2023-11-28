@@ -93,7 +93,7 @@ func _on_exit_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	if ConfirmationScreen.start_confirmation("EXIT_CONFIRMATION"):
 		if await ConfirmationScreen.pressed:
-			get_tree().quit()
+			Global.exit_game()
 
 
 func _on_button_mouse_entered():

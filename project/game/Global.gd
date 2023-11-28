@@ -11,12 +11,6 @@ var previous_windowed_pos = false
 var _dev_mode := false
 var dev_mode_label: Label
 
-func _input(event):
-	if event.is_action_pressed(&"toggle_fullscreen"):
-		toggle_fullscreen()
-	if event.is_action_pressed(&"toggle_dev_mode"):
-		_dev_mode = not _dev_mode and OS.is_debug_build()
-		dev_mode_label.visible = _dev_mode
 
 func _ready() -> void:
 	dev_mode_label = Label.new()
@@ -26,8 +20,30 @@ func _ready() -> void:
 	dev_mode_label.visible = false
 	add_child(dev_mode_label)
 
+
+func _input(event):
+	if event.is_action_pressed(&"toggle_fullscreen"):
+		toggle_fullscreen()
+	if event.is_action_pressed(&"toggle_dev_mode"):
+		_dev_mode = not _dev_mode and OS.is_debug_build()
+		dev_mode_label.visible = _dev_mode
+
+
+func _notification(what : int):
+	if what == NOTIFICATION_EXIT_TREE:
+		exit_game()
+
+
+func exit_game():
+	var window = get_window()
+	if window.mode == Window.MODE_WINDOWED:
+		Profile.set_option("previous_windowed_pos", window.position, true)
+	get_tree().quit()
+
+
 func is_dev_mode() -> bool:
 	return OS.is_debug_build() and _dev_mode
+
 
 func create_level(grid_: GridModel, level_name_: String, full_name_: String) -> Node:
 	var level : Level = LEVEL_SCENE.instantiate()
@@ -35,6 +51,7 @@ func create_level(grid_: GridModel, level_name_: String, full_name_: String) -> 
 	level.level_name = level_name_
 	level.full_name = full_name_
 	return level
+
 
 func create_button(text: String) -> Button:
 	var button := Button.new()
@@ -59,7 +76,10 @@ func toggle_fullscreen():
 		window.size = size
 		var prev = Profile.get_option("previous_windowed_pos")
 		if prev:
-			window.position = prev
+			if prev is String:
+				window.position = str_to_var("Vector2" + prev)
+			else:
+				window.position = prev
 		else:
 			window.position = Vector2(s_size.x/2 - size.x/2, size.y/2)
 		window.set_current_screen(cur_screen)

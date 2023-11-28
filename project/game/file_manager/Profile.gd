@@ -56,6 +56,12 @@ func set_save_data(data):
 	
 	if Global.is_fullscreen() != options.fullscreen:
 		Global.toggle_fullscreen()
+	if not options.fullscreen and options.previous_windowed_pos:
+		var window = get_window()
+		if options.previous_windowed_pos is String:
+			window.position = str_to_var("Vector2" + options.previous_windowed_pos)
+		else:
+			window.position = options.previous_windowed_pos
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):

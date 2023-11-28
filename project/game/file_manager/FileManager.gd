@@ -9,7 +9,7 @@ func _notification(what: int) -> void:
 
 func save_and_quit() -> void:
 	save_game()
-	get_tree().quit()
+	Global.exit_game()
 
 func save_game() -> void:
 	save_current_profile()
