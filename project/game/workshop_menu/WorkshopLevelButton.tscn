@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh07n2tm2va1t"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_mrar7"]
+[ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
+
+[node name="WorkshopLevelButton" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_mrar7")
+script = ExtResource("2_7eonp")
+
+[node name="Open" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+auto_translate = false
+focus_mode = 0
+text = "Level ?"
+
+[connection signal="pressed" from="Open" to="." method="_on_open_pressed"]

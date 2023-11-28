@@ -68,7 +68,7 @@ func _upload_item(id: int, title: String, dir: String) -> bool:
 	var update_id := Steam.startItemUpdate(SteamManager.APP_ID, id)
 	Steam.setItemContent(update_id, dir)
 	Steam.setItemTitle(update_id, title)
-	Steam.submitItemUpdate(update_id, "")
+	Steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
 	print("Uploading item %d" % update_id)
 	var ret: Array = await Steam.item_updated
 	var res: Steam.Result = ret[0]

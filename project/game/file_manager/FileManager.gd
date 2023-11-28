@@ -130,18 +130,17 @@ func load_editor_levels() -> Dictionary:
 				ans[id] = EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), file))
 	return ans
 
-func _data_file(id: String) -> String:
-	return "%s.level" % id
+const LEVEL_FILE := "level.json"
 
 func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelData) -> void:
 	if metadata != null:
 		_save_json_data(_editor_metadata_dir(), id + METADATA, metadata.get_data())
 	if data != null:
 		assert(data.full_name.is_empty())
-		_save_json_data(_editor_level_dir(id), _data_file(id), data.get_data())
+		_save_json_data(_editor_level_dir(id), LEVEL_FILE, data.get_data())
 
 func load_editor_level(id: String) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(_editor_level_dir(id), _data_file(id)))
+	var data := LevelData.load_data(_load_json_data(_editor_level_dir(id), LEVEL_FILE))
 	assert(data == null or data.full_name.is_empty())
 	return data
 
@@ -149,8 +148,12 @@ func load_editor_level_metadata(id: String) -> EditorLevelMetadata:
 	return EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), id + METADATA))
 
 func clear_editor_level(id: String, profile := "") -> void:
-	_delete_file(_editor_level_dir(id, profile), _data_file(id))
+	_delete_file(_editor_level_dir(id, profile), LEVEL_FILE)
 	_delete_file(_editor_metadata_dir(profile), id + METADATA)
+
+func load_workshop_level(dir: String) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(dir, LEVEL_FILE))
+	return data
 
 const DATA_DIR := "res://database/levels"
 

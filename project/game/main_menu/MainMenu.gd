@@ -29,6 +29,9 @@ func _ready():
 	randomize()
 	FileManager.load_game()
 	
+	if not SteamManager.enabled:
+		$MainButtonsContainer/VBoxContainer/Workshop.disabled = true
+	
 	Camera.position = CAM_POS.menu
 	AudioManager.play_bgm("main")
 	
@@ -79,6 +82,11 @@ func _on_profile_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	var profile := preload("res://game/profile_menu/ProfileScreen.tscn").instantiate()
 	TransitionManager.push_scene(profile)
+
+func _on_workshop_pressed():
+	AudioManager.play_sfx("button_pressed")
+	var workshop := preload("res://game/workshop_menu/WorkshopMenu.tscn").instantiate()
+	TransitionManager.push_scene(workshop)
 
 
 func _on_exit_button_pressed():
