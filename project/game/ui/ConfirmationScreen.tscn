@@ -205,7 +205,7 @@ vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 70
+theme_override_constants/separation = 120
 alignment = 1
 
 [node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
