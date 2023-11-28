@@ -113,6 +113,9 @@ func save_level(level_name: String, data: UserLevelSaveData) -> void:
 func clear_level(level_name: String, profile: String) -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
 
+func level_has_solution(level_name: String, profile: String) -> bool:
+	return not load_level(level_name, profile).grid_data.is_empty()
+
 func _editor_metadata_dir(profile := "") -> String:
 	return "%s/editor" % _profile_dir(profile)
 

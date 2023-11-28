@@ -150,6 +150,7 @@ func update_timer_label() -> void:
 
 func win() -> void:
 	running_time = false
+	GridNode.disable()
 	AudioManager.play_sfx("win_level")
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save()
@@ -262,7 +263,7 @@ func _on_playtest_button_pressed() -> void:
 	TransitionManager.push_scene(new_level)
 
 
-func maybe_save() -> void:
+func maybe_save(delete_solution := false) -> void:
 	if not level_name.is_empty():
 		if editor_mode():
 			# Let's put the visibility info in the grid
@@ -272,7 +273,10 @@ func maybe_save() -> void:
 			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, grid_logic.export_data()))
 			grid_logic.set_auto_update_hints(true)
 		else:
-			dummy_save.grid_data = GridNode.grid_logic.export_data()
+			if not delete_solution:
+				dummy_save.grid_data = GridNode.grid_logic.export_data()
+			else:
+				dummy_save.grid_data = {}
 			dummy_save.mistakes = Counters.mistake.count
 			dummy_save.timer_secs = running_time
 			FileManager.save_level(level_name, dummy_save)

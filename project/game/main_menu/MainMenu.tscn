@@ -72,6 +72,7 @@ text = "PLAY_BUTTON"
 
 [node name="EditorButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
 focus_mode = 0
 text = "LEVEL_EDITOR_BUTTON"
