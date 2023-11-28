@@ -145,6 +145,9 @@ func load_editor_level(id: String) -> LevelData:
 	assert(data == null or data.full_name.is_empty())
 	return data
 
+func load_editor_level_metadata(id: String) -> EditorLevelMetadata:
+	return EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), id + METADATA))
+
 func clear_editor_level(id: String, profile := "") -> void:
 	_delete_file(_editor_level_dir(id, profile), _data_file(id))
 	_delete_file(_editor_metadata_dir(profile), id + METADATA)
