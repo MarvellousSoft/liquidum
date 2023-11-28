@@ -148,8 +148,10 @@ script = ExtResource("2_5vo2a")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_right = 189.0
-offset_bottom = 273.0
+offset_left = -103.0
+offset_top = -135.0
+offset_right = 86.0
+offset_bottom = 138.0
 focus_mode = 0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)

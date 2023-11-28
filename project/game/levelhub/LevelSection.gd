@@ -1,6 +1,8 @@
 extends Control
 
 const ALPHA_SPEED = 3.0
+const DIST_EPS = 5.0
+const CENTRAL_POS = Vector2(-103, -135)
 
 signal enable_focus(pos : Vector2, my_section : int)
 signal disable_focus()
@@ -31,6 +33,10 @@ func _process(dt):
 			node.modulate.a = min(node.modulate.a + ALPHA_SPEED*dt, 1.0)
 			if node.modulate.a > 0.0:
 				node.show()
+		if MainButton.position != CENTRAL_POS:
+			MainButton.position = lerp(MainButton.position, CENTRAL_POS, .8)
+			if MainButton.position.distance_to(CENTRAL_POS) < DIST_EPS:
+				MainButton.position = CENTRAL_POS
 	else:
 		for node in [Levels, BackButton]:
 			node.modulate.a = max(node.modulate.a - ALPHA_SPEED*dt, 0.0)
@@ -41,24 +47,28 @@ func _process(dt):
 
 
 func enable() -> void:
-	AnimPlayer.play("float", -1, randf_range(.5, .75))
+	AnimPlayer.speed_scale = randf_range(.35, .55)
+	AnimPlayer.play("float")
 	MainButton.disabled = false
 	ShaderEffect.show()
 
 
 func disable() -> void:
-	AnimPlayer.play("float", -1, randf_range(.2, .3))
+	AnimPlayer.speed_scale = randf_range(.1, .15)
+	AnimPlayer.play("float")
 	MainButton.disabled = true
 	ShaderEffect.hide()
 
 
 func focus():
+	AnimPlayer.pause()
 	focused = true
 	MouseBlocker.show()
 	enable_focus.emit(global_position, my_section)
 
 
 func unfocus():
+	AnimPlayer.play()
 	focused = false
 	MouseBlocker.hide()
 	disable_focus.emit()
