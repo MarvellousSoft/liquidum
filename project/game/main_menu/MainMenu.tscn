@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=7 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="3_2f32g"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
+[ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
 shader = ExtResource("3_2f32g")
@@ -91,8 +92,6 @@ text = "VERSION"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
-
 [node name="ProfileButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 6
@@ -109,11 +108,41 @@ grow_vertical = 2
 focus_mode = 0
 text = "PROFILE: ?"
 
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 71.0
+offset_top = -2300.0
+offset_right = 533.0
+offset_bottom = -2175.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "BACK"
+
+[node name="LevelHub" parent="." instance=ExtResource("4_afxkm")]
+layout_mode = 1
+offset_top = -2360.0
+offset_bottom = -2360.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1930, 4000)
+position_smoothing_enabled = true
+position_smoothing_speed = 4.0
+
+[node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
+
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

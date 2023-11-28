@@ -1,11 +1,18 @@
 extends Control
 
+const CAM_POS = {
+	"menu": Vector2(1930, 1080),
+	"level_hub": Vector2(1930, -1280),
+}
+
 @onready var Version: Label = $Version
 @onready var ProfileButton: Button = $ProfileButton
+@onready var Camera = $Camera2D
 
 func _ready():
 	FileManager.load_game()
 	
+	Camera.position = CAM_POS.menu
 	AudioManager.play_bgm("main")
 	
 	await get_tree().process_frame
@@ -70,3 +77,11 @@ func _on_exit_button_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_play_pressed():
+	Camera.position = CAM_POS.level_hub
+
+
+func _on_back_button_pressed():
+	Camera.position = CAM_POS.menu

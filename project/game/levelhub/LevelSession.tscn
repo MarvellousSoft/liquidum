@@ -1,0 +1,178 @@
+[gd_scene load_steps=12 format=3 uid="uid://dns62u0n4j1k3"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_enftx"]
+[ext_resource type="Script" path="res://game/levelhub/LevelSession.gd" id="1_esrw0"]
+[ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_2ci1h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijmyt"]
+bg_color = Color(0.192157, 0.690196, 0.690196, 1)
+border_width_left = 50
+border_width_top = 50
+border_width_right = 50
+border_width_bottom = 50
+border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+corner_radius_top_left = 170
+corner_radius_top_right = 170
+corner_radius_bottom_right = 170
+corner_radius_bottom_left = 170
+corner_detail = 20
+expand_margin_left = 90.0
+expand_margin_top = 50.0
+expand_margin_right = 90.0
+expand_margin_bottom = 50.0
+shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
+shadow_size = 20
+anti_aliasing_size = 7.338
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ibfh"]
+bg_color = Color(0.466667, 0.937255, 0.933333, 1)
+border_width_left = 50
+border_width_top = 50
+border_width_right = 50
+border_width_bottom = 50
+border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+corner_radius_top_left = 170
+corner_radius_top_right = 170
+corner_radius_bottom_right = 170
+corner_radius_bottom_left = 170
+corner_detail = 20
+expand_margin_left = 90.0
+expand_margin_top = 50.0
+expand_margin_right = 90.0
+expand_margin_bottom = 50.0
+shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
+shadow_size = 20
+anti_aliasing_size = 7.338
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6r72t"]
+bg_color = Color(0.105882, 0.435294, 0.435294, 1)
+border_width_left = 50
+border_width_top = 50
+border_width_right = 50
+border_width_bottom = 50
+border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+corner_radius_top_left = 170
+corner_radius_top_right = 170
+corner_radius_bottom_right = 170
+corner_radius_bottom_left = 170
+corner_detail = 20
+expand_margin_left = 90.0
+expand_margin_top = 50.0
+expand_margin_right = 90.0
+expand_margin_bottom = 50.0
+shadow_color = Color(0.105882, 0.435294, 0.435294, 1)
+shadow_size = 20
+anti_aliasing_size = 7.338
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rr6r"]
+bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
+border_width_left = 50
+border_width_top = 50
+border_width_right = 50
+border_width_bottom = 50
+border_color = Color(0.1925, 0.28175, 0.35, 0.901961)
+corner_radius_top_left = 170
+corner_radius_top_right = 170
+corner_radius_bottom_right = 170
+corner_radius_bottom_left = 170
+corner_detail = 20
+expand_margin_left = 90.0
+expand_margin_top = 50.0
+expand_margin_right = 90.0
+expand_margin_bottom = 50.0
+shadow_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
+shadow_size = 20
+anti_aliasing_size = 7.338
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1121v"]
+shader = ExtResource("3_2ci1h")
+shader_parameter/amplitude = 0.47
+shader_parameter/frequency = 7.63
+shader_parameter/rippleRate = 2.4
+shader_parameter/waveAmplitude = 10.0
+shader_parameter/waveFrequency = 20.0
+shader_parameter/blendingAmount = 1.0
+shader_parameter/wave_color = Color(0.670588, 1, 0.819608, 1)
+
+[sub_resource type="Animation" id="Animation_fsyhn"]
+resource_name = "float"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.3, 2.6, 4, 5.3, 6.6, 7.8, 9.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(37, -80), Vector2(-103, -215), Vector2(-167, -87), Vector2(-148, 29), Vector2(-49, -63), Vector2(-74, -224), Vector2(107, -241)]
+}
+
+[sub_resource type="Animation" id="Animation_i0d6d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nwjf5"]
+_data = {
+"RESET": SubResource("Animation_i0d6d"),
+"float": SubResource("Animation_fsyhn")
+}
+
+[node name="LevelSession" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -3840.0
+offset_bottom = -2160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_enftx")
+script = ExtResource("1_esrw0")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 189.0
+offset_bottom = 273.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 80
+theme_override_font_sizes/font_size = 150
+theme_override_styles/normal = SubResource("StyleBoxFlat_ijmyt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ibfh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6r72t")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_5rr6r")
+text = "1"
+
+[node name="ShaderEffect" type="ColorRect" parent="Button"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_1121v")
+layout_mode = 0
+offset_left = -154.749
+offset_top = -110.855
+offset_right = 345.251
+offset_bottom = 389.145
+color = Color(0.670588, 1, 0.819608, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "float"
+speed_scale = 0.7
+libraries = {
+"": SubResource("AnimationLibrary_nwjf5")
+}

@@ -2,7 +2,9 @@ keys,en,pt_BR
 TEST,Test,teste
 YES,Yes,Yes
 NO,No,Não
-EXIT,Exit,Sair
+EXIT_BUTTON,Exit,Sair
+PLAY_BUTTON,Dive,Mergulhar
+LEVEL_EDITOR_BUTTON,Create,Criar
 EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?
 DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?
 WATERS_COUNTER,Waters: ,Águas: 

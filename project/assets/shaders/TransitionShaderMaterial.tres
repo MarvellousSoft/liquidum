@@ -4,7 +4,7 @@
 
 [resource]
 shader = ExtResource("1_gpmpg")
-shader_parameter/cutoff = 0.0
+shader_parameter/cutoff = 0.347
 shader_parameter/wave_size = 0.038
 shader_parameter/wave_frequency = 0.039
 shader_parameter/wave_speed = 12.534
