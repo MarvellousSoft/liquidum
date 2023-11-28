@@ -1,11 +1,21 @@
 extends Control
 
+@onready var MainButton = $Button
+@onready var ShaderEffect = $Button/ShaderEffect
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+var my_session := -1
+var my_number := -1
+
+func setup(session, number):
+	my_session = session
+	my_number = number
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func enable() -> void:
+	MainButton.disabled = false
+	ShaderEffect.show()
+
+
+func disable() -> void:
+	MainButton.disabled = true
+	ShaderEffect.hide()

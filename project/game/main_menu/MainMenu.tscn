@@ -146,3 +146,5 @@ position_smoothing_speed = 4.0
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="disable_focus" from="LevelHub" to="." method="_on_level_hub_disable_focus"]
+[connection signal="enable_focus" from="LevelHub" to="." method="_on_level_hub_enable_focus"]

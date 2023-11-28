@@ -4,10 +4,14 @@ const CAM_POS = {
 	"menu": Vector2(1930, 1080),
 	"level_hub": Vector2(1930, -1280),
 }
+const LEVEL_ZOOM = 3.0
+const NORMAL_ZOOM = 1.0
 
 @onready var Version: Label = $Version
 @onready var ProfileButton: Button = $ProfileButton
 @onready var Camera = $Camera2D
+
+var cam_target_zoom = NORMAL_ZOOM
 
 func _ready():
 	FileManager.load_game()
@@ -19,6 +23,10 @@ func _ready():
 	
 	Version.text = Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION
+
+
+func _process(dt):
+	pass
 
 
 func _enter_tree() -> void:
@@ -87,3 +95,13 @@ func _on_play_pressed():
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
 	Camera.position = CAM_POS.menu
+
+
+func _on_level_hub_enable_focus(pos, _my_session):
+	Camera.position = pos
+	cam_target_zoom = LEVEL_ZOOM
+
+
+func _on_level_hub_disable_focus():
+	Camera.position = CAM_POS.level_hub
+	cam_target_zoom = NORMAL_ZOOM

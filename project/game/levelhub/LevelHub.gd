@@ -1,5 +1,7 @@
 extends Control
 
+signal enable_focus(pos : Vector2, my_session : int)
+signal disable_focus()
 
 @onready var Sessions = $Sessions
 
@@ -16,5 +18,13 @@ func update_sessions():
 			session.disable()
 		else:
 			session.enable()
-			session.setup(unlocked)
+			session.setup(idx, unlocked)
 		idx += 1
+
+
+func _on_level_session_enable_focus(pos, my_session):
+	enable_focus.emit(pos, my_session)
+
+
+func _on_level_session_disable_focus():
+	disable_focus.emit()

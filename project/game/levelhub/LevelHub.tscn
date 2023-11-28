@@ -75,6 +75,19 @@ offset_bottom = 1732.5
 [node name="Button" parent="Sessions/LevelSession6" index="0"]
 text = "6"
 
+[connection signal="disable_focus" from="Sessions/LevelSession1" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession1" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sessions/LevelSession2" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession2" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sessions/LevelSession3" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession3" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sessions/LevelSession4" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession4" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sessions/LevelSession5" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession5" to="." method="_on_level_session_enable_focus"]
+[connection signal="disable_focus" from="Sessions/LevelSession6" to="." method="_on_level_session_disable_focus"]
+[connection signal="enable_focus" from="Sessions/LevelSession6" to="." method="_on_level_session_enable_focus"]
+
 [editable path="Sessions/LevelSession1"]
 [editable path="Sessions/LevelSession2"]
 [editable path="Sessions/LevelSession3"]

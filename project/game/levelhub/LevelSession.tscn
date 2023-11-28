@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dns62u0n4j1k3"]
+[gd_scene load_steps=13 format=3 uid="uid://dns62u0n4j1k3"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_enftx"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSession.gd" id="1_esrw0"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_2ci1h"]
+[ext_resource type="PackedScene" uid="uid://bjsmnin37pr8t" path="res://game/levelhub/LevelButton.tscn" id="4_gq81p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijmyt"]
 bg_color = Color(0.192157, 0.690196, 0.690196, 1)
@@ -176,3 +177,45 @@ speed_scale = 0.7
 libraries = {
 "": SubResource("AnimationLibrary_nwjf5")
 }
+
+[node name="Levels" type="Control" parent="."]
+anchors_preset = 0
+scale = Vector2(0.5, 0.5)
+
+[node name="LevelButton1" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = -394.0
+offset_top = -838.0
+offset_right = -394.0
+offset_bottom = -838.0
+
+[node name="LevelButton2" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = 730.0
+offset_top = -740.0
+offset_right = 730.0
+offset_bottom = -740.0
+
+[node name="LevelButton3" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = 1236.0
+offset_top = 210.0
+offset_right = 1236.0
+offset_bottom = 210.0
+
+[node name="LevelButton4" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = 410.0
+offset_top = 1104.0
+offset_right = 410.0
+offset_bottom = 1104.0
+
+[node name="LevelButton5" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = -782.0
+offset_top = 852.0
+offset_right = -782.0
+offset_bottom = 852.0
+
+[node name="LevelButton6" parent="Levels" instance=ExtResource("4_gq81p")]
+offset_left = -1136.0
+offset_top = -146.0
+offset_right = -1136.0
+offset_bottom = -146.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -44,7 +44,7 @@ void fragment() {
 
 
 	color.a *= 1.0 * alphaScalar * (ripple + ns.x * ns.y);
-	color.a = max(color.a - (ns.y * 0.45), 0.0);
+	color.a = max(color.a - (ns.y * 0.45), 0.0) * wave_color.a;
 
     COLOR = color;
 }
