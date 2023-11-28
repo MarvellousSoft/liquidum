@@ -7,11 +7,12 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -3040.0
 offset_bottom = -1996.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_d6ccn")
-theme_override_constants/separation = 30
+theme_override_constants/separation = 120
 script = ExtResource("2_ol4g6")
 
 [node name="OpenButton" type="Button" parent="."]

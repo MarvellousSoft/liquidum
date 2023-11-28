@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://4263yf3prywo"]
+[gd_scene load_steps=5 format=3 uid="uid://4263yf3prywo"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_sq1cy"]
 [ext_resource type="Script" path="res://game/editor_menu/EditorHub.gd" id="2_mul0o"]
+[ext_resource type="PackedScene" uid="uid://v7gwn05ed1kv" path="res://game/editor_menu/EditorLevelButton.tscn" id="3_1grfo"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_qaoyn"]
 
 [node name="EditorHub" type="Control"]
@@ -10,37 +11,61 @@ anchors_preset = 0
 theme = ExtResource("1_sq1cy")
 script = ExtResource("2_mul0o")
 
-[node name="YourLevels" type="Label" parent="."]
-layout_mode = 0
-offset_left = 310.0
-offset_top = 415.0
-offset_right = 800.0
-offset_bottom = 525.0
-text = "YOUR_LEVELS"
-
 [node name="CreateNewLevel" type="Button" parent="."]
-layout_mode = 0
-offset_left = 310.0
-offset_top = 178.0
-offset_right = 1150.0
-offset_bottom = 315.0
+layout_mode = 2
+offset_left = 158.0
+offset_top = 1110.0
+offset_right = 1041.0
+offset_bottom = 1235.0
 focus_mode = 0
 text = "CREATE_NEW_LEVEL"
 
-[node name="LevelNode" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 310.0
-offset_top = 588.0
-offset_right = 1150.0
-offset_bottom = 2041.0
+offset_left = 1548.0
+offset_top = 295.0
+offset_right = 2431.0
+offset_bottom = 1993.0
+theme_override_constants/separation = 100
+
+[node name="YourLevels" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "YOUR_LEVELS"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 1500)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_bottom = 80
+
+[node name="LevelNode" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/separation = 70
+
+[node name="EditorLevelButton" parent="VBoxContainer/ScrollContainer/MarginContainer/LevelNode" instance=ExtResource("3_1grfo")]
+layout_mode = 2
+
+[node name="EditorLevelButton2" parent="VBoxContainer/ScrollContainer/MarginContainer/LevelNode" instance=ExtResource("3_1grfo")]
+layout_mode = 2
+
+[node name="EditorLevelButton3" parent="VBoxContainer/ScrollContainer/MarginContainer/LevelNode" instance=ExtResource("3_1grfo")]
+layout_mode = 2
+
+[node name="EditorLevelButton4" parent="VBoxContainer/ScrollContainer/MarginContainer/LevelNode" instance=ExtResource("3_1grfo")]
+layout_mode = 2
 
 [node name="Back" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1805.0
-offset_top = 178.0
-offset_right = 2093.0
-offset_bottom = 315.0
+offset_left = 121.0
+offset_top = 95.0
+offset_right = 409.0
+offset_bottom = 232.0
 focus_mode = 0
 text = "BACK"
 

@@ -80,8 +80,10 @@ func _on_button_mouse_entered():
 
 
 func _on_play_pressed():
+	AudioManager.play_sfx("button_pressed")
 	Camera.position = CAM_POS.level_hub
 
 
 func _on_back_button_pressed():
+	AudioManager.play_sfx("button_back")
 	Camera.position = CAM_POS.menu

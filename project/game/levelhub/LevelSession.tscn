@@ -94,6 +94,21 @@ shader_parameter/waveFrequency = 20.0
 shader_parameter/blendingAmount = 1.0
 shader_parameter/wave_color = Color(0.670588, 1, 0.819608, 1)
 
+[sub_resource type="Animation" id="Animation_i0d6d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_fsyhn"]
 resource_name = "float"
 length = 10.0
@@ -109,21 +124,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(37, -80), Vector2(-103, -215), Vector2(-167, -87), Vector2(-148, 29), Vector2(-49, -63), Vector2(-74, -224), Vector2(107, -241)]
-}
-
-[sub_resource type="Animation" id="Animation_i0d6d"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Button:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nwjf5"]
