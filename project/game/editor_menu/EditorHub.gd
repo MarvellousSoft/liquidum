@@ -23,7 +23,7 @@ func load_all_levels() -> void:
 
 func load_level(id: String) -> void:
 	AudioManager.play_sfx("button_pressed")
-	var level = Global.create_level(GridImpl.empty_editor(1, 1), id)
+	var level = Global.create_level(GridImpl.empty_editor(1, 1), id, "")
 	TransitionManager.push_scene(level)
 
 
@@ -43,7 +43,7 @@ func _on_create_new_level_pressed() -> void:
 		grid.row_hints()[i].water_count = 0
 	for j in grid.cols():
 		grid.col_hints()[j].water_count = 0
-	var data := LevelData.new("", grid.export_data())
+	var data := LevelData.new(level_name, grid.export_data())
 	FileManager.save_editor_level(new_id, metadata, data)
 	load_all_levels()
 

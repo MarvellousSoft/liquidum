@@ -136,12 +136,10 @@ func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelDat
 	if metadata != null:
 		_save_json_data(_editor_metadata_dir(), id + METADATA, metadata.get_data())
 	if data != null:
-		assert(data.full_name.is_empty())
 		_save_json_data(_editor_level_dir(id), LEVEL_FILE, data.get_data())
 
 func load_editor_level(id: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_editor_level_dir(id), LEVEL_FILE))
-	assert(data == null or data.full_name.is_empty())
 	return data
 
 func load_editor_level_metadata(id: String) -> EditorLevelMetadata:

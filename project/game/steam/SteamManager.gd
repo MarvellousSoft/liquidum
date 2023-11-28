@@ -69,7 +69,6 @@ func _upload_item(id: int, title: String, dir: String) -> bool:
 	Steam.setItemContent(update_id, dir)
 	Steam.setItemTitle(update_id, title)
 	Steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
-	print("Uploading item %d" % update_id)
 	var ret: Array = await Steam.item_updated
 	var res: Steam.Result = ret[0]
 	var needs_tos: bool = ret[1]
@@ -78,4 +77,5 @@ func _upload_item(id: int, title: String, dir: String) -> bool:
 		return false
 	if needs_tos:
 		Steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
+	print("Successfuly updated item %d" % id)
 	return true

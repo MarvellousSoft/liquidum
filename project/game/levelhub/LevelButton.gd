@@ -41,6 +41,5 @@ func _on_button_pressed():
 		var level_data := FileManager.load_level_data(my_section, my_level)
 		var level_name := LevelLister.level_name(my_section, my_level)
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
-		# TODO: Display level_data.full_name somewhere
-		var level_node := Global.create_level(grid, level_name)
+		var level_node := Global.create_level(grid, level_name, level_data.full_name)
 		TransitionManager.push_scene(level_node)

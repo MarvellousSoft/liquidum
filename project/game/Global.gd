@@ -29,10 +29,11 @@ func _ready() -> void:
 func is_dev_mode() -> bool:
 	return OS.is_debug_build() and _dev_mode
 
-func create_level(grid_: GridModel, level_name_: String) -> Node:
+func create_level(grid_: GridModel, level_name_: String, full_name_: String) -> Node:
 	var level : Level = LEVEL_SCENE.instantiate()
 	level.grid = grid_
 	level.level_name = level_name_
+	level.full_name = full_name_
 	return level
 
 func create_button(text: String) -> Button:

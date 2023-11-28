@@ -23,6 +23,8 @@ var process_game := false
 var running_time : float
 var grid: GridModel = null
 var level_name := ""
+# TODO: Display this somewhere
+var full_name: String
 # Has completion data but outdated grid data
 var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
 
@@ -52,6 +54,7 @@ func setup(try_load := true) -> void:
 		if grid.editor_mode():
 			var data := FileManager.load_editor_level(level_name)
 			if data != null:
+				full_name = data.full_name
 				# Load with Testing to get hints then change to editor
 				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Testing)
 				visibility = HintVisibility.from_grid(grid)
@@ -239,7 +242,7 @@ func _get_solution_grid() -> GridModel:
 	return new_grid
 
 func _on_playtest_button_pressed() -> void:
-	var new_level = Global.create_level(_get_solution_grid(), "")
+	var new_level = Global.create_level(_get_solution_grid(), "", full_name)
 	TransitionManager.push_scene(new_level)
 
 func maybe_save() -> void:
@@ -249,7 +252,7 @@ func maybe_save() -> void:
 			var grid_logic := GridNode.grid_logic
 			grid_logic.set_auto_update_hints(false)
 			_update_visibilities(grid_logic)
-			FileManager.save_editor_level(level_name, null, LevelData.new("", grid_logic.export_data()))
+			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, grid_logic.export_data()))
 			grid_logic.set_auto_update_hints(true)
 		else:
 			dummy_save.grid_data = GridNode.grid_logic.export_data()
