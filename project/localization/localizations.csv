@@ -27,3 +27,7 @@ CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza
 LEVELS_COMPLETED,levels completed,níveis completos
 WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina
 WORKSHOP_LEVELS,Subscribed levels:,Níveis inscritos:
+PLAY_LEVEL_TOOLTIP,Playtest level,Testar o nível
+EDIT_LEVEL_TOOLTIP,Edit level,Editar o nível
+UPLOAD_LEVEL_TOOLTIP,Upload level to Steam Workshop,Subir o nível para a Oficina da Steam
+DELETE_LEVEL_TOOLTIP,"Delete level, can't be undone","Excluir o nível, não pode ser desfeito"
