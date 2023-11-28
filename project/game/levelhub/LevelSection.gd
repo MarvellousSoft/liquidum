@@ -1,8 +1,12 @@
 extends Control
 
+const LEVELBUTTON = preload("res://game/levelhub/LevelButton.tscn")
 const ALPHA_SPEED = 3.0
-const DIST_EPS = 5.0
+const LERP = 2.0
+const DIST_EPS = .4
 const CENTRAL_POS = Vector2(-103, -135)
+const RADIUS = 500
+const ELLIPSE_RATIO = Vector2(1.1, .75)
 
 signal enable_focus(pos : Vector2, my_section : int)
 signal disable_focus()
@@ -20,6 +24,8 @@ var focused := false
 
 
 func _ready():
+	ShaderEffect.material = ShaderEffect.material.duplicate()
+	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
 	Levels.hide()
 	MouseBlocker.hide()
@@ -34,7 +40,7 @@ func _process(dt):
 			if node.modulate.a > 0.0:
 				node.show()
 		if MainButton.position != CENTRAL_POS:
-			MainButton.position = lerp(MainButton.position, CENTRAL_POS, .8)
+			MainButton.position = lerp(MainButton.position, CENTRAL_POS, clamp(LERP, 0.0, 1.0))
 			if MainButton.position.distance_to(CENTRAL_POS) < DIST_EPS:
 				MainButton.position = CENTRAL_POS
 	else:
@@ -44,6 +50,20 @@ func _process(dt):
 				node.hide()
 	for level in Levels.get_children():
 		level.set_effect_alpha(Levels.modulate.a)
+
+
+func setup(section, unlocked_levels) -> void:
+	my_section = section
+	for button in Levels.get_children():
+		Levels.remove_child(button)
+		button.queue_free()
+	
+	var total_levels = LevelLister.get_levels_in_section(section)
+	for i in range(1, total_levels + 1):
+		var button = LEVELBUTTON.instantiate()
+		Levels.add_child(button)
+		position_level_button(button, total_levels, i)
+		button.setup(section, i, i <= unlocked_levels)
 
 
 func enable() -> void:
@@ -68,18 +88,19 @@ func focus():
 
 
 func unfocus():
-	AnimPlayer.play()
+	AnimPlayer.play("float", 2.0)
 	focused = false
 	MouseBlocker.hide()
 	disable_focus.emit()
 
 
-func setup(section, num_levels) -> void:
-	my_section = section
-	var idx = 1
-	for button in Levels.get_children():
-		button.setup(section, idx, idx <= num_levels)
-		idx += 1
+func position_level_button(button, total_levels, i):
+	var angle = PI/2 + i*2*PI/float(total_levels)
+	var sc = Levels.scale.x
+	button.position = Vector2(
+		cos(angle)*RADIUS*ELLIPSE_RATIO.x/sc,
+		sin(angle)*RADIUS*ELLIPSE_RATIO.y/sc,
+	)
 
 
 func _on_button_pressed():

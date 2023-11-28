@@ -88,7 +88,7 @@ anti_aliasing_size = 7.338
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1121v"]
 shader = ExtResource("3_nwex1")
 shader_parameter/amplitude = 0.47
-shader_parameter/frequency = 7.63
+shader_parameter/frequency = 7.5
 shader_parameter/rippleRate = 2.4
 shader_parameter/waveAmplitude = 10.0
 shader_parameter/waveFrequency = 20.0
@@ -148,10 +148,8 @@ script = ExtResource("2_5vo2a")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = -103.0
-offset_top = -135.0
-offset_right = 86.0
-offset_bottom = 138.0
+offset_right = 189.0
+offset_bottom = 273.0
 focus_mode = 0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
@@ -196,10 +194,10 @@ anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
 [node name="LevelButton1" parent="Levels" instance=ExtResource("4_2vvp1")]
-offset_left = -666.0
-offset_top = -828.0
-offset_right = -666.0
-offset_bottom = -828.0
+offset_left = -360.0
+offset_top = -616.0
+offset_right = -360.0
+offset_bottom = -616.0
 
 [node name="LevelButton2" parent="Levels" instance=ExtResource("4_2vvp1")]
 offset_left = 640.0
@@ -214,10 +212,10 @@ offset_right = 1114.0
 offset_bottom = 18.0
 
 [node name="LevelButton4" parent="Levels" instance=ExtResource("4_2vvp1")]
-offset_left = 550.0
-offset_top = 660.0
-offset_right = 550.0
-offset_bottom = 660.0
+offset_left = 922.0
+offset_top = 758.0
+offset_right = 922.0
+offset_bottom = 758.0
 
 [node name="LevelButton5" parent="Levels" instance=ExtResource("4_2vvp1")]
 offset_left = -640.0
@@ -226,10 +224,10 @@ offset_right = -640.0
 offset_bottom = 600.0
 
 [node name="LevelButton6" parent="Levels" instance=ExtResource("4_2vvp1")]
-offset_left = -1136.0
-offset_top = -146.0
-offset_right = -1136.0
-offset_bottom = -146.0
+offset_left = -908.0
+offset_top = -84.0
+offset_right = -908.0
+offset_bottom = -84.0
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 1

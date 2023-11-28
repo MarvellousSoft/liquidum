@@ -6,6 +6,12 @@ extends Control
 var my_section := -1
 var my_level := -1
 
+
+func _ready():
+	ShaderEffect.material = ShaderEffect.material.duplicate()
+	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
+
+
 func setup(section : int, level : int, active : bool) -> void:
 	my_section = section
 	my_level = level

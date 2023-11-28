@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05gtc"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b7s60"]
 bg_color = Color(0.670588, 1, 0.819608, 1)
 border_width_left = 50
 border_width_top = 50
@@ -23,8 +23,8 @@ expand_margin_bottom = 50.0
 shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
 anti_aliasing_size = 7.338
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ay4p"]
-bg_color = Color(0.466667, 0.937255, 0.933333, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j7da"]
+bg_color = Color(0.439216, 0.929412, 0.929412, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
@@ -43,8 +43,8 @@ shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
 shadow_size = 20
 anti_aliasing_size = 7.338
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrr0q"]
-bg_color = Color(0.105882, 0.435294, 0.435294, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h33ih"]
+bg_color = Color(0.113725, 0.45098, 0.45098, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
@@ -59,17 +59,17 @@ expand_margin_left = 90.0
 expand_margin_top = 50.0
 expand_margin_right = 90.0
 expand_margin_bottom = 50.0
-shadow_color = Color(0.105882, 0.435294, 0.435294, 1)
+shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
 shadow_size = 20
 anti_aliasing_size = 7.338
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_867w5"]
-bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q23fe"]
+bg_color = Color(0.690196, 0.690196, 0.690196, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
 border_width_bottom = 50
-border_color = Color(0.1925, 0.28175, 0.35, 0.901961)
+border_color = Color(0.34902, 0.34902, 0.34902, 1)
 corner_radius_top_left = 170
 corner_radius_top_right = 170
 corner_radius_bottom_right = 170
@@ -79,7 +79,7 @@ expand_margin_left = 90.0
 expand_margin_top = 50.0
 expand_margin_right = 90.0
 expand_margin_bottom = 50.0
-shadow_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
+shadow_color = Color(0, 0, 0, 1)
 shadow_size = 20
 anti_aliasing_size = 7.338
 
@@ -102,18 +102,20 @@ script = ExtResource("1_iig44")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_right = 189.0
-offset_bottom = 273.0
+offset_left = -97.0
+offset_top = -133.0
+offset_right = 92.0
+offset_bottom = 140.0
 focus_mode = 0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
-theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
-theme_override_constants/outline_size = 80
+theme_override_colors/font_outline_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_override_constants/outline_size = 60
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_05gtc")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5ay4p")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_mrr0q")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_867w5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_b7s60")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2j7da")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h33ih")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_q23fe")
 text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]

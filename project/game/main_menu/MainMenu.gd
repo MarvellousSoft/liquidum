@@ -4,7 +4,7 @@ const CAM_POS = {
 	"menu": Vector2(1930, 1080),
 	"level_hub": Vector2(1930, -1280),
 }
-const EPS = .01
+const EPS = .001
 const ZOOM_LERP = 4.0
 const LEVEL_ZOOM = 2.6
 const NORMAL_ZOOM = 1.0
@@ -16,6 +16,7 @@ const NORMAL_ZOOM = 1.0
 var cam_target_zoom = NORMAL_ZOOM
 
 func _ready():
+	randomize()
 	FileManager.load_game()
 	
 	Camera.position = CAM_POS.menu

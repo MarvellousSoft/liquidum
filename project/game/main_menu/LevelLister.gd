@@ -3,8 +3,17 @@ class_name LevelLister
 const INITIAL_UNLOCKED_LEVELS := 3
 const MAX_UNSOLVED_LEVELS := 2
 
+
 static func level_name(section: int, level: int) -> String:
 	return "level%02d_%02d" % [section, level]
+
+
+static func get_levels_in_section(section: int) -> int:
+	var i := 1
+	while FileManager.has_level_data(section, i):
+		i += 1
+	return i - 1
+
 
 static func section_complete(section: int) -> bool:
 	var count_uncompleted := 0
@@ -30,6 +39,7 @@ static func get_max_unlocked_level(section: int) -> int:
 		i += 1
 	return i - 1
 
+
 static func count_completed_levels(profile_name: String) -> int:
 	var count := 0
 	for section in range(1, 50):
@@ -42,6 +52,7 @@ static func count_completed_levels(profile_name: String) -> int:
 			if save != null and save.completed():
 				count += 1
 	return count
+
 
 static func clear_all_level_saves(profile_name: String) -> void:
 	for section in range(1, 50):
