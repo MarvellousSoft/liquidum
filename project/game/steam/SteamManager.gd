@@ -40,6 +40,7 @@ var uploading := false
 func upload_ugc_item(id: int, title: String, dir: String) -> UploadResult:
 	if uploading:
 		return UploadResult.new(id, false)
+	dir = ProjectSettings.globalize_path(dir)
 	uploading = true
 	if id == -1:
 		id = await _create_item_id()
