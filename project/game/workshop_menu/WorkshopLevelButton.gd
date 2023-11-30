@@ -3,6 +3,7 @@ extends Control
 var id: int
 
 @onready var Open: Button = $Open
+@onready var OngoingSolution = $OngoingSolution
 var tween_check: Tween
 
 func _ready() -> void:
@@ -11,6 +12,7 @@ func _ready() -> void:
 		return
 	Open.text = "NOT_INSTALLED"
 	Open.disabled = true
+	OngoingSolution.hide()
 	try_check_download()
 
 func load_level() -> LevelData:
@@ -26,6 +28,7 @@ func try_check_download() -> void:
 	if level != null:
 		Open.text = level.full_name
 		Open.disabled = false
+		OngoingSolution.visible = not level.grid_data.is_empty
 	else:
 		Steam.downloadItem(id, true)
 
