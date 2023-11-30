@@ -9,7 +9,7 @@ func _ready() -> void:
 	if not SteamManager.enabled or id <= 0:
 		Open.disabled = true
 		return
-	Open.text = "Not installed"
+	Open.text = "NOT_INSTALLED"
 	Open.disabled = true
 	try_check_download()
 

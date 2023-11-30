@@ -528,12 +528,12 @@ class SeparateStrategy extends Strategy:
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
-			var any := false
+			var any_content := false
 			for b2 in _b_len():
 				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
 					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
-					any = true
-			return any
+					any_content = true
+			return any_content
 		for b2 in range(leftmost + 1, rightmost):
 			if _content(a, b2) != Content.Water:
 				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
