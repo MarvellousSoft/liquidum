@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://cyipmucbrxt1i"]
+[gd_scene load_steps=11 format=3 uid="uid://cyipmucbrxt1i"]
 
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="1_rmur7"]
+[ext_resource type="Script" path="res://game/ui/Background.gd" id="1_slr8i"]
 [ext_resource type="Shader" path="res://assets/shaders/Background.gdshader" id="1_vkkdf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xpma"]
@@ -35,6 +36,21 @@ scale_min = 0.5
 scale_max = 0.8
 color_ramp = SubResource("GradientTexture1D_3u54o")
 
+[sub_resource type="Animation" id="Animation_3abvm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
 [sub_resource type="Animation" id="Animation_uojn2"]
 resource_name = "idle"
 length = 20.0
@@ -52,21 +68,6 @@ tracks/0/keys = {
 "values": [1.0, 0.0, 1.0]
 }
 
-[sub_resource type="Animation" id="Animation_3abvm"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/ratio")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p1m1d"]
 _data = {
 "RESET": SubResource("Animation_3abvm"),
@@ -75,6 +76,7 @@ _data = {
 
 [node name="Background" type="CanvasLayer"]
 layer = -1
+script = ExtResource("1_slr8i")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_0xpma")

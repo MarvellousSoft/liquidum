@@ -18,6 +18,7 @@ const DESIRED_GRID_W = 1300
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
 @onready var DevButtons: DevPanel = $DevButtons
+@onready var WaveEffect = %WaveEffect
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -39,19 +40,28 @@ func _ready():
 	if workshop_id != -1 and SteamManager.enabled:
 		Steam.startPlaytimeTracking([workshop_id])
 
+
 func _enter_tree():
 	%PlaytestButton.visible = false
 	if GridNode:
 		scale_grid()
 
+
 func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
 		Steam.stopPlaytimeTracking([workshop_id])
+
 
 func _process(dt):
 	if process_game and not grid.editor_mode():
 		running_time += dt
 		update_timer_label()
+
+
+func _input(event):
+	#TODO: Remove or make it harder on release
+	if event.is_action_pressed("debug_1"):
+		win()
 
 
 func setup(try_load := true) -> void:
@@ -152,8 +162,15 @@ func win() -> void:
 	running_time = false
 	GridNode.disable()
 	AudioManager.play_sfx("win_level")
+	WaveEffect.play()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
-	maybe_save()
+	maybe_save(true)
+	
+	await get_tree().create_timer(1.5).timeout
+	
+	TransitionManager.pop_scene()
+	
+	
 
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
@@ -281,6 +298,7 @@ func maybe_save(delete_solution := false) -> void:
 			dummy_save.timer_secs = running_time
 			FileManager.save_level(level_name, dummy_save)
 
+
 func reset_level() -> void:
 	if ConfirmationScreen.start_confirmation("CONFIRM_RESET_LEVEL"):
 		if not await ConfirmationScreen.pressed:
@@ -290,6 +308,7 @@ func reset_level() -> void:
 	running_time = 0
 	Counters.mistake.set_count(0)
 	maybe_save()
+
 
 func _on_back_button_pressed() -> void:
 	maybe_save()

@@ -24,6 +24,7 @@ var focused := false
 
 
 func _ready():
+	AnimPlayer.play("float")
 	ShaderEffect.material = ShaderEffect.material.duplicate()
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
@@ -68,19 +69,16 @@ func setup(section, unlocked_levels) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
 		button.setup(section, i, i <= unlocked_levels)
-		button.pressed.connect(unfocus)
 
 
 func enable() -> void:
 	AnimPlayer.speed_scale = randf_range(.35, .55)
-	AnimPlayer.play("float")
 	MainButton.disabled = false
 	ShaderEffect.show()
 
 
 func disable() -> void:
 	AnimPlayer.speed_scale = randf_range(.1, .15)
-	AnimPlayer.play("float")
 	MainButton.disabled = true
 	ShaderEffect.hide()
 
@@ -93,7 +91,7 @@ func focus():
 
 
 func unfocus():
-	AnimPlayer.play("float", 2.0)
+	AnimPlayer.play("float")
 	focused = false
 	MouseBlocker.hide()
 	disable_focus.emit()

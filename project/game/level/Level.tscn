@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=19 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
 [ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="7_q4003"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
+[ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="13_4gky1"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
@@ -228,6 +229,11 @@ offset_right = 399.0
 offset_bottom = 188.0
 focus_mode = 0
 text = "Back"
+
+[node name="WaveLayer" type="CanvasLayer" parent="."]
+
+[node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
+unique_name_in_owner = true
 
 [node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
 

@@ -68,10 +68,6 @@ func _on_button_pressed():
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var level_node := Global.create_level(grid, level_name, level_data.full_name)
 		TransitionManager.push_scene(level_node)
-		
-		#Wait a bit transition animation to send signal
-		await get_tree().create_timer(.5).timeout
-		pressed.emit()
 
 
 func _on_button_mouse_entered():

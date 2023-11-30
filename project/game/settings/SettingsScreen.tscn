@@ -171,6 +171,7 @@ _data = {
 }
 
 [node name="SettingsScreen" type="CanvasLayer"]
+layer = 2
 script = ExtResource("1_bstu8")
 
 [node name="BG" type="ColorRect" parent="."]
