@@ -214,6 +214,8 @@ class PureCell:
 		return 0.5 * (float(c_left == c) + float(c_right == c))
 	func water_count() -> float:
 		return _content_count(Content.Water)
+	func air_count() -> float:
+		return _content_count(Content.Air)
 	func nothing_count() -> float:
 		return _content_count(Content.Nothing)
 	func eq(other: PureCell) -> bool:
@@ -1136,6 +1138,14 @@ func aquarium_hints_status() -> E.HintStatus:
 			return E.HintStatus.Normal
 	return E.HintStatus.Satisfied
 
+
+func count_air_row(i : int) -> float:
+	var count: float = 0.
+	for j in m:
+		count += _pure_cell(i, j).air_count()
+	return count
+
+
 func count_water_row(i: int) -> float:
 	var count: float = 0.
 	for j in m:
@@ -1170,6 +1180,13 @@ func count_waters() -> float:
 	var count := 0.0
 	for i in n:
 		count += count_water_row(i)
+	return count
+
+
+func count_airs() -> float:
+	var count := 0.0
+	for i in n:
+		count += count_air_row(i)
 	return count
 
 

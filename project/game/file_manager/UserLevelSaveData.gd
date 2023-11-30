@@ -25,7 +25,12 @@ func get_data() -> Dictionary:
 		best_time_secs = best_time_secs,
 	}
 
-func completed() -> bool:
+
+func is_solution_empty() -> bool:
+	return grid_data.is_empty
+
+
+func is_completed() -> bool:
 	return best_mistakes >= 0
 
 func save_completion(mistakes_: int, time: float) -> void:

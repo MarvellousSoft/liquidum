@@ -27,7 +27,7 @@ static func section_complete(section: int) -> bool:
 		if not FileManager.has_level_data(section, i) or count_uncompleted > MAX_UNSOLVED_LEVELS:
 			break
 		var save := FileManager.load_level(LevelLister.level_name(section, i))
-		if save == null or not save.completed():
+		if save == null or not save.is_completed():
 			count_uncompleted += 1
 	return count_uncompleted <= MAX_UNSOLVED_LEVELS
 
@@ -40,7 +40,7 @@ static func get_max_unlocked_level(section: int) -> int:
 	var i := 1
 	while FileManager.has_level_data(section, i) and i <= INITIAL_UNLOCKED_LEVELS + count_completed:
 		var save := FileManager.load_level(LevelLister.level_name(section, i))
-		if save != null and save.completed():
+		if save != null and save.is_completed():
 			count_completed += 1
 		i += 1
 	return i - 1
@@ -55,7 +55,7 @@ static func count_completed_levels(profile_name: String) -> int:
 			if not FileManager.has_level_data(section, level):
 				break
 			var save := FileManager.load_level(LevelLister.level_name(section, level), profile_name)
-			if save != null and save.completed():
+			if save != null and save.is_completed():
 				count += 1
 	return count
 

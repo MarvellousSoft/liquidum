@@ -17,6 +17,7 @@ signal pressed
 
 @onready var MainButton = $Button
 @onready var ShaderEffect = $Button/ShaderEffect
+@onready var OngoingSolution = %OngoingSolution
 
 var my_section := -1
 var my_level := -1
@@ -35,9 +36,15 @@ func setup(section : int, level : int, active : bool) -> void:
 	if active:
 		enable()
 		data = LevelLister.get_game_level_data(section, level)
-		change_style_boxes(data and data.completed())
+		change_style_boxes(data and data.is_completed())
+		set_ongoing_solution(data and not data.is_solution_empty())
 	else:
+		set_ongoing_solution(false)
 		disable()
+
+
+func set_ongoing_solution(status: bool) -> void:
+	OngoingSolution.visible = status
 
 
 func change_style_boxes(completed : bool) -> void:

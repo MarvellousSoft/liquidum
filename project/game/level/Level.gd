@@ -290,10 +290,9 @@ func maybe_save(delete_solution := false) -> void:
 			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, grid_logic.export_data()))
 			grid_logic.set_auto_update_hints(true)
 		else:
-			if not delete_solution:
-				dummy_save.grid_data = GridNode.grid_logic.export_data()
-			else:
-				dummy_save.grid_data = {}
+			if delete_solution:
+				grid.clear_content()
+			dummy_save.grid_data = GridNode.grid_logic.export_data()
 			dummy_save.mistakes = Counters.mistake.count
 			dummy_save.timer_secs = running_time
 			FileManager.save_level(level_name, dummy_save)

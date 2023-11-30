@@ -22,6 +22,7 @@ by sbed under CC BY 3.0
 
 - images/ui/objects/timer_icon.png
 - images/ui/icons/turtle.png
+- images/ui/icons/ongoing_solution_icon.png
 by Lorc under CC BY 3.0
 
 - audio/bgm/main.ogg
