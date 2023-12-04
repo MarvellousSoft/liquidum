@@ -91,11 +91,15 @@ func setup(try_load := true) -> void:
 	GridNode.setup(grid)
 	PlaytestButton.visible = editor_mode()
 	if not editor_mode():
-		update_expected_waters = GridNode.get_expected_waters() > 0
-		update_expected_boats = GridNode.get_expected_boats() > 0
-		Counters.water.visible = GridNode.get_expected_waters() != -1
-		Counters.boat.visible = GridNode.get_expected_boats() != 0
+		var e_waters = GridNode.get_expected_waters()
+		var e_boats = GridNode.get_expected_boats()
+		update_expected_waters = e_waters > 0
+		update_expected_boats = e_boats > 0
+		Counters.water.visible = e_waters != -1
+		Counters.boat.visible = e_boats != -1
 		CountersPanel.visible = Counters.water.visible or Counters.boat.visible
+		if e_boats == -1:
+			BrushPicker.disable()
 	else:
 		Counters.water.visible = true
 		Counters.boat.visible = true

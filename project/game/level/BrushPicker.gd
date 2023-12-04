@@ -3,6 +3,7 @@ extends Control
 signal brushed_picked(mode : E.BrushMode)
 
 var editor_mode := false
+var active := true
 
 @onready var Images = {
 	"self": $CenterContainer/PanelContainer/Images,
@@ -28,10 +29,17 @@ func _ready():
 
 
 func _input(event):
+	if not active:
+		return
 	if event.is_action_pressed("pick_prev_brush"):
 		pick_previous_brush()
 	elif event.is_action_pressed("pick_next_brush"):
 		pick_next_brush()
+
+
+func disable():
+	active = false
+	hide()
 
 
 func setup(editor_mode_: bool) -> void:
