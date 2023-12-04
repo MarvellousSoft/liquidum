@@ -8,6 +8,7 @@ const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7
 const MAX_BOAT_ANIM_SPEED = .9
 const EPS = 0.1
+const HIGHLIGHT_SPEED = 5.0
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
@@ -65,6 +66,7 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 }
 @onready var BoatAnim = $Boat/AnimationPlayer
 @onready var AnimPlayer = $AnimationPlayer
+@onready var Highlight = %Highlight
 
 var row : int
 var column : int
@@ -78,9 +80,10 @@ var water_flags = {
 	E.Waters.BottomRight: false,
 }
 var boat_flag := false
-
+var highlight := false
 
 func _ready():
+	Highlight.modulate.a = 0.0
 	for water in Waters.values():
 		water.material = water.material.duplicate()
 	BoatAnim.seek(randf_range(0.0, BoatAnim.current_animation_length), true)
@@ -98,6 +101,10 @@ func _process(dt):
 				Boat.modulate.a = min(Boat.modulate.a + BOAT_ALPHA_SPEED*dt, 1.0)
 			else:
 				Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
+		if highlight:
+			Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
+		else:
+			Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
 
 
 func enable():
@@ -130,6 +137,10 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 		AnimPlayer.play("startup")
 	else:
 		modulate.a = 1.0
+
+
+func set_highlight(value: bool) -> void:
+	highlight = value
 
 
 func fast_update_waters() -> void:

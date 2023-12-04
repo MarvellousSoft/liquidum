@@ -101,6 +101,24 @@ func set_visibility(arr: Array[int]) -> void:
 				child.set_visibility(bool(arr[i] & WATER_COUNT_VISIBLE), bool(arr[i] & WATER_TYPE_VISIBLE))
 
 
+func remove_all_highlights() -> void:
+	var bar = Horizontal if is_horizontal else Vertical
+	for hint_container in bar.get_children():
+		for hint in hint_container.get_children():
+			hint.set_highlight(false)
+
+
+func highlight_hints(idx : int) -> void:
+	var bar = Horizontal if is_horizontal else Vertical
+	assert(idx < bar.get_child_count(), "Not a valid index to get hint:" + str(idx))
+	var i = 0
+	for hint_container in bar.get_children():
+		for hint in hint_container.get_children():
+			hint.set_highlight(i == idx)
+		i += 1
+
+
+
 func get_hint(idx : int, is_boat : bool) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical
 	assert(idx < bar.get_child_count(), "Not a valid index to get hint:" + str(idx))

@@ -14,6 +14,7 @@ var options = {
 	"sfx_volume": 1.0,
 	"fullscreen": true,
 	"previous_windowed_pos": false,
+	"highlight_grid": true,
 	"locale": 0,
 }
 

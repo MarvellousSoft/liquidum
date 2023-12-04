@@ -666,10 +666,20 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Boat"]
-autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_k3t6r")
 }
+autoplay = "idle"
+
+[node name="Highlight" type="ColorRect" parent="."]
+unique_name_in_owner = true
+z_index = 1
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 500.0
+mouse_filter = 2
+color = Color(0.85098, 1, 0.886275, 0.313726)
 
 [node name="Errors" type="Control" parent="."]
 z_index = 2

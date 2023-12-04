@@ -129,4 +129,11 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Highlight" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 500.0
+color = Color(0.85098, 1, 0.886275, 0.313726)
+
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]

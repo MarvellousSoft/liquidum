@@ -2,6 +2,7 @@ extends Control
 
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
+const HIGHLIGHT_SPEED = 5.0
 
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
@@ -17,6 +18,7 @@ const HIDE_ALPHA = 0.5
 @onready var Number = %Number
 @onready var Boat = %Boat
 @onready var DummyLabel = %DummyLabel
+@onready var Highlight = %Highlight
 
 var editor_mode := false
 var hint_type : E.HintType = E.HintType.Any
@@ -24,6 +26,7 @@ var is_boat := false
 var hint_value := 0.0
 var hint_alpha := 1.0
 var is_dummy := false
+var highlight := false
 
 func _ready():
 	disable_editor()
@@ -50,7 +53,12 @@ func _process(dt):
 		HintsContainer.modulate.a = min(HintsContainer.modulate.a + ALPHA_SPEED*dt, 1.0)
 	else:
 		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
-	
+	if highlight:
+		Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
+	else:
+		Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
+
+
 func set_boat(value):
 	is_boat = value
 	Boat.visible = value
@@ -59,6 +67,10 @@ func set_boat(value):
 func set_value(new_value : float) -> void:
 	hint_value = new_value
 	update_label()
+
+
+func set_highlight(value: bool) -> void:
+	highlight = value
 
 
 func set_hint_type(new_type : E.HintType) -> void:

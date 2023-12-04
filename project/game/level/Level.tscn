@@ -246,6 +246,7 @@ libraries = {
 wait_time = 30.0
 autostart = true
 
+[connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]

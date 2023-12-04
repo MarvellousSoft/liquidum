@@ -408,6 +408,21 @@ func update_drag_preview() -> void:
 		DragPreview.points = []
 
 
+func remove_all_highlights():
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).set_highlight(false)
+	HintBars.left.remove_all_highlights()
+	HintBars.top.remove_all_highlights()
+
+
+func highlight_grid(p_i : int, p_j : int) -> void:
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).set_highlight(i == p_i or j == p_j)
+	HintBars.left.highlight_hints(p_i)
+	HintBars.top.highlight_hints(p_j)
+
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
@@ -478,6 +493,9 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 
 
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
+	if Profile.get_option("highlight_grid"):
+		highlight_grid(i, j)
+	
 	if mouse_hold_status == E.MouseDragState.None:
 		return
 	

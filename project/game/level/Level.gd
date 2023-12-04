@@ -167,6 +167,8 @@ func win() -> void:
 	GridNode.disable()
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
+	if Profile.get_option("highlight_grid"):
+		GridNode.remove_all_highlights()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
 	
@@ -371,3 +373,7 @@ func _on_dev_buttons_load_grid(g: GridModel) -> void:
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
+
+func _on_center_container_mouse_entered():
+	if Profile.get_option("highlight_grid"):
+		GridNode.remove_all_highlights()
