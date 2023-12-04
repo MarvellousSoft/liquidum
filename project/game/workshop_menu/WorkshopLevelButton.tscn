@@ -24,6 +24,7 @@ text = "Level ?"
 
 [node name="OngoingSolution" type="TextureRect" parent="."]
 visible = false
+layout_mode = 0
 offset_left = -144.0
 offset_top = 22.0
 offset_right = -44.0
