@@ -68,6 +68,7 @@ signal pressed_second_button(i: int, j: int, which: E.Waters)
 @onready var AnimPlayer = $AnimationPlayer
 @onready var Highlight = %Highlight
 
+var disabled := false
 var row : int
 var column : int
 var type : E.CellType
@@ -108,11 +109,14 @@ func _process(dt):
 
 
 func enable():
+	disabled = false
 	for button in Buttons.values():
 		button.disabled = false  
 
 
 func disable():
+	disabled = true
+	highlight = false
 	for button in Buttons.values():
 		button.disabled = true
 
@@ -140,6 +144,8 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 
 
 func set_highlight(value: bool) -> void:
+	if disabled:
+		return
 	highlight = value
 
 

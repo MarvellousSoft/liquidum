@@ -124,7 +124,7 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 64
 theme_override_fonts/font = SubResource("FontVariation_k7l4k")
-theme_override_font_sizes/font_size = 200
+theme_override_font_sizes/font_size = 180
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -134,6 +134,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
+mouse_filter = 2
 color = Color(0.85098, 1, 0.886275, 0.313726)
 
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]

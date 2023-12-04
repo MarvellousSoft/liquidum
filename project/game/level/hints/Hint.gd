@@ -29,6 +29,7 @@ var is_dummy := false
 var highlight := false
 
 func _ready():
+	Highlight.modulate.a = 0.0
 	disable_editor()
 	DummyLabel.hide()
 	set_boat(false)
@@ -38,6 +39,11 @@ func _ready():
 
 
 func _process(dt):
+	if highlight:
+		Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
+	else:
+		Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
+	
 	if is_dummy:
 		return
 	
@@ -53,10 +59,6 @@ func _process(dt):
 		HintsContainer.modulate.a = min(HintsContainer.modulate.a + ALPHA_SPEED*dt, 1.0)
 	else:
 		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
-	if highlight:
-		Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
-	else:
-		Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
 
 
 func set_boat(value):
