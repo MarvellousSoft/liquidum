@@ -164,12 +164,12 @@ func update_timer_label() -> void:
 
 
 func win() -> void:
-	running_time = false
+	process_game = false
+	if Profile.get_option("highlight_grid"):
+		GridNode.remove_all_highlights()
 	GridNode.disable()
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
-	if Profile.get_option("highlight_grid"):
-		GridNode.remove_all_highlights()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
 	

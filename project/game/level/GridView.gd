@@ -32,6 +32,7 @@ const MAX_GRID_C = 10
 @onready var EditRowSize = %EditRowSize
 @onready var FillerPanel = %FillerPanel
 
+var disabled = false
 var brush_mode : E.BrushMode = E.BrushMode.Water
 var grid_logic : GridModel
 var rows : int
@@ -131,12 +132,15 @@ func setup_cell_corners() -> void:
 
 
 func enable() -> void:
+	disabled = false
 	for i in rows:
 		for j in columns:
 			get_cell(i, j).enable()
 
 
 func disable() -> void:
+	disabled = true
+	mouse_hold_status = E.MouseDragState.None
 	for i in rows:
 		for j in columns:
 			get_cell(i, j).disable()
@@ -286,11 +290,14 @@ func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
 	HintBars.left.set_visibility(row)
 	HintBars.top.set_visibility(col)
 
+
 func get_cell(i: int, j: int) -> Node:
 	return Columns.get_child(i).get_child(j)
 
+
 func col_hints_should_be_visible() -> Array[int]:
 	return HintBars.top.should_be_visible()
+
 
 func row_hints_should_be_visible() -> Array[int]:
 	return HintBars.left.should_be_visible()
@@ -442,6 +449,9 @@ func highlight_column(idx):
 
 
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
+	if disabled:
+		return
+	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	match brush_mode:
@@ -486,6 +496,8 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 
 
 func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
+	if disabled:
+		return
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	if cell_data.air_at(corner):
@@ -511,6 +523,9 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 
 
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
+	if disabled:
+		return
+	
 	if Profile.get_option("highlight_grid"):
 		highlight_grid(i, j)
 	
@@ -556,15 +571,22 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 
 
 func _on_cell_corner_pressed_main_button(i: int, j: int) -> void:
+	if disabled:
+		return
 	mouse_hold_status = E.MouseDragState.Wall
 	previous_wall_index = [i, j]
 
 
 func _on_cell_corner_pressed_second_button(i: int, j: int) -> void:
+	if disabled:
+		return
 	mouse_hold_status = E.MouseDragState.RemoveWall
 	previous_wall_index = [i, j]
 
+
 func _on_cell_corner_mouse_entered(i: int, j: int) -> void:
+	if disabled:
+		return
 	var new_index = [i, j]
 	if not previous_wall_index.is_empty():
 		if mouse_hold_status == E.MouseDragState.Wall:
@@ -625,12 +647,16 @@ func _on_left_grid():
 
 
 func _on_hint_bar_top_mouse_entered_hint(idx):
+	if disabled:
+		return
 	remove_all_highlights()
 	highlight_column(idx)
 	HintBars.top.highlight_hints(idx)
 
 
 func _on_hint_bar_left_mouse_entered_hint(idx):
+	if disabled:
+		return
 	remove_all_highlights()
 	highlight_row(idx)
 	HintBars.left.highlight_hints(idx)
