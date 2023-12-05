@@ -2,7 +2,6 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
-const STARTUP_DELAY = 0.07
 const BOAT_ALPHA_SPEED = 1.0
 const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7
@@ -121,7 +120,7 @@ func disable():
 		button.disabled = true
 
 
-func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor_mode : bool) -> void:
+func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor_mode : bool, startup_delay : float) -> void:
 	grid = grid_ref
 	row = i
 	column = j
@@ -137,7 +136,7 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	copy_data(data)
 	
 	if not editor_mode:
-		await get_tree().create_timer((i+1)*j*STARTUP_DELAY).timeout
+		await get_tree().create_timer((i+1)*(j+1)*startup_delay).timeout
 		AnimPlayer.play("startup")
 	else:
 		modulate.a = 1.0

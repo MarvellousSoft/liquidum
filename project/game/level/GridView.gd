@@ -6,7 +6,8 @@ signal updated
 signal mistake_made
 signal updated_size
 
-const STARTUP_DELAY = 0.07
+const STARTUP_MAX_DELAY = 0.1
+const MAX_STARTUP_TIME = 2.8
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
 const CELL_CORNER = preload("res://game/level/cells/CellCorner.tscn")
 const PREVIEW_DRAG_COLORS = {
@@ -89,9 +90,7 @@ func setup(grid_logic_: GridModel) -> void:
 	update()
 	if not editor_mode:
 		disable()
-		var sample_cell = get_cell(0,0)
-		var delay = (rows+1)*columns*sample_cell.STARTUP_DELAY
-		await get_tree().create_timer(delay).timeout
+		await get_tree().create_timer(get_grid_delay(rows, columns)).timeout
 		enable()
 
 #Assumes grid_logic is already setup
@@ -99,9 +98,9 @@ func setup_hints():
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
 	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
 	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
-	var delay = STARTUP_DELAY * (rows + 1) * columns
-	HintBars.left.startup(editor_mode, delay + STARTUP_DELAY)
-	HintBars.top.startup(editor_mode, delay + STARTUP_DELAY*2)
+	var delay = get_grid_delay(rows, columns)
+	HintBars.left.startup(editor_mode, delay + STARTUP_MAX_DELAY)
+	HintBars.top.startup(editor_mode, delay + STARTUP_MAX_DELAY*2)
 
 
 func setup_cell_corners() -> void:
@@ -185,11 +184,19 @@ func get_missing_boats() -> int:
 	return grid_logic.get_expected_boats() - grid_logic.count_boats()
 
 
+func get_grid_delay(r : int, c : int) -> float:
+	return min(r*c*STARTUP_MAX_DELAY, MAX_STARTUP_TIME)
+
+
+func get_cell_delay(r : int, c : int) -> float:
+	return get_grid_delay(r, c)/float(r*c)
+
+
 func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 
-	cell.setup(self, cell_data, n, m, editor_mode)
+	cell.setup(self, cell_data, n, m, editor_mode, get_cell_delay(rows, columns))
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
