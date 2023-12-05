@@ -29,7 +29,7 @@ var level_name := ""
 # TODO: Display this somewhere
 var full_name: String
 # Has completion data but outdated grid data
-var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
+var dummy_save := UserLevelSaveData.new({}, true, 0, 0.0)
 var workshop_id := -1
 
 func _ready():
@@ -294,14 +294,20 @@ func maybe_save(delete_solution := false) -> void:
 			var grid_logic := GridNode.grid_logic
 			grid_logic.set_auto_update_hints(false)
 			_update_visibilities(grid_logic)
-			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, grid_logic.export_data()))
+			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, grid_logic.export_data(), ""))
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
 				grid.clear_content()
+			var is_empty := grid.is_empty()
+			dummy_save.is_empty = is_empty
+			if is_empty:
+				dummy_save.mistakes = 0
+				dummy_save.timer_secs = 0.0
+			else:
+				dummy_save.mistakes = Counters.mistake.count
+				dummy_save.timer_secs = running_time
 			dummy_save.grid_data = GridNode.grid_logic.export_data()
-			dummy_save.mistakes = Counters.mistake.count
-			dummy_save.timer_secs = running_time
 			FileManager.save_level(level_name, dummy_save)
 
 

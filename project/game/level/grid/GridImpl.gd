@@ -1452,3 +1452,6 @@ func equal(other: GridImpl) -> bool:
 		if not _line_hint_eq(_col_hints[j], other._col_hints[j]):
 			return false
 	return true
+	
+func is_empty() -> bool:
+	return count_boats() <= 0 and count_waters() <= 0 and count_airs() <= 0

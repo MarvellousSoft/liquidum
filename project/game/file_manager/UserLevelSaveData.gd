@@ -4,14 +4,16 @@ class_name UserLevelSaveData
 const VERSION = 1
 
 var grid_data: Dictionary
+var is_empty: bool
 var mistakes: int
 var timer_secs: float
 
 var best_mistakes: int = -1
 var best_time_secs: float = -1.0
 
-func _init(grid_data_: Dictionary, mistakes_: int, timer_secs_: float) -> void:
+func _init(grid_data_: Dictionary, is_empty_: bool, mistakes_: int, timer_secs_: float) -> void:
 	grid_data = grid_data_
+	is_empty = is_empty_
 	mistakes = mistakes_
 	timer_secs = timer_secs_
 
@@ -19,6 +21,7 @@ func get_data() -> Dictionary:
 	return {
 		version = VERSION,
 		grid_data = grid_data,
+		is_empty = is_empty,
 		mistakes = mistakes,
 		timer_secs = timer_secs,
 		best_mistakes = best_mistakes,
@@ -27,7 +30,7 @@ func get_data() -> Dictionary:
 
 
 func is_solution_empty() -> bool:
-	return grid_data.is_empty
+	return is_empty
 
 
 func is_completed() -> bool:
@@ -45,7 +48,7 @@ static func load_data(data: Variant) -> UserLevelSaveData:
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 		# If we ever change version, handle it here
-	var new := UserLevelSaveData.new(data.grid_data, int(data.mistakes), float(data.timer_secs))
+	var new := UserLevelSaveData.new(data.grid_data, bool(data.is_empty), int(data.mistakes), float(data.timer_secs))
 	new.best_mistakes = int(data.best_mistakes)
 	new.best_time_secs = float(data.best_time_secs)
 	return new

@@ -270,3 +270,6 @@ func export_data() -> Dictionary:
 	return GridModel.must_be_implemented()
 
 # To import, use GridImpl.import_data
+
+func is_empty() -> bool:
+	return GridModel.must_be_implemented()

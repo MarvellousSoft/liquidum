@@ -154,6 +154,8 @@ func clear_editor_level(id: String, profile := "") -> void:
 
 func load_workshop_level(dir: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(dir, LEVEL_FILE))
+	assert(data.tutorial.is_empty(), "Workshop level can't have tutorial")
+	data.tutorial = ""
 	return data
 
 const DATA_DIR := "res://database/levels"

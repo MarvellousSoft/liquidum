@@ -74,13 +74,9 @@ func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
 		hints.expected_aquariums[float(size)] = int(data.expected_aquariums[size])
 	return hints
 
-func _is_grid_empty(grid: GridImpl) -> bool:
-	return grid.count_boats() <= 0 and grid.count_waters() <= 0 and grid.count_airs() <= 0
-
 func export_data(grid: GridImpl) -> Dictionary:
 	return {
 		version = SAVE_VERSION,
-		is_empty = _is_grid_empty(grid),
 		cells = _export_grid(grid.pure_cells, _export_pure_cell),
 		row_hints = grid._row_hints.map(_export_line_hint),
 		col_hints = grid._col_hints.map(_export_line_hint),

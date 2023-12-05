@@ -51,7 +51,7 @@ func _on_create_new_level_pressed() -> void:
 		grid.row_hints()[i].water_count = 0
 	for j in grid.cols():
 		grid.col_hints()[j].water_count = 0
-	var data := LevelData.new(level_name, grid.export_data())
+	var data := LevelData.new(level_name, grid.export_data(), "")
 	FileManager.save_editor_level(new_id, metadata, data)
 	load_all_levels()
 
