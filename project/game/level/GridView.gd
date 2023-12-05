@@ -599,3 +599,8 @@ func _add_row():
 		emit_signal("updated_size")
 	else:
 		generic_error()
+
+
+func _on_left_grid():
+	if Profile.get_option("highlight_grid"):
+		remove_all_highlights()

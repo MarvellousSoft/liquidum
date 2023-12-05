@@ -235,10 +235,18 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_rem_col"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_add_col"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_rem_row"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_add_row"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/FillerPanel" to="." method="_on_left_grid"]
 
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarLeft"]

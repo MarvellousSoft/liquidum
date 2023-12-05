@@ -679,7 +679,7 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 mouse_filter = 2
-color = Color(0.85098, 1, 0.886275, 0.313726)
+color = Color(0.670588, 1, 0.819608, 0.313726)
 
 [node name="Errors" type="Control" parent="."]
 z_index = 2

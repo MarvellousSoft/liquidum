@@ -148,23 +148,6 @@ theme_override_font_sizes/font_size = 96
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
-[node name="PlaytestButton" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
-offset_left = 74.0
-offset_top = 326.0
-offset_right = 801.0
-offset_bottom = 451.0
-focus_mode = 0
-text = "Playtest"
-
-[node name="DevButtons" parent="." instance=ExtResource("7_q4003")]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 1457.0
-offset_right = 733.0
-offset_bottom = 2623.0
-
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
@@ -221,6 +204,23 @@ texture_hover = ExtResource("5_c2kft")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="DevButtons" parent="." instance=ExtResource("7_q4003")]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 1457.0
+offset_right = 780.0
+offset_bottom = 3473.0
+
+[node name="PlaytestButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 74.0
+offset_top = 326.0
+offset_right = 801.0
+offset_bottom = 451.0
+focus_mode = 0
+text = "Playtest"
+
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 2
 offset_left = 99.0
@@ -250,16 +250,16 @@ autostart = true
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
-[connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
+[connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ResetButton" to="." method="reset_level"]
 [connection signal="check_interesting" from="DevButtons" to="." method="_on_dev_buttons_check_interesting"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
-[connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
-[connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ResetButton" to="." method="reset_level"]
+[connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]

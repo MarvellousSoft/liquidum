@@ -118,6 +118,7 @@ button_pressed = false
 custom_minimum_size = Vector2(50, 50)
 
 [node name="LeftContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_constants/separation = 14
@@ -135,6 +136,7 @@ text = "3.5"
 vertical_alignment = 2
 
 [node name="Water" type="TextureRect" parent="LeftContainer"]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_qre3a")
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
@@ -171,6 +173,7 @@ custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 
 [node name="RightContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 alignment = 2

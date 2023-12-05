@@ -6,6 +6,11 @@ const HINT_DELAY = .3
 @onready var AnimPlayer = $AnimationPlayer
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 
+
+func _ready():
+	for child in HintContainer.get_children():
+		child.queue_free()
+
 func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
 	if not editor_mode and expected.is_empty():
 		hide()
@@ -16,7 +21,7 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	AnimPlayer.play("startup")
 	
 	delay = HINT_DELAY
-	update_values(expected, current, editor_mode, false)
+	update_values(expected, current, editor_mode)
 	for child in HintContainer.get_children():
 		child.startup(delay)
 		delay += HINT_DELAY
@@ -38,7 +43,7 @@ func _visible() -> Dictionary:
 		ans[sz] = true
 	return ans
 
-func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, auto_start := true) -> void:
+func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
 	var visible_ := _visible()
 	for sz in visible_:
 		if not expected.has(sz):
@@ -46,8 +51,6 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 	while HintContainer.get_child_count() < expected.size():
 		var c := preload("res://game/level/hints/AquariumHint.tscn").instantiate()
 		HintContainer.add_child(c)
-		if auto_start:
-			c.startup(0)
 	while HintContainer.get_child_count() > expected.size():
 		var child := HintContainer.get_child(HintContainer.get_child_count() - 1)
 		HintContainer.remove_child(child)

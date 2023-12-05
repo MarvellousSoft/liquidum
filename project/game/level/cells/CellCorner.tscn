@@ -43,7 +43,7 @@ _data = {
 [node name="CellCorner" type="TextureRect"]
 modulate = Color(0.45098, 0.941176, 0.776471, 0.784314)
 use_parent_material = true
-custom_minimum_size = Vector2(250, 250)
+custom_minimum_size = Vector2(180, 180)
 offset_right = 100.0
 offset_bottom = 100.0
 texture = ExtResource("1_mtb6s")

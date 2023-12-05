@@ -81,6 +81,7 @@ alignment = 1
 layout_mode = 2
 
 [node name="ToggleHintType" parent="VBoxContainer/EditorButtons" instance=ExtResource("3_trrfp")]
+visible = false
 layout_mode = 2
 texture_pressed = ExtResource("6_o4fwo")
 
@@ -124,7 +125,7 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 64
 theme_override_fonts/font = SubResource("FontVariation_k7l4k")
-theme_override_font_sizes/font_size = 180
+theme_override_font_sizes/font_size = 160
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -135,6 +136,6 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 mouse_filter = 2
-color = Color(0.85098, 1, 0.886275, 0.313726)
+color = Color(0.670588, 1, 0.819608, 0.313726)
 
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]

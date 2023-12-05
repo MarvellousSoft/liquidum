@@ -33,6 +33,7 @@ var dummy_save := UserLevelSaveData.new({}, 0, 0.0)
 var workshop_id := -1
 
 func _ready():
+	%PlaytestButton.visible = false
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
@@ -42,9 +43,9 @@ func _ready():
 
 
 func _enter_tree():
-	%PlaytestButton.visible = false
 	if GridNode:
 		scale_grid()
+		PlaytestButton.visible = editor_mode()
 
 
 func _exit_tree() -> void:

@@ -1,5 +1,7 @@
 extends HBoxContainer
 
+const ALPHA_SPEED = 4.0
+const HIDE_ALPHA = 0.5
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var VisibilityButton: TextureButton = %VisibilityButton
@@ -7,15 +9,30 @@ extends HBoxContainer
 @onready var MiddleSeparator = %MiddleSeparator
 @onready var ExpectedAmount = %ExpectedAmount
 @onready var CurrentAmount: Label = %CurrentAmount
+@onready var LeftContainer = %LeftContainer
+@onready var RightContainer = %RightContainer
+@onready var Water = %Water
 
 var aquarium_size: float
 
 func _ready():
+	Water.material = Water.material.duplicate()
+	Water.material.set_shader_parameter("level", 0.0)
 	modulate.a = 0.0
 
 
+func _process(dt):
+	if VisibilityButton.visible:
+		for node in [LeftContainer, RightContainer]:
+			if VisibilityButton.is_pressed():
+				node.modulate.a = min(node.modulate.a + ALPHA_SPEED*dt, 1.0)
+			else:
+				node.modulate.a = max(node.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
+
+
 func startup(delay: float) -> void:
-	await get_tree().create_timer(delay).timeout
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
 
 
