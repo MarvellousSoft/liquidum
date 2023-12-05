@@ -1,6 +1,8 @@
 class_name HintBar
 extends Control
 
+signal mouse_entered_hint(idx : int)
+
 const HINT = preload("res://game/level/hints/Hint.tscn")
 
 @export var is_horizontal := false
@@ -28,7 +30,8 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
 		var water_hint = create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
-		create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
+		var hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
+		hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		if hints[i].boat_count == -1 and hints[i].water_count == -1:
 			water_hint.dummy_hint()
 
@@ -69,7 +72,7 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 		new_hint.enable_editor()
 	else:
 		new_hint.disable_editor()
-	
+
 	return new_hint
 
 const WATER_COUNT_VISIBLE := 1
@@ -89,6 +92,7 @@ func should_be_visible() -> Array[int]:
 				val |= BOAT_TYPE_VISIBLE if child.is_boat else WATER_TYPE_VISIBLE 
 		ans.append(val)
 	return ans
+
 
 func set_visibility(arr: Array[int]) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
@@ -118,7 +122,6 @@ func highlight_hints(idx : int) -> void:
 		i += 1
 
 
-
 func get_hint(idx : int, is_boat : bool) -> Node:
 	var bar = Horizontal if is_horizontal else Vertical
 	assert(idx < bar.get_child_count(), "Not a valid index to get hint:" + str(idx))
@@ -127,3 +130,7 @@ func get_hint(idx : int, is_boat : bool) -> Node:
 			return child
 	#"Couldn't find hint of this type
 	return null
+
+
+func _on_hint_mouse_entered(idx : int) -> void:
+	mouse_entered_hint.emit(idx)

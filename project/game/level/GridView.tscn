@@ -236,6 +236,8 @@ end_cap_mode = 2
 antialiased = true
 
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
+[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_mouse_entered_hint"]
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize" to="." method="_on_left_grid"]
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_rem_col"]

@@ -16,13 +16,7 @@ base_font = ExtResource("5_oyftd")
 [node name="Hint" type="Control"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -1820.0
-offset_bottom = -980.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_s2nml")
 
 [node name="Hints" type="Control" parent="."]

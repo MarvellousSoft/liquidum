@@ -430,6 +430,17 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 	HintBars.left.highlight_hints(p_i)
 	HintBars.top.highlight_hints(p_j)
 
+
+func highlight_row(idx):
+	for j in columns:
+		get_cell(idx, j).set_highlight(true)
+
+
+func highlight_column(idx):
+	for i in rows:
+		get_cell(i, idx).set_highlight(true)
+
+
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
@@ -611,3 +622,15 @@ func _add_row():
 func _on_left_grid():
 	if Profile.get_option("highlight_grid"):
 		remove_all_highlights()
+
+
+func _on_hint_bar_top_mouse_entered_hint(idx):
+	remove_all_highlights()
+	highlight_column(idx)
+	HintBars.top.highlight_hints(idx)
+
+
+func _on_hint_bar_left_mouse_entered_hint(idx):
+	remove_all_highlights()
+	highlight_row(idx)
+	HintBars.left.highlight_hints(idx)
