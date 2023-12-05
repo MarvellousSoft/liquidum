@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dns62u0n4j1k3"]
+[gd_scene load_steps=14 format=3 uid="uid://dns62u0n4j1k3"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
 [ext_resource type="PackedScene" uid="uid://bjsmnin37pr8t" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijmyt"]
 bg_color = Color(0.192157, 0.690196, 0.690196, 1)
@@ -174,7 +175,6 @@ mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
 
 [node name="MouseBlocker" type="ColorRect" parent="Button"]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = -101.0
@@ -182,12 +182,20 @@ offset_top = -65.0
 offset_right = 299.0
 offset_bottom = 335.0
 
+[node name="OngoingSolution" parent="Button" instance=ExtResource("4_wvh0b")]
+unique_name_in_owner = true
+visible = false
+offset_left = 129.0
+offset_top = 238.0
+offset_right = 129.0
+offset_bottom = 238.0
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "float"
-speed_scale = 0.7
 libraries = {
 "": SubResource("AnimationLibrary_nwjf5")
 }
+autoplay = "float"
+speed_scale = 0.7
 
 [node name="Levels" type="Control" parent="."]
 anchors_preset = 0

@@ -1,0 +1,109 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3tmba0xubh11"]
+
+[ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="1_psev4"]
+
+[sub_resource type="Animation" id="Animation_d3dbx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dot3:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(100, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Dot3:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_71b8q"]
+resource_name = "idle"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Dot3:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(100, 0), Vector2(100, 0), Vector2(100, -24), Vector2(100, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Dot3:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1, 1.2, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.8), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tqnon"]
+_data = {
+"RESET": SubResource("Animation_d3dbx"),
+"idle": SubResource("Animation_71b8q")
+}
+
+[node name="OngoingSolution" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 113.0
+offset_right = 22.0
+offset_bottom = 113.0
+mouse_filter = 2
+
+[node name="Dot1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+pivot_offset = Vector2(35, 70)
+mouse_filter = 2
+texture = ExtResource("1_psev4")
+expand_mode = 1
+
+[node name="Dot2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 50.0
+offset_right = 120.0
+offset_bottom = 70.0
+pivot_offset = Vector2(35, 70)
+mouse_filter = 2
+texture = ExtResource("1_psev4")
+expand_mode = 1
+
+[node name="Dot3" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 100.0
+offset_right = 170.0
+offset_bottom = 70.0
+pivot_offset = Vector2(35, 70)
+mouse_filter = 2
+texture = ExtResource("1_psev4")
+expand_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tqnon")
+}
+autoplay = "idle"

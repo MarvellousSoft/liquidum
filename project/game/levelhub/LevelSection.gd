@@ -17,6 +17,7 @@ signal disable_focus()
 @onready var Levels = $Levels
 @onready var BackButton = $BackButton
 @onready var MouseBlocker = $Button/MouseBlocker
+@onready var OngoingSolution = %OngoingSolution
 
 
 var my_section := -1
@@ -25,6 +26,7 @@ var focused := false
 
 func _ready():
 	AnimPlayer.play("float")
+	OngoingSolution.hide()
 	ShaderEffect.material = ShaderEffect.material.duplicate()
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
@@ -44,6 +46,7 @@ func _process(dt):
 			node.modulate.a = min(node.modulate.a + ALPHA_SPEED*dt, 1.0)
 			if node.modulate.a > 0.0:
 				node.show()
+		OngoingSolution.modulate.a = max(OngoingSolution.modulate.a - ALPHA_SPEED*dt, 0.0)
 		if MainButton.position != CENTRAL_POS:
 			MainButton.position = lerp(MainButton.position, CENTRAL_POS, clamp(LERP, 0.0, 1.0))
 			if MainButton.position.distance_to(CENTRAL_POS) < DIST_EPS:
@@ -53,6 +56,7 @@ func _process(dt):
 			node.modulate.a = max(node.modulate.a - ALPHA_SPEED*dt, 0.0)
 			if node.modulate.a <= 0.0:
 				node.hide()
+		OngoingSolution.modulate.a = min(OngoingSolution.modulate.a + ALPHA_SPEED*dt, 1.0)
 	for level in Levels.get_children():
 		level.set_effect_alpha(Levels.modulate.a)
 

@@ -123,7 +123,9 @@ func setup(try_load := true) -> void:
 	AudioManager.play_sfx("start_level")
 	
 	scale_grid()
-
+	
+	await get_tree().create_timer(GridNode.get_grid_delay(grid.rows(), grid.cols())).timeout
+	
 	process_game = true
 
 

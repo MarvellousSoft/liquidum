@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
-[ext_resource type="Texture2D" uid="uid://buvq2enne6wju" path="res://assets/images/ui/icons/ongoing_solution_icon.png" id="4_f8u65"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlw1d"]
 bg_color = Color(0.670588, 1, 0.819608, 1)
@@ -126,17 +126,8 @@ offset_bottom = 388.0
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
 
-[node name="OngoingSolution" type="TextureRect" parent="."]
+[node name="OngoingSolution" parent="." instance=ExtResource("4_tmmmn")]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 42.0
-offset_top = 115.0
-offset_right = 182.0
-offset_bottom = 255.0
-rotation = -0.244346
-mouse_filter = 2
-texture = ExtResource("4_f8u65")
-expand_mode = 1
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
