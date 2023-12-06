@@ -367,9 +367,9 @@ func _on_dev_buttons_generate() -> void:
 		GridNode.update()
 
 
-func _on_dev_buttons_randomize_water():
+func _on_dev_buttons_randomize_water() -> void:
 	if editor_mode():
-		Generator.new(randi()).randomize_water(GridNode.grid_logic)
+		Generator.new(randi(), true).randomize_water(GridNode.grid_logic)
 		GridNode.update()
 
 
@@ -382,10 +382,40 @@ func _on_dev_buttons_load_grid(g: GridModel) -> void:
 	scale_grid()
 
 
-func _on_button_mouse_entered():
+func _on_button_mouse_entered() -> void:
 	AudioManager.play_sfx("button_hover")
 
 
-func _on_center_container_mouse_entered():
+func _on_center_container_mouse_entered() -> void:
 	if Profile.get_option("highlight_grid"):
 		GridNode.remove_all_highlights()
+
+func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:
+	var val := 0
+	if randf() < w_co:
+		val |= HintBar.WATER_COUNT_VISIBLE
+	if randf() < w_ty:
+		val |= HintBar.WATER_TYPE_VISIBLE
+	if randf() < b_co:
+		val |= HintBar.BOAT_COUNT_VISIBLE
+	if not col and randf() < b_ty:
+		val |= HintBar.BOAT_TYPE_VISIBLE
+	return val
+
+func _on_dev_buttons_randomize_visibility() -> void:
+	var visibility := HintVisibility.default(grid.rows(), grid.cols())
+	visibility.total_boats = randf() < .5
+	visibility.total_water = randf() < .5
+	var w_co := sqrt(randf())
+	var w_ty := randf()
+	var b_co := sqrt(randf())
+	var b_ty := randf()
+	for i in grid.rows():
+		visibility.row[i] = _hint(w_co, w_ty, b_co, b_ty, false)
+	for j in grid.cols():
+		visibility.col[j] = _hint(w_co, w_ty, b_co, b_ty, true)
+	var aq_pct := randf()
+	for aq in grid.all_aquarium_counts():
+		if randf() < aq_pct:
+			visibility.expected_aquariums.append(aq)
+	_apply_visibility(visibility)

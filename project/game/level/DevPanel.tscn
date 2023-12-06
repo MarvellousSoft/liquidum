@@ -24,6 +24,7 @@ text = "Used strategies"
 
 [node name="FullSolve" type="Button" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "Full solve"
 
 [node name="FullSolveType" type="Label" parent="."]
@@ -32,6 +33,7 @@ text = "Solving manually"
 
 [node name="GodMode" type="CheckButton" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "God mode"
 
 [node name="Seed" type="LineEdit" parent="."]
@@ -40,19 +42,28 @@ placeholder_text = "Seed: ?"
 
 [node name="Generate" type="Button" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "Generate"
 
 [node name="Interesting" type="CheckButton" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "Interesting"
 
 [node name="Diags" type="CheckBox" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "Diagonals"
 
 [node name="RandomizeWater" type="Button" parent="."]
 layout_mode = 2
+focus_mode = 0
 text = "Randomize Water"
+
+[node name="RandomizeVisibility" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Randomize visibility"
 
 [node name="Paste" type="Button" parent="."]
 layout_mode = 2
@@ -73,5 +84,6 @@ text = "Paste clipboard"
 [connection signal="mouse_entered" from="Diags" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="RandomizeWater" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="RandomizeWater" to="." method="_on_randomize_water_pressed"]
+[connection signal="pressed" from="RandomizeVisibility" to="." method="_on_randomize_visibility_pressed"]
 [connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]

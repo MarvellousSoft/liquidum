@@ -1,9 +1,13 @@
 class_name Generator
 
 var rng := RandomNumberGenerator.new()
+var diagonals: bool
+var count_vis: float
+var type_vis: float
 
-func _init(rseed_: int) -> void:
+func _init(rseed_: int, diagonals_: bool) -> void:
 	rng.seed = rseed_
+	diagonals = diagonals_
 
 func _shuffle(a: Array) -> void:
 	for i in a.size():
@@ -128,7 +132,7 @@ func randomize_water(grid: GridModel) -> void:
 					elif c.nothing_at(corner):
 						c.put_water(corner)
 
-func generate(n: int, m: int, diagonals := true) -> GridModel:
+func generate(n: int, m: int) -> GridModel:
 	# Reset rng
 	rng.seed = rng.seed
 	var adj_rule: AdjacencyRule

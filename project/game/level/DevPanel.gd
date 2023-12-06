@@ -6,6 +6,7 @@ signal use_strategies()
 signal full_solve()
 signal generate()
 signal randomize_water()
+signal randomize_visibility()
 signal load_grid(g: GridModel)
 
 
@@ -46,8 +47,8 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			rseed = int($Seed.text)
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
-		var gen := Generator.new(rseed)
-		var g := gen.generate(rows, cols, $Diags.button_pressed)
+		var gen := Generator.new(rseed, $Diags.button_pressed)
+		var g := gen.generate(rows, cols)
 		if $Interesting.button_pressed and $Seed.text == "":
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
@@ -77,7 +78,7 @@ func selected_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $Paste]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $RandomizeVisibility, $Paste]:
 		node.visible = editor_mode
 
 
@@ -127,3 +128,8 @@ func _on_paste_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_randomize_visibility_pressed():
+	AudioManager.play_sfx("button_pressed")
+	randomize_visibility.emit()

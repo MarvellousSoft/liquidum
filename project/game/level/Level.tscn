@@ -256,6 +256,7 @@ autostart = true
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]
+[connection signal="randomize_visibility" from="DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
