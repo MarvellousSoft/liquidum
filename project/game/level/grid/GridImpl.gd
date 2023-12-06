@@ -1278,12 +1278,14 @@ func _col_bools(j: int, content: Content) -> Array[bool]:
 func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			var status := _hint_statusi(count_boat_row(i), _row_hints[i].boat_count)
-			var type := _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
+			var count := _row_hints[i].boat_count
+			var status := _hint_statusi(count_boat_row(i), count)
+			var type := count == -1 or _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
 			return _status_and_then(status, type)
 		E.HintContent.Water:
-			var status := _hint_statusf(count_water_row(i), _row_hints[i].water_count)
-			var type := _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
+			var count := _row_hints[i].water_count
+			var status := _hint_statusf(count_water_row(i), count)
+			var type :=  count == -1.0 or _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
 			return _status_and_then(status, type)
 		_:
 			assert(false, "Bad content")
@@ -1295,8 +1297,10 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 			var status := _hint_statusi(count_boat_col(j), _col_hints[j].boat_count)
 			return _status_and_then(status, _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat)))
 		E.HintContent.Water:
-			var status := _hint_statusf(count_water_col(j), _col_hints[j].water_count)
-			return _status_and_then(status, _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water)))
+			var count := _col_hints[j].water_count
+			var status := _hint_statusf(count_water_col(j), count)
+			var type := count == -1.0 or _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
+			return _status_and_then(status, type)
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong

@@ -375,8 +375,11 @@ func _on_dev_buttons_randomize_water():
 
 func _on_dev_buttons_load_grid(g: GridModel) -> void:
 	grid = g
+	var visibility := HintVisibility.from_grid(g)
 	GridNode.grid_logic = g
 	GridNode.update()
+	_apply_visibility(visibility)
+	scale_grid()
 
 
 func _on_button_mouse_entered():
