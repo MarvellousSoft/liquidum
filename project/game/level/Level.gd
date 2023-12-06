@@ -345,10 +345,9 @@ func _on_grid_view_updated_size():
 func _on_dev_buttons_full_solve():
 	if editor_mode():
 		var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
-		g2.clear_content()
 		_update_visibilities(g2)
-		var r := SolverModel.new().full_solve(g2, DevButtons.selected_strategies())
-		DevButtons.set_solve_type(r)
+		g2.clear_content()
+		DevButtons.start_solve(g2)
 	else:
 		var r: SolverModel.SolveResult = GridNode.full_solve(DevButtons.selected_strategies(), true, false)
 		DevButtons.set_solve_type(r)

@@ -643,6 +643,8 @@ func full_solve(grid: GridModel, strategy_list: Array, flush_undo := true, min_b
 		grid.push_empty_undo()
 	apply_strategies(grid, strategy_list, false)
 	if grid.is_any_hint_broken():
+		#var s = JSON.stringify(grid.export_data())
+		#DisplayServer.clipboard_set(s)
 		return SolveResult.Unsolvable
 	if grid.are_hints_satisfied():
 		return SolveResult.SolvedUniqueNoGuess

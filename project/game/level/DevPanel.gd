@@ -12,6 +12,7 @@ signal load_grid(g: GridModel)
 
 @onready var StrategyList: MenuButton = $StrategyList
 
+var solve_thread: Thread = Thread.new()
 
 func _ready() -> void:
 	var popup := StrategyList.get_popup()
@@ -90,6 +91,19 @@ func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	$Generate.disabled = false
 	return g
 
+func _solve(g: GridModel) -> SolverModel.SolveResult:
+	return SolverModel.new().full_solve(g, selected_strategies())
+
+func _process(_dt: float) -> void:
+	if solve_thread.is_started() and not solve_thread.is_alive():
+		var r = solve_thread.wait_to_finish()
+		set_solve_type(r)
+		$FullSolve.disabled = false
+
+func start_solve(g: GridModel) -> void:
+	assert(not solve_thread.is_started())
+	$FullSolve.disabled = true
+	solve_thread.start(_solve.bind(g))
 
 func _on_strategies_pressed():
 	AudioManager.play_sfx("button_pressed")
@@ -98,7 +112,10 @@ func _on_strategies_pressed():
 
 func _on_full_solve_pressed():
 	AudioManager.play_sfx("button_pressed")
-	full_solve.emit()
+	if solve_thread.is_started():
+		pass
+	else:
+		full_solve.emit()
 
 
 func _on_generate_pressed():

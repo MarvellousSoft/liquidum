@@ -1212,15 +1212,21 @@ func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
 
 func all_hints_status() -> E.HintStatus:
 	var s := E.HintStatus.Satisfied
+	#print("bef ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_boats_hint_status())
+	#print("boats ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_waters_hint_status())
+	#print("waters ", E.HintStatus.find_key(s))
 	s = merge_status(s, aquarium_hints_status())
+	#print("aquariums ", E.HintStatus.find_key(s))
 	for i in n:
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Water))
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Boat))
+		#print("row %d " % i, E.HintStatus.find_key(s))
 	for j in m:
 		s = merge_status(s, get_col_hint_status(j, E.HintContent.Water))
 		s = merge_status(s, get_col_hint_status(j, E.HintContent.Boat))
+		#print("col %d " % j, E.HintStatus.find_key(s))
 	return s
 
 func are_hints_satisfied() -> bool:
