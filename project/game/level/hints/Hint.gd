@@ -144,6 +144,7 @@ func enable_editor() -> void:
 	EditorButtons.show()
 	if is_boat:
 		ToggleVisibility.set_pressed(false)
+	ToggleHintType.set_pressed(false)
 
 
 func disable_editor() -> void:

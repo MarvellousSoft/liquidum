@@ -24,10 +24,14 @@ func _ready():
 
 func setup(hints : Array, editor_mode : bool) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
-	for child in bar.get_children():
+	# Let's not remove all children to keep the current visibility when adding/removing rows
+	# Removing then adding does not keep the same value, but that's fine enough
+	while bar.get_child_count() > hints.size():
+		var child := bar.get_child(bar.get_child_count() - 1)
 		bar.remove_child(child)
 		child.queue_free()
-	for i in hints.size():
+	while bar.get_child_count() < hints.size():
+		var i := bar.get_child_count()
 		var container := (VBoxContainer.new() as BoxContainer) if is_horizontal else (HBoxContainer.new() as BoxContainer)
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
