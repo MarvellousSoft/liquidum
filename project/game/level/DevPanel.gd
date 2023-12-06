@@ -14,6 +14,7 @@ signal load_grid(g: GridModel)
 
 func _ready() -> void:
 	var popup := StrategyList.get_popup()
+	popup.hide_on_checkable_item_selection = false
 	popup.index_pressed.connect(_toggled_strategy)
 	var i := 0
 	for strategy in SolverModel.STRATEGY_LIST:
