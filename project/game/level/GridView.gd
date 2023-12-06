@@ -667,4 +667,6 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 
 
 func _on_block_mouse_entered(row : int, column : int):
+	if disabled:
+		return
 	highlight_grid(row, column)

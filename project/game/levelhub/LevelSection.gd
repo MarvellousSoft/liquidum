@@ -7,6 +7,18 @@ const DIST_EPS = .4
 const CENTRAL_POS = Vector2(-103, -135)
 const RADIUS = 500
 const ELLIPSE_RATIO = Vector2(1.1, .75)
+const STYLES = {
+	"normal": {
+		"normal": preload("res://assets/ui/SectionButton/NormalStyle.tres"),
+		"hover": preload("res://assets/ui/SectionButton/HoverStyle.tres"),
+		"pressed": preload("res://assets/ui/SectionButton/PressedStyle.tres"),
+	},
+	"completed": {
+		"normal": preload("res://assets/ui/SectionButton/CompletedNormalStyle.tres"),
+		"hover": preload("res://assets/ui/SectionButton/CompletedHoverStyle.tres"),
+		"pressed": preload("res://assets/ui/SectionButton/CompletedPressedStyle.tres"),
+	}
+}
 
 signal enable_focus(pos : Vector2, my_section : int)
 signal disable_focus()
@@ -79,6 +91,7 @@ func setup(section, unlocked_levels) -> void:
 	
 	OngoingSolution.visible = LevelLister.count_section_ongoing_solutions(section) > 0
 	update_level_count_label()
+	update_style_boxes(is_section_completed())
 
 
 func enable() -> void:
@@ -118,10 +131,22 @@ func position_level_button(button, total_levels, i):
 	)
 
 
+func is_section_completed():
+	return LevelLister.count_completed_section_levels(my_section) >=\
+		   LevelLister.count_section_levels(my_section)
+
+
 func update_level_count_label():
 	LevelCount.text = "%d/%d" % \
 		[LevelLister.count_completed_section_levels(my_section),\
 		 LevelLister.count_section_levels(my_section)]
+
+
+func update_style_boxes(completed : bool):
+	var styles = STYLES.completed if completed else STYLES.normal
+	MainButton.add_theme_stylebox_override("normal", styles.normal)
+	MainButton.add_theme_stylebox_override("hover", styles.hover)
+	MainButton.add_theme_stylebox_override("pressed", styles.pressed)
 
 
 func _on_button_pressed():

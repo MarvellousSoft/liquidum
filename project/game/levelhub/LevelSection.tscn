@@ -2,57 +2,20 @@
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
+[ext_resource type="StyleBox" uid="uid://cb7spey42d0ve" path="res://assets/ui/SectionButton/CompletedNormalStyle.tres" id="3_cxiqi"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
 [ext_resource type="PackedScene" uid="uid://bjsmnin37pr8t" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
+[ext_resource type="StyleBox" uid="uid://dw5db25mri8oa" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
+[ext_resource type="StyleBox" uid="uid://u08m6dr57t0c" path="res://assets/ui/SectionButton/CompletedPressedStyle.tres" id="5_te6c4"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijmyt"]
-bg_color = Color(0.192157, 0.690196, 0.690196, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
-shadow_size = 20
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ibfh"]
-bg_color = Color(0.466667, 0.937255, 0.933333, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
-shadow_size = 20
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6r72t"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skdpu"]
 bg_color = Color(0.105882, 0.435294, 0.435294, 1)
 border_width_left = 50
 border_width_top = 50
 border_width_right = 50
 border_width_bottom = 50
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+border_color = Color(0.0352941, 1, 0.34902, 1)
 corner_radius_top_left = 170
 corner_radius_top_right = 170
 corner_radius_bottom_right = 170
@@ -63,26 +26,6 @@ expand_margin_top = 50.0
 expand_margin_right = 90.0
 expand_margin_bottom = 50.0
 shadow_color = Color(0.105882, 0.435294, 0.435294, 1)
-shadow_size = 20
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rr6r"]
-bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.1925, 0.28175, 0.35, 0.901961)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-shadow_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
 shadow_size = 20
 anti_aliasing_size = 7.338
 
@@ -157,10 +100,10 @@ theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
 theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
 theme_override_constants/outline_size = 80
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_ijmyt")
-theme_override_styles/hover = SubResource("StyleBoxFlat_1ibfh")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_6r72t")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_5rr6r")
+theme_override_styles/normal = ExtResource("3_cxiqi")
+theme_override_styles/hover = ExtResource("4_ej3iu")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_skdpu")
+theme_override_styles/disabled = ExtResource("5_te6c4")
 text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]
