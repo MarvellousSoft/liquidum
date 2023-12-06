@@ -75,7 +75,6 @@ alignment = 1
 layout_mode = 2
 
 [node name="ToggleHintType" parent="VBoxContainer/EditorButtons" instance=ExtResource("3_trrfp")]
-visible = false
 layout_mode = 2
 texture_pressed = ExtResource("6_o4fwo")
 
