@@ -26,6 +26,7 @@ var cam_target_zoom = NORMAL_ZOOM
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
+	SteamManager.enabled = false
 	randomize()
 	FileManager.load_game()
 	

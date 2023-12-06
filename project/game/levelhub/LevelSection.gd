@@ -73,6 +73,9 @@ func setup(section, unlocked_levels) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
 		button.setup(section, i, i <= unlocked_levels)
+	
+	OngoingSolution.visible = LevelLister.count_section_ongoing_solutions(section) > 0
+		
 
 
 func enable() -> void:

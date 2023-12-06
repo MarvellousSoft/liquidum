@@ -1,25 +1,34 @@
 extends Node
 
 const DEFAULT_PROFILE := "fish"
+const CURRENT_PROFILE := "user://cur_profile.txt"
+const PROFILE_FILE := "profile.save"
+const METADATA := ".metadata"
+const LEVEL_FILE := "level.json"
+const DATA_DIR := "res://database/levels"
+
 var current_profile := DEFAULT_PROFILE
+
 
 func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
 		save_profile()
 
+
 func save_and_quit() -> void:
 	save_game()
 	Global.exit_game()
+
 
 func save_game() -> void:
 	save_current_profile()
 	save_profile()
 
+
 func load_game() -> void:
 	load_current_profile()
 	load_profile()
 
-const CURRENT_PROFILE := "user://cur_profile.txt"
 
 func load_current_profile() -> void:
 	if not FileAccess.file_exists(CURRENT_PROFILE):
@@ -31,14 +40,20 @@ func load_current_profile() -> void:
 	else:
 		current_profile = DEFAULT_PROFILE
 
+
 func save_current_profile() -> void:
 	var file := FileAccess.open(CURRENT_PROFILE, FileAccess.WRITE)
 	file.store_string(current_profile)
+
 
 func change_current_profile(profile: String) -> void:
 	current_profile = profile
 	save_current_profile()
 	load_profile()
+
+
+func get_current_profile() -> String:
+	return current_profile
 
 # Does not clear editor levels
 func clear_whole_profile(profile: String) -> void:
@@ -70,6 +85,7 @@ func _load_json_data(dir_name: String, file_name: String, error_non_existing := 
 		return null
 	return json.get_data()
 
+
 func _save_json_data(dir_name: String, file_name: String, data: Dictionary) -> void:
 	_assert_dir(dir_name)
 	var file := FileAccess.open("%s/%s" % [dir_name, file_name], FileAccess.WRITE)
@@ -77,12 +93,12 @@ func _save_json_data(dir_name: String, file_name: String, data: Dictionary) -> v
 		push_error("Error trying to open file %s/%s whilst saving: %d" % [dir_name, file_name, FileAccess.get_open_error()])
 	file.store_string(JSON.stringify(data))
 
+
 func _delete_file(dir_name: String, file_name: String) -> void:
 	file_name = "%s/%s" % [dir_name, file_name]
 	if FileAccess.file_exists(file_name):
 		DirAccess.remove_absolute(file_name)
 
-const PROFILE_FILE := "profile.save"
 
 # TODO: Rename to settings
 func load_profile() -> void:
@@ -91,38 +107,47 @@ func load_profile() -> void:
 		save_profile()
 	Profile.set_save_data(_load_json_data(_profile_dir(), PROFILE_FILE))
 
+
 func save_profile() -> void:
 	var profile_data := Profile.get_save_data()
 	_save_json_data(_profile_dir(), PROFILE_FILE, profile_data)
 
+
 func clear_profile(profile: String) -> void:
 	_delete_file(_profile_dir(profile), PROFILE_FILE)
+
 
 func _level_dir(profile := "") -> String:
 	return "%s/levels" % _profile_dir(profile)
 
+
 func _level_file(level: String) -> String:
 	return "%s.save" % level
+
 
 func load_level(level_name: String, profile := "") -> UserLevelSaveData:
 	return UserLevelSaveData.load_data(_load_json_data(_level_dir(profile), _level_file(level_name), false))
 
+
 func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())
+
 
 func clear_level(level_name: String, profile: String) -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
 
+
 func level_has_solution(level_name: String, profile: String) -> bool:
 	return not load_level(level_name, profile).grid_data.is_empty()
+
 
 func _editor_metadata_dir(profile := "") -> String:
 	return "%s/editor" % _profile_dir(profile)
 
+
 func _editor_level_dir(id: String, profile := "") -> String:
 	return "%s/%s" % [_editor_metadata_dir(profile), id]
 
-const METADATA := ".metadata"
 
 func load_editor_levels() -> Dictionary:
 	var ans = {}
@@ -133,7 +158,6 @@ func load_editor_levels() -> Dictionary:
 				ans[id] = EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), file))
 	return ans
 
-const LEVEL_FILE := "level.json"
 
 func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelData) -> void:
 	if metadata != null:
@@ -141,16 +165,20 @@ func save_editor_level(id: String, metadata: EditorLevelMetadata, data: LevelDat
 	if data != null:
 		_save_json_data(_editor_level_dir(id), LEVEL_FILE, data.get_data())
 
+
 func load_editor_level(id: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_editor_level_dir(id), LEVEL_FILE))
 	return data
 
+
 func load_editor_level_metadata(id: String) -> EditorLevelMetadata:
 	return EditorLevelMetadata.load_data(_load_json_data(_editor_metadata_dir(), id + METADATA))
+
 
 func clear_editor_level(id: String, profile := "") -> void:
 	_delete_file(_editor_level_dir(id, profile), LEVEL_FILE)
 	_delete_file(_editor_metadata_dir(profile), id + METADATA)
+
 
 func load_workshop_level(dir: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(dir, LEVEL_FILE))
@@ -158,16 +186,18 @@ func load_workshop_level(dir: String) -> LevelData:
 	data.tutorial = ""
 	return data
 
-const DATA_DIR := "res://database/levels"
 
 func _level_data_dir(section: int) -> String:
 	return "%s/%02d" % [DATA_DIR, section]
 
+
 func _level_data_file(level: int) -> String:
 	return "%02d.json" % level
 
+
 func has_level_data(section: int, level: int) -> bool:
 	return FileAccess.file_exists("%s/%s" % [_level_data_dir(section), _level_data_file(level)])
+
 
 func load_level_data(section: int, level: int) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_level_data_dir(section), _level_data_file(level)))

@@ -68,3 +68,14 @@ static func clear_all_level_saves(profile_name: String) -> void:
 			if not FileManager.has_level_data(section, level):
 				break
 			FileManager.clear_level(LevelLister.level_name(section, level), profile_name)
+
+
+static func count_section_ongoing_solutions(section : int):
+	var count := 0
+	for level in range(1, 50):
+		if not FileManager.has_level_data(section, level):
+			break
+		var save := FileManager.load_level(LevelLister.level_name(section, level), FileManager.get_current_profile())
+		if save != null and not save.is_solution_empty():
+			count += 1
+	return count

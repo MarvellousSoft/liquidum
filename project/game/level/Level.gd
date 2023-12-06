@@ -110,13 +110,14 @@ func setup(try_load := true) -> void:
 		TimerContainer.hide()
 	update_counters()
 
-	AnimPlayer.play("startup")
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
-		delay += COUNTER_DELAY_STARTUP
 		counter.startup(delay)
-	delay += COUNTER_DELAY_STARTUP
+		delay += COUNTER_DELAY_STARTUP
 	AquariumHints.startup(delay, grid.grid_hints().expected_aquariums, grid.all_aquarium_counts(), GridNode.editor_mode)
+	
+	AnimPlayer.play("startup")
+	
 	_apply_visibility(visibility)
 
 	

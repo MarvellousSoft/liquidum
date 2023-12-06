@@ -49,6 +49,7 @@ func setup(hints : Array, editor_mode : bool) -> void:
 
 func startup(editor_mode : bool, delay : float) -> void:
 	if not editor_mode:
+		modulate.a = 0.0
 		await get_tree().create_timer(delay).timeout
 		AnimPlayer.play("startup")
 	else:
