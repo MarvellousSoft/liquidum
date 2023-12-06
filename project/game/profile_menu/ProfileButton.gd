@@ -23,7 +23,7 @@ func _on_select_button_pressed():
 
 func _on_delete_button_pressed() -> void:
 	AudioManager.play_sfx("button_back")
-	if ConfirmationScreen.start_confirmation("CONFIRM_DELETE_PROFILE"):
+	if ConfirmationScreen.start_confirmation(&"CONFIRM_DELETE_PROFILE"):
 		if await ConfirmationScreen.pressed:
 			delete.emit(profile_name)
 

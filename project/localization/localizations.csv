@@ -33,3 +33,9 @@ EDIT_LEVEL_TOOLTIP,Edit level,Editar o nível
 UPLOAD_LEVEL_TOOLTIP,Upload level to Steam Workshop,Subir o nível para a Oficina da Steam
 DELETE_LEVEL_TOOLTIP,"Delete level, can't be undone","Excluir o nível, não pode ser desfeito"
 NOT_INSTALLED,Not installed,Não instalado
+RANDOM_BUTTON,Explorer mode,Modo explorador
+RANDOM_TITLE,Explorer mode,Modo explorador
+EASY_BUTTON,Easy,Fácil
+MEDIUM_BUTTON,Medium,Médio
+HARD_BUTTON,Hard,Difícil
+CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente

@@ -179,12 +179,26 @@ func clear_editor_level(id: String, profile := "") -> void:
 	_delete_file(_editor_level_dir(id, profile), LEVEL_FILE)
 	_delete_file(_editor_metadata_dir(profile), id + METADATA)
 
+func _no_tutorial(data: LevelData) -> void:
+	if data != null:
+		assert(data.tutorial.is_empty(), "Level can't have tutorial")
+		data.tutorial = ""
+	
 
 func load_workshop_level(dir: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(dir, LEVEL_FILE))
-	assert(data.tutorial.is_empty(), "Workshop level can't have tutorial")
-	data.tutorial = ""
+	_no_tutorial(data)
 	return data
+
+const RANDOM := "random.json"
+
+func load_random_level() -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_level_dir(), RANDOM))
+	_no_tutorial(data)
+	return data
+
+func save_random_level(data: LevelData) -> void:
+	_save_json_data(_level_dir(), RANDOM, data.get_data())
 
 
 func _level_data_dir(section: int) -> String:

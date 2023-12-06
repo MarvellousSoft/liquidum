@@ -70,6 +70,11 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "PLAY_BUTTON"
 
+[node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "RANDOM_BUTTON"
+
 [node name="EditorButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -141,6 +146,7 @@ position_smoothing_speed = 4.0
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Workshop" to="." method="_on_button_mouse_entered"]

@@ -92,7 +92,7 @@ func _on_workshop_pressed():
 
 func _on_exit_button_pressed():
 	AudioManager.play_sfx("button_pressed")
-	if ConfirmationScreen.start_confirmation("EXIT_CONFIRMATION"):
+	if ConfirmationScreen.start_confirmation(&"EXIT_CONFIRMATION"):
 		if await ConfirmationScreen.pressed:
 			Global.exit_game()
 
@@ -121,3 +121,8 @@ func _on_level_hub_enable_focus(pos, _my_section):
 func _on_level_hub_disable_focus():
 	Camera.position = CAM_POS.level_hub
 	cam_target_zoom = NORMAL_ZOOM
+
+
+func _on_random_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	TransitionManager.push_scene(preload("res://game/random_menu/RandomHub.tscn").instantiate())

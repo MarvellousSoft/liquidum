@@ -27,16 +27,16 @@ func reset_texts() -> void:
 	NoButton.text = tr("NO")
 	
 
-func start_confirmation(override_title := "", override_yes := "", override_no := "") -> bool:
+func start_confirmation(override_title := &"", override_yes := &"", override_no := &"") -> bool:
 	if active:
 		push_error("Already has an active confirmation screen. Aborting new one")
 		return false
 	reset_texts()
-	if override_title != "":
+	if not override_title.is_empty():
 		MainTitle.text = tr(override_title)
-	if override_yes != "":
+	if not override_yes.is_empty():
 		YesButton.text = tr(override_yes)
-	if override_no != "":
+	if not override_no.is_empty():
 		NoButton.text = tr(override_no)
 	active = true
 	AnimPlayer.play("enable")

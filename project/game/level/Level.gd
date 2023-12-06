@@ -332,7 +332,7 @@ func maybe_save(delete_solution := false) -> void:
 
 
 func reset_level() -> void:
-	if ConfirmationScreen.start_confirmation("CONFIRM_RESET_LEVEL"):
+	if ConfirmationScreen.start_confirmation(&"CONFIRM_RESET_LEVEL"):
 		if not await ConfirmationScreen.pressed:
 			return
 	GridNode.grid_logic.clear_all()
