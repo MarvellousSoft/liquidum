@@ -185,10 +185,10 @@ grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 3.5
 libraries = {
 "": SubResource("AnimationLibrary_sb0jh")
 }
+speed_scale = 3.5
 
 [node name="Settings" type="Control" parent="."]
 visible = false

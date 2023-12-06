@@ -19,6 +19,10 @@ const DESIRED_GRID_W = 1300
 @onready var AnimPlayer = $AnimationPlayer
 @onready var DevButtons: DevPanel = $DevButtons
 @onready var WaveEffect = %WaveEffect
+@onready var ResetButton = %ResetButton
+@onready var BackButton = %BackButton
+@onready var Settings = $SettingsScreen
+@onready var ContinueAnim = $ContinueButton/AnimationPlayer
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -31,6 +35,7 @@ var full_name: String
 # Has completion data but outdated grid data
 var dummy_save := UserLevelSaveData.new({}, true, 0, 0.0)
 var workshop_id := -1
+var game_won := false
 
 func _ready():
 	%PlaytestButton.visible = false
@@ -68,6 +73,7 @@ func _input(event):
 func setup(try_load := true) -> void:
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
+	game_won = false
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -167,18 +173,29 @@ func update_timer_label() -> void:
 
 
 func win() -> void:
+	if game_won:
+		return
+	
+	game_won = true
 	process_game = false
+	
 	if Profile.get_option("highlight_grid"):
 		GridNode.remove_all_highlights()
 	GridNode.disable()
+	ResetButton.disabled = true
+	BackButton.disabled = true
+	Settings.disable_button()
+	
+	
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
+	
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
 	
 	await get_tree().create_timer(1.5).timeout
 	
-	TransitionManager.pop_scene()
+	ContinueAnim.play("show")
 	
 	
 
@@ -419,3 +436,7 @@ func _on_dev_buttons_randomize_visibility() -> void:
 		if randf() < aq_pct:
 			visibility.expected_aquariums.append(aq)
 	_apply_visibility(visibility)
+
+
+func _on_continue_button_pressed():
+	TransitionManager.pop_scene()

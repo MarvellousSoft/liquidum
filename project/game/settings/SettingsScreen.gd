@@ -9,15 +9,29 @@ signal pause_toggled(active : bool)
 	"sfx": $Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider,
 }
 @onready var Fullscreen = $Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox
-@onready var  BG = $BG
+@onready var BG = $BG
+@onready var PauseButton = $PauseButton
 
 var active := false
+var is_disabled := false
 
 func _ready():
 	BG.hide()
 
 
+func disable_button():
+	is_disabled = true
+	PauseButton.disabled = true
+
+
+func enable_button():
+	is_disabled = false
+	PauseButton.disabled = false
+
+
 func toggle_pause() -> void:
+	if is_disabled:
+		return
 	active = not active
 	if active:
 		AudioManager.play_sfx("enable_settings")

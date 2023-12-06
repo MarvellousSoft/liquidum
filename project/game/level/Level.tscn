@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=22 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -17,6 +17,66 @@
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
+
+[sub_resource type="Animation" id="Animation_aqku1"]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.6),
+"transitions": PackedFloat32Array(0.535887, 1),
+"update": 0,
+"values": [Vector2(3027, 2242), Vector2(3027, 1962)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_72efb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3027, 2242)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
+_data = {
+"RESET": SubResource("Animation_72efb"),
+"show": SubResource("Animation_aqku1")
+}
 
 [sub_resource type="Animation" id="Animation_1qr1w"]
 length = 0.001
@@ -193,6 +253,7 @@ unique_name_in_owner = true
 offset_bottom = 0.0
 
 [node name="ResetButton" type="TextureButton" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 offset_left = 3335.0
 offset_top = 49.0
@@ -219,16 +280,33 @@ offset_top = 326.0
 offset_right = 801.0
 offset_bottom = 451.0
 focus_mode = 0
-text = "Playtest"
+text = "PLAYTEST"
+
+[node name="ContinueButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+offset_left = 3027.0
+offset_top = 2242.0
+offset_right = 3754.0
+offset_bottom = 2367.0
+focus_mode = 0
+text = "CONTINUE"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueButton"]
+libraries = {
+"": SubResource("AnimationLibrary_dnqfm")
+}
 
 [node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 offset_left = 99.0
 offset_top = 63.0
 offset_right = 399.0
 offset_bottom = 188.0
 focus_mode = 0
-text = "Back"
+text = "BACK"
 
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 
@@ -259,7 +337,11 @@ autostart = true
 [connection signal="randomize_visibility" from="DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
+[connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
+[connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
