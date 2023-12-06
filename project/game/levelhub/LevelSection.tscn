@@ -190,6 +190,17 @@ offset_top = 238.0
 offset_right = 129.0
 offset_bottom = 238.0
 
+[node name="LevelCount" type="Label" parent="Button"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 176.0
+offset_top = -143.0
+offset_right = 383.0
+offset_bottom = -48.0
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 51
+text = "0/8"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_nwjf5")

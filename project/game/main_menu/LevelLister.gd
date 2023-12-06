@@ -46,6 +46,26 @@ static func get_max_unlocked_level(section: int) -> int:
 	return i - 1
 
 
+static func count_section_levels(section : int) -> int:
+	var count := 0
+	for level in range(1, 50):
+		if not FileManager.has_level_data(section, level):
+			break
+		count += 1
+	return count
+
+
+static func count_completed_section_levels(section : int) -> int:
+	var count := 0
+	for level in range(1, 50):
+		if not FileManager.has_level_data(section, level):
+			break
+		var save := FileManager.load_level(LevelLister.level_name(section, level), FileManager.get_current_profile())
+		if save != null and save.is_completed():
+			count += 1
+	return count
+
+
 static func count_completed_levels(profile_name: String) -> int:
 	var count := 0
 	for section in range(1, 50):
