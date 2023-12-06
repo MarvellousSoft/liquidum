@@ -367,7 +367,7 @@ class TogetherStrategy extends Strategy:
 	func _corner(a: int, b2: int) -> E.Corner:
 		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
 	func _apply(a: int) -> bool:
-		if _a_hints()[a].water_count_type != E.HintType.Together or _a_hints()[a].water_count == -1.:
+		if _a_hints()[a].water_count_type != E.HintType.Together:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
@@ -390,6 +390,8 @@ class TogetherStrategy extends Strategy:
 				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
 		if any:
 			return true
+		if _a_hints()[a].water_count == -1.:
+			return any
 		# Mark far away cells as empty
 		var min_b2 := leftmost
 		while min_b2 > 0 and _content(a, min_b2 - 1) == Content.Nothing:
