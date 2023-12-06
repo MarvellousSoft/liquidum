@@ -658,23 +658,17 @@ func maybe_update_hints() -> void:
 	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
-		var type := E.HintType.Any
-		if _row_hints[i].boat_count > 1:
-			type = E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
+		var type := E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
 		_row_hints[i].boat_count_type = type
 		_row_hints[i].water_count = count_water_row(i)
-		type = E.HintType.Any
-		if _row_hints[i].water_count > 0.5:
-			type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
+		type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
 		_row_hints[i].water_count_type = type
 	for j in m:
 		_col_hints[j].boat_count = count_boat_col(j)
 		# This is always Any
 		_col_hints[j].boat_count_type = E.HintType.Any
 		_col_hints[j].water_count = count_water_col(j)
-		var type := E.HintType.Any
-		if _col_hints[j].water_count > 0.5:
-			type = E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
+		var type := E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
 		_col_hints[j].water_count_type = type
 	assert(are_hints_satisfied())
 
@@ -1255,11 +1249,13 @@ func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
 	else:
 		return not is_together
 
-func _status_and_then(status: E.HintStatus, cond: bool) -> E.HintStatus:
-	if not cond and status == E.HintStatus.Satisfied:
-		return E.HintStatus.Wrong
-	else:
-		return status
+func _status_and_then(status: E.HintStatus, together_match: bool, is_q: bool) -> E.HintStatus:
+	if status == E.HintStatus.Satisfied and not together_match:
+		if is_q:
+			return E.HintStatus.Normal
+		else:
+			return E.HintStatus.Wrong
+	return status
 
 func _row_bools(i: int, content: Content) -> Array[bool]:
 	var a: Array[bool] = []
@@ -1280,13 +1276,13 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 		E.HintContent.Boat:
 			var count := _row_hints[i].boat_count
 			var status := _hint_statusi(count_boat_row(i), count)
-			var type := count == -1 or _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
-			return _status_and_then(status, type)
+			var type :=  _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
+			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
 			var count := _row_hints[i].water_count
 			var status := _hint_statusf(count_water_row(i), count)
-			var type :=  count == -1.0 or _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
-			return _status_and_then(status, type)
+			var type := _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
+			return _status_and_then(status, type, count == -1.0)
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong
@@ -1294,13 +1290,15 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 	match hint_content:
 		E.HintContent.Boat:
-			var status := _hint_statusi(count_boat_col(j), _col_hints[j].boat_count)
-			return _status_and_then(status, _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat)))
+			var count := _col_hints[j].boat_count
+			var status := _hint_statusi(count_boat_col(j), count)
+			var type := _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat))
+			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
 			var count := _col_hints[j].water_count
 			var status := _hint_statusf(count_water_col(j), count)
-			var type := count == -1.0 or _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
-			return _status_and_then(status, type)
+			var type := count == -1 or _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
+			return _status_and_then(status, type, count == -1.0)
 		_:
 			assert(false, "Bad content")
 			return E.HintStatus.Wrong
