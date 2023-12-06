@@ -666,5 +666,5 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 	HintBars.left.highlight_hints(idx)
 
 
-func _on_block_mouse_entered():
-	remove_all_highlights()
+func _on_block_mouse_entered(row : int, column : int):
+	highlight_grid(row, column)

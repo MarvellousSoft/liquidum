@@ -81,6 +81,7 @@ var water_flags = {
 }
 var boat_flag := false
 var highlight := false
+var editor_mode := false
 
 func _ready():
 	Highlight.modulate.a = 0.0
@@ -120,7 +121,8 @@ func disable():
 		button.disabled = true
 
 
-func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor_mode : bool, startup_delay : float) -> void:
+func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float) -> void:
+	editor_mode = editor
 	grid = grid_ref
 	row = i
 	column = j
@@ -205,7 +207,8 @@ func update_blocks(data: GridModel.CellModel) -> void:
 
 func set_block(block : E.Waters) -> void:
 	Blocks[block].show()
-	Buttons[block].hide()
+	if not editor_mode:
+		Buttons[block].hide()
 
 
 func set_boat(value) -> void:
@@ -282,4 +285,4 @@ func _on_button_mouse_entered(which : E.Waters):
 
 
 func _on_block_mouse_entered():
-	block_entered.emit()
+	block_entered.emit(row, column)
