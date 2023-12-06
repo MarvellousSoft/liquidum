@@ -16,14 +16,17 @@ func _ready():
 	Horizontal.visible = is_horizontal
 	for child in Vertical.get_children():
 		Vertical.remove_child(child)
+		child.queue_free()
 	for child in Horizontal.get_children():
 		Horizontal.remove_child(child)
+		child.queue_free()
 
 
 func setup(hints : Array, editor_mode : bool) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
 	for child in bar.get_children():
 		bar.remove_child(child)
+		child.queue_free()
 	for i in hints.size():
 		var container := (VBoxContainer.new() as BoxContainer) if is_horizontal else (HBoxContainer.new() as BoxContainer)
 		container.alignment = BoxContainer.ALIGNMENT_END

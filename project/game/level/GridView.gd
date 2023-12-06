@@ -66,8 +66,10 @@ func _input(event):
 func reset() -> void:
 	for child in Columns.get_children():
 		Columns.remove_child(child)
+		child.queue_free()
 	for child in CellCornerGrid.get_children():
 		CellCornerGrid.remove_child(child)
+		child.queue_free()
 
 
 func setup(grid_logic_: GridModel) -> void:
@@ -95,7 +97,7 @@ func setup(grid_logic_: GridModel) -> void:
 		enable()
 
 #Assumes grid_logic is already setup
-func setup_hints():
+func setup_hints() -> void:
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
 	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
 	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
@@ -108,6 +110,7 @@ func setup_cell_corners() -> void:
 	await get_tree().process_frame
 	for child in CellCornerGrid.get_children():
 		CellCornerGrid.remove_child(child)
+		child.queue_free()
 	var sample_cell = get_cell(0,0)
 	var sample_corner = CELL_CORNER.instantiate()
 	CellCornerGrid.columns = columns + 1
