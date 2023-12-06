@@ -116,12 +116,12 @@ func _on_randomize_water_pressed():
 
 
 func _on_paste_pressed():
-	var str := DisplayServer.clipboard_get()
+	var txt := DisplayServer.clipboard_get()
 	var g: GridModel
-	if str.begins_with("{"):
-		g = GridImpl.import_data(JSON.parse_string(str), GridModel.LoadMode.Editor)
+	if txt.begins_with("{"):
+		g = GridImpl.import_data(JSON.parse_string(txt), GridModel.LoadMode.Editor)
 	else:
-		g = GridImpl.from_str(str, GridModel.LoadMode.Editor)
+		g = GridImpl.from_str(txt, GridModel.LoadMode.Editor)
 	load_grid.emit(g)
 
 

@@ -369,7 +369,7 @@ func _on_dev_buttons_generate() -> void:
 
 func _on_dev_buttons_randomize_water():
 	if editor_mode():
-		Generator.randomize_water(GridNode.grid_logic)
+		Generator.new(randi()).randomize_water(GridNode.grid_logic)
 		GridNode.update()
 
 

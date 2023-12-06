@@ -1,23 +1,29 @@
 class_name Generator
 
-var rseed: int = randi()
-
+var rng := RandomNumberGenerator.new()
 
 func _init(rseed_: int) -> void:
-	rseed = rseed_
+	rng.seed = rseed_
+
+func _shuffle(a: Array) -> void:
+	for i in a.size():
+		var j := rng.randi_range(i, a.size() - 1)
+		var tmp = a[i]
+		a[i] = a[j]
+		a[j] = tmp
 
 func wrand(mx: int, weight: int) -> int:
-	var val := randi_range(1, mx)
+	var val := rng.randi_range(1, mx)
 	for _i in weight:
-		val = mini(val, randi_range(1, mx))
+		val = mini(val, rng.randi_range(1, mx))
 	return val
 
 func any_empty(g: Array[Array]) -> Vector2i:
 	var i_order := range(g.size())
-	i_order.shuffle()
+	_shuffle(i_order)
 	for i in i_order:
 		var j_order = range(g[i].size())
-		j_order.shuffle()
+		_shuffle(j_order)
 		for j in j_order:
 			if g[i][j] == 0:
 				return Vector2i(i, j)
@@ -37,11 +43,11 @@ class SquareAdj extends AdjacencyRule:
 class DiagAdj extends AdjacencyRule:
 	# Whether each cell was dec diagonal
 	var dec_diag: Array[Array]
-	func _init(n: int, m: int) -> void:
+	func _init(rng: RandomNumberGenerator, n: int, m: int) -> void:
 		for i in n:
 			var row = []
 			for j in m:
-				row.append(randf() < 0.5)
+				row.append(rng.randf() < 0.5)
 			dec_diag.append(row)
 	func third_adj(from: Vector2i) -> Vector2i:
 		var oj := from.y / 2
@@ -54,13 +60,13 @@ class DiagAdj extends AdjacencyRule:
 		return [from + Vector2i(0, -1), from + Vector2i(0, 1), third_adj(from)]
 
 func any_adj(g: Array[Array], cells: Array[Vector2i], adj_rule: AdjacencyRule) -> Vector2i:
-	cells.shuffle()
+	_shuffle(cells)
 	for c in cells:
 		var adj := adj_rule.all_adj(c)
 		# Slight hack: Add the other side of the same cell to make diagonals less common
 		adj.append(Vector2i(c.x, c.y ^ 1))
 		adj.append(Vector2i(c.x, c.y ^ 1))
-		adj.shuffle()
+		_shuffle(adj)
 		for e in adj:
 			if e.x >= 0 and e.y >= 0 and e.x < g.size() and e.y < g[0].size() and g[e.x][e.y] == 0:
 				return e
@@ -77,7 +83,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 	# Break groups into similar sizes, this uses the "sticks and rocks" technique
 	var group_sizes: Array[int] = [left - 1]
 	for group_i in (n * m) / 2:
-		var s := randi_range(0, left - 2 - group_i)
+		var s := rng.randi_range(0, left - 2 - group_i)
 		for j in (group_i + 1):
 			if s < group_sizes[j]:
 				var rest := group_sizes[j] - s
@@ -102,12 +108,12 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			left -= 1
 	return g
 
-static func randomize_water(grid: GridModel) -> void:
+func randomize_water(grid: GridModel) -> void:
 	var i_order := range(grid.rows())
-	i_order.shuffle()
+	_shuffle(i_order)
 	for i in i_order:
 		var j_order := range(grid.cols())
-		j_order.shuffle()
+		_shuffle(j_order)
 		for j in j_order:
 			var corners := [E.Corner.TopLeft]
 			var c := grid.get_cell(i, j)
@@ -116,17 +122,18 @@ static func randomize_water(grid: GridModel) -> void:
 			elif c.wall_at(E.Walls.DecDiag):
 				corners = [E.Corner.TopRight, E.Corner.BottomLeft]
 			for corner in corners:
-				if randf() < 0.5:
+				if rng.randf() < 0.5:
 					if c.water_at(corner):
 						c.remove_content(corner)
 					elif c.nothing_at(corner):
 						c.put_water(corner)
 
 func generate(n: int, m: int, diagonals := true) -> GridModel:
-	seed(rseed)
+	# Reset rng
+	rng.seed = rng.seed
 	var adj_rule: AdjacencyRule
 	if diagonals:
-		adj_rule = DiagAdj.new(n, m)
+		adj_rule = DiagAdj.new(rng, n, m)
 	else:
 		adj_rule = SquareAdj.new()
 	var g := _gen_grid_groups(n, 2 * m if diagonals else m, adj_rule)
@@ -148,5 +155,5 @@ func generate(n: int, m: int, diagonals := true) -> GridModel:
 					grid.get_cell(i, j).put_wall(E.Walls.Right)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
-	Generator.randomize_water(grid)
+	randomize_water(grid)
 	return grid
