@@ -11,25 +11,30 @@ signal load_grid(g: GridModel)
 
 
 @onready var StrategyList: MenuButton = $StrategyList
+@onready var ForcedStrategyList: MenuButton = $ForcedStrategyList
 
 var solve_thread: Thread = Thread.new()
 
 func _ready() -> void:
 	var popup := StrategyList.get_popup()
 	popup.hide_on_checkable_item_selection = false
-	popup.index_pressed.connect(_toggled_strategy)
+	popup.index_pressed.connect(_toggled_item.bind(StrategyList))
+	var popup_forced := ForcedStrategyList.get_popup()
+	popup_forced.hide_on_checkable_item_selection = false
+	popup_forced.index_pressed.connect(_toggled_item.bind(ForcedStrategyList))
 	var i := 0
 	for strategy in SolverModel.STRATEGY_LIST:
+		popup_forced.add_check_item(strategy)
 		popup.add_check_item(strategy)
 		popup.set_item_checked(i, true)
 		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
+		popup_forced.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
 		i += 1
 
 
-func _toggled_strategy(index: int) -> void:
+func _toggled_item(index: int, button: MenuButton) -> void:
 	AudioManager.play_sfx("button_pressed")
-	StrategyList.get_popup().toggle_item_checked(index)
-
+	button.get_popup().toggle_item_checked(index)
 
 func _enter_tree() -> void:
 	visible = Global.is_dev_mode() or self == get_tree().current_scene
@@ -38,11 +43,16 @@ func _enter_tree() -> void:
 func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	var time := Time.get_unix_time_from_system()
 	var strategies := selected_strategies()
+	var forced_strategies := selected_forced_strategies()
+	for s in forced_strategies:
+		if strategies.find(s) == -1:
+			strategies.append(s)
 	while true:
-		if Time.get_unix_time_from_system() > time + 10:
+		if Time.get_unix_time_from_system() > time + 20:
 			print("Took too long generating")
 			$Seed.placeholder_text = "Gave up"
 			return null
+		assert(not $Interesting.button_pressed or forced_strategies.is_empty(), "Can't generate interesting and have forced strategy")
 		var rseed := randi() % 100000
 		if $Seed.text != "":
 			rseed = int($Seed.text)
@@ -50,12 +60,24 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			$Seed.placeholder_text = "Seed: %d" % rseed
 		var gen := Generator.new(rseed, $Diags.button_pressed)
 		var g := gen.generate(rows, cols)
-		if $Interesting.button_pressed and $Seed.text == "":
+		if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
 			hints.apply_to_grid(g2)
-			var r := SolverModel.new().full_solve(g2, strategies)
-			if r != SolverModel.SolveResult.SolvedUnique:
+			var retry := true
+			if forced_strategies.is_empty():
+				retry = SolverModel.new().full_solve(g2, strategies) != SolverModel.SolveResult.SolvedUnique
+			else:
+				SolverModel.new().apply_strategies(g2, strategies)
+				if g2.are_hints_satisfied():
+					retry = false
+					for s in forced_strategies:
+						g2.undo()
+						SolverModel.new().apply_strategies(g2, strategies.filter(func(s2): return s2 != s))
+						if g2.are_hints_satisfied():
+							retry = true
+							break
+			if retry:
 				await get_tree().process_frame
 				continue
 		return g
@@ -70,11 +92,15 @@ func set_solve_type(type: SolverModel.SolveResult) -> void:
 func god_mode_enabled() -> bool:
 	return $GodMode.is_pressed()
 
+func _checked_items(popup: PopupMenu) -> Array:
+	return range(popup.item_count).filter(func(i): return popup.is_item_checked(i)).map(func(i): return popup.get_item_text(i))
+	
 
 func selected_strategies() -> Array:
-	var popup := StrategyList.get_popup()
-	return range(popup.item_count).filter(func(i): return popup.is_item_checked(i)).map(func(i): return popup.get_item_text(i))
+	return _checked_items(StrategyList.get_popup())
 
+func selected_forced_strategies() -> Array:
+	return _checked_items(ForcedStrategyList.get_popup())
 
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
