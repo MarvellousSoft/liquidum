@@ -609,7 +609,6 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
-mouse_filter = 2
 texture = ExtResource("24_0kqeq")
 
 [node name="TopLeft" type="TextureRect" parent="Blocks"]
@@ -619,7 +618,6 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
-mouse_filter = 2
 texture = ExtResource("25_00o68")
 
 [node name="TopRight" type="TextureRect" parent="Blocks"]
@@ -629,7 +627,6 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
-mouse_filter = 2
 texture = ExtResource("26_lb8de")
 
 [node name="BottomRight" type="TextureRect" parent="Blocks"]
@@ -639,7 +636,6 @@ layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
-mouse_filter = 2
 texture = ExtResource("27_fulr6")
 
 [node name="BottomLeft" type="TextureRect" parent="Blocks"]
@@ -649,7 +645,6 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
-mouse_filter = 2
 texture = ExtResource("28_6ngov")
 
 [node name="Boat" type="TextureRect" parent="."]
@@ -779,3 +774,8 @@ libraries = {
 [connection signal="mouse_entered" from="Buttons/BottomRight" to="." method="_on_button_mouse_entered" binds= [7]]
 [connection signal="gui_input" from="Buttons/BottomLeft" to="." method="_on_button_gui_input" binds= [8]]
 [connection signal="mouse_entered" from="Buttons/BottomLeft" to="." method="_on_button_mouse_entered" binds= [8]]
+[connection signal="mouse_entered" from="Blocks/Single" to="." method="_on_block_mouse_entered"]
+[connection signal="mouse_entered" from="Blocks/TopLeft" to="." method="_on_block_mouse_entered"]
+[connection signal="mouse_entered" from="Blocks/TopRight" to="." method="_on_block_mouse_entered"]
+[connection signal="mouse_entered" from="Blocks/BottomRight" to="." method="_on_block_mouse_entered"]
+[connection signal="mouse_entered" from="Blocks/BottomLeft" to="." method="_on_block_mouse_entered"]

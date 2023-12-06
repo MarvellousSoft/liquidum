@@ -11,7 +11,7 @@ const HIGHLIGHT_SPEED = 5.0
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
-
+signal block_entered
 
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
@@ -200,10 +200,12 @@ func update_blocks(data: GridModel.CellModel) -> void:
 		for corner in E.Corner.values():
 			if data.block_at(corner):
 				set_block(corner)
+				
 
 
 func set_block(block : E.Waters) -> void:
 	Blocks[block].show()
+	Buttons[block].hide()
 
 
 func set_boat(value) -> void:
@@ -277,3 +279,7 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 
 func _on_button_mouse_entered(which : E.Waters):
 	mouse_entered.emit(row, column, which)
+
+
+func _on_block_mouse_entered():
+	block_entered.emit()

@@ -208,6 +208,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
 	cell.mouse_entered.connect(_on_cell_mouse_entered)
+	cell.block_entered.connect(_on_block_mouse_entered)
 	
 	return cell
 
@@ -663,3 +664,7 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 	remove_all_highlights()
 	highlight_row(idx)
 	HintBars.left.highlight_hints(idx)
+
+
+func _on_block_mouse_entered():
+	remove_all_highlights()
