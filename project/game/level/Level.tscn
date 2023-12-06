@@ -206,10 +206,10 @@ stretch_mode = 0
 
 [node name="DevButtons" parent="." instance=ExtResource("7_q4003")]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 1457.0
-offset_right = 780.0
-offset_bottom = 3473.0
+offset_left = 40.0
+offset_top = 1210.0
+offset_right = 756.0
+offset_bottom = 3051.0
 
 [node name="PlaytestButton" type="Button" parent="."]
 unique_name_in_owner = true
@@ -253,7 +253,6 @@ autostart = true
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]
-[connection signal="check_interesting" from="DevButtons" to="." method="_on_dev_buttons_check_interesting"]
 [connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]

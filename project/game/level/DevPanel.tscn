@@ -54,10 +54,6 @@ text = "Diagonals"
 layout_mode = 2
 text = "Randomize Water"
 
-[node name="IsInteresting" type="Button" parent="."]
-layout_mode = 2
-text = "Is interesting?"
-
 [node name="Paste" type="Button" parent="."]
 layout_mode = 2
 focus_mode = 0
@@ -77,7 +73,5 @@ text = "Paste clipboard"
 [connection signal="mouse_entered" from="Diags" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="RandomizeWater" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="RandomizeWater" to="." method="_on_randomize_water_pressed"]
-[connection signal="mouse_entered" from="IsInteresting" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="IsInteresting" to="." method="_on_is_interesting_pressed"]
 [connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]

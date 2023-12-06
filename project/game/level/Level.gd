@@ -343,8 +343,15 @@ func _on_grid_view_updated_size():
 	scale_grid()
 
 func _on_dev_buttons_full_solve():
-	var r: SolverModel.SolveResult = GridNode.full_solve(DevButtons.selected_strategies(), true, false)
-	DevButtons.set_solve_type(r)
+	if editor_mode():
+		var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
+		g2.clear_content()
+		_update_visibilities(g2)
+		var r := SolverModel.new().full_solve(g2, DevButtons.selected_strategies())
+		DevButtons.set_solve_type(r)
+	else:
+		var r: SolverModel.SolveResult = GridNode.full_solve(DevButtons.selected_strategies(), true, false)
+		DevButtons.set_solve_type(r)
 
 
 func _on_dev_buttons_use_strategies():
@@ -364,13 +371,6 @@ func _on_dev_buttons_randomize_water():
 	if editor_mode():
 		Generator.randomize_water(GridNode.grid_logic)
 		GridNode.update()
-
-
-func _on_dev_buttons_check_interesting():
-	var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
-	g2.clear_content()
-	_update_visibilities(g2)
-	$DevButtons.do_check_interesting(g2)
 
 
 func _on_dev_buttons_load_grid(g: GridModel) -> void:
