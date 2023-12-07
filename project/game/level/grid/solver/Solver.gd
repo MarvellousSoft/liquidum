@@ -604,6 +604,17 @@ const STRATEGY_LIST := {
 	SeparateCol = SeparateColStrategy,
 }
 
+func solve_with_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> SolveResult:
+	apply_strategies(grid, strategies_names, flush_undo)
+	match grid.all_hints_status():
+		E.HintStatus.Wrong, E.HintStatus.Normal:
+			return SolveResult.Unsolvable
+		E.HintStatus.Satisfied:
+			return SolveResult.SolvedUniqueNoGuess
+		var s:
+			assert(false, "Unknown hint status: %d" % s)
+			return SolveResult.Unsolvable
+
 # Tries to solve the puzzle as much as possible
 func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> void:
 	# We'll merge all changes in the same undo here
