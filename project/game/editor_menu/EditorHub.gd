@@ -11,11 +11,14 @@ func load_all_levels() -> void:
 	for child in LevelNode.get_children():
 		LevelNode.remove_child(child)
 		child.queue_free()
+	var level_names = {}
 	var ids := levels.keys()
-	ids.sort_custom(func(a, b): return levels[a].full_name < levels[b].full_name)
+	for id in ids:
+		level_names[id] = FileManager.load_editor_level(id).full_name
+	ids.sort_custom(func(a, b): return level_names[a] < level_names[b])
 	for id in ids:
 		var button := preload("res://game/editor_menu/EditorLevelButton.tscn").instantiate()
-		button.setup(id, levels[id].full_name)
+		button.setup(id, level_names[id])
 		button.edit.connect(load_level)
 		button.play.connect(play_level)
 		button.delete.connect(delete_level)
@@ -44,7 +47,7 @@ func _on_create_new_level_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
 	var level_name := "Level %d" % (LevelNode.get_child_count() + 1)
-	var metadata := EditorLevelMetadata.new(level_name)
+	var metadata := EditorLevelMetadata.new()
 	var grid := GridImpl.new(5, 5)
 	grid.grid_hints().total_boats = -1
 	for i in grid.rows():

@@ -337,6 +337,7 @@ func maybe_save(delete_solution := false) -> void:
 			grid_logic.set_auto_update_hints(false)
 			_update_visibilities(grid_logic)
 			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
+			
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:

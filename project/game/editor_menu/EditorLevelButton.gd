@@ -33,7 +33,8 @@ func _on_upload_button_pressed() -> void:
 		return
 	UploadButton.disabled = true
 	var metadata := FileManager.load_editor_level_metadata(id)
-	var res := await SteamManager.upload_ugc_item(metadata.steam_id, metadata.full_name, FileManager._editor_level_dir(id))
+	var level_data := FileManager.load_editor_level(id)
+	var res := await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, level_data.description, FileManager._editor_level_dir(id))
 	if res.id != -1 and metadata.steam_id != res.id:
 		metadata.steam_id = res.id
 		FileManager.save_editor_level(id, metadata, null)

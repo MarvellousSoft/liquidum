@@ -26,7 +26,6 @@ var cam_target_zoom = NORMAL_ZOOM
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
-	SteamManager.enabled = false
 	randomize()
 	FileManager.load_game()
 	
@@ -99,7 +98,6 @@ func _on_exit_button_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
-
 
 func _on_play_pressed():
 	AudioManager.play_sfx("button_pressed")

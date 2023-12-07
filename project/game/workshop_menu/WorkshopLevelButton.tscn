@@ -6,25 +6,23 @@
 
 [node name="WorkshopLevelButton" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 theme = ExtResource("1_mrar7")
 script = ExtResource("2_7eonp")
 
 [node name="Open" type="Button" parent="."]
-layout_mode = 0
+layout_mode = 2
 offset_right = 8.0
 offset_bottom = 8.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 auto_translate = false
 focus_mode = 0
 text = "Level ?"
 
 [node name="OngoingSolution" type="TextureRect" parent="."]
 visible = false
-layout_mode = 0
+layout_mode = 2
 offset_left = -144.0
 offset_top = 22.0
 offset_right = -44.0

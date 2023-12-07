@@ -28,7 +28,8 @@ func try_check_download() -> void:
 	if level != null:
 		Open.text = level.full_name
 		Open.disabled = false
-		OngoingSolution.visible = not level.grid_data.is_empty
+		var save := FileManager.load_level(str(id))
+		OngoingSolution.visible = save != null and save.is_empty
 	else:
 		Steam.downloadItem(id, true)
 
