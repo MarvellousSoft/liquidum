@@ -26,6 +26,7 @@ signal won
 @onready var Settings = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
 @onready var Description: Label = $DescriptionScroll/Description
+@onready var DescriptionEdit: TextEdit = $DescriptionEdit
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -43,6 +44,7 @@ var game_won := false
 
 func _ready():
 	Description.text = description
+	DescriptionEdit.text = description
 	%PlaytestButton.visible = false
 	GridNode.hide()
 	await TransitionManager.transition_finished
@@ -78,7 +80,7 @@ func setup(try_load := true) -> void:
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
-	Description.text = description
+	
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -86,6 +88,8 @@ func setup(try_load := true) -> void:
 		if grid.editor_mode():
 			var data := FileManager.load_editor_level(level_name)
 			if data != null:
+				DescriptionEdit.text = data.description
+				description = data.description
 				full_name = data.full_name
 				# Load with Testing to get hints then change to editor
 				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Testing)
@@ -102,6 +106,8 @@ func setup(try_load := true) -> void:
 	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	PlaytestButton.visible = editor_mode()
+	$DescriptionScroll.visible = not editor_mode()
+	DescriptionEdit.visible = editor_mode()
 	if not editor_mode():
 		var e_waters = GridNode.get_expected_waters()
 		var e_boats = GridNode.get_expected_boats()
@@ -323,7 +329,7 @@ func maybe_save(delete_solution := false) -> void:
 			var grid_logic := GridNode.grid_logic
 			grid_logic.set_auto_update_hints(false)
 			_update_visibilities(grid_logic)
-			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, "", grid_logic.export_data(), ""))
+			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
@@ -452,3 +458,9 @@ func _on_dev_buttons_randomize_visibility() -> void:
 
 func _on_continue_button_pressed():
 	TransitionManager.pop_scene()
+
+
+func _on_description_edit_text_changed() -> void:
+	if not editor_mode():
+		return
+	description = DescriptionEdit.text

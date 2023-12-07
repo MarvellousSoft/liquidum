@@ -324,6 +324,18 @@ libraries = {
 wait_time = 30.0
 autostart = true
 
+[node name="DescriptionEdit" type="TextEdit" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 74.0
+offset_top = 570.0
+offset_right = 953.0
+offset_bottom = 964.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
+wrap_mode = 1
+
 [node name="DescriptionScroll" type="ScrollContainer" parent="."]
 layout_mode = 0
 offset_left = 74.0
@@ -335,9 +347,10 @@ horizontal_scroll_mode = 0
 [node name="Description" type="Label" parent="DescriptionScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 60
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-autowrap_mode = 2
+autowrap_mode = 3
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
@@ -360,6 +373,7 @@ autowrap_mode = 2
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
+[connection signal="text_changed" from="DescriptionEdit" to="." method="_on_description_edit_text_changed"]
 
 [editable path="TopInfo/MistakeCounter"]
 [editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
