@@ -35,7 +35,7 @@ func gen_level(hints_builder: Callable, strategies: Array, forced_strategies: Ar
 			break
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
-	FileManager.save_random_level(LevelData.new("", g.export_data(), ""))
+	FileManager.save_random_level(LevelData.new("", "", g.export_data(), ""))
 	load_existing()
 
 func load_existing() -> void:
