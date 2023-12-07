@@ -25,8 +25,9 @@ signal won
 @onready var BackButton = %BackButton
 @onready var Settings = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
-@onready var Description: Label = $DescriptionScroll/Description
-@onready var DescriptionEdit: TextEdit = $DescriptionEdit
+@onready var Description: Label = $Description/Scroll/Label
+@onready var DescriptionEdit: TextEdit = $Description/Edit
+@onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -106,7 +107,7 @@ func setup(try_load := true) -> void:
 	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	PlaytestButton.visible = editor_mode()
-	$DescriptionScroll.visible = not editor_mode()
+	DescriptionScroll.visible = not editor_mode()
 	DescriptionEdit.visible = editor_mode()
 	if not editor_mode():
 		var e_waters = GridNode.get_expected_waters()

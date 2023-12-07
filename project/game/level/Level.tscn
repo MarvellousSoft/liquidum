@@ -324,27 +324,26 @@ libraries = {
 wait_time = 30.0
 autostart = true
 
-[node name="DescriptionEdit" type="TextEdit" parent="."]
+[node name="Description" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 602.0
+offset_right = 974.0
+offset_bottom = 1002.0
+
+[node name="Edit" type="TextEdit" parent="Description"]
 visible = false
 layout_mode = 2
-offset_left = 74.0
-offset_top = 570.0
-offset_right = 953.0
-offset_bottom = 964.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
 wrap_mode = 1
 
-[node name="DescriptionScroll" type="ScrollContainer" parent="."]
-layout_mode = 0
-offset_left = 74.0
-offset_top = 570.0
-offset_right = 953.0
-offset_bottom = 964.0
+[node name="Scroll" type="ScrollContainer" parent="Description"]
+layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Description" type="Label" parent="DescriptionScroll"]
+[node name="Label" type="Label" parent="Description/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -373,7 +372,7 @@ autowrap_mode = 3
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
-[connection signal="text_changed" from="DescriptionEdit" to="." method="_on_description_edit_text_changed"]
+[connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 
 [editable path="TopInfo/MistakeCounter"]
 [editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
