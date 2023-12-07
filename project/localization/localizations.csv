@@ -45,3 +45,4 @@ CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one 
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to ALL the hints.,Todos níveis tem uma única solução. Preste atenção a TODAS as dicas.
 PLAYTEST,Playtest level,Testar nível
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível
+LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel

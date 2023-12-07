@@ -28,6 +28,8 @@ signal won
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionEdit: TextEdit = $Description/Edit
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
+@onready var Title: Label = $Title/Text
+@onready var TitleEdit: LineEdit = $Title/Edit
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -35,7 +37,6 @@ var process_game := false
 var running_time : float
 var grid: GridModel = null
 var level_name := ""
-# TODO: Display this somewhere
 var full_name: String
 var description: String
 # Has completion data but outdated grid data
@@ -46,6 +47,8 @@ var game_won := false
 func _ready():
 	Description.text = description
 	DescriptionEdit.text = description
+	Title.text = full_name
+	TitleEdit.text = full_name
 	%PlaytestButton.visible = false
 	GridNode.hide()
 	await TransitionManager.transition_finished
@@ -91,6 +94,7 @@ func setup(try_load := true) -> void:
 			if data != null:
 				DescriptionEdit.text = data.description
 				description = data.description
+				TitleEdit.text = data.full_name
 				full_name = data.full_name
 				# Load with Testing to get hints then change to editor
 				grid = GridExporter.new().load_data(grid, data.grid_data, GridModel.LoadMode.Testing)
@@ -109,6 +113,8 @@ func setup(try_load := true) -> void:
 	PlaytestButton.visible = editor_mode()
 	DescriptionScroll.visible = not editor_mode()
 	DescriptionEdit.visible = editor_mode()
+	TitleEdit.visible = editor_mode()
+	Title.visible = not editor_mode()
 	if not editor_mode():
 		var e_waters = GridNode.get_expected_waters()
 		var e_boats = GridNode.get_expected_boats()
@@ -465,3 +471,9 @@ func _on_description_edit_text_changed() -> void:
 	if not editor_mode():
 		return
 	description = DescriptionEdit.text
+
+
+func _on_edit_text_changed(new_text: String) -> void:
+	if not editor_mode():
+		return
+	full_name = new_text

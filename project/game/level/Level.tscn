@@ -327,9 +327,9 @@ autostart = true
 [node name="Description" type="MarginContainer" parent="."]
 layout_mode = 0
 offset_left = 74.0
-offset_top = 602.0
+offset_top = 705.0
 offset_right = 974.0
-offset_bottom = 1002.0
+offset_bottom = 1105.0
 
 [node name="Edit" type="TextEdit" parent="Description"]
 visible = false
@@ -350,6 +350,32 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 60
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 autowrap_mode = 3
+
+[node name="Title" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Text" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 313.0
+offset_right = 1176.0
+offset_bottom = 493.0
+theme_override_font_sizes/font_size = 120
+text = "Level title"
+text_overrun_behavior = 3
+
+[node name="Edit" type="LineEdit" parent="Title"]
+visible = false
+layout_mode = 0
+offset_left = 74.0
+offset_top = 512.0
+offset_right = 953.0
+offset_bottom = 644.0
+placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
+max_length = 64
+expand_to_text_length = true
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
@@ -373,6 +399,7 @@ autowrap_mode = 3
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
+[connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 
 [editable path="TopInfo/MistakeCounter"]
 [editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
