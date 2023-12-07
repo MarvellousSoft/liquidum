@@ -608,11 +608,13 @@ func can_solve_with_strategies(grid: GridModel, strategies_names: Array, forced_
 	for s in forced_strategies_or:
 		if strategies_names.find(s) == -1:
 			strategies_names.append(s)
-	var need_undo := apply_strategies(grid, strategies_names)
+	var need_undo := apply_strategies(grid, strategies_names, flush_undo)
 	if grid.are_hints_satisfied():
+		if forced_strategies_or.is_empty():
+			return true
 		if need_undo:
 			grid.undo()
-		apply_strategies(grid, strategies_names.filter(func(s2): return forced_strategies_or.find(s2) == -1))
+		apply_strategies(grid, strategies_names.filter(func(s2): return forced_strategies_or.find(s2) == -1), false)
 		return not grid.are_hints_satisfied()
 	else:
 		return false
