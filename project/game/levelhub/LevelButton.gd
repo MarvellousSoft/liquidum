@@ -2,14 +2,14 @@ extends Control
 
 const STYLES = {
 	"normal": {
-		"normal": preload("res://assets/ui/LevelButton/LevelButtonNormalStyle.tres"),
-		"hover": preload("res://assets/ui/LevelButton/LevelButtonHoverStyle.tres"),
-		"pressed": preload("res://assets/ui/LevelButton/LevelButtonPressedStyle.tres"),
+		"normal": preload("res://assets/ui/LevelButton/NormalStyle.tres"),
+		"hover": preload("res://assets/ui/LevelButton/HoverStyle.tres"),
+		"pressed": preload("res://assets/ui/LevelButton/PressedStyle.tres"),
 	},
 	"completed": {
-		"normal": preload("res://assets/ui/LevelButton/LevelButtonCompletedNormalStyle.tres"),
-		"hover": preload("res://assets/ui/LevelButton/LevelButtonCompletedHoverStyle.tres"),
-		"pressed": preload("res://assets/ui/LevelButton/LevelButtonCompletedPressedStyle.tres"),
+		"normal": preload("res://assets/ui/LevelButton/CompletedNormalStyle.tres"),
+		"hover": preload("res://assets/ui/LevelButton/CompletedHoverStyle.tres"),
+		"pressed": preload("res://assets/ui/LevelButton/CompletedPressedStyle.tres"),
 	}
 }
 

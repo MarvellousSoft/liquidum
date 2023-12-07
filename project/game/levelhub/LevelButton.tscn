@@ -2,83 +2,12 @@
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
+[ext_resource type="StyleBox" uid="uid://nqv6to7wgirr" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
+[ext_resource type="StyleBox" uid="uid://c4yj3hxo7u2s4" path="res://assets/ui/LevelButton/NormalStyle.tres" id="3_dht5y"]
+[ext_resource type="StyleBox" uid="uid://7vwnq01lpj8o" path="res://assets/ui/LevelButton/HoverStyle.tres" id="4_qjcst"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlw1d"]
-bg_color = Color(0.670588, 1, 0.819608, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.0784314, 0.364706, 0.529412, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-shadow_color = Color(0.45098, 0.941176, 0.776471, 1)
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k2t2"]
-bg_color = Color(0.670588, 1, 0.819608, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.85098, 1, 0.886275, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i6kju"]
-bg_color = Color(0.85098, 1, 0.886275, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0, 0.0352941, 0.141176, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-anti_aliasing_size = 7.338
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q23fe"]
-bg_color = Color(0.690196, 0.690196, 0.690196, 1)
-border_width_left = 50
-border_width_top = 50
-border_width_right = 50
-border_width_bottom = 50
-border_color = Color(0.34902, 0.34902, 0.34902, 1)
-corner_radius_top_left = 170
-corner_radius_top_right = 170
-corner_radius_bottom_right = 170
-corner_radius_bottom_left = 170
-corner_detail = 20
-expand_margin_left = 90.0
-expand_margin_top = 50.0
-expand_margin_right = 90.0
-expand_margin_bottom = 50.0
-shadow_color = Color(0, 0, 0, 1)
-shadow_size = 20
-anti_aliasing_size = 7.338
+[ext_resource type="StyleBox" uid="uid://b2184kn03irus" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyxri"]
 shader = ExtResource("3_d8olh")
@@ -109,10 +38,10 @@ theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
 theme_override_colors/font_outline_color = Color(0.0784314, 0.364706, 0.529412, 1)
 theme_override_constants/outline_size = 60
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_mlw1d")
-theme_override_styles/hover = SubResource("StyleBoxFlat_1k2t2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_i6kju")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_q23fe")
+theme_override_styles/normal = ExtResource("3_dht5y")
+theme_override_styles/hover = ExtResource("4_qjcst")
+theme_override_styles/pressed = ExtResource("5_eoh5v")
+theme_override_styles/disabled = ExtResource("3_84hro")
 text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]
