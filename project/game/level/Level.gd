@@ -308,6 +308,9 @@ func _on_playtest_button_pressed() -> void:
 
 
 func maybe_save(delete_solution := false) -> void:
+	if game_won and not delete_solution:
+		# Already saved
+		return
 	if not level_name.is_empty():
 		if editor_mode():
 			# Let's put the visibility info in the grid
@@ -318,6 +321,9 @@ func maybe_save(delete_solution := false) -> void:
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
+				if level_name == RandomHub.RANDOM:
+					FileManager.clear_level(level_name)
+					return
 				grid.clear_content()
 			var is_empty := grid.is_empty()
 			dummy_save.is_empty = is_empty

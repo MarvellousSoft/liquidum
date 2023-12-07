@@ -1,10 +1,14 @@
+class_name RandomHub
 extends Control
 
 const RANDOM := "random"
 
 @onready var Continue: Button = $Center/VBox/Continue
 
-func _ready() -> void:
+func _enter_tree() -> void:
+	call_deferred(&"_update_continue")
+
+func _update_continue() -> void:
 	Continue.visible = FileManager.load_level(RANDOM) != null
 
 func _on_back_pressed() -> void:

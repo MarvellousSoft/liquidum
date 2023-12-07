@@ -133,7 +133,7 @@ func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())
 
 
-func clear_level(level_name: String, profile: String) -> void:
+func clear_level(level_name: String, profile := "") -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
 
 
