@@ -19,6 +19,7 @@ AQUARIUMS,Aquariums,Aquários
 SIZE,Size,Tam.
 AMOUNT,Amount,Quant.
 BACK,Back,Voltar
+CONTINUE,Continue,Continuar
 CREATE_NEW_LEVEL,Create new level,Criar nível novo
 YOUR_LEVELS,Your levels,Seus níveis
 PROFILE,Profile,Perfil
@@ -39,3 +40,5 @@ EASY_BUTTON,Easy,Fácil
 MEDIUM_BUTTON,Medium,Médio
 HARD_BUTTON,Hard,Difícil
 CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente
+RANDOM_COMPLETED,Levels completed,Níveis completados
+CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.

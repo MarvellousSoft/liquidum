@@ -20,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 0.2
 offset_bottom = 95.0
 grow_horizontal = 2
+theme_override_font_sizes/font_size = 125
 text = "RANDOM_TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -65,6 +66,18 @@ anchors_preset = -1
 offset_left = 75.0
 offset_top = 75.0
 text = "BACK"
+
+[node name="CompletedCount" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 75.0
+offset_right = -75.0
+grow_horizontal = 0
+auto_translate = false
+theme_override_font_sizes/font_size = 50
+text = "RANDOM_COMPLETED: ?"
 
 [connection signal="pressed" from="Center/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Center/VBox/Easy" to="." method="_on_easy_pressed"]

@@ -59,6 +59,7 @@ func get_current_profile() -> String:
 func clear_whole_profile(profile: String) -> void:
 	clear_profile(profile)
 	LevelLister.clear_all_level_saves(profile)
+	clear_user_data(profile)
 	if profile == current_profile:
 		# Reload stuff if necessary
 		change_current_profile(profile)
@@ -217,3 +218,15 @@ func load_level_data(section: int, level: int) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_level_data_dir(section), _level_data_file(level)))
 	assert(not data.full_name.is_empty())
 	return data
+
+const USER_DATA := "user.data"
+
+# If this becomes very used, we can cache it
+func load_user_data() -> UserData:
+	return UserData.load_data(_load_json_data(_profile_dir(), USER_DATA, false))
+
+func save_user_data(data: UserData) -> void:
+	_save_json_data(_profile_dir(), USER_DATA, data.get_data())
+
+func clear_user_data(profile: String) -> void:
+	_delete_file(_profile_dir(profile), USER_DATA)

@@ -4,12 +4,17 @@ extends Control
 const RANDOM := "random"
 
 @onready var Continue: Button = $Center/VBox/Continue
+@onready var Completed: Label = $CompletedCount
+
+var completed_count: int
 
 func _enter_tree() -> void:
-	call_deferred(&"_update_continue")
+	call_deferred(&"_update")
 
-func _update_continue() -> void:
+func _update() -> void:
 	Continue.visible = FileManager.load_level(RANDOM) != null
+	completed_count = FileManager.load_user_data().random_levels_completed
+	Completed.text = "%s: %d" % [tr(&"RANDOM_COMPLETED"), completed_count]
 
 func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
@@ -25,6 +30,7 @@ func load_existing() -> void:
 	if data == null:
 		return
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name)
+	level.won.connect(_level_completed)
 	TransitionManager.push_scene(level)
 
 func _on_easy_pressed() -> void:
@@ -37,3 +43,8 @@ func _on_easy_pressed() -> void:
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	load_existing()
+
+func _level_completed() -> void:
+	# Save was already deleted
+	completed_count += 1
+	FileManager.save_user_data(UserData.new(completed_count))
