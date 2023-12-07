@@ -43,3 +43,4 @@ CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente
 RANDOM_COMPLETED,Levels completed,Níveis completados
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to ALL the hints.,Todos níveis tem uma única solução. Preste atenção a TODAS as dicas.
+PLAYTEST,Playtest level,Testar nível

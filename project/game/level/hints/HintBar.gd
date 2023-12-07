@@ -36,9 +36,10 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
-		var water_hint = create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
-		var hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
-		hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
+		var boat_hint = create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
+		var water_hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
+		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
+		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		if hints[i].boat_count == -1 and hints[i].water_count == -1:
 			water_hint.dummy_hint()
 
