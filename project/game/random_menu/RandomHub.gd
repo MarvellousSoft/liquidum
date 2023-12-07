@@ -20,17 +20,20 @@ func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
 
-func gen_level(hints: Level.HintVisibility) -> void:
+func gen_level(hints_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	var g: GridModel
 	var solver := SolverModel.new()
 	for i in 1000:
+		var hints: Level.HintVisibility = hints_builder.call()
 		g = Generator.new(randi(), false).generate(hints.row.size(), hints.col.size())
 		g.set_auto_update_hints(false)
 		g.clear_content()
 		hints.apply_to_grid(g)
-		if solver.solve_with_strategies(g, SolverModel.STRATEGY_LIST.keys()) == SolverModel.SolveResult.SolvedUniqueNoGuess:
+		if solver.solve_with_strategies(g, strategies) == SolverModel.SolveResult.SolvedUniqueNoGuess:
 			print("Created level after %d tries" % (i + 1))
 			break
+	# There may be an existing level save
+	FileManager.clear_level(RANDOM)
 	FileManager.save_random_level(LevelData.new("", g.export_data(), ""))
 	load_existing()
 
@@ -48,10 +51,12 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
+func _easy_visibility() -> Level.HintVisibility:
+	return Level.HintVisibility.default(5, 5)
+
 func _on_easy_pressed() -> void:
 	if await _confirm_new_level():
-		var h := Level.HintVisibility.default(5, 5)
-		gen_level(h)
+		gen_level(_easy_visibility, ["BasicRow", "BasicCol"], [])
 
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")

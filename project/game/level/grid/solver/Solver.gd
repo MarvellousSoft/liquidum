@@ -615,8 +615,8 @@ func solve_with_strategies(grid: GridModel, strategies_names: Array, flush_undo 
 			assert(false, "Unknown hint status: %d" % s)
 			return SolveResult.Unsolvable
 
-# Tries to solve the puzzle as much as possible
-func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> void:
+# Tries to solve the puzzle as much as possible. Returns whether it did anything.
+func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> bool:
 	# We'll merge all changes in the same undo here
 	if flush_undo:
 		grid.push_empty_undo()
@@ -633,8 +633,9 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 					print("Applied %s" % name)
 				any = true
 		if not any:
-			break
+			return t > 0
 		assert(t < 40)
+	return true
 
 enum SolveResult { SolvedUniqueNoGuess, SolvedUnique, SolvedMultiple, Unsolvable }
 
