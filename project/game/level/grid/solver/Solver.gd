@@ -604,16 +604,18 @@ const STRATEGY_LIST := {
 	SeparateCol = SeparateColStrategy,
 }
 
-func solve_with_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> SolveResult:
-	apply_strategies(grid, strategies_names, flush_undo)
-	match grid.all_hints_status():
-		E.HintStatus.Wrong, E.HintStatus.Normal:
-			return SolveResult.Unsolvable
-		E.HintStatus.Satisfied:
-			return SolveResult.SolvedUniqueNoGuess
-		var s:
-			assert(false, "Unknown hint status: %d" % s)
-			return SolveResult.Unsolvable
+func can_solve_with_strategies(grid: GridModel, strategies_names: Array, forced_strategies_or: Array, flush_undo := true) -> bool:
+	for s in forced_strategies_or:
+		if strategies_names.find(s) == -1:
+			strategies_names.append(s)
+	var need_undo := apply_strategies(grid, strategies_names)
+	if grid.are_hints_satisfied():
+		if need_undo:
+			grid.undo()
+		apply_strategies(grid, strategies_names.filter(func(s2): return forced_strategies_or.find(s2) == -1))
+		return not grid.are_hints_satisfied()
+	else:
+		return false
 
 # Tries to solve the puzzle as much as possible. Returns whether it did anything.
 func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> bool:

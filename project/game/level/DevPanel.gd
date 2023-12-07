@@ -44,9 +44,6 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 	var time := Time.get_unix_time_from_system()
 	var strategies := selected_strategies()
 	var forced_strategies := selected_forced_strategies()
-	for s in forced_strategies:
-		if strategies.find(s) == -1:
-			strategies.append(s)
 	while true:
 		if Time.get_unix_time_from_system() > time + 20:
 			print("Took too long generating")
@@ -68,15 +65,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			if forced_strategies.is_empty():
 				retry = SolverModel.new().full_solve(g2, strategies) != SolverModel.SolveResult.SolvedUnique
 			else:
-				SolverModel.new().apply_strategies(g2, strategies)
-				if g2.are_hints_satisfied():
-					retry = false
-					for s in forced_strategies:
-						g2.undo()
-						SolverModel.new().apply_strategies(g2, strategies.filter(func(s2): return s2 != s))
-						if g2.are_hints_satisfied():
-							retry = true
-							break
+				retry = not SolverModel.new().can_solve_with_strategies(g2, strategies, forced_strategies)
 			if retry:
 				await get_tree().process_frame
 				continue

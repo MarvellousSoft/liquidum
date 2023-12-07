@@ -27,9 +27,10 @@ func gen_level(hints_builder: Callable, strategies: Array, forced_strategies: Ar
 		var hints: Level.HintVisibility = hints_builder.call()
 		g = Generator.new(randi(), false).generate(hints.row.size(), hints.col.size())
 		g.set_auto_update_hints(false)
-		g.clear_content()
 		hints.apply_to_grid(g)
-		if solver.solve_with_strategies(g, strategies) == SolverModel.SolveResult.SolvedUniqueNoGuess:
+		var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
+		g2.clear_content()
+		if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
 			print("Created level after %d tries" % (i + 1))
 			break
 	# There may be an existing level save
@@ -51,6 +52,11 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
+func _level_completed() -> void:
+	# Save was already deleted
+	completed_count += 1
+	FileManager.save_user_data(UserData.new(completed_count))
+
 func _easy_visibility() -> Level.HintVisibility:
 	return Level.HintVisibility.default(5, 5)
 
@@ -62,7 +68,28 @@ func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	load_existing()
 
-func _level_completed() -> void:
-	# Save was already deleted
-	completed_count += 1
-	FileManager.save_user_data(UserData.new(completed_count))
+func _vis_array_or(a: Array[int], val: int, count: int) -> void:
+	var b: Array[int] = []
+	for i in a.size():
+		b.append(val if i < count else 0)
+	b.shuffle()
+	for i in a.size():
+		a[i] |= b[i]
+
+func _medium_visibility() -> Level.HintVisibility:
+	var h := Level.HintVisibility.new()
+	for i in 6:
+		h.row.append(0)
+		h.col.append(0)
+	for a in [h.row, h.col]:
+		_vis_array_or(a, HintBar.WATER_COUNT_VISIBLE, mini(randi_range(3, 8), 6))
+		_vis_array_or(a, HintBar.WATER_TYPE_VISIBLE, maxi(randi_range(-3, 4), 0))
+	return h
+
+func _on_medium_pressed():
+	if await _confirm_new_level():
+		gen_level(_medium_visibility, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
+
+
+func _on_hard_pressed():
+	pass # Replace with function body.

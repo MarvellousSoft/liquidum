@@ -81,4 +81,6 @@ text = "RANDOM_COMPLETED: ?"
 
 [connection signal="pressed" from="Center/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Center/VBox/Easy" to="." method="_on_easy_pressed"]
+[connection signal="pressed" from="Center/VBox/Medium" to="." method="_on_medium_pressed"]
+[connection signal="pressed" from="Center/VBox/Hard" to="." method="_on_hard_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
