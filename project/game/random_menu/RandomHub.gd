@@ -42,7 +42,7 @@ func load_existing() -> void:
 	var data := FileManager.load_random_level()
 	if data == null:
 		return
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name)
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "")
 	level.won.connect(_level_completed)
 	TransitionManager.push_scene(level)
 

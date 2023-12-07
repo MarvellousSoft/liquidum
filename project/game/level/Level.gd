@@ -25,6 +25,7 @@ signal won
 @onready var BackButton = %BackButton
 @onready var Settings = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
+@onready var Description: Label = $DescriptionScroll/Description
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -34,12 +35,14 @@ var grid: GridModel = null
 var level_name := ""
 # TODO: Display this somewhere
 var full_name: String
+var description: String
 # Has completion data but outdated grid data
 var dummy_save := UserLevelSaveData.new({}, true, 0, 0.0)
 var workshop_id := -1
 var game_won := false
 
 func _ready():
+	Description.text = description
 	%PlaytestButton.visible = false
 	GridNode.hide()
 	await TransitionManager.transition_finished
@@ -71,11 +74,11 @@ func _input(event):
 	if event.is_action_pressed("debug_1"):
 		win()
 
-
 func setup(try_load := true) -> void:
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
+	Description.text = description
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -306,7 +309,7 @@ func _get_solution_grid() -> GridModel:
 
 
 func _on_playtest_button_pressed() -> void:
-	var new_level = Global.create_level(_get_solution_grid(), "", full_name)
+	var new_level = Global.create_level(_get_solution_grid(), "", full_name, description)
 	TransitionManager.push_scene(new_level)
 
 

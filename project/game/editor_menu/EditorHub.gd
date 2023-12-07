@@ -25,13 +25,13 @@ func load_all_levels() -> void:
 func load_level(id: String) -> void:
 	AudioManager.play_sfx("button_pressed")
 	# Will be loaded
-	var level := Global.create_level(GridImpl.empty_editor(1, 1), id, "")
+	var level := Global.create_level(GridImpl.empty_editor(1, 1), id, "", "")
 	TransitionManager.push_scene(level)
 
 func play_level(id: String) -> void:
 	AudioManager.play_sfx("button_pressed")
 	var data := FileManager.load_editor_level(id)
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), "", data.full_name)
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), "", data.full_name, data.description)
 	TransitionManager.push_scene(level)
 
 
