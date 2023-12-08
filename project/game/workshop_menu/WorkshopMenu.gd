@@ -1,6 +1,6 @@
 extends Control
 
-@onready var ButtonsContainer: BoxContainer = $ScrollContainer/MarginContainer/VBoxContainer
+@onready var ButtonsContainer: BoxContainer = $ScrollContainer/VBoxContainer
 
 func _ready() -> void:
 	if not SteamManager.enabled:

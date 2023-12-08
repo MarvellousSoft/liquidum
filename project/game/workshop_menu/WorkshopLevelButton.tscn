@@ -4,18 +4,17 @@
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
 [ext_resource type="Texture2D" uid="uid://buvq2enne6wju" path="res://assets/images/ui/icons/ongoing_solution_icon.png" id="3_ycly6"]
 
-[node name="WorkshopLevelButton" type="Control"]
-layout_mode = 3
-anchors_preset = 0
+[node name="WorkshopLevelButton" type="MarginContainer"]
 theme = ExtResource("1_mrar7")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 30
 script = ExtResource("2_7eonp")
 
 [node name="Open" type="Button" parent="."]
 layout_mode = 2
-offset_right = 8.0
-offset_bottom = 8.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 4
 auto_translate = false
 focus_mode = 0
 text = "Level ?"
@@ -23,11 +22,6 @@ text = "Level ?"
 [node name="OngoingSolution" type="TextureRect" parent="."]
 visible = false
 layout_mode = 2
-offset_left = -144.0
-offset_top = 22.0
-offset_right = -44.0
-offset_bottom = 122.0
-rotation = -0.244346
 mouse_filter = 2
 texture = ExtResource("3_ycly6")
 expand_mode = 1

@@ -38,14 +38,9 @@ offset_right = 2752.0
 offset_bottom = 1893.0
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 20
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
-layout_mode = 2
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
