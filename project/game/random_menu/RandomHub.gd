@@ -8,6 +8,8 @@ const RANDOM := "random"
 
 var completed_count: int
 
+enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
+
 func _ready() -> void:
 	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
 	# Unlock difficulty after unlocking this section
@@ -79,13 +81,6 @@ func _level_completed() -> void:
 	completed_count += 1
 	FileManager.save_user_data(UserData.new(completed_count))
 
-func _easy_visibility() -> Level.HintVisibility:
-	return Level.HintVisibility.default(5, 5)
-
-func _on_easy_pressed() -> void:
-	if await _confirm_new_level():
-		gen_level(_easy_visibility, ["BasicRow", "BasicCol"], [])
-
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	load_existing()
@@ -98,6 +93,9 @@ func _vis_array_or(a: Array[int], val: int, count: int) -> void:
 	for i in a.size():
 		a[i] |= b[i]
 
+func _easy_visibility() -> Level.HintVisibility:
+	return Level.HintVisibility.default(5, 5)
+
 func _medium_visibility() -> Level.HintVisibility:
 	var h := Level.HintVisibility.new()
 	for i in 6:
@@ -108,15 +106,19 @@ func _medium_visibility() -> Level.HintVisibility:
 		_vis_array_or(a, HintBar.WATER_TYPE_VISIBLE, maxi(randi_range(-3, 4), 0))
 	return h
 
-func _on_medium_pressed():
-	if await _confirm_new_level():
-		gen_level(_medium_visibility, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
-
-func _on_hard_pressed():
-	pass # Replace with function body.
-
-func _on_expert_pressed():
-	pass # Replace with function body.
-
-func _on_insane_pressed():
-	pass # Replace with function body.
+func _on_dif_pressed(dif: Difficulty) -> void:
+	if not await _confirm_new_level():
+		return
+	match dif:
+		Difficulty.Easy:
+			gen_level(_easy_visibility, ["BasicRow", "BasicCol"], [])
+		Difficulty.Medium:
+			gen_level(_medium_visibility, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
+		Difficulty.Hard:
+			pass
+		Difficulty.Expert:
+			pass
+		Difficulty.Insane:
+			pass
+		_:
+			push_error("Uknown difficulty %d" % dif)
