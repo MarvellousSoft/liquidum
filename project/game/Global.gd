@@ -88,3 +88,10 @@ func toggle_fullscreen():
 		else:
 			window.position = Vector2(s_size.x/2 - size.x/2, size.y/2)
 		window.set_current_screen(cur_screen)
+
+func shuffle(a: Array, rng: RandomNumberGenerator) -> void:
+	for i in a.size():
+		var j := rng.randi_range(i, a.size() - 1)
+		var tmp = a[i]
+		a[i] = a[j]
+		a[j] = tmp

@@ -9,13 +9,6 @@ func _init(rseed_: int, diagonals_: bool) -> void:
 	rng.seed = rseed_
 	diagonals = diagonals_
 
-func _shuffle(a: Array) -> void:
-	for i in a.size():
-		var j := rng.randi_range(i, a.size() - 1)
-		var tmp = a[i]
-		a[i] = a[j]
-		a[j] = tmp
-
 func wrand(mx: int, weight: int) -> int:
 	var val := rng.randi_range(1, mx)
 	for _i in weight:
@@ -24,10 +17,10 @@ func wrand(mx: int, weight: int) -> int:
 
 func any_empty(g: Array[Array]) -> Vector2i:
 	var i_order := range(g.size())
-	_shuffle(i_order)
+	Global.shuffle(i_order, rng)
 	for i in i_order:
 		var j_order = range(g[i].size())
-		_shuffle(j_order)
+		Global.shuffle(j_order, rng)
 		for j in j_order:
 			if g[i][j] == 0:
 				return Vector2i(i, j)
@@ -64,13 +57,13 @@ class DiagAdj extends AdjacencyRule:
 		return [from + Vector2i(0, -1), from + Vector2i(0, 1), third_adj(from)]
 
 func any_adj(g: Array[Array], cells: Array[Vector2i], adj_rule: AdjacencyRule) -> Vector2i:
-	_shuffle(cells)
+	Global.shuffle(cells, rng)
 	for c in cells:
 		var adj := adj_rule.all_adj(c)
 		# Slight hack: Add the other side of the same cell to make diagonals less common
 		adj.append(Vector2i(c.x, c.y ^ 1))
 		adj.append(Vector2i(c.x, c.y ^ 1))
-		_shuffle(adj)
+		Global.shuffle(adj, rng)
 		for e in adj:
 			if e.x >= 0 and e.y >= 0 and e.x < g.size() and e.y < g[0].size() and g[e.x][e.y] == 0:
 				return e
@@ -114,10 +107,10 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 
 func randomize_water(grid: GridModel) -> void:
 	var i_order := range(grid.rows())
-	_shuffle(i_order)
+	Global.shuffle(i_order, rng)
 	for i in i_order:
 		var j_order := range(grid.cols())
-		_shuffle(j_order)
+		Global.shuffle(j_order, rng)
 		for j in j_order:
 			var corners := [E.Corner.TopLeft]
 			var c := grid.get_cell(i, j)
