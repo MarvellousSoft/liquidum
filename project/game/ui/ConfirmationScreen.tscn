@@ -226,10 +226,10 @@ theme = ExtResource("6_owsub")
 text = "NO"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 3.5
 libraries = {
 "": SubResource("AnimationLibrary_sb0jh")
 }
+speed_scale = 3.5
 
 [connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_pressed"]

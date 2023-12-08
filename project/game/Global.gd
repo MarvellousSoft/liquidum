@@ -95,3 +95,8 @@ func shuffle(a: Array, rng: RandomNumberGenerator) -> void:
 		var tmp = a[i]
 		a[i] = a[j]
 		a[j] = tmp
+
+func wait_for_thread(t: Thread) -> Variant:
+	while t.is_started() and t.is_alive():
+		await get_tree().create_timer(0.5).timeout
+	return t.wait_to_finish()

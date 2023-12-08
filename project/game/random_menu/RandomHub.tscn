@@ -1,8 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk2tvsodhb3va"]
+[gd_scene load_steps=6 format=3 uid="uid://bk2tvsodhb3va"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_1yoql"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_5r6s3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nxvj5"]
+bg_color = Color(0, 0.0352941, 0.141176, 0.980392)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+expand_margin_left = 75.0
+expand_margin_top = 75.0
+expand_margin_right = 75.0
+expand_margin_bottom = 75.0
 
 [node name="RandomHub" type="Control"]
 layout_mode = 3
@@ -119,6 +131,52 @@ virtual_keyboard_type = 2
 select_all_on_focus = true
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
+
+[node name="GeneratingLevel" type="Control" parent="."]
+editor_description = "Used to capture all the inputs"
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="GeneratingLevel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -511.0
+offset_top = -67.5
+offset_right = 511.0
+offset_bottom = 67.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nxvj5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GeneratingLevel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GeneratingLevel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Text" type="Label" parent="GeneratingLevel/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "GENERATING_LEVEL"
+
+[node name="OngoingSolution" parent="GeneratingLevel/PanelContainer/VBoxContainer/HBoxContainer" instance=ExtResource("4_5r6s3")]
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="GeneratingLevel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "Cancel"
 
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Difficulties/VBox/Easy" to="." method="_on_dif_pressed" binds= [0]]

@@ -65,12 +65,14 @@ _data = {
 }
 
 [node name="OngoingSolution" type="Control"]
+custom_minimum_size = Vector2(170, 70)
 layout_mode = 3
 anchors_preset = 0
 offset_left = 22.0
 offset_top = 113.0
-offset_right = 22.0
-offset_bottom = 113.0
+offset_right = 192.0
+offset_bottom = 183.0
+size_flags_vertical = 4
 mouse_filter = 2
 
 [node name="Dot1" type="TextureRect" parent="."]

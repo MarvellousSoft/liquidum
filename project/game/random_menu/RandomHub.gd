@@ -5,8 +5,10 @@ const RANDOM := "random"
 
 @onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var Completed: Label = $CompletedCount
+@onready var GeneratingLevel: Control = $GeneratingLevel
 
 var completed_count: int
+var gen_thread := Thread.new()
 
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
@@ -45,7 +47,7 @@ func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
 
-func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
+func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> GridModel:
 	var g: GridModel
 	var solver := SolverModel.new()
 	var found := false
@@ -68,6 +70,15 @@ func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_
 				hints = hints_builder.call(rng)
 		if found:
 			break
+	return g
+
+func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
+	if gen_thread.is_alive():
+		return
+	GeneratingLevel.visible = true
+	gen_thread.start(func(): return _inner_gen_level(rng, hints_builder, gen_options_builder, strategies, forced_strategies))
+	var g: GridModel = await Global.wait_for_thread(gen_thread)
+	GeneratingLevel.visible = false
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
 	FileManager.save_random_level(LevelData.new("", "", g.export_data(), ""))
