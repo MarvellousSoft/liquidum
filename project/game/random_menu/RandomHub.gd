@@ -6,9 +6,11 @@ const RANDOM := "random"
 @onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var Completed: Label = $CompletedCount
 @onready var GeneratingLevel: Control = $GeneratingLevel
+@onready var CancelButton: Button = $GeneratingLevel/PanelContainer/VBoxContainer/Cancel
 
 var completed_count: int
 var gen_thread := Thread.new()
+var cancel_gen := false
 
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
@@ -48,16 +50,20 @@ func _on_back_pressed() -> void:
 	TransitionManager.pop_scene()
 
 func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> GridModel:
-	var g: GridModel
+	var g: GridModel = null
 	var solver := SolverModel.new()
 	var found := false
 	var start_time := Time.get_unix_time_from_system()
 	for i in 1000:
+		if cancel_gen:
+			break
 		var hints: Level.HintVisibility = hints_builder.call(rng)
 		var gen_options: bool = gen_options_builder.call(rng)
 		g = Generator.new(rng.randi(), gen_options).generate(hints.row.size(), hints.col.size())
 		g.set_auto_update_hints(false)
 		for j in 3:
+			if cancel_gen:
+				break
 			hints.apply_to_grid(g)
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
@@ -70,15 +76,19 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 				hints = hints_builder.call(rng)
 		if found:
 			break
-	return g
+	return g if not cancel_gen else null
 
 func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	if gen_thread.is_alive():
 		return
 	GeneratingLevel.visible = true
+	CancelButton.disabled = false
+	cancel_gen = false
 	gen_thread.start(func(): return _inner_gen_level(rng, hints_builder, gen_options_builder, strategies, forced_strategies))
 	var g: GridModel = await Global.wait_for_thread(gen_thread)
 	GeneratingLevel.visible = false
+	if g == null:
+		return
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
 	FileManager.save_random_level(LevelData.new("", "", g.export_data(), ""))
@@ -165,3 +175,8 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 			pass
 		_:
 			push_error("Uknown difficulty %d" % dif)
+
+
+func _on_cancel_gen_pressed():
+	cancel_gen = true
+	CancelButton.disabled = true

@@ -185,3 +185,4 @@ text = "Cancel"
 [connection signal="pressed" from="Difficulties/VBox/Expert" to="." method="_on_dif_pressed" binds= [3]]
 [connection signal="pressed" from="Difficulties/VBox/Insane" to="." method="_on_dif_pressed" binds= [4]]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="GeneratingLevel/PanelContainer/VBoxContainer/Cancel" to="." method="_on_cancel_gen_pressed"]
