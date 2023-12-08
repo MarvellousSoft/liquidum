@@ -130,7 +130,7 @@ func all_hints_status() -> E.HintStatus:
 
 # Is this a valid solution?
 # If check_complete is true, it checks all cells are filled (even if with air)
-func are_hints_satisfied(check_complete := false) -> bool:
+func are_hints_satisfied(_check_complete := false) -> bool:
 	return GridModel.must_be_implemented()
 
 func is_any_hint_broken() -> bool:
@@ -273,4 +273,7 @@ func export_data() -> Dictionary:
 # To import, use GridImpl.import_data
 
 func is_empty() -> bool:
+	return GridModel.must_be_implemented()
+
+func copy_to_clipboard() -> void:
 	return GridModel.must_be_implemented()

@@ -1230,16 +1230,13 @@ func all_hints_status() -> E.HintStatus:
 	return s
 
 func are_hints_satisfied(check_complete := false) -> bool:
-	var status := all_hints_status()
-	if status == E.HintStatus.Wrong:
-		return status
 	if check_complete:
 		for i in n:
 			for j in m:
 				var c := _pure_cell(i, j)
 				if c._content_left() == Content.Nothing or c._content_right() == Content.Nothing:
-					return E.HintStatus.Normal
-	return status
+					return false
+	return all_hints_status() == E.HintStatus.Satisfied
 
 func is_any_hint_broken() -> bool:
 	return all_hints_status() == E.HintStatus.Wrong
@@ -1474,3 +1471,7 @@ func equal(other: GridImpl) -> bool:
 	
 func is_empty() -> bool:
 	return count_boats() <= 0 and count_waters() <= 0 and count_airs() <= 0
+
+func copy_to_clipboard() -> void:
+	var s = JSON.stringify(export_data())
+	DisplayServer.clipboard_set(s)

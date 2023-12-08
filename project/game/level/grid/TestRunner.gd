@@ -35,7 +35,7 @@ func _on_auto_solve_pressed():
 
 
 func _on_grid_2_updated():
-	if $GodMode.button_pressed:
+	if $Buttons/GodMode.button_pressed:
 		g2.apply_strategies(all_strategies(), false, false)
 
 
@@ -48,4 +48,4 @@ func _on_full_solve_pressed():
 	var r := g2.full_solve(all_strategies())
 	var solve_type: String = SolverModel.SolveResult.find_key(r)
 	print("Level is %s" % solve_type)
-	$SolvedType.text = solve_type
+	$Buttons/SolvedType.text = solve_type

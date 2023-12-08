@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5np4b83uqkua"]
+[gd_scene load_steps=6 format=3 uid="uid://b5np4b83uqkua"]
 
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_4ps32"]
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_ojaat"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_4ps32")
 script = ExtResource("1_xrxil")
 
 [node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
@@ -45,57 +47,39 @@ metadata/_edit_use_anchors_ = true
 [node name="Tests" type="Node" parent="."]
 script = ExtResource("3_ftgq8")
 
-[node name="Run" type="Button" parent="."]
+[node name="Buttons" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 96.0
-offset_top = 244.0
-offset_right = 177.0
-offset_bottom = 275.0
+offset_right = 846.0
+offset_bottom = 1170.0
+theme_override_constants/separation = 50
+
+[node name="Run" type="Button" parent="Buttons"]
+layout_mode = 2
 text = "Run tests"
 
-[node name="AutoSolve" type="Button" parent="."]
-layout_mode = 0
-offset_left = 96.0
-offset_top = 414.0
-offset_right = 186.0
-offset_bottom = 445.0
+[node name="AutoSolve" type="Button" parent="Buttons"]
+layout_mode = 2
 text = "Simple Solve"
 
-[node name="GodMode" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 95.0
-offset_top = 458.0
-offset_right = 223.0
-offset_bottom = 489.0
+[node name="GodMode" type="CheckButton" parent="Buttons"]
+layout_mode = 2
 text = "God mode"
 
-[node name="Paste" type="Button" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 515.0
-offset_right = 270.0
-offset_bottom = 546.0
+[node name="Paste" type="Button" parent="Buttons"]
+layout_mode = 2
 text = "Paste from clipboard"
 
-[node name="FullSolve" type="Button" parent="."]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 568.0
-offset_right = 180.0
-offset_bottom = 599.0
+[node name="FullSolve" type="Button" parent="Buttons"]
+layout_mode = 2
 text = "Full solve"
 
-[node name="SolvedType" type="Label" parent="."]
-layout_mode = 0
-offset_left = 199.0
-offset_top = 568.0
-offset_right = 301.0
-offset_bottom = 599.0
+[node name="SolvedType" type="Label" parent="Buttons"]
+layout_mode = 2
 
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
-[connection signal="pressed" from="Run" to="." method="_on_run_pressed"]
-[connection signal="pressed" from="AutoSolve" to="." method="_on_auto_solve_pressed"]
-[connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
-[connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="pressed" from="Buttons/Run" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="Buttons/AutoSolve" to="." method="_on_auto_solve_pressed"]
+[connection signal="pressed" from="Buttons/Paste" to="." method="_on_paste_pressed"]
+[connection signal="pressed" from="Buttons/FullSolve" to="." method="_on_full_solve_pressed"]

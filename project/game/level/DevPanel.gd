@@ -153,9 +153,9 @@ func _on_paste_pressed():
 	var txt := DisplayServer.clipboard_get()
 	var g: GridModel
 	if txt.begins_with("{"):
-		g = GridImpl.import_data(JSON.parse_string(txt), GridModel.LoadMode.Editor)
+		g = GridImpl.import_data(JSON.parse_string(txt), GridModel.LoadMode.Testing)
 	else:
-		g = GridImpl.from_str(txt, GridModel.LoadMode.Editor)
+		g = GridImpl.from_str(txt, GridModel.LoadMode.Testing)
 	load_grid.emit(g)
 
 

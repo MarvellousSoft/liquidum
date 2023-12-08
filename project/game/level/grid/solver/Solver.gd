@@ -401,7 +401,9 @@ class TogetherStrategy extends Strategy:
 			max_b2 += 1
 
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
-		assert(water_left2 >= 0)
+		# Invalid solution
+		if water_left2 < 0:
+			return false
 		var no_b2 := range(rightmost + water_left2 + 1, max_b2 + 1) # Far to the right
 		no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
 		no_b2.append_array(range(0, min_b2)) # Before block/air
@@ -527,6 +529,8 @@ class SeparateStrategy extends Strategy:
 				leftmost = min(leftmost, 2 * b + 1)
 				rightmost = max(rightmost, 2 * b + 1)
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		if water_left2 < 0:
+			return false
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
@@ -634,7 +638,7 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 		for name in strategies_names:
 			if strategies[name].apply_any():
 				if t > 30:
-					print("Applied %s" % name)
+					print("[%d] Applied %s" % [t, name])
 				any = true
 				# Earlier strategies are usually simpler, let's try to run them more
 				break
@@ -661,8 +665,7 @@ func full_solve(grid: GridModel, strategy_list: Array, flush_undo := true, min_b
 		grid.push_empty_undo()
 	apply_strategies(grid, strategy_list, false)
 	if grid.is_any_hint_broken():
-		#var s = JSON.stringify(grid.export_data())
-		#DisplayServer.clipboard_set(s)
+		#grid.copy_to_clipboard()
 		return SolveResult.Unsolvable
 	if grid.are_hints_satisfied(true):
 		return SolveResult.SolvedUniqueNoGuess
