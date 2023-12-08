@@ -388,7 +388,35 @@ class TogetherStrategy extends RowColStrategy:
 		- If there's water in the {line}, far away cells can't have water
 		- If there's water and its close to the border, we might need to expand it to the other side
 		- If there's two waters in the {line}, they must be connected
+		- If there's the space between two obstacles is less than N, then it can't have any water
 		"""
+
+	# Add air to small holes. There's no water in row/col
+	func _air_on_small_holes(a: int) -> bool:
+		if _a_hints()[a].water_count == -1.:
+			return false
+		var hint := int(2 * _a_hints()[a].water_count)
+		var any := false
+		var bad_hole := false
+		var hole := false
+		for b2 in 2 * _b_len():
+			var c := _content(a, b2)
+			if c == Content.Nothing:
+				if not hole:
+					hole = true
+					var size := 1
+					for bb2 in range(b2 + 1, 2 * _b_len()):
+						if _content(a, bb2) == Content.Nothing:
+							size += 1
+						else:
+							break
+					bad_hole = size < hint
+				if hole and bad_hole:
+					if c == Content.Nothing:
+						_cell(a, b2 / 2).put_air(_corner(a, b2), false, false)
+			else:
+				hole = false
+		return any
 
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Together:
@@ -400,7 +428,7 @@ class TogetherStrategy extends RowColStrategy:
 				leftmost = min(leftmost, b2)
 				rightmost = b2
 		if rightmost == -1:
-			return false
+			return _air_on_small_holes(a)
 		var any := false
 		# Merge all waters together
 		for b2 in range(leftmost + 1, rightmost):
@@ -411,6 +439,7 @@ class TogetherStrategy extends RowColStrategy:
 		if any:
 			return true
 		if _a_hints()[a].water_count == -1.:
+			# TODO: For {?} we still need to mark air on cells after/before block/air
 			return any
 		# Mark far away cells as empty
 		var min_b2 := leftmost

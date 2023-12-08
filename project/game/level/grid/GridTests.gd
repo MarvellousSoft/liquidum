@@ -557,6 +557,11 @@ func test_solve_together() -> void:
 	3.ww.
 	.L/L/
 	""")
+	assert_can_solve("""
+	h....
+	2.x..
+	}L/L/
+	""", ["TogetherRow", "BasicRow"])
 	# Same but for columns
 	s = ["TogetherCol"]
 	assert_can_solve("""
