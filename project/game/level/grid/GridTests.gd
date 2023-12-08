@@ -562,6 +562,16 @@ func test_solve_together() -> void:
 	2.x..
 	}L/L/
 	""", ["TogetherRow", "BasicRow"])
+	# empty hole but not too big
+	assert_grid_eq(apply_strategies("""
+	h......
+	3.x....
+	}L/L/L/
+	""", s).to_str(), """
+	h......
+	3xx.ww.
+	.L/L/L/
+	""")
 	# Same but for columns
 	s = ["TogetherCol"]
 	assert_can_solve("""

@@ -399,23 +399,39 @@ class TogetherStrategy extends RowColStrategy:
 		var any := false
 		var bad_hole := false
 		var hole := false
-		for b2 in 2 * _b_len():
+		var single_hole_start := -1
+		var single_hole_size := 0
+		# reverse to optimise how we place air
+		for b2 in range(2 * _b_len() - 1, -1, -1):
 			var c := _content(a, b2)
 			if c == Content.Nothing:
 				if not hole:
 					hole = true
 					var size := 1
-					for bb2 in range(b2 + 1, 2 * _b_len()):
+					for bb2 in range(b2 - 1, -1, -1):
 						if _content(a, bb2) == Content.Nothing:
 							size += 1
 						else:
 							break
 					bad_hole = size < hint
+					if size >= hint:
+						if single_hole_start == -1:
+							single_hole_start = b2 - size + 1
+							single_hole_size = size
+						else:
+							single_hole_start = -2
 				if hole and bad_hole:
-					if c == Content.Nothing:
-						_cell(a, b2 / 2).put_air(_corner(a, b2), false, false)
+					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+					any = true
 			else:
 				hole = false
+		if single_hole_start >= 0 and 2 * hint > single_hole_size and hint < single_hole_size:
+			any = true
+			for b2 in range(single_hole_start, single_hole_start + single_hole_size):
+				if b2 - single_hole_start + 1 <= hint and single_hole_start + single_hole_size - b2 <= hint:
+					if _content(a, b2) == Content.Nothing:
+						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+						any = true
 		return any
 
 	func _apply(a: int) -> bool:
