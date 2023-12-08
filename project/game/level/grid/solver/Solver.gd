@@ -338,15 +338,7 @@ class BoatColStrategy extends ColumnStrategy:
 			return any
 		return false
 
-# Logic for both row and column is the same, so let's make it generic
-# Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
-class TogetherStrategy extends Strategy:
-	static func description() -> String:
-		return """
-		- If there's water in the {line}, far away cells can't have water
-		- If there's water and its close to the border, we might need to expand it to the other side
-		- If there's two waters in the {line}, they must be connected
-		"""
+class RowColStrategy extends Strategy:
 	func _cell(_a: int, _b: int) -> GridImpl.CellWithLoc:
 		return GridModel.must_be_implemented()
 	func _left() -> E.Side:
@@ -366,19 +358,47 @@ class TogetherStrategy extends Strategy:
 		return c._content_side(_right()) if bool(b2 & 1) else c._content_side(_left())
 	func _corner(a: int, b2: int) -> E.Corner:
 		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
+	func _wall_right(a: int, b2: int) -> bool:
+		var c := _cell(a, b2 / 2)
+		return c.wall_at(_right() as E.Walls) if bool(b2 & 1) else (c.cell_type() != E.CellType.Single)
+	# Adding water to this cell will flood water to how many half-cells?
+	func _will_flood_how_many(a: int, b2: int) -> int:
+		if _content(a, b2) != Content.Nothing:
+			return 0
+		var b2_min := b2
+		var b2_max := b2
+		# Always floods right or down
+		while not _wall_right(a, b2_max) and _content(a, b2_max + 1) == Content.Nothing:
+			b2_max += 1
+		# Only floods left, not up
+		if _left() == E.Side.Left:
+			while b2_min > 0 and not _wall_right(a, b2_min - 1) and _content(a, b2_min - 1) == Content.Nothing:
+				b2_min -= 1
+		# But up it still "floods" the same cell if it doesn't have a diagonal
+		else:
+			if bool(b2_min & 1) and _cell(a, (b2_min - 1) / 2).cell_type() == E.CellType.Single:
+				b2_min -= 1
+		return b2_max - b2_min + 1
+
+# Logic for both row and column is the same, so let's make it generic
+# Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
+class TogetherStrategy extends RowColStrategy:
+	static func description() -> String:
+		return """
+		- If there's water in the {line}, far away cells can't have water
+		- If there's water and its close to the border, we might need to expand it to the other side
+		- If there's two waters in the {line}, they must be connected
+		"""
+
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Together:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
-		for b in _b_len():
-			var c := _cell(a, b).pure()
-			if c._content_side(_left()) == Content.Water:
-				leftmost = min(leftmost, 2 * b)
-				rightmost = max(rightmost, 2 * b)
-			if c._content_side(_right()) == Content.Water:
-				leftmost = min(leftmost, 2 * b + 1)
-				rightmost = max(rightmost, 2 * b + 1)
+		for b2 in 2 * _b_len():
+			if _content(a, b2) == Content.Water:
+				leftmost = min(leftmost, b2)
+				rightmost = b2
 		if rightmost == -1:
 			return false
 		var any := false
@@ -468,52 +488,12 @@ class TogetherColStrategy extends TogetherStrategy:
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
-class SeparateStrategy extends Strategy:
+class SeparateStrategy extends RowColStrategy:
 	static func description() -> String:
 		return """
 		If adding water to a single cell would cause the waters to be together and
 		fullfill the hint, we can't add water to that cell.
 		"""
-	func _cell(_a: int, _b: int) -> GridImpl.CellWithLoc:
-		return GridModel.must_be_implemented()
-	func _left() -> E.Side:
-		return GridModel.must_be_implemented()
-	func _right() -> E.Side:
-		return GridModel.must_be_implemented()
-	func _a_len() -> int:
-		return GridModel.must_be_implemented()
-	func _b_len() -> int:
-		return GridModel.must_be_implemented()
-	func _a_hints() -> Array[GridModel.LineHint]:
-		return GridModel.must_be_implemented()
-	func _count_water_a(_a: int) -> float:
-		return GridModel.must_be_implemented()
-	func _content(a: int, b2: int) -> Content:
-		var c := _cell(a, b2 / 2).pure()
-		return c._content_side(_right()) if bool(b2 & 1) else c._content_side(_left())
-	func _corner(a: int, b2: int) -> E.Corner:
-		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
-	func _wall_right(a: int, b2: int) -> bool:
-		var c := _cell(a, b2 / 2)
-		return c.wall_at(_right() as E.Walls) if bool(b2 & 1) else (c.cell_type() != E.CellType.Single)
-	# Adding water to this cell will flood water to how many half-cells?
-	func _will_flood_how_many(a: int, b2: int) -> int:
-		if _content(a, b2) != Content.Nothing:
-			return 0
-		var b2_min := b2
-		var b2_max := b2
-		# Always floods right or down
-		while not _wall_right(a, b2_max) and _content(a, b2_max + 1) == Content.Nothing:
-			b2_max += 1
-		# Only floods left, not up
-		if _left() == E.Side.Left:
-			while b2_min > 0 and not _wall_right(a, b2_min - 1) and _content(a, b2_min - 1) == Content.Nothing:
-				b2_min -= 1
-		# But up it still "floods" the same cell if it doesn't have a diagonal
-		else:
-			if bool(b2_min & 1) and _cell(a, (b2_min - 1) / 2).cell_type() == E.CellType.Single:
-				b2_min -= 1
-		return b2_max - b2_min + 1
 
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
