@@ -16,6 +16,7 @@ signal load_grid(g: GridModel)
 var solve_thread: Thread = Thread.new()
 
 func _ready() -> void:
+	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	var popup := StrategyList.get_popup()
 	popup.hide_on_checkable_item_selection = false
 	popup.index_pressed.connect(_toggled_item.bind(StrategyList))
@@ -165,3 +166,7 @@ func _on_button_mouse_entered():
 func _on_randomize_visibility_pressed():
 	AudioManager.play_sfx("button_pressed")
 	randomize_visibility.emit()
+
+
+func _on_dev_mode_toggled(status):
+	visible = status or self == get_tree().current_scene

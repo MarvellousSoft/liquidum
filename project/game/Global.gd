@@ -7,6 +7,8 @@ const COLORS = {
 	"error": Color("#ff6a6aff"),
 }
 
+signal dev_mode_toggled(status : bool)
+
 var previous_windowed_pos = false
 var _dev_mode := false
 var dev_mode_label: Label
@@ -16,6 +18,7 @@ func _ready() -> void:
 	dev_mode_label = Label.new()
 	dev_mode_label.text = "dev mode"
 	dev_mode_label.scale = Vector2(5, 5)
+	dev_mode_label.position.x = get_viewport().get_visible_rect().size.x - 400
 	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
 	dev_mode_label.visible = false
 	add_child(dev_mode_label)
@@ -27,6 +30,7 @@ func _input(event):
 	if event.is_action_pressed(&"toggle_dev_mode"):
 		_dev_mode = not _dev_mode and OS.is_debug_build()
 		dev_mode_label.visible = _dev_mode
+		dev_mode_toggled.emit(_dev_mode)
 
 
 func _notification(what : int):
