@@ -2,8 +2,8 @@ extends Control
 
 @onready var LevelNode: VBoxContainer = %LevelNode
 
-func _ready() -> void:
-	load_all_levels()
+func _enter_tree() -> void:
+	call_deferred(&"load_all_levels")
 
 
 func load_all_levels() -> void:

@@ -664,7 +664,7 @@ func full_solve(grid: GridModel, strategy_list: Array, flush_undo := true, min_b
 		#var s = JSON.stringify(grid.export_data())
 		#DisplayServer.clipboard_set(s)
 		return SolveResult.Unsolvable
-	if grid.are_hints_satisfied():
+	if grid.are_hints_satisfied(true):
 		return SolveResult.SolvedUniqueNoGuess
 	for i in grid.rows():
 		for j in grid.cols():
