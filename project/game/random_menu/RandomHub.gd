@@ -3,11 +3,33 @@ extends Control
 
 const RANDOM := "random"
 
-@onready var Continue: Button = $Center/VBox/Continue
+@onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var Completed: Label = $CompletedCount
 
 var completed_count: int
 
+func _ready() -> void:
+	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
+	# Unlock difficulty after unlocking this section
+	var difs := {
+		medium = 1,
+		hard = 3,
+		expert = 5,
+		# Additionally, all campaign levels must be completed
+		insane = 7,
+	}
+	for dif in difs:
+		var name: String = dif
+		var button: Button = $Difficulties/VBox.get_node(name.capitalize())
+		var open := LevelLister.section_complete(difs[dif] - 1)
+		if dif == "insane":
+			open = open and LevelLister.all_campaign_levels_completed()
+		if open or Global.is_dev_mode():
+			button.tooltip_text = "%s_TOOLTIP" % name.to_upper()
+		else:
+			button.disabled = true
+			button.tooltip_text = "%s_TOOLTIP_DISABLED" % name.to_upper()
+	
 func _enter_tree() -> void:
 	call_deferred(&"_update")
 
@@ -90,6 +112,11 @@ func _on_medium_pressed():
 	if await _confirm_new_level():
 		gen_level(_medium_visibility, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 
-
 func _on_hard_pressed():
+	pass # Replace with function body.
+
+func _on_expert_pressed():
+	pass # Replace with function body.
+
+func _on_insane_pressed():
 	pass # Replace with function body.

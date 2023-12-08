@@ -39,6 +39,8 @@ RANDOM_TITLE,Explorer mode,Modo explorador
 EASY_BUTTON,Easy,Fácil
 MEDIUM_BUTTON,Medium,Médio
 HARD_BUTTON,Hard,Difícil
+EXPERT_BUTTON,Expert,Expert
+INSANE_BUTTON,Insane,Insano
 CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente
 RANDOM_COMPLETED,Levels completed,Níveis completados
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.
@@ -46,3 +48,12 @@ UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to 
 PLAYTEST,Playtest level,Testar nível
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível
 LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel
+EASY_TOOLTIP,Small and simple levels,Níveis pequenos e simples
+MEDIUM_TOOLTIP,"Harder, and uses {N} and -N- rules","Mais difícil, e usa as regras {N} e -N-"
+MEDIUM_TOOLTIP_DISABLED,Unlock section 2 to unlock this difficulty,Desbloqueie a seção 2 para desbloquear essa dificuldade
+HARD_TOOLTIP,"Harder, and uses diagonals and boats","Mais difícil, e usa diagonais e barcos"
+HARD_TOOLTIP_DISABLED,Unlock section 4 to unlock this difficulty,Desbloqueie a seção 4 para desbloquear essa dificuldade
+EXPERT_TOOLTIP,"Harder, may use any rules found in the campaign","Mais difícil, e pode usar todas as regras encontradas na campanha"
+EXPERT_TOOLTIP_DISABLED,Unlock section 5 to unlock this difficulty,Desbloqueie a seção 5 para desbloquear essa dificuldade
+INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?
+INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para desbloquear essa dificuldade
