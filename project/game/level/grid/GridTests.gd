@@ -630,3 +630,15 @@ func test_separate_rule() -> void:
 	..#
 	.L/
 	""", s)
+	# Must mark (0, 1) as X
+	assert_can_solve("""
+	h6-
+	...
+	.L.
+	...
+	.|.
+	...
+	.|.
+	.ww
+	.L.
+	""", s)

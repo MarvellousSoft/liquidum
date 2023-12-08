@@ -518,6 +518,9 @@ class SeparateStrategy extends Strategy:
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
+		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		if water_left2 < 0:
+			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
 		for b in _b_len():
@@ -528,9 +531,6 @@ class SeparateStrategy extends Strategy:
 			if c._content_side(_right()) == Content.Water:
 				leftmost = min(leftmost, 2 * b + 1)
 				rightmost = max(rightmost, 2 * b + 1)
-		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
-		if water_left2 < 0:
-			return false
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
@@ -547,9 +547,24 @@ class SeparateStrategy extends Strategy:
 					return true
 				return false
 		var any := false
-		if leftmost > 0 and _content(a, leftmost - 1) == Content.Nothing and _will_flood_how_many(a, leftmost - 1) == water_left2:
-			_cell(a, (leftmost - 1) / 2).put_air(_corner(a, leftmost - 1), false, true)
-			any = true
+		if _left() == E.Side.Top:
+			# Walk up until we find a cell if we put water it will flood exactly water_left2
+			var b2 := leftmost - 1
+			while b2 >= 0 and _content(a, b2) == Content.Nothing:
+				if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
+					b2 -= 1
+				if leftmost - b2 == water_left2:
+					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+					any = true
+					break
+				if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
+					break
+				else:
+					b2 -= 1
+		else:
+			if leftmost > 0 and _content(a, leftmost - 1) == Content.Nothing and _will_flood_how_many(a, leftmost - 1) == water_left2:
+				_cell(a, (leftmost - 1) / 2).put_air(_corner(a, leftmost - 1), false, true)
+				any = true
 		if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
 			_cell(a, (rightmost + 1) / 2).put_air(_corner(a, rightmost + 1), false, true)
 			any = true
