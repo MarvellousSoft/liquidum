@@ -523,14 +523,13 @@ class SeparateStrategy extends Strategy:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
-		for b in _b_len():
-			var c := _cell(a, b).pure()
-			if c._content_side(_left()) == Content.Water:
-				leftmost = min(leftmost, 2 * b)
-				rightmost = max(rightmost, 2 * b)
-			if c._content_side(_right()) == Content.Water:
-				leftmost = min(leftmost, 2 * b + 1)
-				rightmost = max(rightmost, 2 * b + 1)
+		var nothing_middle := 0
+		for b2 in 2 * _b_len():
+			if _content(a, b2) == Content.Water:
+				leftmost = min(leftmost, b2)
+				rightmost = b2
+			if rightmost != -1 and _content(a, b2) == Content.Nothing:
+				nothing_middle += 1
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
@@ -542,7 +541,7 @@ class SeparateStrategy extends Strategy:
 			return any_content
 		for b2 in range(leftmost + 1, rightmost):
 			if _content(a, b2) != Content.Water:
-				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
+				if nothing_middle == water_left2 and _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
 					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
 					return true
 				return false
