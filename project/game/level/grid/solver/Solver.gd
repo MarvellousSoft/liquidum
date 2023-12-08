@@ -636,6 +636,8 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 				if t > 30:
 					print("Applied %s" % name)
 				any = true
+				# Earlier strategies are usually simpler, let's try to run them more
+				break
 		if not any:
 			return t > 0
 		assert(t < 40)

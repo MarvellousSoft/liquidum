@@ -45,18 +45,28 @@ func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
 
-func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
+func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	var g: GridModel
 	var solver := SolverModel.new()
+	var found := false
+	var start_time := Time.get_unix_time_from_system()
 	for i in 1000:
 		var hints: Level.HintVisibility = hints_builder.call(rng)
-		g = Generator.new(rng.randi(), false).generate(hints.row.size(), hints.col.size())
+		var gen_options: bool = gen_options_builder.call(rng)
+		g = Generator.new(rng.randi(), gen_options).generate(hints.row.size(), hints.col.size())
 		g.set_auto_update_hints(false)
-		hints.apply_to_grid(g)
-		var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-		g2.clear_content()
-		if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
-			print("Created level after %d tries" % (i + 1))
+		for j in 3:
+			hints.apply_to_grid(g)
+			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
+			g2.clear_content()
+			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
+				print("Created level after %d tries and %.1fs" % [i * 3 + j + 1, Time.get_unix_time_from_system() - start_time])
+				found = true
+				break
+			# Let's retry with the same grid but different visibility
+			if j < 2:
+				hints = hints_builder.call(rng)
+		if found:
 			break
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
@@ -94,6 +104,12 @@ func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: i
 	for i in a.size():
 		a[i] |= b[i]
 
+func _true(_rng: RandomNumberGenerator) -> bool:
+	return true
+
+func _false(_rng: RandomNumberGenerator) -> bool:
+	return false
+
 func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 	return Level.HintVisibility.default(5, 5)
 
@@ -107,6 +123,19 @@ func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
 		_vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, 4), 0))
 	return h
 
+
+func _hard_visibility(n: int, m: int) -> Callable:
+	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
+		var h := Level.HintVisibility.new()
+		for i in n:
+			h.row.append(0)
+		for j in m:
+			h.col.append(0)
+		for a in [h.row, h.col]:
+			_vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
+			_vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
+		return h
+
 func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
@@ -114,13 +143,13 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
 	match dif:
 		Difficulty.Easy:
-			gen_level(rng, _easy_visibility, ["BasicRow", "BasicCol"], [])
+			gen_level(rng, _easy_visibility, _false, ["BasicRow", "BasicCol"], [])
 		Difficulty.Medium:
-			gen_level(rng, _medium_visibility, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
+			gen_level(rng, _medium_visibility, _false, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			pass
+			gen_level(rng, _hard_visibility(4, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
 		Difficulty.Expert:
-			pass
+			gen_level(rng, _hard_visibility(5, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AdvancedRow"])
 		Difficulty.Insane:
 			pass
 		_:
