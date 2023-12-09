@@ -572,6 +572,15 @@ func test_solve_together() -> void:
 	3xx.ww.
 	.L/L/L/
 	""")
+	assert_grid_eq(apply_strategies("""
+	h........
+	2....x...
+	}L/_/L/_/
+	""").to_str(), """
+	h........
+	2...xx...
+	.L/_/L/_/
+	""")
 	# Same but for columns
 	s = ["TogetherCol"]
 	assert_can_solve("""
@@ -635,6 +644,11 @@ func test_separate_rule() -> void:
 	h....
 	3.w.w
 	-L/L/
+	""", s)
+	assert_can_solve("""
+	h......
+	4......
+	-L.L.L/
 	""", s)
 	s = ["BasicCol", "SeparateCol"]
 	# Kinda same but for cols
