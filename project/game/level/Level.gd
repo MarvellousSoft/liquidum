@@ -28,7 +28,8 @@ signal won
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionEdit: TextEdit = $Description/Edit
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
-@onready var Title: Label = $Title/Text
+@onready var TitleBanner: PanelContainer = $Title/TitleBanner
+@onready var TitleLabel: Label = $Title/TitleBanner/Label
 @onready var TitleEdit: LineEdit = $Title/Edit
 
 var update_expected_waters : bool
@@ -47,7 +48,7 @@ var game_won := false
 func _ready():
 	Description.text = description
 	DescriptionEdit.text = description
-	Title.text = full_name
+	TitleLabel.text = full_name
 	TitleEdit.text = full_name
 	%PlaytestButton.visible = false
 	GridNode.hide()
@@ -114,7 +115,7 @@ func setup(try_load := true) -> void:
 	DescriptionScroll.visible = not editor_mode()
 	DescriptionEdit.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
-	Title.visible = not editor_mode()
+	TitleBanner.visible = not editor_mode()
 	if not editor_mode():
 		var e_waters = GridNode.get_expected_waters()
 		var e_boats = GridNode.get_expected_boats()

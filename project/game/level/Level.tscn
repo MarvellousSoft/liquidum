@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=23 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -78,6 +78,18 @@ _data = {
 "show": SubResource("Animation_aqku1")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c876g"]
+bg_color = Color(0.670588, 1, 0.819608, 0.784314)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0, 0.0352941, 0.141176, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
 [sub_resource type="Animation" id="Animation_1qr1w"]
 length = 0.001
 tracks/0/type = "value"
@@ -104,9 +116,34 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Description:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Title/TitleBanner:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_4ayxj"]
 resource_name = "startup"
+length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -130,6 +167,30 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Description:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2.8, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Title/TitleBanner:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1, 2, 2.6, 3.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
@@ -308,6 +369,88 @@ offset_bottom = 188.0
 focus_mode = 0
 text = "BACK"
 
+[node name="Description" type="MarginContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 2040.0
+offset_right = 3804.0
+offset_bottom = 2140.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Edit" type="TextEdit" parent="Description"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
+wrap_mode = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Description"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Label" type="Label" parent="Description/Scroll"]
+custom_minimum_size = Vector2(3760, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 60
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Title" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleBanner" type="PanelContainer" parent="Title"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = 1935.0
+offset_right = 3760.0
+offset_bottom = 2113.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c876g")
+
+[node name="Label" type="Label" parent="Title/TitleBanner"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 0.380392)
+theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
+theme_override_constants/shadow_offset_x = 20
+theme_override_constants/outline_size = 60
+theme_override_constants/shadow_outline_size = 60
+theme_override_font_sizes/font_size = 120
+text = "Level title"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Edit" type="LineEdit" parent="Title"]
+visible = false
+layout_mode = 0
+offset_left = 74.0
+offset_top = 512.0
+offset_right = 953.0
+offset_bottom = 644.0
+placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
+max_length = 64
+expand_to_text_length = true
+
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 
 [node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
@@ -323,59 +466,6 @@ libraries = {
 [node name="Autosaver" type="Timer" parent="."]
 wait_time = 30.0
 autostart = true
-
-[node name="Description" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 74.0
-offset_top = 705.0
-offset_right = 974.0
-offset_bottom = 1105.0
-
-[node name="Edit" type="TextEdit" parent="Description"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
-wrap_mode = 1
-
-[node name="Scroll" type="ScrollContainer" parent="Description"]
-layout_mode = 2
-horizontal_scroll_mode = 0
-
-[node name="Label" type="Label" parent="Description/Scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 60
-text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-autowrap_mode = 3
-
-[node name="Title" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Text" type="Label" parent="Title"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 313.0
-offset_right = 1176.0
-offset_bottom = 493.0
-theme_override_font_sizes/font_size = 120
-text = "Level title"
-text_overrun_behavior = 3
-
-[node name="Edit" type="LineEdit" parent="Title"]
-visible = false
-layout_mode = 0
-offset_left = 74.0
-offset_top = 512.0
-offset_right = 953.0
-offset_bottom = 644.0
-placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
-max_length = 64
-expand_to_text_length = true
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
@@ -397,10 +487,10 @@ expand_to_text_length = true
 [connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
-[connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
+[connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
 [editable path="TopInfo/MistakeCounter"]
 [editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
