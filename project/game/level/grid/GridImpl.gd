@@ -374,14 +374,16 @@ class CellWithLoc extends GridModel.CellModel:
 				return pure()._diag_wall_at(wall as E.Diagonal)
 		push_error("Bad wall %d" % wall)
 		return false
-	func put_water(corner: E.Corner, flush_undo := true) -> bool:
+	func put_water(corner: E.Corner, flush_undo := true) -> float:
 		if !grid.is_corner_partially_valid(Content.Water, i, j, corner):
 			return false
+		var added_waters := 0.0
 		if !water_at(corner):
-			var changes := grid._flood_water(i, j, corner, true)
-			grid._push_undo_changes(changes, flush_undo)
+			var dfs := grid._flood_water(i, j, corner, true)
+			added_waters = (dfs as AddWaterDfs).added_waters
+			grid._push_undo_changes(dfs.changes, flush_undo)
 		grid.maybe_update_hints()
-		return true
+		return added_waters
 	func put_block(corner: E.Corner, flush_undo := true) -> bool:
 		if not grid.editor_mode():
 			return false
@@ -421,7 +423,7 @@ class CellWithLoc extends GridModel.CellModel:
 			grid.push_empty_undo()
 		var changes: Array[Change] = []
 		if water_at(corner):
-			changes.append_array(grid._flood_water(i, j, corner, false))
+			changes.append_array(grid._flood_water(i, j, corner, false).changes)
 		if block_at(corner):
 			# Add walls when removing block as well in case there was a nonwall between two blocks
 			var single := pure().cell_type() == E.Single
@@ -989,15 +991,15 @@ func remove_wall_from_idx(i1: int, j1: int, i2: int, j2: int, flush_undo := true
 		get_cell(cw.x, cw.y).remove_wall(cw.z, false)
 	return true
 
-func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Array[Change]:
+func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Dfs:
 	if add:
 		var dfs := AddWaterDfs.new(self, i)
 		dfs.flood(i, j, corner)
-		return dfs.changes
+		return dfs
 	else:
 		var dfs := RemoveWaterDfs.new(self, i)
 		dfs.flood(i, j, corner)
-		return dfs.changes
+		return dfs
 
 class Dfs:
 	var grid: GridImpl
@@ -1046,12 +1048,19 @@ class Dfs:
 class AddWaterDfs extends Dfs:
 	# Water can go up to level min_i because of physics
 	var min_i: int
+	var added_waters := 0.0
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
-		match cell._content_at(corner):
+		var c := cell._content_at(corner)
+		match c:
 			Content.Nothing, Content.Air, Content.Boat, Content.Water:
+				if c != Content.Water:
+					if cell.cell_type() == E.CellType.Single:
+						added_waters += 1.0
+					else:
+						added_waters += 0.5
 				cell.put_water(corner)
 			Content.Block:
 				return false

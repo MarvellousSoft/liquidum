@@ -100,7 +100,7 @@ func _convert_keys_to_int(data_: Variant) -> Variant:
 		return data_
 	var data: Dictionary = data_
 	for key in data.keys():
-		if key.is_valid_int():
+		if key is String and key.is_valid_int():
 			var tmp = _convert_keys_to_int(data[key])
 			data.erase(key)
 			data[key.to_int()] = tmp

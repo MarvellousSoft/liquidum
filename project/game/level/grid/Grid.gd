@@ -48,7 +48,7 @@ class CellModel:
 	# The flush_undo parameter tells if this change should be separate from the previous change
 	# in the undo stack, useful for grouping multiple related changes in the same undo.
 	# Returns whether it was a valid move
-	func put_water(_corner: E.Corner, _flush_undo := true) -> bool:
+	func put_water(_corner: E.Corner, _flush_undo := true) -> float:
 		return GridModel.must_be_implemented()
 	# Puts air in the given diagonal
 	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:

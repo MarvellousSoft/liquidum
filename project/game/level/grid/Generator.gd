@@ -2,12 +2,14 @@ class_name Generator
 
 var rng := RandomNumberGenerator.new()
 var diagonals: bool
+var boats: bool
 var count_vis: float
 var type_vis: float
 
-func _init(rseed_: int, diagonals_: bool) -> void:
+func _init(rseed_: int, diagonals_: bool, boats_ := false) -> void:
 	rng.seed = rseed_
 	diagonals = diagonals_
+	boats = boats_
 
 func wrand(mx: int, weight: int) -> int:
 	var val := rng.randi_range(1, mx)
@@ -118,25 +120,27 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			left -= 1
 	return g
 
-func randomize_water(grid: GridModel) -> void:
-	var i_order := range(grid.rows())
-	Global.shuffle(i_order, rng)
-	for i in i_order:
-		var j_order := range(grid.cols())
-		Global.shuffle(j_order, rng)
-		for j in j_order:
-			var corners := [E.Corner.TopLeft]
-			var c := grid.get_cell(i, j)
-			if c.wall_at(E.Walls.IncDiag):
-				corners = [E.Corner.TopLeft, E.Corner.BottomRight]
-			elif c.wall_at(E.Walls.DecDiag):
-				corners = [E.Corner.TopRight, E.Corner.BottomLeft]
-			for corner in corners:
-				if rng.randf() < 0.5:
-					if c.water_at(corner):
-						c.remove_content(corner)
-					elif c.nothing_at(corner):
-						c.put_water(corner)
+func randomize_water(grid: GridModel, flush_undo := true) -> void:
+	if flush_undo:
+		grid.push_empty_undo()
+	var water_wanted := int(grid.rows() * grid.cols() * randf_range(0.2, 0.75))
+	var all_cells: Array[Vector2i] = []
+	for i in grid.rows():
+		for j in grid.cols():
+			all_cells.append(Vector2i(i, j))
+	while not all_cells.is_empty():
+		var idx: Vector2i = pop_random(all_cells)
+		var corners := [E.Corner.TopLeft]
+		var c := grid.get_cell(idx.x, idx.y)
+		if c.wall_at(E.Walls.IncDiag):
+			corners = [E.Corner.TopLeft, E.Corner.BottomRight]
+		elif c.wall_at(E.Walls.DecDiag):
+			corners = [E.Corner.TopRight, E.Corner.BottomLeft]
+		for corner in corners:
+			if c.nothing_at(corner):
+				water_wanted -= c.put_water(corner, false)
+				if water_wanted <= 0:
+					return
 
 func generate(n: int, m: int) -> GridModel:
 	# Reset rng
@@ -166,5 +170,5 @@ func generate(n: int, m: int) -> GridModel:
 					grid.get_cell(i, j).put_wall(E.Walls.Right)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
-	randomize_water(grid)
+	randomize_water(grid, false)
 	return grid
