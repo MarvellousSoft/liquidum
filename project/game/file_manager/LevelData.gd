@@ -6,8 +6,8 @@ var full_name: String
 var description: String
 var grid_data: Dictionary
 var tutorial: String
-# Only used for levels created from the random hub
-var difficulty: RandomHub.Difficulty = -1
+# Only used for levels created from the random hub. It's either RandomHub.Difficulty or -1
+var difficulty: int = -1
 
 func _init(full_name_: String, description_: String, grid_data_: Dictionary, tutorial_: String) -> void:
 	full_name = full_name_

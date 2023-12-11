@@ -391,47 +391,50 @@ class TogetherStrategy extends RowColStrategy:
 		- If there's the space between two obstacles is less than N, then it can't have any water
 		"""
 
-	# Add air to small holes. There's no water in row/col
-	func _air_on_small_holes(a: int) -> bool:
-		if _a_hints()[a].water_count == -1.:
+	# Like the subset sum strategy on rows, but since it's required to be together, we actually
+	# need only to use the two pointers technique to check all possible solutions
+	# Assumes there's no water in this row/column
+	func _add_necessary_waters_and_airs(a: int) -> bool:
+		if _a_hints()[a].water_count <= 0.0:
 			return false
-		var hint := int(2 * _a_hints()[a].water_count)
 		var any := false
-		var bad_hole := false
-		var hole := false
-		var single_hole_start := -1
-		var single_hole_size := 0
-		# reverse to optimise how we place air
-		for b2 in range(2 * _b_len() - 1, -1, -1):
-			var c := _content(a, b2)
-			if c == Content.Nothing:
-				if not hole:
-					hole = true
-					var size := 1
-					for bb2 in range(b2 - 1, -1, -1):
-						if _content(a, bb2) == Content.Nothing:
-							size += 1
-						else:
-							break
-					bad_hole = size < hint
-					if size >= hint:
-						if single_hole_start == -1:
-							single_hole_start = b2 - size + 1
-							single_hole_size = size
-						else:
-							single_hole_start = -2
-				if hole and bad_hole:
-					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
-					any = true
+		var hint := int(2 * _a_hints()[a].water_count)
+		var r2 := -1
+		var l2 := 0
+		var max_solution_right := -1
+		var min_solution_right := -1
+		var max_solution_left := -1
+		while l2 < 2 * _b_len():
+			if _content(a, l2) != Content.Nothing:
+				l2 += 1
+				continue
+			if r2 < l2:
+				r2 = l2 - 1
+			while r2 < 2 * _b_len() - 1 and _content(a, r2 + 1) == Content.Nothing and r2 - l2 + 1 < hint:
+				r2 += 1
+				while r2 < l2 or (not _wall_right(a, r2) and _content(a, r2 + 1) == Content.Nothing):
+					r2 += 1
+			if r2 - l2 + 1 == hint:
+				max_solution_right = r2
+				max_solution_left = l2
+				if min_solution_right == -1:
+					min_solution_right = r2
+			# This cell is not in ANY solution
+			if max_solution_right < l2:
+				any = true
+				_cell(a, l2 / 2).put_air(_corner(a, l2), false, true)
+			if _left() == E.Left:
+				while not _wall_right(a, l2):
+					l2 += 1
 			else:
-				hole = false
-		if single_hole_start >= 0 and 2 * hint > single_hole_size and hint < single_hole_size:
-			any = true
-			for b2 in range(single_hole_start, single_hole_start + single_hole_size):
-				if b2 - single_hole_start + 1 <= hint and single_hole_start + single_hole_size - b2 <= hint:
-					if _content(a, b2) == Content.Nothing:
-						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
-						any = true
+				if not bool(l2 & 1) and not _wall_right(a, l2):
+					l2 += 1
+			l2 += 1
+		# Every cell between max_solution_left and min_solution_right are in EVERY solution
+		for b2 in range(max_solution_left, min_solution_right + 1, 1):
+			if _content(a, b2) == Content.Nothing:
+				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+				any = true
 		return any
 
 	func _apply(a: int) -> bool:
@@ -444,7 +447,7 @@ class TogetherStrategy extends RowColStrategy:
 				leftmost = min(leftmost, b2)
 				rightmost = b2
 		if rightmost == -1:
-			return _air_on_small_holes(a)
+			return _add_necessary_waters_and_airs(a)
 		var any := false
 		# Merge all waters together
 		for b2 in range(leftmost + 1, rightmost):
