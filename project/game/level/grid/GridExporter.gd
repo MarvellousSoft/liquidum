@@ -18,9 +18,9 @@ func _export_pure_cell(pure: GridImpl.PureCell) -> Dictionary:
 
 func _load_pure_cell(data: Dictionary) -> GridImpl.PureCell:
 	var cell := GridImpl.PureCell.empty()
-	cell.c_left = data.c_left
-	cell.c_right = data.c_right
-	cell.type = data.cell_type
+	cell.c_left = data[c_left]
+	cell.c_right = data[c_right]
+	cell.type = data[cell_type]
 	return cell
 
 func _export_grid(grid: Array[Array], inner_export: Callable) -> Array:
@@ -52,10 +52,10 @@ func _export_line_hint(line: GridModel.LineHint) -> Dictionary:
 
 func _load_line_hint(data: Dictionary) -> GridModel.LineHint:
 	var hint := GridModel.LineHint.new()
-	hint.water_count = data.water_count
-	hint.water_count_type = data.water_count_type
-	hint.boat_count = data.boat_count
-	hint.boat_count_type = data.boat_count_type
+	hint.water_count = data[water_count]
+	hint.water_count_type = data[water_count_type]
+	hint.boat_count = data[boat_count]
+	hint.boat_count_type = data[boat_count_type]
 	return hint
 
 func _export_bool(b: bool) -> int:
@@ -73,11 +73,11 @@ func _export_grid_hints(hints: GridModel.GridHints) -> Dictionary:
 
 func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
 	var hints := GridModel.GridHints.new()
-	hints.total_water = float(data.total_water)
-	hints.total_boats = int(data.total_boats)
+	hints.total_water = float(data[total_water])
+	hints.total_boats = int(data[total_boats])
 	# Need to convert keys to floats
-	for size in data.expected_aquariums:
-		hints.expected_aquariums[float(size)] = int(data.expected_aquariums[size])
+	for size in data[expected_aquariums]:
+		hints.expected_aquariums[float(size)] = int(data[expected_aquariums][size])
 	return hints
 
 func export_data(grid: GridImpl) -> Dictionary:
@@ -92,11 +92,26 @@ func export_data(grid: GridImpl) -> Dictionary:
 		grid_hints: _export_grid_hints(grid._grid_hints),
 	}
 
+func _convert_keys_to_int(data_: Variant) -> Variant:
+	if data_ is Array:
+		for i in data_.size():
+			data_[i] = _convert_keys_to_int(data_[i])
+	if not data_ is Dictionary:
+		return data_
+	var data: Dictionary = data_
+	for key in data.keys():
+		if key.is_valid_int():
+			var tmp = _convert_keys_to_int(data[key])
+			data.erase(key)
+			data[key.to_int()] = tmp
+	return data
+
 func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
-	if SAVE_VERSION != data.version:
+	data = _convert_keys_to_int(data)
+	if SAVE_VERSION != data[version]:
 		push_warning("Invalid version")
 	var content_only := (load_mode == GridModel.LoadMode.ContentOnly)
-	grid.pure_cells = _load_grid(data.cells, _load_pure_cell)
+	grid.pure_cells = _load_grid(data[cells], _load_pure_cell)
 	var n := grid.pure_cells.size()
 	var m := 0 if n == 0 else grid.pure_cells[0].size()
 	if content_only:
@@ -105,10 +120,10 @@ func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) 
 	else:
 		grid.n = n
 		grid.m = m
-		grid._row_hints.assign(data.row_hints.map(_load_line_hint))
-		grid._col_hints.assign(data.col_hints.map(_load_line_hint))
-		grid.wall_bottom = _load_grid(data.wall_bottom, _load_bool)
-		grid.wall_right = _load_grid(data.wall_right, _load_bool)
-		grid._grid_hints = _load_grid_hints(data.grid_hints)
+		grid._row_hints.assign(data[row_hints].map(_load_line_hint))
+		grid._col_hints.assign(data[col_hints].map(_load_line_hint))
+		grid.wall_bottom = _load_grid(data[wall_bottom], _load_bool)
+		grid.wall_right = _load_grid(data[wall_right], _load_bool)
+		grid._grid_hints = _load_grid_hints(data[grid_hints])
 	grid._finish_loading(load_mode)
 	return grid

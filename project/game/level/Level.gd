@@ -470,11 +470,14 @@ func _on_dev_buttons_randomize_visibility() -> void:
 
 func _on_dev_buttons_save():
 	var g := GridNode.grid_logic
-	g.set_auto_update_hints(false)
-	var f := FileAccess.open("res://level.data", FileAccess.WRITE)
-	_hint_visibility().apply_to_grid(g)
-	FileManager._save_json_data("res://", "level.json", LevelData.new(full_name, description, g.export_data(), "").get_data())
-	g.set_auto_update_hints(true)
+	if editor_mode():
+		g.set_auto_update_hints(false)
+		_hint_visibility().apply_to_grid(g)
+	else:
+		assert(g.are_hints_satisfied())
+	FileManager._save_json_data("res://", "%s.json" % level_name, LevelData.new(full_name, description, g.export_data(), "").get_data())
+	if editor_mode():
+		g.set_auto_update_hints(true)
 
 func _on_continue_button_pressed():
 	TransitionManager.pop_scene()
