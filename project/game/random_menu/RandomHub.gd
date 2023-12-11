@@ -4,11 +4,11 @@ extends Control
 const RANDOM := "random"
 
 @onready var Continue: Button = $Difficulties/VBox/Continue
-@onready var Completed: Label = $CompletedCount
+@onready var Completed: VBoxContainer = $CompletedCount
 @onready var GeneratingLevel: Control = $GeneratingLevel
 @onready var CancelButton: Button = $GeneratingLevel/PanelContainer/VBoxContainer/Cancel
 
-var completed_count: int
+var completed_count: Array[int]
 var gen_thread := Thread.new()
 var cancel_gen := false
 
@@ -43,7 +43,10 @@ func _enter_tree() -> void:
 func _update() -> void:
 	Continue.visible = FileManager.load_level(RANDOM) != null
 	completed_count = FileManager.load_user_data().random_levels_completed
-	Completed.text = "%s: %d" % [tr(&"RANDOM_COMPLETED"), completed_count]
+	for dif in Difficulty:
+		var label: Label = Completed.get_node(dif)
+		label.visible = not $Difficulties/VBox.get_node(dif).disabled
+		label.text = "%s - %d" % [tr("%s_BUTTON" % dif.to_upper()), completed_count[Difficulty[dif]]]
 
 func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
@@ -78,7 +81,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 			break
 	return g if not cancel_gen else null
 
-func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
+func gen_level(rng: RandomNumberGenerator, dif: Difficulty, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	if gen_thread.is_alive():
 		return
 	GeneratingLevel.visible = true
@@ -91,7 +94,9 @@ func gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_
 		return
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
-	FileManager.save_random_level(LevelData.new("", "", g.export_data(), ""))
+	var data := LevelData.new("", "", g.export_data(), "")
+	data.difficulty = dif
+	FileManager.save_random_level(data)
 	load_existing()
 
 func load_existing() -> void:
@@ -99,7 +104,7 @@ func load_existing() -> void:
 	if data == null:
 		return
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "")
-	level.won.connect(_level_completed)
+	level.won.connect(_level_completed.bind(data.difficulty))
 	TransitionManager.push_scene(level)
 
 func _confirm_new_level() -> bool:
@@ -108,9 +113,9 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
-func _level_completed() -> void:
+func _level_completed(dif: Difficulty) -> void:
 	# Save was already deleted
-	completed_count += 1
+	completed_count[dif] += 1
 	FileManager.save_user_data(UserData.new(completed_count))
 
 func _on_continue_pressed() -> void:
@@ -164,13 +169,13 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
 	match dif:
 		Difficulty.Easy:
-			gen_level(rng, _easy_visibility, _false, ["BasicRow", "BasicCol"], [])
+			gen_level(rng, dif, _easy_visibility, _false, ["BasicRow", "BasicCol"], [])
 		Difficulty.Medium:
-			gen_level(rng, _medium_visibility, _false, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
+			gen_level(rng, dif, _medium_visibility, _false, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			gen_level(rng, _hard_visibility(4, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
+			gen_level(rng, dif, _hard_visibility(4, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
 		Difficulty.Expert:
-			gen_level(rng, _hard_visibility(5, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AdvancedRow"])
+			gen_level(rng, dif, _hard_visibility(5, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AdvancedRow"])
 		Difficulty.Insane:
 			pass
 		_:

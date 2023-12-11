@@ -26,7 +26,7 @@ PROFILE,Profile,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?
 CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?
-LEVELS_COMPLETED,levels completed,níveis completos
+LEVELS_COMPLETED,levels completed,níveis completados
 WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina
 WORKSHOP_LEVELS,Subscribed levels:,Níveis inscritos:
 PLAY_LEVEL_TOOLTIP,Playtest level,Testar o nível
@@ -42,7 +42,7 @@ HARD_BUTTON,Hard,Difícil
 EXPERT_BUTTON,Expert,Expert
 INSANE_BUTTON,Insane,Insano
 CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente
-RANDOM_COMPLETED,Levels completed,Níveis completados
+RANDOM_COMPLETED,Levels completed:,Níveis completados:
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to ALL the hints.,Todos níveis tem uma única solução. Preste atenção a TODAS as dicas.
 PLAYTEST,Playtest level,Testar nível

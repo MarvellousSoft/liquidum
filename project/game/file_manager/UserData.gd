@@ -2,11 +2,11 @@ class_name UserData
 
 const VERSION := 1
 
-var random_levels_completed: int
+var random_levels_completed: Array[int]
 
 enum { VERSION_KEY, RANDOM_LEVELS_COMPLETED }
 
-func _init(random_levels_completed_: int) -> void:
+func _init(random_levels_completed_: Array[int]) -> void:
 	random_levels_completed = random_levels_completed_
 
 func get_data() -> Dictionary:
@@ -16,10 +16,14 @@ func get_data() -> Dictionary:
 	}
 
 static func load_data(data_: Variant) -> UserData:
+	var completed: Array[int] = []
 	if data_ == null:
-		return UserData.new(0)
+		for i in RandomHub.Difficulty.size():
+			completed.append(0)
+		return UserData.new(completed)
 	var data: Dictionary = data_
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
-	return UserData.new(int(data.random_levels_completed))
+	completed.assign(data.random_levels_completed)
+	return UserData.new(completed)
 

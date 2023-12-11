@@ -104,26 +104,16 @@ offset_top = 75.0
 focus_mode = 0
 text = "BACK"
 
-[node name="CompletedCount" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.8
-anchor_right = 0.9
-offset_top = 75.0
-grow_horizontal = 0
-auto_translate = false
-theme_override_font_sizes/font_size = 70
-text = "RANDOM_COMPLETED: ?"
-
 [node name="Seed" type="LineEdit" parent="."]
 layout_mode = 1
 anchors_preset = -1
+anchor_left = 1.0
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 50.0
-offset_top = -60.5
-offset_right = 362.0
-offset_bottom = 60.5
+offset_left = -50.0
+offset_right = -50.0
+grow_horizontal = 0
 grow_vertical = 2
 placeholder_text = "Seed"
 max_length = 7
@@ -177,6 +167,48 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "Cancel"
+
+[node name="CompletedCount" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.3
+anchor_bottom = 0.7
+offset_left = 50.0
+scale = Vector2(1, 1.02248)
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="CompletedCount"]
+layout_mode = 2
+text = "RANDOM_COMPLETED"
+
+[node name="HSeparator" type="HSeparator" parent="CompletedCount"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Easy" type="Label" parent="CompletedCount"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Easy = ?"
+
+[node name="Medium" type="Label" parent="CompletedCount"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Medium = ?"
+
+[node name="Hard" type="Label" parent="CompletedCount"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Hard = ?"
+
+[node name="Expert" type="Label" parent="CompletedCount"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Expert = ?"
+
+[node name="Insane" type="Label" parent="CompletedCount"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "Insane = ?"
 
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Difficulties/VBox/Easy" to="." method="_on_dif_pressed" binds= [0]]

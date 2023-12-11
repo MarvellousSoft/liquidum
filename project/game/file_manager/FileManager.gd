@@ -184,7 +184,12 @@ func _no_tutorial(data: LevelData) -> void:
 	if data != null:
 		assert(data.tutorial.is_empty(), "Level can't have tutorial")
 		data.tutorial = ""
-	
+
+func _has_difficulty(data: LevelData) -> void:
+	if data != null:
+		assert(data.difficulty != -1, "Random level must have difficulty")
+		if data.difficulty == -1:
+			data.difficulty = RandomHub.Difficulty.Easy
 
 func load_workshop_level(dir: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(dir, LEVEL_FILE))
@@ -195,10 +200,13 @@ const RANDOM := "random.json"
 
 func load_random_level() -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_level_dir(), RANDOM))
+	_has_difficulty(data)
 	_no_tutorial(data)
 	return data
 
 func save_random_level(data: LevelData) -> void:
+	_has_difficulty(data)
+	_no_tutorial(data)
 	_save_json_data(_level_dir(), RANDOM, data.get_data())
 
 
