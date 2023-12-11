@@ -11,11 +11,15 @@ signal pause_toggled(active : bool)
 @onready var Fullscreen = $Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox
 @onready var BG = $BG
 @onready var PauseButton = $PauseButton
+@onready var TitleContainer = %TitleContainer
+@onready var LevelTitle = %LevelTitle
+@onready var LevelID = %LevelID
 
 var active := false
 var is_disabled := false
 
 func _ready():
+	TitleContainer.hide()
 	BG.hide()
 
 
@@ -57,6 +61,19 @@ func setup_values():
 	SoundSettings.bgm.set_value(Profile.get_option("bgm_volume")*100)
 	SoundSettings.sfx.set_value(Profile.get_option("sfx_volume")*100)
 	Fullscreen.button_pressed = Global.is_fullscreen()
+
+
+func set_level_name(level_name: String, section := -1, level := -1) ->  void:
+	if level_name != "":
+		TitleContainer.show()
+		LevelTitle.text = level_name
+		if level != -1 and section != -1:
+			LevelID.show()
+			LevelID.text = "%d - %d" % [section, level]
+		else:
+			LevelID.hide()
+	else:
+		TitleContainer.hide()
 
 
 func _on_volume_slider_value_changed(value, bus : int):

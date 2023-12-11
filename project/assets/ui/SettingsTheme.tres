@@ -44,5 +44,5 @@ HSlider/styles/grabber_area = SubResource("StyleBoxFlat_h5y1j")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_1tofi")
 HSlider/styles/slider = SubResource("StyleBoxFlat_rnmwq")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
-Label/font_sizes/font_size = 90
+Label/font_sizes/font_size = 70
 Label/fonts/font = SubResource("FontVariation_blnni")

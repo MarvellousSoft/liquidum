@@ -184,12 +184,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_sb0jh")
-}
-speed_scale = 3.5
-
 [node name="Settings" type="Control" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -208,6 +202,25 @@ offset_bottom = 2160.0
 layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
+
+[node name="TitleContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LevelTitle" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 120
+text = "LEVEL_NAME"
+horizontal_alignment = 1
+
+[node name="LevelID" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 90
+text = "LEVEL_ID"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -282,6 +295,12 @@ focus_mode = 0
 texture_normal = ExtResource("3_53c0p")
 texture_pressed = ExtResource("4_fa5hr")
 texture_hover = ExtResource("5_epp2n")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sb0jh")
+}
+speed_scale = 3.5
 
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]

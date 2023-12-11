@@ -38,6 +38,8 @@ var process_game := false
 var running_time : float
 var grid: GridModel = null
 var level_name := ""
+var level_number := -1
+var section_number := -1
 var full_name: String
 var description: String
 # Has completion data but outdated grid data
@@ -49,6 +51,7 @@ func _ready():
 	Description.text = description
 	DescriptionEdit.text = description
 	TitleLabel.text = full_name
+	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
 	%PlaytestButton.visible = false
 	GridNode.hide()
@@ -115,7 +118,7 @@ func setup(try_load := true) -> void:
 	DescriptionScroll.visible = not editor_mode()
 	DescriptionEdit.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
-	TitleBanner.visible = not editor_mode()
+	TitleBanner.visible = not editor_mode() and full_name != ""
 	if not editor_mode():
 		var e_waters = GridNode.get_expected_waters()
 		var e_boats = GridNode.get_expected_boats()
