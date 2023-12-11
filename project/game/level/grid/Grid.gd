@@ -277,3 +277,9 @@ func is_empty() -> bool:
 
 func copy_to_clipboard() -> void:
 	return GridModel.must_be_implemented()
+
+func merge_last_undo() -> void:
+	return GridModel.must_be_implemented()
+
+func count_waters() -> float:
+	return GridModel.must_be_implemented()

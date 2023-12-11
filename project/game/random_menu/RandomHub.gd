@@ -4,6 +4,7 @@ extends Control
 const RANDOM := "random"
 
 @onready var Continue: Button = $Difficulties/VBox/Continue
+@onready var ContinueSeparator: HSeparator = $Difficulties/VBox/ContinueSeparator
 @onready var Completed: VBoxContainer = $CompletedCount
 @onready var GeneratingLevel: Control = $GeneratingLevel
 @onready var CancelButton: Button = $GeneratingLevel/PanelContainer/VBoxContainer/Cancel
@@ -41,7 +42,9 @@ func _enter_tree() -> void:
 	call_deferred(&"_update")
 
 func _update() -> void:
-	Continue.visible = FileManager.load_level(RANDOM) != null
+	var has_random_level := FileManager.load_level(RANDOM) != null
+	Continue.visible = has_random_level
+	ContinueSeparator.visible = has_random_level
 	completed_count = FileManager.load_user_data().random_levels_completed
 	for dif in Difficulty:
 		var label: Label = Completed.get_node(dif)
@@ -63,9 +66,9 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 		if cancel_gen:
 			break
 		var hints: Level.HintVisibility = hints_builder.call(rng)
-		var gen_options: bool = gen_options_builder.call(rng)
+		var gen_options: int = gen_options_builder.call(rng)
 		var start_gen := Time.get_unix_time_from_system()
-		g = Generator.new(rng.randi(), gen_options).generate(hints.row.size(), hints.col.size())
+		g = Generator.new(rng.randi(), bool(gen_options & 1), bool(gen_options & 2)).generate(hints.row.size(), hints.col.size())
 		total_gen += Time.get_unix_time_from_system() - start_gen
 		g.set_auto_update_hints(false)
 		for j in 3:
@@ -137,11 +140,11 @@ func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: i
 	for i in a.size():
 		a[i] |= b[i]
 
-func _true(_rng: RandomNumberGenerator) -> bool:
-	return true
+func _diags(rng: RandomNumberGenerator) -> int:
+	return 1 + (2 if rng.randf() < 0.5 else 0) 
 
-func _false(_rng: RandomNumberGenerator) -> bool:
-	return false
+func _nothing(_rng: RandomNumberGenerator) -> int:
+	return 0
 
 func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 	return Level.HintVisibility.default(5, 5)
@@ -160,6 +163,7 @@ func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
 func _hard_visibility(n: int, m: int) -> Callable:
 	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
 		var h := Level.HintVisibility.new()
+		h.total_boats = rng.randf() < 0.5
 		for i in n:
 			h.row.append(0)
 		for j in m:
@@ -167,6 +171,7 @@ func _hard_visibility(n: int, m: int) -> Callable:
 		for a in [h.row, h.col]:
 			_vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
 			_vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
+			_vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 		return h
 
 func _on_dif_pressed(dif: Difficulty) -> void:
@@ -176,13 +181,13 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
 	match dif:
 		Difficulty.Easy:
-			gen_level(rng, dif, _easy_visibility, _false, ["BasicRow", "BasicCol"], [])
+			gen_level(rng, dif, _easy_visibility, _nothing, ["BasicRow", "BasicCol"], [])
 		Difficulty.Medium:
-			gen_level(rng, dif, _medium_visibility, _false, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
+			gen_level(rng, dif, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			gen_level(rng, dif, _hard_visibility(4, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
+			gen_level(rng, dif, _hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
 		Difficulty.Expert:
-			gen_level(rng, dif, _hard_visibility(5, 5), _true, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AdvancedRow"])
+			gen_level(rng, dif, _hard_visibility(5, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AdvancedRow"])
 		Difficulty.Insane:
 			pass
 		_:

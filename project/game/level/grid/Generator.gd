@@ -120,14 +120,30 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			left -= 1
 	return g
 
-func randomize_water(grid: GridModel, flush_undo := true) -> void:
-	if flush_undo:
-		grid.push_empty_undo()
-	var water_wanted := int(grid.rows() * grid.cols() * randf_range(0.2, 0.75))
+func _all_cells(grid: GridModel) -> Array[Vector2i]:
 	var all_cells: Array[Vector2i] = []
 	for i in grid.rows():
 		for j in grid.cols():
 			all_cells.append(Vector2i(i, j))
+	return all_cells
+
+func randomize_boats(grid: GridModel) -> void:
+	var all_cells := _all_cells(grid)
+	Global.shuffle(all_cells, rng)
+	for idx in all_cells:
+		var c := grid.get_cell(idx.x, idx.y)
+		# This can be made a little more efficient by not actually putting the boat.
+		if c.put_boat(true):
+			if rng.randf() < 0.5:
+				grid.undo()
+			else:
+				grid.merge_last_undo()
+
+func randomize_water(grid: GridModel, flush_undo := true) -> void:
+	if flush_undo:
+		grid.push_empty_undo()
+	var water_wanted: float = int(grid.rows() * grid.cols() * randf_range(0.2, 0.75)) - grid.count_waters()
+	var all_cells := _all_cells(grid)
 	while not all_cells.is_empty():
 		var idx: Vector2i = pop_random(all_cells)
 		var corners := [E.Corner.TopLeft]
@@ -170,5 +186,7 @@ func generate(n: int, m: int) -> GridModel:
 					grid.get_cell(i, j).put_wall(E.Walls.Right)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
+	if boats:
+		randomize_boats(grid)
 	randomize_water(grid, false)
 	return grid
