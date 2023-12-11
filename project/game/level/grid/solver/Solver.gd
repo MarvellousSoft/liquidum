@@ -362,21 +362,25 @@ class RowColStrategy extends Strategy:
 		var c := _cell(a, b2 / 2)
 		return c.wall_at(_right() as E.Walls) if bool(b2 & 1) else (c.cell_type() != E.CellType.Single)
 	# Adding water to this cell will flood water to how many half-cells?
-	func _will_flood_how_many(a: int, b2: int) -> int:
+	func _will_flood_how_many(a: int, b2: int, invert_flood := false) -> int:
 		if _content(a, b2) != Content.Nothing:
 			return 0
 		var b2_min := b2
 		var b2_max := b2
 		# Always floods right or down
-		while not _wall_right(a, b2_max) and _content(a, b2_max + 1) == Content.Nothing:
-			b2_max += 1
+		if _left() == E.Side.Left or not invert_flood:
+			while not _wall_right(a, b2_max) and _content(a, b2_max + 1) == Content.Nothing:
+				b2_max += 1
+		else:
+			if not bool(b2_max & 1) and not _wall_right(a, b2_max):
+				b2_max += 1
 		# Only floods left, not up
-		if _left() == E.Side.Left:
+		if _left() == E.Side.Left or invert_flood:
 			while b2_min > 0 and not _wall_right(a, b2_min - 1) and _content(a, b2_min - 1) == Content.Nothing:
 				b2_min -= 1
 		# But up it still "floods" the same cell if it doesn't have a diagonal
 		else:
-			if bool(b2_min & 1) and _cell(a, (b2_min - 1) / 2).cell_type() == E.CellType.Single:
+			if bool(b2_min & 1) and not _wall_right(a, b2_min - 1):
 				b2_min -= 1
 		return b2_max - b2_min + 1
 
@@ -561,12 +565,28 @@ class SeparateStrategy extends RowColStrategy:
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
-			var any_content := false
-			for b2 in _b_len():
-				if _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
-					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
-					any_content = true
-			return any_content
+			var any := false
+			for b2 in 2 * _b_len():
+				if _content(a, b2) == Content.Nothing:
+					# Hole is already discontinuous
+					if rightmost != -1 and rightmost != b2 - 1:
+						leftmost = -1
+					leftmost = min(leftmost, b2)
+					rightmost = b2
+					if _will_flood_how_many(a, b2) == water_left2:
+						_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+						any = true
+			# Single hole, in which case it might be necessary to put water on the corners of it
+			# to prevent creating a contiguous block of water
+			if rightmost != -1 and leftmost != -1:
+				var hole_sz := rightmost - leftmost + 1
+				if _content(a, leftmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, leftmost, true):
+					_cell(a, leftmost / 2).put_water(_corner(a, leftmost), false)
+					any = true
+				if _content(a, rightmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, rightmost, true):
+					_cell(a, rightmost / 2).put_water(_corner(a, rightmost), false)
+					any = true
+			return any
 		for b2 in range(leftmost + 1, rightmost):
 			if _content(a, b2) != Content.Water:
 				if nothing_middle == water_left2 and _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:

@@ -55,22 +55,27 @@ theme_override_constants/separation = 50
 
 [node name="Run" type="Button" parent="Buttons"]
 layout_mode = 2
+focus_mode = 0
 text = "Run tests"
 
 [node name="AutoSolve" type="Button" parent="Buttons"]
 layout_mode = 2
+focus_mode = 0
 text = "Simple Solve"
 
 [node name="GodMode" type="CheckButton" parent="Buttons"]
 layout_mode = 2
+focus_mode = 0
 text = "God mode"
 
 [node name="Paste" type="Button" parent="Buttons"]
 layout_mode = 2
+focus_mode = 0
 text = "Paste from clipboard"
 
 [node name="FullSolve" type="Button" parent="Buttons"]
 layout_mode = 2
+focus_mode = 0
 text = "Full solve"
 
 [node name="SolvedType" type="Label" parent="Buttons"]
