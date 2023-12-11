@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c6108lc3jg2cv"]
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://c6108lc3jg2cv"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 [ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_hda1e"]
@@ -7,6 +7,12 @@
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_x6xj1")
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_wfon5"]
+color = Color(0.0156863, 0.105882, 0.219608, 0.741176)
+grow_begin = -40.0
+grow_end = -40.0
+thickness = 20
 
 [sub_resource type="FontVariation" id="FontVariation_qs55u"]
 base_font = ExtResource("1_x6xj1")
@@ -39,6 +45,7 @@ Button/fonts/font = SubResource("FontVariation_7w16d")
 Button/styles/hover = ExtResource("2_hda1e")
 Button/styles/normal = ExtResource("3_7bdy7")
 Button/styles/pressed = ExtResource("4_7wtpn")
+HSeparator/styles/separator = SubResource("StyleBoxLine_wfon5")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82
 Label/fonts/font = SubResource("FontVariation_qs55u")

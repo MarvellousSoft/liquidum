@@ -31,6 +31,7 @@ signal won
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
 @onready var TitleEdit: LineEdit = $Title/Edit
+@onready var TutorialContainer = %TutorialContainer
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -109,6 +110,8 @@ func setup(try_load := true) -> void:
 			if save != null:
 				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
+				if not save.tutorial.is_empty():
+					add_tutorial(save.tutorial)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
 				dummy_save = save
@@ -174,6 +177,12 @@ func scale_grid() -> void:
 	GridNode.scale = Vector2(s, s)
 	GridNode.modulate.a = prev_a
 	GridNode.setup_cell_corners()
+
+
+func add_tutorial(tutorial_name):
+	for child in TutorialContainer.get_children():
+		TutorialContainer.remove_child(child)
+	TutorialContainer.add_child(Global.get_tutorial(tutorial_name))
 
 
 func update_counters() -> void:

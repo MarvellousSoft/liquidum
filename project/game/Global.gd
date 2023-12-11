@@ -6,6 +6,9 @@ const COLORS = {
 	"satisfied": Color("#61fc89ff"),
 	"error": Color("#ff6a6aff"),
 }
+const TUTORIALS = {
+	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),
+}
 
 signal dev_mode_toggled(status : bool)
 
@@ -66,8 +69,10 @@ func create_button(text: String) -> Button:
 	button.text = text
 	return button
 
+
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
+
 
 func toggle_fullscreen():
 	var window = get_window()
@@ -91,6 +96,7 @@ func toggle_fullscreen():
 			window.position = Vector2(s_size.x/2 - size.x/2, size.y/2)
 		window.set_current_screen(cur_screen)
 
+
 func shuffle(a: Array, rng: RandomNumberGenerator) -> void:
 	for i in a.size():
 		var j := rng.randi_range(i, a.size() - 1)
@@ -98,7 +104,13 @@ func shuffle(a: Array, rng: RandomNumberGenerator) -> void:
 		a[i] = a[j]
 		a[j] = tmp
 
+
 func wait_for_thread(t: Thread) -> Variant:
 	while t.is_started() and t.is_alive():
 		await get_tree().create_timer(0.5).timeout
 	return t.wait_to_finish()
+
+
+func get_tutorial(tutorial_name):
+	assert(TUTORIALS.has(tutorial_name), "Not a valid tutorial name: " + str(tutorial_name))
+	return TUTORIALS[tutorial_name].instantiate()

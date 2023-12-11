@@ -142,6 +142,18 @@ tracks/3/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TutorialContainer:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_4ayxj"]
 resource_name = "startup"
@@ -193,6 +205,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TutorialContainer:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
@@ -338,10 +362,10 @@ offset_bottom = 3051.0
 [node name="PlaytestButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 74.0
-offset_top = 326.0
-offset_right = 801.0
-offset_bottom = 451.0
+offset_left = 100.0
+offset_top = 290.0
+offset_right = 827.0
+offset_bottom = 415.0
 focus_mode = 0
 text = "PLAYTEST"
 
@@ -361,12 +385,21 @@ libraries = {
 "": SubResource("AnimationLibrary_dnqfm")
 }
 
+[node name="TutorialContainer" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 81.0
+offset_top = 503.0
+offset_right = 878.0
+offset_bottom = 2076.0
+
 [node name="BackButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 99.0
+offset_left = 100.0
 offset_top = 63.0
-offset_right = 399.0
+offset_right = 400.0
 offset_bottom = 188.0
 focus_mode = 0
 text = "BACK"
