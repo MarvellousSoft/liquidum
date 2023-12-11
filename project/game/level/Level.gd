@@ -32,6 +32,7 @@ signal won
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
 @onready var TitleEdit: LineEdit = $Title/Edit
 @onready var TutorialContainer = %TutorialContainer
+@onready var TutorialCenterContainer = %TutorialCenterContainer
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -54,6 +55,14 @@ func _ready():
 	TitleLabel.text = full_name
 	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
+	reset_tutorial()
+	var data = FileManager.load_level_data(section_number, level_number)
+	if is_campaign_level() and not data.tutorial.is_empty():
+		TutorialContainer.show()
+		add_tutorial(data.tutorial)
+	else:
+		TutorialContainer.hide()
+		
 	%PlaytestButton.visible = false
 	GridNode.hide()
 	await TransitionManager.transition_finished
@@ -110,8 +119,6 @@ func setup(try_load := true) -> void:
 			if save != null:
 				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
-				if not save.tutorial.is_empty():
-					add_tutorial(save.tutorial)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
 				dummy_save = save
@@ -162,6 +169,10 @@ func setup(try_load := true) -> void:
 	process_game = true
 
 
+func is_campaign_level():
+	return level_number != -1 and section_number != -1
+
+
 func editor_mode() -> bool:
 	return GridNode.editor_mode
 
@@ -179,10 +190,13 @@ func scale_grid() -> void:
 	GridNode.setup_cell_corners()
 
 
+func reset_tutorial():
+	for child in TutorialCenterContainer.get_children():
+		TutorialCenterContainer.remove_child(child)
+
+
 func add_tutorial(tutorial_name):
-	for child in TutorialContainer.get_children():
-		TutorialContainer.remove_child(child)
-	TutorialContainer.add_child(Global.get_tutorial(tutorial_name))
+	TutorialCenterContainer.add_child(Global.get_tutorial(tutorial_name))
 
 
 func update_counters() -> void:
