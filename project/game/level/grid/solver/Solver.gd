@@ -562,10 +562,10 @@ class SeparateStrategy extends RowColStrategy:
 				rightmost = b2
 			if rightmost != -1 and _content(a, b2) == Content.Nothing:
 				nothing_middle += 1
+		var any := false
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as air
 			# because otherwise it would be together. This will work differently in rows and cols.
-			var any := false
 			for b2 in 2 * _b_len():
 				if _content(a, b2) == Content.Nothing:
 					# Hole is already discontinuous
@@ -593,7 +593,6 @@ class SeparateStrategy extends RowColStrategy:
 					_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
 					return true
 				return false
-		var any := false
 		if _left() == E.Side.Top:
 			# Walk up until we find a cell if we put water it will flood exactly water_left2
 			var b2 := leftmost - 1

@@ -56,20 +56,22 @@ class DiagAdj extends AdjacencyRule:
 	func all_adj(from: Vector2i) -> Array[Vector2i]:
 		return [from + Vector2i(0, -1), from + Vector2i(0, 1), third_adj(from)]
 
-func any_adj(g: Array[Array], cells: Array[Vector2i], adj_rule: AdjacencyRule) -> Vector2i:
-	Global.shuffle(cells, rng)
-	for c in cells:
-		var adj := adj_rule.all_adj(c)
-		# Slight hack: Add the other side of the same cell to make diagonals less common
-		adj.append(Vector2i(c.x, c.y ^ 1))
-		adj.append(Vector2i(c.x, c.y ^ 1))
-		Global.shuffle(adj, rng)
-		for e in adj:
-			if e.x >= 0 and e.y >= 0 and e.x < g.size() and e.y < g[0].size() and g[e.x][e.y] == 0:
-				return e
-	return Vector2i(-1, -1)
+func pop_random(arr: Array[Vector2i]) -> Vector2i:
+	if arr.is_empty():
+		return Vector2i(-1, -1)
+	var i := rng.randi_range(0, arr.size() - 1)
+	var val := arr[i]
+	arr[i] = arr.back()
+	arr.pop_back()
+	return val
 
 func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
+	var min_aqs: int
+	if diagonals:
+		m *= 2
+		min_aqs = (n * m) / 5
+	else:
+		min_aqs = int((n * m) / 2.5)
 	var g: Array[Array] = []
 	for i in n:
 		g.append([])
@@ -79,7 +81,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 	var group := 0
 	# Break groups into similar sizes, this uses the "sticks and rocks" technique
 	var group_sizes: Array[int] = [left - 1]
-	for group_i in (n * m) / 2:
+	for group_i in rng.randi_range(min_aqs, (n * m) / 2):
 		var s := rng.randi_range(0, left - 2 - group_i)
 		for j in (group_i + 1):
 			if s < group_sizes[j]:
@@ -88,20 +90,31 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 				group_sizes.append(rest - 1)
 				break
 			s -= group_sizes[j]
+	var all_empty: Array[Vector2i] = []
+	for i in n:
+		for j in m:
+			all_empty.append(Vector2i(i, j))
+	Global.shuffle(all_empty, rng)
 	while left > 0:
 		group += 1
 		var group_size: int = group_sizes.pop_back() + 1
 		if group_sizes.is_empty():
-			group_sizes.push_back(2)
+			group_sizes.push_back(5)
 		left -= 1
-		var cells: Array[Vector2i] = [any_empty(g)]
+		while g[all_empty.back().x][all_empty.back().y] != 0:
+			all_empty.pop_back()
+		var cells: Array[Vector2i] = [all_empty.pop_back()]
 		g[cells[0].x][cells[0].y] = group
+		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0])
 		for _i in group_size:
-			var c := any_adj(g, cells, adj_rule)
+			var c := pop_random(all_adj)
+			while c != Vector2i(-1, -1) and (c.x < 0 or c.x >= n or c.y < 0 or c.y >= m or g[c.x][c.y] != 0):
+				c = pop_random(all_adj)
 			if c.x == -1:
 				break
 			g[c.x][c.y] = group
 			cells.append(c)
+			all_adj.append_array(adj_rule.all_adj(c))
 			left -= 1
 	return g
 
@@ -133,7 +146,8 @@ func generate(n: int, m: int) -> GridModel:
 		adj_rule = DiagAdj.new(rng, n, m)
 	else:
 		adj_rule = SquareAdj.new()
-	var g := _gen_grid_groups(n, 2 * m if diagonals else m, adj_rule)
+	
+	var g := _gen_grid_groups(n, m, adj_rule)
 	var grid := GridImpl.empty_editor(n, m)
 	for i in n:
 		for j in m:

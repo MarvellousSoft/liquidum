@@ -57,12 +57,16 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 	var solver := SolverModel.new()
 	var found := false
 	var start_time := Time.get_unix_time_from_system()
+	var total_gen := 0.0
+	var total_solve := 0.0
 	for i in 1000:
 		if cancel_gen:
 			break
 		var hints: Level.HintVisibility = hints_builder.call(rng)
 		var gen_options: bool = gen_options_builder.call(rng)
+		var start_gen := Time.get_unix_time_from_system()
 		g = Generator.new(rng.randi(), gen_options).generate(hints.row.size(), hints.col.size())
+		total_gen += Time.get_unix_time_from_system() - start_gen
 		g.set_auto_update_hints(false)
 		for j in 3:
 			if cancel_gen:
@@ -70,10 +74,13 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 			hints.apply_to_grid(g)
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			g2.clear_content()
+			var start_solve := Time.get_unix_time_from_system()
 			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
-				print("Created level after %d tries and %.1fs" % [i * 3 + j + 1, Time.get_unix_time_from_system() - start_time])
+				total_solve += Time.get_unix_time_from_system() - start_solve
+				print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [i * 3 + j + 1, Time.get_unix_time_from_system() - start_time, total_gen, total_solve])
 				found = true
 				break
+			total_solve += Time.get_unix_time_from_system() - start_solve
 			# Let's retry with the same grid but different visibility
 			if j < 2:
 				hints = hints_builder.call(rng)
