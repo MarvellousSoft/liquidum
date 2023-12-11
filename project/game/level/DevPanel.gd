@@ -8,6 +8,7 @@ signal generate()
 signal randomize_water()
 signal randomize_visibility()
 signal load_grid(g: GridModel)
+signal save()
 
 
 @onready var StrategyList: MenuButton = $StrategyList
@@ -170,3 +171,7 @@ func _on_randomize_visibility_pressed():
 
 func _on_dev_mode_toggled(status):
 	visible = status or self == get_tree().current_scene
+
+
+func _on_save_pressed():
+	save.emit()

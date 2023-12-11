@@ -74,6 +74,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Paste clipboard"
 
+[node name="Save" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Save to filesystem"
+
 [connection signal="mouse_entered" from="Strategies" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
@@ -92,3 +97,5 @@ text = "Paste clipboard"
 [connection signal="pressed" from="RandomizeVisibility" to="." method="_on_randomize_visibility_pressed"]
 [connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
+[connection signal="mouse_entered" from="Save" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Save" to="." method="_on_save_pressed"]

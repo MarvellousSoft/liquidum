@@ -389,6 +389,7 @@ expand_to_text_length = true
 [connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]
 [connection signal="randomize_visibility" from="DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
 [connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
+[connection signal="save" from="DevButtons" to="." method="_on_dev_buttons_save"]
 [connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
