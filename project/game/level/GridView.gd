@@ -71,8 +71,8 @@ func reset() -> void:
 		CellCornerGrid.remove_child(child)
 		child.queue_free()
 
-
-func setup(grid_logic_: GridModel) -> void:
+# If fast_startup, don't do an animation in the beginning
+func setup(grid_logic_: GridModel, fast_startup := false) -> void:
 	grid_logic = grid_logic_
 	editor_mode = grid_logic.editor_mode()
 	rows = grid_logic.rows()
@@ -86,24 +86,24 @@ func setup(grid_logic_: GridModel) -> void:
 		Columns.add_child(new_row)
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
-			create_cell(new_row, cell_data, i, j)
+			create_cell(new_row, cell_data, i, j, fast_startup)
 
-	setup_hints()
+	setup_hints(fast_startup)
 	setup_cell_corners()
 	update()
-	if not editor_mode:
+	if not editor_mode and not fast_startup:
 		disable()
 		await get_tree().create_timer(get_grid_delay(rows, columns)).timeout
 		enable()
 
 #Assumes grid_logic is already setup
-func setup_hints() -> void:
+func setup_hints(fast_startup: bool) -> void:
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
 	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
 	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
 	var delay = get_grid_delay(rows, columns)
-	HintBars.left.startup(editor_mode, delay + STARTUP_MAX_DELAY)
-	HintBars.top.startup(editor_mode, delay + STARTUP_MAX_DELAY*2)
+	HintBars.left.startup(editor_mode, delay + STARTUP_MAX_DELAY, fast_startup)
+	HintBars.top.startup(editor_mode, delay + STARTUP_MAX_DELAY*2, fast_startup)
 
 
 func setup_cell_corners() -> void:
@@ -199,11 +199,11 @@ func get_cell_delay(r : int, c : int) -> float:
 	return get_grid_delay(r, c)/float(r*c)
 
 
-func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int) -> Cell:
+func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : int, fast_startup : bool) -> Cell:
 	var cell = REGULAR_CELL.instantiate()
 	new_row.add_child(cell)
 
-	cell.setup(self, cell_data, n, m, editor_mode, get_cell_delay(rows, columns))
+	cell.setup(self, cell_data, n, m, editor_mode, get_cell_delay(rows, columns), fast_startup)
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)

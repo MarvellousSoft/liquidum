@@ -37,16 +37,17 @@ class UploadResult:
 
 var uploading := false
 
-func upload_ugc_item(id: int, title: String, description: String, dir: String) -> UploadResult:
+func upload_ugc_item(id: int, title: String, description: String, dir: String, preview_file: String) -> UploadResult:
 	if uploading:
 		return UploadResult.new(id, false)
 	dir = ProjectSettings.globalize_path(dir)
+	preview_file = ProjectSettings.globalize_path(preview_file)
 	uploading = true
 	if id == -1:
 		id = await _create_item_id()
 	var success := false
 	if id != -1:
-		success = await _upload_item(id, title, description, dir)
+		success = await _upload_item(id, title, description, dir, preview_file)
 	uploading = false
 	return UploadResult.new(id, success)
 
@@ -64,11 +65,12 @@ func _create_item_id() -> int:
 		Steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
 	return id
 
-func _upload_item(id: int, title: String, description: String, dir: String) -> bool:
+func _upload_item(id: int, title: String, description: String, dir: String, preview_file: String) -> bool:
 	var update_id := Steam.startItemUpdate(SteamManager.APP_ID, id)
 	Steam.setItemContent(update_id, dir)
 	Steam.setItemTitle(update_id, title)
 	Steam.setItemDescription(update_id, description)
+	Steam.setItemPreview(update_id, preview_file)
 	Steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
 	var ret: Array = await Steam.item_updated
 	var res: Steam.Result = ret[0]

@@ -48,8 +48,8 @@ func setup(hints : Array, editor_mode : bool) -> void:
 	custom_minimum_size = bar.size
 
 
-func startup(editor_mode : bool, delay : float) -> void:
-	if not editor_mode:
+func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
+	if not editor_mode and not fast_startup:
 		modulate.a = 0.0
 		await get_tree().create_timer(delay).timeout
 		AnimPlayer.play("startup")

@@ -121,7 +121,7 @@ func disable():
 		button.disabled = true
 
 
-func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float) -> void:
+func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:
 	editor_mode = editor
 	grid = grid_ref
 	row = i
@@ -137,7 +137,7 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	Boat.modulate.a = 0.0
 	copy_data(data)
 	
-	if not editor_mode:
+	if not editor_mode and not fast_startup:
 		await get_tree().create_timer((i+1)*(j+1)*startup_delay).timeout
 		AnimPlayer.play("startup")
 	else:
