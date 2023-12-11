@@ -471,8 +471,9 @@ func _on_dev_buttons_randomize_visibility() -> void:
 func _on_dev_buttons_save():
 	var g := GridNode.grid_logic
 	g.set_auto_update_hints(false)
+	var f := FileAccess.open("res://level.data", FileAccess.WRITE)
 	_hint_visibility().apply_to_grid(g)
-	FileManager._dev_save_absolute("res://", "level.data", LevelData.new(full_name, description, g.export_data(), "").get_data())
+	FileManager._save_json_data("res://", "level.json", LevelData.new(full_name, description, g.export_data(), "").get_data())
 	g.set_auto_update_hints(true)
 
 func _on_continue_button_pressed():

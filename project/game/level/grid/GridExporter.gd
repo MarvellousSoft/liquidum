@@ -3,11 +3,17 @@ class_name GridExporter
 # Change when there's breaking changes
 const SAVE_VERSION := 1
 
+# Use ints to save serialization space
+# We're not human-editing this anyway
+enum {version, c_left, c_right, cell_type, water_count, water_count_type, boat_count, boat_count_type,
+total_water, total_boats, expected_aquariums, row_hints, col_hints, cells, wall_bottom, wall_right,
+grid_hints}
+
 func _export_pure_cell(pure: GridImpl.PureCell) -> Dictionary:
 	return {
-		c_left = pure.c_left,
-		c_right = pure.c_right,
-		cell_type = pure.cell_type(),
+		c_left: pure.c_left,
+		c_right: pure.c_right,
+		cell_type: pure.cell_type(),
 	}
 
 func _load_pure_cell(data: Dictionary) -> GridImpl.PureCell:
@@ -38,10 +44,10 @@ func _load_grid(data: Array, inner_load: Callable) -> Array[Array]:
 
 func _export_line_hint(line: GridModel.LineHint) -> Dictionary:
 	return {
-		water_count = line.water_count,
-		water_count_type = line.water_count_type,
-		boat_count = line.boat_count,
-		boat_count_type = line.boat_count_type,
+		water_count: line.water_count,
+		water_count_type: line.water_count_type,
+		boat_count: line.boat_count,
+		boat_count_type: line.boat_count_type,
 	}
 
 func _load_line_hint(data: Dictionary) -> GridModel.LineHint:
@@ -60,9 +66,9 @@ func _load_bool(b: int) -> bool:
 
 func _export_grid_hints(hints: GridModel.GridHints) -> Dictionary:
 	return {
-		total_water = hints.total_water,
-		total_boats = hints.total_boats,
-		expected_aquariums = hints.expected_aquariums,
+		total_water: hints.total_water,
+		total_boats: hints.total_boats,
+		expected_aquariums: hints.expected_aquariums,
 	}
 
 func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
@@ -76,14 +82,14 @@ func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
 
 func export_data(grid: GridImpl) -> Dictionary:
 	return {
-		version = SAVE_VERSION,
-		cells = _export_grid(grid.pure_cells, _export_pure_cell),
-		row_hints = grid._row_hints.map(_export_line_hint),
-		col_hints = grid._col_hints.map(_export_line_hint),
+		version: SAVE_VERSION,
+		cells: _export_grid(grid.pure_cells, _export_pure_cell),
+		row_hints: grid._row_hints.map(_export_line_hint),
+		col_hints: grid._col_hints.map(_export_line_hint),
 
-		wall_bottom = _export_grid(grid.wall_bottom, _export_bool),
-		wall_right = _export_grid(grid.wall_right, _export_bool),
-		grid_hints = _export_grid_hints(grid._grid_hints),
+		wall_bottom: _export_grid(grid.wall_bottom, _export_bool),
+		wall_right: _export_grid(grid.wall_right, _export_bool),
+		grid_hints: _export_grid_hints(grid._grid_hints),
 	}
 
 func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
