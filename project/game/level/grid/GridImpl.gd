@@ -1508,3 +1508,19 @@ func merge_last_undo() -> void:
 		return
 	var last: Changes = undo_stack.pop_back()
 	(undo_stack.back() as Changes).changes.append_array(last.changes)
+
+func _any_sol_boats() -> bool:
+	for i in n:
+		for j in m:
+			if solution_c_left[i][j] == Content.Boat:
+				return true
+	return false
+
+func prettify_hints() -> void:
+	assert(not editor_mode())
+	if not _any_sol_boats():
+		grid_hints().total_boats = -1
+		for hints in [row_hints(), col_hints()]:
+			for h in hints:
+				h.boat_count = -1
+				h.boat_count_type = E.HintType.Any
