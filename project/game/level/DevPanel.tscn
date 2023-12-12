@@ -24,6 +24,14 @@ text = "Used strategies"
 layout_mode = 2
 text = "Forced strategies"
 
+[node name="Guesses" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 10.0
+value = 2.0
+rounded = true
+suffix = "guesses"
+select_all_on_focus = true
+
 [node name="FullSolve" type="Button" parent="."]
 layout_mode = 2
 focus_mode = 0
