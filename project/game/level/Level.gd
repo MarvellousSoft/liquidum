@@ -3,7 +3,6 @@ extends Control
 
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1300
-const MIN_TITLE_SIZE = 2
 
 signal won
 
@@ -534,8 +533,8 @@ func _on_description_edit_text_changed() -> void:
 func _on_edit_text_changed(new_text: String) -> void:
 	if not editor_mode():
 		return
-	if new_text.length() < MIN_TITLE_SIZE:
-		TitleEdit.text = full_name
+	if new_text.length() <= 0:
+		full_name = "AAA"
 		return
 	full_name = new_text
 

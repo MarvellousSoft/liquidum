@@ -136,13 +136,10 @@ func set_status(status: E.HintStatus) -> void:
 	match status:
 		E.HintStatus.Normal:
 			Number.add_theme_color_override("default_color", Global.COLORS.normal)
-			DummyLabel.add_theme_color_override("font_color", Global.COLORS.normal)
 		E.HintStatus.Satisfied:
 			Number.add_theme_color_override("default_color", Global.COLORS.satisfied)
-			DummyLabel.add_theme_color_override("font_color", Global.COLORS.satisfied)
 		E.HintStatus.Wrong:
 			Number.add_theme_color_override("default_color", Global.COLORS.error)
-			DummyLabel.add_theme_color_override("font_color", Global.COLORS.error)
 
 
 func enable_editor() -> void:
