@@ -672,17 +672,17 @@ func maybe_update_hints() -> void:
 	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
 		_row_hints[i].boat_count = count_boat_row(i)
-		var type := E.HintType.Together if _is_together(_row_bools(i, Content.Boat)) else E.HintType.Separated
+		var type := _is_together(_row_bools(i, Content.Boat))
 		_row_hints[i].boat_count_type = type
 		_row_hints[i].water_count = count_water_row(i)
-		type = E.HintType.Together if _is_together(_row_bools(i, Content.Water)) else E.HintType.Separated
+		type = _is_together(_row_bools(i, Content.Water))
 		_row_hints[i].water_count_type = type
 	for j in m:
 		_col_hints[j].boat_count = count_boat_col(j)
 		# This is always Any
 		_col_hints[j].boat_count_type = E.HintType.Any
 		_col_hints[j].water_count = count_water_col(j)
-		var type := E.HintType.Together if _is_together(_col_bools(j, Content.Water)) else E.HintType.Separated
+		var type := _is_together(_col_bools(j, Content.Water))
 		_col_hints[j].water_count_type = type
 	assert(are_hints_satisfied())
 
@@ -1268,27 +1268,25 @@ func is_any_hint_broken() -> bool:
 
 enum IsTogether { Separate, Together, Zero }
 
-func _is_together(a: Array[bool]) -> IsTogether:
+# Any if there are 0 true's
+func _is_together(a: Array[bool]) -> E.HintType:
 	var i := 0
 	while i < a.size() and not a[i]:
 		i += 1
 	if i == a.size():
-		return IsTogether.Zero
+		return E.HintType.Any
 	while i < a.size() and a[i]:
 		i += 1
 	while i < a.size() and not a[i]:
 		i += 1
-	return IsTogether.Together if i == a.size() else IsTogether.Separate
+	return E.HintType.Together if i == a.size() else E.HintType.Separated
 
 
 func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
 	if hint == E.HintType.Any:
 		return true
 	var is_together := _is_together(a)
-	if hint == E.HintType.Together:
-		return is_together == IsTogether.Together
-	else:
-		return is_together == IsTogether.Separate
+	return is_together == hint
 
 func _status_and_then(status: E.HintStatus, together_match: bool, is_q: bool) -> E.HintStatus:
 	if status == E.HintStatus.Satisfied and not together_match:

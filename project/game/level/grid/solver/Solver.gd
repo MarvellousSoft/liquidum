@@ -750,7 +750,7 @@ func _make_guess(res: SolveResult) -> SolveResult:
 
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
-func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
+func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, guesses := 0, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
 	assert(grid.editor_mode() and not grid.auto_update_hints())
 	if flush_undo:
 		grid.push_empty_undo()
@@ -770,25 +770,25 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 				if c.nothing_at(corner):
 					# New undo stack
 					c.put_water(corner, true)
-					var r1 := full_solve(grid, strategy_list, cancel_sig, false)
+					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses + 1, min_boat_place, look_for_multiple)
 					grid.undo()
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
 						c.put_air(corner, false)
-						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false))
+						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses, min_boat_place, look_for_multiple))
 					elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
 						grid.redo()
 						return r1
 					# Otherwise we need to try to solve with air
 					c.put_air(corner, true)
-					var r2 := full_solve(grid, strategy_list, cancel_sig, false, min_boat_place, false)
+					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses + 1, min_boat_place, false)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
 						grid.undo()
 						c.put_water(corner, false)
 						# TODO: Maybe here we could store the undo stack and reuse it
 						# Doesn't really make it much faster
-						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false))
+						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses, min_boat_place, look_for_multiple))
 					# Could solve both ways, definitely not unique
 					# If GaveUp, might be multiple or unique, let's be pessimistic.
 					return SolveResult.SolvedMultiple
@@ -799,6 +799,8 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 	for j in grid.cols():
 		if grid.get_col_hint_status(j, E.HintContent.Water) == E.HintStatus.Wrong:
 			return SolveResult.Unsolvable
+	if grid.all_waters_hint_status() == E.HintStatus.Wrong or grid.aquarium_hints_status() == E.HintStatus.Wrong:
+		return SolveResult.Unsolvable
 	for i in grid.rows():
 		for j in grid.cols():
 			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j) or grid.get_cell(i, j).has_boat():
@@ -806,18 +808,19 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 			var c := grid.get_cell(i, j)
 			var b := c.put_boat(true)
 			assert(b)
-			var r1 := full_solve(grid, strategy_list, cancel_sig, false, Vector2i(i, j + 1))
+			var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses + 1, Vector2i(i, j + 1), look_for_multiple)
 			grid.undo()
 			if r1 == SolveResult.Unsolvable:
-				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, Vector2i(i, j + 1)))
+				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses, Vector2i(i, j + 1), look_for_multiple))
 			elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
 				grid.redo()
 				return r1
-			var r2 := full_solve(grid, strategy_list, cancel_sig, false, Vector2i(i, j + 1), false)
+			var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses + 1, Vector2i(i, j + 1), false)
 			if r2 == SolveResult.Unsolvable:
 				grid.undo()
-				c.put_boat(false)
-				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, Vector2i(i, j + 1)))
+				b = c.put_boat(false)
+				assert(b)
+				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses, Vector2i(i, j + 1), look_for_multiple))
 			return SolveResult.SolvedMultiple
 	# Can't really guess anything else
 	return SolveResult.Unsolvable
