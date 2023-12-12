@@ -3,6 +3,7 @@ extends Control
 
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1300
+const MIN_TITLE_SIZE = 2
 
 signal won
 
@@ -19,7 +20,7 @@ signal won
 @onready var BrushPicker = %BrushPicker
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
-@onready var DevButtons: DevPanel = $DevButtons
+@onready var DevButtons: DevPanel = %DevButtons
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton = %ResetButton
 @onready var BackButton = %BackButton
@@ -517,7 +518,7 @@ func _on_description_edit_text_changed() -> void:
 
 
 func _on_edit_text_changed(new_text: String) -> void:
-	if not editor_mode():
+	if not editor_mode() or new_text.length() < MIN_TITLE_SIZE:
 		return
 	full_name = new_text
 

@@ -10,7 +10,7 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -3040.0
+offset_right = -2676.0
 offset_bottom = -1996.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -19,6 +19,7 @@ theme_override_constants/separation = 120
 script = ExtResource("2_ol4g6")
 
 [node name="PlayButton" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 164)
 layout_mode = 2
 tooltip_text = "PLAY_LEVEL_TOOLTIP"
 focus_mode = 0

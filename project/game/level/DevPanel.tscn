@@ -4,10 +4,8 @@
 [ext_resource type="Script" path="res://game/level/DevPanel.gd" id="2_3k7ls"]
 
 [node name="DevPanel" type="VBoxContainer"]
-offset_left = 109.0
-offset_top = 416.0
-offset_right = 777.0
-offset_bottom = 1910.0
+offset_right = 806.0
+offset_bottom = 2366.0
 scale = Vector2(0.5, 0.5)
 theme = ExtResource("1_bh5km")
 theme_override_constants/separation = 50

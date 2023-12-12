@@ -366,12 +366,27 @@ texture_hover = ExtResource("5_c2kft")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="DevButtons" parent="." instance=ExtResource("7_q4003")]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 1210.0
-offset_right = 756.0
-offset_bottom = 3051.0
+offset_left = 25.0
+offset_top = 459.0
+offset_right = 1025.0
+offset_bottom = 1959.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DevButtons" parent="ScrollContainer/MarginContainer" instance=ExtResource("7_q4003")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="PlaytestButton" type="Button" parent="."]
 unique_name_in_owner = true
@@ -546,13 +561,13 @@ autostart = true
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]
-[connection signal="full_solve" from="DevButtons" to="." method="_on_dev_buttons_full_solve"]
-[connection signal="generate" from="DevButtons" to="." method="_on_dev_buttons_generate"]
-[connection signal="load_grid" from="DevButtons" to="." method="_on_dev_buttons_load_grid"]
-[connection signal="randomize_visibility" from="DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
-[connection signal="randomize_water" from="DevButtons" to="." method="_on_dev_buttons_randomize_water"]
-[connection signal="save" from="DevButtons" to="." method="_on_dev_buttons_save"]
-[connection signal="use_strategies" from="DevButtons" to="." method="_on_dev_buttons_use_strategies"]
+[connection signal="full_solve" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_full_solve"]
+[connection signal="generate" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_generate"]
+[connection signal="load_grid" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_load_grid"]
+[connection signal="randomize_visibility" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
+[connection signal="randomize_water" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_water"]
+[connection signal="save" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_save"]
+[connection signal="use_strategies" from="ScrollContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
