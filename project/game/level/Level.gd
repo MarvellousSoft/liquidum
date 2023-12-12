@@ -20,6 +20,7 @@ signal won
 @onready var BrushPicker = %BrushPicker
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
+@onready var DevContainer = %DevContainer
 @onready var DevButtons: DevPanel = %DevButtons
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton = %ResetButton
@@ -51,6 +52,8 @@ var workshop_id := -1
 var game_won := false
 
 func _ready():
+	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
+	DevContainer.visible = Global.is_dev_mode()
 	Description.text = description
 	DescriptionEdit.text = description
 	TitleLabel.text = full_name
@@ -535,3 +538,5 @@ func _on_edit_text_changed(new_text: String) -> void:
 	full_name = new_text
 
 
+func _on_dev_mode_toggled(status):
+	DevContainer.visible = status

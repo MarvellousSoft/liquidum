@@ -6,7 +6,7 @@
 [node name="DevPanel" type="VBoxContainer"]
 offset_right = 806.0
 offset_bottom = 2366.0
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.4, 0.4)
 theme = ExtResource("1_bh5km")
 theme_override_constants/separation = 50
 script = ExtResource("2_3k7ls")
