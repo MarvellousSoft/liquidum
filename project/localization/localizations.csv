@@ -58,3 +58,51 @@ EXPERT_TOOLTIP_DISABLED,Unlock section 5 to unlock this difficulty,Desbloqueie a
 INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?
 INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para desbloquear essa dificuldade
 GENERATING_LEVEL,Generating level,Gerando nível
+LEVEL_01_01,Dipping the Toes,Molhando os Pés
+LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas
+LEVEL_01_03,Aquariums,Aquários
+LEVEL_01_04,Tiny Pools,Pequenas Piscinas
+LEVEL_01_05,Counting Waters,Contando Águas
+LEVEL_01_06,Deep Diving,Mergulho Profundo
+LEVEL_01_07,Ocean View,Vista pro Oceano
+LEVEL_01_08,Bubble Trouble,Problemas Borbulhantes
+LEVEL_02_01,Together & Separate,Juntos & Separados
+LEVEL_02_02,Coral & Reef,
+LEVEL_02_03,Tide & Current,
+LEVEL_02_04,Wave & Ripple,
+LEVEL_02_05,Sun & Breeze,
+LEVEL_02_06,Wet & Wild,
+LEVEL_02_07,Beach & Sand,
+LEVEL_02_08,Whirlpool & Vortex,
+LEVEL_03_01,Waves,
+LEVEL_03_02,Cracks,
+LEVEL_03_03,Shore,
+LEVEL_03_04,Brine,
+LEVEL_03_05,Sand,
+LEVEL_03_06,Lagoon,
+LEVEL_03_07,Grotto,
+LEVEL_03_08,Mist,
+LEVEL_04_01,Rafts,
+LEVEL_04_02,Vessels,
+LEVEL_04_03,Canoes,
+LEVEL_04_04,Lifeboats,
+LEVEL_04_05,Sailboats,
+LEVEL_04_06,Yachts,
+LEVEL_04_07,"Santa Maria, Niña & Pinta",
+LEVEL_04_08,Titanic,
+LEVEL_05_01,,
+LEVEL_05_02,,
+LEVEL_05_03,,
+LEVEL_05_04,,
+LEVEL_05_05,,
+LEVEL_05_06,,
+LEVEL_05_07,,
+LEVEL_05_08,,
+LEVEL_06_01,Kraken,Kraken
+LEVEL_06_02,Leviathan,Leviathan
+LEVEL_06_03,Kappa,Kappa
+LEVEL_06_04,Charybdis,Charybdis
+LEVEL_06_05,Jörmungandr,Jörmungandr
+LEVEL_06_06,Scylla,Scylla
+LEVEL_06_07,Megalodon,Megalodon
+LEVEL_06_08,Cthulhu,Cthulhu
