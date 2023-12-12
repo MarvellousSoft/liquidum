@@ -157,7 +157,7 @@ func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: i
 		a[i] |= b[i]
 
 func _expert_options(rng: RandomNumberGenerator) -> int:
-	return (1 if rng.randf() < 0.6 else 0) + (2 if rng.randf() < 0.3 else 0)
+	return (1 if rng.randf() < 0.5 else 0) + (2 if rng.randf() < 0.35 else 0)
 
 func _diags(rng: RandomNumberGenerator) -> int:
 	return 1 + (2 if rng.randf() < 0.5 else 0) 
