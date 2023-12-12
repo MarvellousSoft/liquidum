@@ -56,13 +56,15 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		var gen := Generator.new(rseed, $Diags.button_pressed)
 		var g := gen.generate(rows, cols)
 		if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
-			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-			g2.clear_content()
-			hints.apply_to_grid(g2)
 			var retry := true
 			if forced_strategies.is_empty():
+				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
+				g2.clear_content()
+				hints.apply_to_grid(g2)
 				retry = SolverModel.new().full_solve(g2, strategies) != SolverModel.SolveResult.SolvedUnique
 			else:
+				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
+				hints.apply_to_grid(g2)
 				retry = not SolverModel.new().can_solve_with_strategies(g2, strategies, forced_strategies)
 			if retry:
 				await get_tree().process_frame

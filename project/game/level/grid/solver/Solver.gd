@@ -669,20 +669,47 @@ const STRATEGY_LIST := {
 	SeparateCol = SeparateColStrategy,
 }
 
-func can_solve_with_strategies(grid: GridModel, strategies_names: Array, forced_strategies_or: Array, flush_undo := true) -> bool:
+# Get a place in the solution that must have air and put a block on it
+# This makes strategies easier to apply
+func _put_block_on_air(grid: GridImpl) -> bool:
+	for i in grid.rows():
+		for j in grid.cols():
+			var c := grid.get_cell(i, j)
+			for corner in c.corners():
+				var sol := grid._content_sol(i, j, corner)
+				if c.nothing_at(corner) and (sol == GridImpl.Content.Air or sol == GridImpl.Content.Nothing):
+					return c.put_block(corner, false)
+	return false
+
+# May add blocks to the grid
+func can_solve_with_strategies(grid_: GridModel, strategies_names: Array, forced_strategies_or: Array) -> bool:
+	var grid: GridImpl = grid_ as GridImpl
+	assert(not grid.editor_mode())
+	grid.force_editor_mode()
+	assert(not grid.auto_update_hints())
 	for s in forced_strategies_or:
 		if strategies_names.find(s) == -1:
 			strategies_names.append(s)
-	var need_undo := apply_strategies(grid, strategies_names, flush_undo)
+	grid.push_empty_undo()
+	while true:
+		apply_strategies(grid, strategies_names, false)
+		match grid.all_hints_status():
+			E.HintStatus.Wrong:
+				push_error("Fucked up somehow")
+				return false
+			E.HintStatus.Satisfied:
+				break
+			E.HintStatus.Normal:
+				pass
+		if not _put_block_on_air(grid):
+			return false
+	if forced_strategies_or.is_empty():
+		return true
+	grid.clear_content()
+	apply_strategies(grid, strategies_names.filter(func(s2): return forced_strategies_or.find(s2) == -1), false)
 	if grid.are_hints_satisfied():
-		if forced_strategies_or.is_empty():
-			return true
-		if need_undo:
-			grid.undo()
-		apply_strategies(grid, strategies_names.filter(func(s2): return forced_strategies_or.find(s2) == -1), false)
-		return not grid.are_hints_satisfied()
-	else:
 		return false
+	return true
 
 # Tries to solve the puzzle as much as possible. Returns whether it did anything.
 func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> bool:

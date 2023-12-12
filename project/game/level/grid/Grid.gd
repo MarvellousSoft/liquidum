@@ -53,6 +53,8 @@ class CellModel:
 	# Puts air in the given diagonal
 	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:
 		return GridModel.must_be_implemented()
+	func put_block(_corner: E.Corner, _flush_undo := true) -> bool:
+		return GridModel.must_be_implemented()
 	func remove_content(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
 	func put_wall(_wall: E.Walls, _flush_undo := true) -> bool:
@@ -64,6 +66,8 @@ class CellModel:
 	func put_boat(_flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
 	func cell_type() -> E.CellType:
+		return GridModel.must_be_implemented()
+	func corners() -> Array[E.Corner]:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:

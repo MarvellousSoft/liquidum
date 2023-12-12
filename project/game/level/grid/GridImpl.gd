@@ -260,6 +260,16 @@ class PureCell:
 			type = E.CellType.Single
 	func cell_type() -> E.CellType:
 		return type
+	func corners() -> Array[E.Corner]:
+		match type:
+			E.CellType.Single:
+				return [E.Corner.TopLeft]
+			E.CellType.DecDiag:
+				return [E.Corner.BottomLeft, E.Corner.TopRight]
+			E.CellType.IncDiag:
+				return [E.Corner.TopLeft, E.Corner.BottomRight]
+		push_error("Unknown type %d" % type)
+		return []
 	func equal(other: PureCell) -> bool:
 		return eq(other)
 	func to_str() -> String:
@@ -485,6 +495,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure()._has_boat()
 	func cell_type() -> E.CellType:
 		return pure().cell_type()
+	func corners() -> Array[E.Corner]:
+		return pure().corners()
 	func _has_boat_invalid_pos() -> bool:
 		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
 
