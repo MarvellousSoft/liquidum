@@ -21,4 +21,5 @@ project/addons/godotsteam/linux64/libsteam_api.so
 project/addons/godotsteam/osx/libsteam_api.dylib
 project/addons/godotsteam/win32/steam_api64.dll
 project/addons/godotsteam/win64/steam_api64.dll
+project/addons/godotsteam/win64/~godotsteam.debug.x86_64.dll
 *.tmp
