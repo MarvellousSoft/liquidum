@@ -56,10 +56,13 @@ func _ready():
 	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
 	reset_tutorial()
-	var data = FileManager.load_level_data(section_number, level_number)
-	if is_campaign_level() and not data.tutorial.is_empty():
-		TutorialContainer.show()
-		add_tutorial(data.tutorial)
+	if is_campaign_level():
+		var data = FileManager.load_level_data(section_number, level_number)
+		if not data.tutorial.is_empty():
+			TutorialContainer.show()
+			add_tutorial(data.tutorial)
+		else:
+			TutorialContainer.hide()
 	else:
 		TutorialContainer.hide()
 		
