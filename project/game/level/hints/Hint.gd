@@ -101,16 +101,19 @@ func update_label() -> void:
 	match hint_type:
 		E.HintType.Any:
 			Number.text += str(hint_value)
+			DummyLabel.text = "?"
 		E.HintType.Together:
 			if editor_mode:
-				Number.text += alpha_t("{", hint_alpha) + str(hint_value) + alpha_t("}", hint_alpha)
+				Number.text += alpha_t("{ ", hint_alpha) + str(hint_value) + alpha_t(" }", hint_alpha)
 			else:
 				Number.text += "{ " + str(hint_value) + " }"
+				DummyLabel.text = "{ ? }"
 		E.HintType.Separated:
 			if editor_mode:
 				Number.text += alpha_t("- ", hint_alpha) + str(hint_value) + alpha_t(" -", hint_alpha)
 			else:
 				Number.text += "- " + str(hint_value) + " -"
+				DummyLabel.text = "- ? -"
 
 
 func no_hint() -> void:
@@ -133,10 +136,13 @@ func set_status(status: E.HintStatus) -> void:
 	match status:
 		E.HintStatus.Normal:
 			Number.add_theme_color_override("default_color", Global.COLORS.normal)
+			DummyLabel.add_theme_color_override("font_color", Global.COLORS.normal)
 		E.HintStatus.Satisfied:
 			Number.add_theme_color_override("default_color", Global.COLORS.satisfied)
+			DummyLabel.add_theme_color_override("font_color", Global.COLORS.satisfied)
 		E.HintStatus.Wrong:
 			Number.add_theme_color_override("default_color", Global.COLORS.error)
+			DummyLabel.add_theme_color_override("font_color", Global.COLORS.error)
 
 
 func enable_editor() -> void:
