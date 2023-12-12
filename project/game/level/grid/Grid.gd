@@ -291,3 +291,7 @@ func count_waters() -> float:
 # If there are not boats, hide all boat hints
 func prettify_hints() -> void:
 	return GridModel.must_be_implemented()
+
+# Is the grid fully filled, including airs?
+func check_complete() -> bool:
+	return GridModel.must_be_implemented()

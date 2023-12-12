@@ -757,10 +757,11 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 	if cancel_sig.call():
 		return SolveResult.GaveUp
 	apply_strategies(grid, strategy_list, false)
-	if grid.is_any_hint_broken():
+	var status := grid.all_hints_status()
+	if status == E.HintStatus.Wrong:
 		#grid.copy_to_clipboard()
 		return SolveResult.Unsolvable
-	if grid.are_hints_satisfied(true):
+	if status == E.HintStatus.Satisfied and grid.check_complete():
 		return SolveResult.SolvedUniqueNoGuess
 	for i in grid.rows():
 		for j in grid.cols():
