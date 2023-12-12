@@ -448,7 +448,7 @@ class CellWithLoc extends GridModel.CellModel:
 				grid.flood_all(false)
 		grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
-	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool) -> void:
+	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool, unsafe_mode: bool) -> void:
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
 				var c := WallChange.new(i, j, wall as E.Side, grid.wall_at(i, j, wall as E.Side))
@@ -458,6 +458,9 @@ class CellWithLoc extends GridModel.CellModel:
 				var c := CellChange.new(i, j, pure().clone())
 				pure()._change_diag_wall(wall as E.Diagonal, new)
 				grid._push_undo_changes([c], flush_undo)
+		if unsafe_mode:
+			# No safety checks
+			return
 		if new:
 			grid.fix_invalid_boats(false)
 		else:
@@ -467,11 +470,11 @@ class CellWithLoc extends GridModel.CellModel:
 			grid.flood_all(false)
 		grid.validate()
 		grid.maybe_update_hints()
-	func put_wall(wall: E.Walls, flush_undo := true) -> bool:
-		_change_wall(wall, true, flush_undo)
+	func put_wall(wall: E.Walls, flush_undo := true, unsafe_mode := false) -> bool:
+		_change_wall(wall, true, flush_undo, unsafe_mode)
 		return true
 	func remove_wall(wall: E.Walls, flush_undo := true) -> bool:
-		_change_wall(wall, false, flush_undo)
+		_change_wall(wall, false, flush_undo, false)
 		return true
 	func put_boat(flush_undo := true) -> bool:
 		if flush_undo:
@@ -1357,6 +1360,8 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 	return editor_mode() or _is_content_partial_solution(c, _content_sol(i, j, corner))
 
 func validate() -> void:
+	if not OS.is_debug_build():
+		return
 	for j in m:
 		assert(col_hints()[j].boat_count_type == E.HintType.Any)
 	# Blocks are surrounded by walls

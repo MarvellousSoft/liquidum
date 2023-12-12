@@ -169,24 +169,28 @@ func generate(n: int, m: int) -> GridModel:
 	
 	var g := _gen_grid_groups(n, m, adj_rule)
 	var grid := GridImpl.empty_editor(n, m)
+	# Let's just update once in the end
+	grid.set_auto_update_hints(false)
 	for i in n:
 		for j in m:
 			if diagonals:
 				var diag_adj: DiagAdj = adj_rule as DiagAdj
 				if j < m - 1 and g[i][2 * j + 1] != g[i][2 * j + 2]:
-					grid.get_cell(i, j).put_wall(E.Walls.Right)
+					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
 				var from := Vector2i(i, 2 * j) if diag_adj.dec_diag[i][j] else Vector2i(i, 2 * j + 1)
 				var bottom := diag_adj.third_adj(from)
 				if i < n - 1 and g[from.x][from.y] != g[bottom.x][bottom.y]:
-					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
+					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
 				if g[i][2 * j] != g[i][2 * j + 1]:
-					grid.get_cell(i, j).put_wall(E.Walls.DecDiag if diag_adj.dec_diag[i][j] else E.Walls.IncDiag)
+					grid.get_cell(i, j).put_wall(E.Walls.DecDiag if diag_adj.dec_diag[i][j] else E.Walls.IncDiag, false, true)
 			else:
 				if j < m - 1 and g[i][j] != g[i][j + 1]:
-					grid.get_cell(i, j).put_wall(E.Walls.Right)
+					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
-					grid.get_cell(i, j).put_wall(E.Walls.Bottom)
+					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
 	if boats:
 		randomize_boats(grid)
 	randomize_water(grid, false)
+	# Necessary because we did unsafe updates
+	grid.set_auto_update_hints(true)
 	return grid
