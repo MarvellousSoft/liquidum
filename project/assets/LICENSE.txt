@@ -14,6 +14,7 @@ The following assets have an specific license/attribution to them.
 - images/ui/icons/cloud-upload.png
 - images/ui/icons/trash-can.png
 - images/ui/icons/checkmark.png
+- images/ui/icons/mouse_icon.png
 by Delapouite under CC BY 3.0
 
 - images/ui/checkbox_pressed.png

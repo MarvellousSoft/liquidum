@@ -94,4 +94,4 @@ debug_1={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://localization/localizations.en.translation", "res://localization/localizations.pt_BR.translation")
+locale/translations=PackedStringArray("res://localization/localizations.en.translation", "res://localization/localizations.pt_BR.translation", "res://localization/localizations.pt.translation")

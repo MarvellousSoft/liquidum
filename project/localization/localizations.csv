@@ -1,108 +1,108 @@
-keys,en,pt_BR
-TEST,Test,teste
-YES,Yes,Yes
-NO,No,Não
-EXIT_BUTTON,Exit,Sair
-PLAY_BUTTON,Dive,Mergulhar
-LEVEL_EDITOR_BUTTON,Create,Criar
-EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?
-DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?
-WATERS_COUNTER,Waters: ,Águas: 
-BOATS_COUNTER,Boats: ,Barcos: 
-MISTAKES_COUNTER,Mistakes: ,Erros: 
-MASTER_SOUND,Master Volume,Volume Geral
-BGM_SOUND,BGM Volume,Volume de Fundo
-SFX_SOUND,SFX Volume,Volume de Efeitos Sonoros
-FULLSCREEN,Fullscreen,Tela Cheia
-SAVE_AND_EXIT,Save & Exit,Salvar & Sair
-AQUARIUMS,Aquariums,Aquários
-SIZE,Size,Tam.
-AMOUNT,Amount,Quant.
-BACK,Back,Voltar
-CONTINUE,Continue,Continuar
-CREATE_NEW_LEVEL,Create new level,Criar nível novo
-YOUR_LEVELS,Your levels,Seus níveis
-PROFILE,Profile,Perfil
-CHANGE_PROFILE,Change Profile,Trocar Perfil
-CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?
-CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?
-LEVELS_COMPLETED,levels completed,níveis completados
-WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina
-WORKSHOP_LEVELS,Subscribed levels:,Níveis inscritos:
-PLAY_LEVEL_TOOLTIP,Playtest level,Testar o nível
-EDIT_LEVEL_TOOLTIP,Edit level,Editar o nível
-UPLOAD_LEVEL_TOOLTIP,Upload level to Steam Workshop,Subir o nível para a Oficina da Steam
-DELETE_LEVEL_TOOLTIP,"Delete level, can't be undone","Excluir o nível, não pode ser desfeito"
-NOT_INSTALLED,Not installed,Não instalado
-RANDOM_BUTTON,Explorer mode,Modo explorador
-RANDOM_TITLE,Explorer mode,Modo explorador
-EASY_BUTTON,Easy,Fácil
-MEDIUM_BUTTON,Medium,Médio
-HARD_BUTTON,Hard,Difícil
-EXPERT_BUTTON,Expert,Expert
-INSANE_BUTTON,Insane,Insano
-CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente
-RANDOM_COMPLETED,Levels completed:,Níveis completados:
-CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.
-UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution.,Todos níveis tem uma única solução.
-PLAYTEST,Playtest level,Testar nível
-LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível
-LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel
-EASY_TOOLTIP,Small and simple levels,Níveis pequenos e simples
-MEDIUM_TOOLTIP,"Harder, and uses {N} and -N- rules","Mais difícil, e usa as regras {N} e -N-"
-MEDIUM_TOOLTIP_DISABLED,Unlock section 2 to unlock this difficulty,Desbloqueie a seção 2 para desbloquear essa dificuldade
-HARD_TOOLTIP,"Harder, and uses diagonals and boats","Mais difícil, e usa diagonais e barcos"
-HARD_TOOLTIP_DISABLED,Unlock section 4 to unlock this difficulty,Desbloqueie a seção 4 para desbloquear essa dificuldade
-EXPERT_TOOLTIP,"Harder, may use any rules found in the campaign","Mais difícil, e pode usar todas as regras encontradas na campanha"
-EXPERT_TOOLTIP_DISABLED,Unlock section 5 to unlock this difficulty,Desbloqueie a seção 5 para desbloquear essa dificuldade
-INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?
-INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para desbloquear essa dificuldade
-GENERATING_LEVEL,Generating level,Gerando nível
-LEVEL_01_01,Dipping the Toes,Molhando os Pés
-LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas
-LEVEL_01_03,Aquariums,Aquários
-LEVEL_01_04,Tiny Pools,Pequenas Piscinas
-LEVEL_01_05,Counting Waters,Contando Águas
-LEVEL_01_06,Deep Diving,Mergulho Profundo
-LEVEL_01_07,Ocean View,Vista pro Oceano
-LEVEL_01_08,Bubble Trouble,Problemas Borbulhantes
-LEVEL_02_01,Together & Separate,Juntos & Separados
-LEVEL_02_02,Coral & Reef,
-LEVEL_02_03,Tide & Current,
-LEVEL_02_04,Wave & Ripple,
-LEVEL_02_05,Sun & Breeze,
-LEVEL_02_06,Wet & Wild,
-LEVEL_02_07,Beach & Sand,
-LEVEL_02_08,Whirlpool & Vortex,
-LEVEL_03_01,Waves,
-LEVEL_03_02,Cracks,
-LEVEL_03_03,Shore,
-LEVEL_03_04,Brine,
-LEVEL_03_05,Sand,
-LEVEL_03_06,Lagoon,
-LEVEL_03_07,Grotto,
-LEVEL_03_08,Mist,
-LEVEL_04_01,Rafts,
-LEVEL_04_02,Vessels,
-LEVEL_04_03,Canoes,
-LEVEL_04_04,Lifeboats,
-LEVEL_04_05,Sailboats,
-LEVEL_04_06,Yachts,
-LEVEL_04_07,"Santa Maria, Niña & Pinta",
-LEVEL_04_08,Titanic,
-LEVEL_05_01,,
-LEVEL_05_02,,
-LEVEL_05_03,,
-LEVEL_05_04,,
-LEVEL_05_05,,
-LEVEL_05_06,,
-LEVEL_05_07,,
-LEVEL_05_08,,
-LEVEL_06_01,Kraken,Kraken
-LEVEL_06_02,Leviathan,Leviathan
-LEVEL_06_03,Kappa,Kappa
-LEVEL_06_04,Charybdis,Charybdis
-LEVEL_06_05,Jörmungandr,Jörmungandr
-LEVEL_06_06,Scylla,Scylla
-LEVEL_06_07,Megalodon,Megalodon
-LEVEL_06_08,Cthulhu,Cthulhu
+keys,en,pt_BR,pt
+TEST,Test,Teste,Teste
+YES,Yes,Sim,Sim
+NO,No,Não,Não
+EXIT_BUTTON,Exit,Sair,Saída
+PLAY_BUTTON,Dive,Mergulhar,Mergulhar
+LEVEL_EDITOR_BUTTON,Create,Criar,Criar
+EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?,Tem certeza de que deseja sair do jogo?
+DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?,Tem certeza?
+WATERS_COUNTER,Waters: ,Águas: ,Águas:
+BOATS_COUNTER,Boats: ,Barcos: ,Barcos:
+MISTAKES_COUNTER,Mistakes: ,Erros: ,Erros:
+MASTER_SOUND,Master Volume,Volume Geral,Volume principal
+BGM_SOUND,BGM Volume,Volume de Fundo,Volume da música musical
+SFX_SOUND,SFX Volume,Volume de Efeitos Sonoros,Volume de efeitos sonoros
+FULLSCREEN,Fullscreen,Tela Cheia,Tela cheia
+SAVE_AND_EXIT,Save & Exit,Salvar & Sair,Saída segura
+AQUARIUMS,Aquariums,Aquários,Aquários
+SIZE,Size,Tam.,Tamanho
+AMOUNT,Amount,Quant.,Quantia
+BACK,Back,Voltar,Voltar
+CONTINUE,Continue,Continuar,Continuar
+CREATE_NEW_LEVEL,Create new level,Criar nível novo,Criar novo nível
+YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
+PROFILE,Profile,Perfil,Perfil
+CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
+CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
+CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza de que deseja redefinir o nível?
+LEVELS_COMPLETED,levels completed,níveis completados,níveis concluídos
+WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina,Níveis de oficina
+WORKSHOP_LEVELS,Subscribed levels:,Níveis inscritos:,Níveis inscritos:
+PLAY_LEVEL_TOOLTIP,Playtest level,Testar o nível,Nível de teste
+EDIT_LEVEL_TOOLTIP,Edit level,Editar o nível,Editar nível
+UPLOAD_LEVEL_TOOLTIP,Upload level to Steam Workshop,Subir o nível para a Oficina da Steam,Carregar nível para Steam Workshop
+DELETE_LEVEL_TOOLTIP,"Delete level, can't be undone","Excluir o nível, não pode ser desfeito","Excluir nível, não pode ser desfeito"
+NOT_INSTALLED,Not installed,Não instalado,Não instalado
+RANDOM_BUTTON,Explorer mode,Modo explorador,Modo explorador
+RANDOM_TITLE,Explorer mode,Modo explorador,Modo explorador
+EASY_BUTTON,Easy,Fácil,Fácil
+MEDIUM_BUTTON,Medium,Médio,Médio
+HARD_BUTTON,Hard,Difícil,Duro
+EXPERT_BUTTON,Expert,Expert,Especialista
+INSANE_BUTTON,Insane,Insano,Insano
+CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente,Continuar existente
+RANDOM_COMPLETED,Levels completed:,Níveis completados:,Níveis concluídos:
+CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.,Tem certeza de que deseja iniciar um novo nível?  O existente será perdido.
+UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution.,Todos níveis tem uma única solução.,Todos os níveis têm uma solução única.
+PLAYTEST,Playtest level,Testar nível,Nível de teste
+LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível,Descrição do nível
+LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel,Título do nível
+EASY_TOOLTIP,Small and simple levels,Níveis pequenos e simples,Níveis pequenos e simples
+MEDIUM_TOOLTIP,"Harder levels, and uses {N} and -N- rules",Níveis mais difíceis e usa regras {N} e -N-,Níveis mais difíceis e usa regras {N} e -N-
+MEDIUM_TOOLTIP_DISABLED,Unlock section 2 to unlock this difficulty,Desbloqueie a seção 2 para desbloquear essa dificuldade,Desbloqueie a seção 2 para desbloquear esta dificuldade
+HARD_TOOLTIP,"Very hard levels, uses diagonals and boats","Níveis muito difíceis, usa diagonais e barcos","Níveis muito difíceis, usa diagonais e barcos"
+HARD_TOOLTIP_DISABLED,Unlock section 4 to unlock this difficulty,Desbloqueie a seção 4 para desbloquear essa dificuldade,Desbloqueie a seção 4 para desbloquear esta dificuldade
+EXPERT_TOOLTIP,"Extremely hard levels, may use any rules found in the campaign","Níveis extremamente difíceis, podendo usar quaisquer regras encontradas na campanha","Níveis extremamente difíceis, podendo usar quaisquer regras encontradas na campanha"
+EXPERT_TOOLTIP_DISABLED,Unlock section 5 to unlock this difficulty,Desbloqueie a seção 5 para desbloquear essa dificuldade,Desbloqueie a seção 5 para desbloquear esta dificuldade
+INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?,Tem certeza de que deseja tentar isso?
+INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para desbloquear essa dificuldade,Complete TODOS os níveis para desbloquear esta dificuldade
+GENERATING_LEVEL,Generating level,Gerando nível,Gerando nível
+LEVEL_01_01,Dipping the Toes,Molhando os Pés,Mergulhando os dedos dos pés
+LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas,Profundidades desconhecidas
+LEVEL_01_03,Aquariums,Aquários,Aquários
+LEVEL_01_04,Tiny Pools,Pequenas Piscinas,Piscinas minúsculas
+LEVEL_01_05,Counting Waters,Contando Águas,Contando Águas
+LEVEL_01_06,Deep Diving,Mergulho Profundo,Mergulho Profundo
+LEVEL_01_07,Ocean View,Vista pro Oceano,vista do oceano
+LEVEL_01_08,Bubble Trouble,Problemas Borbulhantes,Problema de bolha
+LEVEL_02_01,Together & Separate,Juntos & Separados,Juntos e Separados
+LEVEL_02_02,Coral & Reef,Recifes & Corais,Recife de corais
+LEVEL_02_03,Tide & Current,Maré & Corrente,Maré e corrente
+LEVEL_02_04,Wave & Ripple,Onda & Quebra,Onda e ondulação
+LEVEL_02_05,Sun & Breeze,Sol & Brisa,Sol e Brisa
+LEVEL_02_06,Wet & Wild,Molhado & Selvagem,Molhado e Selvagem
+LEVEL_02_07,Beach & Sand,Praia & Areia,Areia da praia
+LEVEL_02_08,Whirlpool & Vortex,Redemoinho & Vórtice,Hidromassagem e Vórtice
+LEVEL_03_01,Waves,Ondas,Ondas
+LEVEL_03_02,Cracks,Rachaduras,Rachaduras
+LEVEL_03_03,Shore,Costa,Costa
+LEVEL_03_04,Mist,Névoa,Salmoura
+LEVEL_03_05,Sand,Areia,Areia
+LEVEL_03_06,Lagoon,Lagoa,Lagoa
+LEVEL_03_07,Grotto,Gruta,Gruta
+LEVEL_03_08,Brine,Salmoura,Névoa
+LEVEL_04_01,Rafts,Jangadas,Jangadas
+LEVEL_04_02,Canoes,Canoas,Embarcações
+LEVEL_04_03,Vessels,Embarcações,Canoas
+LEVEL_04_04,Lifeboats,Salva-vidas,Barcos
+LEVEL_04_05,Sailboats,Veleiros,Veleiros
+LEVEL_04_06,Yachts,Iates,Iates
+LEVEL_04_07,"Santa Maria, Niña & Pinta","Santa Maria, Niña & Pinta","Santa Maria, Niña e Pinta"
+LEVEL_04_08,Titanic,Titanic,Titânico
+LEVEL_05_01,,,
+LEVEL_05_02,,,
+LEVEL_05_03,,,
+LEVEL_05_04,,,
+LEVEL_05_05,,,
+LEVEL_05_06,,,
+LEVEL_05_07,,,
+LEVEL_05_08,,,
+LEVEL_06_01,Kraken,Kraken,Kraken
+LEVEL_06_02,Leviathan,Leviathan,Leviatã
+LEVEL_06_03,Kappa,Kappa,Kappa
+LEVEL_06_04,Charybdis,Charybdis,Caríbdis
+LEVEL_06_05,Jörmungandr,Jörmungandr,Jörmungandr
+LEVEL_06_06,Scylla,Scylla,Cila
+LEVEL_06_07,Megalodon,Megalodon,Megalodonte
+LEVEL_06_08,Cthulhu,Cthulhu,Cthulhu
