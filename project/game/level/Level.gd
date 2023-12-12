@@ -98,11 +98,11 @@ func _input(event):
 	if event.is_action_pressed("debug_1"):
 		win()
 
+
 func setup(try_load := true) -> void:
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
-	
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -408,15 +408,19 @@ func _on_back_button_pressed() -> void:
 func _on_settings_screen_pause_toggled(active):
 	process_game = not active
 
+
 func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
 		maybe_save()
 
+
 func _on_autosaver_timeout():
 	maybe_save()
 
+
 func _on_grid_view_updated_size():
 	scale_grid()
+
 
 func _on_dev_buttons_full_solve():
 	if editor_mode():
@@ -431,6 +435,7 @@ func _on_dev_buttons_full_solve():
 
 func _on_dev_buttons_use_strategies():
 	GridNode.apply_strategies(DevButtons.selected_strategies(), true, false)
+
 
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
@@ -466,6 +471,7 @@ func _on_center_container_mouse_entered() -> void:
 	if Profile.get_option("highlight_grid"):
 		GridNode.remove_all_highlights()
 
+
 func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:
 	var val := 0
 	if randf() < w_co:
@@ -477,6 +483,7 @@ func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int
 	if not col and randf() < b_ty:
 		val |= HintBar.BOAT_TYPE_VISIBLE
 	return val
+
 
 func _on_dev_buttons_randomize_visibility() -> void:
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
@@ -496,6 +503,7 @@ func _on_dev_buttons_randomize_visibility() -> void:
 			visibility.expected_aquariums.append(aq)
 	_apply_visibility(visibility)
 
+
 func _on_dev_buttons_save():
 	var g := GridNode.grid_logic
 	if editor_mode():
@@ -506,6 +514,7 @@ func _on_dev_buttons_save():
 	FileManager._save_json_data("res://", "%s.json" % level_name, LevelData.new(full_name, description, g.export_data(), "").get_data())
 	if editor_mode():
 		g.set_auto_update_hints(true)
+
 
 func _on_continue_button_pressed():
 	TransitionManager.pop_scene()
@@ -518,7 +527,10 @@ func _on_description_edit_text_changed() -> void:
 
 
 func _on_edit_text_changed(new_text: String) -> void:
-	if not editor_mode() or new_text.length() < MIN_TITLE_SIZE:
+	if not editor_mode():
+		return
+	if new_text.length() < MIN_TITLE_SIZE:
+		TitleEdit.text = full_name
 		return
 	full_name = new_text
 
