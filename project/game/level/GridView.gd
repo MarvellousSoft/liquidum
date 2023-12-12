@@ -267,7 +267,7 @@ func update_hints() -> void:
 	var row_hints := grid_logic.row_hints()
 	for i in rows:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint = HintBars.left.get_hint(i, hint_type == E.HintContent.Boat)
+			var hint: Hint = HintBars.left.get_hint(i, hint_type == E.HintContent.Boat)
 			if hint:
 				var val := float(row_hints[i].boat_count) if hint_type == E.HintContent.Boat else row_hints[i].water_count
 				hint.set_value(val)
@@ -279,7 +279,7 @@ func update_hints() -> void:
 	var col_hints := grid_logic.col_hints()
 	for j in columns:
 		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
+			var hint: Hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
 			if hint:
 				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
 				hint.set_value(val)

@@ -447,6 +447,9 @@ func _on_dev_buttons_generate() -> void:
 		assert(new_grid.editor_mode())
 		assert(new_grid.auto_update_hints())
 		grid = new_grid
+		var vis := HintVisibility.from_grid(grid)
+		_apply_visibility(vis)
+		grid.maybe_update_hints()
 		GridNode.grid_logic = grid
 		GridNode.update()
 
@@ -461,6 +464,7 @@ func _on_dev_buttons_randomize_water() -> void:
 func _on_dev_buttons_load_grid(g: GridModel) -> void:
 	grid = g
 	var visibility := HintVisibility.from_grid(g)
+	grid.maybe_update_hints()
 	GridNode.grid_logic = g
 	GridNode.update()
 	_apply_visibility(visibility)

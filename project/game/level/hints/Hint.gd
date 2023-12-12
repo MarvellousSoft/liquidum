@@ -1,3 +1,4 @@
+class_name Hint
 extends Control
 
 const ALPHA_SPEED = 4.0
