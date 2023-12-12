@@ -62,6 +62,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 	var start_time := Time.get_unix_time_from_system()
 	var total_gen := 0.0
 	var total_solve := 0.0
+	var tries := 0
 	for i in 1000:
 		if cancel_gen:
 			break
@@ -75,24 +76,34 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 			if cancel_gen:
 				break
 			hints.apply_to_grid(g)
-			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
 			var start_solve := Time.get_unix_time_from_system()
-			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
-				total_solve += Time.get_unix_time_from_system() - start_solve
-				g2.force_editor_mode(false)
-				g2.clear_content()
-				solver.apply_strategies(g2, strategies + forced_strategies)
-				assert(g2.are_hints_satisfied())
-				g2.prettify_hints()
-				g = g2
-				print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [i * 3 + j + 1, Time.get_unix_time_from_system() - start_time, total_gen, total_solve])
-				found = true
-				break
+			tries += 1
+			if not forced_strategies.is_empty():
+				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
+				if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
+					total_solve += Time.get_unix_time_from_system() - start_solve
+					g2.force_editor_mode(false)
+					g2.clear_content()
+					solver.apply_strategies(g2, strategies + forced_strategies)
+					assert(g2.are_hints_satisfied())
+					g = g2
+					found = true
+					break
+			else:
+				g.clear_content()
+				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
+				if solver.full_solve(g2, strategies) == SolverModel.SolveResult.SolvedUnique:
+					total_solve += Time.get_unix_time_from_system() - start_solve
+					g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.SolutionNoClear)
+					found = true
+					break
 			total_solve += Time.get_unix_time_from_system() - start_solve
 			# Let's retry with the same grid but different visibility
 			if j < 2:
 				hints = hints_builder.call(rng)
 		if found:
+			g.prettify_hints()
+			print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [tries, Time.get_unix_time_from_system() - start_time, total_gen, total_solve])
 			break
 	return g if not cancel_gen else null
 
@@ -145,6 +156,9 @@ func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: i
 	for i in a.size():
 		a[i] |= b[i]
 
+func _expert_options(rng: RandomNumberGenerator) -> int:
+	return (1 if rng.randf() < 0.6 else 0) + (2 if rng.randf() < 0.3 else 0)
+
 func _diags(rng: RandomNumberGenerator) -> int:
 	return 1 + (2 if rng.randf() < 0.5 else 0) 
 
@@ -192,9 +206,9 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		Difficulty.Hard:
 			gen_level(rng, dif, _hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
 		Difficulty.Expert:
-			gen_level(rng, dif, _hard_visibility(5, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
+			gen_level(rng, dif, _hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
 		Difficulty.Insane:
-			pass
+			gen_level(rng, dif, _hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
 			push_error("Uknown difficulty %d" % dif)
 

@@ -131,13 +131,13 @@ func randomize_boats(grid: GridModel) -> void:
 	var all_cells := _all_cells(grid)
 	Global.shuffle(all_cells, rng)
 	for idx in all_cells:
+		if not SolverModel._boat_possible(grid, idx.x, idx.y):
+			continue
 		var c := grid.get_cell(idx.x, idx.y)
-		# This can be made a little more efficient by not actually putting the boat.
-		if c.put_boat(true):
-			if rng.randf() < 0.5:
-				grid.undo()
-			else:
-				grid.merge_last_undo()
+		if rng.randf() < 0.5:
+			if not c.put_boat(true):
+				push_error("Boat placing should succeed")
+
 
 func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	if flush_undo:

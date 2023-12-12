@@ -797,10 +797,11 @@ func full_solve(grid: GridModel, strategy_list: Array, flush_undo := true, min_b
 			return SolveResult.Unsolvable
 	for i in grid.rows():
 		for j in grid.cols():
-			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j):
+			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j) or grid.get_cell(i, j).has_boat():
 				continue
 			var c := grid.get_cell(i, j)
-			c.put_boat(true)
+			var b := c.put_boat(true)
+			assert(b)
 			var r1 := full_solve(grid, strategy_list, false, Vector2i(i, j + 1))
 			grid.undo()
 			if r1 == SolveResult.Unsolvable:
