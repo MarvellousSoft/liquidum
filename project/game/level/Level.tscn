@@ -470,6 +470,7 @@ offset_right = 3804.0
 offset_bottom = 2140.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="Edit" type="TextEdit" parent="Description"]
 visible = false
@@ -481,7 +482,9 @@ wrap_mode = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Description"]
 layout_mode = 2
-horizontal_scroll_mode = 0
+mouse_filter = 2
+follow_focus = true
+horizontal_scroll_mode = 3
 
 [node name="Label" type="Label" parent="Description/Scroll"]
 custom_minimum_size = Vector2(3760, 100)
@@ -538,7 +541,7 @@ offset_right = 953.0
 offset_bottom = 644.0
 placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
-expand_to_text_length = true
+caret_blink = true
 
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 
