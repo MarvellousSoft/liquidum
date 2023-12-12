@@ -80,7 +80,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
 				total_solve += Time.get_unix_time_from_system() - start_solve
 				g2.clear_content()
-				solver.apply_strategies(g2, strategies)
+				solver.apply_strategies(g2, strategies + forced_strategies)
 				assert(g2.are_hints_satisfied())
 				g = g2
 				print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [i * 3 + j + 1, Time.get_unix_time_from_system() - start_time, total_gen, total_solve])

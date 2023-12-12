@@ -1250,13 +1250,17 @@ func all_hints_status() -> E.HintStatus:
 		#print("col %d " % j, E.HintStatus.find_key(s))
 	return s
 
-func are_hints_satisfied(check_complete := false) -> bool:
-	if check_complete:
-		for i in n:
-			for j in m:
-				var c := _pure_cell(i, j)
-				if c._content_left() == Content.Nothing or c._content_right() == Content.Nothing:
-					return false
+func check_complete() -> bool:
+	for i in n:
+		for j in m:
+			var c := _pure_cell(i, j)
+			if c._content_left() == Content.Nothing or c._content_right() == Content.Nothing:
+				return false
+	return true
+
+func are_hints_satisfied(check_complete_ := false) -> bool:
+	if check_complete_ and not check_complete():
+		return false
 	return all_hints_status() == E.HintStatus.Satisfied
 
 func is_any_hint_broken() -> bool:

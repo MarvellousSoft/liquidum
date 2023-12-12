@@ -690,19 +690,22 @@ func can_solve_with_strategies(grid_: GridModel, strategies_names: Array, forced
 	for s in forced_strategies_or:
 		if strategies_names.find(s) == -1:
 			strategies_names.append(s)
-	grid.push_empty_undo()
 	while true:
 		apply_strategies(grid, strategies_names, false)
-		match grid.all_hints_status():
-			E.HintStatus.Wrong:
-				push_error("Fucked up somehow")
-				return false
-			E.HintStatus.Satisfied:
-				break
-			E.HintStatus.Normal:
-				pass
+		if grid.check_complete():
+			match grid.all_hints_status():
+				E.HintStatus.Wrong:
+					push_error("Fucked up somehow")
+					return false
+				E.HintStatus.Satisfied:
+					break
 		if not _put_block_on_air(grid):
 			return false
+	grid.clear_content()
+	apply_strategies(grid, strategies_names)
+	# Sometimes adding blocks make some strategies stop working
+	if not grid.are_hints_satisfied(true):
+		return false
 	if forced_strategies_or.is_empty():
 		return true
 	grid.clear_content()

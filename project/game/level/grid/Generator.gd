@@ -142,7 +142,7 @@ func randomize_boats(grid: GridModel) -> void:
 func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	if flush_undo:
 		grid.push_empty_undo()
-	var water_wanted: float = int(grid.rows() * grid.cols() * randf_range(0.2, 0.75)) - grid.count_waters()
+	var water_wanted: float = int(grid.rows() * grid.cols() * rng.randf_range(0.2, 0.75)) - grid.count_waters()
 	var all_cells := _all_cells(grid)
 	while not all_cells.is_empty():
 		var idx: Vector2i = pop_random(all_cells)

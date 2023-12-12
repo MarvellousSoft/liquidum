@@ -445,6 +445,8 @@ func _on_dev_buttons_generate() -> void:
 		return
 	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
+		assert(new_grid.editor_mode())
+		assert(new_grid.auto_update_hints())
 		grid = new_grid
 		GridNode.grid_logic = grid
 		GridNode.update()
