@@ -159,7 +159,7 @@ func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := t
 
 func full_solve(strategies: Array, flush_undo := true, do_emit_signal := true) -> SolverModel.SolveResult:
 	grid_logic.force_editor_mode(true)
-	var result := SolverModel.new().full_solve(grid_logic, strategies, flush_undo)
+	var result := SolverModel.new().full_solve(grid_logic, strategies, func(): return false, flush_undo)
 	grid_logic.force_editor_mode(false)
 	update(do_emit_signal)
 	return result
