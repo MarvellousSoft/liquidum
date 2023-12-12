@@ -1266,15 +1266,19 @@ func are_hints_satisfied(check_complete_ := false) -> bool:
 func is_any_hint_broken() -> bool:
 	return all_hints_status() == E.HintStatus.Wrong
 
-func _is_together(a: Array[bool]) -> bool:
+enum IsTogether { Separate, Together, Zero }
+
+func _is_together(a: Array[bool]) -> IsTogether:
 	var i := 0
 	while i < a.size() and not a[i]:
 		i += 1
+	if i == a.size():
+		return IsTogether.Zero
 	while i < a.size() and a[i]:
 		i += 1
 	while i < a.size() and not a[i]:
 		i += 1
-	return i == a.size()
+	return IsTogether.Together if i == a.size() else IsTogether.Separate
 
 
 func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
@@ -1282,9 +1286,9 @@ func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
 		return true
 	var is_together := _is_together(a)
 	if hint == E.HintType.Together:
-		return is_together
+		return is_together == IsTogether.Together
 	else:
-		return not is_together
+		return is_together == IsTogether.Separate
 
 func _status_and_then(status: E.HintStatus, together_match: bool, is_q: bool) -> E.HintStatus:
 	if status == E.HintStatus.Satisfied and not together_match:
