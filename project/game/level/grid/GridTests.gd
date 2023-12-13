@@ -685,3 +685,24 @@ func test_total_waters() -> void:
 	..ww
 	L.L.
 	""", s)
+	s += ["AllWatersMedium"]
+	assert_can_solve("""
+	+waters=1
+	....
+	L.|.
+	....
+	L...
+	""", s)
+	assert_grid_eq(apply_strategies("""
+	+waters=3
+	....
+	L.|.
+	....
+	L._.
+	""", s).to_str(), """
+	+waters=3.0
+	....
+	L.|.
+	wwww
+	L._.
+	""")

@@ -692,10 +692,48 @@ class AllWatersEasyStrategy extends Strategy:
 
 class AllWatersMediumStrategy extends Strategy:
 	static func description() -> String:
-		return "- If flooding water on a tile would create too many waters, mark it with air."
+		return """
+		- If flooding water on a tile would create too many waters, mark it with air.
+		- Same for flooding air and adding water."""
 	func apply_any() -> bool:
-		# TODO: implement
-		return false
+		if grid.grid_hints().total_water == -1.0:
+			return false
+		var water_left := grid.grid_hints().total_water - grid.count_waters()
+		if water_left <= 0:
+			return false
+		var any := false
+		for i in grid.rows():
+			for j2 in 2 * grid.cols():
+				var c := grid.get_cell(i, j2 / 2)
+				var pc := grid._pure_cell(i, j2 / 2)
+				var right := bool(j2 & 1)
+				if (pc._content_right() if right else pc._content_right()) != GridImpl.Content.Nothing:
+					continue
+				# This if is just an optimisation since we only need to test this once on this line x aquarium
+				if (right and c.cell_type() != E.CellType.Single) or (not right and c.wall_at(E.Walls.Left)):
+					var corner: E.Corner = c.corners()[int(right)]
+					if c.water_would_flood_how_many(corner) > water_left:
+						if c.put_air(corner, false, true):
+							any = true
+		water_left = grid.grid_hints().total_water - grid.count_waters()
+		var count_nothing := 0.0
+		for i in grid.rows():
+			for j in grid.cols():
+				count_nothing += grid._pure_cell(i, j).nothing_count()
+		if water_left > count_nothing:
+			return any
+		for i in grid.rows():
+			for j in grid.cols():
+				var c := grid.get_cell(i, j)
+				for corner in c.corners():
+					if not c.nothing_at(corner):
+						continue
+					# This if is just an optimisation since we only need to test this once on this line x aquarium
+					if c.wall_at(E.Walls.Left) if E.corner_is_left(corner) else c.cell_type() != E.CellType.Single:
+						if water_left > count_nothing - c.air_would_flood_how_many(corner):
+							if c.put_water(corner, false):
+								any = true
+		return any
 
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,

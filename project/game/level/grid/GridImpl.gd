@@ -500,6 +500,21 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure().cell_type()
 	func corners() -> Array[E.Corner]:
 		return pure().corners()
+	func water_would_flood_how_many(corner: E.Corner) -> float:
+		if water_at(corner):
+			return 0.0
+		var dfs := AddWaterDfs.new(grid, i)
+		dfs.dry_run = true
+		dfs.flood(i, j, corner)
+		return dfs.added_waters
+	func air_would_flood_how_many(corner: E.Corner) -> float:
+		if not nothing_at(corner):
+			return 0.0
+		var dfs := AddAirDfs.new(grid)
+		dfs.dry_run = true
+		dfs.flood(i, j, corner)
+		return dfs.added_air
+		
 	func _has_boat_invalid_pos() -> bool:
 		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
 
@@ -1064,6 +1079,7 @@ class AddWaterDfs extends Dfs:
 	# Water can go up to level min_i because of physics
 	var min_i: int
 	var added_waters := 0.0
+	var dry_run := false
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
@@ -1076,7 +1092,8 @@ class AddWaterDfs extends Dfs:
 						added_waters += 1.0
 					else:
 						added_waters += 0.5
-				cell.put_water(corner)
+				if not dry_run:
+					cell.put_water(corner)
 			Content.Block:
 				return false
 		return true
@@ -1087,10 +1104,19 @@ class AddWaterDfs extends Dfs:
 
 
 class AddAirDfs extends Dfs:
+	var added_air := 0.0
+	var dry_run := false
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
-		match cell._content_at(corner):
+		var c := cell._content_at(corner)
+		match c:
 			Content.Water, Content.Nothing, Content.Air:
-				cell.put_air(corner)
+				if c != Content.Air:
+					if cell.cell_type() == E.CellType.Single:
+						added_air += 1.0
+					else:
+						added_air += 0.5
+				if not dry_run:
+					cell.put_air(corner)
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true

@@ -67,7 +67,12 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func cell_type() -> E.CellType:
 		return GridModel.must_be_implemented()
+	# Left then right
 	func corners() -> Array[E.Corner]:
+		return GridModel.must_be_implemented()
+	func water_would_flood_how_many(_corner: E.Corner) -> float:
+		return GridModel.must_be_implemented()
+	func air_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
