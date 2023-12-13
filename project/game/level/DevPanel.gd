@@ -131,6 +131,7 @@ func _on_strategies_pressed():
 
 
 func _on_full_solve_pressed():
+	$FullSolveType.text = ""
 	AudioManager.play_sfx("button_pressed")
 	if solve_thread.is_started():
 		pass
