@@ -6,8 +6,7 @@ const RANDOM := "random"
 @onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var ContinueSeparator: HSeparator = $Difficulties/VBox/ContinueSeparator
 @onready var Completed: VBoxContainer = $CompletedCount
-@onready var GeneratingLevel: Control = $GeneratingLevel
-@onready var CancelButton: Button = $GeneratingLevel/PanelContainer/VBoxContainer/Cancel
+@onready var GenLevel: GeneratingLevel = $GeneratingLevel
 
 var completed_count: Array[int]
 var gen := RandomLevelGenerator.new()
@@ -57,10 +56,9 @@ func _on_back_pressed() -> void:
 func gen_level(rng: RandomNumberGenerator, dif: Difficulty, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	if gen.running():
 		return
-	GeneratingLevel.visible = true
-	CancelButton.disabled = false
+	GenLevel.enable()
 	var g := await gen.generate(rng, hints_builder, gen_options_builder, strategies, forced_strategies)
-	GeneratingLevel.visible = false
+	GenLevel.disable()
 	if g == null:
 		return
 	# There may be an existing level save
@@ -161,4 +159,3 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 
 func _on_cancel_gen_pressed():
 	gen.cancel()
-	CancelButton.disabled = true

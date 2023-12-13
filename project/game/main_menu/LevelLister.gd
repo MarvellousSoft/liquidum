@@ -25,6 +25,9 @@ static func section_complete(section: int) -> bool:
 	var count_uncompleted := 0
 	for i in range(1, 100):
 		if not FileManager.has_level_data(section, i) or count_uncompleted > MAX_UNSOLVED_LEVELS:
+			if i == 1:
+				# No levels in section
+				return false
 			break
 		var save := FileManager.load_level(LevelLister.level_name(section, i))
 		if save == null or not save.is_completed():
