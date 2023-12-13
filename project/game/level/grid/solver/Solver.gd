@@ -655,6 +655,48 @@ class SeparateColStrategy extends SeparateStrategy:
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
+class AllWatersEasyStrategy extends Strategy:
+	static func description() -> String:
+		return """
+		- If remaining waters is 0, mark everything with air.
+		- If the remaining empty spaces equal the total waters, fill them all."""
+	func apply_any() -> bool:
+		if grid.grid_hints().total_water == -1.0:
+			return false
+		var water_left := grid.grid_hints().total_water - grid.count_waters()
+		if water_left < 0:
+			return false
+		var any := false
+		if water_left == 0:
+			for i in grid.rows():
+				for j in grid.cols():
+					var c := grid.get_cell(i, j)
+					for corner in c.corners():
+						if c.nothing_at(corner):
+							if c.put_air(corner, false, true):
+								any = true
+			return any
+		var count_nothing := 0.0
+		for i in grid.rows():
+			for j in grid.cols():
+				count_nothing += grid._pure_cell(i, j).nothing_count()
+		if water_left == count_nothing:
+			for i in grid.rows():
+				for j in grid.cols():
+					var c := grid.get_cell(i, j)
+					for corner in c.corners():
+						if c.nothing_at(corner):
+							if c.put_water(corner, false):
+								any = true
+		return any
+
+class AllWatersMediumStrategy extends Strategy:
+	static func description() -> String:
+		return "- If flooding water on a tile would create too many waters, mark it with air."
+	func apply_any() -> bool:
+		# TODO: implement
+		return false
+
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
 	BasicCol = BasicColStrategy,
@@ -667,6 +709,8 @@ const STRATEGY_LIST := {
 	TogetherCol = TogetherColStrategy,
 	SeparateRow = SeparateRowStrategy,
 	SeparateCol = SeparateColStrategy,
+	AllWatersEasy = AllWatersEasyStrategy,
+	AllWatersMedium = AllWatersMediumStrategy,
 }
 
 # Get a place in the solution that must have air and put a block on it

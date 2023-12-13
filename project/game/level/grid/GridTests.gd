@@ -56,7 +56,7 @@ func all_strategies() -> Array:
 
 func apply_strategies(s: String, strategies := []) -> GridImpl:
 	var g := str_grid(s)
-	check(!g.are_hints_satisfied())
+	check(!g.are_hints_satisfied(true))
 	if strategies.is_empty():
 		strategies = all_strategies()
 	SolverModel.new().apply_strategies(g, strategies)
@@ -64,7 +64,7 @@ func apply_strategies(s: String, strategies := []) -> GridImpl:
 
 func assert_can_solve(s: String, strategies := [], result := true) -> void:
 	var g := apply_strategies(s, strategies)
-	if g.are_hints_satisfied() != result:
+	if g.are_hints_satisfied(true) != result:
 		fail_later_if(true)
 		print("Not solved:\n", g.to_str())
 		show_grids.emit(s, g.to_str())
@@ -671,4 +671,17 @@ func test_separate_rule() -> void:
 	.|.
 	.ww
 	.L.
+	""", s)
+
+func test_total_waters() -> void:
+	var s := ["AllWatersEasy"]
+	assert_can_solve("""
+	+waters=1
+	..
+	L.
+	""", s)
+	assert_can_solve("""
+	+waters=1
+	..ww
+	L.L.
 	""", s)
