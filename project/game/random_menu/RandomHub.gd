@@ -6,7 +6,6 @@ const RANDOM := "random"
 @onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var ContinueSeparator: HSeparator = $Difficulties/VBox/ContinueSeparator
 @onready var Completed: VBoxContainer = $CompletedCount
-@onready var GenLevel: GeneratingLevel = $GeneratingLevel
 
 var completed_count: Array[int]
 var gen := RandomLevelGenerator.new()
@@ -37,7 +36,11 @@ func _ready() -> void:
 			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
 	
 func _enter_tree() -> void:
+	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
+
+func _exit_tree() -> void:
+	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 
 func _update() -> void:
 	var has_random_level := FileManager.load_level(RANDOM) != null
@@ -56,9 +59,9 @@ func _on_back_pressed() -> void:
 func gen_level(rng: RandomNumberGenerator, dif: Difficulty, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
 	if gen.running():
 		return
-	GenLevel.enable()
+	GeneratingLevel.enable()
 	var g := await gen.generate(rng, hints_builder, gen_options_builder, strategies, forced_strategies)
-	GenLevel.disable()
+	GeneratingLevel.disable()
 	if g == null:
 		return
 	# There may be an existing level save

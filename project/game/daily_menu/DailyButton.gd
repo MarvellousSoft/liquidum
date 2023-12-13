@@ -116,7 +116,9 @@ func _on_button_pressed() -> void:
 	DailyButton.disabled = true
 	var date := _today()
 	if not FileManager.has_daily_level(date):
+		GeneratingLevel.enable()
 		var level := await gen_level(date)
+		GeneratingLevel.disable()
 		if level != null:
 			FileManager.save_daily_level(date, level)
 	var level_data := FileManager.load_daily_level(date)

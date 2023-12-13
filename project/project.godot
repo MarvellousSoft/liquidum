@@ -28,6 +28,7 @@ E="*res://game/level/grid/Enums.gd"
 Background="*res://game/ui/Background.tscn"
 ConfirmationScreen="*res://game/ui/ConfirmationScreen.tscn"
 SteamManager="*res://game/steam/SteamManager.gd"
+GeneratingLevel="*res://game/ui/GeneratingLevel.tscn"
 
 [debug]
 

@@ -1,9 +1,8 @@
-class_name GeneratingLevel
-extends Control
+extends CanvasLayer
 
 signal cancel
 
-@onready var Cancel: Button = $PanelContainer/VBoxContainer/Cancel
+@onready var Cancel: Button = $All/PanelContainer/VBoxContainer/Cancel
 
 func enable() -> void:
 	show()
