@@ -151,9 +151,9 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		Difficulty.Medium:
 			gen_level(rng, dif, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			gen_level(rng, dif, RandomHub._hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
+			gen_level(rng, dif, RandomHub._hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AllWatersMedium"])
 		Difficulty.Expert:
-			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
+			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
 		Difficulty.Insane:
 			gen_level(rng, dif, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
