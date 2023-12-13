@@ -93,7 +93,7 @@ func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	load_existing()
 
-func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: int) -> void:
+static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: int) -> void:
 	var b: Array[int] = []
 	for i in a.size():
 		b.append(val if i < count else 0)
@@ -113,29 +113,30 @@ func _nothing(_rng: RandomNumberGenerator) -> int:
 func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 	return Level.HintVisibility.default(5, 5)
 
-func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
+static func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
 	var h := Level.HintVisibility.new()
 	for i in 6:
 		h.row.append(0)
 		h.col.append(0)
 	for a in [h.row, h.col]:
-		_vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, 8), 6))
-		_vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, 4), 0))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, 8), 6))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, 4), 0))
 	return h
 
 
-func _hard_visibility(n: int, m: int) -> Callable:
+static func _hard_visibility(n: int, m: int) -> Callable:
 	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
 		var h := Level.HintVisibility.new()
 		h.total_boats = rng.randf() < 0.5
+		h.total_water = rng.randf() < 0.3
 		for i in n:
 			h.row.append(0)
 		for j in m:
 			h.col.append(0)
 		for a in [h.row, h.col]:
-			_vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
-			_vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
-			_vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
+			RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
+			RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
+			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 		return h
 
 func _on_dif_pressed(dif: Difficulty) -> void:
@@ -149,11 +150,11 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		Difficulty.Medium:
 			gen_level(rng, dif, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			gen_level(rng, dif, _hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
+			gen_level(rng, dif, RandomHub._hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol"])
 		Difficulty.Expert:
-			gen_level(rng, dif, _hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
+			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
 		Difficulty.Insane:
-			gen_level(rng, dif, _hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
+			gen_level(rng, dif, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
 			push_error("Uknown difficulty %d" % dif)
 

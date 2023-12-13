@@ -29,6 +29,7 @@ theme_override_constants/separation = 75
 
 [node name="Button" type="Button" parent="HBox"]
 layout_mode = 2
+tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_START"
 

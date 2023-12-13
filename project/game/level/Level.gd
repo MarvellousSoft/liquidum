@@ -249,8 +249,6 @@ func win() -> void:
 	await get_tree().create_timer(1.5).timeout
 	
 	ContinueAnim.play("show")
-	
-	
 
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:

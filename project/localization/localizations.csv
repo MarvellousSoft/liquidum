@@ -108,5 +108,14 @@ LEVEL_06_07,Megalodon,Megalodon,Megalodonte
 LEVEL_06_08,Cthulhu,Cthulhu,Cthulhu
 DAILY_START,Start daily level,Começar nível do dia,Começar nível do dia
 DAILY_CONTINUE,Continue daily level,Continuar nível do dia,Continuar nível do dia
+DAILY_COMPLETED,Daily level completed,Nível do dia completado,Nível do dia completado
+DAILY_TOOLTIP,"A hard level that changes daily, in which you can compare your results to other players","Um nível dificil que muda diariamente, em que você pode comparar seus resultados com outros jogadores","Um nível dificil que muda diariamente, em que você pode comparar seus resultados com outros jogadores"
 HOURS_LEFT,hours left,horas restantes,horas restantes
 MINUTES_LEFT,minutes left,minutos restantes,minutos restantes
+MONDAY,Monday,Segunda,Segunda
+TUESDAY,Tuesday,Terça,Terça
+WEDNESDAY,Wednesday,Quarta,Quarta
+THURSDAY,Thursday,Quinta,Quinta
+FRIDAY,Friday,Sexta,Sexta
+SATURDAY,Saturday,Sábado,Sábado
+SUNDAY,Sunday,Domingo,Domingo
