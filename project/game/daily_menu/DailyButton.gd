@@ -14,7 +14,7 @@ func _update() -> void:
 	
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
-		if save.is_completed():
+		if save != null and save.is_completed():
 			DailyButton.text = "DAILY_COMPLETED"
 		else:
 			DailyButton.text = "DAILY_CONTINUE"
