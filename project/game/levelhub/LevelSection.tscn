@@ -201,6 +201,7 @@ horizontal_alignment = 1
 [node name="Spacer" type="Control" parent="Button/LevelInfoContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="BestTime" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
 unique_name_in_owner = true

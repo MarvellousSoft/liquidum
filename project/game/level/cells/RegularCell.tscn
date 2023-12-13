@@ -550,8 +550,9 @@ mouse_filter = 2
 
 [node name="Top" type="TextureRect" parent="Hints"]
 layout_mode = 0
+offset_top = -6.0
 offset_right = 500.0
-offset_bottom = 500.0
+offset_bottom = 494.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
@@ -559,7 +560,8 @@ texture = ExtResource("20_6vhtd")
 
 [node name="Left" type="TextureRect" parent="Hints"]
 layout_mode = 0
-offset_right = 500.0
+offset_left = -2.0
+offset_right = 498.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
