@@ -209,6 +209,20 @@ func save_random_level(data: LevelData) -> void:
 	_no_tutorial(data)
 	_save_json_data(_level_dir(), RANDOM, data.get_data())
 
+func _daily_name(date: String) -> String:
+	return "daily_%s.json" % date
+
+func load_daily_level(date: String) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_level_dir(), _daily_name(date)))
+	_no_tutorial(data)
+	return data
+
+func save_daily_level(date: String, data: LevelData) -> void:
+	_no_tutorial(data)
+	_save_json_data(_level_dir(), _daily_name(date), data.get_data())
+
+func has_daily_level(date: String) -> bool:
+	return FileAccess.file_exists("%s/%s" % [_level_dir(), _daily_name(date)])
 
 func _level_data_dir(section: int) -> String:
 	return "%s/%02d" % [DATA_DIR, section]

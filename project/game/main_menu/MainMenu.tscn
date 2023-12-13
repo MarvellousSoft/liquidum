@@ -76,6 +76,7 @@ layout_mode = 2
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 focus_mode = 0
 text = "RANDOM_BUTTON"
 

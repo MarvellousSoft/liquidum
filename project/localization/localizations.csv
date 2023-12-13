@@ -106,3 +106,7 @@ LEVEL_06_05,Jörmungandr,Jörmungandr,Jörmungandr
 LEVEL_06_06,Scylla,Scylla,Cila
 LEVEL_06_07,Megalodon,Megalodon,Megalodonte
 LEVEL_06_08,Cthulhu,Cthulhu,Cthulhu
+DAILY_START,Start daily level,Começar nível do dia,Começar nível do dia
+DAILY_CONTINUE,Continue daily level,Continuar nível do dia,Continuar nível do dia
+HOURS_LEFT,hours left,horas restantes,horas restantes
+MINUTES_LEFT,minutes left,minutos restantes,minutos restantes
