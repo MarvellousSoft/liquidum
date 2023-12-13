@@ -1291,9 +1291,9 @@ func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
 	var is_together := _is_together(a)
 	return is_together == hint
 
-func _status_and_then(status: E.HintStatus, together_match: bool, is_q: bool) -> E.HintStatus:
+func _status_and_then(status: E.HintStatus, together_match: bool, is_question_mark: bool) -> E.HintStatus:
 	if status == E.HintStatus.Satisfied and not together_match:
-		if is_q:
+		if is_question_mark:
 			return E.HintStatus.Normal
 		else:
 			return E.HintStatus.Wrong
@@ -1334,12 +1334,13 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 		E.HintContent.Boat:
 			var count := _col_hints[j].boat_count
 			var status := _hint_statusi(count_boat_col(j), count)
+			assert(_col_hints[j].boat_count_type == E.HintType.Any)
 			var type := _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat))
 			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
 			var count := _col_hints[j].water_count
 			var status := _hint_statusf(count_water_col(j), count)
-			var type := count == -1 or _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
+			var type := _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
 			return _status_and_then(status, type, count == -1.0)
 		_:
 			assert(false, "Bad content")
