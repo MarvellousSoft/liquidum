@@ -59,4 +59,5 @@ color = Color(0.670588, 1, 0.819608, 1)
 unique_name_in_owner = true
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

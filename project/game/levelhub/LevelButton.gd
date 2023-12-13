@@ -79,3 +79,8 @@ func _on_button_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+	mouse_entered.emit()
+
+
+func _on_button_mouse_exited():
+	mouse_exited.emit()

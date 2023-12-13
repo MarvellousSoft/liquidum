@@ -32,18 +32,12 @@ offset_top = 637.5
 offset_right = 2321.25
 offset_bottom = 597.5
 
-[node name="Button" parent="Sections/LevelSection2" index="0"]
-text = "2"
-
 [node name="LevelSection3" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 3617.5
 offset_top = 778.75
 offset_right = 3577.5
 offset_bottom = 738.75
-
-[node name="Button" parent="Sections/LevelSection3" index="0"]
-text = "3"
 
 [node name="LevelSection4" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
@@ -52,9 +46,6 @@ offset_top = 1743.75
 offset_right = 1248.75
 offset_bottom = 1703.75
 
-[node name="Button" parent="Sections/LevelSection4" index="0"]
-text = "4"
-
 [node name="LevelSection5" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 2498.75
@@ -62,18 +53,12 @@ offset_top = 1591.25
 offset_right = 2458.75
 offset_bottom = 1551.25
 
-[node name="Button" parent="Sections/LevelSection5" index="0"]
-text = "5"
-
 [node name="LevelSection6" parent="Sections" instance=ExtResource("2_6hlcq")]
 layout_mode = 1
 offset_left = 3705.0
 offset_top = 1772.5
 offset_right = 3665.0
 offset_bottom = 1732.5
-
-[node name="Button" parent="Sections/LevelSection6" index="0"]
-text = "6"
 
 [connection signal="disable_focus" from="Sections/LevelSection1" to="." method="_on_level_section_disable_focus"]
 [connection signal="enable_focus" from="Sections/LevelSection1" to="." method="_on_level_section_enable_focus"]

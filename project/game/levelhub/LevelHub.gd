@@ -14,6 +14,7 @@ func _ready():
 func update_sections():
 	var idx = 1
 	for section in Sections.get_children():
+		section.set_number(idx)
 		var unlocked = LevelLister.get_max_unlocked_level(idx)
 		if unlocked == 0:
 			section.disable()

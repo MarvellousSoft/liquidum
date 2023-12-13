@@ -104,7 +104,6 @@ theme_override_styles/normal = ExtResource("3_57438")
 theme_override_styles/hover = ExtResource("4_ej3iu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_a7tmt")
 theme_override_styles/disabled = ExtResource("6_lf75c")
-text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]
 show_behind_parent = true
@@ -143,6 +142,85 @@ offset_bottom = -48.0
 theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
 theme_override_constants/outline_size = 51
 text = "0/8"
+
+[node name="SectionNumber" type="Label" parent="Button"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -93.0
+offset_top = -53.0
+offset_right = 283.0
+offset_bottom = 327.0
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 80
+theme_override_font_sizes/font_size = 150
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelInfoContainer" type="MarginContainer" parent="Button"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -154.0
+offset_top = -107.0
+offset_right = 346.0
+offset_bottom = 393.0
+pivot_offset = Vector2(190, 190)
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/LevelInfoContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LevelName" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 40
+text = "Level Name That is Very Big"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Completed" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 30
+text = "COMPLETED_LEVEL"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Button/LevelInfoContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="BestTime" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 20
+text = "BEST_TIME"
+horizontal_alignment = 1
+
+[node name="BestMistakes" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 20
+text = "BEST_MISTAKES"
+horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

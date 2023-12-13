@@ -31,10 +31,13 @@ signal disable_focus()
 @onready var MouseBlocker = $Button/MouseBlocker
 @onready var OngoingSolution = %OngoingSolution
 @onready var LevelCount = %LevelCount
+@onready var SectionNumber = %SectionNumber
+@onready var LevelInfoContainer = %LevelInfoContainer
 
 
 var my_section := -1
 var focused := false
+var showing_level_info := false
 
 
 func _ready():
@@ -43,6 +46,8 @@ func _ready():
 	ShaderEffect.material = ShaderEffect.material.duplicate()
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
+	LevelInfoContainer.modulate.a = 0.0
+	SectionNumber.modulate.a = 1.0
 	Levels.hide()
 	MouseBlocker.hide()
 	AnimPlayer.seek(randf_range(0.0, AnimPlayer.current_animation_length))
@@ -54,42 +59,37 @@ func _input(event):
 
 
 func _process(dt):
+	for node in [Levels, BackButton]:
+		Global.alpha_fade_node(dt, node, focused, ALPHA_SPEED, true)
+	for node in [OngoingSolution, LevelCount]:
+		Global.alpha_fade_node(dt, node, not focused, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, LevelInfoContainer, showing_level_info and focused, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, SectionNumber, not focused or not showing_level_info, ALPHA_SPEED)
 	if focused:
-		for node in [Levels, BackButton]:
-			node.modulate.a = min(node.modulate.a + ALPHA_SPEED*dt, 1.0)
-			if node.modulate.a > 0.0:
-				node.show()
-		OngoingSolution.modulate.a = max(OngoingSolution.modulate.a - ALPHA_SPEED*dt, 0.0)
-		LevelCount.modulate.a = max(LevelCount.modulate.a - ALPHA_SPEED*dt, 0.0)
 		if MainButton.position != CENTRAL_POS:
 			MainButton.position = lerp(MainButton.position, CENTRAL_POS, clamp(LERP, 0.0, 1.0))
 			if MainButton.position.distance_to(CENTRAL_POS) < DIST_EPS:
 				MainButton.position = CENTRAL_POS
-	else:
-		for node in [Levels, BackButton]:
-			node.modulate.a = max(node.modulate.a - ALPHA_SPEED*dt, 0.0)
-			if node.modulate.a <= 0.0:
-				node.hide()
-		OngoingSolution.modulate.a = min(OngoingSolution.modulate.a + ALPHA_SPEED*dt, 1.0)
-		LevelCount.modulate.a = min(LevelCount.modulate.a + ALPHA_SPEED*dt, 1.0)
 	for level in Levels.get_children():
 		level.set_effect_alpha(Levels.modulate.a)
 
 
 func setup(section, unlocked_levels) -> void:
-	my_section = section
+	set_number(section)
 	for button in Levels.get_children():
 		Levels.remove_child(button)
 		button.queue_free()
 	
-	var total_levels = LevelLister.get_levels_in_section(section)
+	var total_levels = LevelLister.get_levels_in_section(my_section)
 	for i in range(1, total_levels + 1):
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
-		button.setup(section, i, i <= unlocked_levels)
+		button.setup(my_section, i, i <= unlocked_levels)
+		button.mouse_exited.connect(_on_level_button_mouse_exited)
+		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 	
-	OngoingSolution.visible = LevelLister.count_section_ongoing_solutions(section) > 0
+	OngoingSolution.visible = LevelLister.count_section_ongoing_solutions(my_section) > 0
 	update_level_count_label()
 	update_style_boxes(is_section_completed())
 
@@ -108,6 +108,11 @@ func disable() -> void:
 	LevelCount.hide()
 
 
+func set_number(section: int) -> void:
+	my_section = section
+	SectionNumber.text = str(section)
+
+
 func focus():
 	AnimPlayer.pause()
 	focused = true
@@ -120,6 +125,38 @@ func unfocus():
 	focused = false
 	MouseBlocker.hide()
 	disable_focus.emit()
+
+
+func show_level_info(level_name: String, completed: bool, time: float, mistakes: int) -> void:
+	showing_level_info = true
+	%LevelName.text = level_name
+	if completed:
+		%Completed.text = tr("COMPLETED_LEVEL")
+	else:
+		%Completed.text = tr("NOT_COMPLETED_LEVEL")
+	if time != -1:
+		%BestTime.text = tr("BEST_TIME") % get_formatted_time(time)
+	else:
+		%BestTime.text = tr("BEST_TIME") % "-"
+	if mistakes != -1:
+		%BestMistakes.text = tr("BEST_MISTAKES") % str(mistakes)
+	else:
+		%BestMistakes.text = tr("BEST_MISTAKES") % "-"
+
+
+func hide_level_info():
+	showing_level_info = false
+
+
+func get_formatted_time(time: float) -> String:
+	var t = int(time)
+	var hours = t/3600
+	var minutes = t%3600/60
+	var seconds = t%60
+	if hours > 0:
+		return "%02d:%02d:%02d" % [hours,minutes,seconds]
+	else:
+		return "%02d:%02d" % [minutes,seconds]
 
 
 func position_level_button(button, total_levels, i):
@@ -157,3 +194,16 @@ func _on_button_pressed():
 func _on_back_button_pressed():
 	AudioManager.play_sfx("zoom_out")
 	unfocus()
+
+
+func _on_level_button_mouse_entered(level_number : int):
+	var save = FileManager.load_level(LevelLister.level_name(my_section, level_number))
+	var data = FileManager.load_level_data(my_section, level_number)
+	if save:
+		show_level_info(data.full_name, save.is_completed(), save.best_time_secs, save.best_mistakes)
+	else:
+		show_level_info(data.full_name, false, -1, -1)
+
+
+func _on_level_button_mouse_exited():
+	hide_level_info()

@@ -116,3 +116,15 @@ func wait_for_thread(t: Thread) -> Variant:
 func get_tutorial(tutorial_name):
 	assert(TUTORIALS.has(tutorial_name), "Not a valid tutorial name: " + str(tutorial_name))
 	return TUTORIALS[tutorial_name].instantiate()
+
+
+func alpha_fade_node(dt: float, node: Node, show: bool, alpha_speed := 1.0, toggle_visibility := false, max_alpha := 1.0, min_alpha := 0.0) -> void:
+	if show:
+		node.modulate.a = min(node.modulate.a + alpha_speed*dt, max_alpha)
+	else:
+		node.modulate.a = max(node.modulate.a - alpha_speed*dt, min_alpha)
+	if toggle_visibility:
+		if node.modulate.a > 0.0:
+			node.show()
+		else:
+			node.hide()
