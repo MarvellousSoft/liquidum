@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1cm4ha1d6dj5"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_o1eud"]
+[ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
+
+[node name="DailyButton" type="Button"]
+focus_mode = 0
+theme = ExtResource("1_o1eud")
+text = "DAILY_START"
+script = ExtResource("2_u6wd6")

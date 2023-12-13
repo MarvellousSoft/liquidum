@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=9 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
+[ext_resource type="PackedScene" uid="uid://d1cm4ha1d6dj5" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
 shader = ExtResource("3_2f32g")
@@ -69,6 +70,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "PLAY_BUTTON"
+
+[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("4_o512o")]
+layout_mode = 2
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
