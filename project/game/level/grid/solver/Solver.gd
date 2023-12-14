@@ -319,44 +319,49 @@ class BoatRowStrategy extends RowStrategy:
 			return any
 		return false
 
+# Aquariums that CAN and DO NOT have boats. The boat position might not be clear.
+# Returns an array of (l, r), meaning ONE boat is possible on grid[l][j]..grid[r][j]
+# If l != r means the boat position is not clear, as it may be placed in multiple places
+# in the aquarium.
+# This is best effort. Two separate aquariums might be unknowingly connected and the
+# total possible boats might be smaller.
+static func _list_possible_boats_on_row(grid: GridModel, j: int) -> Array[Vector2i]:
+	var i := grid.rows() - 1
+	var ans: Array[Vector2i] = []
+	while i >= 0:
+		if grid.get_cell(i, j).cell_type() != E.CellType.Single:
+			i -= 1
+			continue
+		var boat_possible := SolverModel._boat_possible(grid, i, j)
+		var had_boat := grid.get_cell(i, j).has_boat()
+		if not boat_possible:
+			i -= 1
+			continue
+		var r := i
+		i -= 1
+		# Skip rest of this aquarium. Best effort, they might still be connected through the side.
+		while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
+			assert(SolverModel._boat_possible(grid, i, j))
+			i -= 1
+		if not had_boat:
+			ans.append(Vector2i(i + 1, r))
+	return ans
+
 class BoatColStrategy extends ColumnStrategy:
 	static func description() -> String:
 		return "If hint is all possible aquariums, put boats in the ones where it's clear"
 	func _apply(j: int) -> bool:
-		var hint := grid._col_hints[j].boat_count
-		if hint <= 0:
+		var boats_left := grid.col_hints()[j].boat_count - grid.count_boat_col(j)
+		if boats_left <= 0:
 			return false
-		var i := grid.rows() - 1
-		# Aquariums that CAN have boats. The boat position might not be clear.
-		var count := 0
-		while i >= 0:
-			if grid.get_cell(i, j).cell_type() != E.CellType.Single:
-				i -= 1
-				continue
-			if grid.get_cell(i, j).has_boat():
-				hint -= 1
-			elif SolverModel._boat_possible(grid, i, j):
-				count += 1
-			else:
-				i -= 1
-				continue
-			i -= 1
-			# Skip rest of this aquarium. Best effort, they might still be connected through the side.
-			while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-				i -= 1
-		if hint > 0 and count == hint:
+		var possible_boats := SolverModel._list_possible_boats_on_row(grid, j)
+		assert(possible_boats.size() >= boats_left)
+		if possible_boats.size() == boats_left:
 			# We can put boats if the places they should go are clear
 			var any := false
-			for i_ in range(grid.rows() - 1, -1, -1):
-				i = i_
-				if grid.get_cell(i, j).cell_type() != E.CellType.Single:
-					continue
-				if grid.get_cell(i, j).has_boat():
-					continue
-				if SolverModel._boat_possible(grid, i, j):
-					if (!grid.get_cell(i, j).wall_at(E.Walls.Top) and SolverModel._boat_possible(grid, i - 1, j)) or SolverModel._boat_possible(grid, i + 1, j):
-						continue
-					if grid.get_cell(i, j).put_boat(false):
+			for lr in possible_boats:
+				if lr.x == lr.y:
+					if grid.get_cell(lr.x, j).put_boat(false):
 						any = true
 			return any
 		return false
