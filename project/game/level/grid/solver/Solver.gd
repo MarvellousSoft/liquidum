@@ -259,6 +259,40 @@ class MediumColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
+class AdvancedColStrategy extends Strategy:
+	func apply(j: int) -> bool:
+		if grid.col_hints()[j].water_count <= 0:
+			return false
+		var water_left := grid.col_hints()[j].water_count - grid.count_water_col(j)
+		if water_left <= 0:
+			return false
+		var single_i := -1
+		var single_corner := E.Corner.TopLeft
+		for i in grid.rows():
+			var c := grid.get_cell(i, j)
+			if c.cell_type() != E.CellType.Single:
+				for corner in c.corners():
+					if c.nothing_at(corner):
+						if single_i == -1:
+							single_i = i
+							single_corner = corner
+						else:
+							single_i = -2
+		if single_i >= 0:
+			if water_left - floorf(water_left) == 0.5:
+				return grid.get_cell(single_i, j).put_water(single_corner, false)
+			else:
+				return grid.get_cell(single_i, j).put_air(single_corner, false, true)
+		return false
+	func apply_any() -> bool:
+		var any := false
+		for j in grid.cols():
+			if apply(j):
+				any = true
+		return any
+	static func description() -> String:
+		return "- If there's a single empty half-cell in the column, determine if it's water or air."
+
 # This cell is empty and we could put water below it
 static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 	var c := grid._pure_cell(i, j)
@@ -735,6 +769,7 @@ class AllWatersMediumStrategy extends Strategy:
 								any = true
 		return any
 
+
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
 	BasicCol = BasicColStrategy,
@@ -743,6 +778,7 @@ const STRATEGY_LIST := {
 	MediumRow = MediumRowStrategy,
 	MediumCol = MediumColStrategy,
 	AdvancedRow = AdvancedRowStrategy,
+	AdvancedCol = AdvancedColStrategy,
 	TogetherRow = TogetherRowStrategy,
 	TogetherCol = TogetherColStrategy,
 	SeparateRow = SeparateRowStrategy,

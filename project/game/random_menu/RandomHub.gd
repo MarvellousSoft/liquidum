@@ -17,7 +17,7 @@ func _ready() -> void:
 	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
 	# Unlock difficulty after unlocking this section
 	var difs := {
-		medium = 1,
+		medium = 2,
 		hard = 3,
 		expert = 5,
 		# Additionally, all campaign levels must be completed
@@ -153,7 +153,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		Difficulty.Hard:
 			gen_level(rng, dif, RandomHub._hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatRow", "BoatCol", "AllWatersMedium"])
 		Difficulty.Expert:
-			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow"])
+			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow", "AdvancedCol"])
 		Difficulty.Insane:
 			gen_level(rng, dif, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
