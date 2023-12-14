@@ -289,7 +289,6 @@ class CellChange extends Change:
 		j = j_
 		prev_cell = prev_cell_
 	func undo(grid: GridImpl) -> Change:
-		# TODO: Fix undo for removing block from water
 		# Maybe clone isn't necessary, but let's be safe
 		var new_cell: PureCell = grid.pure_cells[i][j].clone()
 		grid.pure_cells[i][j] = prev_cell
@@ -434,10 +433,13 @@ class CellWithLoc extends GridModel.CellModel:
 		var change := CellChange.new(i, j, pure().clone())
 		if pure().put_nothing(corner):
 			changes.append(change)
+			# push undo changes before flooding
+			grid._push_undo_changes(changes, false)
 			# Removing block might trigger flooding
 			if change.prev_cell.block_at(corner):
 				grid.flood_all(false)
-		grid._push_undo_changes(changes, false)
+		else:
+			grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
 	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool, unsafe_mode: bool) -> void:
 		match wall:
@@ -931,8 +933,8 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
-	# Undoing block changes might need flooding
-	flood_all(false)
+	# Floods should've gone in the undo stack
+	assert(!flood_all(false))
 	maybe_update_hints()
 	return true
 
