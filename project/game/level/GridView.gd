@@ -272,32 +272,33 @@ func update_visuals(fast_update := false) -> void:
 			if fast_update:
 				cell.fast_update_waters()
 
+func _update_line_hints(current: Array[GridModel.LineHint], correct: Array[GridModel.LineHint], bar: HintBar, hint_status: Callable) -> void:
+	for i in current.size():
+		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
+			var hint: Hint = bar.get_hint(i, hint_type == E.HintContent.Boat)
+			var is_boat: bool = (hint_type == E.HintContent.Boat)
+			if hint:
+				var h_model := grid_logic.row_hints()[i]
+				var val := float(h_model.boat_count) if is_boat else h_model.water_count
+				var value_visible := val != -1.
+				if not value_visible:
+					val = float(correct[i].boat_count) if is_boat else correct[i].water_count
+				hint.set_value(val)
+				var type := h_model.boat_count_type if is_boat else h_model.water_count_type
+				var type_visible := type != E.HintType.Hidden
+				if not type_visible:
+					type = correct[i].boat_count_type if is_boat else correct[i].water_count_type
+				hint.set_hint_type(type)
+				if not editor_mode:
+					hint.set_status(hint_status.call(i, hint_type))
+				else:
+					hint.set_status(E.HintStatus.Normal)
+					hint.set_visibility(value_visible, type_visible)
 
 func update_hints() -> void:
 	var row_hints := grid_logic.row_hints()
-	for i in rows:
-		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint: Hint = HintBars.left.get_hint(i, hint_type == E.HintContent.Boat)
-			if hint:
-				var val := float(row_hints[i].boat_count) if hint_type == E.HintContent.Boat else row_hints[i].water_count
-				hint.set_value(val)
-				hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
-				if not editor_mode:
-					hint.set_status(grid_logic.get_row_hint_status(i, hint_type))
-				else:
-					hint.set_status(E.HintStatus.Normal)
-	var col_hints := grid_logic.col_hints()
-	for j in columns:
-		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint: Hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
-			if hint:
-				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
-				hint.set_value(val)
-				hint.set_hint_type(col_hints[j].boat_count_type if hint_type == E.HintContent.Boat else col_hints[j].water_count_type)
-				if not editor_mode:
-					hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
-				else:
-					hint.set_status(E.HintStatus.Normal)
+	_update_line_hints(grid_logic.row_hints(), grid_logic.correct_row_hints(), HintBars.left, func(i, type): return grid_logic.get_row_hint_status(i, type))
+	_update_line_hints(grid_logic.col_hints(), grid_logic.correct_col_hints(), HintBars.top, func(j, type): return grid_logic.get_col_hint_status(j, type))
 
 
 func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
@@ -680,3 +681,40 @@ func _on_block_mouse_entered(row : int, column : int):
 	if disabled:
 		return
 	highlight_grid(row, column)
+
+
+func _on_hint_bar_left_water_value_visible(i: int, on: bool) -> void:
+	if on:
+		# Will be updated
+		grid_logic.row_hints()[i].water_count = 0
+		grid_logic.update_row_hint(i)
+	else:
+		grid_logic.row_hints()[i].water_count = -1
+
+
+func _on_hint_bar_left_water_type_visible(i: int, on: bool) -> void:
+	if on:
+		# Will be updated
+		grid_logic.row_hints()[i].water_count_type = E.HintType.Zero
+		grid_logic.update_row_hint(i)
+	else:
+		grid_logic.row_hints()[i].water_count_type = E.HintType.Hidden
+
+func _on_hint_bar_top_water_value_visible(j: int, on: bool) -> void:
+	if on:
+		# Will be updated
+		grid_logic.col_hints()[j].water_count = 0
+		grid_logic.update_col_hint(j)
+	else:
+		grid_logic.col_hints()[j].water_count = -1
+
+func _on_hint_bar_top_water_type_visible(j: int, on: bool) -> void:
+	if on:
+		# Will be updated
+		grid_logic.col_hints()[j].water_count_type = E.HintType.Zero
+		grid_logic.update_col_hint(j)
+	else:
+		grid_logic.col_hints()[j].water_count_type = E.HintType.Hidden
+
+
+

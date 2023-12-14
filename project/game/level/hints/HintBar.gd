@@ -2,6 +2,10 @@ class_name HintBar
 extends Control
 
 signal mouse_entered_hint(idx : int)
+signal water_value_visible(idx: int, on: bool)
+signal water_type_visible(idx: int, on: bool)
+signal boat_value_visible(idx: int, on: bool)
+signal boat_type_visible(idx: int, on: bool)
 
 const HINT = preload("res://game/level/hints/Hint.tscn")
 
@@ -11,7 +15,7 @@ const HINT = preload("res://game/level/hints/Hint.tscn")
 @onready var Vertical = $Vertical
 @onready var AnimPlayer = $AnimationPlayer
 
-func _ready():
+func _ready() -> void:
 	Vertical.visible = not is_horizontal
 	Horizontal.visible = is_horizontal
 	for child in Vertical.get_children():
@@ -39,13 +43,18 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		var boat_hint = create_hint(container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, i == 0)
 		var water_hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, i == 0)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
+		boat_hint.value_visible.connect(func(on: bool): boat_value_visible.emit(i, on))
+		boat_hint.type_visible.connect(func(on: bool): boat_type_visible.emit(i, on))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
+		water_hint.value_visible.connect(func(on: bool): water_value_visible.emit(i, on))
+		water_hint.type_visible.connect(func(on: bool): water_type_visible.emit(i, on))
 		if hints[i].boat_count == -1 and hints[i].water_count == -1:
 			water_hint.dummy_hint()
 
 
 	await get_tree().process_frame
 	custom_minimum_size = bar.size
+
 
 
 func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
@@ -57,7 +66,7 @@ func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
 		modulate.a = 1.0
 
 
-func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> Node:
+func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, first : bool) -> Hint:
 	var new_hint = HINT.instantiate()
 	container.add_child(new_hint)
 	new_hint.set_boat(is_boat)

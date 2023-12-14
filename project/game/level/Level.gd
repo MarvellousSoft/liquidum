@@ -344,14 +344,9 @@ func _hint_visibility() -> HintVisibility:
 	return h
 
 
-func _update_visibilities(new_grid: GridModel) -> void:
-	_hint_visibility().apply_to_grid(new_grid)
-
-
 func _get_solution_grid() -> GridModel:
 	assert(editor_mode())
 	var new_grid := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Solution)
-	_update_visibilities(new_grid)
 	return new_grid
 
 
@@ -368,11 +363,7 @@ func maybe_save(delete_solution := false) -> void:
 		if editor_mode():
 			# Let's put the visibility info in the grid
 			var grid_logic := GridNode.grid_logic
-			grid_logic.set_auto_update_hints(false)
-			_update_visibilities(grid_logic)
 			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
-			
-			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
 				if level_name == RandomHub.RANDOM:
@@ -427,7 +418,6 @@ func _on_grid_view_updated_size():
 func _on_dev_buttons_full_solve():
 	if editor_mode():
 		var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
-		_update_visibilities(g2)
 		g2.clear_content()
 		DevButtons.start_solve(g2)
 	else:

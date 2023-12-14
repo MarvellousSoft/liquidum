@@ -617,11 +617,35 @@ func rem_col(flush_undo := true) -> void:
 	var change := _do_rem_col()
 	_push_undo_changes([change], flush_undo)
 
-func row_hints() -> Array[LineHint]:
+func row_hints(unhide_everything := false) -> Array[LineHint]:
 	return _row_hints
+
+func correct_row_hints() -> Array[LineHint]:
+	assert(editor_mode())
+	var ret: Array[LineHint] = []
+	for i in n:
+		var h := LineHint.new()
+		h.water_count = count_water_row(i)
+		h.water_count_type = _is_together(_row_bools(i, Content.Water))
+		h.boat_count = count_boat_row(i)
+		h.boat_count_type = _is_together(_row_bools(i, Content.Boat))
+		ret.append(h)
+	return ret
 
 func col_hints() -> Array[LineHint]:
 	return _col_hints
+
+func correct_col_hints() -> Array[LineHint]:
+	assert(editor_mode())
+	var ret: Array[LineHint] = []
+	for j in m:
+		var h := LineHint.new()
+		h.water_count = count_water_col(j)
+		h.water_count_type = _is_together(_col_bools(j, Content.Water))
+		h.boat_count = count_boat_col(j)
+		h.boat_count_type = _is_together(_col_bools(j, Content.Boat))
+		ret.append(h)
+	return ret
 
 func force_editor_mode(b := true) -> void:
 	_force_editor_mode = b
@@ -672,6 +696,26 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 func editor_mode() -> bool:
 	return _force_editor_mode or solution_c_left.is_empty()
 
+func update_row_hint(i: int) -> void:
+	var hint := _row_hints[i]
+	if hint.boat_count != -1:
+		hint.boat_count = count_boat_row(i)
+	if hint.boat_count_type != E.HintType.Hidden:
+		hint.boat_count_type = _is_together(_row_bools(i, Content.Boat))
+	if hint.water_count != -1.:
+		hint.water_count = count_water_row(i)
+	if hint.water_count_type != E.HintType.Hidden:
+		hint.water_count_type = _is_together(_row_bools(i, Content.Water))
+
+func update_col_hint(j: int) -> void:
+	var hint := _col_hints[j]
+	hint.boat_count = count_boat_col(j)
+	# This is always Hidden
+	# (maybe should be always Separated but that boat has sailed *BA-DUM-TSS*)
+	hint.boat_count_type = E.HintType.Hidden
+	hint.water_count = count_water_col(j)
+	hint.water_count_type = _is_together(_col_bools(j, Content.Water))
+
 func maybe_update_hints() -> void:
 	if not editor_mode() or not auto_update_hints():
 		return
@@ -679,19 +723,9 @@ func maybe_update_hints() -> void:
 	_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
-		_row_hints[i].boat_count = count_boat_row(i)
-		var type := _is_together(_row_bools(i, Content.Boat))
-		_row_hints[i].boat_count_type = type
-		_row_hints[i].water_count = count_water_row(i)
-		type = _is_together(_row_bools(i, Content.Water))
-		_row_hints[i].water_count_type = type
+		update_row_hint(i)
 	for j in m:
-		_col_hints[j].boat_count = count_boat_col(j)
-		# This is always Hidden (maybe should be always Separated)
-		_col_hints[j].boat_count_type = E.HintType.Hidden
-		_col_hints[j].water_count = count_water_col(j)
-		var type := _is_together(_col_bools(j, Content.Water))
-		_col_hints[j].water_count_type = type
+		update_col_hint(j)
 	assert(are_hints_satisfied())
 
 func _validate(chr: String, possible: String) -> String:

@@ -105,7 +105,13 @@ func remove_wall_from_idx(_i1: int, _j1: int, _i2: int, _j2: int, _flush_undo :=
 func row_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
+func correct_row_hints() -> Array[LineHint]:
+	return GridModel.must_be_implemented()
+
 func col_hints() -> Array[LineHint]:
+	return GridModel.must_be_implemented()
+
+func correct_col_hints() -> Array[LineHint]:
 	return GridModel.must_be_implemented()
 
 func add_row(_flush_undo := true) -> void:
@@ -299,4 +305,10 @@ func prettify_hints() -> void:
 
 # Is the grid fully filled, including airs?
 func check_complete() -> bool:
+	return GridModel.must_be_implemented()
+
+func update_row_hint(i: int) -> void:
+	return GridModel.must_be_implemented()
+
+func update_col_hint(j: int) -> void:
 	return GridModel.must_be_implemented()

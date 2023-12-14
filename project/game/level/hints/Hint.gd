@@ -1,6 +1,9 @@
 class_name Hint
 extends Control
 
+signal value_visible(bool)
+signal type_visible(bool)
+
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
 const HIGHLIGHT_SPEED = 5.0
@@ -154,3 +157,11 @@ func enable_editor() -> void:
 func disable_editor() -> void:
 	editor_mode = false
 	EditorButtons.hide()
+
+
+func _on_toggle_visibility_toggled(toggled_on: bool) -> void:
+	value_visible.emit(toggled_on)
+
+
+func _on_toggle_hint_type_toggled(toggled_on: bool) -> void:
+	type_visible.emit(toggled_on)

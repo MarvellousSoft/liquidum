@@ -138,4 +138,7 @@ offset_bottom = 500.0
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 0.313726)
 
+[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleVisibility" to="." method="_on_toggle_visibility_toggled"]
+[connection signal="toggled" from="VBoxContainer/EditorButtons/ToggleHintType" to="." method="_on_toggle_hint_type_toggled"]
+
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]
