@@ -71,9 +71,6 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "PLAY_BUTTON"
 
-[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("4_o512o")]
-layout_mode = 2
-
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -141,6 +138,13 @@ text = "BACK"
 layout_mode = 1
 offset_top = -2360.0
 offset_bottom = -2360.0
+
+[node name="DailyButton" parent="." instance=ExtResource("4_o512o")]
+layout_mode = 2
+offset_left = 118.0
+offset_top = 1620.0
+offset_right = 118.0
+offset_bottom = 1620.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1930, 4000)

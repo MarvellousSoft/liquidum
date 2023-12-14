@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1cm4ha1d6dj5"]
+[gd_scene load_steps=5 format=3 uid="uid://d1cm4ha1d6dj5"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_o1eud"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
+[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_ghr64"]
 
 [node name="DailyButton" type="Control"]
 layout_mode = 3
@@ -11,35 +13,86 @@ theme = ExtResource("1_o1eud")
 script = ExtResource("2_u6wd6")
 
 [node name="HBox" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(0, 125)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_top = 17.0
+layout_mode = 0
 offset_right = 1087.0
-offset_bottom = 241.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_bottom = 250.0
 size_flags_horizontal = 8
 theme_override_constants/separation = 75
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBox"]
 layout_mode = 2
+theme_override_constants/separation = 50
 
 [node name="Button" type="Button" parent="HBox/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
-text = "DAILY_START"
+text = "DAILY_BUTTON"
+
+[node name="OngoingSolution" parent="HBox/VBoxContainer/Button" instance=ExtResource("3_jx7ca")]
+unique_name_in_owner = true
+offset_left = -52.0
+offset_top = 101.0
+offset_right = 118.0
+offset_bottom = 171.0
 
 [node name="TimeLeft" type="Label" parent="HBox/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 auto_translate = false
 localize_numeral_system = false
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
 text = "X hours left"
+vertical_alignment = 1
+
+[node name="StreakContainer" type="VBoxContainer" parent="HBox/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CurStreak" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "CUR_STREAK"
+vertical_alignment = 1
+
+[node name="BestStreak" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "BEST_STREAK"
+vertical_alignment = 1
+
+[node name="Completed" type="TextureRect" parent="HBox"]
+unique_name_in_owner = true
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
+texture = ExtResource("4_ghr64")
+expand_mode = 1
+
+[node name="NotCompleted" type="Label" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 0
+localize_numeral_system = false
+tooltip_text = "DAILY_LEVEL_NOT_PLAYED_TOOLTIP"
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 100
+text = "X"
+vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 30.0

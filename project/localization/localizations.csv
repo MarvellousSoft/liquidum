@@ -110,10 +110,12 @@ LEVEL_06_05,Jörmungandr,Jörmungandr,Jörmungandr
 LEVEL_06_06,Scylla,Scylla,Cila
 LEVEL_06_07,Megalodon,Megalodon,Megalodonte
 LEVEL_06_08,Cthulhu,Cthulhu,Cthulhu
-DAILY_START,Start daily level,Começar nível do dia,Começar nível do dia
-DAILY_CONTINUE,Continue daily level,Continuar nível do dia,Continuar nível do dia
-DAILY_COMPLETED,Daily level completed,Nível do dia completado,Nível do dia completado
+DAILY_BUTTON,Daily Level,Nivel do Dia,Nivel do Dia
+DAILY_LEVEL_NOT_PLAYED_TOOLTIP,Daily level not completed,Nivel do dia não feito,Nivel do dia não feito
+DAILY_LEVEL_PLAYED_TOOLTIP,Daily level completed!,Nível do dia feito!,Nível do dia feito!
 DAILY_TOOLTIP,"A hard level that changes daily, in which you can compare your results to other players","Um nível dificil que muda diariamente, em que você pode comparar seus resultados com outros jogadores","Um nível dificil que muda diariamente, em que você pode comparar seus resultados com outros jogadores"
+CUR_STREAK,Current win streak:  %d,Sequência atual de vitórias:  %d,Sequência atual de vitórias:  %d
+BEST_STREAK,Best win streak:  %d,Maior sequência atual de vitórias:  %d,Maior sequência atual de vitórias:  %d
 HOURS_LEFT,hours left,horas restantes,horas restantes
 MINUTES_LEFT,minutes left,minutos restantes,minutos restantes
 MONDAY,Monday,Segunda,Segunda

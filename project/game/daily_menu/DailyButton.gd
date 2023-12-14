@@ -1,7 +1,13 @@
 extends Control
 
-@onready var DailyButton: Button = $HBox/Button
-@onready var TimeLeft: Label = $HBox/TimeLeft
+@onready var DailyButton: Button = %Button
+@onready var TimeLeft: Label = %TimeLeft
+@onready var OngoingSolution = %OngoingSolution
+@onready var Completed = %Completed
+@onready var NotCompleted = %NotCompleted
+@onready var CurStreak = %CurStreak
+@onready var BestStreak = %BestStreak
+
 var deadline: int
 var gen := RandomLevelGenerator.new()
 
@@ -14,13 +20,12 @@ func _update() -> void:
 	
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
-		if save != null and save.is_completed():
-			DailyButton.text = "DAILY_COMPLETED"
-		else:
-			DailyButton.text = "DAILY_CONTINUE"
-	else:
-		DailyButton.text = "DAILY_START"
+		if save:
+			OngoingSolution.visible = not save.is_solution_empty()
+			Completed.visible = save.is_completed()
+			NotCompleted.visible = not save.is_completed()
 	_update_time_left()
+	_update_streak()
 
 func _update_time_left() -> void:
 	var secs_left := deadline - _unixtime()
@@ -36,6 +41,11 @@ func _update_time_left() -> void:
 		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), tr(txt)]
 	else:
 		_update()
+
+#TODO: Implement
+func _update_streak() -> void:
+	CurStreak.text = tr("CUR_STREAK") % 0
+	BestStreak.text = tr("BEST_STREAK") % 0
 
 
 func _unixtime() -> int:
