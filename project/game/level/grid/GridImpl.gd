@@ -289,6 +289,7 @@ class CellChange extends Change:
 		j = j_
 		prev_cell = prev_cell_
 	func undo(grid: GridImpl) -> Change:
+		# TODO: Fix undo for removing block from water
 		# Maybe clone isn't necessary, but let's be safe
 		var new_cell: PureCell = grid.pure_cells[i][j].clone()
 		grid.pure_cells[i][j] = prev_cell
@@ -400,10 +401,6 @@ class CellWithLoc extends GridModel.CellModel:
 		if flush_undo:
 			grid.push_empty_undo()
 		var change := CellChange.new(i, j, pure().clone())
-		var single := pure().cell_type() == E.Single
-		for side in E.Side.values():
-			if not wall_at(side) and (single or E.corner_is_side(corner, side)):
-				put_wall(side, false)
 		if pure().put_block(corner):
 			grid._push_undo_changes([change], false)
 			grid.maybe_update_hints()
@@ -434,12 +431,6 @@ class CellWithLoc extends GridModel.CellModel:
 		var changes: Array[Change] = []
 		if water_at(corner):
 			changes.append_array(grid._flood_water(i, j, corner, false).changes)
-		if block_at(corner):
-			# Add walls when removing block as well in case there was a nonwall between two blocks
-			var single := pure().cell_type() == E.Single
-			for side in E.Side.values():
-				if not wall_at(side) and (single or E.corner_is_side(corner, side)):
-					put_wall(side)
 		var change := CellChange.new(i, j, pure().clone())
 		if pure().put_nothing(corner):
 			changes.append(change)
@@ -464,9 +455,8 @@ class CellWithLoc extends GridModel.CellModel:
 		if new:
 			grid.fix_invalid_boats(false)
 		else:
-			# Maybe some block is invalid
-			grid.fix_block_walls()
 			# Removing walls might cause water to flood where it couldn't before
+			# Optimization: We could just flood starting from around this cell
 			grid.flood_all(false)
 		grid.validate()
 		grid.maybe_update_hints()
@@ -544,7 +534,6 @@ func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_ri
 	wall_bottom.append(new_wall_bottom)
 	wall_right.append(new_wall_right)
 	_row_hints.append(new_line_hint)
-	fix_block_walls()
 	maybe_update_hints()
 	validate()
 	return AddRowChange.new()
@@ -593,7 +582,6 @@ func _do_add_col(col: Array[PureCell], new_wall_bottom: Array[bool], new_wall_ri
 			wall_bottom[i].append(new_wall_bottom[i])
 		wall_right[i].append(new_wall_right[i])
 	_col_hints.append(new_line_hint)
-	fix_block_walls()
 	maybe_update_hints()
 	validate()
 	return AddColChange.new()
@@ -658,13 +646,13 @@ func wall_at(i: int, j: int, side: E.Side) -> bool:
 	return false
 
 func _has_wall_bottom(i: int, j: int) -> bool:
-	return i == n - 1 or wall_bottom[i][j]
+	return i == n - 1 or wall_bottom[i][j] or pure_cells[i][j]._content_bottom() == Content.Block or pure_cells[i + 1][j]._content_top() == Content.Block
 
 func _has_wall_top(i: int, j: int) -> bool:
 	return i == 0 or _has_wall_bottom(i - 1, j)
 
 func _has_wall_right(i: int, j: int) -> bool:
-	return j == m - 1 or wall_right[i][j]
+	return j == m - 1 or wall_right[i][j] or pure_cells[i][j].c_right == Content.Block or pure_cells[i][j + 1].c_left == Content.Block
 
 func _has_wall_left(i: int, j: int) -> bool:
 	return j == 0 or _has_wall_right(i, j - 1)
@@ -943,7 +931,8 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 
 	# changes is now the changes to redo the undo
 	redos.push_back(Changes.new(changes))
-	assert(!flood_all(false))
+	# Undoing block changes might need flooding
+	flood_all(false)
 	maybe_update_hints()
 	return true
 
@@ -1453,15 +1442,6 @@ func fix_invalid_boats(flush_undo := true) -> bool:
 				c.remove_content(E.Corner.TopLeft, false)
 				removed_boat = true
 	return removed_boat
-
-func fix_block_walls() -> void:
-	for i in n:
-		for j in m:
-			var c := get_cell(i, j)
-			if not c.wall_at(E.Walls.Right) and (c.pure()._content_right() == Content.Block or _pure_cell(i, j + 1)._content_left() == Content.Block):
-				c.put_wall(E.Walls.Right, false)
-			if not c.wall_at(E.Walls.Bottom) and (c.pure()._content_bottom() == Content.Block or _pure_cell(i + 1, j)._content_top() == Content.Block):
-				c.put_wall(E.Walls.Bottom, false)
 
 func flood_air(flush_undo := true) -> bool:
 	if flush_undo:
