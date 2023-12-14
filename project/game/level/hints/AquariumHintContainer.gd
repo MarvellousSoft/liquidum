@@ -21,7 +21,9 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	AnimPlayer.play("startup")
 	
 	delay = HINT_DELAY
-	update_values(expected, current, editor_mode)
+	for child in HintContainer.get_children():
+		child.modulate.a = 0.0
+	update_values(expected, current, editor_mode, true)
 	for child in HintContainer.get_children():
 		child.startup(delay)
 		delay += HINT_DELAY
@@ -43,7 +45,7 @@ func _visible() -> Dictionary:
 		ans[sz] = true
 	return ans
 
-func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
+func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, disable_instant_startup := false) -> void:
 	var visible_ := _visible()
 	for sz in visible_:
 		if not expected.has(sz):
@@ -51,6 +53,8 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool)
 	while HintContainer.get_child_count() < expected.size():
 		var c := preload("res://game/level/hints/AquariumHint.tscn").instantiate()
 		HintContainer.add_child(c)
+		if editor_mode and not disable_instant_startup:
+			c.instant_startup()
 	while HintContainer.get_child_count() > expected.size():
 		var child := HintContainer.get_child(HintContainer.get_child_count() - 1)
 		HintContainer.remove_child(child)

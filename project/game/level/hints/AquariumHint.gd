@@ -36,6 +36,11 @@ func startup(delay: float) -> void:
 	AnimPlayer.play("startup")
 
 
+func instant_startup() -> void:
+	modulate.a = 1.0
+	Water.material.set_shader_parameter("level", 0.5)
+
+
 func should_be_visible() -> bool:
 	return VisibilityButton.visible and VisibilityButton.is_pressed()
 
