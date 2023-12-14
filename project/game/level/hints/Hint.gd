@@ -22,7 +22,7 @@ const HIGHLIGHT_SPEED = 5.0
 @onready var Highlight = %Highlight
 
 var editor_mode := false
-var hint_type : E.HintType = E.HintType.Any
+var hint_type : E.HintType = E.HintType.Hidden
 var is_boat := false
 var hint_value := 0.0
 var hint_alpha := 1.0
@@ -100,7 +100,7 @@ func alpha_t(text : String, alpha : float) -> String:
 func update_label() -> void:
 	Number.text = ""
 	match hint_type:
-		E.HintType.Any:
+		E.HintType.Zero, E.HintType.Hidden:
 			Number.text += str(hint_value)
 			DummyLabel.text = "?"
 		E.HintType.Together:

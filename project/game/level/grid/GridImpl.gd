@@ -61,9 +61,9 @@ func _init(n_: int, m_: int) -> void:
 func _empty_line_hint() -> LineHint:
 	var hint := LineHint.new()
 	hint.water_count = -1.
-	hint.water_count_type = E.HintType.Any
+	hint.water_count_type = E.HintType.Hidden
 	hint.boat_count = -1
-	hint.boat_count_type = E.HintType.Any
+	hint.boat_count_type = E.HintType.Hidden
 	return hint
 
 func setup(n_: int, m_: int) -> void:
@@ -685,11 +685,14 @@ func editor_mode() -> bool:
 func maybe_update_hints() -> void:
 	if not editor_mode() or not auto_update_hints():
 		return
-	_grid_hints.total_boats = count_boats()
-	_grid_hints.total_water = count_waters()
+	if _grid_hints.total_boats != -1:
+		_grid_hints.total_boats = count_boats()
+	if _grid_hints.total_water != -1:
+		_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
-		_row_hints[i].boat_count = count_boat_row(i)
+		if _row_hints[i].boat_count != -1:
+			_row_hints[i].boat_count = count_boat_row(i)
 		var type := _is_together(_row_bools(i, Content.Boat))
 		_row_hints[i].boat_count_type = type
 		_row_hints[i].water_count = count_water_row(i)
@@ -697,8 +700,8 @@ func maybe_update_hints() -> void:
 		_row_hints[i].water_count_type = type
 	for j in m:
 		_col_hints[j].boat_count = count_boat_col(j)
-		# This is always Any
-		_col_hints[j].boat_count_type = E.HintType.Any
+		# This is always Hidden (maybe should be always Separated)
+		_col_hints[j].boat_count_type = E.HintType.Hidden
 		_col_hints[j].water_count = count_water_col(j)
 		var type := _is_together(_col_bools(j, Content.Water))
 		_col_hints[j].water_count_type = type
@@ -763,7 +766,7 @@ func _validate_hint_type(c2: String) -> E.HintType:
 	elif c2 == '-':
 		return E.HintType.Separated
 	else:
-		return E.HintType.Any
+		return E.HintType.Hidden
 
 func _parse_extra_data(line: String) -> void:
 	var kv := line.split("=", false, 2)
@@ -1303,7 +1306,7 @@ func _is_together(a: Array[bool]) -> E.HintType:
 	while i < a.size() and not a[i]:
 		i += 1
 	if i == a.size():
-		return E.HintType.Any
+		return E.HintType.Zero
 	while i < a.size() and a[i]:
 		i += 1
 	while i < a.size() and not a[i]:
@@ -1312,7 +1315,7 @@ func _is_together(a: Array[bool]) -> E.HintType:
 
 
 func _hint_type_ok(hint: E.HintType, a: Array[bool]) -> bool:
-	if hint == E.HintType.Any:
+	if hint == E.HintType.Hidden:
 		return true
 	var is_together := _is_together(a)
 	return is_together == hint
@@ -1360,7 +1363,7 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 		E.HintContent.Boat:
 			var count := _col_hints[j].boat_count
 			var status := _hint_statusi(count_boat_col(j), count)
-			assert(_col_hints[j].boat_count_type == E.HintType.Any)
+			assert(_col_hints[j].boat_count_type == E.HintType.Hidden)
 			var type := _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat))
 			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
@@ -1386,11 +1389,20 @@ func is_solution_partially_valid() -> bool:
 func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> bool:
 	return editor_mode() or _is_content_partial_solution(c, _content_sol(i, j, corner))
 
+func validate_hint(count: float, type: E.HintType) -> void:
+	if count != -1 and type != E.HintType.Hidden:
+		assert((count == 0) == (type == E.HintType.Zero))
+
 func validate() -> void:
 	if not OS.is_debug_build():
 		return
 	for j in m:
-		assert(col_hints()[j].boat_count_type == E.HintType.Any)
+		assert(col_hints()[j].boat_count_type == E.HintType.Hidden)
+		validate_hint(col_hints()[j].boat_count, col_hints()[j].boat_count_type)
+		validate_hint(col_hints()[j].water_count, col_hints()[j].water_count_type)
+	for i in n:
+		validate_hint(row_hints()[i].boat_count, row_hints()[i].boat_count_type)
+		validate_hint(row_hints()[i].water_count, row_hints()[i].water_count_type)
 	# Blocks are surrounded by walls
 	for i in n:
 		for j in m:
@@ -1557,4 +1569,4 @@ func prettify_hints() -> void:
 		for hints in [row_hints(), col_hints()]:
 			for h in hints:
 				h.boat_count = -1
-				h.boat_count_type = E.HintType.Any
+				h.boat_count_type = E.HintType.Hidden

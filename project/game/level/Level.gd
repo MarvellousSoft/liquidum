@@ -288,22 +288,22 @@ class HintVisibility:
 		var val := 0
 		if hint.water_count != -1.:
 			val |= HintBar.WATER_COUNT_VISIBLE
-		if hint.water_count_type != E.HintType.Any:
+		if hint.water_count_type != E.HintType.Hidden:
 			val |= HintBar.WATER_TYPE_VISIBLE
 		if hint.boat_count != -1:
 			val |= HintBar.BOAT_COUNT_VISIBLE
-		if hint.boat_count_type != E.HintType.Any:
+		if hint.boat_count_type != E.HintType.Hidden:
 			val |= HintBar.BOAT_TYPE_VISIBLE
 		return val
 	func _update_line_hint(line_hint: GridModel.LineHint, flags: int) -> void:
 		if not (flags & HintBar.BOAT_COUNT_VISIBLE):
 			line_hint.boat_count = -1
 		if not (flags & HintBar.BOAT_TYPE_VISIBLE):
-			line_hint.boat_count_type = E.HintType.Any
+			line_hint.boat_count_type = E.HintType.Hidden
 		if not (flags & HintBar.WATER_COUNT_VISIBLE):
 			line_hint.water_count = -1.0
 		if not (flags & HintBar.WATER_TYPE_VISIBLE):
-			line_hint.water_count_type = E.HintType.Any
+			line_hint.water_count_type = E.HintType.Hidden
 	func apply_to_grid(grid: GridModel) -> void:
 		var ghints := grid.grid_hints()
 		if not total_water:
