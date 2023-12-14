@@ -7,6 +7,8 @@ var cancel_gen := false
 var success_state: int
 
 func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> GridModel:
+	var initial_seed := rng.seed
+	var initial_state := rng.state
 	var g: GridModel = null
 	var solver := SolverModel.new()
 	var found := false
@@ -49,7 +51,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 		total_solve += Time.get_unix_time_from_system() - start_solve
 	if found:
 		g.prettify_hints()
-		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [tries, Time.get_unix_time_from_system() - start_time, total_gen, total_solve])
+		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d]" % [tries, Time.get_unix_time_from_system() - start_time, total_gen, total_solve, initial_seed, initial_state])
 	return g if found else null
 
 # hints_builder takes rng and returns Level.HintVisibility

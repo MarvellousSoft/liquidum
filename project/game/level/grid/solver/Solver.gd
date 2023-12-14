@@ -325,7 +325,7 @@ class BoatRowStrategy extends RowStrategy:
 # in the aquarium.
 # This is best effort. Two separate aquariums might be unknowingly connected and the
 # total possible boats might be smaller.
-static func _list_possible_boats_on_row(grid: GridModel, j: int) -> Array[Vector2i]:
+static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector2i]:
 	var i := grid.rows() - 1
 	var ans: Array[Vector2i] = []
 	while i >= 0:
@@ -338,13 +338,17 @@ static func _list_possible_boats_on_row(grid: GridModel, j: int) -> Array[Vector
 			i -= 1
 			continue
 		var r := i
+		var l := i
 		i -= 1
 		# Skip rest of this aquarium. Best effort, they might still be connected through the side.
 		while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-			assert(SolverModel._boat_possible(grid, i, j))
+			assert(had_boat or l > i + 1 or SolverModel._boat_possible(grid, i, j))
+			# Stop moving l when we see air
+			if l == i + 1 and grid.get_cell(i, j).nothing_full():
+				l = i
 			i -= 1
 		if not had_boat:
-			ans.append(Vector2i(i + 1, r))
+			ans.append(Vector2i(l, r))
 	return ans
 
 class BoatColStrategy extends ColumnStrategy:
@@ -354,8 +358,7 @@ class BoatColStrategy extends ColumnStrategy:
 		var boats_left := grid.col_hints()[j].boat_count - grid.count_boat_col(j)
 		if boats_left <= 0:
 			return false
-		var possible_boats := SolverModel._list_possible_boats_on_row(grid, j)
-		assert(possible_boats.size() >= boats_left)
+		var possible_boats := SolverModel._list_possible_boats_on_col(grid, j)
 		if possible_boats.size() == boats_left:
 			# We can put boats if the places they should go are clear
 			var any := false
@@ -763,6 +766,27 @@ class AllWatersMediumStrategy extends Strategy:
 								any = true
 		return any
 
+class AllBoatsStrategy extends Strategy:
+	static func description() -> String:
+		return "If all boat possible locations is the remaining hint, fill everything with boats."
+	func apply_any() -> bool:
+		var boats_left := grid.grid_hints().total_boats - grid.count_boats()
+		if boats_left <= 0:
+			return false
+		var possible_boats: Array[Array] = []
+		var total_possible := 0
+		for j in grid.cols():
+			var p := SolverModel._list_possible_boats_on_col(grid, j)
+			total_possible += p.size()
+			possible_boats.append(p)
+		var any := false
+		if total_possible == boats_left:
+			for j in grid.cols():
+				for lr in possible_boats[j]:
+					if lr.x == lr.y:
+						if grid.get_cell(lr.x, j).put_boat(false):
+							any = true
+		return any
 
 const STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy,
@@ -779,6 +803,7 @@ const STRATEGY_LIST := {
 	SeparateCol = SeparateColStrategy,
 	AllWatersEasy = AllWatersEasyStrategy,
 	AllWatersMedium = AllWatersMediumStrategy,
+	AllBoats = AllBoatsStrategy,
 }
 
 # Get a place in the solution that must have air and put a block on it

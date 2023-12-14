@@ -334,8 +334,6 @@ func test_can_solve() -> void:
 	"""
 	assert_can_solve(col_with_halfcell % "#")
 	assert_cant_solve(col_with_halfcell % ".")
-
-func test_cant_solve() -> void:
 	# Can't guess water level
 	assert_cant_solve("""
 	+boats=1
@@ -348,6 +346,18 @@ func test_cant_solve() -> void:
 	....
 	....
 	""")
+	# Can guess the left boat but not the right unless it's X on top
+	var grid_with_2_boats := """
+	+boats=2
+	##%s
+	L.|.
+	%s
+	|.|.
+	%s
+	L.L.
+	"""
+	assert_grid_eq(apply_strategies(grid_with_2_boats % ["..", "....", "...."]).to_str(), grid_with_2_boats % ["..", "bb..", "ww.."])
+	assert_grid_eq(apply_strategies(grid_with_2_boats % ["xx", "....", "...."]).to_str(), grid_with_2_boats % ["xx", "bbbb", "wwww"])
 
 func test_guess_boat() -> void:
 	var g := str_grid("""
