@@ -259,8 +259,8 @@ class MediumColStrategy extends ColumnStrategy:
 				any = true
 		return any
 
-class AdvancedColStrategy extends Strategy:
-	func apply(j: int) -> bool:
+class AdvancedColStrategy extends ColumnStrategy:
+	func _apply(j: int) -> bool:
 		if grid.col_hints()[j].water_count <= 0:
 			return false
 		var water_left := grid.col_hints()[j].water_count - grid.count_water_col(j)
@@ -284,12 +284,6 @@ class AdvancedColStrategy extends Strategy:
 			else:
 				return grid.get_cell(single_i, j).put_air(single_corner, false, true)
 		return false
-	func apply_any() -> bool:
-		var any := false
-		for j in grid.cols():
-			if apply(j):
-				any = true
-		return any
 	static func description() -> String:
 		return "- If there's a single empty half-cell in the column, determine if it's water or air."
 
@@ -302,13 +296,6 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 		return false
 	c = grid._pure_cell(i + 1, j)
 	return c._content_top() == Content.Water or c._content_top() == Content.Nothing
-
-static func _put_boat(grid: GridImpl, i: int, j: int) -> void:
-	# Put water down
-	var c := grid.get_cell(i + 1, j)
-	c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false)
-	# Put boat here
-	grid.get_cell(i, j).put_boat(false)
 
 class BoatRowStrategy extends RowStrategy:
 	static func description() -> String:
@@ -324,10 +311,12 @@ class BoatRowStrategy extends RowStrategy:
 			elif SolverModel._boat_possible(grid, i, j):
 				count += 1
 		if hint > 0 and count == hint:
+			var any := false
 			for j in grid.cols():
 				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j):
-					SolverModel._put_boat(grid, i, j)
-			return true
+					if grid.get_cell(i, j).put_boat(false):
+						any = true
+			return any
 		return false
 
 class BoatColStrategy extends ColumnStrategy:
@@ -367,8 +356,8 @@ class BoatColStrategy extends ColumnStrategy:
 				if SolverModel._boat_possible(grid, i, j):
 					if (!grid.get_cell(i, j).wall_at(E.Walls.Top) and SolverModel._boat_possible(grid, i - 1, j)) or SolverModel._boat_possible(grid, i + 1, j):
 						continue
-					SolverModel._put_boat(grid, i, j)
-					any = true
+					if grid.get_cell(i, j).put_boat(false):
+						any = true
 			return any
 		return false
 
