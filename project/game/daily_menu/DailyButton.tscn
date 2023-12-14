@@ -18,22 +18,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -543.5
-offset_top = -62.5
-offset_right = 543.5
-offset_bottom = 62.5
+offset_top = 17.0
+offset_right = 1087.0
+offset_bottom = 241.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 75
 
-[node name="Button" type="Button" parent="HBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBox/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_START"
 
-[node name="TimeLeft" type="Label" parent="HBox"]
+[node name="TimeLeft" type="Label" parent="HBox/VBoxContainer"]
 layout_mode = 2
 auto_translate = false
 localize_numeral_system = false
@@ -43,5 +45,5 @@ text = "X hours left"
 wait_time = 30.0
 autostart = true
 
-[connection signal="pressed" from="HBox/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="HBox/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="Timer" to="HBox" method="_on_timer_timeout"]

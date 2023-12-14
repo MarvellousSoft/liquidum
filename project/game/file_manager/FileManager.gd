@@ -1,12 +1,13 @@
 extends Node
 
-const DEFAULT_PROFILE := "fish"
 const CURRENT_PROFILE := "user://cur_profile.txt"
+const DATA_DIR := "res://database/levels"
+const DEFAULT_PROFILE := "fish"
 const PROFILE_FILE := "profile.save"
 const METADATA := ".metadata"
 const JSON_EXT := ".json"
 const LEVEL_FILE := "level.json"
-const DATA_DIR := "res://database/levels"
+const USER_DATA := "user.data"
 
 var current_profile := DEFAULT_PROFILE
 
@@ -242,14 +243,14 @@ func load_level_data(section: int, level: int) -> LevelData:
 	assert(not data.full_name.is_empty())
 	return data
 
-const USER_DATA := "user.data"
-
 # If this becomes very used, we can cache it
 func load_user_data() -> UserData:
 	return UserData.load_data(_load_json_data(_profile_dir(), USER_DATA, false))
 
+
 func save_user_data(data: UserData) -> void:
 	_save_json_data(_profile_dir(), USER_DATA, data.get_data())
+
 
 func clear_user_data(profile: String) -> void:
 	_delete_file(_profile_dir(profile), USER_DATA)
