@@ -149,6 +149,8 @@ func setup(try_load := true) -> void:
 	else:
 		Counters.water.visible = true
 		Counters.boat.visible = true
+		update_expected_waters = true
+		update_expected_boats = true
 		Counters.water.enable_editor()
 		Counters.boat.enable_editor()
 		Counters.mistake.hide()
