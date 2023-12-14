@@ -323,6 +323,17 @@ func test_can_solve() -> void:
 	....
 	....
 	""")
+	var col_with_halfcell := """
+	h3.
+	.%s.
+	../
+	...
+	.L.
+	...
+	.L.
+	"""
+	assert_can_solve(col_with_halfcell % "#")
+	assert_cant_solve(col_with_halfcell % ".")
 
 func test_cant_solve() -> void:
 	# Can't guess water level
