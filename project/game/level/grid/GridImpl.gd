@@ -675,14 +675,11 @@ func editor_mode() -> bool:
 func maybe_update_hints() -> void:
 	if not editor_mode() or not auto_update_hints():
 		return
-	if _grid_hints.total_boats != -1:
-		_grid_hints.total_boats = count_boats()
-	if _grid_hints.total_water != -1:
-		_grid_hints.total_water = count_waters()
+	_grid_hints.total_boats = count_boats()
+	_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
 	for i in n:
-		if _row_hints[i].boat_count != -1:
-			_row_hints[i].boat_count = count_boat_row(i)
+		_row_hints[i].boat_count = count_boat_row(i)
 		var type := _is_together(_row_bools(i, Content.Boat))
 		_row_hints[i].boat_count_type = type
 		_row_hints[i].water_count = count_water_row(i)
