@@ -20,18 +20,17 @@ gradient = SubResource("Gradient_63qul")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hkg60"]
 lifetime_randomness = 0.01
+particle_flag_disable_z = true
 emission_shape = 3
 emission_box_extents = Vector3(1930, 1, 1)
-particle_flag_disable_z = true
-direction = Vector3(0, -1, 0)
-gravity = Vector3(0, -40, 0)
-angular_velocity_min = 5.0
-angular_velocity_max = 90.0
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.01
-tangential_accel_max = 26.97
 angle_min = -5.0
 angle_max = 5.0
+direction = Vector3(0, -1, 0)
+angular_velocity_min = 5.0
+angular_velocity_max = 90.0
+orbit_velocity_max = 0.01
+gravity = Vector3(0, -40, 0)
+tangential_accel_max = 26.97
 scale_min = 0.5
 scale_max = 0.8
 color_ramp = SubResource("GradientTexture1D_3u54o")
@@ -85,7 +84,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.192157, 0.690196, 0.690196, 1)
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 position = Vector2(1896, 2336)
@@ -97,7 +95,7 @@ fixed_fps = 60
 visibility_rect = Rect2(-1930, -2140, 3860, 2140)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_p1m1d")
 }
+autoplay = "idle"
