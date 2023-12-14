@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://qm8ijblbhiyt"]
+[gd_scene load_steps=15 format=3 uid="uid://qm8ijblbhiyt"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_1r4dl"]
 [ext_resource type="Script" path="res://game/level/GridView.gd" id="1_a7a5u"]
@@ -11,6 +11,42 @@
 [ext_resource type="StyleBox" uid="uid://c0cteq2yo5wub" path="res://assets/ui/PositiveButtonNormalStyle.tres" id="8_s30ge"]
 [ext_resource type="StyleBox" uid="uid://c3mn1jux1l2u3" path="res://assets/ui/PositiveButtonHoverStyle.tres" id="9_uydqk"]
 [ext_resource type="StyleBox" uid="uid://citb7ivyjv8tc" path="res://assets/ui/PositiveButtonPressedStyle.tres" id="10_f8tbb"]
+
+[sub_resource type="Animation" id="Animation_0ktux"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CenterContainer/MainGridContainer/SizePanel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_n7vvy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CenterContainer/MainGridContainer/SizePanel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hctdx"]
+_data = {
+"RESET": SubResource("Animation_n7vvy"),
+"startup": SubResource("Animation_0ktux")
+}
 
 [node name="GridView" type="Control"]
 layout_mode = 3
@@ -97,6 +133,7 @@ layout_mode = 2
 
 [node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -127,8 +164,15 @@ theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
+[node name="FillerPanelRight" type="Panel" parent="CenterContainer/MainGridContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+
 [node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 10
@@ -162,11 +206,28 @@ theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
-[node name="FillerPanel" type="Panel" parent="CenterContainer/MainGridContainer"]
+[node name="FillerPanelBottom" type="Panel" parent="CenterContainer/MainGridContainer"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
+
+[node name="SizePanel" type="MarginContainer" parent="CenterContainer/MainGridContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+
+[node name="GridSizeLabel" type="Label" parent="CenterContainer/MainGridContainer/SizePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 70
+theme_override_font_sizes/font_size = 150
+text = "10x10"
 
 [node name="CellCornerGrid" type="GridContainer" parent="."]
 z_index = 1
@@ -226,6 +287,11 @@ layout_mode = 2
 [node name="CellCorner16" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hctdx")
+}
+
 [node name="DragPreviewCanvas" type="CanvasLayer" parent="."]
 
 [node name="DragPreviewLine" type="Line2D" parent="DragPreviewCanvas"]
@@ -248,7 +314,7 @@ antialiased = true
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_rem_row"]
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_add_row"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/FillerPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/SizePanel" to="." method="_on_left_grid"]
 
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarLeft"]

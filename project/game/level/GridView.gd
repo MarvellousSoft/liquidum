@@ -30,7 +30,11 @@ const MAX_GRID_C = 10
 @onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
 @onready var EditColumnSize = %EditColumnSize
 @onready var EditRowSize = %EditRowSize
-@onready var FillerPanel = %FillerPanel
+@onready var FillerPanelRight = %FillerPanelRight
+@onready var FillerPanelBottom = %FillerPanelBottom
+@onready var SizePanel = %SizePanel
+@onready var GridSizeLabel = %GridSizeLabel
+@onready var AnimPlayer = $AnimationPlayer
 
 var disabled = false
 var brush_mode : E.BrushMode = E.BrushMode.Water
@@ -77,8 +81,10 @@ func setup(grid_logic_: GridModel, fast_startup := false) -> void:
 	editor_mode = grid_logic.editor_mode()
 	rows = grid_logic.rows()
 	columns = grid_logic.cols()
-	for node in [EditColumnSize, EditRowSize, FillerPanel]:
+	for node in [EditColumnSize, EditRowSize]:
 		node.visible = editor_mode
+	for node in [FillerPanelRight, FillerPanelBottom]:
+		node.visible = not editor_mode
 	reset()
 	for i in rows:
 		var new_row = HBoxContainer.new()
@@ -87,14 +93,18 @@ func setup(grid_logic_: GridModel, fast_startup := false) -> void:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(i, j)
 			create_cell(new_row, cell_data, i, j, fast_startup)
-
+	
+	GridSizeLabel.text = "%dx%d" % [rows, columns]
 	setup_hints(fast_startup)
 	setup_cell_corners()
 	update()
 	if not editor_mode and not fast_startup:
 		disable()
 		await get_tree().create_timer(get_grid_delay(rows, columns)).timeout
+		AnimPlayer.play("startup")
 		enable()
+	else:
+		SizePanel.modulate.a = 1.0
 
 #Assumes grid_logic is already setup
 func setup_hints(fast_startup: bool) -> void:
