@@ -53,14 +53,14 @@ PLAYTEST,Playtest level,Testar nível,Nível de teste
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível,Descrição do nível
 LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel,Título do nível
 EASY_TOOLTIP,Small and simple levels,Níveis pequenos e simples,Níveis pequenos e simples
-MEDIUM_TOOLTIP,"Harder levels, and uses {N} and -N- rules",Níveis mais difíceis e usa regras {N} e -N-,Níveis mais difíceis e usa regras {N} e -N-
-MEDIUM_TOOLTIP_DISABLED,Unlock section 2 to unlock this difficulty,Desbloqueie a seção 2 para desbloquear essa dificuldade,Desbloqueie a seção 2 para desbloquear esta dificuldade
-HARD_TOOLTIP,"Very hard levels, uses diagonals and boats","Níveis muito difíceis, usa diagonais e barcos","Níveis muito difíceis, usa diagonais e barcos"
-HARD_TOOLTIP_DISABLED,Unlock section 4 to unlock this difficulty,Desbloqueie a seção 4 para desbloquear essa dificuldade,Desbloqueie a seção 4 para desbloquear esta dificuldade
-EXPERT_TOOLTIP,"Extremely hard levels, may use any rules found in the campaign","Níveis extremamente difíceis, podendo usar quaisquer regras encontradas na campanha","Níveis extremamente difíceis, podendo usar quaisquer regras encontradas na campanha"
-EXPERT_TOOLTIP_DISABLED,Unlock section 5 to unlock this difficulty,Desbloqueie a seção 5 para desbloquear essa dificuldade,Desbloqueie a seção 5 para desbloquear esta dificuldade
+MEDIUM_TOOLTIP,Uses {N} and -N- hints,Usa dicas {N} e -N-,Usa dicas {N} e -N-
+MEDIUM_TOOLTIP_DISABLED,Unlock section 2 to access this difficulty,Desbloqueie a seção 2 para acessar essa dificuldade,Desbloqueie a seção 2 para acessar essa dificuldade
+HARD_TOOLTIP,Uses diagonals and boats,Usa diagonais e barcos,Usa diagonais e barcos
+HARD_TOOLTIP_DISABLED,Unlock section 4 to access this difficulty,Desbloqueie a seção 4 para acessar essa dificuldade,Desbloqueie a seção 4 para acessar essa dificuldade
+EXPERT_TOOLTIP,May use any rules found in the campaign,Pode usar quaisquer regras encontradas na campanha,Pode usar quaisquer regras encontradas na campanha
+EXPERT_TOOLTIP_DISABLED,Unlock section 5 to access this difficulty,Desbloqueie a seção 5 para acessar essa dificuldade,Desbloqueie a seção 5 para acessar essa dificuldade
 INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?,Tem certeza de que deseja tentar isso?
-INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para desbloquear essa dificuldade,Complete TODOS os níveis para desbloquear esta dificuldade
+INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para acessar essa dificuldade,Complete TODOS os níveis para acessar essa dificuldade
 GENERATING_LEVEL,Generating level,Gerando nível,Gerando nível
 LEVEL_01_01,Dipping the Toes,Molhando os Pés,Mergulhando os dedos dos pés
 LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas,Profundidades desconhecidas
