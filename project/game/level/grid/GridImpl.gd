@@ -1553,6 +1553,14 @@ func prettify_hints() -> void:
 			for h in hints:
 				h.boat_count = -1
 				h.boat_count_type = E.HintType.Hidden
+	else:
+		# 0 hint but there's no boat possible, let's remove it to make it prettier
+		for i in n:
+			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return SolverModel._boat_possible(self, i, j)):
+				_row_hints[i].boat_count = -1
+		for j in m:
+			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return SolverModel._boat_possible(self, i, j)):
+				_col_hints[j].boat_count = -1
 
 func any_schrodinger_boats() -> bool:
 	if _grid_hints.total_boats == -1:
