@@ -11,10 +11,25 @@ extends Control
 var deadline: int
 var gen := RandomLevelGenerator.new()
 
+func _ready() -> void:
+	Global.dev_mode_toggled.connect(func(_on): _update())
+
 func _enter_tree() -> void:
 	call_deferred("_update")
 
 func _update() -> void:
+	var unlocked := Global.is_dev_mode() or LevelLister.section_complete(4)
+	DailyButton.disabled = not unlocked
+	TimeLeft.visible = unlocked
+	$HBox/VBoxContainer/StreakContainer.visible = unlocked
+	NotCompleted.visible = unlocked
+	if unlocked:
+		DailyButton.tooltip_text = "DAILY_TOOLTIP"
+	else:
+		DailyButton.tooltip_text = "DAILY_TOOLTIP_DISABLED"
+		OngoingSolution.visible = false
+		return
+
 	var date := _today()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
 	
@@ -28,6 +43,8 @@ func _update() -> void:
 	_update_streak()
 
 func _update_time_left() -> void:
+	if DailyButton.disabled:
+		return
 	var secs_left := deadline - _unixtime()
 	if secs_left > 0:
 		var num: int
