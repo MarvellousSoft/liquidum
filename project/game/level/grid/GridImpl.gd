@@ -468,7 +468,7 @@ class CellWithLoc extends GridModel.CellModel:
 	func remove_wall(wall: E.Walls, flush_undo := true) -> bool:
 		_change_wall(wall, false, flush_undo, false)
 		return true
-	func put_boat(flush_undo := true) -> bool:
+	func put_boat(flush_undo := true, flood := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
 		if wall_at(E.Walls.Bottom) or pure().cell_type() != E.Single:
@@ -480,9 +480,13 @@ class CellWithLoc extends GridModel.CellModel:
 		if c.pure()._content_top() != Content.Water:
 			if not c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false):
 				return false
-		var change: Change = CellChange.new(i, j, pure().clone())
+		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
 		if pure()._put_boat():
-			grid._push_undo_changes([change], false)
+			if flood:
+				var dfs := AddAirDfs.new(grid)
+				dfs.flood(i, j, E.Corner.TopLeft)
+				changes.append_array(dfs.changes)
+			grid._push_undo_changes(changes, false)
 			grid.maybe_update_hints()
 			return true
 		return false

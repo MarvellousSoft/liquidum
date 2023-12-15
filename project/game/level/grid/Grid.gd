@@ -63,7 +63,7 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func has_boat() -> bool:
 		return GridModel.must_be_implemented()
-	func put_boat(_flush_undo := true) -> bool:
+	func put_boat(_flush_undo := true, _flood := false) -> bool:
 		return GridModel.must_be_implemented()
 	func cell_type() -> E.CellType:
 		return GridModel.must_be_implemented()

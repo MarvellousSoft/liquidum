@@ -314,7 +314,7 @@ class BoatRowStrategy extends RowStrategy:
 			var any := false
 			for j in grid.cols():
 				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j):
-					if grid.get_cell(i, j).put_boat(false):
+					if grid.get_cell(i, j).put_boat(false, true):
 						any = true
 			return any
 		return false
@@ -364,7 +364,7 @@ class BoatColStrategy extends ColumnStrategy:
 			var any := false
 			for lr in possible_boats:
 				if lr.x == lr.y:
-					if grid.get_cell(lr.x, j).put_boat(false):
+					if grid.get_cell(lr.x, j).put_boat(false, true):
 						any = true
 			return any
 		return false
@@ -784,7 +784,7 @@ class AllBoatsStrategy extends Strategy:
 			for j in grid.cols():
 				for lr in possible_boats[j]:
 					if lr.x == lr.y:
-						if grid.get_cell(lr.x, j).put_boat(false):
+						if grid.get_cell(lr.x, j).put_boat(false, true):
 							any = true
 		return any
 
@@ -945,7 +945,7 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j) or grid.get_cell(i, j).has_boat():
 				continue
 			var c := grid.get_cell(i, j)
-			var b := c.put_boat(true)
+			var b := c.put_boat(true, true)
 			assert(b)
 			var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), look_for_multiple)
 			grid.undo()
@@ -957,7 +957,7 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 			var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), false)
 			if r2 == SolveResult.Unsolvable:
 				grid.undo()
-				b = c.put_boat(false)
+				b = c.put_boat(false, true)
 				assert(b)
 				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple))
 			return SolveResult.SolvedMultiple
