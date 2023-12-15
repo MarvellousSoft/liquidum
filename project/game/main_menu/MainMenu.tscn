@@ -68,12 +68,14 @@ alignment = 1
 [node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
 text = "PLAY_BUTTON"
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "RANDOM_TOOLTIP"
 focus_mode = 0
 text = "RANDOM_BUTTON"
 
@@ -81,12 +83,14 @@ text = "RANDOM_BUTTON"
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+tooltip_text = "LEVEL_EDITOR_TOOLTIP"
 focus_mode = 0
 text = "LEVEL_EDITOR_BUTTON"
 
 [node name="Workshop" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "WORKSHOP_TOOLTIP"
 focus_mode = 0
 text = "WORKSHOP_BUTTON"
 
@@ -114,6 +118,7 @@ offset_top = 41.0
 offset_right = 655.0
 offset_bottom = 641.0
 scale = Vector2(0.5, 0.5)
+tooltip_text = "PROFILE_TOOLTIP"
 focus_mode = 0
 icon = ExtResource("4_au5uo")
 icon_alignment = 1

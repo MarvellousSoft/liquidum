@@ -3,8 +3,11 @@ TEST,Test,Teste,Teste
 YES,Yes,Sim,Sim
 NO,No,Não,Não
 EXIT_BUTTON,Exit,Sair,Saída
+PROFILE_TOOLTIP,Change profile,Mudar perfil,Mudar perfil
 PLAY_BUTTON,Dive,Mergulhar,Mergulhar
+PLAY_TOOLTIP,Campaign levels,Níveis da campanha,Níveis da campanha
 LEVEL_EDITOR_BUTTON,Create,Criar,Criar
+LEVEL_EDITOR_TOOLTIP,Level editor,Editor de níveis,Editor de níveis
 EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?,Tem certeza de que deseja sair do jogo?
 DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?,Tem certeza?
 WATERS_COUNTER,Waters: ,Águas: ,Águas:
@@ -29,6 +32,7 @@ CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que qu
 CONFIRM_RESET_DAILY,Are you sure? Resetting a daily resets your streak and hides leaderboards.,Tem certeza? Resetar o nível do dia quebra sua sequência e esconde o ranking.,Tem certeza? Resetar o nível do dia quebra sua sequência e esconde o ranking.
 LEVELS_COMPLETED,levels completed,níveis completados,níveis concluídos
 WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina,Níveis de oficina
+WORKSHOP_TOOLTIP,User-created levels,Níveis criados por usuários,Níveis criados por usuários
 WORKSHOP_LEVELS,Subscribed levels:,Níveis inscritos:,Níveis inscritos:
 PLAY_LEVEL_TOOLTIP,Playtest level,Testar o nível,Nível de teste
 EDIT_LEVEL_TOOLTIP,Edit level,Editar o nível,Editar nível
@@ -40,6 +44,7 @@ NOT_COMPLETED_LEVEL,Not Completed,Não Completado,Não Completado
 BEST_TIME,Best Time:  %s,Melhor Tempo:  %s,Melhor Tempo:  %s
 BEST_MISTAKES,Lowest Mistakes:  %s,Menor Erros:  %s,Menor Erros:  %s
 RANDOM_BUTTON,Explorer mode,Modo explorador,Modo explorador
+RANDOM_TOOLTIP,Random levels,Níveis aleatórios,Níveis aleatórios
 RANDOM_TITLE,Explorer mode,Modo explorador,Modo explorador
 EASY_BUTTON,Easy,Fácil,Fácil
 MEDIUM_BUTTON,Medium,Médio,Médio
