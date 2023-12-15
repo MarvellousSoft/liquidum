@@ -356,7 +356,7 @@ func test_can_solve() -> void:
 	%s
 	L.L.
 	"""
-	assert_grid_eq(apply_strategies(grid_with_2_boats % ["..", "....", "...."]).to_str(), grid_with_2_boats % ["..", "bb..", "ww.."])
+	assert_grid_eq(apply_strategies(grid_with_2_boats % ["..", "....", "...."]).to_str(), grid_with_2_boats % ["xx", "bb..", "wwww"])
 	assert_grid_eq(apply_strategies(grid_with_2_boats % ["..", "..xx", "...."]).to_str(), grid_with_2_boats % ["xx", "bbbb", "wwww"])
 	assert_cant_solve("""
 	+boats=1
@@ -377,6 +377,24 @@ func test_can_solve() -> void:
 	ww
 	L.
 	""")
+	var grid_with_1_boat_col := """
+	+boats=1
+	B%s.
+	.%s
+	.|.
+	.%s
+	.|.
+	0%s
+	.L.
+	"""
+	for s in ["BoatCol", "AllBoats"]:
+		var h := "1" if s == "BoatCol" else "."
+		assert_can_solve(grid_with_1_boat_col % [h, "..", "ww", "ww"], [s])
+		assert_can_solve(grid_with_1_boat_col % [h, "xx", "xx", "ww"], [s])
+		assert_can_solve(grid_with_1_boat_col % [h, "xx", "xx", ".."], [s])
+		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
+		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "xx", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
+		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", "ww"], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
 
 func test_guess_boat() -> void:
 	var g := str_grid("""

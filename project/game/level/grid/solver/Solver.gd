@@ -355,6 +355,22 @@ static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector
 			ans.append(Vector2i(l, r))
 	return ans
 
+static func _put_boat_on_col(grid: GridImpl, lr: Vector2i, j: int) -> bool:
+	var any := false
+	if lr.x == lr.y:
+		if grid.get_cell(lr.x, j).put_boat(false, true):
+			any = true
+	else:
+		# Put air on top and water on bottom
+		if grid.get_cell(lr.x, j).nothing_full():
+			if grid.get_cell(lr.x, j).put_air(E.Corner.TopLeft, false, true):
+				any = true
+		if grid._pure_cell(lr.y + 1, j)._content_top() != Content.Water:
+			var c := grid.get_cell(lr.y + 1, j)
+			if c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false):
+				any = true
+	return any
+
 class BoatColStrategy extends ColumnStrategy:
 	static func description() -> String:
 		return "If hint is all possible aquariums, put boats in the ones where it's clear"
@@ -367,9 +383,8 @@ class BoatColStrategy extends ColumnStrategy:
 			# We can put boats if the places they should go are clear
 			var any := false
 			for lr in possible_boats:
-				if lr.x == lr.y:
-					if grid.get_cell(lr.x, j).put_boat(false, true):
-						any = true
+				if SolverModel._put_boat_on_col(grid, lr, j):
+					any = true
 			return any
 		return false
 
@@ -787,9 +802,8 @@ class AllBoatsStrategy extends Strategy:
 		if total_possible == boats_left:
 			for j in grid.cols():
 				for lr in possible_boats[j]:
-					if lr.x == lr.y:
-						if grid.get_cell(lr.x, j).put_boat(false, true):
-							any = true
+					if SolverModel._put_boat_on_col(grid, lr, j):
+						any = true
 		return any
 
 const STRATEGY_LIST := {
