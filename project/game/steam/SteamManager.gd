@@ -4,6 +4,8 @@ extends Node
 var enabled := true
 const APP_ID := 2716690
 
+var stats_received := false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if enabled:
@@ -18,13 +20,26 @@ func _ready() -> void:
 		set_process(false)
 		set_process_input(false)
 		return
+	Steam.user_stats_received.connect(_stats_received)
+	Steam.requestCurrentStats()
+
+func _stats_received() -> void:
+	print("Steam stats received!")
+	stats_received = true
+
+func store_stats() -> void:
+	if not stats_received:
+		Steam.requestCurrentStats()
+		return
+	print("Storing")
+	Steam.storeStats()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		store_stats()
 		Steam.steamShutdown()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_dt: float) -> void:
 	Steam.run_callbacks()
 

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvc05fffw42ma"]
+
+[ext_resource type="Script" path="res://game/steam/SteamPlaytimeTracker.gd" id="1_gjq3s"]
+
+[node name="SteamPlaytimeTracker" type="Node"]
+script = ExtResource("1_gjq3s")
+
+[node name="Flush" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
+[connection signal="timeout" from="Flush" to="." method="flush"]

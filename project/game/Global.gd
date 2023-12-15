@@ -63,7 +63,7 @@ func is_dev_mode() -> bool:
 	return OS.is_debug_build() and _dev_mode
 
 
-func create_level(grid_: GridModel, level_name_: String, full_name_: String, description_: String, level_number := -1, section_number := -1) -> Level:
+func create_level(grid_: GridModel, level_name_: String, full_name_: String, description_: String, tracking_stats: Array[String] = [], level_number := -1, section_number := -1) -> Level:
 	var level : Level = LEVEL_SCENE.instantiate()
 	level.grid = grid_
 	level.level_name = level_name_
@@ -71,6 +71,7 @@ func create_level(grid_: GridModel, level_name_: String, full_name_: String, des
 	level.level_number = level_number
 	level.section_number = section_number
 	level.description = description_
+	level.add_playtime_tracking(tracking_stats)
 	return level
 
 

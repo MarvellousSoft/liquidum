@@ -49,3 +49,22 @@ func _on_full_solve_pressed():
 	var solve_type: String = SolverModel.SolveResult.find_key(r)
 	print("Level is %s" % solve_type)
 	$Buttons/SolvedType.text = solve_type
+
+const STATS := ["daily_level"]
+
+func _on_print_global_stats_pressed() -> void:
+	if not SteamManager.enabled:
+		return
+	for stat in STATS:
+		var val := Steam.getGlobalStatFloat(stat + "_secs")
+		var tot := Steam.getGlobalStatInt(stat + "_total")
+		print("%s = %.0f tot %.0f avg" % [stat, val, val / tot])
+
+
+func _on_print_local_stats_pressed():
+	if not SteamManager.enabled:
+		return
+	Steam.requestCurrentStats()
+	for stat in STATS:
+		var val := Steam.getStatFloat(stat + "_secs")
+		print("%s = %.0f" % [stat, val])

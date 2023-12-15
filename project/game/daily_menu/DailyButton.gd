@@ -167,7 +167,7 @@ func _on_button_pressed() -> void:
 			FileManager.save_daily_level(today, level)
 	var level_data := FileManager.load_daily_level(today)
 	if level_data != null:
-		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description)
+		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily_level"])
 		level.reset_text = &"CONFIRM_RESET_DAILY"
 		level.won.connect(level_completed)
 		TransitionManager.push_scene(level)

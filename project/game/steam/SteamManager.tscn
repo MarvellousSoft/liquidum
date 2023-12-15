@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmjn7dq5vfhnt"]
+
+[ext_resource type="Script" path="res://game/steam/SteamManager.gd" id="1_28o4c"]
+
+[node name="SteamManager" type="Node"]
+script = ExtResource("1_28o4c")
+
+[node name="StoreStats" type="Timer" parent="."]
+wait_time = 600.0
+autostart = true
+
+[connection signal="timeout" from="StoreStats" to="." method="store_stats"]

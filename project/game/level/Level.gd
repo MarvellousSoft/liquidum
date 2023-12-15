@@ -554,3 +554,8 @@ func _on_edit_text_changed(new_text: String) -> void:
 
 func _on_dev_mode_toggled(status):
 	DevContainer.visible = status
+
+func add_playtime_tracking(stats: Array[String]) -> void:
+	var tracker := preload("res://game/steam/SteamPlaytimeTracker.tscn").instantiate()
+	tracker.stats = stats
+	add_child(tracker)

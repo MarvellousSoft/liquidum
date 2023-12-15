@@ -49,8 +49,10 @@ script = ExtResource("3_ftgq8")
 
 [node name="Buttons" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 846.0
-offset_bottom = 1170.0
+offset_left = 119.0
+offset_top = 136.0
+offset_right = 965.0
+offset_bottom = 1306.0
 theme_override_constants/separation = 50
 
 [node name="Run" type="Button" parent="Buttons"]
@@ -81,6 +83,17 @@ text = "Full solve"
 [node name="SolvedType" type="Label" parent="Buttons"]
 layout_mode = 2
 
+[node name="PrintLocalStats" type="Button" parent="Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "Print local stats"
+
+[node name="PrintGlobalStats" type="Button" parent="Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "Print global stats
+"
+
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
@@ -88,3 +101,5 @@ layout_mode = 2
 [connection signal="pressed" from="Buttons/AutoSolve" to="." method="_on_auto_solve_pressed"]
 [connection signal="pressed" from="Buttons/Paste" to="." method="_on_paste_pressed"]
 [connection signal="pressed" from="Buttons/FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="pressed" from="Buttons/PrintLocalStats" to="." method="_on_print_local_stats_pressed"]
+[connection signal="pressed" from="Buttons/PrintGlobalStats" to="." method="_on_print_global_stats_pressed"]
