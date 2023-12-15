@@ -76,12 +76,9 @@ func _unixtime() -> int:
 		return Steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-func _remove_time(date: String) -> String:
-	return date.substr(0, date.find('T'))
-
-func _today(dt: float = 0) -> String:
-	var date := Time.get_datetime_string_from_unix_time(_unixtime() - dt)
-	return _remove_time(date)
+func _today(dt: int = 0) -> String:
+	var today := Time.get_datetime_string_from_unix_time(_unixtime() - dt)
+	return today.substr(0, today.find('T'))
 
 func _yesterday() -> String:
 	return _today(24 * 60 * 60)
@@ -133,10 +130,10 @@ const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDA
 # Friday - Simple, boats
 # Saturday - Simple, together/separate
 # Sunday - Diagonals, boats
-func gen_level(date: String) -> LevelData:
-	var weekday: Time.Weekday = Time.get_datetime_dict_from_datetime_string(date, true).weekday
+func gen_level(today: String) -> LevelData:
+	var weekday: Time.Weekday = Time.get_datetime_dict_from_datetime_string(today, true).weekday
 	var rng := RandomNumberGenerator.new()
-	rng.seed = Time.get_unix_time_from_datetime_string(date)
+	rng.seed = Time.get_unix_time_from_datetime_string(today)
 	var g: GridModel = null
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	match weekday:
@@ -161,21 +158,24 @@ func gen_level(date: String) -> LevelData:
 
 func _on_button_pressed() -> void:
 	DailyButton.disabled = true
-	var date := _today()
-	if not FileManager.has_daily_level(date):
+	var today := _today()
+	if not FileManager.has_daily_level(today):
 		GeneratingLevel.enable()
-		var level := await gen_level(date)
+		var level := await gen_level(today)
 		GeneratingLevel.disable()
 		if level != null:
-			FileManager.save_daily_level(date, level)
-	var level_data := FileManager.load_daily_level(date)
+			FileManager.save_daily_level(today, level)
+	var level_data := FileManager.load_daily_level(today)
 	if level_data != null:
-		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(date), level_data.full_name, level_data.description)
+		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description)
+		level.reset_text = &"CONFIRM_RESET_DAILY"
 		level.won.connect(level_completed)
 		TransitionManager.push_scene(level)
 	DailyButton.disabled = false
 
-func level_completed(mistakes: int) -> void:
+func level_completed(mistakes: int, first_try_no_resets: bool) -> void:
+	if not first_try_no_resets:
+		return
 	var data := UserData.current()
 	if mistakes < 3:
 		# It the streak was broken this would be handled in _update_streak

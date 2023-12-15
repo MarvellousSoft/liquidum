@@ -4,7 +4,7 @@ extends Control
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1300
 
-signal won(mistakes: int)
+signal won(first_try_no_resets: bool, mistakes: int)
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -49,6 +49,8 @@ var description: String
 var dummy_save := UserLevelSaveData.new({}, true, 0, 0.0)
 var workshop_id := -1
 var game_won := false
+var first_try_no_resets := true
+var reset_text := &"CONFIRM_RESET_LEVEL"
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -128,6 +130,8 @@ func setup(try_load := true) -> void:
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
 				dummy_save = save
+				if save.is_completed():
+					first_try_no_resets = false
 	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	PlaytestButton.visible = editor_mode()
@@ -246,7 +250,7 @@ func win() -> void:
 	
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit(int(Counters.mistake.count))
+	won.emit(first_try_no_resets, int(Counters.mistake.count))
 	
 	await get_tree().create_timer(1.5).timeout
 	
@@ -396,13 +400,14 @@ func maybe_save(delete_solution := false) -> void:
 
 
 func reset_level() -> void:
-	if ConfirmationScreen.start_confirmation(&"CONFIRM_RESET_LEVEL"):
+	if ConfirmationScreen.start_confirmation(reset_text):
 		if not await ConfirmationScreen.pressed:
 			return
 	GridNode.grid_logic.clear_all()
 	GridNode.setup(GridNode.grid_logic)
 	running_time = 0
 	Counters.mistake.set_count(0)
+	first_try_no_resets = false
 	maybe_save()
 
 
