@@ -304,5 +304,6 @@ func prettify_hints() -> void:
 func check_complete() -> bool:
 	return GridModel.must_be_implemented()
 
-func any_positive_boat_hints() -> bool:
+# Boats that may or may not be there, making the solution always Multiple
+func any_schrodinger_boats() -> bool:
 	return GridModel.must_be_implemented()

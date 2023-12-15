@@ -267,7 +267,7 @@ func _on_grid_updated() -> void:
 
 class HintVisibility:
 	var total_water: bool = false
-	var total_boats: bool = false
+	var total_boats: bool = true
 	var expected_aquariums: Array[float] = []
 	var row: Array[int]
 	var col: Array[int]
@@ -308,6 +308,7 @@ class HintVisibility:
 			line_hint.water_count_type = E.HintType.Hidden
 	func apply_to_grid(grid: GridModel) -> void:
 		var ghints := grid.grid_hints()
+		var prev_boats := ghints.total_boats
 		if not total_water:
 			ghints.total_water = -1
 		if not total_boats:
@@ -320,6 +321,9 @@ class HintVisibility:
 			_update_line_hint(grid.row_hints()[i], row[i])
 		for j in grid.cols():
 			_update_line_hint(grid.col_hints()[j], col[j])
+		# Let's force boat amount if it would create schrodinger boats
+		if grid.any_schrodinger_boats():
+			ghints.total_boats = prev_boats
 
 
 func _apply_visibility(h: HintVisibility) -> void:

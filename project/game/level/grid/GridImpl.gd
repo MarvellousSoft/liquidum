@@ -1548,18 +1548,19 @@ func _any_sol_boats() -> bool:
 func prettify_hints() -> void:
 	assert(not editor_mode())
 	if not _any_sol_boats():
-		grid_hints().total_boats = -1
+		grid_hints().total_boats = 0
 		for hints in [row_hints(), col_hints()]:
 			for h in hints:
 				h.boat_count = -1
 				h.boat_count_type = E.HintType.Hidden
 
-func any_boats(h: LineHint) -> bool:
-	if h.boat_count > 0:
-		return true
-	return h.boat_count == -1 and h.boat_count_type != E.HintType.Hidden and h.boat_count_type != E.HintType.Zero
-
-func any_positive_boat_hints() -> bool:
-	if grid_hints().total_boats > 0:
-		return true
-	return row_hints().any(any_boats) or col_hints().any(any_boats)
+func any_schrodinger_boats() -> bool:
+	if _grid_hints.total_boats == -1:
+		for i in n:
+			if _row_hints[i].boat_count != -1:
+				continue
+			for j in m:
+				# We can freely remove or add a boat on this cell and the solution remains valid
+				if _col_hints[j].boat_count == -1 and SolverModel._boat_possible(self, i, j):
+					return true
+	return false

@@ -25,7 +25,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 		var gen_options: int = gen_options_builder.call(rng)
 		g = Generator.new(rng.randi(), bool(gen_options & 1), bool(gen_options & 2)).generate(hints.row.size(), hints.col.size())
 		total_gen += Time.get_unix_time_from_system() - start_gen
-		if force_boats and not g.any_positive_boat_hints():
+		if force_boats and g.count_boats() == 0:
 			continue
 		g.set_auto_update_hints(false)
 		hints.apply_to_grid(g)

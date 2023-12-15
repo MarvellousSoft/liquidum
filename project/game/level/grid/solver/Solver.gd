@@ -901,6 +901,9 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 		#grid.copy_to_clipboard()
 		return SolveResult.Unsolvable
 	if status == E.HintStatus.Satisfied and grid.check_complete():
+		# Since we don't have "airs that don't have boats" we need this
+		if grid.any_schrodinger_boats():
+			return SolveResult.SolvedMultiple
 		return SolveResult.SolvedUniqueNoGuess
 	for i in grid.rows():
 		for j in grid.cols():
