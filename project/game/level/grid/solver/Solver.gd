@@ -342,7 +342,7 @@ static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector
 		i -= 1
 		# Skip rest of this aquarium. Best effort, they might still be connected through the side.
 		while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-			assert(had_boat or l > i + 1 or SolverModel._boat_possible(grid, i, j))
+			assert(had_boat or l > i + 1 or not grid.get_cell(i, j).nothing_full() or SolverModel._boat_possible(grid, i, j))
 			# Stop moving l when we see air
 			if l == i + 1 and grid.get_cell(i, j).nothing_full():
 				l = i

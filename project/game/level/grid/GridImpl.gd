@@ -1549,3 +1549,13 @@ func prettify_hints() -> void:
 			for h in hints:
 				h.boat_count = -1
 				h.boat_count_type = E.HintType.Hidden
+
+func any_boats(h: LineHint) -> bool:
+	if h.boat_count > 0:
+		return true
+	return h.boat_count == -1 and h.boat_count_type != E.HintType.Hidden and h.boat_count_type != E.HintType.Zero
+
+func any_positive_boat_hints() -> bool:
+	if grid_hints().total_boats > 0:
+		return true
+	return row_hints().any(any_boats) or col_hints().any(any_boats)

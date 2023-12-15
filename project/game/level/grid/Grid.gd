@@ -293,10 +293,16 @@ func merge_last_undo() -> void:
 func count_waters() -> float:
 	return GridModel.must_be_implemented()
 
+func count_boats() -> int:
+	return GridModel.must_be_implemented()
+
 # If there are not boats, hide all boat hints
 func prettify_hints() -> void:
 	return GridModel.must_be_implemented()
 
 # Is the grid fully filled, including airs?
 func check_complete() -> bool:
+	return GridModel.must_be_implemented()
+
+func any_positive_boat_hints() -> bool:
 	return GridModel.must_be_implemented()

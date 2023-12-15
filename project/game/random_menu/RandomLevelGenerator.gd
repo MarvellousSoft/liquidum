@@ -6,7 +6,7 @@ var cancel_gen := false
 # Can be used to generate it very quickly
 var success_state: int
 
-func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> GridModel:
+func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats: bool) -> GridModel:
 	var initial_seed := rng.seed
 	var initial_state := rng.state
 	var g: GridModel = null
@@ -25,6 +25,8 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 		var gen_options: int = gen_options_builder.call(rng)
 		g = Generator.new(rng.randi(), bool(gen_options & 1), bool(gen_options & 2)).generate(hints.row.size(), hints.col.size())
 		total_gen += Time.get_unix_time_from_system() - start_gen
+		if force_boats and not g.any_positive_boat_hints():
+			continue
 		g.set_auto_update_hints(false)
 		hints.apply_to_grid(g)
 		var start_solve := Time.get_unix_time_from_system()
@@ -57,9 +59,9 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 # hints_builder takes rng and returns Level.HintVisibility
 # gen_options_builder takes rng and returns (diagonals, boats) as a bitflag
 # If forced_str is empty, the level is generated as "interesting" (SolvedUnique)
-func generate(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> GridModel:
+func generate(rng: RandomNumberGenerator, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	cancel_gen = false
-	gen_thread.start(func(): return _inner_gen_level(rng, hints_builder, gen_options_builder, strategies, forced_strategies))
+	gen_thread.start(func(): return _inner_gen_level(rng, hints_builder, gen_options_builder, strategies, forced_strategies, force_boats))
 	return await Global.wait_for_thread(gen_thread)
 
 func running() -> bool:

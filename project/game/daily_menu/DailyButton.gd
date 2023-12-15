@@ -69,6 +69,14 @@ func _simple_hints(n: int, m: int) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 		return Level.HintVisibility.default(n, m)
 
+func _simple_boats(n: int, m: int) -> Callable:
+	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
+		var h := Level.HintVisibility.default(n, m)
+		h.total_boats = rng.randf() < 0.5
+		for a in [h.row, h.col]:
+			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
+		return h
+
 func _continuity_hints(n: int, m: int) -> Callable:
 	return RandomHub._hard_visibility(n, m)
 
@@ -113,11 +121,12 @@ func gen_level(date: String) -> LevelData:
 		Time.WEEKDAY_THURSDAY:
 			g = await gen.generate(rng, _simple_hints(5, 5), _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_FRIDAY:
-			g = await gen.generate(rng, _simple_hints(7, 7), _fixed_opts(2), strategies, [])
+			g = await gen.generate(rng, _simple_boats(7, 7), _fixed_opts(2), strategies, [], true)
+			assert(g._any_sol_boats())
 		Time.WEEKDAY_SATURDAY:
 			g = await gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_SUNDAY:
-			g = await gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(3), strategies, [])
+			g = await gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(3), strategies, [], true)
 	if g != null:
 		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
 	return null
