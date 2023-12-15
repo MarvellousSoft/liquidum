@@ -29,14 +29,18 @@ func any_empty(g: Array[Array]) -> Vector2i:
 	return Vector2i(-1, -1)
 
 class AdjacencyRule:
-	func all_adj(_from: Vector2i) -> Array[Vector2i]:
+	func all_adj(_from: Vector2i, _boats: bool) -> Array[Vector2i]:
 		return GridModel.must_be_implemented()
 
 class SquareAdj extends AdjacencyRule:
 	const dv := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
-	func all_adj(from: Vector2i) -> Array[Vector2i]:
+	func all_adj(from: Vector2i, boats: bool) -> Array[Vector2i]:
 		var adj: Array[Vector2i] = []
 		adj.assign(dv.map(func(d): return from + d))
+		# Hack: make things more vertical when there's boats
+		if boats:
+			adj.append(from + dv[0])
+			adj.append(from + dv[1])
 		return adj
 
 class DiagAdj extends AdjacencyRule:
@@ -55,8 +59,12 @@ class DiagAdj extends AdjacencyRule:
 			return Vector2i(from.x - 1, oj * 2 + int(from.x == 0 or !dec_diag[from.x - 1][oj]))
 		else: # connects to bottom
 			return Vector2i(from.x + 1, oj * 2 + int(from.x == dec_diag.size() - 1 or dec_diag[from.x + 1][oj]))
-	func all_adj(from: Vector2i) -> Array[Vector2i]:
-		return [from + Vector2i(0, -1), from + Vector2i(0, 1), third_adj(from)]
+	func all_adj(from: Vector2i, boats: bool) -> Array[Vector2i]:
+		var adj: Array[Vector2i] = [from + Vector2i(0, -1), from + Vector2i(0, 1), third_adj(from)]
+		# Hack: make things more vertical when there's boats
+		if boats:
+			adj.append(adj.back())
+		return adj
 
 func pop_random(arr: Array[Vector2i]) -> Vector2i:
 	if arr.is_empty():
@@ -107,7 +115,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			all_empty.pop_back()
 		var cells: Array[Vector2i] = [all_empty.pop_back()]
 		g[cells[0].x][cells[0].y] = group
-		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0])
+		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0], boats)
 		for _i in group_size:
 			var c := pop_random(all_adj)
 			while c != Vector2i(-1, -1) and (c.x < 0 or c.x >= n or c.y < 0 or c.y >= m or g[c.x][c.y] != 0):
@@ -116,7 +124,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 				break
 			g[c.x][c.y] = group
 			cells.append(c)
-			all_adj.append_array(adj_rule.all_adj(c))
+			all_adj.append_array(adj_rule.all_adj(c, boats))
 			left -= 1
 	return g
 

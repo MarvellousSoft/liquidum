@@ -151,7 +151,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		Difficulty.Medium:
 			gen_level(rng, dif, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			gen_level(rng, dif, RandomHub._hard_visibility(4, 5), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatCol", "AllBoats", "AllWatersMedium"])
+			gen_level(rng, dif, RandomHub._hard_visibility(5, 4), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "BoatCol", "AllBoats", "AllWatersMedium"])
 		Difficulty.Expert:
 			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats"], ["TogetherRow", "TogetherCol", "SeparateRow", "SeparateCol", "AdvancedRow", "AdvancedCol"])
 		Difficulty.Insane:
