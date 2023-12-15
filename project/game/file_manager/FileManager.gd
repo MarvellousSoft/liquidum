@@ -244,11 +244,11 @@ func load_level_data(section: int, level: int) -> LevelData:
 	return data
 
 # If this becomes very used, we can cache it
-func load_user_data() -> UserData:
+func _load_user_data() -> UserData:
 	return UserData.load_data(_load_json_data(_profile_dir(), USER_DATA, false))
 
 
-func save_user_data(data: UserData) -> void:
+func _save_user_data(data: UserData) -> void:
 	_save_json_data(_profile_dir(), USER_DATA, data.get_data())
 
 

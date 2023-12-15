@@ -46,7 +46,7 @@ func _update() -> void:
 	var has_random_level := FileManager.load_level(RANDOM) != null
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level
-	completed_count = FileManager.load_user_data().random_levels_completed
+	completed_count = UserData.current().random_levels_completed
 	for dif in Difficulty:
 		var label: Label = Completed.get_node(dif)
 		label.visible = not $Difficulties/VBox.get_node(dif).disabled
@@ -88,7 +88,8 @@ func _confirm_new_level() -> bool:
 func _level_completed(dif: Difficulty) -> void:
 	# Save was already deleted
 	completed_count[dif] += 1
-	FileManager.save_user_data(UserData.new(completed_count))
+	UserData.current().random_levels_completed = completed_count
+	UserData.save()
 
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")

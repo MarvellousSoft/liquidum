@@ -1,10 +1,21 @@
 class_name UserData
 
+static var _current: UserData = null
+static var _current_profile: String = ""
+
+static func current() -> UserData:
+	if _current == null or _current_profile != FileManager.current_profile:
+		_current_profile = FileManager.current_profile
+		_current = FileManager._load_user_data()
+	return _current
+
+static func save() -> void:
+	FileManager._save_user_data(current())
+
+
 const VERSION := 1
 
 var random_levels_completed: Array[int]
-
-enum { VERSION_KEY, RANDOM_LEVELS_COMPLETED }
 
 func _init(random_levels_completed_: Array[int]) -> void:
 	random_levels_completed = random_levels_completed_
