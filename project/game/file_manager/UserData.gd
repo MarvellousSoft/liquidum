@@ -16,14 +16,23 @@ static func save() -> void:
 const VERSION := 1
 
 var random_levels_completed: Array[int]
+var best_streak: int
+var current_streak: int
+var last_day: String
 
-func _init(random_levels_completed_: Array[int]) -> void:
+func _init(random_levels_completed_: Array[int], best_streak_: int, current_streak_: int, last_day_: String) -> void:
 	random_levels_completed = random_levels_completed_
+	best_streak = best_streak_
+	current_streak = current_streak_
+	last_day = last_day_
 
 func get_data() -> Dictionary:
 	return {
 		version = VERSION,
 		random_levels_completed = random_levels_completed,
+		best_streak = best_streak,
+		current_streak = current_streak,
+		last_day = last_day,
 	}
 
 static func load_data(data_: Variant) -> UserData:
@@ -31,10 +40,10 @@ static func load_data(data_: Variant) -> UserData:
 	if data_ == null:
 		for i in RandomHub.Difficulty.size():
 			completed.append(0)
-		return UserData.new(completed)
+		return UserData.new(completed, 0, 0, "")
 	var data: Dictionary = data_
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
-	return UserData.new(completed)
+	return UserData.new(completed, data.best_streak, data.current_streak, data.last_day)
 

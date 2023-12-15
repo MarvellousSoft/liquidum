@@ -4,7 +4,7 @@ extends Control
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1300
 
-signal won
+signal won(mistakes: int)
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -246,7 +246,7 @@ func win() -> void:
 	
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit()
+	won.emit(int(Counters.mistake.count))
 	
 	await get_tree().create_timer(1.5).timeout
 	

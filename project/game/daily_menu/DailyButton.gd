@@ -8,6 +8,7 @@ extends Control
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
 
+var date: String
 var deadline: int
 var gen := RandomLevelGenerator.new()
 
@@ -30,7 +31,7 @@ func _update() -> void:
 		OngoingSolution.visible = false
 		return
 
-	var date := _today()
+	date = _today()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
 	
 	if FileManager.has_daily_level(date):
@@ -60,10 +61,14 @@ func _update_time_left() -> void:
 	else:
 		_update()
 
-#TODO: Implement
+
 func _update_streak() -> void:
-	CurStreak.text = tr("CUR_STREAK") % 0
-	BestStreak.text = tr("BEST_STREAK") % 0
+	var data := UserData.current()
+	if data.current_streak > 0 and data.last_day < _yesterday():
+		data.current_streak = 0
+		UserData.save()
+	CurStreak.text = tr("CUR_STREAK") % data.current_streak
+	BestStreak.text = tr("BEST_STREAK") % data.best_streak
 
 
 func _unixtime() -> int:
@@ -71,10 +76,15 @@ func _unixtime() -> int:
 		return Steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-func _today() -> String:
-	var date := Time.get_datetime_string_from_unix_time(_unixtime())
+func _remove_time(date: String) -> String:
 	return date.substr(0, date.find('T'))
 
+func _today(dt: float = 0) -> String:
+	var date := Time.get_datetime_string_from_unix_time(_unixtime() - dt)
+	return _remove_time(date)
+
+func _yesterday() -> String:
+	return _today(24 * 60 * 60)
 
 func _on_timer_timeout():
 	_update_time_left()
@@ -161,5 +171,21 @@ func _on_button_pressed() -> void:
 	var level_data := FileManager.load_daily_level(date)
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(date), level_data.full_name, level_data.description)
+		level.won.connect(level_completed)
 		TransitionManager.push_scene(level)
 	DailyButton.disabled = false
+
+func level_completed(mistakes: int) -> void:
+	var data := UserData.current()
+	if mistakes < 3:
+		# It the streak was broken this would be handled in _update_streak
+		if date != data.last_day:
+			data.last_day = date
+			data.current_streak += 1
+			data.best_streak = max(data.best_streak, data.current_streak)
+			UserData.save()
+	else:
+		if data.current_streak > 0:
+			data.current_streak = 0
+			UserData.save()
+	

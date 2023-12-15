@@ -50,6 +50,7 @@ vertical_alignment = 1
 
 [node name="StreakContainer" type="VBoxContainer" parent="HBox/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "STREAK_TOOLTIP"
 theme_override_constants/separation = 15
 
 [node name="CurStreak" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
