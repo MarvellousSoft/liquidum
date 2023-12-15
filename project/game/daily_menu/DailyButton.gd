@@ -55,7 +55,8 @@ func _update_time_left() -> void:
 		else:
 			num = secs_left / 60
 			txt = "MINUTES_LEFT"
-		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), tr(txt)]
+		txt = tr(txt).format({"s": "s" if num > 1 else ""})
+		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), txt]
 	else:
 		_update()
 

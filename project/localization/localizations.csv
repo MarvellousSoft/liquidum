@@ -117,8 +117,8 @@ DAILY_TOOLTIP,A hard level that changes daily,Um nível dificil que muda diariam
 DAILY_TOOLTIP_DISABLED,Unlock section 5 to access daily levels,Desbloqueie a seção 5 para acessar níveis do dia,Desbloqueie a seção 5 para acessar níveis do dia
 CUR_STREAK,Current win streak:  %d,Sequência atual de vitórias:  %d,Sequência atual de vitórias:  %d
 BEST_STREAK,Best win streak:  %d,Maior sequência atual de vitórias:  %d,Maior sequência atual de vitórias:  %d
-HOURS_LEFT,hours left,horas restantes,horas restantes
-MINUTES_LEFT,minutes left,minutos restantes,minutos restantes
+HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
+MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
 MONDAY,Monday,Segunda,Segunda
 TUESDAY,Tuesday,Terça,Terça
 WEDNESDAY,Wednesday,Quarta,Quarta
