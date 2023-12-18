@@ -10,7 +10,9 @@ static func current() -> UserData:
 	return _current
 
 static func save() -> void:
-	FileManager._save_user_data(current())
+	var data := current()
+	data.save_stats_to_steam()
+	FileManager._save_user_data(data)
 
 
 const VERSION := 1
@@ -35,6 +37,13 @@ func get_data() -> Dictionary:
 		last_day = last_day,
 	}
 
+func save_stats_to_steam() -> void:
+	if not SteamManager.enabled or not SteamManager.stats_received:
+		return
+	SteamStats.set_random_levels(random_levels_completed)
+	SteamStats.set_current_streak(current_streak)
+
+
 static func load_data(data_: Variant) -> UserData:
 	var completed: Array[int] = []
 	if data_ == null:
@@ -46,4 +55,3 @@ static func load_data(data_: Variant) -> UserData:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
 	return UserData.new(completed, data.best_streak, data.current_streak, data.last_day)
-

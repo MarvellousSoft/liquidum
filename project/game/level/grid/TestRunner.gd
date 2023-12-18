@@ -50,14 +50,15 @@ func _on_full_solve_pressed():
 	print("Level is %s" % solve_type)
 	$Buttons/SolvedType.text = solve_type
 
-const STATS := ["daily", "editor", "playtest", "random"]
+const PLAYED_STATS := ["daily", "editor", "playtest", "random"]
+const INT_STATS := ["daily_levels", "random_all_levels", "random_insane_levels"]
 
 func _on_print_global_stats_pressed() -> void:
 	if not SteamManager.enabled:
 		return
 	Steam.requestGlobalStats(5)
 	await Steam.global_stats_received
-	for stat in STATS:
+	for stat in PLAYED_STATS:
 		var val := Steam.getGlobalStatFloat(stat + "_secs")
 		var tot := Steam.getGlobalStatInt(stat + "_total")
 		print("%s = %.0f tot %.0f avg" % [stat, val, val / tot])
@@ -66,7 +67,9 @@ func _on_print_global_stats_pressed() -> void:
 func _on_print_local_stats_pressed():
 	if not SteamManager.enabled:
 		return
-	for stat in STATS:
+	for stat in PLAYED_STATS:
 		var val := Steam.getStatFloat(stat + "_secs")
 		var tot := Steam.getStatInt(stat + "_total")
 		print("%s = %.0f (total %d)" % [stat, val, tot])
+	for int_stat in INT_STATS:
+		print("%s = %d" % [int_stat, Steam.getStatInt(int_stat)])
