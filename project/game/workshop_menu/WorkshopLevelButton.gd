@@ -39,4 +39,9 @@ func _on_open_pressed() -> void:
 		return
 	var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), str(id), level_data.full_name, level_data.description, ["workshop"])
 	level.workshop_id = id
+	level.won.connect(_level_completed)
 	TransitionManager.push_scene(level)
+
+func _level_completed(_no_resets: bool, _mistakes: int, first_win: bool) -> void:
+	if first_win and SteamManager.enabled:
+		SteamStats.increment_workshop()

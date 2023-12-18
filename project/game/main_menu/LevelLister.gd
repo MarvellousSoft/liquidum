@@ -7,6 +7,8 @@ const MAX_UNSOLVED_LEVELS := 2
 static func level_name(section: int, level: int) -> String:
 	return "level%02d_%02d" % [section, level]
 
+static func has_section(section: int) -> int:
+	return FileManager.has_level_data(section, 1)
 
 static func get_levels_in_section(section: int) -> int:
 	var i := 1
