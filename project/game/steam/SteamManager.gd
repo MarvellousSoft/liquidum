@@ -20,18 +20,18 @@ func _ready() -> void:
 		set_process(false)
 		set_process_input(false)
 		return
-	Steam.user_stats_received.connect(_stats_received)
+	Steam.current_stats_received.connect(_stats_received)
 	Steam.requestCurrentStats()
 
-func _stats_received() -> void:
-	print("Steam stats received!")
+func _stats_received(game: int, result: int, user: int) -> void:
+	print("Steam stats received! (result = %d, game = %d, user = %d)" % [result, game, user])
 	stats_received = true
 
 func store_stats() -> void:
 	if not stats_received:
 		Steam.requestCurrentStats()
 		return
-	print("Storing")
+	print("Storing steam stats")
 	Steam.storeStats()
 
 func _notification(what: int) -> void:
