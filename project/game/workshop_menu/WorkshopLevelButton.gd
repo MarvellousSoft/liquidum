@@ -37,6 +37,6 @@ func _on_open_pressed() -> void:
 	var level_data := load_level()
 	if level_data == null:
 		return
-	var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), str(id), level_data.full_name, level_data.description)
+	var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), str(id), level_data.full_name, level_data.description, ["workshop"])
 	level.workshop_id = id
 	TransitionManager.push_scene(level)

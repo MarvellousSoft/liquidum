@@ -50,7 +50,7 @@ func _on_full_solve_pressed():
 	print("Level is %s" % solve_type)
 	$Buttons/SolvedType.text = solve_type
 
-const STATS := ["daily_level"]
+const STATS := ["daily", "editor", "playtest", "random"]
 
 func _on_print_global_stats_pressed() -> void:
 	if not SteamManager.enabled:

@@ -10,6 +10,7 @@ const RANDOM := "random"
 var completed_count: Array[int]
 var gen := RandomLevelGenerator.new()
 
+# Do not change the model difficulty names, at most the user displayed ones
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
 func _ready() -> void:
@@ -75,7 +76,7 @@ func load_existing() -> void:
 	var data := FileManager.load_random_level()
 	if data == null:
 		return
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "")
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()])
 	level.won.connect(_level_completed.bind(data.difficulty))
 	TransitionManager.push_scene(level)
 

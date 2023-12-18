@@ -364,7 +364,7 @@ func _get_solution_grid() -> GridModel:
 
 
 func _on_playtest_button_pressed() -> void:
-	var new_level = Global.create_level(_get_solution_grid(), "", full_name, description)
+	var new_level = Global.create_level(_get_solution_grid(), "", full_name, description, ["playtest"])
 	TransitionManager.push_scene(new_level)
 
 
@@ -556,6 +556,7 @@ func _on_dev_mode_toggled(status):
 	DevContainer.visible = status
 
 func add_playtime_tracking(stats: Array[String]) -> void:
+	stats.append("total")
 	var tracker := preload("res://game/steam/SteamPlaytimeTracker.tscn").instantiate()
 	tracker.stats = stats
 	add_child(tracker)
