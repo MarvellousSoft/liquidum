@@ -1,3 +1,4 @@
+class_name SteamPlaytimeTracker
 extends Node
 
 # Name without the _secs or _total suffix
@@ -10,8 +11,10 @@ func _ready() -> void:
 var time_to_add := 0.0
 
 func _process(dt: float) -> void:
-	# TODO: Pause if on pause screen
 	time_to_add += dt
+
+func set_tracking(on: bool) -> void:
+	set_process(on)
 
 func flush() -> void:
 	if not SteamManager.enabled or not SteamManager.stats_received:

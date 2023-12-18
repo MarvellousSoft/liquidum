@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=27 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="13_4gky1"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
+[ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
@@ -558,6 +559,8 @@ libraries = {
 [node name="Autosaver" type="Timer" parent="."]
 wait_time = 30.0
 autostart = true
+
+[node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]

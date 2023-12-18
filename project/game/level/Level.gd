@@ -24,7 +24,7 @@ signal won(first_try_no_resets: bool, mistakes: int)
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton = %ResetButton
 @onready var BackButton = %BackButton
-@onready var Settings = $SettingsScreen
+@onready var Settings: SettingsScreen = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionEdit: TextEdit = $Description/Edit
@@ -416,8 +416,9 @@ func _on_back_button_pressed() -> void:
 	TransitionManager.pop_scene()
 
 
-func _on_settings_screen_pause_toggled(active):
-	process_game = not active
+func _on_settings_screen_pause_toggled(paused: bool) -> void:
+	process_game = not paused
+	$SteamPlaytimeTracker.set_tracking(not paused)
 
 
 func _notification(what: int) -> void:
@@ -557,6 +558,4 @@ func _on_dev_mode_toggled(status):
 
 func add_playtime_tracking(stats: Array[String]) -> void:
 	stats.append("total")
-	var tracker := preload("res://game/steam/SteamPlaytimeTracker.tscn").instantiate()
-	tracker.stats = stats
-	add_child(tracker)
+	$SteamPlaytimeTracker.stats = stats

@@ -1,3 +1,4 @@
+class_name SettingsScreen
 extends CanvasLayer
 
 signal pause_toggled(active : bool)
