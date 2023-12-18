@@ -58,8 +58,7 @@ func _on_upload_button_pressed() -> void:
 		metadata.steam_id = res.id
 		FileManager.save_editor_level(id, metadata, null)
 	if not res.success:
-		# TODO: Display some error
-		pass
+		push_error("Failed to upload to workshop")
 	var err := DirAccess.remove_absolute(IMG_FILE)
 	if err != Error.OK:
 		push_warning("Failed to delete image preview: %d" % err)

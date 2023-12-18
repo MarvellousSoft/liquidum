@@ -55,6 +55,7 @@ var uploading := false
 func upload_ugc_item(id: int, title: String, description: String, dir: String, preview_file: String) -> UploadResult:
 	if uploading:
 		return UploadResult.new(id, false)
+	UploadingToWorkshop.start()
 	dir = ProjectSettings.globalize_path(dir)
 	preview_file = ProjectSettings.globalize_path(preview_file)
 	uploading = true
@@ -64,6 +65,7 @@ func upload_ugc_item(id: int, title: String, description: String, dir: String, p
 	if id != -1:
 		success = await _upload_item(id, title, description, dir, preview_file)
 	uploading = false
+	UploadingToWorkshop.stop()
 	return UploadResult.new(id, success)
 
 func _create_item_id() -> int:
@@ -87,6 +89,7 @@ func _upload_item(id: int, title: String, description: String, dir: String, prev
 	Steam.setItemDescription(update_id, description)
 	Steam.setItemPreview(update_id, preview_file)
 	Steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
+	UploadingToWorkshop.update_handle = update_id
 	var ret: Array = await Steam.item_updated
 	var res: Steam.Result = ret[0]
 	var needs_tos: bool = ret[1]

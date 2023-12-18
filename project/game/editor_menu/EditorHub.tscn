@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://4263yf3prywo"]
+[gd_scene load_steps=6 format=3 uid="uid://4263yf3prywo"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_sq1cy"]
 [ext_resource type="Script" path="res://game/editor_menu/EditorHub.gd" id="2_mul0o"]
 [ext_resource type="PackedScene" uid="uid://v7gwn05ed1kv" path="res://game/editor_menu/EditorLevelButton.tscn" id="3_1grfo"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_qaoyn"]
+[ext_resource type="PackedScene" uid="uid://bhoqtcckfgxkg" path="res://game/editor_menu/UploadingToWorkshop.tscn" id="5_b3n3h"]
 
 [node name="EditorHub" type="Control"]
 layout_mode = 3
@@ -75,6 +76,8 @@ focus_mode = 0
 text = "BACK"
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_qaoyn")]
+
+[node name="UploadingToWorkshop" parent="." instance=ExtResource("5_b3n3h")]
 
 [connection signal="mouse_entered" from="CreateNewLevel" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="CreateNewLevel" to="." method="_on_create_new_level_pressed"]
