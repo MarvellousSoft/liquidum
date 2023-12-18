@@ -48,8 +48,8 @@ RANDOM_TOOLTIP,Random levels,Níveis aleatórios,Níveis aleatórios
 RANDOM_TITLE,Explorer mode,Modo explorador,Modo explorador
 EASY_BUTTON,Easy,Fácil,Fácil
 MEDIUM_BUTTON,Medium,Médio,Médio
-HARD_BUTTON,Hard,Difícil,Duro
-EXPERT_BUTTON,Expert,Expert,Especialista
+HARD_BUTTON,Hard,Difícil,Difícil
+EXPERT_BUTTON,Expert,Expert,Expert
 INSANE_BUTTON,Insane,Insano,Insano
 CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente,Continuar existente
 RANDOM_COMPLETED,Levels completed:,Níveis completados:,Níveis concluídos:

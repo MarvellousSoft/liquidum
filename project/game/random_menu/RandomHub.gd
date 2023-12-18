@@ -7,7 +7,6 @@ const RANDOM := "random"
 @onready var ContinueSeparator: HSeparator = $Difficulties/VBox/ContinueSeparator
 @onready var Completed: VBoxContainer = $CompletedCount
 
-var completed_count: Array[int]
 var gen := RandomLevelGenerator.new()
 
 # Do not change the model difficulty names, at most the user displayed ones
@@ -35,23 +34,27 @@ func _ready() -> void:
 		else:
 			button.disabled = true
 			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
-	
+
+func _on_dev_mode(_on: bool) -> void:
+	get_tree().reload_current_scene()
+
 func _enter_tree() -> void:
+	Global.dev_mode_toggled.connect(_on_dev_mode)
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
 
 func _exit_tree() -> void:
+	Global.dev_mode_toggled.disconnect(_on_dev_mode)
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 
 func _update() -> void:
 	var has_random_level := FileManager.load_level(RANDOM) != null
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level
-	completed_count = UserData.current().random_levels_completed
 	for dif in Difficulty:
 		var label: Label = Completed.get_node(dif)
 		label.visible = not $Difficulties/VBox.get_node(dif).disabled
-		label.text = "%s - %d" % [tr("%s_BUTTON" % dif.to_upper()), completed_count[Difficulty[dif]]]
+		label.text = "%s - %d" % [tr("%s_BUTTON" % dif.to_upper()), UserData.current().random_levels_completed[Difficulty[dif]]]
 
 func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
@@ -86,10 +89,9 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
-func _level_completed(dif: Difficulty, _no_resets: bool, _mistakes: int) -> void:
+func _level_completed(_no_resets: bool, _mistakes: int, dif: Difficulty) -> void:
 	# Save was already deleted
-	completed_count[dif] += 1
-	UserData.current().random_levels_completed = completed_count
+	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
 
 func _on_continue_pressed() -> void:

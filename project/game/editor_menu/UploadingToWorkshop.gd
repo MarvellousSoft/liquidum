@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 @onready var Update: Timer = $Update
-@onready var Progress: Range = $All/PanelContainer/VBoxContainer/ProgressBar
+@onready var Progress: Range = %ProgressBar
 
 var update_handle: int = 0
 
