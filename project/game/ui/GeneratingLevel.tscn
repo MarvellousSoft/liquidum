@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgytdfreynwua"]
+[gd_scene load_steps=5 format=3 uid="uid://dgytdfreynwua"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ifh03"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="1_wgnft"]
 [ext_resource type="Script" path="res://game/ui/GeneratingLevel.gd" id="2_b07ge"]
+[ext_resource type="StyleBox" uid="uid://8ys6eirm8td1" path="res://game/ui/BlackPanelContainer.tres" id="3_vi7mk"]
 
 [node name="GeneratingLevel" type="CanvasLayer"]
 editor_description = "Used to capture all the inputs"
@@ -32,6 +33,7 @@ offset_right = 511.5
 offset_bottom = 135.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("3_vi7mk")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="All/PanelContainer"]
 layout_mode = 2

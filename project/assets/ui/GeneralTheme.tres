@@ -18,7 +18,7 @@ thickness = 20
 base_font = ExtResource("1_x6xj1")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vcc8j"]
-bg_color = Color(0, 0.0352941, 0.141176, 1)
+bg_color = Color(0.85098, 1, 0.886275, 0.235294)
 border_width_left = 20
 border_width_top = 20
 border_width_right = 20
