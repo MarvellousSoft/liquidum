@@ -10,6 +10,7 @@ const TUTORIALS = {
 	"mouse": preload("res://database/tutorials/Mouse.tscn"),
 	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
+	"boats": preload("res://database/tutorials/Boats.tscn"),
 }
 
 signal dev_mode_toggled(status : bool)
