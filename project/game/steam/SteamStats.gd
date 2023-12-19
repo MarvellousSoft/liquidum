@@ -9,25 +9,31 @@ static func flushNewAchievements() -> void:
 	Steam.storeStats()
 
 static func set_random_levels(completed_count: Array[int]) -> void:
-	var new_achievement := false
+	var any := false
 	var tot := 0
-	if Steam.getStatInt("random_insane_levels") < 25 and completed_count[RandomHub.Difficulty.Insane] >= 25:
-		new_achievement = true
+	var each := true
 	for dif in RandomHub.Difficulty:
 		var dif_val: int = RandomHub.Difficulty[dif]
+		if completed_count[dif_val] == 0:
+			each = false
 		tot += completed_count[dif_val]
-		Steam.setStatInt("random_%s_levels" % [dif.to_lower()], completed_count[dif_val])
-	if not Steam.getAchievement("random_25").achieved and tot >= 25:
-		new_achievement = true
-	Steam.setStatInt("random_all_levels", tot)
-	if new_achievement:
+		var stat_name := "random_%s_levels" % [dif.to_lower()]
+		if dif_val == RandomHub.Difficulty.Insane:
+			if SteamStats._set_stat_with_goal(stat_name, completed_count[dif_val], 100, "random_100", 10):
+				any = true
+		else:
+			Steam.setStatInt(stat_name, completed_count[dif_val])
+	if SteamStats._set_stat_with_goal("random_all_levels", tot, 25, "random_25", 5):
+		any = true
+	if tot > 0 and SteamStats._achieve("random_1", false):
+		any = true
+	if each and SteamStats._achieve("random_each", false):
+		any = true
+	if any:
 		SteamStats.flushNewAchievements()
 
 static func set_current_streak(streak: int) -> void:
-	var had_streak := Steam.getAchievement("daily_streak_7")
-	Steam.setStatInt("daily_streak_current", streak)
-	if not had_streak and streak >= 7:
-		SteamStats.flushNewAchievements()
+	SteamStats._set_stat_with_goal("daily_streak_current", streak, 7, "daily_streak_7", 2)
 
 static func _increment(stat: String) -> void:
 	var val := Steam.getStatInt(stat)
@@ -45,7 +51,8 @@ static func increment_workshop() -> void:
 static func _achieve(achievement: String, flush := true) -> bool:
 	if not Steam.getAchievement(achievement).achieved:
 		Steam.setAchievement(achievement)
-		SteamStats.flushNewAchievements()
+		if flush:
+			SteamStats.flushNewAchievements()
 		return true
 	return false
 
@@ -60,7 +67,7 @@ static func _set_stat_with_goal(stat: String, val: int, goal: int, achievement: 
 		Steam.setStatInt(stat, val)
 		if val > prev and val < goal and (prev / checkpoint) != (val / checkpoint):
 			Steam.indicateAchievementProgress(achievement, val, goal)
-		return val == goal
+		return prev < goal and val >= goal
 	return false
 
 static func update_campaign_stats() -> void:
