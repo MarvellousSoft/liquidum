@@ -572,6 +572,7 @@ func _do_rem_row() -> RemRowChange:
 	prev_wall_bottom.assign(wall_bottom.pop_back())
 	prev_wall_right.assign(wall_right.pop_back())
 	var hint: LineHint = _row_hints.pop_back()
+	fix_invalid_boats(false)
 	maybe_update_hints()
 	validate()
 	return RemRowChange.new(prev_row, prev_wall_bottom, prev_wall_right, hint)
@@ -586,8 +587,10 @@ func add_row(flush_undo := true) -> void:
 func rem_row(flush_undo := true) -> void:
 	if n == 1:
 		return
+	if flush_undo:
+		push_empty_undo()
 	var change := _do_rem_row()
-	_push_undo_changes([change], flush_undo)
+	_push_undo_changes([change], false)
 
 func _do_add_col(col: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddColChange:
 	assert(editor_mode())
