@@ -33,7 +33,8 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 		SteamStats.flushNewAchievements()
 
 static func set_current_streak(streak: int) -> void:
-	SteamStats._set_stat_with_goal("daily_streak_current", streak, 7, "daily_streak_7", 2)
+	if SteamStats._set_stat_with_goal("daily_streak_current", streak, 7, "daily_streak_7", 2):
+		SteamStats.flushNewAchievements()
 
 static func _increment(stat: String) -> void:
 	var val := Steam.getStatInt(stat)
@@ -46,7 +47,14 @@ static func increment_daily_good() -> void:
 	SteamStats._increment("daily_good_levels")
 
 static func increment_workshop() -> void:
-	SteamStats._increment("workshop_levels")
+	var any := false
+	var stat := "workshop_levels"
+	if SteamStats._achieve("workshop_levels_1", false):
+		any = true
+	if SteamStats._set_stat_with_goal(stat, Steam.getStatInt(stat) + 1, 5, "workshop_levels_5", 3):
+		any = true
+	if any:
+		SteamStats.flushNewAchievements()
 
 static func _achieve(achievement: String, flush := true) -> bool:
 	if not Steam.getAchievement(achievement).achieved:
@@ -85,7 +93,7 @@ static func update_campaign_stats() -> void:
 				any = true
 		if SteamStats._set_stat_with_goal("section_%d_levels" % section, completed_levels, section_levels, "section_%d_completed" % section, section_levels / 2):
 			any = true
-		if completed_levels > LevelLister.MAX_UNSOLVED_LEVELS:
+		if section_levels - completed_levels > LevelLister.MAX_UNSOLVED_LEVELS:
 			break
 		section += 1
 	while LevelLister.has_section(section):

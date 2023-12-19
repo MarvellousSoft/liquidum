@@ -174,15 +174,15 @@ func _on_button_pressed() -> void:
 	DailyButton.disabled = false
 
 func level_completed(mistakes: int, first_try_no_resets: bool, first_win: bool) -> void:
-	if first_win and SteamManager.enabled:
+	if first_win and SteamManager.stats_received:
 		SteamStats.increment_daily_all()
 	if not first_try_no_resets or not first_win:
 		return
 	var data := UserData.current()
 	if mistakes < 3:
-		if SteamManager.enabled:
+		if SteamManager.stats_received:
 			SteamStats.increment_daily_good()
-		if mistakes == 0 and SteamManager.enabled:
+		if mistakes == 0 and SteamManager.stats_received:
 			SteamStats.unlock_daily_no_mistakes()
 		# It the streak was broken this would be handled in _update_streak
 		if date != data.last_day:
