@@ -6,9 +6,15 @@ signal disable_focus()
 @onready var Sections = $Sections
 
 var level_focused := false
+var level_to_unlock = -1
+var section_to_unlock = -1
 
 func _ready():
 	update_sections()
+
+
+func _enter_tree():
+	check_unlocks()
 
 
 func update_sections():
@@ -20,8 +26,26 @@ func update_sections():
 			section.disable()
 		else:
 			section.enable()
-			section.setup(idx, unlocked)
+			section.setup(self, idx, unlocked)
 		idx += 1
+
+
+func check_unlocks() -> void:
+	if level_to_unlock != -1:
+		pass
+	elif section_to_unlock != -1:
+		pass
+	level_to_unlock = -1
+	section_to_unlock = -1
+
+func unlock_level(level, section):
+	level_to_unlock = level
+	section_to_unlock = section
+
+
+func unlock_section(section):
+	level_to_unlock = -1
+	section_to_unlock = section
 
 
 func _on_level_section_enable_focus(pos, my_section):

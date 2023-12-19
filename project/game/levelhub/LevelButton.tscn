@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjsmnin37pr8t"]
+[gd_scene load_steps=17 format=3 uid="uid://bjsmnin37pr8t"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
@@ -8,6 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://7vwnq01lpj8o" path="res://assets/ui/LevelButton/HoverStyle.tres" id="4_qjcst"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
 [ext_resource type="StyleBox" uid="uid://b2184kn03irus" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
+[ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyxri"]
 shader = ExtResource("3_d8olh")
@@ -18,7 +19,163 @@ shader_parameter/waveAmplitude = 10.0
 shader_parameter/waveFrequency = 20.0
 shader_parameter/blendingAmount = 1.0
 shader_parameter/wave_color = Color(0.670588, 1, 0.819608, 0.34902)
-shader_parameter/alpha = 1.0
+shader_parameter/alpha = 0.0
+
+[sub_resource type="Animation" id="Animation_yarop"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Button:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-97, -133)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UnlockParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_sl2us"]
+resource_name = "unlock"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2, 2.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.4, 0.4), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Button:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("UnlockParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4p2d0"]
+_data = {
+"RESET": SubResource("Animation_yarop"),
+"unlock": SubResource("Animation_sl2us")
+}
+
+[sub_resource type="Gradient" id="Gradient_8l20x"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.910299)
+colors = PackedColorArray(0.45098, 0.941176, 0.776471, 1, 0.85098, 1, 0.886275, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_k2ynt"]
+gradient = SubResource("Gradient_8l20x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xc37j"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 500.0
+initial_velocity_max = 500.0
+orbit_velocity_max = 0.01
+gravity = Vector3(0, 0, 0)
+tangential_accel_max = 26.97
+attractor_interaction_enabled = false
+scale_min = 0.5
+color_ramp = SubResource("GradientTexture1D_k2ynt")
+turbulence_noise_strength = 17.78
+turbulence_noise_scale = 2.659
 
 [node name="LevelButton" type="Control"]
 layout_mode = 3
@@ -42,6 +199,7 @@ theme_override_styles/normal = ExtResource("3_dht5y")
 theme_override_styles/hover = ExtResource("4_qjcst")
 theme_override_styles/pressed = ExtResource("5_eoh5v")
 theme_override_styles/disabled = ExtResource("3_84hro")
+disabled = true
 text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]
@@ -57,6 +215,23 @@ color = Color(0.670588, 1, 0.819608, 1)
 
 [node name="OngoingSolution" parent="." instance=ExtResource("4_tmmmn")]
 unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4p2d0")
+}
+speed_scale = 1.5
+
+[node name="UnlockParticles" type="GPUParticles2D" parent="."]
+position = Vector2(4, 12)
+emitting = false
+amount = 40
+process_material = SubResource("ParticleProcessMaterial_xc37j")
+texture = ExtResource("9_1gdj7")
+lifetime = 2.5
+one_shot = true
+speed_scale = 1.5
+explosiveness = 1.0
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=52 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -10,10 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/cell/air_single.png" id="8_o2vuh"]
 [ext_resource type="Texture2D" uid="uid://drtuy7jt7dfl2" path="res://assets/images/ui/cell/air_topleft.png" id="9_xqw16"]
 [ext_resource type="Texture2D" uid="uid://4bsr554e8gbo" path="res://assets/images/ui/cell/air_topright.png" id="10_iqtow"]
-[ext_resource type="Texture2D" uid="uid://df3d58nkyqgq7" path="res://assets/images/ui/cell/single_button_normal.png" id="11_4w8p5"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/cell/single_button_pressed.png" id="12_8pxsf"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/cell/single_button_hover.png" id="13_0ph6y"]
-[ext_resource type="Texture2D" uid="uid://cc5o7ctb2q2y3" path="res://assets/images/ui/cell/diagonal_button_normal.png" id="15_2vt7g"]
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/cell/diagonal_button_pressed.png" id="16_g5nkk"]
 [ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/cell/diagonal_button_hover.png" id="17_g3cup"]
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/cell/diagonal_button_mask.png" id="19_sucjp"]
@@ -112,7 +110,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_whcw4"]
 resource_name = "error"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -149,7 +147,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_2hmw4"]
 resource_name = "error"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -186,7 +184,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_627e5"]
 resource_name = "error"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -223,7 +221,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_m2xxj"]
 resource_name = "error"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -260,7 +258,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_6oxih"]
 resource_name = "error"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -491,7 +489,6 @@ offset_right = 50.0
 offset_bottom = 50.0
 pivot_offset = Vector2(250, 250)
 focus_mode = 0
-texture_normal = ExtResource("11_4w8p5")
 texture_pressed = ExtResource("12_8pxsf")
 texture_hover = ExtResource("13_0ph6y")
 
@@ -501,7 +498,6 @@ offset_right = 50.0
 offset_bottom = 50.0
 pivot_offset = Vector2(250, 250)
 focus_mode = 0
-texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
@@ -513,7 +509,6 @@ offset_bottom = 50.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 255)
 focus_mode = 0
-texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
@@ -525,7 +520,6 @@ offset_bottom = 50.0
 rotation = 3.14159
 pivot_offset = Vector2(250, 250)
 focus_mode = 0
-texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
@@ -537,7 +531,6 @@ offset_bottom = 50.0
 rotation = -1.5708
 pivot_offset = Vector2(250, 250)
 focus_mode = 0
-texture_normal = ExtResource("15_2vt7g")
 texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")

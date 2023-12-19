@@ -5,6 +5,7 @@ const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = 1300
 
 signal won(first_try_no_resets: bool, mistakes: int, first_win: bool)
+signal had_first_win
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -51,6 +52,7 @@ var workshop_id := -1
 var game_won := false
 var first_try_no_resets := true
 var reset_text := &"CONFIRM_RESET_LEVEL"
+var won_before := false
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -250,7 +252,7 @@ func win() -> void:
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
 	
-	var won_before := dummy_save.is_completed()
+	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
 	won.emit(first_try_no_resets, int(Counters.mistake.count), not won_before)
@@ -539,6 +541,8 @@ func _on_dev_buttons_save():
 
 func _on_continue_button_pressed():
 	TransitionManager.pop_scene()
+	if not won_before:
+		had_first_win.emit()
 
 
 func _on_description_edit_text_changed() -> void:

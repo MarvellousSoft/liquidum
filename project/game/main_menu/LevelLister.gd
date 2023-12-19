@@ -17,10 +17,34 @@ static func get_levels_in_section(section: int) -> int:
 	return i - 1
 
 
+static func just_unlocked_level() -> Dictionary:
+	var level_info = {
+		"level_number": -1,
+		"section": -1,
+	}
+	
+	return level_info
+
+
+static func get_max_unlocked_levels() -> int:
+	return MAX_UNSOLVED_LEVELS
+
+
+static func get_initial_unlocked_levels() -> int:
+	return INITIAL_UNLOCKED_LEVELS
+
+
 static func get_game_level_data(section : int, level : int):
 	if not FileManager.has_level_data(section, level):
 		push_error("Not a valid level (section %s - level %s)" % [str(section), str(level)])
 	return FileManager.load_level(LevelLister.level_name(section, level))
+
+
+static func count_all_game_sections() -> int:
+	for i in range(1, 100):
+		if not has_section(i):
+			return i - 1
+	return -1
 
 
 static func section_complete(section: int) -> bool:
@@ -104,6 +128,7 @@ static func count_section_ongoing_solutions(section: int) -> int:
 		if save != null and not save.is_solution_empty():
 			count += 1
 	return count
+
 
 static func all_campaign_levels_completed() -> bool:
 	for section in range(1, 50):

@@ -14,10 +14,12 @@ const STYLES = {
 }
 
 signal pressed
+signal had_first_win
 
 @onready var MainButton = $Button
 @onready var ShaderEffect = $Button/ShaderEffect
 @onready var OngoingSolution = %OngoingSolution
+@onready var AnimPlayer = $AnimationPlayer
 
 var my_section := -1
 var my_level := -1
@@ -41,6 +43,11 @@ func setup(section : int, level : int, active : bool) -> void:
 	else:
 		set_ongoing_solution(false)
 		disable()
+
+
+func unlock():
+	await get_tree().create_timer(2.0).timeout
+	AnimPlayer.play("unlock")
 
 
 func set_ongoing_solution(status: bool) -> void:
@@ -75,11 +82,18 @@ func _on_button_pressed():
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, ["l%02d_%02d" % [my_section, my_level]], my_level, my_section)
 		level_node.won.connect(_level_completed)
+		level_node.had_first_win.connect(_on_level_had_first_win)
 		TransitionManager.push_scene(level_node)
+
 
 func _level_completed(_no_resets: bool, _mistakes: int, first_win: bool) -> void:
 	if first_win:
 		SteamStats.update_campaign_stats()
+
+
+func _on_level_had_first_win():
+	had_first_win.emit(self)
+
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
