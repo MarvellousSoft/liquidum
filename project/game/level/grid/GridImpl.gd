@@ -1565,6 +1565,31 @@ func _any_sol_boats() -> bool:
 
 func prettify_hints() -> void:
 	assert(not editor_mode())
+	for i in n:
+		var diags := false
+		for j in m:
+			if _pure_cell(i, j).cell_type() != E.Single:
+				diags = true
+				break
+		if diags and _row_hints[i].water_count == 0.5:
+			_row_hints[i].water_count_type = E.HintType.Hidden
+		if not diags and _row_hints[i].water_count == 1:
+			_row_hints[i].water_count_type = E.HintType.Hidden
+		if _row_hints[i].water_count == m:
+			_row_hints[i].water_count_type = E.HintType.Hidden
+		if _row_hints[i].boat_count == 1 or _row_hints[i].boat_count == m:
+			_row_hints[i].boat_count_type = E.HintType.Hidden
+		
+	for j in m:
+		var diags := false
+		for i in n:
+			if _pure_cell(i, j).cell_type() != E.Single:
+				diags = true
+				break
+		if diags and _col_hints[j].water_count == 0.5:
+			_col_hints[j].water_count_type = E.HintType.Hidden
+		if not diags and _col_hints[j].water_count == 1:
+			_col_hints[j].water_count_type = E.HintType.Hidden
 	if not _any_sol_boats():
 		grid_hints().total_boats = 0
 		for hints in [row_hints(), col_hints()]:

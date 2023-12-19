@@ -52,7 +52,6 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 				break
 		total_solve += Time.get_unix_time_from_system() - start_solve
 	if found:
-		g.prettify_hints()
 		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d]" % [tries, Time.get_unix_time_from_system() - start_time, total_gen, total_solve, initial_seed, initial_state])
 	return g if found else null
 

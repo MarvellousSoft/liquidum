@@ -104,6 +104,8 @@ func _input(event):
 
 
 func setup(try_load := true) -> void:
+	if not grid.editor_mode():
+		grid.prettify_hints()
 	DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
