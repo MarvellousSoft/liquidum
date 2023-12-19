@@ -24,8 +24,11 @@ func _ready() -> void:
 	Steam.requestCurrentStats()
 
 func _stats_received(game: int, result: int, user: int) -> void:
+	if stats_received:
+		return
 	print("Steam stats received! (result = %d, game = %d, user = %d)" % [result, game, user])
 	stats_received = true
+	SteamStats.update_campaign_stats()
 
 func store_stats() -> void:
 	if not stats_received:

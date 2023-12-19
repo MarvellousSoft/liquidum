@@ -74,8 +74,12 @@ func _on_button_pressed():
 		var level_name := LevelLister.level_name(my_section, my_level)
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, ["l%02d_%02d" % [my_section, my_level]], my_level, my_section)
+		level_node.won.connect(_level_completed)
 		TransitionManager.push_scene(level_node)
 
+func _level_completed(_no_resets: bool, _mistakes: int, first_win: bool) -> void:
+	if first_win:
+		SteamStats.update_campaign_stats()
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")

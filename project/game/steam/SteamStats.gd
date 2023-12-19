@@ -52,21 +52,39 @@ static func _achieve(achievement: String, flush := true) -> bool:
 static func unlock_daily_no_mistakes() -> void:
 	SteamStats._achieve("daily_no_mistakes")
 
-static func _section_unlocked(section: int) -> String:
-	return "section_%d_unlocked" % section
+# Returns whether the goal was just reached
+# Indicates progress every checkpoint values
+static func _set_stat_with_goal(stat: String, val: int, goal: int, achievement: String, checkpoint: int) -> bool:
+	var prev := Steam.getStatInt(stat)
+	if prev != val:
+		Steam.setStatInt(stat, val)
+		if val > prev and val < goal and (prev / checkpoint) != (val / checkpoint):
+			Steam.indicateAchievementProgress(achievement, val, goal)
+		return val == goal
+	return false
 
 static func update_campaign_stats() -> void:
 	var any := false
 	var section := 1
+	var total_completed := 0
+	var total_levels := 0
 	while LevelLister.has_section(section):
 		var completed_levels := LevelLister.count_completed_section_levels(section)
-		var total_levels := LevelLister.count_section_levels(section)
-		# TODO: Other achievements
+		total_completed += completed_levels
+		var section_levels := LevelLister.count_section_levels(section)
+		total_levels += section_levels
 		if section > 1:
 			if SteamStats._achieve("section_%d_unlocked" % section, false):
 				any = true
+		if SteamStats._set_stat_with_goal("section_%d_levels" % section, completed_levels, section_levels, "section_%d_completed" % section, section_levels / 2):
+			any = true
 		if completed_levels > LevelLister.MAX_UNSOLVED_LEVELS:
 			break
 		section += 1
+	while LevelLister.has_section(section):
+		total_levels += LevelLister.count_section_levels(section)
+		section += 1
+	if SteamStats._set_stat_with_goal("campaign_levels", total_completed, total_levels, "campaign_levels_completed", total_levels / 4):
+		any = true
 	if any:
 		SteamStats.flushNewAchievements()
