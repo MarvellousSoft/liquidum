@@ -1590,6 +1590,8 @@ func prettify_hints() -> void:
 			_col_hints[j].water_count_type = E.HintType.Hidden
 		if not diags and _col_hints[j].water_count == 1:
 			_col_hints[j].water_count_type = E.HintType.Hidden
+		if _col_hints[j].water_count == n:
+			_col_hints[j].water_count_type = E.HintType.Hidden
 	if not _any_sol_boats():
 		grid_hints().total_boats = 0
 		for hints in [row_hints(), col_hints()]:
