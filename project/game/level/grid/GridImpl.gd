@@ -510,6 +510,16 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.water_locs
+	func boat_possible() -> bool:
+		# TODO: Move that logic here
+		return SolverModel._boat_possible(grid, i, j)
+	func boat_would_flood_which() -> Array[WaterPosition]:
+		if SolverModel._boat_possible(grid, i, j):
+			var c := grid.get_cell(i + 1, j)
+			return c.water_would_flood_which(E.diag_to_corner(c.cell_type(), E.Side.Top))
+		else:
+			assert(false, "Should be called only if possible")
+			return []
 	func air_would_flood_how_many(corner: E.Corner) -> float:
 		if not nothing_at(corner):
 			return 0.0

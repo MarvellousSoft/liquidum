@@ -83,6 +83,12 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func water_would_flood_which(_corner: E.Corner) -> Array[WaterPosition]:
 		return GridModel.must_be_implemented()
+	# Can this cell have a boat? (True if it already has one)
+	func boat_possible() -> bool:
+		return GridModel.must_be_implemented()
+	# Returns only waters it would flood. Empty if boat not possible.
+	func boat_would_flood_which() -> Array[WaterPosition]:
+		return GridModel.must_be_implemented()
 	func air_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()
 
