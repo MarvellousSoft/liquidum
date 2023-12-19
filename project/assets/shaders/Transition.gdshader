@@ -11,7 +11,7 @@ uniform vec4 foam_color : source_color;
 void fragment() {
 	float value = (1.0 - UV.x) * (1.0 - wave_size - wave_foam_size);
 	float alpha = 1.0;
-	vec3 color = water_color.rgb + vec3(0.0, value, 0.0) / 5.0;
+	vec3 color = water_color.rgb + vec3(0.0, value, 0.0) / 10.0;
 	
 	float wave_cutoff_percent = (sin(UV.y / wave_frequency + TIME * wave_speed) + 1.0) / 2.0;
 	float wave_cutoff_value = cutoff - wave_cutoff_percent * wave_size;

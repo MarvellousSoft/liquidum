@@ -4,10 +4,10 @@
 
 [resource]
 shader = ExtResource("1_gpmpg")
-shader_parameter/cutoff = 0.347
+shader_parameter/cutoff = 0.0
 shader_parameter/wave_size = 0.038
 shader_parameter/wave_frequency = 0.039
 shader_parameter/wave_speed = 12.534
 shader_parameter/wave_foam_size = 0.038
-shader_parameter/water_color = Color(0.192157, 0.690196, 0.690196, 1)
-shader_parameter/foam_color = Color(0.670588, 1, 0.819608, 1)
+shader_parameter/water_color = Color(0, 0.0352941, 0.141176, 1)
+shader_parameter/foam_color = Color(0.0352941, 0.211765, 0.34902, 1)

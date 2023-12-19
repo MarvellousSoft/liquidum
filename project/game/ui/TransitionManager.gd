@@ -2,6 +2,17 @@ extends CanvasLayer
 
 signal transition_finished
 
+const COLORS = {
+	"dark_mode": {
+		"water_color": Color("000924"),
+		"foam_color": Color("093659"),
+	},
+	"light_mode": {
+		"water_color": Color("31b0b0"),
+		"foam_color": Color("abffd1"),
+	}
+}
+
 @onready var Effect: ColorRect = $Effect
 @onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 
@@ -10,6 +21,8 @@ var stack: Array[Node] = []
 
 
 func _ready():
+	Global.dark_mode_toggled.connect(_on_dark_mode_toggled)
+	_on_dark_mode_toggled(false)
 	Effect.material.set_shader_parameter("cutoff", 1.0)
 	visible = false
 
@@ -52,3 +65,9 @@ func change_scene(scene: Node, add_to_stack := false) -> void:
 	active = false
 	
 	transition_finished.emit()
+
+
+func _on_dark_mode_toggled(dark_mode):
+	var colors = COLORS.dark_mode if dark_mode else COLORS.light_mode
+	Effect.material.set_shader_parameter("water_color", colors.water_color)
+	Effect.material.set_shader_parameter("foam_color", colors.foam_color)

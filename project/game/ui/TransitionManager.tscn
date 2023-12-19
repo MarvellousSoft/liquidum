@@ -56,3 +56,4 @@ grow_vertical = 2
 libraries = {
 "": SubResource("AnimationLibrary_hg3bf")
 }
+speed_scale = 1.2
