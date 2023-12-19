@@ -8,6 +8,7 @@ var active := true
 @onready var Images = {
 	"self": $CenterContainer/PanelContainer/Images,
 	E.BrushMode.Water: $CenterContainer/PanelContainer/Images/Water,
+	E.BrushMode.Air: $CenterContainer/PanelContainer/Images/Air,
 	E.BrushMode.Boat: $CenterContainer/PanelContainer/Images/Boat,
 	E.BrushMode.Wall: $CenterContainer/PanelContainer/Images/Wall,
 	E.BrushMode.Block: $CenterContainer/PanelContainer/Images/Block,
@@ -15,6 +16,7 @@ var active := true
 @onready var ButtonsContainer = $CenterContainer/PanelContainer/Buttons
 @onready var Buttons = {
 	E.BrushMode.Water: $CenterContainer/PanelContainer/Buttons/Water,
+	E.BrushMode.Air: $CenterContainer/PanelContainer/Buttons/Air,
 	E.BrushMode.Boat: $CenterContainer/PanelContainer/Buttons/Boat,
 	E.BrushMode.Wall: $CenterContainer/PanelContainer/Buttons/Wall,
 	E.BrushMode.Block: $CenterContainer/PanelContainer/Buttons/Block,
@@ -50,6 +52,16 @@ func setup(editor_mode_: bool) -> void:
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == E.BrushMode.Water)
 	custom_minimum_size = ButtonsContainer.size
+
+
+func enable_brush(brush_type : E.BrushMode) -> void:
+	Images[brush_type].set_visible(true)
+	Buttons[brush_type].set_visible(true)
+
+
+func disable_brush(brush_type : E.BrushMode) -> void:
+	Images[brush_type].set_visible(false)
+	Buttons[brush_type].set_visible(false)
 
 
 func pick_next_brush() -> void:

@@ -149,7 +149,7 @@ func setup(try_load := true) -> void:
 		CountersPanel.visible = Counters.water.visible or Counters.boat.visible
 		var no_boat_hint := func(h: GridModel.LineHint) -> bool: return h.boat_count <= 0 and (h.boat_count_type == E.HintType.Hidden or h.boat_count_type == E.HintType.Zero)
 		if e_boats <= 0 and grid.row_hints().all(no_boat_hint) and grid.col_hints().all(no_boat_hint):
-			BrushPicker.disable()
+			BrushPicker.disable_brush(E.BrushMode.Boat)
 	else:
 		Counters.water.visible = true
 		Counters.boat.visible = true

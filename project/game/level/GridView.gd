@@ -481,6 +481,18 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 					play_water_sound()
 				else:
 					highlight_error(i, j, which)
+		E.BrushMode.Air:
+			grid_logic.push_empty_undo()
+			if cell_data.air_at(corner):
+				mouse_hold_status = E.MouseDragState.RemoveAir
+				cell_data.remove_content(corner, false)
+				AudioManager.play_sfx("air_remove")
+			else:
+				mouse_hold_status = E.MouseDragState.Air
+				if cell_data.put_air(corner, false):
+					AudioManager.play_sfx("air_put")
+				else:
+					highlight_error(i, j, which)
 		E.BrushMode.Boat:
 			grid_logic.push_empty_undo()
 			if cell_data.has_boat():
@@ -528,11 +540,14 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		get_cell(i, j).update_blocks(cell_data)
 		AudioManager.play_sfx("block_remove")
 	else:
-		mouse_hold_status = E.MouseDragState.Air
-		if cell_data.put_air(corner):
-			AudioManager.play_sfx("air_put")
+		if brush_mode == E.BrushMode.Air:
+			pass #Do unknown stuff here
 		else:
-			highlight_error(i, j, which)
+			mouse_hold_status = E.MouseDragState.Air
+			if cell_data.put_air(corner):
+				AudioManager.play_sfx("air_put")
+			else:
+				highlight_error(i, j, which)
 	update()
 
 

@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://plt8snslppc5"]
+[gd_scene load_steps=18 format=3 uid="uid://plt8snslppc5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_6301b"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_puwdh"]
 [ext_resource type="Texture2D" uid="uid://bixum37r787g3" path="res://assets/images/ui/brush/boat_brusher.png" id="4_83tnc"]
+[ext_resource type="Texture2D" uid="uid://cgmcsaju30agc" path="res://assets/images/ui/brush/brish_picker_air.png" id="5_1bwir"]
 [ext_resource type="Texture2D" uid="uid://b3o4hcgpf2wf1" path="res://assets/images/ui/brush/brish_picker_wall.png" id="5_lkn2k"]
 [ext_resource type="Texture2D" uid="uid://bngcg8vy5gjtq" path="res://assets/images/ui/brush/brish_picker_block.png" id="6_ksqdr"]
 [ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush/brush_picker_unpressed.png" id="7_0ebh5"]
@@ -148,6 +149,12 @@ layout_mode = 2
 texture = ExtResource("3_puwdh")
 expand_mode = 1
 
+[node name="Air" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+texture = ExtResource("5_1bwir")
+expand_mode = 1
+
 [node name="Boat" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(250, 250)
@@ -173,6 +180,18 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Water" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("7_0ebh5")
+texture_pressed = ExtResource("8_pcm1q")
+texture_hover = ExtResource("9_aiaqv")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Air" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
