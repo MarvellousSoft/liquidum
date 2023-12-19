@@ -395,15 +395,46 @@ func test_can_solve() -> void:
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "xx", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", "ww"], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
+	# Using cross row-col boat elimination
+	# Necessary because we don't have a X that means "no boat"
+	var grid_two_boats := """
+	+boats=%d
+	B..0...
+	%s......
+	.|.....
+	.wwwwww
+	.L._._.
+	"""
+	assert_can_solve(grid_two_boats % [-1, "2"], ["BoatRow"])
+	assert_can_solve(grid_two_boats % [2, "."], ["AllBoats"])
+	assert_cant_solve(grid_two_boats % [-1, "."])
 	assert_can_solve("""
 	+boats=-1
-	B...0...
-	.h2.....
-	2.......
-	..|.....
-	..wwwwww
-	..L._._.
-	""", ["BoatRow"])
+	B1.
+	.xx
+	.|.
+	.ww
+	.L.
+	0xx
+	.|.
+	.ww
+	.L.
+	""")
+	var grid_row_1_boat := """
+	+boats=-1
+	B1.
+	%sxx
+	.|.
+	%s..
+	.|.
+	.ww
+	.L.
+	"""
+	assert_can_solve(grid_row_1_boat % [".", "0"])
+	assert_can_solve(grid_row_1_boat % ["0", "."])
+	assert_cant_solve(grid_row_1_boat % [".", "."])
+
+
 
 func test_guess_boat() -> void:
 	var g := str_grid("""

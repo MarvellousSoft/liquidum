@@ -321,13 +321,16 @@ class BoatRowStrategy extends RowStrategy:
 			return any
 		return false
 
+static func _maybe_extra_boat_on_row(grid: GridImpl, i: int) -> bool:
+	return grid._row_hints[i].boat_count == -1 or grid.get_row_hint_status(i, E.HintContent.Boat) == E.HintStatus.Normal
+
 # Aquariums that CAN and DO NOT have boats. The boat position might not be clear.
 # Returns an array of (l, r), meaning ONE boat is possible on grid[l][j]..grid[r][j]
 # If l != r means the boat position is not clear, as it may be placed in multiple places
 # in the aquarium.
 # This is best effort. Two separate aquariums might be unknowingly connected and the
 # total possible boats might be smaller.
-static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector2i]:
+static func _list_possible_boats_on_col(grid: GridImpl, j: int) -> Array[Vector2i]:
 	var i := grid.rows() - 1
 	var ans: Array[Vector2i] = []
 	while i >= 0:
@@ -342,6 +345,8 @@ static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector
 		var r := i
 		var l := i
 		var stop_moving := grid.get_cell(i, j).air_full()
+		# Cross-eliminate tiles that already have satisfied row hints
+		var any_possible := not had_boat and _maybe_extra_boat_on_row(grid, i)
 		i -= 1
 		# Skip rest of this aquarium. Best effort, they might still be connected through the side.
 		while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
@@ -352,15 +357,24 @@ static func _list_possible_boats_on_col(grid: GridModel, j: int) -> Array[Vector
 			if not stop_moving and grid.get_cell(i, j).air_full():
 				l = i
 				stop_moving = true
+			if l == i:
+				any_possible = any_possible or (not had_boat and _maybe_extra_boat_on_row(grid, i))
 			i -= 1
-		if not had_boat:
+		if any_possible:
 			ans.append(Vector2i(l, r))
 	return ans
 
 static func _put_boat_on_col(grid: GridImpl, lr: Vector2i, j: int) -> bool:
 	var any := false
-	if lr.x == lr.y:
-		if grid.get_cell(lr.x, j).put_boat(false, true):
+	var possible_i := -1
+	for i in range(lr.x, lr.y + 1):
+		if possible_i != -2 and _maybe_extra_boat_on_row(grid, i):
+			if possible_i == -1:
+				possible_i = i
+			else:
+				possible_i = -2
+	if possible_i >= 0:
+		if grid.get_cell(possible_i, j).put_boat(false, true):
 			any = true
 	else:
 		# Put air on top and water on bottom
@@ -800,6 +814,9 @@ class AllBoatsStrategy extends Strategy:
 		var possible_boats: Array[Array] = []
 		var total_possible := 0
 		for j in grid.cols():
+			if grid.col_hints()[j].boat_count != -1 and grid.get_col_hint_status(j, E.HintContent.Boat) != E.HintStatus.Normal:
+				possible_boats.append([])
+				continue
 			var p := SolverModel._list_possible_boats_on_col(grid, j)
 			total_possible += p.size()
 			possible_boats.append(p)
