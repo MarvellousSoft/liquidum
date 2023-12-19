@@ -300,6 +300,8 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 class BoatRowStrategy extends RowStrategy:
 	static func description() -> String:
 		return "If hint is all possible boat locations, then put the boats"
+	func _maybe_extra_boats(j: int) -> bool:
+		return grid._col_hints[j].boat_count == -1 or grid.get_col_hint_status(j, E.HintContent.Boat) == E.HintStatus.Normal
 	func _apply(i: int) -> bool:
 		var hint := grid._row_hints[i].boat_count
 		if hint <= 0:
@@ -308,12 +310,12 @@ class BoatRowStrategy extends RowStrategy:
 		for j in grid.cols():
 			if grid.get_cell(i, j).has_boat():
 				hint -= 1
-			elif SolverModel._boat_possible(grid, i, j):
+			elif SolverModel._boat_possible(grid, i, j) and _maybe_extra_boats(j):
 				count += 1
 		if hint > 0 and count == hint:
 			var any := false
 			for j in grid.cols():
-				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j):
+				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j) and _maybe_extra_boats(j):
 					if grid.get_cell(i, j).put_boat(false, true):
 						any = true
 			return any

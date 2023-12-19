@@ -395,6 +395,15 @@ func test_can_solve() -> void:
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "xx", "..", ".."], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
 		assert_grid_eq(apply_strategies(grid_with_1_boat_col % [h, "..", "..", "ww"], [s]).to_str(), grid_with_1_boat_col % [h, "xx", "..", "ww"])
+	assert_can_solve("""
+	+boats=-1
+	B...0...
+	.h2.....
+	2.......
+	..|.....
+	..wwwwww
+	..L._._.
+	""", ["BoatRow"])
 
 func test_guess_boat() -> void:
 	var g := str_grid("""
