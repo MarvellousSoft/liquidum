@@ -54,7 +54,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			rseed = int($Seed.text)
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
-		var gen := Generator.new(rseed, $Diags.button_pressed)
+		var gen := Generator.new(rseed, $Diags.button_pressed, $Boats.button_pressed)
 		var g := gen.generate(rows, cols)
 		hints.apply_to_grid(g)
 		if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):

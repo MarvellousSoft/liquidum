@@ -6,7 +6,7 @@ var boats: bool
 var count_vis: float
 var type_vis: float
 
-func _init(rseed_: int, diagonals_: bool, boats_ := false) -> void:
+func _init(rseed_: int, diagonals_: bool, boats_: bool) -> void:
 	rng.seed = rseed_
 	diagonals = diagonals_
 	boats = boats_
