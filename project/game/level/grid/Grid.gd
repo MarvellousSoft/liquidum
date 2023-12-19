@@ -255,11 +255,11 @@ func to_str() -> String:
 	return GridModel.must_be_implemented()
 
 # Undo the latest changes. Returns true if it was possible to do so.
-func undo() -> bool:
+func undo(_skip_empty := true) -> bool:
 	return GridModel.must_be_implemented()
 
 # Redo the latest undone changes
-func redo() -> bool:
+func redo(_skip_empty := true) -> bool:
 	return GridModel.must_be_implemented()
 
 # Push empty undo. Only useful when doing multiple operations with flush = false

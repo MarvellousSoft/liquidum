@@ -944,7 +944,7 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 						grid.redo()
 						return r1
 					# Otherwise we need to try to solve with air
-					c.put_air(corner, true)
+					c.put_air(corner, true, true)
 					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
@@ -979,12 +979,14 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 			elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
 				grid.redo()
 				return r1
-			var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), false)
+			var r2 := full_solve(grid, strategy_list, cancel_sig, true, guesses_left - 1, Vector2i(i, j + 1), false)
+			grid.undo(false)
 			if r2 == SolveResult.Unsolvable:
-				grid.undo()
 				b = c.put_boat(false, true)
 				assert(b)
 				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple))
-			return SolveResult.SolvedMultiple
+			else:
+				grid.redo(false)
+				return SolveResult.SolvedMultiple
 	# Can't really guess anything else
 	return SolveResult.Unsolvable

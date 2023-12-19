@@ -940,8 +940,8 @@ func to_str() -> String:
 		builder.append("\n")
 	return "".join(builder)
 
-func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
-	while not undos.is_empty() and (undos.back() as Changes).changes.is_empty():
+func _undo_impl(undos: Array[Changes], redos: Array[Changes], skip_empty: bool) -> bool:
+	while skip_empty and not undos.is_empty() and (undos.back() as Changes).changes.is_empty():
 		undos.pop_back()
 	if undos.is_empty():
 		return false
@@ -962,12 +962,12 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes]) -> bool:
 func push_empty_undo() -> void:
 	_push_undo_changes([], true)
 
-func undo() -> bool:
-	return _undo_impl(undo_stack, redo_stack)
+func undo(skip_empty := true) -> bool:
+	return _undo_impl(undo_stack, redo_stack, skip_empty)
 
-func redo() -> bool:
+func redo(skip_empty := true) -> bool:
 	# Beautifully, redo works exactly the same as undo
-	return _undo_impl(redo_stack, undo_stack)
+	return _undo_impl(redo_stack, undo_stack, skip_empty)
 
 func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
 	redo_stack.clear()
