@@ -503,6 +503,13 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.added_waters
+	func water_would_flood_which(corner: E.Corner) -> Array[WaterPosition]:
+		if water_at(corner):
+			return []
+		var dfs := AddWaterDfs.new(grid, i)
+		dfs.dry_run = true
+		dfs.flood(i, j, corner)
+		return dfs.water_locs
 	func air_would_flood_how_many(corner: E.Corner) -> float:
 		if not nothing_at(corner):
 			return 0.0
@@ -1075,18 +1082,19 @@ class AddWaterDfs extends Dfs:
 	var min_i: int
 	var added_waters := 0.0
 	var dry_run := false
+	var water_locs: Array[WaterPosition]
 	func _init(grid_: GridImpl, min_i_: int) -> void:
 		super(grid_)
 		min_i = min_i_
-	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)
 		match c:
 			Content.Nothing, Content.Air, Content.Boat, Content.Water:
+				var pos: E.Waters = E.Waters.Single if cell.cell_type() == E.CellType.Single else (corner as E.Waters)
 				if c != Content.Water:
-					if cell.cell_type() == E.CellType.Single:
-						added_waters += 1.0
-					else:
-						added_waters += 0.5
+					added_waters += E.waters_size(pos)
+					if dry_run:
+						water_locs.append(WaterPosition.new(i, j, pos))
 				if not dry_run:
 					cell.put_water(corner)
 			Content.Block:

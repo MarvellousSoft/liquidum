@@ -22,6 +22,15 @@ class GridHints:
 	# Dictionary[float, int]
 	var expected_aquariums: Dictionary
 
+class WaterPosition:
+	var i: int
+	var j: int
+	var loc: E.Waters
+	func _init(i_: int, j_: int, loc_: E.Waters) -> void:
+		i = i_
+		j = j_
+		loc = loc_
+
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -71,6 +80,8 @@ class CellModel:
 	func corners() -> Array[E.Corner]:
 		return GridModel.must_be_implemented()
 	func water_would_flood_how_many(_corner: E.Corner) -> float:
+		return GridModel.must_be_implemented()
+	func water_would_flood_which(_corner: E.Corner) -> Array[WaterPosition]:
 		return GridModel.must_be_implemented()
 	func air_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()

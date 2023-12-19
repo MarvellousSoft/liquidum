@@ -883,7 +883,8 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 		var any := false
 		for name in strategies_names:
 			if strategies[name].apply_any():
-				if t > 30:
+				if t > 35:
+					grid.copy_to_clipboard()
 					print("[%d] Applied %s" % [t, name])
 				any = true
 				# Earlier strategies are usually simpler, let's try to run them more

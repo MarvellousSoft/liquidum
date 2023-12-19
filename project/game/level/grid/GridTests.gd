@@ -764,3 +764,22 @@ func test_total_waters() -> void:
 	wwww
 	L._.
 	""")
+
+func _cmp_waters(a: Array[GridModel.WaterPosition], b: Array[Vector3i]) -> void:
+	assert(a.size() == b.size())
+	for i in a.size():
+		assert(a[i].i == b[i].x)
+		assert(a[i].j == b[i].y)
+		assert(a[i].loc == b[i].z)
+
+func test_flood_which() -> void:
+	var grid_str := """
+	....
+	|.L.
+	%s
+	L._/
+	"""
+	var g := str_grid(grid_str % ["...."])
+	_cmp_waters(g.get_cell(0, 0).water_would_flood_which(E.Corner.TopLeft), [Vector3i(0, 0, E.Single), Vector3i(1, 0, E.Single), Vector3i(1, 1, E.TopLeft)])
+	g = str_grid(grid_str % ["www."])
+	_cmp_waters(g.get_cell(0, 0).water_would_flood_which(E.Corner.TopLeft), [Vector3i(0, 0, E.Single)])

@@ -59,3 +59,9 @@ func diag_to_corner(cell: E.CellType, side: E.Side) -> E.Corner:
 				return E.Corner.BottomLeft
 	assert(false, "Invalid side")
 	return E.Corner.TopLeft
+func waters_size(waters: E.Waters) -> float:
+	match waters:
+		E.Waters.Single:
+			return 1.0
+		_:
+			return 0.5

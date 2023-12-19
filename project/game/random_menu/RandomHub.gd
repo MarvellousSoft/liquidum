@@ -147,7 +147,7 @@ static func _hard_visibility(n: int, m: int) -> Callable:
 func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
-	var rng = RandomNumberGenerator.new()
+	var rng := RandomNumberGenerator.new()
 	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
 	match dif:
 		Difficulty.Easy:
