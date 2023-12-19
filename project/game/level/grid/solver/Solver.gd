@@ -511,9 +511,6 @@ class TogetherStrategy extends RowColStrategy:
 				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
 		if any:
 			return true
-		if _a_hints()[a].water_count == -1.:
-			# TODO: For {?} we still need to mark air on cells after/before block/air
-			return any
 		# Mark far away cells as empty
 		var min_b2 := leftmost
 		while min_b2 > 0 and _content(a, min_b2 - 1) == Content.Nothing:
@@ -522,18 +519,24 @@ class TogetherStrategy extends RowColStrategy:
 		while max_b2 < 2 * _b_len() - 1 and _content(a, max_b2 + 1) == Content.Nothing:
 			max_b2 += 1
 
-		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
-		# Invalid solution
+		var hint := _a_hints()[a].water_count
+		var water_left2 := int(2 * (hint - _count_water_a(a)))
 		if water_left2 < 0:
-			return false
-		var no_b2 := range(rightmost + water_left2 + 1, max_b2 + 1) # Far to the right
-		no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
+			# Invalid solution
+			if hint >= 0:
+				return false
+		var no_b2 := []
+		if water_left2 >= 0:
+			no_b2.append_array(range(rightmost + water_left2 + 1, max_b2 + 1)) # Far to the right
+			no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
 		no_b2.append_array(range(0, min_b2)) # Before block/air
 		no_b2.append_array(range(max_b2 + 1, 2 * _b_len())) # After block/air
 		for b2 in no_b2:
 			if _content(a, b2) == Content.Nothing:
 				any = true
 				_cell(a, b2 / 2).put_air(_corner(a, b2), false, true)
+		if water_left2 < 0:
+			return any
 		# Mark nearby cells as full if close to the "border"
 		var yes_b2 := []
 		if leftmost - min_b2 < water_left2:

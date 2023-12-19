@@ -758,7 +758,7 @@ func _validate_hint(c1: String, c2: String) -> int:
 		else:
 			return int(c1)
 	else:
-		assert(c2 == ".", "Invalid hint")
+		assert(c2 == "." or c2 == "}" or c2 == "-", "Invalid hint")
 		return -1
 
 func _validate_hint_float(c1: String, c2: String) -> float:

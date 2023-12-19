@@ -529,6 +529,16 @@ func test_together_rules() -> void:
 	g.get_cell(2, 0).remove_content(TopRight)
 	g.get_cell(1, 0).put_water(TopRight)
 	assert(g.are_hints_satisfied())
+	assert_can_solve("""
+	h....
+	.wwx.
+	}L.L/
+	""", ["TogetherRow"])
+	assert_can_solve("""
+	h........
+	5....w...
+	}L/L.L/_.
+	""")
 
 func test_put_wall() -> void:
 	var g := GridImpl.new(1, 2)
