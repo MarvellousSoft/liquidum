@@ -26,58 +26,46 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Button:disabled")
+tracks/0/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Vector2(1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:scale")
+tracks/2/path = NodePath("Button:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(-97, -133)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Button:position")
+tracks/3/path = NodePath("UnlockParticles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-97, -133)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("UnlockParticles:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -90,62 +78,67 @@ length = 3.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Button:disabled")
+tracks/0/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 2.1),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
+"update": 0,
+"values": [0.0, 1.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Button/ShaderEffect:material:shader_parameter/alpha")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 1.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 2, 2.2),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.4, 0.4), Vector2(1, 1)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Button:position")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Button:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.2),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133), Vector2(-129.897, -164.948), Vector2(-56.383, -96.8085), Vector2(-83.5165, -86.8132), Vector2(-54.5455, -151.136), Vector2(-109.412, -134.118), Vector2(-67.0732, -134.146), Vector2(-97, -133)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("UnlockParticles:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("UnlockParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(2.1),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2.1),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"disable"
+}, {
+"args": [],
+"method": &"enable"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4p2d0"]
@@ -162,7 +155,7 @@ colors = PackedColorArray(0.45098, 0.941176, 0.776471, 1, 0.85098, 1, 0.886275, 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_k2ynt"]
 gradient = SubResource("Gradient_8l20x")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xc37j"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lr6ig"]
 lifetime_randomness = 0.5
 direction = Vector3(0, 0, 0)
 spread = 180.0
@@ -172,7 +165,8 @@ orbit_velocity_max = 0.01
 gravity = Vector3(0, 0, 0)
 tangential_accel_max = 26.97
 attractor_interaction_enabled = false
-scale_min = 0.5
+scale_min = 0.3
+scale_max = 0.6
 color_ramp = SubResource("GradientTexture1D_k2ynt")
 turbulence_noise_strength = 17.78
 turbulence_noise_scale = 2.659
@@ -226,7 +220,7 @@ speed_scale = 1.5
 position = Vector2(4, 12)
 emitting = false
 amount = 40
-process_material = SubResource("ParticleProcessMaterial_xc37j")
+process_material = SubResource("ParticleProcessMaterial_lr6ig")
 texture = ExtResource("9_1gdj7")
 lifetime = 2.5
 one_shot = true

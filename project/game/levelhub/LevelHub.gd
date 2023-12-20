@@ -31,21 +31,34 @@ func update_sections():
 
 
 func check_unlocks() -> void:
+	
+	#Unlock a new level
 	if level_to_unlock != -1:
-		pass
+		var section = Sections.get_child(section_to_unlock - 1)
+		section.disable_level(level_to_unlock)
+		await TransitionManager.transition_finished
+		section.unlock_level(level_to_unlock)
+	#Unlock a new section
 	elif section_to_unlock != -1:
-		pass
+		var section = Sections.get_child(section_to_unlock - 1)
+		section.disable()
+		await TransitionManager.transition_finished
+		#Unfocus previous sections
+		Sections.get_child(section_to_unlock - 2).unfocus()
+		await get_tree().create_timer(.5).timeout
+		section.unlock()
 	level_to_unlock = -1
 	section_to_unlock = -1
 
-func unlock_level(level, section):
+
+func prepare_to_unlock_level(section, level):
+	section_to_unlock = section
 	level_to_unlock = level
-	section_to_unlock = section
 
 
-func unlock_section(section):
+func unlock_section(prev_section):
 	level_to_unlock = -1
-	section_to_unlock = section
+	section_to_unlock = prev_section + 1
 
 
 func _on_level_section_enable_focus(pos, my_section):

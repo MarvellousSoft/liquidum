@@ -46,7 +46,6 @@ func setup(section : int, level : int, active : bool) -> void:
 
 
 func unlock():
-	await get_tree().create_timer(2.0).timeout
 	AnimPlayer.play("unlock")
 
 

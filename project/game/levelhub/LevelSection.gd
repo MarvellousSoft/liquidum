@@ -38,6 +38,7 @@ signal disable_focus()
 var my_section := -1
 var focused := false
 var showing_level_info := false
+var hub = null
 
 
 func _ready():
@@ -86,7 +87,8 @@ func setup(hub_ref, section, unlocked_levels) -> void:
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
-		button.setup(my_section, i, i <= unlocked_levels)
+		var has_unlock_anim = (my_section == hub.section_to_unlock and i == hub.level_to_unlock)
+		button.setup(my_section, i, i <= unlocked_levels and not has_unlock_anim)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
@@ -174,6 +176,13 @@ func unlock():
 	AnimPlayer.play("unlock")
 
 
+func unlock_level(level):
+	Levels.get_child(level - 1).unlock()
+
+
+func disable_level(level):
+	Levels.get_child(level - 1).disable()
+
 
 func is_section_completed():
 	return LevelLister.count_completed_section_levels(my_section) >=\
@@ -221,7 +230,7 @@ func _on_level_first_win(button):
 	var completed_levels = LevelLister.count_completed_section_levels(section)
 	var section_levels = LevelLister.count_section_levels(section)
 	if completed_levels < section_levels - LevelLister.get_max_unlocked_levels():
-		hub.unlock_level(section, LevelLister.get_max_unlocked_level(section))
+		hub.prepare_to_unlock_level(section, LevelLister.get_max_unlocked_level(section))
 	elif (completed_levels == section_levels - LevelLister.get_max_unlocked_levels()) and \
 		 section < LevelLister.count_all_game_sections():
 		hub.unlock_section(section)
