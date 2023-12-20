@@ -422,9 +422,9 @@ unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 81.0
-offset_top = 503.0
-offset_right = 785.0
-offset_bottom = 2101.0
+offset_top = 270.0
+offset_right = 1036.0
+offset_bottom = 1868.0
 
 [node name="PanelContainer" type="PanelContainer" parent="TutorialContainer"]
 layout_mode = 2
