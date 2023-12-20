@@ -13,7 +13,7 @@ const HIDE_ALPHA = 0.5
 
 var count: float = 0.0
 var visibility_active := true
-
+var editor_mode := false
 
 func _ready():
 	disable_editor()
@@ -30,10 +30,12 @@ func _process(dt):
 
 
 func enable_editor():
+	editor_mode = true
 	VisibilityButton.show()
 
 
 func disable_editor():
+	editor_mode = false
 	VisibilityButton.hide()
 
 func should_be_visible() -> bool:
@@ -69,10 +71,13 @@ func update_label() -> void:
 		AnimPlayer.play("update_counter_big")
 	else:
 		AnimPlayer.play("update_counter")
-	if check_for_satisfied:
-		if count == 0:
-			Counter.add_theme_color_override("font_color", Global.COLORS.satisfied)
-		elif count > 0:
-			Counter.add_theme_color_override("font_color", Global.COLORS.normal)
-		else:
-			Counter.add_theme_color_override("font_color", Global.COLORS.error)
+	if not editor_mode:
+		if check_for_satisfied:
+			if count == 0:
+				Counter.add_theme_color_override("font_color", Global.COLORS.satisfied)
+			elif count > 0:
+				Counter.add_theme_color_override("font_color", Global.COLORS.normal)
+			else:
+				Counter.add_theme_color_override("font_color", Global.COLORS.error)
+	else:
+		Counter.add_theme_color_override("font_color", Global.COLORS.normal)
