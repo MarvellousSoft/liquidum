@@ -16,9 +16,9 @@ theme = ExtResource("1_huabo")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 40
 
 [node name="Boat" type="TextureRect" parent="HBoxContainer"]
+visible = false
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
