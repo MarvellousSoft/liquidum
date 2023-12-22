@@ -1,9 +1,13 @@
 class_name HintBar
 extends Control
 
-signal mouse_entered_hint(idx : int)
-
 const HINT = preload("res://game/level/hints/Hint.tscn")
+const WATER_COUNT_VISIBLE := 1
+const WATER_TYPE_VISIBLE := 2
+const BOAT_COUNT_VISIBLE := 4
+const BOAT_TYPE_VISIBLE := 8
+
+signal mouse_entered_hint(idx : int)
 
 @export var is_horizontal := false
 
@@ -40,8 +44,8 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		var water_hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
-		if hints[i].boat_count == -1 and hints[i].water_count == -1:
-			water_hint.dummy_hint()
+		#if hints[i].water_count == -1 and hints[i].water_count_type == E.HintType.Hidden:
+			#water_hint.dummy_hint()
 
 
 	await get_tree().process_frame
@@ -62,7 +66,8 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 	container.add_child(new_hint)
 	new_hint.set_boat(is_boat)
 	#Set value
-	if hint_value == -1:
+	if hint_value == -1 and is_boat and\
+	   (type == E.HintType.Hidden or type == E.HintType.Zero):
 		new_hint.no_hint()
 	else:
 		new_hint.set_value(hint_value)
@@ -81,10 +86,6 @@ func create_hint(container : Container, editor_mode : bool, is_boat: float, hint
 
 	return new_hint
 
-const WATER_COUNT_VISIBLE := 1
-const WATER_TYPE_VISIBLE := 2
-const BOAT_COUNT_VISIBLE := 4
-const BOAT_TYPE_VISIBLE := 8
 
 func should_be_visible() -> Array[int]:
 	var bar = Horizontal if is_horizontal else Vertical

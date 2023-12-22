@@ -711,10 +711,10 @@ func maybe_update_hints() -> void:
 		_row_hints[i].water_count_type = type
 	for j in m:
 		_col_hints[j].boat_count = count_boat_col(j)
-		# This is always Hidden (maybe should be always Separated)
-		_col_hints[j].boat_count_type = E.HintType.Hidden
+		var type := _is_together(_col_bools(j, Content.Boat))
+		_col_hints[j].boat_count_type = type
 		_col_hints[j].water_count = count_water_col(j)
-		var type := _is_together(_col_bools(j, Content.Water))
+		type = _is_together(_col_bools(j, Content.Water))
 		_col_hints[j].water_count_type = type
 	assert(are_hints_satisfied())
 
@@ -1376,7 +1376,6 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 		E.HintContent.Boat:
 			var count := _col_hints[j].boat_count
 			var status := _hint_statusi(count_boat_col(j), count)
-			assert(_col_hints[j].boat_count_type == E.HintType.Hidden)
 			var type := _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat))
 			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
@@ -1410,7 +1409,6 @@ func validate() -> void:
 	if not OS.is_debug_build():
 		return
 	for j in m:
-		assert(col_hints()[j].boat_count_type == E.HintType.Hidden)
 		validate_hint(col_hints()[j].boat_count, col_hints()[j].boat_count_type)
 		validate_hint(col_hints()[j].water_count, col_hints()[j].water_count_type)
 	for i in n:

@@ -99,21 +99,22 @@ func alpha_t(text : String, alpha : float) -> String:
 
 func update_label() -> void:
 	Number.text = ""
+	var value = str(hint_value) if hint_value != -1 else "?"
 	match hint_type:
 		E.HintType.Zero, E.HintType.Hidden:
-			Number.text += str(hint_value)
+			Number.text += value
 			DummyLabel.text = "?"
 		E.HintType.Together:
 			if editor_mode:
-				Number.text += alpha_t("{ ", hint_alpha) + str(hint_value) + alpha_t(" }", hint_alpha)
+				Number.text += alpha_t("{ ", hint_alpha) + value + alpha_t(" }", hint_alpha)
 			else:
-				Number.text += "{ " + str(hint_value) + " }"
+				Number.text += "{ " + value + " }"
 				DummyLabel.text = "{ ? }"
 		E.HintType.Separated:
 			if editor_mode:
-				Number.text += alpha_t("- ", hint_alpha) + str(hint_value) + alpha_t(" -", hint_alpha)
+				Number.text += alpha_t("- ", hint_alpha) + value + alpha_t(" -", hint_alpha)
 			else:
-				Number.text += "- " + str(hint_value) + " -"
+				Number.text += "- " + value + " -"
 				DummyLabel.text = "- ? -"
 
 
@@ -134,13 +135,16 @@ func set_hint_visibility(which : E.Walls, value : bool) -> void:
 
 
 func set_status(status: E.HintStatus) -> void:
-	match status:
-		E.HintStatus.Normal:
-			Number.add_theme_color_override("default_color", Global.COLORS.normal)
-		E.HintStatus.Satisfied:
-			Number.add_theme_color_override("default_color", Global.COLORS.satisfied)
-		E.HintStatus.Wrong:
-			Number.add_theme_color_override("default_color", Global.COLORS.error)
+	if hint_value == -1:
+		Number.add_theme_color_override("default_color", Global.COLORS.normal)
+	else:
+		match status:
+			E.HintStatus.Normal:
+				Number.add_theme_color_override("default_color", Global.COLORS.normal)
+			E.HintStatus.Satisfied:
+				Number.add_theme_color_override("default_color", Global.COLORS.satisfied)
+			E.HintStatus.Wrong:
+				Number.add_theme_color_override("default_color", Global.COLORS.error)
 
 
 func enable_editor() -> void:
