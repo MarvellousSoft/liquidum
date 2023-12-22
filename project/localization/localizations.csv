@@ -93,13 +93,13 @@ LEVEL_03_06,River,Rio,Rio
 LEVEL_03_07,Grotto,Gruta,Gruta
 LEVEL_03_08,Crystals,Cristais,Cristais
 LEVEL_04_01,Rafts,Jangadas,Jangadas
-LEVEL_04_02,Canoes,Canoas,Embarcações
-LEVEL_04_03,Vessels,Embarcações,Canoas
-LEVEL_04_04,Lifeboats,Salva-vidas,Barcos
+LEVEL_04_02,Canoes,Canoas,Canoas
+LEVEL_04_03,Vessels,Embarcações,Embarcações
+LEVEL_04_04,Titanic,Titanic,Titanic
 LEVEL_04_05,"Santa Maria, Niña & Pinta","Santa Maria, Niña & Pinta","Santa Maria, Niña & Pinta"
 LEVEL_04_06,Sailboats,Veleiros,Veleiros
 LEVEL_04_07,SS Chip & Dale,SS Tico & Teco,SS Tico & Teco
-LEVEL_04_08,Titanic,Titanic,Titânico
+LEVEL_04_08,Yachts,Iates,Iates
 LEVEL_05_01,,,
 LEVEL_05_02,,,
 LEVEL_05_03,,,
