@@ -134,6 +134,7 @@ func setup(try_load := true) -> void:
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs
+				update_timer_label()
 				dummy_save = save
 				if save.is_completed():
 					first_try_no_resets = false
