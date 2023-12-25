@@ -51,7 +51,6 @@ MEDIUM_BUTTON,Medium,Médio,Médio
 HARD_BUTTON,Hard,Difícil,Difícil
 EXPERT_BUTTON,Expert,Expert,Expert
 INSANE_BUTTON,Insane,Insano,Insano
-CONTINUE_RANDOM_BUTTON,Continue existing,Continuar existente,Continuar existente
 RANDOM_COMPLETED,Levels completed:,Níveis completados:,Níveis concluídos:
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.,Tem certeza de que deseja iniciar um novo nível?  O existente será perdido.
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution.,Todos níveis tem uma única solução.,Todos os níveis têm uma solução única.

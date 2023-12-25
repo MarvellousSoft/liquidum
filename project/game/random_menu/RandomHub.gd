@@ -48,9 +48,12 @@ func _exit_tree() -> void:
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 
 func _update() -> void:
-	var has_random_level := FileManager.load_level(RANDOM) != null
+	var has_random_level := (FileManager.load_level(RANDOM) != null)
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level
+	if has_random_level:
+		var dif := FileManager.load_random_level().difficulty
+		Continue.text = "%s - %s" % [tr("CONTINUE"), tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())]
 	for dif in Difficulty:
 		var label: Label = Completed.get_node(dif)
 		label.visible = not $Difficulties/VBox.get_node(dif).disabled
