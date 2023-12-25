@@ -53,6 +53,7 @@ var game_won := false
 var first_try_no_resets := true
 var reset_text := &"CONFIRM_RESET_LEVEL"
 var won_before := false
+var reset_mistakes_on_empty := true
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -394,7 +395,7 @@ func maybe_save(delete_solution := false) -> void:
 				grid.clear_content()
 			var is_empty := grid.is_empty()
 			dummy_save.is_empty = is_empty
-			if is_empty:
+			if is_empty and reset_mistakes_on_empty:
 				dummy_save.mistakes = 0
 				dummy_save.timer_secs = 0.0
 			else:

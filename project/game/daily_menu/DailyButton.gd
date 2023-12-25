@@ -170,6 +170,7 @@ func _on_button_pressed() -> void:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily"])
 		level.reset_text = &"CONFIRM_RESET_DAILY"
 		level.won.connect(level_completed)
+		level.reset_mistakes_on_empty = false
 		TransitionManager.push_scene(level)
 	DailyButton.disabled = false
 
