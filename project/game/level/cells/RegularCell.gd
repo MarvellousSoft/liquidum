@@ -8,11 +8,20 @@ const MIN_BOAT_ANIM_SPEED = .7
 const MAX_BOAT_ANIM_SPEED = .9
 const EPS = 0.1
 const HIGHLIGHT_SPEED = 5.0
+const PREVIEW_MAX_ALPHA = 0.4
+const PREVIEW_ALPHA_SPEED = 1.6
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
 signal block_entered
 
+@onready var Previews = {
+	E.Waters.Single: $Preview/Single,
+	E.Waters.TopLeft: $Preview/TopLeft,
+	E.Waters.TopRight: $Preview/TopRight,
+	E.Waters.BottomLeft: $Preview/BottomLeft,
+	E.Waters.BottomRight: $Preview/BottomRight,
+}
 @onready var Waters = {
 	E.Waters.Single: $Waters/Single,
 	E.Waters.TopLeft: $Waters/TopLeft,
@@ -79,6 +88,13 @@ var water_flags = {
 	E.Waters.BottomLeft: false,
 	E.Waters.BottomRight: false,
 }
+var preview_water_flags = {
+	E.Waters.Single: false,
+	E.Waters.TopLeft: false,
+	E.Waters.TopRight: false,
+	E.Waters.BottomLeft: false,
+	E.Waters.BottomRight: false,
+}
 var boat_flag := false
 var highlight := false
 var editor_mode := false
@@ -87,6 +103,10 @@ func _ready():
 	Highlight.modulate.a = 0.0
 	for water in Waters.values():
 		water.material = water.material.duplicate()
+	for preview in Previews.values():
+		preview.material = preview.material.duplicate()
+		preview.material.set_shader_parameter("final_alpha", 0.0)
+		preview.material.set_shader_parameter("level", 1.0)
 	BoatAnim.seek(randf_range(0.0, BoatAnim.current_animation_length), true)
 	BoatAnim.speed_scale = randf_range(MIN_BOAT_ANIM_SPEED, MAX_BOAT_ANIM_SPEED)
 
@@ -98,20 +118,21 @@ func _process(dt):
 				increase_water_level(corner, dt)
 			else:
 				decrease_water_level(corner, dt)
-			if boat_flag:
-				Boat.modulate.a = min(Boat.modulate.a + BOAT_ALPHA_SPEED*dt, 1.0)
+			var cur_alpha = get_final_alpha(Previews[corner])
+			if preview_water_flags[corner]:
+				cur_alpha = min(cur_alpha + dt*PREVIEW_ALPHA_SPEED, PREVIEW_MAX_ALPHA)
 			else:
-				Boat.modulate.a = max(Boat.modulate.a - BOAT_ALPHA_SPEED*dt, 0.0)
-		if highlight:
-			Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
-		else:
-			Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
+				cur_alpha = max(cur_alpha - dt*PREVIEW_ALPHA_SPEED, 0.0)
+			set_final_alpha(Previews[corner], cur_alpha)
+			Global.alpha_fade_node(dt, Boat, boat_flag)
+
+		Global.alpha_fade_node(dt, Highlight, highlight)
 
 
 func enable():
 	disabled = false
 	for button in Buttons.values():
-		button.disabled = false  
+		button.disabled = false
 
 
 func disable():
@@ -131,12 +152,13 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 		set_water_level(water, 0.)
 	for nowater in NoWaters.values():
 		nowater.hide()
-
+	for preview in Previews.values():
+		set_final_alpha(preview, 0.)
 	for error in Errors.values():
 		error.modulate.a = 0.0
 	Boat.modulate.a = 0.0
 	copy_data(data)
-	
+
 	if not editor_mode and not fast_startup:
 		await get_tree().create_timer((i+1)*(j+1)*startup_delay).timeout
 		AnimPlayer.play("startup")
@@ -202,7 +224,7 @@ func update_blocks(data: GridModel.CellModel) -> void:
 		for corner in E.Corner.values():
 			if data.block_at(corner):
 				set_block(corner)
-				
+
 
 
 func set_block(block : E.Waters) -> void:
@@ -225,9 +247,24 @@ func set_water(water : E.Waters, value: bool) -> void:
 	water_flags[water] = value
 
 
+<<<<<<< HEAD
 func remove_nowater() -> void:
 	for nowater in NoWaters.values():
 		nowater.hide()
+=======
+func set_water_preview(water : E.Waters, value: bool) -> void:
+	preview_water_flags[water] = value
+
+
+func remove_all_water_preview() -> void:
+	for water in Previews.keys():
+		preview_water_flags[water] = false
+
+
+func remove_air() -> void:
+	for air in Airs.values():
+		air.hide()
+>>>>>>> 10352fd (First version of water preview)
 
 
 func set_nowater(nowater : E.Waters, value: bool) -> void:
@@ -245,6 +282,13 @@ func get_corner_water_level(corner : E.Waters) -> float:
 func set_water_level(water: TextureRect, value: float) -> void:
 	water.material.set_shader_parameter("level", value)
 
+
+func get_final_alpha(water: TextureRect) -> float:
+	return water.material.get_shader_parameter("final_alpha")
+
+
+func set_final_alpha(water: TextureRect, value: float) -> void:
+	water.material.set_shader_parameter("final_alpha", value)
 
 func increase_water_level(corner : E.Waters, dt : float) -> void:
 	var water = Waters[corner] as Node

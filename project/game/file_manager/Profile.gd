@@ -15,6 +15,7 @@ var options = {
 	"fullscreen": true,
 	"previous_windowed_pos": false,
 	"highlight_grid": true,
+	"show_grid_preview": true,
 	"locale": 0,
 }
 

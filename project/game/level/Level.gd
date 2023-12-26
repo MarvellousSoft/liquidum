@@ -252,6 +252,8 @@ func win() -> void:
 	
 	if Profile.get_option("highlight_grid"):
 		GridNode.remove_all_highlights()
+	if Profile.get_option("show_grid_preview"):
+		GridNode.remove_all_preview()
 	GridNode.disable()
 	ResetButton.disabled = true
 	BackButton.disabled = true
@@ -503,6 +505,8 @@ func _on_button_mouse_entered() -> void:
 func _on_center_container_mouse_entered() -> void:
 	if Profile.get_option("highlight_grid"):
 		GridNode.remove_all_highlights()
+	if Profile.get_option("show_grid_preview"):
+		GridNode.remove_all_preview()
 
 
 func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:

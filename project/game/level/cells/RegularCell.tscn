@@ -335,6 +335,53 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.85098, 1, 0.886275, 1)
 
+[node name="Preview" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Single" type="TextureRect" parent="Preview"]
+material = ExtResource("2_oggd4")
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("3_7aqdv")
+
+[node name="TopLeft" type="TextureRect" parent="Preview"]
+material = ExtResource("2_oggd4")
+custom_minimum_size = Vector2(100, 90)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("4_lwpcm")
+
+[node name="TopRight" type="TextureRect" parent="Preview"]
+material = ExtResource("2_oggd4")
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("5_l8l5q")
+
+[node name="BottomRight" type="TextureRect" parent="Preview"]
+material = ExtResource("2_oggd4")
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("6_k26rs")
+
+[node name="BottomLeft" type="TextureRect" parent="Preview"]
+material = ExtResource("2_oggd4")
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+texture = ExtResource("7_v8ssd")
+
 [node name="Waters" type="Control" parent="."]
 anchors_preset = 0
 

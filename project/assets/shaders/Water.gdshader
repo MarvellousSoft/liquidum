@@ -1,6 +1,7 @@
 shader_type canvas_item;
 
 uniform float level : hint_range(0.0, 1.0);
+uniform float final_alpha : hint_range(0.0, 1.0) = 1.0;
 uniform vec2 size = vec2(1.0);
 uniform float wave_width = 100.0;
 uniform float wave_height = 20.0;
@@ -38,5 +39,5 @@ void fragment() {
 	COLOR.rgb += ray * 0.3;
 	float alpha = texture(TEXTURE, UV).a;
 	COLOR.a = smoothstep(0.0, 0.06, wave_mask);
-	COLOR.a *= alpha;
+	COLOR.a *= alpha * final_alpha;
 }

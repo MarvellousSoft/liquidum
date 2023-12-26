@@ -452,6 +452,22 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 	HintBars.top.highlight_hints(p_j)
 
 
+func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
+	remove_all_preview()
+	@warning_ignore("incompatible_ternary")
+	var corner = which if which != E.Waters.Single else E.Corner.TopLeft
+	var affected_cells = grid_logic.get_cell(p_i, p_j).water_would_flood_which(corner)
+	for cell_data in affected_cells:
+		var cell = get_cell(cell_data.i, cell_data.j)
+		cell.set_water_preview(cell_data.loc, true)
+
+
+func remove_all_preview() -> void:
+	for i in rows:
+		for j in columns:
+			get_cell(i, j).remove_all_water_preview()
+
+
 func highlight_row(idx):
 	for j in columns:
 		get_cell(idx, j).set_highlight(true)
@@ -557,6 +573,8 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	if Profile.get_option("highlight_grid"):
 		highlight_grid(i, j)
+	if Profile.get_option("show_grid_preview") and brush_mode == E.BrushMode.Water and mouse_hold_status == E.MouseDragState.None:
+		show_preview(i, j, which)
 	
 	if mouse_hold_status == E.MouseDragState.None:
 		return
@@ -673,6 +691,8 @@ func _add_row():
 func _on_left_grid():
 	if Profile.get_option("highlight_grid"):
 		remove_all_highlights()
+	if Profile.get_option("show_grid_preview"):
+		remove_all_preview()
 
 
 func _on_hint_bar_top_mouse_entered_hint(idx):
@@ -681,6 +701,8 @@ func _on_hint_bar_top_mouse_entered_hint(idx):
 	remove_all_highlights()
 	highlight_column(idx)
 	HintBars.top.highlight_hints(idx)
+	if Profile.get_option("show_grid_preview"):
+		remove_all_preview()
 
 
 func _on_hint_bar_left_mouse_entered_hint(idx):
@@ -689,6 +711,8 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 	remove_all_highlights()
 	highlight_row(idx)
 	HintBars.left.highlight_hints(idx)
+	if Profile.get_option("show_grid_preview"):
+		remove_all_preview()
 
 
 func _on_block_mouse_entered(row : int, column : int):
