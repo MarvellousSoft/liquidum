@@ -137,6 +137,9 @@ const FRIDAY = "FRIDAY"
 const SATURDAY = "SATURDAY"
 const SUNDAY = "SUNDAY"
 const UPLOADING_TO_WORKSHOP = "UPLOADING_TO_WORKSHOP"
+const PCT_1 = "PCT_1"
+const PCT_10 = "PCT_10"
+const PCT_50 = "PCT_50"
 
 const KEYS = [
  "TEST",
@@ -272,5 +275,8 @@ const KEYS = [
  "FRIDAY",
  "SATURDAY",
  "SUNDAY",
- "UPLOADING_TO_WORKSHOP"
+ "UPLOADING_TO_WORKSHOP",
+ "PCT_1",
+ "PCT_10",
+ "PCT_50"
 ]

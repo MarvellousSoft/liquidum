@@ -1,6 +1,7 @@
+class_name DailyButton
 extends Control
 
-@onready var DailyButton: Button = %Button
+@onready var MainButton: Button = %Button
 @onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
 @onready var Completed = %Completed
@@ -20,14 +21,14 @@ func _enter_tree() -> void:
 
 func _update() -> void:
 	var unlocked := Global.is_dev_mode() or LevelLister.section_complete(4)
-	DailyButton.disabled = not unlocked
+	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
 	$HBox/VBoxContainer/StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
 	if unlocked:
-		DailyButton.tooltip_text = "DAILY_TOOLTIP"
+		MainButton.tooltip_text = "DAILY_TOOLTIP"
 	else:
-		DailyButton.tooltip_text = "DAILY_TOOLTIP_DISABLED"
+		MainButton.tooltip_text = "DAILY_TOOLTIP_DISABLED"
 		OngoingSolution.visible = false
 		return
 
@@ -44,7 +45,7 @@ func _update() -> void:
 	_update_streak()
 
 func _update_time_left() -> void:
-	if DailyButton.disabled:
+	if MainButton.disabled:
 		return
 	var secs_left := deadline - _unixtime()
 	if secs_left > 0:
@@ -87,8 +88,8 @@ func _on_timer_timeout():
 	_update_time_left()
 
 func _process(_dt: float) -> void:
-	if size != DailyButton.size:
-		size = DailyButton.size
+	if size != MainButton.size:
+		size = MainButton.size
 
 func _simple_hints(n: int, m: int) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Level.HintVisibility:
@@ -157,7 +158,7 @@ func gen_level(today: String) -> LevelData:
 	return null
 
 func _on_button_pressed() -> void:
-	DailyButton.disabled = true
+	MainButton.disabled = true
 	var today := _today()
 	if not FileManager.has_daily_level(today):
 		GeneratingLevel.enable()
@@ -169,12 +170,15 @@ func _on_button_pressed() -> void:
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily"])
 		level.reset_text = &"CONFIRM_RESET_DAILY"
-		level.won.connect(level_completed)
+		level.won.connect(level_completed.bind(level))
 		level.reset_mistakes_on_empty = false
 		TransitionManager.push_scene(level)
-	DailyButton.disabled = false
+	MainButton.disabled = false
 
-func level_completed(info: Level.WinInfo) -> void:
+func level_completed(info: Level.WinInfo, level: Level) -> void:
+	var l_id := await upload_leaderboard(info)
+	var l_data := await get_leaderboard_data(l_id)
+	level.display_leaderboard(l_data)
 	if info.first_win and SteamManager.stats_received:
 		SteamStats.increment_daily_all()
 	if not info.first_try_no_resets or not info.first_win:
@@ -195,14 +199,13 @@ func level_completed(info: Level.WinInfo) -> void:
 		if data.current_streak > 0:
 			data.current_streak = 0
 			UserData.save()
-	await upload_leaderboard(info)
 
 # 27 hours, enough
 const MAX_TIME := 100000
 
-func upload_leaderboard(info: Level.WinInfo) -> void:
+func upload_leaderboard(info: Level.WinInfo) -> int:
 	if not SteamManager.enabled:
-		return
+		return -1
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
@@ -210,9 +213,72 @@ func upload_leaderboard(info: Level.WinInfo) -> void:
 	var ret: Array = await Steam.leaderboard_find_result
 	if not ret[1]:
 		push_warning("Leaderboard not found for daily %s" % date)
-		return
+		return -1
 	var l_id: int = ret[0]
 	Steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
 	ret = await Steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)
+	return l_id
+
+class ListEntry:
+	var global_rank: int
+	# Name. Might be "10% percentile"
+	var text: String
+	# Might be null
+	var image: Image
+	var mistakes: int
+	var secs: int
+	static func create(data: Dictionary, override_name := "") -> ListEntry:
+		var entry := ListEntry.new()
+		entry.global_rank = data.global_rank
+		entry.mistakes = data.score / MAX_TIME
+		entry.secs = data.score % MAX_TIME
+		if override_name.is_empty():
+			var img_data
+			if data.steam_id == Steam.getSteamID():
+				entry.text = Steam.getPersonaName()
+			else:
+				var nickname := Steam.getPlayerNickname(data.steam_id)
+				entry.text = Steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
+			Steam.getPlayerAvatar(Steam.AVATAR_SMALL, data.steam_id)
+			var ret: Array = await Steam.avatar_loaded
+			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+		else:
+			entry.text = override_name
+		print("%s %d/%d" % [entry.text, entry.secs, entry.mistakes])
+		return entry
+
+class LeaderboardData:
+	var list: Array[ListEntry]
+	# Only the secs of the top 100 scores that have no mistakes
+	# Used to draw an histogram
+	var top_no_mistakes: Array[int]
+
+func get_leaderboard_data(l_id: int) -> LeaderboardData:
+	if not SteamManager.enabled:
+		return null
+	var data := LeaderboardData.new()
+	var list_has_rank := {}
+	Steam.downloadLeaderboardEntries(0, 0, Steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
+	var ret: Array = await Steam.leaderboard_scores_downloaded
+	for entry in ret[2]:
+		list_has_rank[entry.global_rank] = true
+		data.list.append(await ListEntry.create(entry))
+	var total := Steam.getLeaderboardEntryCount(l_id)
+	Steam.downloadLeaderboardEntries(1, 1000, Steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
+	ret = await Steam.leaderboard_scores_downloaded
+	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
+	for entry in ret[2]:
+		for pct in percentiles:
+			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
+				data.list.append(await ListEntry.create(entry, tr(pct[1])))
+				list_has_rank[entry.global_rank] = true
+		# Only on no mistakes
+		if entry.score < MAX_TIME:
+			data.top_no_mistakes.append(entry.score)
+	for pct in percentiles:
+		if not list_has_rank.has(ceili(float(total) * pct[0])):
+			# If this happens, we can do extra requests. But are we really that popular?
+			push_warning("%.2f percentile not in top entries" % pct[0])
+	return data
