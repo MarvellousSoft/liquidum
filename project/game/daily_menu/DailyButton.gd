@@ -195,3 +195,24 @@ func level_completed(info: Level.WinInfo) -> void:
 		if data.current_streak > 0:
 			data.current_streak = 0
 			UserData.save()
+	await upload_leaderboard(info)
+
+# 27 hours, enough
+const MAX_TIME := 100000
+
+func upload_leaderboard(info: Level.WinInfo) -> void:
+	if not SteamManager.enabled:
+		return
+	# We need to store both mistakes and time in the same score.
+	# Mistakes take priority.
+	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
+	Steam.findOrCreateLeaderboard("daily_%s" % date, Steam.LEADERBOARD_SORT_METHOD_ASCENDING, Steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+	var ret: Array = await Steam.leaderboard_find_result
+	if not ret[1]:
+		push_warning("Leaderboard not found for daily %s" % date)
+		return
+	var l_id: int = ret[0]
+	Steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
+	ret = await Steam.leaderboard_score_uploaded
+	if not ret[0]:
+		push_warning("Failed to upload entry for daily %s" % date)

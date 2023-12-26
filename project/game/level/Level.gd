@@ -11,10 +11,12 @@ class WinInfo:
 	var first_win: bool
 	var first_try_no_resets: bool
 	var mistakes: int
-	func _init(first_win_: bool, first_try_no_resets_: bool, mistakes_: int) -> void:
+	var time_secs: float
+	func _init(first_win_: bool, first_try_no_resets_: bool, mistakes_: int, time_secs_: float) -> void:
 		first_win = first_win_
 		first_try_no_resets = first_try_no_resets_
 		mistakes = mistakes_
+		time_secs = time_secs_
 
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
@@ -266,7 +268,7 @@ func win() -> void:
 	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit(WinInfo.new(not won_before, first_try_no_resets, int(Counters.mistake.count)))
+	won.emit(WinInfo.new(not won_before, first_try_no_resets, int(Counters.mistake.count), running_time))
 	
 	await get_tree().create_timer(1.5).timeout
 	
