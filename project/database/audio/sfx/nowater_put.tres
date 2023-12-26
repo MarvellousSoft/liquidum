@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://468kna07tn0t"]
 
-[ext_resource type="AudioStream" uid="uid://d3e4qtevmbhg5" path="res://assets/audio/sfx/put_air.wav" id="1_kvmfi"]
+[ext_resource type="AudioStream" uid="uid://d3e4qtevmbhg5" path="res://assets/audio/sfx/put_nowater.wav" id="1_kvmfi"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_hm0ev"]
 
 [resource]

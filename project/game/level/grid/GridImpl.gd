@@ -96,13 +96,13 @@ func setup(n_: int, m_: int) -> void:
 	_grid_hints.total_boats = 0
 	_grid_hints.expected_aquariums = {}
 
-enum Content { Nothing, Water, Air, Block, Boat }
+enum Content { Nothing, Water, NoWater, Block, Boat }
 
 func _is_content_partial_solution(c: Content, sol: Content) -> bool:
 	match c:
 		Content.Block, Content.Water, Content.Boat:
 			return sol == c
-		Content.Nothing, Content.Air:
+		Content.Nothing, Content.NoWater:
 			return true
 	return true
 
@@ -155,10 +155,10 @@ class PureCell:
 		return _content_full(Content.Water)
 	func water_at(corner: E.Corner) -> bool:
 		return _content_at(corner) == Content.Water
-	func air_full() -> bool:
-		return _content_full(Content.Air)
-	func air_at(corner: E.Corner) -> bool:
-		return _content_at(corner) == Content.Air
+	func nowater_full() -> bool:
+		return _content_full(Content.NoWater)
+	func nowater_at(corner: E.Corner) -> bool:
+		return _content_at(corner) == Content.NoWater
 	func nothing_full() -> bool:
 		return _content_full(Content.Nothing)
 	func nothing_at(corner: E.Corner) -> bool:
@@ -187,8 +187,8 @@ class PureCell:
 		return prev_left != c_left or prev_right != c_right
 	func put_water(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Water)
-	func put_air(corner: E.Corner) -> bool:
-		return put_content(corner, Content.Air)
+	func put_nowater(corner: E.Corner) -> bool:
+		return put_content(corner, Content.NoWater)
 	func put_block(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Block)
 	func put_nothing(corner: E.Corner) -> bool:
@@ -197,7 +197,7 @@ class PureCell:
 		if type != E.Single:
 			return false
 		# Only things that can be replaced with boat
-		if c_left != Content.Nothing and c_left != Content.Air:
+		if c_left != Content.Nothing and c_left != Content.NoWater:
 			return false
 		c_left = Content.Boat
 		c_right = Content.Boat
@@ -214,8 +214,8 @@ class PureCell:
 		return 0.5 * (float(c_left == c) + float(c_right == c))
 	func water_count() -> float:
 		return _content_count(Content.Water)
-	func air_count() -> float:
-		return _content_count(Content.Air)
+	func nowater_count() -> float:
+		return _content_count(Content.NoWater)
 	func nothing_count() -> float:
 		return _content_count(Content.Nothing)
 	func eq(other: PureCell) -> bool:
@@ -251,7 +251,7 @@ class PureCell:
 		return type == E.Single or E.corner_to_diag(corner) == type
 	func _change_diag_wall(diag: E.Diagonal, new: bool) -> void:
 		if new:
-			# Water and air are fine to keep. If changing diagonal let's purge everything.
+			# Water and nowater are fine to keep. If changing diagonal let's purge everything.
 			if _has_boat() or (c_left != c_right and type != E.Single and type != diag):
 				c_left = Content.Nothing
 				c_right = Content.Nothing
@@ -364,10 +364,10 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure().water_full()
 	func water_at(corner: E.Corner) -> bool:
 		return pure().water_at(corner)
-	func air_full() -> bool:
-		return pure().air_full()
-	func air_at(corner: E.Corner) -> bool:
-		return pure().air_at(corner)
+	func nowater_full() -> bool:
+		return pure().nowater_full()
+	func nowater_at(corner: E.Corner) -> bool:
+		return pure().nowater_at(corner)
 	func nothing_full() -> bool:
 		return pure().nothing_full()
 	func nothing_at(corner: E.Corner) -> bool:
@@ -405,18 +405,18 @@ class CellWithLoc extends GridModel.CellModel:
 			grid.maybe_update_hints()
 			return true
 		return false
-	func put_air(corner: E.Corner, flush_undo := true, flood := false) -> bool:
+	func put_nowater(corner: E.Corner, flush_undo := true, flood := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
-		if !grid.is_corner_partially_valid(Content.Air, i, j, corner):
+		if !grid.is_corner_partially_valid(Content.NoWater, i, j, corner):
 			return false
 		if water_at(corner):
 			remove_content(corner, false)
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
-		if pure().put_air(corner):
-			# No auto-flooding air
+		if pure().put_nowater(corner):
+			# No auto-flooding nowater
 			if flood:
-				var dfs := AddAirDfs.new(grid)
+				var dfs := AddNoWaterDfs.new(grid)
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes, false)
@@ -483,7 +483,7 @@ class CellWithLoc extends GridModel.CellModel:
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
 		if pure()._put_boat():
 			if flood:
-				var dfs := AddAirDfs.new(grid)
+				var dfs := AddNoWaterDfs.new(grid)
 				dfs.flood(i, j, E.Corner.TopLeft)
 				changes.append_array(dfs.changes)
 			grid._push_undo_changes(changes, false)
@@ -520,13 +520,13 @@ class CellWithLoc extends GridModel.CellModel:
 		else:
 			assert(false, "Should be called only if possible")
 			return []
-	func air_would_flood_how_many(corner: E.Corner) -> float:
+	func nowater_would_flood_how_many(corner: E.Corner) -> float:
 		if not nothing_at(corner):
 			return 0.0
-		var dfs := AddAirDfs.new(grid)
+		var dfs := AddNoWaterDfs.new(grid)
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
-		return dfs.added_air
+		return dfs.added_nowater
 		
 	func _has_boat_invalid_pos() -> bool:
 		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
@@ -729,7 +729,7 @@ func _str_content(chr: String) -> Content:
 		'w':
 			return Content.Water
 		'x':
-			return Content.Air
+			return Content.NoWater
 		'#':
 			return Content.Block
 		'b':
@@ -743,7 +743,7 @@ func _content_str(c: Content) -> String:
 			return '.'
 		Content.Water:
 			return 'w'
-		Content.Air:
+		Content.NoWater:
 			return 'x'
 		Content.Block:
 			return '#'
@@ -1103,7 +1103,7 @@ class AddWaterDfs extends Dfs:
 	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)
 		match c:
-			Content.Nothing, Content.Air, Content.Boat, Content.Water:
+			Content.Nothing, Content.NoWater, Content.Boat, Content.Water:
 				var pos: E.Waters = E.Waters.Single if cell.cell_type() == E.CellType.Single else (corner as E.Waters)
 				if c != Content.Water:
 					added_waters += E.waters_size(pos)
@@ -1120,20 +1120,20 @@ class AddWaterDfs extends Dfs:
 		return true
 
 
-class AddAirDfs extends Dfs:
-	var added_air := 0.0
+class AddNoWaterDfs extends Dfs:
+	var added_nowater := 0.0
 	var dry_run := false
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)
 		match c:
-			Content.Water, Content.Nothing, Content.Air:
-				if c != Content.Air:
+			Content.Water, Content.Nothing, Content.NoWater:
+				if c != Content.NoWater:
 					if cell.cell_type() == E.CellType.Single:
-						added_air += 1.0
+						added_nowater += 1.0
 					else:
-						added_air += 0.5
+						added_nowater += 0.5
 				if not dry_run:
-					cell.put_air(corner)
+					cell.put_nowater(corner)
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
@@ -1202,10 +1202,10 @@ func aquarium_hints_status() -> E.HintStatus:
 	return E.HintStatus.Satisfied
 
 
-func count_air_row(i : int) -> float:
+func count_nowater_row(i : int) -> float:
 	var count: float = 0.
 	for j in m:
-		count += _pure_cell(i, j).air_count()
+		count += _pure_cell(i, j).nowater_count()
 	return count
 
 
@@ -1246,10 +1246,10 @@ func count_waters() -> float:
 	return count
 
 
-func count_airs() -> float:
+func count_nowaters() -> float:
 	var count := 0.0
 	for i in n:
-		count += count_air_row(i)
+		count += count_nowater_row(i)
 	return count
 
 
@@ -1469,15 +1469,15 @@ func fix_invalid_boats(flush_undo := true) -> bool:
 				removed_boat = true
 	return removed_boat
 
-func flood_air(flush_undo := true) -> bool:
+func flood_nowater(flush_undo := true) -> bool:
 	if flush_undo:
 		push_empty_undo()
-	var dfs := AddAirDfs.new(self)
+	var dfs := AddNoWaterDfs.new(self)
 	for i in range(n - 1, -1, -1):
 		for j in m:
 			var c := _pure_cell(i, j)
 			for corner in E.Corner.values():
-				if c.last_seen(corner) < last_seen and c.air_at(corner):
+				if c.last_seen(corner) < last_seen and c.nowater_at(corner):
 					dfs.flood(i, j, corner)
 	if !dfs.changes.is_empty():
 		_push_undo_changes(dfs.changes, false)
@@ -1547,7 +1547,7 @@ func equal(other: GridImpl) -> bool:
 	return true
 	
 func is_empty() -> bool:
-	return count_boats() <= 0 and count_waters() <= 0 and count_airs() <= 0
+	return count_boats() <= 0 and count_waters() <= 0 and count_nowaters() <= 0
 
 func copy_to_clipboard() -> void:
 	var s = JSON.stringify(export_data())

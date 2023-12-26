@@ -250,25 +250,25 @@ func update_visuals(fast_update := false) -> void:
 			var cell_data := grid_logic.get_cell(i, j)
 			var cell := get_cell(i, j) as Cell
 			if cell_data.water_full():
-				cell.remove_air()
+				cell.remove_nowater()
 				cell.set_boat(false)
 				cell.set_water(E.Single, true)
-			elif cell_data.air_full():
+			elif cell_data.nowater_full():
 				cell.remove_water()
 				cell.set_boat(false)
-				cell.set_air(E.Single, true)
+				cell.set_nowater(E.Single, true)
 			elif cell_data.has_boat():
 				cell.remove_water()
-				cell.remove_air()
+				cell.remove_nowater()
 				cell.set_boat(true)
 			elif cell_data.nothing_full():
 				cell.remove_water()
-				cell.remove_air()
+				cell.remove_nowater()
 				cell.set_boat(false)
 			else:
 				for corner in E.Corner.values():
 					cell.set_water(corner, cell_data.water_at(corner))
-					cell.set_air(corner, cell_data.air_at(corner))
+					cell.set_nowater(corner, cell_data.nowater_at(corner))
 			if fast_update:
 				cell.fast_update_waters()
 
@@ -481,16 +481,16 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 					play_water_sound()
 				else:
 					highlight_error(i, j, which)
-		E.BrushMode.Air:
+		E.BrushMode.NoWater:
 			grid_logic.push_empty_undo()
-			if cell_data.air_at(corner):
-				mouse_hold_status = E.MouseDragState.RemoveAir
+			if cell_data.nowater_at(corner):
+				mouse_hold_status = E.MouseDragState.RemoveNoWater
 				cell_data.remove_content(corner, false)
-				AudioManager.play_sfx("air_remove")
+				AudioManager.play_sfx("nowater_remove")
 			else:
-				mouse_hold_status = E.MouseDragState.Air
-				if cell_data.put_air(corner, false):
-					AudioManager.play_sfx("air_put")
+				mouse_hold_status = E.MouseDragState.NoWater
+				if cell_data.put_nowater(corner, false):
+					AudioManager.play_sfx("nowater_put")
 				else:
 					highlight_error(i, j, which)
 		E.BrushMode.Boat:
@@ -526,10 +526,10 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		return
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
-	if cell_data.air_at(corner):
-		mouse_hold_status = E.MouseDragState.RemoveAir
+	if cell_data.nowater_at(corner):
+		mouse_hold_status = E.MouseDragState.RemoveNoWater
 		cell_data.remove_content(corner)
-		AudioManager.play_sfx("air_remove")
+		AudioManager.play_sfx("nowater_remove")
 	elif cell_data.has_boat():
 		mouse_hold_status = E.MouseDragState.RemoveBoat
 		cell_data.remove_content(corner)
@@ -540,12 +540,12 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 		get_cell(i, j).update_blocks(cell_data)
 		AudioManager.play_sfx("block_remove")
 	else:
-		if brush_mode == E.BrushMode.Air:
+		if brush_mode == E.BrushMode.NoWater:
 			pass #Do unknown stuff here
 		else:
-			mouse_hold_status = E.MouseDragState.Air
-			if cell_data.put_air(corner):
-				AudioManager.play_sfx("air_put")
+			mouse_hold_status = E.MouseDragState.NoWater
+			if cell_data.put_nowater(corner):
+				AudioManager.play_sfx("nowater_put")
 			else:
 				highlight_error(i, j, which)
 	update()
@@ -568,9 +568,9 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			play_water_sound()
 		else:
 			highlight_error(i, j, which)
-	elif mouse_hold_status == E.MouseDragState.Air and cell_data.nothing_at(corner):
-		if cell_data.put_air(corner, false):
-			AudioManager.play_sfx("air_put")
+	elif mouse_hold_status == E.MouseDragState.NoWater and cell_data.nothing_at(corner):
+		if cell_data.put_nowater(corner, false):
+			AudioManager.play_sfx("nowater_put")
 		else:
 			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
@@ -586,9 +586,9 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	elif mouse_hold_status == E.MouseDragState.RemoveWater and cell_data.water_at(corner):
 		cell_data.remove_content(corner, false)
 		play_water_sound()
-	elif mouse_hold_status == E.MouseDragState.RemoveAir and cell_data.air_at(corner):
+	elif mouse_hold_status == E.MouseDragState.RemoveNoWater and cell_data.nowater_at(corner):
 		cell_data.remove_content(corner, false)
-		AudioManager.play_sfx("air_remove")
+		AudioManager.play_sfx("nowater_remove")
 	elif mouse_hold_status == E.MouseDragState.RemoveBoat and cell_data.has_boat():
 		cell_data.remove_content(corner, false)
 		AudioManager.play_sfx("boat_remove")

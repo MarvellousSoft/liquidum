@@ -106,11 +106,11 @@ func test_simple() -> void:
 	check(!g.get_cell(0, 1).water_at(BottomRight))
 	check(g.get_cell(1, 1).water_at(TopRight))
 	check(!g.get_cell(1, 1).water_at(BottomLeft))
-	# Check air
-	check(!g.get_cell(0, 0).air_at(TopLeft))
-	check(!g.get_cell(0, 1).air_at(TopLeft))
-	check(g.get_cell(0, 1).air_at(BottomRight))
-	check(!g.get_cell(1, 0).air_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
+	# Check nowater
+	check(!g.get_cell(0, 0).nowater_at(TopLeft))
+	check(!g.get_cell(0, 1).nowater_at(TopLeft))
+	check(g.get_cell(0, 1).nowater_at(BottomRight))
+	check(!g.get_cell(1, 0).nowater_at(BottomLeft) and !g.get_cell(1, 0).water_at(BottomRight))
 	# Check block
 	check(!g.get_cell(1, 0).block_full())
 	check(g.get_cell(1, 0).block_at(BottomLeft))
@@ -201,8 +201,8 @@ L╲_╲_.
 	""")
 	g.get_cell(3, 0).remove_content(TopRight)
 	g.get_cell(1, 0).put_water(BottomLeft)
-	g.get_cell(1, 2).put_air(BottomRight)
-	g.get_cell(1, 1).put_air(BottomRight)
+	g.get_cell(1, 2).put_nowater(BottomRight)
+	g.get_cell(1, 1).put_nowater(BottomRight)
 	assert_grid_eq(g.to_str(), """
 ......
 |....╲
@@ -506,11 +506,11 @@ func test_boat_place_remove() -> void:
 	assert(!g.get_cell(0, 1).has_boat())
 	g.undo()
 	assert(g.are_hints_satisfied())
-	# Air should flood through boats without deleting them
-	g.get_cell(0, 0).put_air(TopLeft, true, true)
-	assert(g.get_cell(0, 0).air_full())
+	# NoWater should flood through boats without deleting them
+	g.get_cell(0, 0).put_nowater(TopLeft, true, true)
+	assert(g.get_cell(0, 0).nowater_full())
 	assert(g.get_cell(0, 1).has_boat())
-	assert(g.get_cell(0, 2).air_full())
+	assert(g.get_cell(0, 2).nowater_full())
 
 func test_subset_sum() -> void:
 	assert_can_solve("""
@@ -606,14 +606,14 @@ func test_put_wall() -> void:
 	g.put_wall_from_idx(0, 0, 3, 3)
 	assert_grid_eq(g.to_str(), dec_dig)
 
-func test_put_air_with_boat() -> void:
+func test_put_nowater_with_boat() -> void:
 	var g := str_grid("""
 	bb..
 	|...
 	w.ww
 	L/L.
 	""")
-	g.get_cell(1, 1).put_air(BottomRight)
+	g.get_cell(1, 1).put_nowater(BottomRight)
 	assert_grid_eq(g.to_str(), """
 	bb..
 	|...
@@ -742,7 +742,7 @@ func test_separate_rule() -> void:
 	2....
 	-L/_/
 	""", s)
-	# Put air in nearby aquariums because it would be together
+	# Put nowater in nearby aquariums because it would be together
 	assert_can_solve("""
 	h........
 	3..w....#

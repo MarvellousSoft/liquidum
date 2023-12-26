@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://d3e4qtevmbhg5"
-path="res://.godot/imported/put_air.wav-6107c3de7d1cdc240010d27f76021774.sample"
+path="res://.godot/imported/put_nowater.wav-c0e8446f25ed713aeee67b6ba138d6d0.sample"
 
 [deps]
 
-source_file="res://assets/audio/sfx/put_air.wav"
-dest_files=["res://.godot/imported/put_air.wav-6107c3de7d1cdc240010d27f76021774.sample"]
+source_file="res://assets/audio/sfx/put_nowater.wav"
+dest_files=["res://.godot/imported/put_nowater.wav-c0e8446f25ed713aeee67b6ba138d6d0.sample"]
 
 [params]
 

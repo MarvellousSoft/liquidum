@@ -38,9 +38,9 @@ class CellModel:
 	func water_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	# When user marks a tile definitely doesn't contain waters
-	func air_full() -> bool:
+	func nowater_full() -> bool:
 		return GridModel.must_be_implemented()
-	func air_at(_corner: E.Corner) -> bool:
+	func nowater_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	func nothing_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -59,8 +59,8 @@ class CellModel:
 	# Returns whether it was a valid move
 	func put_water(_corner: E.Corner, _flush_undo := true) -> float:
 		return GridModel.must_be_implemented()
-	# Puts air in the given diagonal
-	func put_air(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:
+	# Puts nowater in the given diagonal
+	func put_nowater(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:
 		return GridModel.must_be_implemented()
 	func put_block(_corner: E.Corner, _flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
@@ -89,7 +89,7 @@ class CellModel:
 	# Returns only waters it would flood. Empty if boat not possible.
 	func boat_would_flood_which() -> Array[WaterPosition]:
 		return GridModel.must_be_implemented()
-	func air_would_flood_how_many(_corner: E.Corner) -> float:
+	func nowater_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
@@ -155,7 +155,7 @@ func all_hints_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
 # Is this a valid solution?
-# If check_complete is true, it checks all cells are filled (even if with air)
+# If check_complete is true, it checks all cells are filled (even if with nowater)
 func are_hints_satisfied(_check_complete := false) -> bool:
 	return GridModel.must_be_implemented()
 
@@ -192,7 +192,7 @@ func aquarium_hints_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
 enum LoadMode {
-	# Default. Must be a solution, and the water/air/boats are cleared after loading and validation.
+	# Default. Must be a solution, and the water/nowater/boats are cleared after loading and validation.
 	Solution,
 	# Same as above, but doesn't clear the contents.
 	SolutionNoClear,
@@ -212,8 +212,8 @@ enum LoadMode {
 # 34
 # 1 and 2 are the contents on both left and right sides.
 # - w: water
-# - x: air (not necessary for the solution, just for tracking where there's no water)
-# - #: block (can't have either water or air)
+# - x: nowater (not necessary for the solution, just for tracking where there's no water)
+# - #: block (can't have either water or nowater)
 # - .: nothing
 # 3 is the left and bottom wall information.
 # - |: left wall only
@@ -271,10 +271,10 @@ func push_empty_undo() -> void:
 func flood_all(_flush_undo := true) -> bool:
 	return GridModel.must_be_implemented()
 
-func flood_air(_flush_undo := true) -> bool:
+func flood_nowater(_flush_undo := true) -> bool:
 	return GridModel.must_be_implemented()
 
-# Clear all water and air
+# Clear all water and nowater
 func clear_content() -> void:
 	return GridModel.must_be_implemented()
 
@@ -317,7 +317,7 @@ func count_boats() -> int:
 func prettify_hints() -> void:
 	return GridModel.must_be_implemented()
 
-# Is the grid fully filled, including airs?
+# Is the grid fully filled, including s?
 func check_complete() -> bool:
 	return GridModel.must_be_implemented()
 

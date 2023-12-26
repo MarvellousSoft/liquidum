@@ -382,10 +382,10 @@ offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 texture = ExtResource("7_v8ssd")
 
-[node name="Airs" type="Control" parent="."]
+[node name="NoWaters" type="Control" parent="."]
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="Airs"]
+[node name="Single" type="TextureRect" parent="NoWaters"]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -394,7 +394,7 @@ offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("8_o2vuh")
 
-[node name="TopLeft" type="TextureRect" parent="Airs"]
+[node name="TopLeft" type="TextureRect" parent="NoWaters"]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -403,7 +403,7 @@ offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("9_xqw16")
 
-[node name="TopRight" type="TextureRect" parent="Airs"]
+[node name="TopRight" type="TextureRect" parent="NoWaters"]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -412,7 +412,7 @@ offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("10_iqtow")
 
-[node name="BottomRight" type="TextureRect" parent="Airs"]
+[node name="BottomRight" type="TextureRect" parent="NoWaters"]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -422,7 +422,7 @@ rotation = 3.14159
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("9_xqw16")
 
-[node name="BottomLeft" type="TextureRect" parent="Airs"]
+[node name="BottomLeft" type="TextureRect" parent="NoWaters"]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0

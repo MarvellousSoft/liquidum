@@ -149,7 +149,7 @@ layout_mode = 2
 texture = ExtResource("3_puwdh")
 expand_mode = 1
 
-[node name="Air" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="NoWater" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("5_1bwir")
@@ -191,7 +191,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Air" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="NoWater" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0

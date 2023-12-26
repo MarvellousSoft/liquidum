@@ -20,12 +20,12 @@ signal block_entered
 	E.Waters.BottomLeft: $Waters/BottomLeft,
 	E.Waters.BottomRight: $Waters/BottomRight,
 }
-@onready var Airs = {
-	E.Waters.Single: $Airs/Single,
-	E.Waters.TopLeft: $Airs/TopLeft,
-	E.Waters.TopRight: $Airs/TopRight,
-	E.Waters.BottomLeft: $Airs/BottomLeft,
-	E.Waters.BottomRight: $Airs/BottomRight,
+@onready var NoWaters = {
+	E.Waters.Single: $NoWaters/Single,
+	E.Waters.TopLeft: $NoWaters/TopLeft,
+	E.Waters.TopRight: $NoWaters/TopRight,
+	E.Waters.BottomLeft: $NoWaters/BottomLeft,
+	E.Waters.BottomRight: $NoWaters/BottomRight,
 }
 @onready var Buttons = {
 	E.Single: $Buttons/Single,
@@ -129,8 +129,8 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	for water in Waters.values():
 		water.show()
 		set_water_level(water, 0.)
-	for air in Airs.values():
-		air.hide()
+	for nowater in NoWaters.values():
+		nowater.hide()
 
 	for error in Errors.values():
 		error.modulate.a = 0.0
@@ -169,7 +169,7 @@ func get_type() -> E.CellType:
 func copy_data(data: GridModel.CellModel) -> void:
 	# Need to remove water when changing walls
 	remove_water()
-	remove_air()
+	remove_nowater()
 	set_boat(false)
 	for wall in E.Walls.values():
 		var has_wall := data.wall_at(wall)
@@ -225,13 +225,13 @@ func set_water(water : E.Waters, value: bool) -> void:
 	water_flags[water] = value
 
 
-func remove_air() -> void:
-	for air in Airs.values():
-		air.hide()
+func remove_nowater() -> void:
+	for nowater in NoWaters.values():
+		nowater.hide()
 
 
-func set_air(air : E.Waters, value: bool) -> void:
-	Airs[air].visible = value
+func set_nowater(nowater : E.Waters, value: bool) -> void:
+	NoWaters[nowater].visible = value
 
 
 func get_water_flag(corner : E.Waters) -> bool:
