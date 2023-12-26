@@ -13,9 +13,9 @@ DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?,Tem certeza?
 WATERS_COUNTER,Waters Missing: ,Águas Faltando: ,Águas Faltando: 
 BOATS_COUNTER,Boats Missing: ,Barcos Faltando: ,Barcos Faltando: 
 MISTAKES_COUNTER,Mistakes: ,Erros: ,Erros:
-MASTER_SOUND,Master Volume,Volume Geral,Volume principal
-BGM_SOUND,BGM Volume,Volume de Fundo,Volume da música musical
-SFX_SOUND,SFX Volume,Volume de Efeitos Sonoros,Volume de efeitos sonoros
+MASTER_SOUND,Master volume,Volume geral,Volume geral
+BGM_SOUND,Background music volume,Volume da música de fundo,Volume da música de fundo
+SFX_SOUND,Sound effects volume,Volume de efeitos sonoros,Volume de efeitos sonoros
 FULLSCREEN,Fullscreen,Tela Cheia,Tela cheia
 SAVE_AND_EXIT,Save & Exit,Salvar & Sair,Saída segura
 AQUARIUMS,Aquariums,Aquários,Aquários
