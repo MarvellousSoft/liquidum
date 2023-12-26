@@ -452,6 +452,17 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 	HintBars.top.highlight_hints(p_j)
 
 
+func show_boat_preview(p_i : int, p_j : int) -> void:
+	remove_all_preview()
+	@warning_ignore("incompatible_ternary")
+	var grid_cell = grid_logic.get_cell(p_i, p_j)
+	if grid_cell.boat_possible():
+		var affected_cells = grid_logic.get_cell(p_i, p_j).boat_would_flood_which()
+		for cell_data in affected_cells:
+			var cell = get_cell(cell_data.i, cell_data.j)
+			cell.set_water_preview(cell_data.loc, true)
+
+
 func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
 	remove_all_preview()
 	@warning_ignore("incompatible_ternary")
@@ -465,7 +476,7 @@ func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
 func remove_all_preview() -> void:
 	for i in rows:
 		for j in columns:
-			get_cell(i, j).remove_all_water_preview()
+			get_cell(i, j).remove_all_preview()
 
 
 func highlight_row(idx):
@@ -573,8 +584,11 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	if Profile.get_option("highlight_grid"):
 		highlight_grid(i, j)
-	if Profile.get_option("show_grid_preview") and brush_mode == E.BrushMode.Water and mouse_hold_status == E.MouseDragState.None:
-		show_preview(i, j, which)
+	if Profile.get_option("show_grid_preview") and mouse_hold_status == E.MouseDragState.None:
+		if brush_mode == E.BrushMode.Water:
+			show_preview(i, j, which)
+		elif brush_mode == E.BrushMode.Boat:
+			show_boat_preview(i, j)
 	
 	if mouse_hold_status == E.MouseDragState.None:
 		return

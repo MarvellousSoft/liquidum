@@ -96,6 +96,7 @@ var preview_water_flags = {
 	E.Waters.BottomLeft: false,
 	E.Waters.BottomRight: false,
 }
+var preview_boat_flag := false
 var boat_flag := false
 var highlight := false
 var editor_mode := false
@@ -126,6 +127,7 @@ func _process(dt):
 				cur_alpha = max(cur_alpha - dt*PREVIEW_ALPHA_SPEED, 0.0)
 			set_final_alpha(Previews[corner], cur_alpha)
 			Global.alpha_fade_node(dt, Boat, boat_flag)
+			Global.alpha_fade_node(dt, BoatPreview, preview_boat_flag, false, false, PREVIEW_ALPHA_SPEED)
 
 		Global.alpha_fade_node(dt, Highlight, highlight)
 
@@ -158,6 +160,7 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	for error in Errors.values():
 		error.modulate.a = 0.0
 	Boat.modulate.a = 0.0
+	BoatPreview.modulate.a = 0.0
 	copy_data(data)
 
 	if not editor_mode and not fast_startup:
@@ -234,8 +237,12 @@ func set_block(block : E.Waters) -> void:
 		Buttons[block].hide()
 
 
-func set_boat(value) -> void:
+func set_boat(value : bool) -> void:
 	boat_flag = value
+
+
+func set_boat_preview(value : bool) -> void:
+	preview_boat_flag = value
 
 
 func remove_water() -> void:
@@ -257,9 +264,10 @@ func set_water_preview(water : E.Waters, value: bool) -> void:
 	preview_water_flags[water] = value
 
 
-func remove_all_water_preview() -> void:
+func remove_all_preview() -> void:
 	for water in Previews.keys():
 		preview_water_flags[water] = false
+	preview_boat_flag = false
 
 
 func set_nowater(nowater : E.Waters, value: bool) -> void:
