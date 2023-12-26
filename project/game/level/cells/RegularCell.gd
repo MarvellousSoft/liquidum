@@ -65,6 +65,7 @@ signal block_entered
 	E.Waters.BottomRight: $Blocks/BottomRight,
 }
 @onready var Boat = $Boat
+@onready var BoatPreview = $BoatPreview
 @onready var Errors = {
 	E.Waters.Single: $Errors/Single,
 	E.Waters.TopLeft: $Errors/TopLeft,
@@ -247,11 +248,11 @@ func set_water(water : E.Waters, value: bool) -> void:
 	water_flags[water] = value
 
 
-<<<<<<< HEAD
 func remove_nowater() -> void:
 	for nowater in NoWaters.values():
 		nowater.hide()
-=======
+
+
 func set_water_preview(water : E.Waters, value: bool) -> void:
 	preview_water_flags[water] = value
 
@@ -259,12 +260,6 @@ func set_water_preview(water : E.Waters, value: bool) -> void:
 func remove_all_water_preview() -> void:
 	for water in Previews.keys():
 		preview_water_flags[water] = false
-
-
-func remove_air() -> void:
-	for air in Airs.values():
-		air.hide()
->>>>>>> 10352fd (First version of water preview)
 
 
 func set_nowater(nowater : E.Waters, value: bool) -> void:
