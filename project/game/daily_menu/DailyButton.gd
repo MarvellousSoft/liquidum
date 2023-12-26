@@ -235,7 +235,6 @@ class ListEntry:
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
 		if override_name.is_empty():
-			var img_data
 			if data.steam_id == Steam.getSteamID():
 				entry.text = Steam.getPersonaName()
 			else:

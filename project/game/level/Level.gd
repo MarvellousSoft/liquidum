@@ -573,7 +573,7 @@ func _on_edit_text_changed(new_text: String) -> void:
 		return
 	full_name = new_text
 
-func display_leaderboard(data: DailyButton.LeaderboardData) -> void:
+func display_leaderboard(_data: DailyButton.LeaderboardData) -> void:
 	assert(game_won)
 	# TODO: Display
 
