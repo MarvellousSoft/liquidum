@@ -17,7 +17,7 @@ var editor_mode := false
 
 func _ready():
 	disable_editor()
-	MainLabel.text = tr(counter_name)
+	MainLabel.text = counter_name
 
 
 func _process(dt):
@@ -30,6 +30,7 @@ func _process(dt):
 
 
 func enable_editor():
+	MainLabel.text += "_EDITOR"
 	editor_mode = true
 	VisibilityButton.show()
 

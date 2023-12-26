@@ -89,7 +89,7 @@ script = ExtResource("1_bwmcc")
 custom_minimum_size = Vector2(0, 81)
 layout_mode = 2
 theme = ExtResource("2_wetut")
-theme_override_constants/separation = 21
+theme_override_constants/separation = 15
 
 [node name="VisibilityButton" parent="HBoxContainer" instance=ExtResource("3_86ios")]
 unique_name_in_owner = true
@@ -100,13 +100,15 @@ size_flags_vertical = 0
 custom_minimum_size = Vector2(50, 50)
 
 [node name="Label" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = SubResource("FontVariation_5wwqj")
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 60
 text = "MISTAKES"
-vertical_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Counter" type="Label" parent="HBoxContainer"]
 layout_mode = 2
