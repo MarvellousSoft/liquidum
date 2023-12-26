@@ -180,16 +180,17 @@ class PureCell:
 	func _diag_wall_at(diag: E.Diagonal) -> bool:
 		return diag == type
 	# Can't override block
-	func put_content(corner: E.Corner, content: Content) -> bool:
+	func put_content(corner: E.Corner, content: Content, force_no_mix := false) -> bool:
 		if not _valid_corner(corner):
 			return false
 
 		var prev_left := c_left
 		var prev_right := c_right
-		# Maybe mix NoBoat and NoWater
-		match [content, _content_at(corner)]:
-			[Content.NoBoat, Content.NoWater], [Content.NoWater, Content.NoBoat], [Content.NoBoat, Content.NoBoatWater], [Content.NoWater, Content.NoBoatWater]:
-				content = Content.NoBoatWater
+		if not force_no_mix:
+			# Maybe mix NoBoat and NoWater
+			match [content, _content_at(corner)]:
+				[Content.NoBoat, Content.NoWater], [Content.NoWater, Content.NoBoat], [Content.NoBoat, Content.NoBoatWater], [Content.NoWater, Content.NoBoatWater]:
+					content = Content.NoBoatWater
 		if E.corner_is_left(corner):
 			if type == E.Single:
 				c_right = content
@@ -201,10 +202,10 @@ class PureCell:
 		return prev_left != c_left or prev_right != c_right
 	func put_water(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Water)
-	func put_nowater(corner: E.Corner) -> bool:
-		return put_content(corner, Content.NoWater)
-	func put_noboat(corner: E.Corner) -> bool:
-		return put_content(corner, Content.NoBoat)
+	func put_nowater(corner: E.Corner, force_no_mix: bool) -> bool:
+		return put_content(corner, Content.NoWater, force_no_mix)
+	func put_noboat(corner: E.Corner, force_no_mix: bool) -> bool:
+		return put_content(corner, Content.NoBoat, force_no_mix)
 	func put_block(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Block)
 	func put_nothing(corner: E.Corner) -> bool:
@@ -421,7 +422,7 @@ class CellWithLoc extends GridModel.CellModel:
 			grid.maybe_update_hints()
 			return true
 		return false
-	func put_nowater(corner: E.Corner, flush_undo := true, flood := false) -> bool:
+	func put_nowater(corner: E.Corner, flush_undo := true, flood := false, force_no_mix := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
 		if !grid.is_corner_partially_valid(Content.NoWater, i, j, corner):
@@ -429,7 +430,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if water_at(corner):
 			remove_content(corner, false)
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
-		if pure().put_nowater(corner):
+		if pure().put_nowater(corner, force_no_mix):
 			# No auto-flooding nowater
 			if flood:
 				var dfs := AddNoWaterDfs.new(grid)
@@ -438,7 +439,7 @@ class CellWithLoc extends GridModel.CellModel:
 			grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
 		return true
-	func put_noboat(corner: E.Corner, flush_undo := true) -> bool:
+	func put_noboat(corner: E.Corner, flush_undo := true, force_no_mix := false) -> bool:
 		if flush_undo:
 			grid.push_empty_undo()
 		if !grid.is_corner_partially_valid(Content.NoBoat, i, j, corner):
@@ -446,7 +447,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if water_at(corner):
 			return false
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
-		if pure().put_noboat(corner):
+		if pure().put_noboat(corner, force_no_mix):
 			grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
 		return true
@@ -469,6 +470,14 @@ class CellWithLoc extends GridModel.CellModel:
 		else:
 			grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
+	func remove_nowater(corner: E.Corner, flush_undo := true) -> void:
+		if pure()._content_at(corner) != Content.NoBoatWater:
+			return remove_content(corner, flush_undo)
+		put_noboat(corner, flush_undo, true)
+	func remove_noboat(corner: E.Corner, flush_undo := true) -> void:
+		if pure()._content_at(corner) != Content.NoBoatWater:
+			return remove_content(corner, flush_undo)
+		put_nowater(corner, flush_undo, false, true)
 	func _change_wall(wall: E.Walls, new: bool, flush_undo: bool, unsafe_mode: bool) -> void:
 		match wall:
 			E.Top, E.Left, E.Right, E.Bottom:
@@ -1169,7 +1178,7 @@ class AddNoWaterDfs extends Dfs:
 					else:
 						added_nowater += 0.5
 				if not dry_run:
-					cell.put_nowater(corner)
+					cell.put_nowater(corner, false)
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true

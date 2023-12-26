@@ -68,6 +68,10 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func remove_content(_corner: E.Corner, _flush_undo := true) -> void:
 		return GridModel.must_be_implemented()
+	func remove_nowater(_corner: E.Corner, _flush_undo := true) -> void:
+		return GridModel.must_be_implemented()
+	func remove_noboat(_corner: E.Corner, _flush_undo := true) -> void:
+		return GridModel.must_be_implemented()
 	func put_wall(_wall: E.Walls, _flush_undo := true, _unsafe_mode := false) -> bool:
 		return GridModel.must_be_implemented()
 	func remove_wall(_wall: E.Walls, _flush_undo := true) -> bool:
