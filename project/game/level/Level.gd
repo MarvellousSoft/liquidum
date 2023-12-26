@@ -9,12 +9,10 @@ signal had_first_win
 
 class WinInfo:
 	var first_win: bool
-	var first_try_no_resets: bool
 	var mistakes: int
 	var time_secs: float
-	func _init(first_win_: bool, first_try_no_resets_: bool, mistakes_: int, time_secs_: float) -> void:
+	func _init(first_win_: bool, mistakes_: int, time_secs_: float) -> void:
 		first_win = first_win_
-		first_try_no_resets = first_try_no_resets_
 		mistakes = mistakes_
 		time_secs = time_secs_
 
@@ -61,10 +59,10 @@ var description: String
 var dummy_save := UserLevelSaveData.new({}, true, 0, 0.0)
 var workshop_id := -1
 var game_won := false
-var first_try_no_resets := true
 var reset_text := &"CONFIRM_RESET_LEVEL"
 var won_before := false
 var reset_mistakes_on_empty := true
+var reset_mistakes_on_reset := true
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -147,8 +145,6 @@ func setup(try_load := true) -> void:
 				running_time = save.timer_secs
 				update_timer_label()
 				dummy_save = save
-				if save.is_completed():
-					first_try_no_resets = false
 	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
 	PlaytestButton.visible = editor_mode()
@@ -268,7 +264,7 @@ func win() -> void:
 	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit(WinInfo.new(not won_before, first_try_no_resets, int(Counters.mistake.count), running_time))
+	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count), running_time))
 	
 	await get_tree().create_timer(1.5).timeout
 	
@@ -426,9 +422,9 @@ func reset_level() -> void:
 			return
 	GridNode.grid_logic.clear_all()
 	GridNode.setup(GridNode.grid_logic)
-	running_time = 0
-	Counters.mistake.set_count(0)
-	first_try_no_resets = false
+	if reset_mistakes_on_reset:
+		running_time = 0
+		Counters.mistake.set_count(0)
 	maybe_save()
 
 

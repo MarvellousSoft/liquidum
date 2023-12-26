@@ -172,6 +172,7 @@ func _on_button_pressed() -> void:
 		level.reset_text = &"CONFIRM_RESET_DAILY"
 		level.won.connect(level_completed.bind(level))
 		level.reset_mistakes_on_empty = false
+		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
 	MainButton.disabled = false
 
@@ -181,7 +182,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.display_leaderboard(l_data)
 	if info.first_win and SteamManager.stats_received:
 		SteamStats.increment_daily_all()
-	if not info.first_try_no_resets or not info.first_win:
+	if not info.first_win:
 		return
 	var data := UserData.current()
 	if info.mistakes < 3:
