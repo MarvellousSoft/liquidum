@@ -311,11 +311,11 @@ class HintVisibility:
 	func _update_line_hint(line_hint: GridModel.LineHint, flags: int) -> void:
 		if not (flags & HintBar.BOAT_COUNT_VISIBLE):
 			line_hint.boat_count = -1
-		if not (flags & HintBar.BOAT_TYPE_VISIBLE):
+		if not (flags & HintBar.BOAT_TYPE_VISIBLE) or line_hint.boat_count_type == E.HintType.Zero:
 			line_hint.boat_count_type = E.HintType.Hidden
 		if not (flags & HintBar.WATER_COUNT_VISIBLE):
 			line_hint.water_count = -1.0
-		if not (flags & HintBar.WATER_TYPE_VISIBLE):
+		if not (flags & HintBar.WATER_TYPE_VISIBLE) or line_hint.water_count_type == E.HintType.Zero:
 			line_hint.water_count_type = E.HintType.Hidden
 	func apply_to_grid(grid: GridModel) -> void:
 		var ghints := grid.grid_hints()
@@ -335,6 +335,7 @@ class HintVisibility:
 		# Let's force boat amount if it would create schrodinger boats
 		if grid.any_schrodinger_boats():
 			ghints.total_boats = prev_boats
+		grid.validate()
 
 
 func _apply_visibility(h: HintVisibility) -> void:
@@ -363,9 +364,9 @@ func _update_visibilities(new_grid: GridModel) -> void:
 	_hint_visibility().apply_to_grid(new_grid)
 
 
-func _get_solution_grid() -> GridModel:
+func _get_solution_grid(mode := GridModel.LoadMode.Solution) -> GridModel:
 	assert(editor_mode())
-	var new_grid := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Solution)
+	var new_grid := GridImpl.import_data(GridNode.grid_logic.export_data(), mode)
 	_update_visibilities(new_grid)
 	return new_grid
 
@@ -443,8 +444,7 @@ func _on_grid_view_updated_size():
 
 func _on_dev_buttons_full_solve():
 	if editor_mode():
-		var g2 := GridImpl.import_data(GridNode.grid_logic.export_data(), GridModel.LoadMode.Testing)
-		_update_visibilities(g2)
+		var g2 := _get_solution_grid(GridModel.LoadMode.Testing)
 		g2.clear_content()
 		DevButtons.start_solve(g2)
 	else:

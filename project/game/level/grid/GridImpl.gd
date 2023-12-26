@@ -857,6 +857,7 @@ func _finish_loading(load_mode: LoadMode) -> void:
 			clear_content()
 	auto_update_hints_ = load_mode == LoadMode.Editor
 	maybe_update_hints()
+	validate()
 
 func set_auto_update_hints(b: bool) -> void:
 	auto_update_hints_ = b
@@ -1404,6 +1405,9 @@ func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> 
 func validate_hint(count: float, type: E.HintType) -> void:
 	if count != -1 and type != E.HintType.Hidden:
 		assert((count == 0) == (type == E.HintType.Zero))
+	# Never have a hidden count with Zero type. Theoretically it's ok, but it's unclear
+	# to the user and the solver doesn't handle it well.
+	assert(count != -1 or type != E.HintType.Zero or editor_mode())
 
 func validate() -> void:
 	if not OS.is_debug_build():
