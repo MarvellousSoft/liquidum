@@ -325,14 +325,26 @@ func _connections_down(i: int, j: int, corner: E.Waters) -> Array[int]:
 		conns.append(j)
 	# Check down right
 	if !grid_logic.wall_at(i, j, E.Side.Right) and (single or !E.corner_is_left(corner as E.Corner)):
-		var c := grid_logic.get_cell(i, j + 1)
-		if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Bottom):
-			conns.append(j + 1)
+		var jr := j + 1
+		while true:
+			var c := grid_logic.get_cell(i, jr)
+			if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Bottom):
+				conns.append(jr)
+			if c.cell_type() == E.CellType.Single and not c.wall_at(E.Walls.Right):
+				jr += 1
+			else:
+				break
 	# Check down left
 	if !grid_logic.wall_at(i, j, E.Side.Left) and (single or E.corner_is_left(corner as E.Corner)):
-		var c := grid_logic.get_cell(i, j - 1)
-		if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Bottom):
-			conns.append(j - 1)
+		var jl := j - 1
+		while true:
+			var c := grid_logic.get_cell(i, jl)
+			if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Bottom):
+				conns.append(jl)
+			if c.cell_type() == E.CellType.Single and not c.wall_at(E.Walls.Left):
+				jl -= 1
+			else:
+				break
 	return conns
 
 func _connections_up(i: int, j: int, corner: E.Waters) -> Array[int]:
@@ -343,14 +355,26 @@ func _connections_up(i: int, j: int, corner: E.Waters) -> Array[int]:
 		conns.append(j)
 	# Check up right
 	if !grid_logic.wall_at(i, j, E.Side.Right) and (single or !E.corner_is_left(corner as E.Corner)):
-		var c := grid_logic.get_cell(i, j + 1)
-		if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Top):
-			conns.append(j + 1)
+		var jr := j + 1
+		while true:
+			var c := grid_logic.get_cell(i, jr)
+			if !c.wall_at(E.Walls.DecDiag) and !c.wall_at(E.Walls.Top):
+				conns.append(jr)
+			if c.cell_type() == E.CellType.Single and not c.wall_at(E.Walls.Right):
+				jr += 1
+			else:
+				break
 	# Check up left
 	if !grid_logic.wall_at(i, j, E.Side.Left) and (single or E.corner_is_left(corner as E.Corner)):
-		var c := grid_logic.get_cell(i, j - 1)
-		if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Top):
-			conns.append(j - 1)
+		var jl := j - 1
+		while true:
+			var c := grid_logic.get_cell(i, jl)
+			if !c.wall_at(E.Walls.IncDiag) and !c.wall_at(E.Walls.Top):
+				conns.append(jl)
+			if c.cell_type() == E.CellType.Single and not c.wall_at(E.Walls.Left):
+				jl -= 1
+			else:
+				break
 	return conns
 
 func can_increase_water(i: int, j: int, corner: E.Waters) -> bool:
