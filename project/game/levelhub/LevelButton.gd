@@ -85,8 +85,8 @@ func _on_button_pressed():
 		TransitionManager.push_scene(level_node)
 
 
-func _level_completed(_no_resets: bool, _mistakes: int, first_win: bool) -> void:
-	if first_win:
+func _level_completed(info: Level.WinInfo) -> void:
+	if info.first_win:
 		SteamStats.update_campaign_stats()
 
 

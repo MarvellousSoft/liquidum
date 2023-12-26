@@ -92,7 +92,7 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
-func _level_completed(_no_resets: bool, _mistakes: int, _first_win: bool, dif: Difficulty) -> void:
+func _level_completed(_info: Level.WinInfo, dif: Difficulty) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()

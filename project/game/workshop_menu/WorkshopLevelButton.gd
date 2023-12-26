@@ -42,6 +42,6 @@ func _on_open_pressed() -> void:
 	level.won.connect(_level_completed)
 	TransitionManager.push_scene(level)
 
-func _level_completed(_no_resets: bool, _mistakes: int, first_win: bool) -> void:
-	if first_win and SteamManager.enabled:
+func _level_completed(info: Level.WinInfo) -> void:
+	if info.first_win and SteamManager.enabled:
 		SteamStats.increment_workshop()
