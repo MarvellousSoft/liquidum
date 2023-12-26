@@ -96,14 +96,24 @@ func setup(n_: int, m_: int) -> void:
 	_grid_hints.total_boats = 0
 	_grid_hints.expected_aquariums = {}
 
-enum Content { Nothing, Water, NoWater, Block, Boat }
+static func empty_ish(c: Content) -> bool:
+	match c:
+		Content.NoWater, Content.NoBoat, Content.NoBoatWater, Content.Nothing:
+			return true
+		Content.Block, Content.Water, Content.Boat:
+			return false
+	push_error("Unknown content %d" % c)
+	return false
+
+enum Content { Nothing, Water, NoWater, Block, Boat, NoBoat, NoBoatWater }
 
 func _is_content_partial_solution(c: Content, sol: Content) -> bool:
 	match c:
 		Content.Block, Content.Water, Content.Boat:
 			return sol == c
-		Content.Nothing, Content.NoWater:
+		Content.Nothing, Content.NoWater, Content.NoBoat, Content.NoBoatWater:
 			return true
+	push_error("Unknown content %d" % c)
 	return true
 
 func _content_sol(i: int, j: int, corner: E.Corner) -> Content:
@@ -176,6 +186,10 @@ class PureCell:
 
 		var prev_left := c_left
 		var prev_right := c_right
+		# Maybe mix NoBoat and NoWater
+		match [content, _content_at(corner)]:
+			[Content.NoBoat, Content.NoWater], [Content.NoWater, Content.NoBoat], [Content.NoBoat, Content.NoBoatWater], [Content.NoWater, Content.NoBoatWater]:
+				content = Content.NoBoatWater
 		if E.corner_is_left(corner):
 			if type == E.Single:
 				c_right = content
@@ -189,6 +203,8 @@ class PureCell:
 		return put_content(corner, Content.Water)
 	func put_nowater(corner: E.Corner) -> bool:
 		return put_content(corner, Content.NoWater)
+	func put_noboat(corner: E.Corner) -> bool:
+		return put_content(corner, Content.NoBoat)
 	func put_block(corner: E.Corner) -> bool:
 		return put_content(corner, Content.Block)
 	func put_nothing(corner: E.Corner) -> bool:
@@ -419,6 +435,18 @@ class CellWithLoc extends GridModel.CellModel:
 				var dfs := AddNoWaterDfs.new(grid)
 				dfs.flood(i, j, corner)
 				changes.append_array(dfs.changes)
+			grid._push_undo_changes(changes, false)
+		grid.maybe_update_hints()
+		return true
+	func put_noboat(corner: E.Corner, flush_undo := true) -> bool:
+		if flush_undo:
+			grid.push_empty_undo()
+		if !grid.is_corner_partially_valid(Content.NoBoat, i, j, corner):
+			return false
+		if water_at(corner):
+			return false
+		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
+		if pure().put_noboat(corner):
 			grid._push_undo_changes(changes, false)
 		grid.maybe_update_hints()
 		return true
@@ -730,6 +758,10 @@ func _str_content(chr: String) -> Content:
 			return Content.Water
 		'x':
 			return Content.NoWater
+		'y':
+			return Content.NoBoat
+		'z':
+			return Content.NoBoatWater
 		'#':
 			return Content.Block
 		'b':
@@ -745,6 +777,10 @@ func _content_str(c: Content) -> String:
 			return 'w'
 		Content.NoWater:
 			return 'x'
+		Content.NoBoat:
+			return 'y'
+		Content.NoBoatWater:
+			return 'z'
 		Content.Block:
 			return '#'
 		Content.Boat:
@@ -819,8 +855,8 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 	var h := hb + hh
 	for i in n:
 		for j in m:
-			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wxb#')
-			var c2 := _validate(lines[2 * i + h][2 * j + 1 + h], '.wxb#')
+			var c1 := _validate(lines[2 * i + h][2 * j + h], '.wxyzb#')
+			var c2 := _validate(lines[2 * i + h][2 * j + 1 + h], '.wxyzb#')
 			var c3 := _validate(lines[2 * i + 1 + h][2 * j + h], '.|_L')
 			var c4 := _validate(lines[2 * i + 1 + h][2 * j + 1 + h], '.╲/')
 			var cell := _pure_cell(i, j)

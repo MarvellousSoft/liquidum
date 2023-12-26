@@ -62,6 +62,8 @@ class CellModel:
 	# Puts nowater in the given diagonal
 	func put_nowater(_corner: E.Corner, _flush_undo := true, _flood := false) -> bool:
 		return GridModel.must_be_implemented()
+	func put_noboat(_corner: E.Corner, _flush_undo := true) -> bool:
+		return GridModel.must_be_implemented()
 	func put_block(_corner: E.Corner, _flush_undo := true) -> bool:
 		return GridModel.must_be_implemented()
 	func remove_content(_corner: E.Corner, _flush_undo := true) -> void:

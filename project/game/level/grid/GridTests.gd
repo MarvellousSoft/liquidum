@@ -835,3 +835,19 @@ func test_flood_which() -> void:
 	g = str_grid(grid_str % ["www."])
 	_cmp_waters(g.get_cell(0, 0).water_would_flood_which(E.Corner.TopLeft), [Vector3i(0, 0, E.Single)])
 	_cmp_waters(g.get_cell(0, 0).boat_would_flood_which(), [])
+
+func test_noboat() -> void:
+	var grid_str := """
+	%s
+	L/
+	"""
+	var g := str_grid(grid_str % "..")
+	g.get_cell(0, 0).put_nowater(TopLeft)
+	g.get_cell(0, 0).put_noboat(BottomRight)
+	assert_grid_eq(g.to_str(), grid_str % "xy")
+	g.get_cell(0, 0).put_noboat(TopLeft)
+	assert_grid_eq(g.to_str(), grid_str % "zy")
+	g.get_cell(0, 0).put_nowater(TopLeft)
+	assert_grid_eq(g.to_str(), grid_str % "zy")
+	g.get_cell(0, 0).put_nowater(BottomRight)
+	assert_grid_eq(g.to_str(), grid_str % "zz")

@@ -854,7 +854,7 @@ func _put_block_on_nowater(grid: GridImpl) -> bool:
 			var c := grid.get_cell(i, j)
 			for corner in c.corners():
 				var sol := grid._content_sol(i, j, corner)
-				if c.nothing_at(corner) and (sol == GridImpl.Content.NoWater or sol == GridImpl.Content.Nothing):
+				if c.nothing_at(corner) and GridImpl.empty_ish(sol):
 					return c.put_block(corner, false)
 	return false
 
