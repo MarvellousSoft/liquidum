@@ -275,6 +275,8 @@ func win() -> void:
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
+	if Profile.get_option("show_grid_preview"):
+		GridNode.remove_all_preview()
 
 
 func _on_grid_updated() -> void:

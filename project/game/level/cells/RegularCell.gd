@@ -127,7 +127,7 @@ func _process(dt):
 				cur_alpha = max(cur_alpha - dt*PREVIEW_ALPHA_SPEED, 0.0)
 			set_final_alpha(Previews[corner], cur_alpha)
 			Global.alpha_fade_node(dt, Boat, boat_flag)
-			Global.alpha_fade_node(dt, BoatPreview, preview_boat_flag, false, false, PREVIEW_ALPHA_SPEED)
+			Global.alpha_fade_node(dt, BoatPreview, preview_boat_flag, PREVIEW_ALPHA_SPEED, false, PREVIEW_MAX_ALPHA)
 
 		Global.alpha_fade_node(dt, Highlight, highlight)
 
@@ -235,6 +235,10 @@ func set_block(block : E.Waters) -> void:
 	Blocks[block].show()
 	if not editor_mode:
 		Buttons[block].hide()
+
+
+func has_boat() -> bool:
+	return boat_flag
 
 
 func set_boat(value : bool) -> void:

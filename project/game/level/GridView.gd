@@ -455,8 +455,9 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 func show_boat_preview(p_i : int, p_j : int) -> void:
 	remove_all_preview()
 	@warning_ignore("incompatible_ternary")
-	var grid_cell = grid_logic.get_cell(p_i, p_j)
-	if grid_cell.boat_possible():
+	var grid_cell = get_cell(p_i, p_j)
+	if grid_logic.get_cell(p_i, p_j).boat_possible() and not grid_cell.has_boat():
+		grid_cell.set_boat_preview(true)
 		var affected_cells = grid_logic.get_cell(p_i, p_j).boat_would_flood_which()
 		for cell_data in affected_cells:
 			var cell = get_cell(cell_data.i, cell_data.j)
@@ -492,6 +493,9 @@ func highlight_column(idx):
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
+	
+	if Profile.get_option("show_grid_preview"):
+		remove_all_preview()
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
