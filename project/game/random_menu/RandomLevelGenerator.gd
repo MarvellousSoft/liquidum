@@ -1,5 +1,7 @@
 class_name RandomLevelGenerator
 
+const MAX_TIME_PER_SOLVE = 10.0
+
 var gen_thread := Thread.new()
 var cancel_gen := false
 # State of the RNG right before generating a successful level
@@ -45,7 +47,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, hints_builder: Callable, gen_o
 		else:
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-			if solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_unix_time_from_system() > start_solve + 3) == SolverModel.SolveResult.SolvedUnique:
+			if solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_unix_time_from_system() > start_solve + MAX_TIME_PER_SOLVE) == SolverModel.SolveResult.SolvedUnique:
 				total_solve += Time.get_unix_time_from_system() - start_solve
 				g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.SolutionNoClear)
 				found = true
