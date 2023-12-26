@@ -404,6 +404,16 @@ class BoatColStrategy extends ColumnStrategy:
 			return any
 		return false
 
+class Section:
+	var start2: int
+	var end2: int
+	# Either looking at rows, or this is a single cell or half-cell
+	var single: bool
+	func _init(b2: int) -> void:
+		start2 = b2
+		end2 = b2
+		single = true
+
 class RowColStrategy extends Strategy:
 	func _cell(_a: int, _b: int) -> GridImpl.CellWithLoc:
 		return GridModel.must_be_implemented()
@@ -425,6 +435,8 @@ class RowColStrategy extends Strategy:
 	func _corner(a: int, b2: int) -> E.Corner:
 		return E.diag_to_corner(_cell(a, b2 / 2).cell_type(), _right() if bool(b2 & 1) else _left())
 	func _wall_right(a: int, b2: int) -> bool:
+		if b2 < 0:
+			return true
 		var c := _cell(a, b2 / 2)
 		return c.wall_at(_right() as E.Walls) if bool(b2 & 1) else (c.cell_type() != E.CellType.Single)
 	# Adding water to this cell will flood water to how many half-cells?
@@ -449,6 +461,17 @@ class RowColStrategy extends Strategy:
 			if bool(b2_min & 1) and not _wall_right(a, b2_min - 1):
 				b2_min -= 1
 		return b2_max - b2_min + 1
+	func _empty_sections(a: int) -> Array[Section]:
+		var ans: Array[Section] = []
+		for b2 in range(2 * _b_len()):
+			if _content(a, b2) == Content.Nothing:
+				if ans.is_empty() or _wall_right(a, b2 - 1) or ans.back().end2 < b2 - 1:
+					ans.append(Section.new(b2))
+				else:
+					ans.back().end2 = b2
+					if _left() != E.Side.Left and not bool(b2 & 1):
+						ans.back().single = false
+		return ans
 
 # Logic for both row and column is the same, so let's make it generic
 # Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
@@ -609,14 +632,63 @@ class TogetherColStrategy extends TogetherStrategy:
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
+enum TogetherStatus { None, AlwaysTogether, MaybeSeparated }
+
 class SeparateStrategy extends RowColStrategy:
 	static func description() -> String:
 		return """
 		If adding water to a single cell would cause the waters to be together and
 		fullfill the hint, we can't add water to that cell.
 		"""
+	
+	func _skip_right(a: int, b2: int) -> int:
+		if not bool(b2 & 1) and not _wall_right(a, b2):
+			b2 += 1
+		while _left() == E.Left and not _wall_right(a, b2):
+			b2 += 1
+		return b2 + 1
+
+	func _will_be_together_right(a: int, b2: int) -> TogetherStatus:
+		while b2 < 2 * _b_len() and _content(a, b2) != Content.Water and _content(a, b2) != Content.Nothing and _content(a, b2) != Content.NoBoat:
+			b2 += 1
+		if b2 == 2 * _b_len():
+			return TogetherStatus.None
+		if _content(a, b2) != Content.Water:
+			b2 = _skip_right(a, b2)
+		if b2 == 2 * _b_len():
+			return TogetherStatus.AlwaysTogether
+		while b2 < 2 * _b_len() and _content(a, b2) == Content.Water:
+			b2 += 1
+		if b2 == 2 * _b_len():
+			return TogetherStatus.AlwaysTogether
+		b2 = _skip_right(a, b2)
+		while b2 < 2 * _b_len():
+			if _content(a, b2) == Content.Water or _content(a, b2) == Content.Nothing or _content(a, b2) == Content.NoBoat:
+				return TogetherStatus.MaybeSeparated
+		return TogetherStatus.AlwaysTogether
+
+	func _will_be_together_left(a: int, b2: int) -> TogetherStatus:
+		return TogetherStatus.MaybeSeparated
+
+	func try_sections_strat(a: int) -> bool:
+		var sections := _empty_sections(a)
+		if sections.size() > 3 or sections.is_empty():
+			return false
+		for section in sections:
+			# Try to put water on everything, if it's AlwaysTogether it means we need a NoWater here
+			if _will_be_together_right(a, section.end2) == TogetherStatus.AlwaysTogether and \
+			   _will_be_together_left(a, section.start2) == TogetherStatus.AlwaysTogether:
+				return _cell(a, section.start2).put_nowater(_corner(a, section.start2), false, true)
+			# Try to put NoWater here, if it's AlwaysTogether it means we need Water here
+			pass
+		return false
 
 	func _apply(a: int) -> bool:
+		if _a_hints()[a].water_count_type != E.HintType.Separated:
+			return false
+		# TODO: Make this work
+		#if try_sections_strat(a):
+		#	return true
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
