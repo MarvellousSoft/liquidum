@@ -754,11 +754,23 @@ func test_separate_rule() -> void:
 	3.w.w
 	-L/L/
 	""", s)
-	#assert_can_solve("""
-	#h......
-	#4......
-	#-L.L.L/
-	#""", s)
+	assert_can_solve("""
+	h......
+	4......
+	-L.L.L/
+	""", s)
+	# 3 blocks, must put air in middle
+	assert_can_solve("""
+	h........
+	.........
+	-L.L._.L.
+	""", s)
+	# Must put air and water
+	assert_can_solve("""
+	h......
+	.ww....
+	.L.L.L.
+	""")
 	s = ["BasicCol", "SeparateCol"]
 	# Kinda same but for cols
 	assert_can_solve("""
@@ -780,6 +792,20 @@ func test_separate_rule() -> void:
 	.ww
 	.L.
 	""", s)
+	# 3 blocks, must put air in middle, but sometimes it's not possible if the blocks are long
+	var single_block := "...\n.L."
+	var water_block := ".ww\n.L."
+	var double_block := "...\n.|.\n%s" % single_block
+	var three_blocks := "h.-\n%s\n%s\n%s"
+	assert_can_solve(three_blocks % [single_block, single_block, single_block], s)
+	assert_can_solve(three_blocks % [double_block, single_block, single_block], s)
+	assert_cant_solve(three_blocks % [single_block, double_block, single_block], s)
+	assert_cant_solve(three_blocks % [single_block, single_block, double_block], s)
+	assert_can_solve(three_blocks % [single_block, double_block, ""], s)
+	assert_can_solve(three_blocks % [water_block, single_block, single_block], s)
+	assert_cant_solve(three_blocks % [water_block, single_block, double_block], s)
+	assert_can_solve(three_blocks % [water_block, double_block, ""], s)
+
 
 func test_total_waters() -> void:
 	var s := ["AllWatersEasy"]
