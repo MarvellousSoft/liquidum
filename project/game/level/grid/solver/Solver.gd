@@ -461,6 +461,7 @@ class RowColStrategy extends Strategy:
 			if bool(b2_min & 1) and not _wall_right(a, b2_min - 1):
 				b2_min -= 1
 		return b2_max - b2_min + 1
+
 	func _empty_sections(a: int) -> Array[Section]:
 		var ans: Array[Section] = []
 		for b2 in range(2 * _b_len()):
@@ -640,35 +641,66 @@ class SeparateStrategy extends RowColStrategy:
 		If adding water to a single cell would cause the waters to be together and
 		fullfill the hint, we can't add water to that cell.
 		"""
-	
-	func _skip_right(a: int, b2: int) -> int:
+	func _nothing(a: int, b2: int) -> bool:
+		var c := _content(a, b2)
+		return c == Content.Nothing or c == Content.NoBoat
+
+	func _water_or_nothing(a: int, b2: int) -> bool:
+		return _content(a, b2) == Content.Water or _nothing(a, b2)
+
+	func _skip_right(a: int, b2: int, more_than_single: bool) -> int:
 		if not bool(b2 & 1) and not _wall_right(a, b2):
 			b2 += 1
-		while _left() == E.Left and not _wall_right(a, b2):
+		while more_than_single and not _wall_right(a, b2):
 			b2 += 1
 		return b2 + 1
+	
+	func _skip_left(a: int, b2: int, more_than_single: bool) -> int:
+		if bool(b2 & 1) and not _wall_right(a, b2 - 1):
+			b2 -= 1
+		while more_than_single and b2 > 0 and not _wall_right(a, b2 - 1):
+			b2 -= 1
+		return b2 - 1
 
 	func _will_be_together_right(a: int, b2: int) -> TogetherStatus:
-		while b2 < 2 * _b_len() and _content(a, b2) != Content.Water and _content(a, b2) != Content.Nothing and _content(a, b2) != Content.NoBoat:
+		while b2 < 2 * _b_len() and not _water_or_nothing(a, b2):
 			b2 += 1
 		if b2 == 2 * _b_len():
 			return TogetherStatus.None
 		if _content(a, b2) != Content.Water:
-			b2 = _skip_right(a, b2)
+			b2 = _skip_right(a, b2, true)
 		if b2 == 2 * _b_len():
 			return TogetherStatus.AlwaysTogether
 		while b2 < 2 * _b_len() and _content(a, b2) == Content.Water:
 			b2 += 1
 		if b2 == 2 * _b_len():
 			return TogetherStatus.AlwaysTogether
-		b2 = _skip_right(a, b2)
+		b2 = _skip_right(a, b2, _left() == E.Left)
 		while b2 < 2 * _b_len():
-			if _content(a, b2) == Content.Water or _content(a, b2) == Content.Nothing or _content(a, b2) == Content.NoBoat:
+			if _water_or_nothing(a, b2):
 				return TogetherStatus.MaybeSeparated
+			b2 += 1
 		return TogetherStatus.AlwaysTogether
 
 	func _will_be_together_left(a: int, b2: int) -> TogetherStatus:
-		return TogetherStatus.MaybeSeparated
+		while b2 >= 0 and not _water_or_nothing(a, b2):
+			b2 -= 1
+		if b2 < 0:
+			return TogetherStatus.None
+		if _content(a, b2) != Content.Water:
+			b2 = _skip_left(a, b2, _left() == E.Left)
+		if b2 < 0:
+			return TogetherStatus.AlwaysTogether
+		while b2 >= 0 and _content(a, b2) == Content.Water:
+			b2 -= 1
+		if b2 < 0:
+			return TogetherStatus.AlwaysTogether
+		b2 = _skip_left(a, b2, true)
+		while b2 >= 0:
+			if _water_or_nothing(a, b2):
+				return TogetherStatus.MaybeSeparated
+			b2 -= 1
+		return TogetherStatus.AlwaysTogether
 
 	func try_sections_strat(a: int) -> bool:
 		var sections := _empty_sections(a)
@@ -676,11 +708,14 @@ class SeparateStrategy extends RowColStrategy:
 			return false
 		for section in sections:
 			# Try to put water on everything, if it's AlwaysTogether it means we need a NoWater here
-			if _will_be_together_right(a, section.end2) == TogetherStatus.AlwaysTogether and \
+			if _nothing(a, section.start2) and _will_be_together_right(a, section.end2) == TogetherStatus.AlwaysTogether and \
 			   _will_be_together_left(a, section.start2) == TogetherStatus.AlwaysTogether:
-				return _cell(a, section.start2).put_nowater(_corner(a, section.start2), false, true)
+				return _cell(a, section.start2 / 2).put_nowater(_corner(a, section.start2), false, true)
 			# Try to put NoWater here, if it's AlwaysTogether it means we need Water here
-			pass
+			if _nothing(a, section.end2):
+				match [_will_be_together_right(a, section.end2 + 1), _will_be_together_left(a, section.start2 - 1)]:
+					[TogetherStatus.AlwaysTogether, TogetherStatus.None], [TogetherStatus.None, TogetherStatus.AlwaysTogether]:
+						return _cell(a, section.end2 / 2).put_water(_corner(a, section.end2), false)
 		return false
 
 	func _apply(a: int) -> bool:
@@ -688,7 +723,7 @@ class SeparateStrategy extends RowColStrategy:
 			return false
 		# TODO: Make this work
 		#if try_sections_strat(a):
-		#	return true
+			#return true
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
