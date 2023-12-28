@@ -761,3 +761,4 @@ func _on_block_mouse_entered(row : int, column : int):
 	if disabled:
 		return
 	highlight_grid(row, column)
+	remove_all_preview()

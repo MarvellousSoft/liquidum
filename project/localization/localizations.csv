@@ -55,6 +55,8 @@ EXPERT_BUTTON,Expert,Expert,Expert
 INSANE_BUTTON,Insane,Insano,Insano
 RANDOM_COMPLETED,Levels completed:,Níveis completados:,Níveis concluídos:
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.,Tem certeza de que deseja iniciar um novo nível?  O existente será perdido.
+FIRST_LEVEL_DESCRIPTION,Use all the clues to complete the grid with water,Use todas as dicas para completar a grade com água.,Use todas as dicas para completar a grade com água.
+SECOND_LEVEL_DESCRIPTION,Using X's to mark spots you *can't* have water is extremely useful but optional.,"Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional.","Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional."
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution.,Todos níveis tem uma única solução.,Todos os níveis têm uma solução única.
 PLAYTEST,Playtest level,Testar nível,Nível de teste
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível,Descrição do nível
