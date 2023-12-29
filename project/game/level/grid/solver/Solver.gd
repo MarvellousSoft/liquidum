@@ -721,9 +721,8 @@ class SeparateStrategy extends RowColStrategy:
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Separated:
 			return false
-		# TODO: Make this work
-		#if try_sections_strat(a):
-			#return true
+		if try_sections_strat(a):
+			return true
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
 		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))

@@ -72,6 +72,8 @@ func assert_can_solve(s: String, strategies := [], result := true) -> void:
 func assert_cant_solve(s: String, strategies := []) -> void:
 	assert_can_solve(s, strategies, false)
 
+func assert_apply_strategies(s: String, res: String, strategies := []) -> void:
+	assert_grid_eq(apply_strategies(s, strategies).to_str(), res)
 
 func get_rows(s : String) -> int:
 	return (s.count('\n') + 1) / 2
@@ -769,8 +771,8 @@ func test_separate_rule() -> void:
 	assert_can_solve("""
 	h......
 	.ww....
-	.L.L.L.
-	""")
+	-L.L.L.
+	""", s)
 	s = ["BasicCol", "SeparateCol"]
 	# Kinda same but for cols
 	assert_can_solve("""
@@ -798,7 +800,7 @@ func test_separate_rule() -> void:
 	var double_block := "...\n.|.\n%s" % single_block
 	var three_blocks := "h.-\n%s\n%s\n%s"
 	assert_can_solve(three_blocks % [single_block, single_block, single_block], s)
-	assert_can_solve(three_blocks % [double_block, single_block, single_block], s)
+	assert_apply_strategies(three_blocks % [double_block, single_block, single_block], three_blocks % ["...\n.|.\n" + water_block, ".xx\n.L.", water_block], s)
 	assert_cant_solve(three_blocks % [single_block, double_block, single_block], s)
 	assert_cant_solve(three_blocks % [single_block, single_block, double_block], s)
 	assert_can_solve(three_blocks % [single_block, double_block, ""], s)
