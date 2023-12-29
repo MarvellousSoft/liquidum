@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bjsmnin37pr8t"]
+[gd_scene load_steps=18 format=3 uid="uid://bjsmnin37pr8t"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
 [ext_resource type="StyleBox" uid="uid://b2184kn03irus" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
+[ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="10_5jj0t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyxri"]
 shader = ExtResource("3_d8olh")
@@ -226,6 +227,17 @@ lifetime = 2.5
 one_shot = true
 speed_scale = 1.5
 explosiveness = 1.0
+
+[node name="HardIcon" type="TextureRect" parent="."]
+modulate = Color(0.85098, 1, 0.886275, 1)
+layout_mode = 0
+offset_left = 92.0
+offset_top = -224.0
+offset_right = 242.0
+offset_bottom = -74.0
+tooltip_text = "HARD_LEVEL_TOOLTIP"
+texture = ExtResource("10_5jj0t")
+expand_mode = 1
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
