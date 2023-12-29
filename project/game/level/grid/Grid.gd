@@ -30,6 +30,8 @@ class WaterPosition:
 		i = i_
 		j = j_
 		loc = loc_
+	func to_vec3() -> Vector3i:
+		return Vector3i(i, j, loc)
 
 class CellModel:
 	func water_full() -> bool:

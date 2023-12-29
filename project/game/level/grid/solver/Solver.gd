@@ -294,8 +294,8 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 		return false
 	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
 		return false
-	c = grid._pure_cell(i + 1, j)
-	return c._content_top() == Content.Water or c._content_top() == Content.Nothing
+	var below := grid._pure_cell(i + 1, j)._content_top()
+	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
 class BoatRowStrategy extends RowStrategy:
 	static func description() -> String:

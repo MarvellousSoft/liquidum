@@ -883,3 +883,15 @@ func test_noboat() -> void:
 	g.get_cell(0, 0).remove_noboat(TopLeft)
 	g.get_cell(0, 0).remove_nowater(BottomRight)
 	assert_grid_eq(g.to_str(), grid_str % "xy")
+	g = str_grid("""
+	..
+	|.
+	yy
+	L.
+	""")
+	assert(g.get_cell(0, 0).boat_possible())
+	assert(g.get_cell(0, 0).water_would_flood_which(TopLeft).map(func(x): return x.to_vec3()) == [Vector3i(0, 0, E.Single), Vector3i(1, 0, E.Single)])
+	assert(g.get_cell(0, 0).boat_would_flood_which().map(func(x): return x.to_vec3()) == [Vector3i(1, 0, E.Single)])
+	g.get_cell(0, 0).put_noboat(TopLeft)
+	# Ignore NoBoat, just like we ignore NoWater when placing water
+	assert(g.get_cell(0, 0).boat_possible())

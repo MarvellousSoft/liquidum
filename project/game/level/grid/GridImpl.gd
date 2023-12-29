@@ -1164,7 +1164,7 @@ class AddWaterDfs extends Dfs:
 	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)
 		match c:
-			Content.Nothing, Content.NoWater, Content.Boat, Content.Water:
+			Content.Nothing, Content.NoWater, Content.Boat, Content.Water, Content.NoBoat, Content.NoBoatWater:
 				var pos: E.Waters = E.Waters.Single if cell.cell_type() == E.CellType.Single else (corner as E.Waters)
 				if c != Content.Water:
 					added_waters += E.waters_size(pos)
@@ -1174,6 +1174,8 @@ class AddWaterDfs extends Dfs:
 					cell.put_water(corner)
 			Content.Block:
 				return false
+			_:
+				assert(false, "Unkown content %d" % c)
 		return true
 	func _can_go_up(i: int, _j: int) -> bool:
 		return i - 1 >= min_i
@@ -1187,7 +1189,7 @@ class AddNoWaterDfs extends Dfs:
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)
 		match c:
-			Content.Water, Content.Nothing, Content.NoWater:
+			Content.Water, Content.Nothing, Content.NoWater, Content.NoBoat, Content.NoBoatWater:
 				if c != Content.NoWater:
 					if cell.cell_type() == E.CellType.Single:
 						added_nowater += 1.0
@@ -1195,6 +1197,10 @@ class AddNoWaterDfs extends Dfs:
 						added_nowater += 0.5
 				if not dry_run:
 					cell.put_nowater(corner, false)
+			Content.Block, Content.Boat:
+				pass
+			_:
+				assert(false, "Unkown content %d" % c)
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
