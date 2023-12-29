@@ -609,16 +609,24 @@ func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	
-	#Prioritize removing noboats if boat-related brush is on
-	if brush_mode == E.BrushMode.Boat or brush_mode == E.BrushMode.NoBoat:
-		if cell_data.noboat_at(corner):
-			mouse_hold_status = E.MouseDragState.RemoveNoBoat
-			cell_data.remove_noboat(corner)
-			AudioManager.play_sfx("nowater_remove")
-			update()
-			return
-	
-	if cell_data.nowater_at(corner):
+	# Prioritize removing noboats if boat-related brush is on
+	if (brush_mode == E.BrushMode.Boat or brush_mode == E.BrushMode.NoBoat) and cell_data.noboat_at(corner):
+		mouse_hold_status = E.MouseDragState.RemoveNoBoat
+		cell_data.remove_noboat(corner)
+		AudioManager.play_sfx("nowater_remove")
+	elif brush_mode == E.BrushMode.Boat and cell_data.nowater_at(corner) and not cell_data.noboat_at(corner):
+		mouse_hold_status = E.MouseDragState.NoBoat
+		if cell_data.put_noboat(corner):
+			AudioManager.play_sfx("nowater_put")
+		else:
+			highlight_error(i, j, which)
+	elif brush_mode == E.BrushMode.Water and cell_data.noboat_at(corner) and not cell_data.nowater_at(corner):
+		mouse_hold_status = E.MouseDragState.NoWater
+		if cell_data.put_nowater(corner):
+			AudioManager.play_sfx("nowater_put")
+		else:
+			highlight_error(i, j, which)
+	elif cell_data.nowater_at(corner):
 		mouse_hold_status = E.MouseDragState.RemoveNoWater
 		cell_data.remove_nowater(corner)
 		AudioManager.play_sfx("nowater_remove")
