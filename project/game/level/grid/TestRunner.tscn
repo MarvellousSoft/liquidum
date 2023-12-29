@@ -94,6 +94,41 @@ focus_mode = 0
 text = "Print global stats
 "
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="DailiesButton" type="Button" parent="Buttons/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Preprocess Dailies"
+
+[node name="DailiesYear" type="SpinBox" parent="Buttons/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 2024.0
+max_value = 2040.0
+value = 2024.0
+rounded = true
+
+[node name="DailiesProgress" type="ProgressBar" parent="Buttons/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 365.0
+step = 1.0
+
+[node name="DailiesCancel" type="Button" parent="Buttons/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Cancel"
+
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
@@ -103,3 +138,4 @@ text = "Print global stats
 [connection signal="pressed" from="Buttons/FullSolve" to="." method="_on_full_solve_pressed"]
 [connection signal="pressed" from="Buttons/PrintLocalStats" to="." method="_on_print_local_stats_pressed"]
 [connection signal="pressed" from="Buttons/PrintGlobalStats" to="." method="_on_print_global_stats_pressed"]
+[connection signal="pressed" from="Buttons/HBoxContainer/DailiesButton" to="." method="_on_preprocess_dailies_pressed"]

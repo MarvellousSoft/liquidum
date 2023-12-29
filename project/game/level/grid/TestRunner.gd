@@ -73,3 +73,32 @@ func _on_print_local_stats_pressed():
 		print("%s = %.0f (total %d)" % [stat, val, tot])
 	for int_stat in INT_STATS:
 		print("%s = %d" % [int_stat, Steam.getStatInt(int_stat)])
+
+
+func _on_preprocess_dailies_pressed() -> void:
+	var year: int = int(%DailiesYear.value)
+	var prep := FileManager.load_dailies(year)
+	var unixtime := Time.get_unix_time_from_datetime_string("%s-01-01" % year)
+	var gen := RandomLevelGenerator.new()
+	%DailiesProgress.value = 0
+	%DailiesProgress.visible = true
+	%DailiesYear.visible = false
+	%DailiesButton.visible = false
+	%DailiesCancel.visible = true
+	%DailiesCancel.button_pressed = false
+	while true:
+		var date := Time.get_datetime_string_from_unix_time(unixtime)
+		date = date.substr(0, date.find("T"))
+		if not date.begins_with(str(year)) or %DailiesCancel.button_pressed:
+			break
+		var dict := Time.get_datetime_dict_from_datetime_string(date, false)
+		if prep.success_state(dict) == 0:
+			await DailyButton.gen_level(gen, date)
+			prep.set_success_state(dict, gen.success_state)
+		%DailiesProgress.value += 1
+		unixtime += 24 * 60 * 60
+	%DailiesProgress.visible = false
+	%DailiesYear.visible = true
+	%DailiesButton.visible = true
+	%DailiesCancel.visible = false
+	FileManager.save_dailies(year, prep)

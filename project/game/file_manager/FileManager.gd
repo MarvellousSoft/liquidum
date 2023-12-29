@@ -2,6 +2,7 @@ extends Node
 
 const CURRENT_PROFILE := "user://cur_profile.txt"
 const DATA_DIR := "res://database/levels"
+const DAILIES_DIR := "res://database/dailies"
 const DEFAULT_PROFILE := "fish"
 const PROFILE_FILE := "profile.save"
 const METADATA := ".metadata"
@@ -89,8 +90,9 @@ func _load_json_data(dir_name: String, file_name: String, error_non_existing := 
 	return json.get_data()
 
 
-func _save_json_data(dir_name: String, file_name: String, data: Dictionary) -> void:
+func _save_json_data(dir_name: String, file_name: String, data: Variant) -> void:
 	_assert_dir(dir_name)
+	assert(data is Dictionary or data is Array)
 	var file := FileAccess.open("%s/%s" % [dir_name, file_name], FileAccess.WRITE)
 	if file == null:
 		push_error("Error trying to open file %s/%s whilst saving: %d" % [dir_name, file_name, FileAccess.get_open_error()])
@@ -254,3 +256,9 @@ func _save_user_data(data: UserData) -> void:
 
 func clear_user_data(profile: String) -> void:
 	_delete_file(_profile_dir(profile), USER_DATA)
+
+func load_dailies(year: int) -> PreprocessedDailies:
+	return PreprocessedDailies.load_data(_load_json_data(DAILIES_DIR, str(year) + JSON_EXT))
+
+func save_dailies(year: int, data: PreprocessedDailies) -> void:
+	_save_json_data(DAILIES_DIR, str(year) + JSON_EXT, data.get_data())

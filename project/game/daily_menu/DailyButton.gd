@@ -25,6 +25,7 @@ func _update() -> void:
 	TimeLeft.visible = unlocked
 	$HBox/VBoxContainer/StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
+	Completed.visible = false
 	if unlocked:
 		MainButton.tooltip_text = "DAILY_TOOLTIP"
 	else:
@@ -91,11 +92,11 @@ func _process(_dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 
-func _simple_hints(n: int, m: int) -> Callable:
+static func _simple_hints(n: int, m: int) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 		return Level.HintVisibility.default(n, m)
 
-func _simple_boats(n: int, m: int) -> Callable:
+static func _simple_boats(n: int, m: int) -> Callable:
 	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
 		var h := Level.HintVisibility.default(n, m)
 		h.total_boats = rng.randf() < 0.5
@@ -103,10 +104,10 @@ func _simple_boats(n: int, m: int) -> Callable:
 			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
 		return h
 
-func _continuity_hints(n: int, m: int) -> Callable:
+static func _continuity_hints(n: int, m: int) -> Callable:
 	return RandomHub._hard_visibility(n, m)
 
-func _hidden_hints(n: int, m: int) -> Callable:
+static func _hidden_hints(n: int, m: int) -> Callable:
 	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
 		var h := Level.HintVisibility.new()
 		h.total_water = rng.randf() < 0.5
@@ -118,7 +119,7 @@ func _hidden_hints(n: int, m: int) -> Callable:
 			RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, a.size() - 1))
 		return h
 
-func _fixed_opts(opts: int) -> Callable:
+static func _fixed_opts(opts: int) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> int:
 		return opts
 
@@ -131,10 +132,14 @@ const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDA
 # Friday - Simple, boats
 # Saturday - Simple, together/separate
 # Sunday - Diagonals, boats
-func gen_level(today: String) -> LevelData:
-	var weekday: Time.Weekday = Time.get_datetime_dict_from_datetime_string(today, true).weekday
+static func gen_level(gen: RandomLevelGenerator, today: String) -> LevelData:
+	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
+	var weekday: Time.Weekday = date_dict.weekday
 	var rng := RandomNumberGenerator.new()
 	rng.seed = Time.get_unix_time_from_datetime_string(today)
+	var preprocessed_state := FileManager.load_dailies(date_dict.year).success_state(date_dict)
+	if preprocessed_state != 0 and false:
+		rng.state = preprocessed_state
 	var g: GridModel = null
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	match weekday:
@@ -162,7 +167,7 @@ func _on_button_pressed() -> void:
 	var today := _today()
 	if not FileManager.has_daily_level(today):
 		GeneratingLevel.enable()
-		var level := await gen_level(today)
+		var level := await DailyButton.gen_level(gen, today)
 		GeneratingLevel.disable()
 		if level != null:
 			FileManager.save_daily_level(today, level)
