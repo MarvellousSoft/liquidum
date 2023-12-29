@@ -284,7 +284,7 @@ func _on_grid_updated() -> void:
 	if DevButtons.god_mode_enabled():
 		GridNode.apply_strategies(DevButtons.selected_strategies(), false, false)
 	update_counters()
-	if GridNode.is_level_finished() and not editor_mode():
+	if not editor_mode() and GridNode.is_level_finished():
 		win()
 
 

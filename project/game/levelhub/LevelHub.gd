@@ -11,7 +11,7 @@ var section_to_unlock = -1
 
 func _ready():
 	update_sections()
-	Global.dev_mode_toggled.connect(func(on): update_sections())
+	Global.dev_mode_toggled.connect(func(_on): update_sections())
 
 
 func _enter_tree():

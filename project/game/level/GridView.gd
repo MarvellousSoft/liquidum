@@ -234,8 +234,8 @@ func update(do_emit_signal := true, fast_update := false) -> void:
 		updated.emit()
 
 
-func is_level_finished():
-	return grid_logic.are_hints_satisfied()
+func is_level_finished() -> bool:
+	return grid_logic.is_equal_solution()
 
 func update_walls() -> void:
 	for i in rows:

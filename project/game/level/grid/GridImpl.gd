@@ -118,6 +118,10 @@ func _is_content_partial_solution(c: Content, sol: Content) -> bool:
 	push_error("Unknown content %d" % c)
 	return true
 
+func _is_content_equal_solution(c: Content, sol: Content) -> bool:
+	# Ingenious solution, reuse the partial function
+	return _is_content_partial_solution(c, sol) and _is_content_partial_solution(sol, c)
+
 func _content_sol(i: int, j: int, corner: E.Corner) -> Content:
 	if E.corner_is_left(corner):
 		return solution_c_left[i][j]
@@ -1687,3 +1691,14 @@ func any_schrodinger_boats() -> bool:
 				if _col_hints[j].boat_count == -1 and SolverModel._boat_possible(self, i, j):
 					return true
 	return false
+
+func is_equal_solution() -> bool:
+	for i in n:
+		for j in m:
+			if not _is_content_equal_solution(_pure_cell(i, j).c_left, solution_c_left[i][j]) \
+			   or not _is_content_equal_solution(_pure_cell(i, j).c_right, solution_c_right[i][j]):
+				# If we ever allow "fake hints" (with additional rules), remove this
+				assert(not are_hints_satisfied())
+				return false
+	assert(are_hints_satisfied())
+	return true

@@ -338,3 +338,7 @@ func check_complete() -> bool:
 # Boats that may or may not be there, making the solution always Multiple
 func any_schrodinger_boats() -> bool:
 	return GridModel.must_be_implemented()
+
+# Matches the stored solution
+func is_equal_solution() -> bool:
+	return GridModel.must_be_implemented()
