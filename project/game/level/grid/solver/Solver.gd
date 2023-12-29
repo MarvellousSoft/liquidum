@@ -479,8 +479,8 @@ class RowColStrategy extends Strategy:
 class TogetherStrategy extends RowColStrategy:
 	var basic: bool
 
-	func _init(grid: GridImpl, basic_: bool) -> void:
-		super(grid)
+	func _init(grid_: GridImpl, basic_: bool) -> void:
+		super(grid_)
 		basic = basic_
 
 	func description() -> String:
@@ -664,11 +664,22 @@ class TogetherColStrategy extends TogetherStrategy:
 enum TogetherStatus { None, AlwaysTogether, MaybeSeparated }
 
 class SeparateStrategy extends RowColStrategy:
+	var basic: bool
+	
+	func _init(grid_: GridImpl, basic_: bool) -> void:
+		super(grid_)
+		basic = basic_
+	
 	func description() -> String:
-		return """
-		If adding water to a single cell would cause the waters to be together and
-		fullfill the hint, we can't add water to that cell.
-		"""
+		if basic:
+			return """
+			Add NoWater to cells that would flood exactly the -N- cells
+			"""
+		else:
+			return """
+			If adding water to a single cell would cause the waters to be together and
+			fullfill the hint, we can't add water to that cell.
+			"""
 	func _nothing(a: int, b2: int) -> bool:
 		var c := _content(a, b2)
 		return c == Content.Nothing or c == Content.NoBoat
@@ -749,7 +760,7 @@ class SeparateStrategy extends RowColStrategy:
 	func _apply(a: int) -> bool:
 		if _a_hints()[a].water_count_type != E.HintType.Separated:
 			return false
-		if try_sections_strat(a):
+		if not basic and try_sections_strat(a):
 			return true
 		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
 			return false
@@ -767,6 +778,7 @@ class SeparateStrategy extends RowColStrategy:
 				nothing_middle += 1
 		var any := false
 		if rightmost == -1:
+
 			# We can mark connected components of size exactly the hint as nowater
 			# because otherwise it would be together. This will work differently in rows and cols.
 			for b2 in 2 * _b_len():
@@ -776,47 +788,49 @@ class SeparateStrategy extends RowColStrategy:
 						leftmost = -1
 					leftmost = min(leftmost, b2)
 					rightmost = b2
-					if _will_flood_how_many(a, b2) == water_left2:
+					if basic and _will_flood_how_many(a, b2) == water_left2:
 						_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
 						any = true
-			# Single hole, in which case it might be necessary to put water on the corners of it
-			# to prevent creating a contiguous block of water
-			if rightmost != -1 and leftmost != -1:
-				var hole_sz := rightmost - leftmost + 1
-				if _content(a, leftmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, leftmost, true):
-					_cell(a, leftmost / 2).put_water(_corner(a, leftmost), false)
-					any = true
-				if _content(a, rightmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, rightmost, true):
-					_cell(a, rightmost / 2).put_water(_corner(a, rightmost), false)
-					any = true
+			if not basic:
+				# Single hole, in which case it might be necessary to put water on the corners of it
+				# to prevent creating a contiguous block of water
+				if rightmost != -1 and leftmost != -1:
+					var hole_sz := rightmost - leftmost + 1
+					if _content(a, leftmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, leftmost, true):
+						_cell(a, leftmost / 2).put_water(_corner(a, leftmost), false)
+						any = true
+					if _content(a, rightmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, rightmost, true):
+						_cell(a, rightmost / 2).put_water(_corner(a, rightmost), false)
+						any = true
 			return any
 		for b2 in range(leftmost + 1, rightmost):
 			if _content(a, b2) != Content.Water:
-				if nothing_middle == water_left2 and _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
+				if basic and nothing_middle == water_left2 and _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
 					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
 					return true
 				return false
-		if _left() == E.Side.Top:
-			# Walk up until we find a cell if we put water it will flood exactly water_left2
-			var b2 := leftmost - 1
-			while b2 >= 0 and _content(a, b2) == Content.Nothing:
-				if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
-					b2 -= 1
-				if leftmost - b2 == water_left2:
-					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
+		if basic:
+			if _left() == E.Side.Top:
+				# Walk up until we find a cell if we put water it will flood exactly water_left2
+				var b2 := leftmost - 1
+				while b2 >= 0 and _content(a, b2) == Content.Nothing:
+					if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
+						b2 -= 1
+					if leftmost - b2 == water_left2:
+						_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
+						any = true
+						break
+					if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
+						break
+					else:
+						b2 -= 1
+			else:
+				if leftmost > 0 and (_content(a, leftmost - 1) == Content.Nothing or _content(a, leftmost - 1) == Content.NoBoat) and _will_flood_how_many(a, leftmost - 1) == water_left2:
+					_cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true)
 					any = true
-					break
-				if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
-					break
-				else:
-					b2 -= 1
-		else:
-			if leftmost > 0 and _content(a, leftmost - 1) == Content.Nothing and _will_flood_how_many(a, leftmost - 1) == water_left2:
-				_cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true)
+			if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
+				_cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true)
 				any = true
-		if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
-			_cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true)
-			any = true
 		return any
 
 	func apply_any() -> bool:
@@ -975,8 +989,10 @@ static var STRATEGY_LIST := {
 	TogetherRowAdvanced = TogetherRowStrategy.new.bind(false),
 	TogetherColBasic = TogetherColStrategy.new.bind(true),
 	TogetherColAdvanced = TogetherColStrategy.new.bind(false),
-	SeparateRow = SeparateRowStrategy.new,
-	SeparateCol = SeparateColStrategy.new,
+	SeparateRowBasic = SeparateRowStrategy.new.bind(true),
+	SeparateRowAdvanced = SeparateRowStrategy.new.bind(false),
+	SeparateColBasic = SeparateColStrategy.new.bind(true),
+	SeparateColAdvanced = SeparateColStrategy.new.bind(false),
 	AllWatersEasy = AllWatersEasyStrategy.new,
 	AllWatersMedium = AllWatersMediumStrategy.new,
 	AllBoats = AllBoatsStrategy.new,

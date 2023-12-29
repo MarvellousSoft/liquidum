@@ -693,7 +693,7 @@ func test_solve_together() -> void:
 	}L/_/L/_/
 	""")
 	# Same but for columns
-	s = ["TogetherCol"]
+	s = ["TogetherColBasic", "TogetherColAdvanced"]
 	assert_can_solve("""
 	h3}
 	.w.
@@ -737,7 +737,7 @@ func test_wrong_rule() -> void:
 	""")
 
 func test_separate_rule() -> void:
-	var s := ["BasicRow", "SeparateRow"]
+	var s := ["BasicRow", "SeparateRowBasic", "SeparateRowAdvanced"]
 	# Disregard aquarium of size 2
 	assert_can_solve("""
 	h....
@@ -773,7 +773,7 @@ func test_separate_rule() -> void:
 	.ww....
 	-L.L.L.
 	""", s)
-	s = ["BasicCol", "SeparateCol"]
+	s = ["BasicCol", "SeparateColBasic", "SeparateColAdvanced"]
 	# Kinda same but for cols
 	assert_can_solve("""
 	h2-
