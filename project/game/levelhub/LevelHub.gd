@@ -9,16 +9,22 @@ var level_focused := false
 var level_to_unlock = -1
 var section_to_unlock = -1
 
-func _ready():
+func _ready() -> void:
 	update_sections()
-	Global.dev_mode_toggled.connect(func(_on): update_sections())
 
 
-func _enter_tree():
+
+func _enter_tree() -> void:
+	Global.dev_mode_toggled.connect(_on_dev_mode)
 	check_unlocks()
 
+func _exit_tree() -> void:
+	Global.dev_mode_toggled.disconnect(_on_dev_mode)
 
-func update_sections():
+func _on_dev_mode(_on: bool) -> void:
+	update_sections()
+
+func update_sections() -> void:
 	var idx = 1
 	for section in Sections.get_children():
 		section.set_number(idx)

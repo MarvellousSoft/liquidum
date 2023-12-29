@@ -934,9 +934,9 @@ func auto_update_hints() -> bool:
 
 func _col_hint(h: int, type: E.HintType) -> String:
 	if type == E.HintType.Separated:
-		return "%s-" % [h if h >= 0 else "."]
+		return "%s-" % [str(h) if h >= 0 else "."]
 	elif type == E.HintType.Together:
-		return "%s}" % [h if h >= 0 else "."]
+		return "%s}" % [str(h) if h >= 0 else "."]
 	elif h < 0:
 		return ".."
 	elif h < 10:
