@@ -11,6 +11,7 @@ var section_to_unlock = -1
 
 func _ready():
 	update_sections()
+	Global.dev_mode_toggled.connect(func(on): update_sections())
 
 
 func _enter_tree():
@@ -21,7 +22,9 @@ func update_sections():
 	var idx = 1
 	for section in Sections.get_children():
 		section.set_number(idx)
-		var unlocked = LevelLister.get_max_unlocked_level(idx)
+		var unlocked := LevelLister.get_max_unlocked_level(idx)
+		if Global.is_dev_mode():
+			unlocked = LevelLister.count_section_levels(idx)
 		if unlocked == 0:
 			section.disable()
 		else:
