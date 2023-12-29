@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=51 format=3 uid="uid://ducq8gqvrwpyh"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -7,9 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/water_topright.png" id="5_l8l5q"]
 [ext_resource type="Texture2D" uid="uid://c0gt3ni02eqol" path="res://assets/images/ui/cell/water_bottomright.png" id="6_k26rs"]
 [ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/water_bottomleft.png" id="7_v8ssd"]
-[ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/cell/air_single.png" id="8_o2vuh"]
-[ext_resource type="Texture2D" uid="uid://drtuy7jt7dfl2" path="res://assets/images/ui/cell/air_topleft.png" id="9_xqw16"]
-[ext_resource type="Texture2D" uid="uid://4bsr554e8gbo" path="res://assets/images/ui/cell/air_topright.png" id="10_iqtow"]
+[ext_resource type="Texture2D" uid="uid://va1cg7wpj46n" path="res://assets/images/ui/cell/nowater.png" id="8_k2l07"]
+[ext_resource type="Texture2D" uid="uid://13rkxestm2" path="res://assets/images/ui/cell/noboat.png" id="9_po7i3"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/cell/single_button_pressed.png" id="12_8pxsf"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/cell/single_button_hover.png" id="13_0ph6y"]
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/cell/diagonal_button_pressed.png" id="16_g5nkk"]
@@ -333,6 +332,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 color = Color(0.85098, 1, 0.886275, 1)
 
 [node name="Preview" type="Control" parent="."]
@@ -344,6 +344,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+mouse_filter = 2
 texture = ExtResource("3_7aqdv")
 
 [node name="TopLeft" type="TextureRect" parent="Preview"]
@@ -353,6 +354,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("4_lwpcm")
 
 [node name="TopRight" type="TextureRect" parent="Preview"]
@@ -362,6 +364,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("5_l8l5q")
 
 [node name="BottomRight" type="TextureRect" parent="Preview"]
@@ -371,6 +374,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("6_k26rs")
 
 [node name="BottomLeft" type="TextureRect" parent="Preview"]
@@ -380,6 +384,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("7_v8ssd")
 
 [node name="Waters" type="Control" parent="."]
@@ -391,6 +396,7 @@ custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
+mouse_filter = 2
 texture = ExtResource("3_7aqdv")
 
 [node name="TopLeft" type="TextureRect" parent="Waters"]
@@ -400,6 +406,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("4_lwpcm")
 
 [node name="TopRight" type="TextureRect" parent="Waters"]
@@ -409,6 +416,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("5_l8l5q")
 
 [node name="BottomRight" type="TextureRect" parent="Waters"]
@@ -418,6 +426,7 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("6_k26rs")
 
 [node name="BottomLeft" type="TextureRect" parent="Waters"]
@@ -427,57 +436,150 @@ layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
+mouse_filter = 2
 texture = ExtResource("7_v8ssd")
 
-[node name="NoWaters" type="Control" parent="."]
+[node name="NoContent" type="Control" parent="."]
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="NoWaters"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
+[node name="Single" type="HBoxContainer" parent="NoContent"]
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(250, 250)
-texture = ExtResource("8_o2vuh")
+offset_right = 500.0
+offset_bottom = 500.0
+mouse_filter = 2
+alignment = 1
 
-[node name="TopLeft" type="TextureRect" parent="NoWaters"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(250, 250)
-texture = ExtResource("9_xqw16")
+[node name="Water" type="TextureRect" parent="NoContent/Single"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_k2l07")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="TopRight" type="TextureRect" parent="NoWaters"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(250, 250)
-texture = ExtResource("10_iqtow")
+[node name="Boat" type="TextureRect" parent="NoContent/Single"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("9_po7i3")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="BottomRight" type="TextureRect" parent="NoWaters"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
+[node name="TopLeft" type="HBoxContainer" parent="NoContent"]
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-rotation = 3.14159
-pivot_offset = Vector2(250, 250)
-texture = ExtResource("9_xqw16")
+offset_right = 307.0
+offset_bottom = 244.0
+mouse_filter = 2
+alignment = 1
 
-[node name="BottomLeft" type="TextureRect" parent="NoWaters"]
-visible = false
-custom_minimum_size = Vector2(500, 500)
+[node name="Water" type="TextureRect" parent="NoContent/TopLeft"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_k2l07")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Boat" type="TextureRect" parent="NoContent/TopLeft"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("9_po7i3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopRight" type="HBoxContainer" parent="NoContent"]
 layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-rotation = 3.14159
-pivot_offset = Vector2(250, 250)
-texture = ExtResource("10_iqtow")
+offset_left = 190.0
+offset_right = 497.0
+offset_bottom = 244.0
+mouse_filter = 2
+alignment = 1
+
+[node name="Water" type="TextureRect" parent="NoContent/TopRight"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_k2l07")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Boat" type="TextureRect" parent="NoContent/TopRight"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("9_po7i3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BottomLeft" type="HBoxContainer" parent="NoContent"]
+layout_mode = 0
+offset_top = 251.0
+offset_right = 307.0
+offset_bottom = 495.0
+mouse_filter = 2
+alignment = 1
+
+[node name="Water" type="TextureRect" parent="NoContent/BottomLeft"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_k2l07")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Boat" type="TextureRect" parent="NoContent/BottomLeft"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("9_po7i3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BottomRight" type="HBoxContainer" parent="NoContent"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 251.0
+offset_right = 497.0
+offset_bottom = 495.0
+mouse_filter = 2
+alignment = 1
+
+[node name="Water" type="TextureRect" parent="NoContent/BottomRight"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_k2l07")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Boat" type="TextureRect" parent="NoContent/BottomRight"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("9_po7i3")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Blocks" type="Control" parent="."]
 anchors_preset = 0

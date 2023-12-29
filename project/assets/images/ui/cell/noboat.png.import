@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drtuy7jt7dfl2"
-path="res://.godot/imported/air_topleft.png-70e562da07800d1ce7a52092a52c96ec.ctex"
+uid="uid://13rkxestm2"
+path="res://.godot/imported/noboat.png-92864a543546f4e4f909088845f9cdd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/cell/air_topleft.png"
-dest_files=["res://.godot/imported/air_topleft.png-70e562da07800d1ce7a52092a52c96ec.ctex"]
+source_file="res://assets/images/ui/cell/noboat.png"
+dest_files=["res://.godot/imported/noboat.png-92864a543546f4e4f909088845f9cdd7.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4bsr554e8gbo"
-path="res://.godot/imported/air_topright.png-bfd3fa59bebfc31167671b88615df589.ctex"
+uid="uid://7y5mpv0mw60"
+path="res://.godot/imported/brish_picker_noboat.png-31c4a3e1843723ddd2114399bedc99e6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/cell/air_topright.png"
-dest_files=["res://.godot/imported/air_topright.png-bfd3fa59bebfc31167671b88615df589.ctex"]
+source_file="res://assets/images/ui/brush/brish_picker_noboat.png"
+dest_files=["res://.godot/imported/brish_picker_noboat.png-31c4a3e1843723ddd2114399bedc99e6.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -10,6 +10,7 @@ var active := true
 	E.BrushMode.Water: $CenterContainer/PanelContainer/Images/Water,
 	E.BrushMode.NoWater: $CenterContainer/PanelContainer/Images/NoWater,
 	E.BrushMode.Boat: $CenterContainer/PanelContainer/Images/Boat,
+	E.BrushMode.NoBoat: $CenterContainer/PanelContainer/Images/NoBoat,
 	E.BrushMode.Wall: $CenterContainer/PanelContainer/Images/Wall,
 	E.BrushMode.Block: $CenterContainer/PanelContainer/Images/Block,
 }
@@ -18,6 +19,7 @@ var active := true
 	E.BrushMode.Water: $CenterContainer/PanelContainer/Buttons/Water,
 	E.BrushMode.NoWater: $CenterContainer/PanelContainer/Buttons/NoWater,
 	E.BrushMode.Boat: $CenterContainer/PanelContainer/Buttons/Boat,
+	E.BrushMode.NoBoat: $CenterContainer/PanelContainer/Buttons/NoBoat,
 	E.BrushMode.Wall: $CenterContainer/PanelContainer/Buttons/Wall,
 	E.BrushMode.Block: $CenterContainer/PanelContainer/Buttons/Block,
 }
@@ -49,6 +51,9 @@ func setup(editor_mode_: bool) -> void:
 	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
 		Images[editor_button].set_visible(editor_mode)
 		Buttons[editor_button].set_visible(editor_mode)
+	for editor_button in [E.BrushMode.NoWater, E.BrushMode.NoBoat]:
+		Images[editor_button].set_visible(not editor_mode)
+		Buttons[editor_button].set_visible(not editor_mode)
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == E.BrushMode.Water)
 	custom_minimum_size = ButtonsContainer.size

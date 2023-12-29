@@ -40,7 +40,13 @@ class CellModel:
 	# When user marks a tile definitely doesn't contain waters
 	func nowater_full() -> bool:
 		return GridModel.must_be_implemented()
+	func noboat_full() -> bool:
+		return GridModel.must_be_implemented()
+	func noboatwater_full() -> bool:
+		return GridModel.must_be_implemented()
 	func nowater_at(_corner: E.Corner) -> bool:
+		return GridModel.must_be_implemented()
+	func noboat_at(_corner: E.Corner) -> bool:
 		return GridModel.must_be_implemented()
 	func nothing_full() -> bool:
 		return GridModel.must_be_implemented()

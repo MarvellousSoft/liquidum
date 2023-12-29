@@ -1,6 +1,14 @@
 class_name GridImpl
 extends GridModel
 
+enum Content { Nothing, Water, NoWater, Block, Boat, NoBoat, NoBoatWater }
+enum IsTogether { Separate, Together, Zero }
+
+const TopLeft := E.Corner.TopLeft
+const TopRight := E.Corner.TopRight
+const BottomLeft := E.Corner.BottomLeft
+const BottomRight := E.Corner.BottomRight
+
 static func empty_editor(rows_: int, cols_: int) -> GridModel:
 	var g := GridImpl.new(rows_, cols_)
 	g.set_auto_update_hints(true)
@@ -27,11 +35,6 @@ static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> Gri
 	return g
 
 # Everything below is implementation details about grids.
-
-const TopLeft := E.Corner.TopLeft
-const TopRight := E.Corner.TopRight
-const BottomLeft := E.Corner.BottomLeft
-const BottomRight := E.Corner.BottomRight
 
 var n: int
 var m: int
@@ -105,7 +108,6 @@ static func empty_ish(c: Content) -> bool:
 	push_error("Unknown content %d" % c)
 	return false
 
-enum Content { Nothing, Water, NoWater, Block, Boat, NoBoat, NoBoatWater }
 
 func _is_content_partial_solution(c: Content, sol: Content) -> bool:
 	match c:
@@ -167,8 +169,16 @@ class PureCell:
 		return _content_at(corner) == Content.Water
 	func nowater_full() -> bool:
 		return _content_full(Content.NoWater)
+	func noboat_full() -> bool:
+		return _content_full(Content.NoBoat)
+	func noboatwater_full() -> bool:
+		return _content_full(Content.NoBoatWater)
 	func nowater_at(corner: E.Corner) -> bool:
-		return _content_at(corner) == Content.NoWater
+		var content = _content_at(corner)
+		return _content_at(corner) == Content.NoWater or content == Content.NoBoatWater
+	func noboat_at(corner: E.Corner) -> bool:
+		var content = _content_at(corner)
+		return content == Content.NoBoat or content == Content.NoBoatWater
 	func nothing_full() -> bool:
 		return _content_full(Content.Nothing)
 	func nothing_at(corner: E.Corner) -> bool:
@@ -383,8 +393,14 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure().water_at(corner)
 	func nowater_full() -> bool:
 		return pure().nowater_full()
+	func noboat_full() -> bool:
+		return pure().noboat_full()
+	func noboatwater_full() -> bool:
+		return pure().noboatwater_full()
 	func nowater_at(corner: E.Corner) -> bool:
 		return pure().nowater_at(corner)
+	func noboat_at(corner: E.Corner) -> bool:
+		return pure().noboat_at(corner)
 	func nothing_full() -> bool:
 		return pure().nothing_full()
 	func nothing_at(corner: E.Corner) -> bool:
@@ -1356,8 +1372,6 @@ func are_hints_satisfied(check_complete_ := false) -> bool:
 
 func is_any_hint_broken() -> bool:
 	return all_hints_status() == E.HintStatus.Wrong
-
-enum IsTogether { Separate, Together, Zero }
 
 # Any if there are 0 true's
 func _is_together(a: Array[bool]) -> E.HintType:

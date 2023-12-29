@@ -29,12 +29,27 @@ signal block_entered
 	E.Waters.BottomLeft: $Waters/BottomLeft,
 	E.Waters.BottomRight: $Waters/BottomRight,
 }
-@onready var NoWaters = {
-	E.Waters.Single: $NoWaters/Single,
-	E.Waters.TopLeft: $NoWaters/TopLeft,
-	E.Waters.TopRight: $NoWaters/TopRight,
-	E.Waters.BottomLeft: $NoWaters/BottomLeft,
-	E.Waters.BottomRight: $NoWaters/BottomRight,
+@onready var NoContent = {
+	E.Waters.Single: {
+		"water": $NoContent/Single/Water,
+		"boat": $NoContent/Single/Boat,
+	},
+	E.Waters.TopLeft: {
+		"water": $NoContent/TopLeft/Water,
+		"boat": $NoContent/TopLeft/Boat,
+	},
+	E.Waters.TopRight: {
+		"water": $NoContent/TopRight/Water,
+		"boat": $NoContent/TopRight/Boat,
+	},
+	E.Waters.BottomLeft: {
+		"water": $NoContent/BottomLeft/Water,
+		"boat": $NoContent/BottomLeft/Boat,
+	},
+	E.Waters.BottomRight: {
+		"water": $NoContent/BottomRight/Water,
+		"boat": $NoContent/BottomRight/Boat,
+	},
 }
 @onready var Buttons = {
 	E.Single: $Buttons/Single,
@@ -153,8 +168,9 @@ func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor
 	for water in Waters.values():
 		water.show()
 		set_water_level(water, 0.)
-	for nowater in NoWaters.values():
-		nowater.hide()
+	for nocontent in NoContent.values():
+		nocontent.water.hide()
+		nocontent.boat.hide()
 	for preview in Previews.values():
 		set_final_alpha(preview, 0.)
 	for error in Errors.values():
@@ -260,8 +276,13 @@ func set_water(water : E.Waters, value: bool) -> void:
 
 
 func remove_nowater() -> void:
-	for nowater in NoWaters.values():
-		nowater.hide()
+	for nocontent in NoContent.values():
+		nocontent.water.hide()
+
+
+func remove_noboat() -> void:
+	for nocontent in NoContent.values():
+		nocontent.boat.hide()
 
 
 func set_water_preview(water : E.Waters, value: bool) -> void:
@@ -274,8 +295,13 @@ func remove_all_preview() -> void:
 	preview_boat_flag = false
 
 
-func set_nowater(nowater : E.Waters, value: bool) -> void:
-	NoWaters[nowater].visible = value
+func set_nowater(which : E.Waters, value: bool) -> void:
+	NoContent[which].water.visible = value
+
+
+
+func set_noboat(which : E.Waters, value: bool) -> void:
+	NoContent[which].boat.visible = value
 
 
 func get_water_flag(corner : E.Waters) -> bool:
