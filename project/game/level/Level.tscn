@@ -305,6 +305,7 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 96
+autowrap_mode = 0
 
 [node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 40
