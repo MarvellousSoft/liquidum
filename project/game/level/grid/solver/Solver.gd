@@ -8,7 +8,7 @@ class Strategy:
 		grid = grid_
 	func apply_any() -> bool:
 		return GridModel.must_be_implemented()
-	static func description() -> String:
+	func description() -> String:
 		return "No description"
 
 # Strategy for a single row
@@ -173,7 +173,7 @@ class ColDfs extends GridImpl.Dfs:
 
 
 class BasicRowStrategy extends RowStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		- Put nowater in components that are too big
 		- Put water everywhere if there's no more space for nowater
@@ -191,7 +191,7 @@ class BasicRowStrategy extends RowStrategy:
 		return any
 
 class MediumRowStrategy extends RowStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return "If a component is so big it MUST be filled, fill it."
 	func _apply_strategy(_i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
 		var any := false
@@ -202,7 +202,7 @@ class MediumRowStrategy extends RowStrategy:
 		return any
 
 class AdvancedRowStrategy extends RowStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return "Use subset sum to tell if some components MUST or CANT be present in the solution"
 	func _apply_strategy(_i:int, values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
 		var numbers: Array[float] = []
@@ -231,7 +231,7 @@ class AdvancedRowStrategy extends RowStrategy:
 
 
 class BasicColStrategy extends ColumnStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		- Put nowater partially in components that are bigger than the hint
 		- Put water everywhere if there's no more space for non-water
@@ -249,7 +249,7 @@ class BasicColStrategy extends ColumnStrategy:
 		return any
 
 class MediumColStrategy extends ColumnStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return "If a component is so big it MUST be partially filled, fill it."
 	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
 		var any := false
@@ -284,7 +284,7 @@ class AdvancedColStrategy extends ColumnStrategy:
 			else:
 				return grid.get_cell(single_i, j).put_nowater(single_corner, false, true)
 		return false
-	static func description() -> String:
+	func description() -> String:
 		return "- If there's a single empty half-cell in the column, determine if it's water or nowater."
 
 # This cell is empty and we could put water below it
@@ -298,7 +298,7 @@ static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
 	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
 class BoatRowStrategy extends RowStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return "If hint is all possible boat locations, then put the boats"
 	func _maybe_extra_boats(j: int) -> bool:
 		return grid._col_hints[j].boat_count == -1 or grid.get_col_hint_status(j, E.HintContent.Boat) == E.HintStatus.Normal
@@ -388,7 +388,7 @@ static func _put_boat_on_col(grid: GridImpl, lr: Vector2i, j: int) -> bool:
 	return any
 
 class BoatColStrategy extends ColumnStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return "If hint is all possible aquariums, put boats in the ones where it's clear"
 	func _apply(j: int) -> bool:
 		var boats_left := grid.col_hints()[j].boat_count - grid.count_boat_col(j)
@@ -477,7 +477,7 @@ class RowColStrategy extends Strategy:
 # Logic for both row and column is the same, so let's make it generic
 # Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
 class TogetherStrategy extends RowColStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		- If there's water in the {line}, far away cells can't have water
 		- If there's water and its close to the border, we might need to expand it to the other side
@@ -598,8 +598,8 @@ class TogetherStrategy extends RowColStrategy:
 
 
 class TogetherRowStrategy extends TogetherStrategy:
-	static func description() -> String:
-		return TogetherStrategy.description().format({line = "row"})
+	func description() -> String:
+		return super.description().format({line = "row"})
 	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
 		return grid.get_cell(a, b) as GridImpl.CellWithLoc
 	func _left() -> E.Side:
@@ -616,8 +616,8 @@ class TogetherRowStrategy extends TogetherStrategy:
 		return grid.count_water_row(a)
 
 class TogetherColStrategy extends TogetherStrategy:
-	static func description() -> String:
-		return TogetherStrategy.description().format({line = "column"})
+	func description() -> String:
+		return super.description().format({line = "column"})
 	func _cell(a: int, b: int) -> GridImpl.CellWithLoc:
 		return grid.get_cell(b, a) as GridImpl.CellWithLoc
 	func _left() -> E.Side:
@@ -636,7 +636,7 @@ class TogetherColStrategy extends TogetherStrategy:
 enum TogetherStatus { None, AlwaysTogether, MaybeSeparated }
 
 class SeparateStrategy extends RowColStrategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		If adding water to a single cell would cause the waters to be together and
 		fullfill the hint, we can't add water to that cell.
@@ -831,7 +831,7 @@ class SeparateColStrategy extends SeparateStrategy:
 		return grid.count_water_col(a)
 
 class AllWatersEasyStrategy extends Strategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		- If remaining waters is 0, mark everything with nowater.
 		- If the remaining empty spaces equal the total waters, fill them all."""
@@ -866,7 +866,7 @@ class AllWatersEasyStrategy extends Strategy:
 		return any
 
 class AllWatersMediumStrategy extends Strategy:
-	static func description() -> String:
+	func description() -> String:
 		return """
 		- If flooding water on a tile would create too many waters, mark it with nowater.
 		- Same for flooding nowater and adding water."""
@@ -911,7 +911,7 @@ class AllWatersMediumStrategy extends Strategy:
 		return any
 
 class AllBoatsStrategy extends Strategy:
-	static func description() -> String:
+	func description() -> String:
 		return "If all boat possible locations is the remaining hint, fill everything with boats."
 	func apply_any() -> bool:
 		var boats_left := grid.grid_hints().total_boats - grid.count_boats()

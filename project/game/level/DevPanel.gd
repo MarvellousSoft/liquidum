@@ -29,8 +29,8 @@ func _ready() -> void:
 		popup_forced.add_check_item(strategy)
 		popup.add_check_item(strategy)
 		popup.set_item_checked(i, true)
-		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
-		popup_forced.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].description())
+		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].new(null).description())
+		popup_forced.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].new(null).description())
 		i += 1
 
 
