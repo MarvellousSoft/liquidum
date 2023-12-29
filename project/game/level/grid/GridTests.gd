@@ -575,7 +575,7 @@ func test_together_rules() -> void:
 	h....
 	.wwx.
 	}L.L/
-	""", ["TogetherRow"])
+	""", ["TogetherRowBasic"])
 	assert_can_solve("""
 	h........
 	5....w...
@@ -644,7 +644,7 @@ func test_resize() -> void:
 	assert_grid_eq(g.to_str(), with_row)
 
 func test_solve_together() -> void:
-	var s := ["TogetherRow"]
+	var s := ["TogetherRowBasic", "TogetherRowAdvanced"]
 	assert_can_solve("""
 	h....
 	3w.w.
@@ -672,7 +672,7 @@ func test_solve_together() -> void:
 	h....
 	2.x..
 	}L/L/
-	""", ["TogetherRow", "BasicRow"])
+	""", ["TogetherRowAdvanced", "BasicRow"])
 	# empty hole but not too big
 	assert_grid_eq(apply_strategies("""
 	h......

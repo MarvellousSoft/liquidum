@@ -477,13 +477,36 @@ class RowColStrategy extends Strategy:
 # Logic for both row and column is the same, so let's make it generic
 # Instead of (rows, cols) (i, j), let's use (a_len, b_len) (a, b)
 class TogetherStrategy extends RowColStrategy:
+	var basic: bool
+
+	func _init(grid: GridImpl, basic_: bool) -> void:
+		super(grid)
+		basic = basic_
+
 	func description() -> String:
-		return """
-		- If there's water in the {line}, far away cells can't have water
-		- If there's water and its close to the border, we might need to expand it to the other side
-		- If there's two waters in the {line}, they must be connected
-		- If there's the space between two obstacles is less than N, then it can't have any water
-		"""
+		if basic:
+			return """
+			- If there's two waters in the {line}, they must be connected
+			- If there's water in the {line}, far away cells can't have water
+			"""
+		else:
+			return """
+			- If there's water and its close to the border, we might need to expand it to the other side
+			- If there's the space between two obstacles is less than N, then it can't have any water
+			"""
+	
+	func _basic_waters_and_nowaters(a: int) -> bool:
+		# Very simplistic logic, jut put water in the middle if the hint is big
+		# The function below also covers this, but we're using this for "easy mode"
+		var h := _a_hints()[a].water_count
+		var b_len := _b_len()
+		var any := false
+		if h * 2 > b_len:
+			for b2 in range(b_len - (int(2 * h) - b_len), b_len + (int(2 * h) - b_len)):
+				if _content(a, b2) != Content.Water:
+					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+					any = true
+		return any
 
 	# Like the subset sum strategy on rows, but since it's required to be together, we actually
 	# need only to use the two pointers technique to check all possible solutions
@@ -491,6 +514,8 @@ class TogetherStrategy extends RowColStrategy:
 	func _add_necessary_waters_and_nowaters(a: int) -> bool:
 		if _a_hints()[a].water_count <= 0.0:
 			return false
+		if basic:
+			return _basic_waters_and_nowaters(a)
 		var any := false
 		var hint := int(2 * _a_hints()[a].water_count)
 		var r2 := -1
@@ -543,14 +568,15 @@ class TogetherStrategy extends RowColStrategy:
 		if rightmost == -1:
 			return _add_necessary_waters_and_nowaters(a)
 		var any := false
-		# Merge all waters together
-		for b2 in range(leftmost + 1, rightmost):
-			var content := _content(a, b2)
-			if content != Content.Water:
-				any = true
-				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
-		if any:
-			return true
+		if basic:
+			# Merge all waters together
+			for b2 in range(leftmost + 1, rightmost):
+				var content := _content(a, b2)
+				if content != Content.Water:
+					any = true
+					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+			if any:
+				return true
 		# Mark far away cells as empty
 		var min_b2 := leftmost
 		while min_b2 > 0 and _content(a, min_b2 - 1) == Content.Nothing:
@@ -565,28 +591,30 @@ class TogetherStrategy extends RowColStrategy:
 			# Invalid solution
 			if hint >= 0:
 				return false
-		var no_b2 := []
-		if water_left2 >= 0:
-			no_b2.append_array(range(rightmost + water_left2 + 1, max_b2 + 1)) # Far to the right
-			no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
-		no_b2.append_array(range(0, min_b2)) # Before block/nowater
-		no_b2.append_array(range(max_b2 + 1, 2 * _b_len())) # After block/nowater
-		for b2 in no_b2:
-			if _content(a, b2) == Content.Nothing:
-				any = true
-				_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-		if water_left2 < 0:
-			return any
-		# Mark nearby cells as full if close to the "border"
-		var yes_b2 := []
-		if leftmost - min_b2 < water_left2:
-			yes_b2.append_array(range(rightmost + 1, min(rightmost + 1 + water_left2 - (leftmost - min_b2), 2 * _b_len())))
-		if max_b2 - rightmost < water_left2:
-			yes_b2.append_array(range(max(0, leftmost - (water_left2 - (max_b2 - rightmost))), leftmost))
-		for b2 in yes_b2:
-			if _content(a, b2) != Content.Water:
-				any = true
-				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+		if basic:
+			var no_b2 := []
+			if water_left2 >= 0:
+				no_b2.append_array(range(rightmost + water_left2 + 1, max_b2 + 1)) # Far to the right
+				no_b2.append_array(range(leftmost - water_left2 - 1, min_b2 - 1, -1)) # Far to the left
+			no_b2.append_array(range(0, min_b2)) # Before block/nowater
+			no_b2.append_array(range(max_b2 + 1, 2 * _b_len())) # After block/nowater
+			for b2 in no_b2:
+				if _content(a, b2) == Content.Nothing:
+					any = true
+					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
+		else:
+			if water_left2 < 0:
+				return any
+			# Mark nearby cells as full if close to the "border"
+			var yes_b2 := []
+			if leftmost - min_b2 < water_left2:
+				yes_b2.append_array(range(rightmost + 1, min(rightmost + 1 + water_left2 - (leftmost - min_b2), 2 * _b_len())))
+			if max_b2 - rightmost < water_left2:
+				yes_b2.append_array(range(max(0, leftmost - (water_left2 - (max_b2 - rightmost))), leftmost))
+			for b2 in yes_b2:
+				if _content(a, b2) != Content.Water:
+					any = true
+					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
 		return any
 
 	func apply_any() -> bool:
@@ -934,22 +962,24 @@ class AllBoatsStrategy extends Strategy:
 						any = true
 		return any
 
-const STRATEGY_LIST := {
-	BasicRow = BasicRowStrategy,
-	BasicCol = BasicColStrategy,
-	BoatRow = BoatRowStrategy,
-	BoatCol = BoatColStrategy,
-	MediumRow = MediumRowStrategy,
-	MediumCol = MediumColStrategy,
-	AdvancedRow = AdvancedRowStrategy,
-	AdvancedCol = AdvancedColStrategy,
-	TogetherRow = TogetherRowStrategy,
-	TogetherCol = TogetherColStrategy,
-	SeparateRow = SeparateRowStrategy,
-	SeparateCol = SeparateColStrategy,
-	AllWatersEasy = AllWatersEasyStrategy,
-	AllWatersMedium = AllWatersMediumStrategy,
-	AllBoats = AllBoatsStrategy,
+static var STRATEGY_LIST := {
+	BasicRow = BasicRowStrategy.new,
+	BasicCol = BasicColStrategy.new,
+	BoatRow = BoatRowStrategy.new,
+	BoatCol = BoatColStrategy.new,
+	MediumRow = MediumRowStrategy.new,
+	MediumCol = MediumColStrategy.new,
+	AdvancedRow = AdvancedRowStrategy.new,
+	AdvancedCol = AdvancedColStrategy.new,
+	TogetherRowBasic = TogetherRowStrategy.new.bind(true),
+	TogetherRowAdvanced = TogetherRowStrategy.new.bind(false),
+	TogetherColBasic = TogetherColStrategy.new.bind(true),
+	TogetherColAdvanced = TogetherColStrategy.new.bind(false),
+	SeparateRow = SeparateRowStrategy.new,
+	SeparateCol = SeparateColStrategy.new,
+	AllWatersEasy = AllWatersEasyStrategy.new,
+	AllWatersMedium = AllWatersMediumStrategy.new,
+	AllBoats = AllBoatsStrategy.new,
 }
 
 # Get a place in the solution that must have nowater and put a block on it
@@ -1006,7 +1036,7 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 	grid.flood_nowater(false)
 	var strategies := {}
 	for name in strategies_names:
-		strategies[name] = STRATEGY_LIST[name].new(grid)
+		strategies[name] = STRATEGY_LIST[name].call(grid)
 	for t in 50:
 		var any := false
 		for name in strategies_names:
