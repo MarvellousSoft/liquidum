@@ -932,10 +932,14 @@ func set_auto_update_hints(b: bool) -> void:
 func auto_update_hints() -> bool:
 	return editor_mode() and auto_update_hints_
 
-func _col_hint(h: int) -> String:
-	if h < 0:
+func _col_hint(h: int, type: E.HintType) -> String:
+	if type == E.HintType.Separated:
+		return "%s-" % [h if h >= 0 else "."]
+	elif type == E.HintType.Together:
+		return "%s}" % [h if h >= 0 else "."]
+	elif h < 0:
 		return ".."
-	if h < 10:
+	elif h < 10:
 		return "%d." % h
 	else:
 		# Will crash if h >= 100
@@ -949,8 +953,12 @@ func _row_hint1(h: int) -> String:
 	else:
 		return "%d" % h
 
-func _row_hint2(h: int) -> String:
-	if h >= 10:
+func _row_hint2(h: int, type: E.HintType) -> String:
+	if type == E.HintType.Separated:
+		return "-"
+	elif type == E.HintType.Together:
+		return "}"
+	elif h >= 10:
 		return "%d" % (h % 10)
 	else:
 		return "."
@@ -961,21 +969,23 @@ func to_str() -> String:
 		builder.append("+waters=%.1f\n" % _grid_hints.total_water)
 	if _grid_hints.total_boats != 0:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
-	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1) or _col_hints.any(func(h): return h.boat_count != -1)
-	var hints := _row_hints.any(func(h): return h.water_count != -1.) or _col_hints.any(func(h): return h.water_count != -1.)
+	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden) \
+		or _col_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden)
+	var hints := _row_hints.any(func(h): return h.water_count != -1. or h.water_count_type != E.HintType.Hidden) \
+		or _col_hints.any(func(h): return h.water_count != -1. or h.water_count_type != E.HintType.Hidden)
 	if boat_hints:
 		builder.append('B')
 		if hints:
 			builder.append('.')
 		for j in m:
-			builder.append(_col_hint(_col_hints[j].boat_count))
+			builder.append(_col_hint(_col_hints[j].boat_count, _col_hints[j].boat_count_type))
 		builder.append('\n')
 	if hints:
 		if boat_hints:
 			builder.append('.')
 		builder.append('h')
 		for j in m:
-			builder.append(_col_hint(int(_col_hints[j].water_count * 2)))
+			builder.append(_col_hint(int(_col_hints[j].water_count * 2), _col_hints[j].water_count_type))
 		builder.append('\n')
 	for i in n:
 		if boat_hints:
@@ -988,9 +998,9 @@ func to_str() -> String:
 			builder.append(_content_str(cell.c_right))
 		builder.append("\n")
 		if boat_hints:
-			builder.append(_row_hint2(_row_hints[i].boat_count))
+			builder.append(_row_hint2(_row_hints[i].boat_count, _row_hints[i].boat_count_type))
 		if hints:
-			builder.append(_row_hint2(int(_row_hints[i].water_count * 2)))
+			builder.append(_row_hint2(int(_row_hints[i].water_count * 2), _row_hints[i].water_count_type))
 		for j in m:
 			var left := _has_wall_left(i, j)
 			var down := _has_wall_bottom(i, j)

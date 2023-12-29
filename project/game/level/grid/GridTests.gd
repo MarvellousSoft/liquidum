@@ -655,7 +655,7 @@ func test_solve_together() -> void:
 	""", s).to_str(), """
 	h....
 	2.w.x
-	.L/L/
+	}L/L/
 	""")
 	assert_grid_eq(apply_strategies("""
 	h....
@@ -664,7 +664,7 @@ func test_solve_together() -> void:
 	""", s).to_str(), """
 	h....
 	3.ww.
-	.L/L/
+	}L/L/
 	""")
 	assert_can_solve("""
 	h....
@@ -679,7 +679,7 @@ func test_solve_together() -> void:
 	""", s).to_str(), """
 	h......
 	3xx.ww.
-	.L/L/L/
+	}L/L/L/
 	""")
 	assert_grid_eq(apply_strategies("""
 	h........
@@ -688,7 +688,7 @@ func test_solve_together() -> void:
 	""").to_str(), """
 	h........
 	2x..xx..x
-	.L/_/L/_/
+	}L/_/L/_/
 	""")
 	# Same but for columns
 	s = ["TogetherCol"]
@@ -706,7 +706,7 @@ func test_solve_together() -> void:
 	...
 	.L/
 	""", s).to_str(), """
-	h2.
+	h2}
 	..w
 	.L/
 	..x
@@ -719,7 +719,7 @@ func test_solve_together() -> void:
 	...
 	.L/
 	""", s).to_str(), """
-	h3.
+	h3}
 	..w
 	.L/
 	.w.
