@@ -132,7 +132,7 @@ const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDA
 # Friday - Simple, boats
 # Saturday - Simple, together/separate
 # Sunday - Diagonals, boats
-static func gen_level(gen: RandomLevelGenerator, today: String) -> LevelData:
+static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
 	var weekday: Time.Weekday = date_dict.weekday
 	var rng := RandomNumberGenerator.new()
@@ -144,20 +144,20 @@ static func gen_level(gen: RandomLevelGenerator, today: String) -> LevelData:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	match weekday:
 		Time.WEEKDAY_MONDAY:
-			g = await gen.generate(rng, _simple_hints(7, 7), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, _simple_hints(7, 7), _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_TUESDAY:
-			g = await gen.generate(rng, _continuity_hints(5, 5), _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, _continuity_hints(5, 5), _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_WEDNESDAY:
-			g = await gen.generate(rng, _hidden_hints(6, 6), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, _hidden_hints(6, 6), _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_THURSDAY:
-			g = await gen.generate(rng, _simple_hints(5, 5), _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, _simple_hints(5, 5), _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_FRIDAY:
-			g = await gen.generate(rng, _simple_boats(7, 7), _fixed_opts(2), strategies, [], true)
+			g = await l_gen.generate(rng, _simple_boats(7, 7), _fixed_opts(2), strategies, [], true)
 			assert(g._any_sol_boats())
 		Time.WEEKDAY_SATURDAY:
-			g = await gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_SUNDAY:
-			g = await gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(3), strategies, [], true)
+			g = await l_gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(3), strategies, [], true)
 	if g != null:
 		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
 	return null

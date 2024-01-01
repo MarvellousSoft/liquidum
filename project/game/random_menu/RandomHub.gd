@@ -63,11 +63,27 @@ func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
 
-func gen_level(rng: RandomNumberGenerator, dif: Difficulty, hints_builder: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array) -> void:
+static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, dif: Difficulty) -> GridModel:
+	match dif:
+		Difficulty.Easy:
+			return await l_gen.generate(rng, _easy_visibility, _nothing, ["BasicRow", "BasicCol"], [])
+		Difficulty.Medium:
+			return await l_gen.generate(rng, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
+		Difficulty.Hard:
+			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 4), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
+		Difficulty.Expert:
+			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
+		Difficulty.Insane:
+			return await l_gen.generate(rng, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
+		_:
+			push_error("Uknown difficulty %d" % dif)
+			return null
+
+func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
-	var g := await gen.generate(rng, hints_builder, gen_options_builder, strategies, forced_strategies)
+	var g := await gen_from_difficulty(gen, rng, dif)
 	GeneratingLevel.disable()
 	if g == null:
 		return
@@ -152,19 +168,8 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		return
 	var rng := RandomNumberGenerator.new()
 	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
-	match dif:
-		Difficulty.Easy:
-			gen_level(rng, dif, _easy_visibility, _nothing, ["BasicRow", "BasicCol"], [])
-		Difficulty.Medium:
-			gen_level(rng, dif, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
-		Difficulty.Hard:
-			gen_level(rng, dif, RandomHub._hard_visibility(5, 4), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
-		Difficulty.Expert:
-			gen_level(rng, dif, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
-		Difficulty.Insane:
-			gen_level(rng, dif, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
-		_:
-			push_error("Uknown difficulty %d" % dif)
+	gen_and_play(rng, dif)
+
 
 
 func _on_cancel_gen_pressed():
