@@ -924,7 +924,7 @@ class AllWatersMediumStrategy extends Strategy:
 				var c := grid.get_cell(i, j2 / 2)
 				var pc := grid._pure_cell(i, j2 / 2)
 				var right := bool(j2 & 1)
-				if (pc._content_right() if right else pc._content_right()) != GridImpl.Content.Nothing:
+				if (pc._content_right() if right else pc._content_left()) != GridImpl.Content.Nothing:
 					continue
 				# This if is just an optimisation since we only need to test this once on this line x aquarium
 				if (right and c.cell_type() != E.CellType.Single) or (not right and c.wall_at(E.Walls.Left)):
