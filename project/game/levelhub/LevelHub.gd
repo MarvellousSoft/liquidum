@@ -10,6 +10,14 @@ var level_to_unlock = -1
 var section_to_unlock = -1
 
 func _ready() -> void:
+	for i in 100:
+		var h := HashingContext.new()
+		h.start(HashingContext.HASH_SHA1)
+		var arr := PackedByteArray()
+		arr.resize(4)
+		arr.encode_s32(0, i)
+		h.update(arr)
+		print("%2d %s" % [i, h.finish().decode_s64(0)])
 	update_sections()
 
 

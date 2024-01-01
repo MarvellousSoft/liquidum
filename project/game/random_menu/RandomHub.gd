@@ -66,15 +66,15 @@ func _on_back_pressed() -> void:
 static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, dif: Difficulty) -> GridModel:
 	match dif:
 		Difficulty.Easy:
-			return await l_gen.generate(rng, _easy_visibility, _nothing, ["BasicRow", "BasicCol"], [])
+			return await l_gen.generate(rng, RandomHub._easy_visibility, RandomHub._nothing, ["BasicRow", "BasicCol"], [])
 		Difficulty.Medium:
-			return await l_gen.generate(rng, _medium_visibility, _nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
+			return await l_gen.generate(rng, RandomHub._medium_visibility, RandomHub._nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 4), _diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
+			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 4), RandomHub._diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
 		Difficulty.Expert:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 5), _expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
+			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 5), RandomHub._expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
 		Difficulty.Insane:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(6, 6), _expert_options, SolverModel.STRATEGY_LIST.keys(), [])
+			return await l_gen.generate(rng, RandomHub._hard_visibility(6, 6), RandomHub._expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
 			push_error("Uknown difficulty %d" % dif)
 			return null
@@ -125,16 +125,16 @@ static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, c
 	for i in a.size():
 		a[i] |= b[i]
 
-func _expert_options(rng: RandomNumberGenerator) -> int:
+static func _expert_options(rng: RandomNumberGenerator) -> int:
 	return (1 if rng.randf() < 0.5 else 0) + (2 if rng.randf() < 0.35 else 0)
 
-func _diags(rng: RandomNumberGenerator) -> int:
+static func _diags(rng: RandomNumberGenerator) -> int:
 	return 1 + (2 if rng.randf() < 0.5 else 0) 
 
-func _nothing(_rng: RandomNumberGenerator) -> int:
+static func _nothing(_rng: RandomNumberGenerator) -> int:
 	return 0
 
-func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
+static func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
 	return Level.HintVisibility.default(5, 5)
 
 static func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
@@ -163,11 +163,32 @@ static func _hard_visibility(n: int, m: int) -> Callable:
 			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 		return h
 
+# We're using this to generate seeds from sequential numbers since Godot docs says
+# similar seeds might lead to similar values.
+static func consistent_hash(x: int) -> int:
+	var h := HashingContext.new()
+	h.start(HashingContext.HASH_SHA1)
+	var arr := PackedByteArray()
+	arr.resize(4)
+	arr.encode_s32(0, x)
+	h.update(arr)
+	return h.finish().decode_s64(0)
+
 func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
 	var rng := RandomNumberGenerator.new()
-	rng.seed = randi() if $Seed.text.is_empty() else int($Seed.text)
+	if $Seed.text.is_empty():
+		var data := UserData.current()
+		data.random_levels_created[dif] += 1
+		var i := data.random_levels_created[dif]
+		rng.seed = RandomHub.consistent_hash(i)
+		UserData.save()
+		var success_state := PreprocessedDifficulty.current(dif).success_state(i)
+		if success_state != 0:
+			rng.state = success_state
+	else:
+		rng.seed = int($Seed.text)
 	gen_and_play(rng, dif)
 
 

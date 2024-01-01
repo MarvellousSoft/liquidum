@@ -1,5 +1,16 @@
 class_name PreprocessedDifficulty
 
+static var _current: Array[PreprocessedDifficulty]
+
+static func _static_init() -> void:
+	for _d in RandomHub.Difficulty:
+		_current.append(null)
+
+static func current(dif: RandomHub.Difficulty) -> PreprocessedDifficulty:
+	if _current[dif] == null:
+		_current[dif] = FileManager.load_preprocessed_difficulty(dif)
+	return _current[dif]
+
 var _success_states: Array[int]
 var difficulty: RandomHub.Difficulty
 
