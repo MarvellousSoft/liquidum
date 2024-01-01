@@ -265,7 +265,7 @@ func save_dailies(year: int, data: PreprocessedDailies) -> void:
 	_save_json_data(DAILIES_DIR, str(year) + JSON_EXT, data.get_data())
 
 func _dif_filename(dif: RandomHub.Difficulty) -> String:
-	return RandomHub.Difficulty.find_key(dif).to_lower()
+	return RandomHub.Difficulty.find_key(dif).to_lower() + JSON_EXT
 
 func load_preprocessed_difficulty(dif: RandomHub.Difficulty) -> PreprocessedDifficulty:
 	return PreprocessedDifficulty.load_data(dif, _load_json_data(RANDOM_DIR, _dif_filename(dif)))

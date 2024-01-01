@@ -102,3 +102,29 @@ func _on_preprocess_dailies_pressed() -> void:
 	%DailiesButton.visible = true
 	%DailiesCancel.visible = false
 	FileManager.save_dailies(year, prep)
+
+
+func _on_dif_button_pressed():
+	var dif: RandomHub.Difficulty = %DifOptions.get_selected_id()
+	var prep := PreprocessedDifficulty.current(dif)
+	var gen := RandomLevelGenerator.new()
+	%DifProgress.value = 0
+	%DifProgress.visible = true
+	%DifOptions.disabled = true
+	%DifButton.visible = false
+	%DifCancel.visible = true
+	%DifCancel.button_pressed = false
+	var rng := RandomNumberGenerator.new()
+	for i in 1000:
+		if %DifCancel.button_pressed:
+			break
+		if prep.success_state(i) == 0:
+			rng.seed = RandomHub.consistent_hash(i)
+			await RandomHub.gen_from_difficulty(gen, rng, dif)
+			prep.set_success_state(i, gen.success_state)
+		%DifProgress.value += 1
+	%DifCancel.visible = false
+	%DifProgress.visible = false
+	%DifButton.visible = true
+	%DifOptions.disabled = false
+	FileManager.save_preprocessed_difficulty(prep)
