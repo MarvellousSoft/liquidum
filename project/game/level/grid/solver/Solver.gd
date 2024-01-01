@@ -974,6 +974,9 @@ class AllBoatsStrategy extends Strategy:
 						any = true
 		return any
 
+static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
+	grid.get_cell(pos.i, pos.j).put_water((pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft, false)
+
 class AquariumsStrategy extends Strategy:
 	func description() -> String:
 		return """
@@ -997,6 +1000,7 @@ class AquariumsStrategy extends Strategy:
 						all_aqs.append(dfs.info)
 		var var_aqs: Array[GridImpl.AquariumInfo] = []
 		var any_pools := false
+		var ways_to_reach := {}
 		for aq in all_aqs:
 			if aq.fixed_water():
 				assert(not aq.has_pool)
@@ -1008,6 +1012,16 @@ class AquariumsStrategy extends Strategy:
 			else:
 				var_aqs.append(aq)
 				any_pools = any_pools or aq.has_pool
+				if any_pools:
+					continue
+				# Since it doesn't have pools, there's a single way to fill it out
+				var reaches := aq.total_water
+				ways_to_reach[reaches] = ways_to_reach.get(reaches, 0) + 1
+				for val in aq.empty_at_height:
+					if val == 0:
+						continue
+					reaches += val
+					ways_to_reach[reaches] = ways_to_reach.get(reaches, 0) + 1
 		var any := false
 		for aq in var_aqs:
 			# It needs at least one more water
@@ -1015,10 +1029,31 @@ class AquariumsStrategy extends Strategy:
 				for i in aq.empty_at_height.size():
 					if aq.empty_at_height[i] == 0:
 						continue
-					var pos: GridModel.WaterPosition = aq.cells_at_height[i][0]
-					grid.get_cell(pos.i, pos.j).put_water((pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft, false)
+					SolverModel._put_water(grid, aq.cells_at_height[i][0])
 					any = true
 					break
+		if any:
+			return true
+		for sz in hint:
+			if hint[sz] == 0 or hint[sz] != ways_to_reach.get(sz, 0):
+				continue
+			for aq in var_aqs:
+				var reaches := aq.total_water
+				for i in aq.empty_at_height.size():
+					if aq.empty_at_height[i] == 0:
+						continue
+					elif reaches == sz:
+						for pos in aq.cells_at_height[i]:
+							var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
+							var c := grid.get_cell(pos.i, pos.j)
+							if c.nothing_at(corner) or c.noboat_at(corner):
+								c.put_nowater(corner, false, true)
+								any = true
+					else:
+						reaches += aq.empty_at_height[i]
+						if reaches == sz:
+							SolverModel._put_water(grid, aq.cells_at_height[i][0])
+							any = true
 		return any
 
 static var STRATEGY_LIST := {
