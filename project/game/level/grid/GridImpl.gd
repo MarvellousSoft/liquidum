@@ -1267,6 +1267,7 @@ class AquariumInfo:
 	var empty_at_height: Array[float]
 	var min_height: int
 	var total_water: float
+	var total_empty: float
 	func add(pos: WaterPosition, content: Content) -> void:
 		if cells_at_height.is_empty():
 			min_height = pos.i
@@ -1279,11 +1280,18 @@ class AquariumInfo:
 		if content == Content.Water:
 			total_water += E.waters_size(pos.loc)
 		elif content == Content.Nothing or content == Content.NoBoat and empty_at_height[h] >= 0:
+			total_empty += E.waters_size(pos.loc)
 			empty_at_height[h] += E.waters_size(pos.loc)
 		elif content == Content.NoWater or content == Content.NoBoatWater:
-			empty_at_height[h] = -1
+			if empty_at_height[h] >= 0:
+				total_empty -= empty_at_height[h]
+				empty_at_height[h] = -1
 	func fixed_water() -> bool:
-		return empty_at_height.all(func(e): return e == 0.0)
+		return total_empty == 0
+	func remove_m1() -> void:
+		for i in empty_at_height.size():
+			if empty_at_height[i] == -1:
+				empty_at_height[i] = 0
 
 # Always start flooding from the bottom for this to work
 class CrawlAquarium extends Dfs:
