@@ -165,33 +165,33 @@ static func _hard_visibility(n: int, m: int) -> Callable:
 
 # We're using this to generate seeds from sequential numbers since Godot docs says
 # similar seeds might lead to similar values.
-static func consistent_hash(x: int) -> int:
-	var h := HashingContext.new()
-	h.start(HashingContext.HASH_SHA1)
-	var arr := PackedByteArray()
-	arr.resize(4)
-	arr.encode_s32(0, x)
-	h.update(arr)
-	return h.finish().decode_s64(0)
+static func consistent_hash(x: String) -> int:
+	return x.sha1_buffer().decode_s64(0)
 
 func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
 	var rng := RandomNumberGenerator.new()
-	if $Seed.text.is_empty():
+	var seed: String = $Seed.text
+	if seed.is_empty():
 		var data := UserData.current()
 		data.random_levels_created[dif] += 1
 		var i := data.random_levels_created[dif]
-		rng.seed = RandomHub.consistent_hash(i)
+		rng.seed = RandomHub.consistent_hash(str(i))
 		UserData.save()
 		var success_state := PreprocessedDifficulty.current(dif).success_state(i)
 		if success_state != 0:
 			rng.state = success_state
 	else:
-		rng.seed = int($Seed.text)
+		rng.seed = RandomHub.consistent_hash(seed)
 	gen_and_play(rng, dif)
 
 
 
 func _on_cancel_gen_pressed():
 	gen.cancel()
+
+
+func _on_custom_seed_button_pressed() -> void:
+	$CustomSeedButton.visible = false
+	$Seed.visible = true

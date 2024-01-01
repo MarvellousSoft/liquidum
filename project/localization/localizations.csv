@@ -141,3 +141,5 @@ PCT_1,1% percentile,Percentil 1%,Percentil 1%
 PCT_10,10% percentile,Percentil 10%,Percentil 10%
 PCT_50,50% percentile,Percentil 50%,Percentil 50%
 HARD_LEVEL_TOOLTIP,This level is hard,Esse nível é difícil,Esse nível é difícil
+USE_CUSTOM_SEED,Use custom seed,Usar seed própria,Usar seed própria
+SEED,Seed,Seed,Seed

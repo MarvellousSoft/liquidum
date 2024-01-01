@@ -119,7 +119,7 @@ func _on_dif_button_pressed():
 		if %DifCancel.button_pressed:
 			break
 		if prep.success_state(i) == 0:
-			rng.seed = RandomHub.consistent_hash(i)
+			rng.seed = RandomHub.consistent_hash(str(i))
 			await RandomHub.gen_from_difficulty(gen, rng, dif)
 			prep.set_success_state(i, gen.success_state)
 		%DifProgress.value += 1

@@ -145,6 +145,8 @@ const PCT_1 = "PCT_1"
 const PCT_10 = "PCT_10"
 const PCT_50 = "PCT_50"
 const HARD_LEVEL_TOOLTIP = "HARD_LEVEL_TOOLTIP"
+const USE_CUSTOM_SEED = "USE_CUSTOM_SEED"
+const SEED = "SEED"
 
 const KEYS = [
  "TEST",
@@ -288,5 +290,7 @@ const KEYS = [
  "PCT_1",
  "PCT_10",
  "PCT_50",
- "HARD_LEVEL_TOOLTIP"
+ "HARD_LEVEL_TOOLTIP",
+ "USE_CUSTOM_SEED",
+ "SEED"
 ]
