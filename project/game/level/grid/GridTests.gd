@@ -31,7 +31,7 @@ func run_all_tests() -> void:
 				print("FAILED!")
 
 	if fail > 0:
-		print("Some tests failed :(")
+		print("(%d) Some tests failed :(" % fail)
 	else:
 		print("All tests passed!")
 
@@ -897,3 +897,25 @@ func test_noboat() -> void:
 	g.get_cell(0, 0).put_noboat(TopLeft)
 	# Ignore NoBoat, just like we ignore NoWater when placing water
 	assert(g.get_cell(0, 0).boat_possible())
+
+func test_aquariums() -> void:
+	var grid_one_aqua := "..\nL."
+	assert_cant_solve(grid_one_aqua)
+	assert_can_solve("+aqua=1:1\n" + grid_one_aqua)
+	assert_can_solve("+aqua=0:0\n" + grid_one_aqua)
+	var grid_two_aqua = "...#\nL.L/"
+	assert_cant_solve("+aqua=1:1\n" + grid_two_aqua)
+	assert_can_solve("+aqua=1:1\n+aqua=0.5:1\n" + grid_two_aqua)
+	assert_can_solve("+aqua=1:0\n+aqua=0.5:1\n" + grid_two_aqua)
+	assert_can_solve("+aqua=0:0\n" + grid_two_aqua)
+	var grid_three_aqua = """
+	h....
+	2....
+	.L.L/
+	"""
+	assert_cant_solve(grid_three_aqua)
+	assert_can_solve(grid_three_aqua)
+	assert_can_solve("+aqua=1:1\n" + grid_three_aqua)
+	assert_can_solve("+aqua=1:0\n" + grid_three_aqua)
+	assert_can_solve("+aqua=0:2\n" + grid_three_aqua)
+	assert_can_solve("+aqua=0:1\n" + grid_three_aqua)

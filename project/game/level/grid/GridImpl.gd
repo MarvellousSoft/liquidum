@@ -19,7 +19,7 @@ static func import_data(data: Dictionary, load_mode: LoadMode) -> GridModel:
 	return GridExporter.new().load_data(GridImpl.new(0, 0), data, load_mode)
 
 static func from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> GridModel:
-	s = s.replace('\r', '').dedent().strip_edges()
+	s = s.replace('\r', '').replace('\t', '').strip_edges()
 	var my_s := s
 	while my_s[0] == '+':
 		my_s = my_s.split("\n", false, 1)[1]
@@ -969,6 +969,8 @@ func to_str() -> String:
 		builder.append("+waters=%.1f\n" % _grid_hints.total_water)
 	if _grid_hints.total_boats != 0:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
+	for sz in _grid_hints.expected_aquariums:
+		builder.append("+aqua=%.1f:%d\n" % [sz, _grid_hints.expected_aquariums[sz]])
 	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden) \
 		or _col_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden)
 	var hints := _row_hints.any(func(h): return h.water_count != -1. or h.water_count_type != E.HintType.Hidden) \
@@ -1257,6 +1259,52 @@ class CountWaterDfs extends Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return true
 
+class AquariumInfo:
+	# Not 100% accurate, aquariums with holes in the middle are counted as having pool, even though they don't
+	var has_pool: bool
+	# Array[Array[WaterPosition]]
+	var cells_at_height: Array[Array]
+	var empty_at_height: Array[float]
+	var min_height: int
+	var total_water: float
+	func add(pos: WaterPosition, content: Content) -> void:
+		if cells_at_height.is_empty():
+			min_height = pos.i
+		while min_height + cells_at_height.size() <= pos.i:
+			var arr: Array[WaterPosition] = []
+			cells_at_height.append(arr)
+			empty_at_height.append(0.0)
+		var h := pos.i - min_height
+		cells_at_height[h].append(pos)
+		if content == Content.Water:
+			total_water += E.waters_size(pos.loc)
+		elif content == Content.Nothing or content == Content.NoBoat and empty_at_height[h] >= 0:
+			empty_at_height[h] += E.waters_size(pos.loc)
+		elif content == Content.NoWater or content == Content.NoBoatWater:
+			empty_at_height[h] = -1
+	func fixed_water() -> bool:
+		return empty_at_height.all(func(e): return e == 0.0)
+
+# Always start flooding from the bottom for this to work
+class CrawlAquarium extends Dfs:
+	var info: AquariumInfo
+	func reset() -> void:
+		info = AquariumInfo.new()
+	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
+		info.add(WaterPosition.new(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner))
+		return true
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	func _can_go_down(i: int, j: int) -> bool:
+		var c := grid._pure_cell(i + 1, j)
+		var corner := E.diag_to_corner(c.cell_type(), E.Side.Top)
+		if c.last_seen(corner) == grid.last_seen:
+			return false
+		if c._content_top() == Content.Water:
+			return true
+		else:
+			info.has_pool = true
+			return false
 
 func grid_hints() -> GridHints:
 	return _grid_hints

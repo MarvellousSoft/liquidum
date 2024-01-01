@@ -172,8 +172,8 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
 	var rng := RandomNumberGenerator.new()
-	var seed: String = $Seed.text
-	if seed.is_empty():
+	var seed_str: String = $Seed.text
+	if seed_str.is_empty():
 		var data := UserData.current()
 		data.random_levels_created[dif] += 1
 		var i := data.random_levels_created[dif]
@@ -183,7 +183,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		if success_state != 0:
 			rng.state = success_state
 	else:
-		rng.seed = RandomHub.consistent_hash(seed)
+		rng.seed = RandomHub.consistent_hash(seed_str)
 	gen_and_play(rng, dif)
 
 

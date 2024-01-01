@@ -974,6 +974,53 @@ class AllBoatsStrategy extends Strategy:
 						any = true
 		return any
 
+class AquariumsStrategy extends Strategy:
+	func description() -> String:
+		return """
+		- If for a given aquarium there can't be aquariums with this much water, add more.
+		- Mostly ignores aquariums that have "pools"
+		"""
+	func apply_any() -> bool:
+		var hint := grid.grid_hints().expected_aquariums.duplicate()
+		if hint.is_empty():
+			return false
+		var all_aqs: Array[GridImpl.AquariumInfo] = []
+		var dfs := GridImpl.CrawlAquarium.new(grid)
+		# Bottom up for correctness
+		for i in range(grid.rows() - 1, -1, -1):
+			for j in grid.cols():
+				for corner in grid.get_cell(i, j).corners():
+					var c := grid._pure_cell(i, j)
+					if c.last_seen(corner) != grid.last_seen and not c.block_at(corner):
+						dfs.reset()
+						dfs.flood(i, j, corner)
+						all_aqs.append(dfs.info)
+		var var_aqs: Array[GridImpl.AquariumInfo] = []
+		var any_pools := false
+		for aq in all_aqs:
+			if aq.fixed_water():
+				assert(not aq.has_pool)
+				if hint.has(aq.total_water):
+					hint[aq.total_water] -= 1
+					# Invalid
+					if hint[aq.total_water] < 0:
+						return false
+			else:
+				var_aqs.append(aq)
+				any_pools = any_pools or aq.has_pool
+		var any := false
+		for aq in var_aqs:
+			# It needs at least one more water
+			if hint.get(aq.total_water, -1) == 0 and not aq.has_pool:
+				for i in aq.empty_at_height.size():
+					if aq.empty_at_height[i] == 0:
+						continue
+					var pos: GridModel.WaterPosition = aq.cells_at_height[i][0]
+					grid.get_cell(pos.i, pos.j).put_water((pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft, false)
+					any = true
+					break
+		return any
+
 static var STRATEGY_LIST := {
 	BasicRow = BasicRowStrategy.new,
 	BasicCol = BasicColStrategy.new,
@@ -994,6 +1041,7 @@ static var STRATEGY_LIST := {
 	AllWatersEasy = AllWatersEasyStrategy.new,
 	AllWatersMedium = AllWatersMediumStrategy.new,
 	AllBoats = AllBoatsStrategy.new,
+	Aquariums = AquariumsStrategy.new,
 }
 
 # Get a place in the solution that must have nowater and put a block on it
