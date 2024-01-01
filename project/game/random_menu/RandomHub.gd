@@ -83,7 +83,7 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
-	var g := await gen_from_difficulty(gen, rng, dif)
+	var g := await RandomHub.gen_from_difficulty(gen, rng, dif)
 	GeneratingLevel.disable()
 	if g == null:
 		return

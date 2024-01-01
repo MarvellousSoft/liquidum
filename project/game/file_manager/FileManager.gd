@@ -3,6 +3,7 @@ extends Node
 const CURRENT_PROFILE := "user://cur_profile.txt"
 const DATA_DIR := "res://database/levels"
 const DAILIES_DIR := "res://database/dailies"
+const RANDOM_DIR := "res://database/random"
 const DEFAULT_PROFILE := "fish"
 const PROFILE_FILE := "profile.save"
 const METADATA := ".metadata"
@@ -262,3 +263,12 @@ func load_dailies(year: int) -> PreprocessedDailies:
 
 func save_dailies(year: int, data: PreprocessedDailies) -> void:
 	_save_json_data(DAILIES_DIR, str(year) + JSON_EXT, data.get_data())
+
+func _dif_filename(dif: RandomHub.Difficulty) -> String:
+	return RandomHub.Difficulty.find_key(dif).to_lower()
+
+func load_preprocessed_difficulty(dif: RandomHub.Difficulty) -> PreprocessedDifficulty:
+	return PreprocessedDifficulty.load_data(dif, _load_json_data(RANDOM_DIR, _dif_filename(dif)))
+
+func save_preprocessed_difficulty(data: PreprocessedDifficulty) -> void:
+	_save_json_data(RANDOM_DIR, _dif_filename(data.difficulty), data.get_data())
