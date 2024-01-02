@@ -287,20 +287,24 @@ func _on_grid_updated() -> void:
 	if not editor_mode() and GridNode.is_level_finished():
 		win()
 
-
+# In hindsight, this was a mistake. We should always store hint visibility in the grid, and load
+# it in the UI from there. This way, undos would Just Work™ and things would be stored in the
+# model as they should.
 class HintVisibility:
 	var total_water: bool = false
 	var total_boats: bool = true
 	var expected_aquariums: Array[float] = []
 	var row: Array[int]
 	var col: Array[int]
-	static func default(n: int, m: int) -> HintVisibility:
+	static func default(n: int, m: int, start := HintBar.WATER_COUNT_VISIBLE) -> HintVisibility:
 		var h := HintVisibility.new()
 		for i in n:
-			h.row.append(HintBar.WATER_COUNT_VISIBLE)
+			h.row.append(start)
 		for j in m:
-			h.col.append(HintBar.WATER_COUNT_VISIBLE)
+			h.col.append(start)
 		return h
+	static func all_hidden(n: int, m: int) -> HintVisibility:
+		return HintVisibility.default(n, m, 0)
 	static func from_grid(grid: GridModel) -> HintVisibility:
 		var h := HintVisibility.new()
 		h.total_water = (grid.grid_hints().total_water != -1.)

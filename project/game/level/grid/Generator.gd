@@ -166,6 +166,21 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 				if water_wanted <= 0:
 					return
 
+static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var all_aqs := grid.all_aquarium_counts()
+	# Add some small sizes that may be 0
+	all_aqs[0.0] = all_aqs.get(0.0, 0)
+	var any_diags := range(grid.rows()).any(func(i): return range(grid.cols()).any(func(j): return grid.get_cell(i, j).cell_type() != E.Single))
+	if any_diags:
+		all_aqs[0.5] = all_aqs.get(0.5, 0)
+	all_aqs[1.0] = all_aqs.get(1.0, 0)
+	var expected := grid.grid_hints().expected_aquariums
+	var szs := all_aqs.keys()
+	Global.shuffle(szs, rng)
+	szs.resize(rng.randi_range(1, maxi(1, szs.size() - 2)))
+	for sz in szs:
+		expected[sz] = all_aqs[sz]
+
 func generate(n: int, m: int) -> GridModel:
 	# Reset rng
 	rng.seed = rng.seed
