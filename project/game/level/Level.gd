@@ -330,7 +330,6 @@ class HintVisibility:
 		if not (flags & HintBar.WATER_TYPE_VISIBLE) or line_hint.water_count_type == E.HintType.Zero:
 			line_hint.water_count_type = E.HintType.Hidden
 	func apply_to_grid(grid: GridModel) -> void:
-		assert(not grid.is_empty())
 		var ghints := grid.grid_hints()
 		var prev_boats := ghints.total_boats
 		if not total_water:

@@ -5,7 +5,7 @@ const HINT_DELAY = .3
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
-
+@onready var Title = %Title
 
 func _ready():
 	for child in HintContainer.get_children():
@@ -27,7 +27,12 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	for child in HintContainer.get_children():
 		child.startup(delay)
 		delay += HINT_DELAY
-
+	
+	if editor_mode:
+		Title.text = tr("AQUARIUMS_COUNTER_EDITOR")
+	else:
+		Title.text = tr("AQUARIUMS_COUNTER")
+	
 func visible_sizes() -> Array[float]:
 	var ans: Array[float] = []
 	for child in HintContainer.get_children():
