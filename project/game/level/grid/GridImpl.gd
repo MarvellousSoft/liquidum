@@ -1262,26 +1262,21 @@ class CountWaterDfs extends Dfs:
 class AquariumInfo:
 	# Not 100% accurate, aquariums with holes in the middle are counted as having pool, even though they don't
 	var has_pool: bool
+	# This actually goes from bottom to top, starting at max_i and decreasing
 	# Array[Array[WaterPosition]]
 	var cells_at_height: Array[Array]
 	var empty_at_height: Array[float]
-	var min_height: int
+	var max_i: int
 	var total_water: float
 	var total_empty: float
 	func add(pos: WaterPosition, content: Content) -> void:
 		if cells_at_height.is_empty():
-			min_height = pos.i
-		while min_height + cells_at_height.size() <= pos.i:
+			max_i = pos.i
+		while max_i - cells_at_height.size() >= pos.i:
 			var arr: Array[WaterPosition] = []
 			cells_at_height.append(arr)
 			empty_at_height.append(0.0)
-		while pos.i < min_height:
-			min_height -= 1
-			# Inefficient adding at the beginning, but who cares
-			var arr: Array[WaterPosition] = []
-			cells_at_height.push_front(arr)
-			empty_at_height.push_front(0.0)
-		var h := pos.i - min_height
+		var h := max_i - pos.i
 		assert(h >= 0)
 		cells_at_height[h].append(pos)
 		if content == Content.Water:
@@ -1313,13 +1308,14 @@ class CrawlAquarium extends Dfs:
 	func _can_go_down(i: int, j: int) -> bool:
 		var c := grid._pure_cell(i + 1, j)
 		var corner := E.diag_to_corner(c.cell_type(), E.Side.Top)
-		if c.last_seen(corner) == grid.last_seen:
+		if c.last_seen(corner) == grid.last_seen: # Already seen
 			return false
 		if c._content_top() == Content.Water:
 			return true
 		else:
 			info.has_pool = true
-			return false
+			# Still go down to visit everything in the aquarium
+			return true
 
 func grid_hints() -> GridHints:
 	return _grid_hints

@@ -920,3 +920,17 @@ func test_aquariums() -> void:
 	#assert_can_solve("+aqua=0:2\n" + grid_three_aqua)
 	#assert_can_solve("+aqua=0:1\n" + grid_three_aqua)
 	assert_can_solve("+aqua=0:1\n.x\nL/")
+	# Like level 5x2, uses a bunch of aquarium logics
+	assert_can_solve("""
+	+aqua=0.5:1
+	+aqua=1.0:1
+	+aqua=2.0:1
+	+aqua=3.0:1
+	+aqua=6.0:2
+	..............
+	|.|.L.|.|╲|...
+	..............
+	|.|.....|.|...
+	..............
+	L.L._._.L.L._.
+""")

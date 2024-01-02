@@ -1032,7 +1032,7 @@ class AquariumsStrategy extends Strategy:
 					var_aqs.append(aq)
 				if any_pools:
 					continue
-				# Since it doesn't have pools, there's a single way to fill it out
+				# Since it doesn't have pools, there's a unique way to fill it out
 				var reaches := aq.total_water
 				ways_to_reach[reaches] = ways_to_reach.get(reaches, 0) + 1
 				for val in aq.empty_at_height:
