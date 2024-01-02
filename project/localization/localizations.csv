@@ -23,7 +23,7 @@ SAVE_AND_EXIT,Save & Exit Game,Salvar & Fechar o jogo,Salvar & Fechar o jogo
 AQUARIUMS_COUNTER,Aquariums Needed,Aquários Necessários,Aquários Necessários
 AQUARIUMS_COUNTER_EDITOR,Total Aquariums,Aquários Totais,Aquários Totais
 SIZE,Size,Tam.,Tamanho
-AMOUNT,Amount,Quant.,Quantia
+AQ_AMOUNT,Total  (Cur.),Total  (Atual),Total  (Atual)
 BACK,Back,Voltar,Voltar
 CONTINUE,Continue,Continuar,Continuar
 CREATE_NEW_LEVEL,Create new level,Criar nível novo,Criar novo nível

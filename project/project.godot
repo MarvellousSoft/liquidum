@@ -102,3 +102,7 @@ debug_1={
 [internationalization]
 
 locale/translations=PackedStringArray("res://localization/localizations.en.translation", "res://localization/localizations.pt_BR.translation", "res://localization/localizations.pt.translation")
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=2

@@ -100,7 +100,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
 theme_override_fonts/font = SubResource("FontVariation_n0dxx")
 theme_override_font_sizes/font_size = 52
-text = "AMOUNT"
+text = "AQ_AMOUNT"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox"]
 custom_minimum_size = Vector2(680, 700)
