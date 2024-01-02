@@ -92,72 +92,17 @@ func _process(_dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 
-static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
-	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
-	RandomHub.hide_obvious_hints(grid)
-
-static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
-	var h := Level.HintVisibility.default(grid.rows(), grid.cols())
-	h.total_boats = rng.randf() < 0.5
-	for a in [h.row, h.col]:
-		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
-	h.apply_to_grid(grid)
-	RandomHub.hide_obvious_hints(grid)
-
-static func _continuity_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
-	RandomHub._hard_visibility(rng, grid)
-
-static func _hidden_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
-	var h := Level.HintVisibility.new()
-	h.total_water = rng.randf() < 0.5
-	for i in grid.rows():
-		h.row.append(0)
-	for j in grid.cols():
-		h.col.append(0)
-	for a in [h.row, h.col]:
-		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, a.size() - 1))
-	h.apply_to_grid(grid)
-	RandomHub.hide_obvious_hints(grid)
-
-static func _fixed_opts(opts: int) -> Callable:
-	return func(_rng: RandomNumberGenerator) -> int:
-		return opts
-
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
-# Monday - Simple, basic hints, larger
-# Tuesday - Diagonals, together/separate
-# Wednesday - Simple, hidden hints
-# Thursday - Diagonals, basic hints
-# Friday - Simple, boats
-# Saturday - Simple, together/separate
-# Sunday - Diagonals, boats
 static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
 	var weekday: Time.Weekday = date_dict.weekday
 	var rng := RandomNumberGenerator.new()
-	rng.seed = Time.get_unix_time_from_datetime_string(today)
+	rng.seed = RandomHub.consistent_hash(today)
 	var preprocessed_state := FileManager.load_dailies(date_dict.year).success_state(date_dict)
-	if preprocessed_state != 0 and false:
+	if preprocessed_state != 0:
 		rng.state = preprocessed_state
-	var g: GridModel = null
-	var strategies := SolverModel.STRATEGY_LIST.keys()
-	match weekday:
-		Time.WEEKDAY_MONDAY:
-			g = await l_gen.generate(rng,7, 7, DailyButton._simple_hints, _fixed_opts(0), strategies, [])
-		Time.WEEKDAY_TUESDAY:
-			g = await l_gen.generate(rng, 5, 5, DailyButton._continuity_hints, _fixed_opts(1), strategies, [])
-		Time.WEEKDAY_WEDNESDAY:
-			g = await l_gen.generate(rng, 6, 6, DailyButton._hidden_hints, _fixed_opts(0), strategies, [])
-		Time.WEEKDAY_THURSDAY:
-			g = await l_gen.generate(rng, 5, 5, DailyButton._simple_hints, _fixed_opts(1), strategies, [])
-		Time.WEEKDAY_FRIDAY:
-			g = await l_gen.generate(rng, 7, 7, DailyButton._simple_boats, _fixed_opts(2), strategies, [], true)
-			assert(g._any_sol_boats())
-		Time.WEEKDAY_SATURDAY:
-			g = await l_gen.generate(rng, 6, 6, DailyButton._continuity_hints, _fixed_opts(0), strategies, [])
-		Time.WEEKDAY_SUNDAY:
-			g = await l_gen.generate(rng, 6, 6, DailyButton._continuity_hints, _fixed_opts(3), strategies, [], true)
+	var g: GridModel = await RandomFlavors.gen(l_gen, rng, weekday as RandomFlavors.Flavor)
 	if g != null:
 		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
 	return null
