@@ -1275,7 +1275,14 @@ class AquariumInfo:
 			var arr: Array[WaterPosition] = []
 			cells_at_height.append(arr)
 			empty_at_height.append(0.0)
+		while pos.i < min_height:
+			min_height -= 1
+			# Inefficient adding at the beginning, but who cares
+			var arr: Array[WaterPosition] = []
+			cells_at_height.push_front(arr)
+			empty_at_height.push_front(0.0)
 		var h := pos.i - min_height
+		assert(h >= 0)
 		cells_at_height[h].append(pos)
 		if content == Content.Water:
 			total_water += E.waters_size(pos.loc)

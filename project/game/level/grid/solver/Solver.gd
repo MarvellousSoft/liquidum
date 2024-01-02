@@ -987,10 +987,17 @@ static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
 		c.put_nowater(corner, false, true)
 
 class AquariumsStrategy extends Strategy:
+	var basic: bool
+	func _init(grid_: GridImpl, basic_: bool) -> void:
+		super(grid_)
+		basic = basic_
 	func description() -> String:
+		if basic:
+			return "- If for a given aquarium there can't be aquariums with this much water, add more."
 		return """
-		- If for a given aquarium there can't be aquariums with this much water, add more.
-		- Mostly ignores aquariums that have "pools"
+		- If for a given aquarium, it can't be filled up, add nowater.
+		- If there's exactly one way to fill an aquarium to a certain value that's required, do it.
+		- Mostly ignores aquariums that have "pools", unless they are already filled.
 		"""
 	func apply_any() -> bool:
 		var hint := grid.grid_hints().expected_aquariums.duplicate()
@@ -1034,21 +1041,22 @@ class AquariumsStrategy extends Strategy:
 					reaches += val
 					ways_to_reach[reaches] = ways_to_reach.get(reaches, 0) + 1
 		var any := false
-		for aq in var_aqs:
-			# It needs more water while the low values are 0 on the hints
-			var reaches := aq.total_water
-			for i in aq.empty_at_height.size():
-				if aq.empty_at_height[i] <= 0:
-					continue
-				if hint.get(reaches, -1) == 0:
-					for pos in aq.cells_at_height[i]:
-						SolverModel._put_water(grid, pos)
-					reaches += aq.empty_at_height[i]
-					any = true
-				else:
-					break
-		if any:
-			return true
+		if basic:
+			for aq in var_aqs:
+				# It needs more water while the low values are 0 on the hints
+				var reaches := aq.total_water
+				for i in aq.empty_at_height.size():
+					if aq.empty_at_height[i] <= 0:
+						continue
+					if hint.get(reaches, -1) == 0:
+						for pos in aq.cells_at_height[i]:
+							SolverModel._put_water(grid, pos)
+						reaches += aq.empty_at_height[i]
+						any = true
+					else:
+						break
+		if any or basic:
+			return any
 		# If there are exactly the required number of ways to reach the given hint, do them all
 		# This require any_pools = 0 otherwise we can't properly calculate the ways to reach a hint
 		for sz in hint:
@@ -1106,7 +1114,8 @@ static var STRATEGY_LIST := {
 	AllWatersEasy = AllWatersEasyStrategy.new,
 	AllWatersMedium = AllWatersMediumStrategy.new,
 	AllBoats = AllBoatsStrategy.new,
-	Aquariums = AquariumsStrategy.new,
+	AquariumsBasic = AquariumsStrategy.new.bind(true),
+	AquariumsAdvanced = AquariumsStrategy.new.bind(false),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

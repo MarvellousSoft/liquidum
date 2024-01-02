@@ -166,6 +166,7 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 				if water_wanted <= 0:
 					return
 
+@warning_ignore("shadowed_variable")
 static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var all_aqs := grid.all_aquarium_counts()
 	# Add some small sizes that may be 0
