@@ -144,20 +144,20 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	match weekday:
 		Time.WEEKDAY_MONDAY:
-			g = await l_gen.generate(rng,7, 7, _simple_hints, _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng,7, 7, DailyButton._simple_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_TUESDAY:
-			g = await l_gen.generate(rng, 5, 5, _continuity_hints, _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, 5, 5, DailyButton._continuity_hints, _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_WEDNESDAY:
-			g = await l_gen.generate(rng, 6, 6, _hidden_hints, _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, 6, 6, DailyButton._hidden_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_THURSDAY:
-			g = await l_gen.generate(rng, 5, 5, _simple_hints, _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, 5, 5, DailyButton._simple_hints, _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_FRIDAY:
-			g = await l_gen.generate(rng, 7, 7, _simple_boats, _fixed_opts(2), strategies, [], true)
+			g = await l_gen.generate(rng, 7, 7, DailyButton._simple_boats, _fixed_opts(2), strategies, [], true)
 			assert(g._any_sol_boats())
 		Time.WEEKDAY_SATURDAY:
-			g = await l_gen.generate(rng, 6, 6, _continuity_hints, _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, 6, 6, DailyButton._continuity_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_SUNDAY:
-			g = await l_gen.generate(rng, 6, 6, _continuity_hints, _fixed_opts(3), strategies, [], true)
+			g = await l_gen.generate(rng, 6, 6, DailyButton._continuity_hints, _fixed_opts(3), strategies, [], true)
 	if g != null:
 		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
 	return null
