@@ -66,15 +66,15 @@ func _on_back_pressed() -> void:
 static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, dif: Difficulty) -> GridModel:
 	match dif:
 		Difficulty.Easy:
-			return await l_gen.generate(rng, RandomHub._easy_visibility, RandomHub._nothing, ["BasicRow", "BasicCol"], [])
+			return await l_gen.generate(rng, 5, 5, RandomHub._easy_visibility, RandomHub._nothing, ["BasicRow", "BasicCol"], [])
 		Difficulty.Medium:
-			return await l_gen.generate(rng, RandomHub._medium_visibility, RandomHub._nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
+			return await l_gen.generate(rng, 6, 6, RandomHub._medium_visibility, RandomHub._nothing, ["BasicCol", "BasicRow", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["MediumCol", "MediumRow"])
 		Difficulty.Hard:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 4), RandomHub._diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
+			return await l_gen.generate(rng, 5, 4, RandomHub._hard_visibility, RandomHub._diags, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "AllWatersEasy", "BoatRow"], ["TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic", "BoatCol", "AllBoats", "AllWatersMedium"])
 		Difficulty.Expert:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(5, 5), RandomHub._expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
+			return await l_gen.generate(rng, 5, 5, RandomHub._hard_visibility, RandomHub._expert_options, ["BasicCol", "BasicRow", "MediumCol", "MediumRow", "BoatRow", "BoatCol", "AllWatersEasy", "AllWatersMedium", "AllBoats", "TogetherRowBasic", "TogetherColBasic", "SeparateRowBasic", "SeparateColBasic"], ["TogetherRowAdvanced", "TogetherColAdvanced", "SeparateRowAdvanced", "SeparateColAdvanced", "AdvancedRow", "AdvancedCol"])
 		Difficulty.Insane:
-			return await l_gen.generate(rng, RandomHub._hard_visibility(6, 6), RandomHub._expert_options, SolverModel.STRATEGY_LIST.keys(), [])
+			return await l_gen.generate(rng, 6, 6, RandomHub._hard_visibility, RandomHub._expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
 			push_error("Uknown difficulty %d" % dif)
 			return null
@@ -134,34 +134,34 @@ static func _diags(rng: RandomNumberGenerator) -> int:
 static func _nothing(_rng: RandomNumberGenerator) -> int:
 	return 0
 
-static func _easy_visibility(_rng: RandomNumberGenerator) -> Level.HintVisibility:
-	return Level.HintVisibility.default(5, 5)
+static func _easy_visibility(_rng: RandomNumberGenerator, grid: GridModel) -> void:
+	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
 
-static func _medium_visibility(rng: RandomNumberGenerator) -> Level.HintVisibility:
+static func _medium_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.new()
-	for i in 6:
+	for _i in grid.rows():
 		h.row.append(0)
+	for _j in grid.cols():
 		h.col.append(0)
 	for a in [h.row, h.col]:
-		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, 8), 6))
-		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, 4), 0))
-	return h
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, a.size() + 2), a.size()))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size() - 2), 0))
+	h.apply_to_grid(grid)
 
 
-static func _hard_visibility(n: int, m: int) -> Callable:
-	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
-		var h := Level.HintVisibility.new()
-		h.total_boats = rng.randf() < 0.5
-		h.total_water = rng.randf() < 0.3
-		for i in n:
-			h.row.append(0)
-		for j in m:
-			h.col.append(0)
-		for a in [h.row, h.col]:
-			RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
-			RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
-			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
-		return h
+static func _hard_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.new()
+	h.total_boats = rng.randf() < 0.5
+	h.total_water = rng.randf() < 0.3
+	for i in grid.rows():
+		h.row.append(0)
+	for j in grid.cols():
+		h.col.append(0)
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(1, a.size() + 3), a.size()))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
+		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
+	h.apply_to_grid(grid)
 
 # We're using this to generate seeds from sequential numbers since Godot docs says
 # similar seeds might lead to similar values.

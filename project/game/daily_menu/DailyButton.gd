@@ -92,20 +92,18 @@ func _process(_dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 
-static func _simple_hints(n: int, m: int) -> Callable:
-	return func(_rng: RandomNumberGenerator) -> Level.HintVisibility:
-		return Level.HintVisibility.default(n, m)
+static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
+	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
 
-static func _simple_boats(n: int, m: int) -> Callable:
-	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
-		var h := Level.HintVisibility.default(n, m)
-		h.total_boats = rng.randf() < 0.5
-		for a in [h.row, h.col]:
-			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
-		return h
+static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.default(grid.rows(), grid.cols())
+	h.total_boats = rng.randf() < 0.5
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
+	h.apply_to_grid(grid)
 
-static func _continuity_hints(n: int, m: int) -> Callable:
-	return RandomHub._hard_visibility(n, m)
+static func _continuity_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	RandomHub._hard_visibility(rng, grid)
 
 static func _hidden_hints(n: int, m: int) -> Callable:
 	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
@@ -144,20 +142,20 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	match weekday:
 		Time.WEEKDAY_MONDAY:
-			g = await l_gen.generate(rng, _simple_hints(7, 7), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng,7, 7, _simple_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_TUESDAY:
-			g = await l_gen.generate(rng, _continuity_hints(5, 5), _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, 5, 5, _continuity_hints, _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_WEDNESDAY:
-			g = await l_gen.generate(rng, _hidden_hints(6, 6), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, 6, 6, _hidden_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_THURSDAY:
-			g = await l_gen.generate(rng, _simple_hints(5, 5), _fixed_opts(1), strategies, [])
+			g = await l_gen.generate(rng, 5, 5, _simple_hints, _fixed_opts(1), strategies, [])
 		Time.WEEKDAY_FRIDAY:
-			g = await l_gen.generate(rng, _simple_boats(7, 7), _fixed_opts(2), strategies, [], true)
+			g = await l_gen.generate(rng, 7, 7, _simple_boats, _fixed_opts(2), strategies, [], true)
 			assert(g._any_sol_boats())
 		Time.WEEKDAY_SATURDAY:
-			g = await l_gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(0), strategies, [])
+			g = await l_gen.generate(rng, 6, 6, _continuity_hints, _fixed_opts(0), strategies, [])
 		Time.WEEKDAY_SUNDAY:
-			g = await l_gen.generate(rng, _continuity_hints(6, 6), _fixed_opts(3), strategies, [], true)
+			g = await l_gen.generate(rng, 6, 6, _continuity_hints, _fixed_opts(3), strategies, [], true)
 	if g != null:
 		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
 	return null
