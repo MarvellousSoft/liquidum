@@ -164,6 +164,9 @@ func setup(try_load := true) -> void:
 		if e_boats <= 0 and grid.row_hints().all(no_boat_hint) and grid.col_hints().all(no_boat_hint):
 			BrushPicker.disable_brush(E.BrushMode.Boat)
 			BrushPicker.disable_brush(E.BrushMode.NoBoat)
+		if is_campaign_level():
+			if section_number == 1 and level_number == 1:
+				BrushPicker.disable_brush(E.BrushMode.NoWater)
 	else:
 		Counters.water.visible = true
 		Counters.boat.visible = true
