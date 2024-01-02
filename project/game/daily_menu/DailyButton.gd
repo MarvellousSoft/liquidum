@@ -94,6 +94,7 @@ func _process(_dt: float) -> void:
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
+	RandomHub.hide_obvious_hints(grid)
 
 static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.default(grid.rows(), grid.cols())
@@ -101,21 +102,22 @@ static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	for a in [h.row, h.col]:
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
 	h.apply_to_grid(grid)
+	RandomHub.hide_obvious_hints(grid)
 
 static func _continuity_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	RandomHub._hard_visibility(rng, grid)
 
-static func _hidden_hints(n: int, m: int) -> Callable:
-	return func(rng: RandomNumberGenerator) -> Level.HintVisibility:
-		var h := Level.HintVisibility.new()
-		h.total_water = rng.randf() < 0.5
-		for i in n:
-			h.row.append(0)
-		for j in m:
-			h.col.append(0)
-		for a in [h.row, h.col]:
-			RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, a.size() - 1))
-		return h
+static func _hidden_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.new()
+	h.total_water = rng.randf() < 0.5
+	for i in grid.rows():
+		h.row.append(0)
+	for j in grid.cols():
+		h.col.append(0)
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, a.size() - 1))
+	h.apply_to_grid(grid)
+	RandomHub.hide_obvious_hints(grid)
 
 static func _fixed_opts(opts: int) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> int:

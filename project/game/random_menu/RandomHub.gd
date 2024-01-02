@@ -134,6 +134,17 @@ static func _diags(rng: RandomNumberGenerator) -> int:
 static func _nothing(_rng: RandomNumberGenerator) -> int:
 	return 0
 
+# If a hint is 0 or the size of row/col, hide it. This makes puzzles more interesting.
+static func hide_obvious_hints(grid: GridModel) -> void:
+	var hints := grid.row_hints()
+	for i in grid.rows():
+		if hints[i].water_count == grid.cols() or hints[i].water_count == 0:
+			hints[i].water_count_type = E.HintType.Hidden
+	hints = grid.col_hints()
+	for j in grid.cols():
+		if hints[j].water_count == grid.rows() or hints[j].water_count == 0:
+			hints[j].water_count_type = E.HintType.Hidden
+
 static func _easy_visibility(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
 
@@ -147,6 +158,7 @@ static func _medium_visibility(rng: RandomNumberGenerator, grid: GridModel) -> v
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, a.size() + 2), a.size()))
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size() - 2), 0))
 	h.apply_to_grid(grid)
+	hide_obvious_hints(grid)
 
 
 static func _hard_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -162,6 +174,7 @@ static func _hard_visibility(rng: RandomNumberGenerator, grid: GridModel) -> voi
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 	h.apply_to_grid(grid)
+	hide_obvious_hints(grid)
 
 # We're using this to generate seeds from sequential numbers since Godot docs says
 # similar seeds might lead to similar values.
