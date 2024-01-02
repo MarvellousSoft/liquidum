@@ -93,7 +93,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 				if retry:
 					await get_tree().process_frame
 					continue
-				return g
+			return g
 	assert(false, "Unreachable")
 	return null
 

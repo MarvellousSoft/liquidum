@@ -486,7 +486,6 @@ func _on_dev_buttons_generate() -> void:
 		GridNode.grid_logic = grid
 		grid.set_auto_update_hints(true)
 		GridNode.update(true, true)
-		print(Vector2i(grid.rows(), grid.cols()))
 		_apply_visibility(vis)
 
 
