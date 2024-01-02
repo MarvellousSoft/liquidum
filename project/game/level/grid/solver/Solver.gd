@@ -1005,13 +1005,17 @@ class AquariumsStrategy extends Strategy:
 			return false
 		var all_aqs: Array[GridImpl.AquariumInfo] = []
 		var dfs := GridImpl.CrawlAquarium.new(grid)
+		# This will change, let's store it
+		var last_seen := grid.last_seen
 		# Bottom up for correctness
 		for i in range(grid.rows() - 1, -1, -1):
 			for j in grid.cols():
 				for corner in grid.get_cell(i, j).corners():
 					var c := grid._pure_cell(i, j)
-					if c.last_seen(corner) != grid.last_seen and not c.block_at(corner):
+					if c.last_seen(corner) < last_seen and not c.block_at(corner):
 						dfs.reset()
+						dfs.flood(i, j, corner)
+						dfs.reset_for_pool_check()
 						dfs.flood(i, j, corner)
 						dfs.info.remove_m1()
 						all_aqs.append(dfs.info)
@@ -1020,7 +1024,6 @@ class AquariumsStrategy extends Strategy:
 		var ways_to_reach := {}
 		for aq in all_aqs:
 			if aq.fixed_water():
-				assert(not aq.has_pool)
 				if hint.has(aq.total_water):
 					hint[aq.total_water] -= 1
 					# Invalid

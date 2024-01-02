@@ -56,7 +56,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			return null
 		assert(not $Interesting.button_pressed or forced_strategies.is_empty(), "Can't generate interesting and have forced strategy")
 		var flavor = FlavorOptions.get_selected_id()
-		assert(flavor < 1000 or forced_strategies.is_empty(), "Can't generate flavor and have forced strategy")
+		assert(flavor == 1000 or forced_strategies.is_empty(), "Can't generate flavor and have forced strategy")
 		var rng := RandomNumberGenerator.new()
 		var rseed := randi() % 100000
 		if $Seed.text != "":
@@ -198,3 +198,6 @@ func _on_randomize_visibility_pressed():
 
 func _on_save_pressed():
 	save.emit()
+
+func should_reset_visible_aquariums() -> bool:
+	return $Aquariums.button_pressed

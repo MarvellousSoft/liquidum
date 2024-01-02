@@ -1143,7 +1143,7 @@ class Dfs:
 		return GridModel.must_be_implemented()
 	func flood(i: int, j: int, corner: E.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
-		if cell.last_seen(corner) == grid.last_seen:
+		if cell.last_seen(corner) >= grid.last_seen:
 			return
 		cell.set_last_seen(corner, grid.last_seen)
 		# Try to flood the same cell
@@ -1260,7 +1260,6 @@ class CountWaterDfs extends Dfs:
 		return true
 
 class AquariumInfo:
-	# Not 100% accurate, aquariums with holes in the middle are counted as having pool, even though they don't
 	var has_pool: bool
 	# This actually goes from bottom to top, starting at max_i and decreasing
 	# Array[Array[WaterPosition]]
@@ -1298,24 +1297,31 @@ class AquariumInfo:
 # Always start flooding from the bottom for this to work
 class CrawlAquarium extends Dfs:
 	var info: AquariumInfo
+	var pool_check: bool
+	func _init(grid_: GridImpl) -> void:
+		super(grid_)
+	func check_for_pools() -> bool:
+		return pool_check
 	func reset() -> void:
 		info = AquariumInfo.new()
+		pool_check = false
+	func reset_for_pool_check() -> void:
+		# Another DFS for pool check
+		grid.last_seen += 1
+		pool_check = true
 	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
-		info.add(WaterPosition.new(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner))
+		if check_for_pools():
+			info.add(WaterPosition.new(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner))
 		return true
 	func _can_go_up(_i: int, _j: int) -> bool:
 		return true
 	func _can_go_down(i: int, j: int) -> bool:
 		var c := grid._pure_cell(i + 1, j)
-		var corner := E.diag_to_corner(c.cell_type(), E.Side.Top)
-		if c.last_seen(corner) == grid.last_seen: # Already seen
-			return false
 		if c._content_top() == Content.Water:
 			return true
-		else:
+		if check_for_pools() and c.last_seen(E.diag_to_corner(c.cell_type(), E.Side.Top)) <= grid.last_seen - 2: # Actual pool
 			info.has_pool = true
-			# Still go down to visit everything in the aquarium
-			return true
+		return check_for_pools()
 
 func grid_hints() -> GridHints:
 	return _grid_hints

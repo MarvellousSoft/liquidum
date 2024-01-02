@@ -478,6 +478,8 @@ func _on_dev_buttons_use_strategies():
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
 		return
+	if DevButtons.should_reset_visible_aquariums():
+		AquariumHints.set_should_be_visible({})
 	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
 		assert(new_grid.editor_mode())
