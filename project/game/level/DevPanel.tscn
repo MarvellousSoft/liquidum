@@ -70,6 +70,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Boats"
 
+[node name="Aquariums" type="CheckBox" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Aquariums"
+
 [node name="RandomizeWater" type="Button" parent="."]
 layout_mode = 2
 focus_mode = 0
@@ -104,6 +109,7 @@ text = "Save to filesystem"
 [connection signal="mouse_entered" from="Interesting" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Diags" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Boats" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Aquariums" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="RandomizeWater" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="RandomizeWater" to="." method="_on_randomize_water_pressed"]
 [connection signal="pressed" from="RandomizeVisibility" to="." method="_on_randomize_visibility_pressed"]

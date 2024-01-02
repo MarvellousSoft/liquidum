@@ -49,14 +49,18 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			$Seed.placeholder_text = "Gave up"
 			return null
 		assert(not $Interesting.button_pressed or forced_strategies.is_empty(), "Can't generate interesting and have forced strategy")
+		var rng := RandomNumberGenerator.new()
 		var rseed := randi() % 100000
 		if $Seed.text != "":
 			rseed = int($Seed.text)
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
-		var gen := Generator.new(rseed, $Diags.button_pressed, $Boats.button_pressed)
+		rng.seed = RandomHub.consistent_hash(str(rseed))
+		var gen := Generator.new(rng.randi(), $Diags.button_pressed, $Boats.button_pressed)
 		var g := gen.generate(rows, cols)
 		hints.apply_to_grid(g)
+		if $Aquariums.button_pressed:
+			Generator.randomize_aquarium_hints(rng, g)
 		if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
 			var retry := true
 			if forced_strategies.is_empty():
