@@ -20,7 +20,7 @@ enum Flavor {
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
-	RandomHub.hide_obvious_hints(grid)
+	# RandomHub.hide_obvious_hints(grid) Don't hide otherwise it's obvious it's 0
 
 static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.default(grid.rows(), grid.cols())
@@ -28,7 +28,7 @@ static func _simple_boats(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	for a in [h.row, h.col]:
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() * .75)))
 	h.apply_to_grid(grid)
-	RandomHub.hide_obvious_hints(grid)
+	# RandomHub.hide_obvious_hints(grid) Don't hide otherwise it's obvious it's 0
 
 static func _continuity_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	RandomHub._hard_visibility(rng, grid)

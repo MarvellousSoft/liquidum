@@ -481,13 +481,13 @@ func _on_dev_buttons_generate() -> void:
 	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
 		assert(new_grid.editor_mode())
-		assert(new_grid.auto_update_hints())
+		var vis := HintVisibility.from_grid(new_grid)
 		grid = new_grid
-		var vis := HintVisibility.from_grid(grid)
-		_apply_visibility(vis)
-		grid.maybe_update_hints()
 		GridNode.grid_logic = grid
-		GridNode.update()
+		grid.set_auto_update_hints(true)
+		GridNode.update(true, true)
+		print(Vector2i(grid.rows(), grid.cols()))
+		_apply_visibility(vis)
 
 
 func _on_dev_buttons_randomize_water() -> void:

@@ -55,6 +55,10 @@ layout_mode = 2
 focus_mode = 0
 text = "Generate"
 
+[node name="FlavorOptions" type="OptionButton" parent="."]
+layout_mode = 2
+focus_mode = 0
+
 [node name="Interesting" type="CheckButton" parent="."]
 layout_mode = 2
 focus_mode = 0

@@ -14,7 +14,9 @@ signal save()
 @onready var StrategyList: MenuButton = $StrategyList
 @onready var ForcedStrategyList: MenuButton = $ForcedStrategyList
 @onready var Guesses: SpinBox = $Guesses
+@onready var FlavorOptions: OptionButton = $FlavorOptions
 
+var l_gen := RandomLevelGenerator.new()
 var solve_thread: Thread = Thread.new()
 
 func _ready() -> void:
@@ -32,6 +34,10 @@ func _ready() -> void:
 		popup.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].call(null).description())
 		popup_forced.set_item_tooltip(i, SolverModel.STRATEGY_LIST[strategy].call(null).description())
 		i += 1
+	for flavor in RandomFlavors.Flavor:
+		FlavorOptions.add_item(flavor)
+	FlavorOptions.add_item("No flavor", 1000)
+	FlavorOptions.selected = RandomFlavors.Flavor.size()
 
 
 func _toggled_item(index: int, button: MenuButton) -> void:
@@ -49,6 +55,8 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 			$Seed.placeholder_text = "Gave up"
 			return null
 		assert(not $Interesting.button_pressed or forced_strategies.is_empty(), "Can't generate interesting and have forced strategy")
+		var flavor = FlavorOptions.get_selected_id()
+		assert(flavor < 1000 or forced_strategies.is_empty(), "Can't generate flavor and have forced strategy")
 		var rng := RandomNumberGenerator.new()
 		var rseed := randi() % 100000
 		if $Seed.text != "":
@@ -56,29 +64,36 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
 		rng.seed = RandomHub.consistent_hash(str(rseed))
-		var gen := Generator.new(rng.randi(), $Diags.button_pressed, $Boats.button_pressed)
-		var g := gen.generate(rows, cols)
-		hints.apply_to_grid(g)
-		if $Aquariums.button_pressed:
-			Generator.randomize_aquarium_hints(rng, g)
-		if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
-			var retry := true
-			if forced_strategies.is_empty():
-				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-				g2.clear_content()
-				retry = SolverModel.new().full_solve(g2, strategies, func(): return Time.get_unix_time_from_system() > time + 20, true, int(Guesses.value)) != SolverModel.SolveResult.SolvedUnique
-			else:
-				var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
-				retry = not SolverModel.new().can_solve_with_strategies(g2, strategies, forced_strategies)
-				if not retry:
+		if flavor < 1000:
+			var g := await RandomFlavors.gen(l_gen, rng, flavor)
+			g.solution_c_left.clear()
+			g.solution_c_right.clear()
+			return g
+		else:
+			# TODO: This can be refactored to use RandomLevelGenerator
+			var gen := Generator.new(rng.randi(), $Diags.button_pressed, $Boats.button_pressed)
+			var g := gen.generate(rows, cols)
+			hints.apply_to_grid(g)
+			if $Aquariums.button_pressed:
+				Generator.randomize_aquarium_hints(rng, g)
+			if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
+				var retry := true
+				if forced_strategies.is_empty():
+					var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 					g2.clear_content()
-					SolverModel.new().apply_strategies(g2, strategies)
-					assert(g2.are_hints_satisfied())
-					g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.Editor)
-			if retry:
-				await get_tree().process_frame
-				continue
-		return g
+					retry = SolverModel.new().full_solve(g2, strategies, func(): return Time.get_unix_time_from_system() > time + 20, true, int(Guesses.value)) != SolverModel.SolveResult.SolvedUnique
+				else:
+					var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
+					retry = not SolverModel.new().can_solve_with_strategies(g2, strategies, forced_strategies)
+					if not retry:
+						g2.clear_content()
+						SolverModel.new().apply_strategies(g2, strategies)
+						assert(g2.are_hints_satisfied())
+						g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.Editor)
+				if retry:
+					await get_tree().process_frame
+					continue
+				return g
 	assert(false, "Unreachable")
 	return null
 
@@ -103,7 +118,7 @@ func selected_forced_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $RandomizeVisibility, $Paste]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $RandomizeVisibility, $Paste, FlavorOptions]:
 		node.visible = editor_mode
 
 
