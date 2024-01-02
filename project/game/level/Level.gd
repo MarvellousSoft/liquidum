@@ -593,3 +593,7 @@ func _on_dev_mode_toggled(status):
 func add_playtime_tracking(stats: Array[String]) -> void:
 	stats.append("total")
 	$SteamPlaytimeTracker.stats = stats
+
+
+func _on_dev_buttons_copy_to_editor():
+	DevButtons.do_copy_to_editor(GridNode.grid_logic, _hint_visibility())

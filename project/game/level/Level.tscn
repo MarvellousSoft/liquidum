@@ -571,6 +571,7 @@ autostart = true
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]
+[connection signal="copy_to_editor" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_copy_to_editor"]
 [connection signal="full_solve" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="load_grid" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_load_grid"]

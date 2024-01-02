@@ -9,6 +9,7 @@ signal randomize_water()
 signal randomize_visibility()
 signal load_grid(g: GridModel)
 signal save()
+signal copy_to_editor()
 
 
 @onready var StrategyList: MenuButton = $StrategyList
@@ -201,3 +202,23 @@ func _on_save_pressed():
 
 func should_reset_visible_aquariums() -> bool:
 	return $Aquariums.button_pressed
+
+func _on_copy_to_editor_pressed():
+	AudioManager.play_sfx("button_pressed")
+	copy_to_editor.emit()
+
+func do_copy_to_editor(grid: GridModel, hints: Level.HintVisibility) -> void:
+	var g: GridModel
+	if not grid.editor_mode():
+		g = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Testing)
+		# Copy solution, probably should be moved somewhere
+		for i in g.rows():
+			for j in g.cols():
+				var c: GridImpl.PureCell = g._pure_cell(i, j)
+				c.c_left = grid.solution_c_left[i][j]
+				c.c_right = grid.solution_c_right[i][j]
+	else:
+		g = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Testing)
+		hints.apply_to_grid(g)
+	assert(g.are_hints_satisfied())
+	EditorHub.save_to_editor("Copied from DevPanel", g)

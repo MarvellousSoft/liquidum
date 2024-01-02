@@ -1,3 +1,4 @@
+class_name EditorHub
 extends Control
 
 @onready var LevelNode: VBoxContainer = %LevelNode
@@ -42,20 +43,23 @@ func delete_level(id: String) -> void:
 	FileManager.clear_editor_level(id)
 	load_all_levels()
 
+static func save_to_editor(level_name: String, grid: GridModel) -> void:
+	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
+	var metadata := EditorLevelMetadata.new()
+	var data := LevelData.new(level_name, "", grid.export_data(), "")
+	FileManager.save_editor_level(new_id, metadata, data)
+
 
 func _on_create_new_level_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
 	var level_name := "Level %d" % (LevelNode.get_child_count() + 1)
-	var metadata := EditorLevelMetadata.new()
 	var grid := GridImpl.new(5, 5)
 	grid.grid_hints().total_boats = -1
 	for i in grid.rows():
 		grid.row_hints()[i].water_count = 0
 	for j in grid.cols():
 		grid.col_hints()[j].water_count = 0
-	var data := LevelData.new(level_name, "", grid.export_data(), "")
-	FileManager.save_editor_level(new_id, metadata, data)
+	EditorHub.save_to_editor(level_name, grid)
 	load_all_levels()
 
 

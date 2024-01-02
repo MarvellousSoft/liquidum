@@ -53,7 +53,7 @@ func _on_upload_button_pressed() -> void:
 	var level_data := FileManager.load_editor_level(id)
 	await _create_grid_image(level_data)
 	var metadata := FileManager.load_editor_level_metadata(id)
-	var res := await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, level_data.description, FileManager._editor_level_dir(id), IMG_FILE)
+	var res = await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, level_data.description, FileManager._editor_level_dir(id), IMG_FILE)
 	if res.id != -1 and metadata.steam_id != res.id:
 		metadata.steam_id = res.id
 		FileManager.save_editor_level(id, metadata, null)

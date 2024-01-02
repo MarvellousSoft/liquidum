@@ -99,6 +99,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Save to filesystem"
 
+[node name="CopyToEditor" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Copy to editor"
+
 [connection signal="mouse_entered" from="Strategies" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
@@ -121,3 +126,4 @@ text = "Save to filesystem"
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
 [connection signal="mouse_entered" from="Save" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="CopyToEditor" to="." method="_on_copy_to_editor_pressed"]
