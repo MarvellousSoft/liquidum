@@ -8,6 +8,7 @@ const COLORS = {
 }
 const TUTORIALS = {
 	"mouse": preload("res://database/tutorials/Mouse.tscn"),
+	"mouse2": preload("res://database/tutorials/Mouse2.tscn"),
 	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
 	"boats": preload("res://database/tutorials/Boats.tscn"),

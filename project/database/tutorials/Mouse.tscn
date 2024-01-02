@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bp6kuwanbskgw"]
+[gd_scene load_steps=8 format=3 uid="uid://b8gs3yl6iwrio"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_j3v0c"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="2_d4ckx"]
 [ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="2_y2uuo"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_g7ukb"]
 [ext_resource type="Texture2D" uid="uid://dguu4animlbb" path="res://assets/images/ui/icons/mouse_left_button.png" id="3_ma811"]
-[ext_resource type="Texture2D" uid="uid://bgodttpynf1hp" path="res://assets/images/ui/tutorial/air_cell_example.png" id="4_2bwax"]
 [ext_resource type="Texture2D" uid="uid://bjm6t8nm5ccbg" path="res://assets/images/ui/icons/mouse_right_button.png" id="4_hl8rs"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_qcr8y"]
 
@@ -298,55 +297,4 @@ layout_mode = 2
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 texture = ExtResource("3_g7ukb")
-expand_mode = 1
-
-[node name="Separator" type="HSeparator" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="SecondClick" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 50
-
-[node name="Mouse" type="TextureRect" parent="VBoxContainer/SecondClick"]
-self_modulate = Color(0.45098, 0.941176, 0.776471, 1)
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 2
-texture = ExtResource("2_y2uuo")
-expand_mode = 1
-
-[node name="LeftButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
-self_modulate = Color(0.45098, 0.941176, 0.776471, 1)
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("3_ma811")
-expand_mode = 1
-
-[node name="RightButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
-self_modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("4_hl8rs")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="VBoxContainer/SecondClick"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
-theme_override_colors/font_outline_color = Color(0.85098, 1, 0.886275, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 200
-text = "="
-vertical_alignment = 1
-
-[node name="Spacer" type="Control" parent="VBoxContainer/SecondClick"]
-custom_minimum_size = Vector2(30, 0)
-layout_mode = 2
-
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SecondClick"]
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 2
-texture = ExtResource("4_2bwax")
 expand_mode = 1

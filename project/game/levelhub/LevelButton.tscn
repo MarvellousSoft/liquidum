@@ -229,6 +229,7 @@ speed_scale = 1.5
 explosiveness = 1.0
 
 [node name="HardIcon" type="TextureRect" parent="."]
+visible = false
 modulate = Color(0.85098, 1, 0.886275, 1)
 layout_mode = 0
 offset_left = 92.0

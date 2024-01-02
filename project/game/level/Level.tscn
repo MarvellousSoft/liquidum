@@ -20,6 +20,33 @@
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4105n"]
+bg_color = Color(0.133333, 0.513726, 0.6, 0.854902)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.0352941, 0.211765, 0.34902, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3453y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c876g"]
+bg_color = Color(0.670588, 1, 0.819608, 0.784314)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0, 0.0352941, 0.141176, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
 [sub_resource type="Animation" id="Animation_72efb"]
 length = 0.001
 tracks/0/type = "value"
@@ -79,33 +106,6 @@ _data = {
 "RESET": SubResource("Animation_72efb"),
 "show": SubResource("Animation_aqku1")
 }
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4105n"]
-bg_color = Color(0.133333, 0.513726, 0.6, 0.854902)
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-corner_detail = 20
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3453y"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c876g"]
-bg_color = Color(0.670588, 1, 0.819608, 0.784314)
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color(0, 0.0352941, 0.141176, 1)
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
 
 [sub_resource type="Animation" id="Animation_1qr1w"]
 length = 0.001
@@ -403,22 +403,6 @@ offset_bottom = 415.0
 focus_mode = 0
 text = "PLAYTEST"
 
-[node name="ContinueButton" type="Button" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-offset_left = 3027.0
-offset_top = 2242.0
-offset_right = 3754.0
-offset_bottom = 2367.0
-focus_mode = 0
-text = "CONTINUE"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueButton"]
-libraries = {
-"": SubResource("AnimationLibrary_dnqfm")
-}
-
 [node name="TutorialContainer" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
@@ -546,6 +530,22 @@ placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
 caret_blink = true
 
+[node name="ContinueButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+offset_left = 3027.0
+offset_top = 2242.0
+offset_right = 3754.0
+offset_bottom = 2367.0
+focus_mode = 0
+text = "CONTINUE"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueButton"]
+libraries = {
+"": SubResource("AnimationLibrary_dnqfm")
+}
+
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 
 [node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
@@ -580,12 +580,12 @@ autostart = true
 [connection signal="use_strategies" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
-[connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 

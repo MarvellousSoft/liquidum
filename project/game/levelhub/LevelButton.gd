@@ -70,11 +70,12 @@ func set_effect_alpha(value : float) -> void:
 func enable() -> void:
 	MainButton.disabled = false
 	ShaderEffect.show()
-
+	HardIcon.modulate.a = 1.0
 
 func disable() -> void:
 	MainButton.disabled = true
 	ShaderEffect.hide()
+	HardIcon.modulate.a = 0.0
 
 
 func _on_button_pressed():
