@@ -94,8 +94,11 @@ func _process(_dt: float) -> void:
 
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
-func _level_name(weekday: Time.Weekday) -> String:
+static func _level_name(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
+
+static func _level_desc(weekday: Time.Weekday) -> String:
+	return "%s_LEVEL_DESC" % DAY_STR[weekday]
 
 static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
@@ -107,7 +110,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 		rng.state = preprocessed_state
 	var g: GridModel = await RandomFlavors.gen(l_gen, rng, weekday as RandomFlavors.Flavor)
 	if g != null:
-		return LevelData.new(DAY_STR[weekday], "", g.export_data(), "")
+		return LevelData.new(_level_name(weekday), _level_desc(weekday), g.export_data(), "")
 	return null
 
 func _on_button_pressed() -> void:

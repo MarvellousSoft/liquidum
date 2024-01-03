@@ -132,12 +132,19 @@ STREAK_TOOLTIP,Consecutive daily levels with less than 3 mistakes,Níveis do dia
 HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
 MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda básica,Segunda básica
+MONDAY_LEVEL_DESC,"No special rules,",Sem regras especiais.,Sem regras especiais.
 TUESDAY_LEVEL,Secret Boat Tuesday,Terça do barco secreto,Terça do barco secreto
+TUESDAY_LEVEL_DESC,Barcos com dicas escondidas.,Barcos com dicas escondidas.,Barcos com dicas escondidas.
 WEDNESDAY_LEVEL,Diagonal Wednesday,Quarta diagonal,Quarta diagonal
+WEDNESDAY_LEVEL_DESC,Diagonals and no hidden hints.,Diagonais e nenhuma dica escondida.,Diagonais e nenhuma dica escondida.
 THURSDAY_LEVEL,Hidden Thursday,Quinta escondida,Quinta escondida
+THURSDAY_LEVEL_DESC,"Hidden water hints, plus boats.","Dicas de água escondidas, e barcos.","Dicas de água escondidas, e barcos."
 FRIDAY_LEVEL,Freaky Friday,Sexta-Feira Muito Louca,Sexta-Feira Muito Louca
+FRIDAY_LEVEL_DESC,"Every rule, everywhere, all at once.","Todas as regras, em todo lugar ao mesmo tempo.","Todas as regras, em todo lugar ao mesmo tempo."
 SATURDAY_LEVEL,One Row Saturday,Sábado de uma linha,Sábado de uma linha
+SATURDAY_LEVEL_DESC,Only one row hint is visible.,Apenas a dica de uma linha é visivel.,Apenas a dica de uma linha é visivel.
 SUNDAY_LEVEL,Aquarium Sunday,Domingo dos aquários,Domingo dos aquários
+SUNDAY_LEVEL_DESC,Diagonals and many aquarium hints visible.,Diagonais e muitas regras de aquário visíveis.,Diagonais e muitas regras de aquário visíveis.
 UPLOADING_TO_WORKSHOP,Uploading to workshop,Fazendo upload para a Oficina,Fazendo upload para a Oficina
 PCT_1,1% percentile,Percentil 1%,Percentil 1%
 PCT_10,10% percentile,Percentil 10%,Percentil 10%

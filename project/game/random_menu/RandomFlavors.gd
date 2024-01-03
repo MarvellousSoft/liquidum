@@ -10,7 +10,7 @@ class_name RandomFlavors
 # One Hint Saturday
 # Aquarium Sunday
 enum Flavor {
-	# All aquarium rules visible, nothing else
+	# Many aquarium rules visible.
 	Aquariums = Time.WEEKDAY_SUNDAY,
 	# No diagonals, boats, aquariums, hidden hints or {-
 	Basic,
