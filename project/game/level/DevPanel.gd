@@ -51,7 +51,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 	var strategies := selected_strategies()
 	var forced_strategies := selected_forced_strategies()
 	while true:
-		if Time.get_unix_time_from_system() > time + 20:
+		if Time.get_unix_time_from_system() > time + 60:
 			print("Took too long generating")
 			$Seed.placeholder_text = "Gave up"
 			return null
@@ -59,7 +59,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		var flavor = FlavorOptions.get_selected_id()
 		assert(flavor == 1000 or forced_strategies.is_empty(), "Can't generate flavor and have forced strategy")
 		var rng := RandomNumberGenerator.new()
-		var rseed := randi() % 100000
+		var rseed := randi() % 1000000
 		if $Seed.text != "":
 			rseed = int($Seed.text)
 		else:

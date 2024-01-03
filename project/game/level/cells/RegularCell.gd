@@ -14,6 +14,7 @@ const PREVIEW_ALPHA_SPEED = 1.6
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
 signal block_entered
+signal override_mouse_entered(i: int, j: int, which: E.Waters)
 
 @onready var Previews = {
 	E.Waters.Single: $Preview/Single,
@@ -359,7 +360,7 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 
 func _on_button_mouse_entered(which : E.Waters):
 	if row != null and column != null:
-		mouse_entered.emit(row, column, which)
+		override_mouse_entered.emit(row, column, which)
 
 
 func _on_block_mouse_entered():

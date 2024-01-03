@@ -217,7 +217,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
 	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
-	cell.mouse_entered.connect(_on_cell_mouse_entered)
+	cell.override_mouse_entered.connect(_on_cell_mouse_entered)
 	cell.block_entered.connect(_on_block_mouse_entered)
 	
 	return cell
