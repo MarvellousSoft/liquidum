@@ -94,6 +94,9 @@ func _process(_dt: float) -> void:
 
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
+func _level_name(weekday: Time.Weekday) -> String:
+	return "%s_LEVEL" % DAY_STR[weekday]
+
 static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
 	var weekday: Time.Weekday = date_dict.weekday

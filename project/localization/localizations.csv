@@ -131,13 +131,13 @@ BEST_STREAK,Best win streak:  %d,Maior sequência de vitórias:  %d,Maior sequê
 STREAK_TOOLTIP,Consecutive daily levels with less than 3 mistakes,Níveis do dia consecutivos com menos de 3 erros,Níveis do dia consecutivos com menos de 3 erros
 HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
 MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
-MONDAY,Monday,Segunda,Segunda
-TUESDAY,Tuesday,Terça,Terça
-WEDNESDAY,Wednesday,Quarta,Quarta
-THURSDAY,Thursday,Quinta,Quinta
-FRIDAY,Friday,Sexta,Sexta
-SATURDAY,Saturday,Sábado,Sábado
-SUNDAY,Sunday,Domingo,Domingo
+MONDAY_LEVEL,Basic Monday,Segunda básica,Segunda básica
+TUESDAY_LEVEL,Secret Boat Tuesday,Terça do barco secreto,Terça do barco secreto
+WEDNESDAY_LEVEL,Diagonal Wednesday,Quarta diagonal,Quarta diagonal
+THURSDAY_LEVEL,Hidden Thursday,Quinta escondida,Quinta escondida
+FRIDAY_LEVEL,Freaky Friday,Sexta-Feira Muito Louca,Sexta-Feira Muito Louca
+SATURDAY_LEVEL,One Row Saturday,Sábado de uma linha,Sábado de uma linha
+SUNDAY_LEVEL,Aquarium Sunday,Domingo dos aquários,Domingo dos aquários
 UPLOADING_TO_WORKSHOP,Uploading to workshop,Fazendo upload para a Oficina,Fazendo upload para a Oficina
 PCT_1,1% percentile,Percentil 1%,Percentil 1%
 PCT_10,10% percentile,Percentil 10%,Percentil 10%
