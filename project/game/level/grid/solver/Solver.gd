@@ -769,16 +769,12 @@ class SeparateStrategy extends RowColStrategy:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
-		var nothing_middle := 0
 		for b2 in 2 * _b_len():
 			if _content(a, b2) == Content.Water:
 				leftmost = min(leftmost, b2)
 				rightmost = b2
-			if rightmost != -1 and _content(a, b2) == Content.Nothing:
-				nothing_middle += 1
 		var any := false
 		if rightmost == -1:
-
 			# We can mark connected components of size exactly the hint as nowater
 			# because otherwise it would be together. This will work differently in rows and cols.
 			for b2 in 2 * _b_len():
@@ -803,34 +799,37 @@ class SeparateStrategy extends RowColStrategy:
 						_cell(a, rightmost / 2).put_water(_corner(a, rightmost), false)
 						any = true
 			return any
+		if not basic:
+			return any
+		var not_water_middle := (rightmost - leftmost + 1) - int(2 * _count_water_a(a))
 		for b2 in range(leftmost + 1, rightmost):
-			if _content(a, b2) != Content.Water:
-				if basic and nothing_middle == water_left2 and _content(a, b2) == Content.Nothing and _will_flood_how_many(a, b2) == water_left2:
+			var c := _content(a, b2)
+			if c != Content.Water:
+				if not_water_middle == water_left2 and (c == Content.Nothing or c == Content.NoBoat) and _will_flood_how_many(a, b2) == water_left2:
 					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
 					return true
 				return false
-		if basic:
-			if _left() == E.Side.Top:
-				# Walk up until we find a cell if we put water it will flood exactly water_left2
-				var b2 := leftmost - 1
-				while b2 >= 0 and _content(a, b2) == Content.Nothing:
-					if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
-						b2 -= 1
-					if leftmost - b2 == water_left2:
-						_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-						any = true
-						break
-					if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
-						break
-					else:
-						b2 -= 1
-			else:
-				if leftmost > 0 and (_content(a, leftmost - 1) == Content.Nothing or _content(a, leftmost - 1) == Content.NoBoat) and _will_flood_how_many(a, leftmost - 1) == water_left2:
-					_cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true)
+		if _left() == E.Side.Top:
+			# Walk up until we find a cell if we put water it will flood exactly water_left2
+			var b2 := leftmost - 1
+			while b2 >= 0 and _content(a, b2) == Content.Nothing:
+				if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
+					b2 -= 1
+				if leftmost - b2 == water_left2:
+					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
 					any = true
-			if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
-				_cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true)
+					break
+				if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
+					break
+				else:
+					b2 -= 1
+		else:
+			if leftmost > 0 and (_content(a, leftmost - 1) == Content.Nothing or _content(a, leftmost - 1) == Content.NoBoat) and _will_flood_how_many(a, leftmost - 1) == water_left2:
+				_cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true)
 				any = true
+		if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
+			_cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true)
+			any = true
 		return any
 
 	func apply_any() -> bool:
