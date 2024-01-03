@@ -3,11 +3,21 @@ class_name Generator
 class Options:
 	var diagonals: bool
 	var boats: bool
+	# Just a hint, doesn't need to be strictly satisfied
+	var aquarium_count: int = 0
+	#
+	var min_water: int = 0
 	func with_boats(b := true) -> Options:
 		boats = b
 		return self
 	func with_diags(b := true) -> Options:
 		diagonals = b
+		return self
+	func with_aquariums(count: int) -> Options:
+		aquarium_count = count
+		return self
+	func with_min_water(count: int) -> Options:
+		min_water = count
 		return self
 	func build(rseed: int) -> Generator:
 		return Generator.new(rseed, self)
@@ -87,12 +97,14 @@ func pop_random(arr: Array[Vector2i]) -> Vector2i:
 	return val
 
 func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
-	var min_aqs: int
+	var aqs: int
 	if opts.diagonals:
 		m *= 2
-		min_aqs = (n * m) / 5
+	if opts.aquarium_count > 0:
+		aqs = opts.aquarium_count - 1
 	else:
-		min_aqs = int((n * m) / 2.5)
+		var min_aqs: int = (n * m) / 5 if opts.diagonals else int((n * m) / 2.5)
+		aqs =  rng.randi_range(min_aqs, (n * m) / 2)
 	var g: Array[Array] = []
 	for i in n:
 		g.append([])
@@ -102,7 +114,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 	var group := 0
 	# Break groups into similar sizes, this uses the "sticks and rocks" technique
 	var group_sizes: Array[int] = [left - 1]
-	for group_i in rng.randi_range(min_aqs, (n * m) / 2):
+	for group_i in aqs:
 		var s := rng.randi_range(0, left - 2 - group_i)
 		for j in (group_i + 1):
 			if s < group_sizes[j]:
@@ -162,24 +174,24 @@ func randomize_boats(grid: GridModel) -> void:
 func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	if flush_undo:
 		grid.push_empty_undo()
-	var water_wanted: float = int(grid.rows() * grid.cols() * rng.randf_range(0.2, 0.75)) - grid.count_waters()
+	var min_water := opts.min_water
+	if min_water == 0:
+		min_water = int(grid.rows() * grid.cols() * rng.randf_range(0.2, 0.75))
+	var water_wanted: float = min_water - grid.count_waters()
+	if water_wanted < 0:
+		return
 	var all_cells := _all_cells(grid)
 	while not all_cells.is_empty():
 		var idx: Vector2i = pop_random(all_cells)
-		var corners := [E.Corner.TopLeft]
 		var c := grid.get_cell(idx.x, idx.y)
-		if c.wall_at(E.Walls.IncDiag):
-			corners = [E.Corner.TopLeft, E.Corner.BottomRight]
-		elif c.wall_at(E.Walls.DecDiag):
-			corners = [E.Corner.TopRight, E.Corner.BottomLeft]
-		for corner in corners:
+		for corner in c.corners():
 			if c.nothing_at(corner):
 				water_wanted -= c.put_water(corner, false)
 				if water_wanted <= 0:
 					return
 
 @warning_ignore("shadowed_variable")
-static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel, aq_pct := 0.5) -> void:
 	var all_aqs := grid.all_aquarium_counts()
 	# Add some small sizes that may be 0
 	all_aqs[0.0] = all_aqs.get(0.0, 0)
@@ -189,10 +201,9 @@ static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel
 	all_aqs[1.0] = all_aqs.get(1.0, 0)
 	var expected := grid.grid_hints().expected_aquariums
 	var szs := all_aqs.keys()
-	Global.shuffle(szs, rng)
-	szs.resize(rng.randi_range(1, maxi(1, szs.size() - 2)))
 	for sz in szs:
-		expected[sz] = all_aqs[sz]
+		if rng.randf() < aq_pct:
+			expected[sz] = all_aqs[sz]
 
 func generate(n: int, m: int) -> GridModel:
 	# Reset rng

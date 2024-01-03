@@ -135,15 +135,17 @@ static func _nothing(_rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder()
 
 # If a hint is 0 or the size of row/col, hide it. This makes puzzles more interesting.
-static func hide_too_easy_hints(grid: GridModel) -> void:
+static func hide_too_easy_hints(grid: GridModel, rows := true, cols := true) -> void:
 	var hints := grid.row_hints()
-	for i in grid.rows():
-		if hints[i].water_count == grid.cols() or hints[i].water_count == 0:
-			hints[i].water_count = -1
-	hints = grid.col_hints()
-	for j in grid.cols():
-		if hints[j].water_count == grid.rows() or hints[j].water_count == 0:
-			hints[j].water_count = -1
+	if rows:
+		for i in grid.rows():
+			if hints[i].water_count == grid.cols() or hints[i].water_count == 0:
+				hints[i].water_count = -1
+	if cols:
+		hints = grid.col_hints()
+		for j in grid.cols():
+			if hints[j].water_count == grid.rows() or hints[j].water_count == 0:
+				hints[j].water_count = -1
 
 static func _easy_visibility(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
