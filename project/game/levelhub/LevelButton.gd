@@ -36,13 +36,13 @@ func setup(section : int, level : int, active : bool) -> void:
 	my_section = section
 	my_level = level
 	MainButton.text = str(level)
+	# Maybe make this less hardcoded in the future
+	HardIcon.visible = level >= 7 or section == 6
 	if active:
 		enable()
 		data = LevelLister.get_game_level_data(section, level)
 		change_style_boxes(data and data.is_completed())
 		set_ongoing_solution(data and not data.is_solution_empty())
-		# Maybe make this less hardcoded in the future
-		HardIcon.visible = level >= 7 or section == 6
 	else:
 		set_ongoing_solution(false)
 		disable()

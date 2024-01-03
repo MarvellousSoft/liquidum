@@ -72,6 +72,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("HardIcon:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.85098, 1, 0.886275, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_sl2us"]
 resource_name = "unlock"
@@ -140,6 +152,18 @@ tracks/4/keys = {
 "args": [],
 "method": &"enable"
 }]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("HardIcon:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2, 2.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.85098, 1, 0.886275, 0), Color(0.85098, 1, 0.886275, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4p2d0"]
@@ -229,7 +253,6 @@ speed_scale = 1.5
 explosiveness = 1.0
 
 [node name="HardIcon" type="TextureRect" parent="."]
-visible = false
 modulate = Color(0.85098, 1, 0.886275, 1)
 layout_mode = 0
 offset_left = 92.0
