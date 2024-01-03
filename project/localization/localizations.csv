@@ -57,8 +57,9 @@ INSANE_BUTTON,Insane,Insano,Insano
 RANDOM_COMPLETED,Levels completed:,Níveis completados:,Níveis concluídos:
 CONFIRM_NEW_RANDOM,Are you sure you want to start a new level? The existing one will be lost.,Tem certeza que quer começar um novo nível? O existente será perdido.,Tem certeza de que deseja iniciar um novo nível?  O existente será perdido.
 FIRST_LEVEL_DESCRIPTION,Use all the clues to complete the grid with water. Numbers show how much water there is in a row or column.,Use todas as dicas para completar a grade com água. Números indicam quantas águas existem em uma linha ou coluna.,Use todas as dicas para completar a grade com água. Números indicam quantas águas existem em uma linha ou coluna.
-SECOND_LEVEL_DESCRIPTION,Using X's to mark spots you *can't* have water is extremely useful but optional. Use it constantly!,"Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional. Use constantemente!","Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional. Use constantemente!"
-UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution.,Todos níveis tem uma única solução.,Todos os níveis têm uma solução única.
+SECOND_LEVEL_DESCRIPTION,Using X's to mark cells you *can't* have water is extremely useful but optional. Use it constantly!,"Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional. Use constantemente!","Usar X's para marcar espaços onde *não* tem água é extremamente útil, porém opcional. Use constantemente!"
+THIRD_LEVEL_DESCRIPTION,"Cells not separated by a wall belong to the same aquarium, where water is always at the same level","Espaços não separados por paredes pertencem ao mesmo aquário, onde o nível da água é sempre igual","Espaços não separados por paredes pertencem ao mesmo aquário, onde o nível da água é sempre igual"
+UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to all hints,Todos níveis tem uma única solução. Preste atenção em todas as dicas,Todos níveis tem uma única solução. Preste atenção em todas as dicas
 PLAYTEST,Playtest level,Testar nível,Nível de teste
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível,Descrição do nível
 LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel,Título do nível

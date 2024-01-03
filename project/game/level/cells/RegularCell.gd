@@ -358,10 +358,8 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 
 
 func _on_button_mouse_entered(which : E.Waters):
-	if row and column:
+	if row != null and column != null:
 		mouse_entered.emit(row, column, which)
-	else:
-		pass
 
 
 func _on_block_mouse_entered():
