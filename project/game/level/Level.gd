@@ -494,7 +494,7 @@ func _on_dev_buttons_generate() -> void:
 func _on_dev_buttons_randomize_water() -> void:
 	if editor_mode():
 		GridNode.grid_logic.clear_content()
-		Generator.new(randi(), true, false).randomize_water(GridNode.grid_logic)
+		Generator.builder().with_diags().build(randi()).randomize_water(GridNode.grid_logic)
 		GridNode.update()
 
 

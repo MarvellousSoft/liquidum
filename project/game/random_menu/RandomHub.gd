@@ -125,15 +125,14 @@ static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, c
 	for i in a.size():
 		a[i] |= b[i]
 
-static func _expert_options(rng: RandomNumberGenerator) -> int:
-	return (RandomLevelGenerator.DIAGONALS_FLAG if rng.randf() < 0.5 else 0) \
-		 + (RandomLevelGenerator.BOATS_FLAG if rng.randf() < 0.35 else 0)
+static func _expert_options(rng: RandomNumberGenerator) -> Generator.Options:
+	return Generator.builder().with_diags(rng.randf() < 0.5).with_boats(rng.randf() < 0.35)
 
-static func _diags(rng: RandomNumberGenerator) -> int:
-	return 1 + (2 if rng.randf() < 0.5 else 0) 
+static func _diags(rng: RandomNumberGenerator) -> Generator.Options:
+	return Generator.builder().with_diags().with_boats(rng.randf() < 0.5)
 
-static func _nothing(_rng: RandomNumberGenerator) -> int:
-	return 0
+static func _nothing(_rng: RandomNumberGenerator) -> Generator.Options:
+	return Generator.builder()
 
 # If a hint is 0 or the size of row/col, hide it. This makes puzzles more interesting.
 static func hide_too_easy_hints(grid: GridModel) -> void:

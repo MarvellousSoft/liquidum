@@ -1,15 +1,26 @@
 class_name Generator
 
-var rng := RandomNumberGenerator.new()
-var diagonals: bool
-var boats: bool
-var count_vis: float
-var type_vis: float
+class Options:
+	var diagonals: bool
+	var boats: bool
+	func with_boats(b := true) -> Options:
+		boats = b
+		return self
+	func with_diags(b := true) -> Options:
+		diagonals = b
+		return self
+	func build(rseed: int) -> Generator:
+		return Generator.new(rseed, self)
 
-func _init(rseed_: int, diagonals_: bool, boats_: bool) -> void:
+var rng := RandomNumberGenerator.new()
+var opts: Options
+
+static func builder() -> Options:
+	return Options.new()
+
+func _init(rseed_: int, opts_: Options) -> void:
 	rng.seed = rseed_
-	diagonals = diagonals_
-	boats = boats_
+	opts = opts_
 
 func wrand(mx: int, weight: int) -> int:
 	var val := rng.randi_range(1, mx)
@@ -77,7 +88,7 @@ func pop_random(arr: Array[Vector2i]) -> Vector2i:
 
 func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 	var min_aqs: int
-	if diagonals:
+	if opts.diagonals:
 		m *= 2
 		min_aqs = (n * m) / 5
 	else:
@@ -115,7 +126,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			all_empty.pop_back()
 		var cells: Array[Vector2i] = [all_empty.pop_back()]
 		g[cells[0].x][cells[0].y] = group
-		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0], boats)
+		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0], opts.boats)
 		for _i in group_size:
 			var c := pop_random(all_adj)
 			while c != Vector2i(-1, -1) and (c.x < 0 or c.x >= n or c.y < 0 or c.y >= m or g[c.x][c.y] != 0):
@@ -124,7 +135,7 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 				break
 			g[c.x][c.y] = group
 			cells.append(c)
-			all_adj.append_array(adj_rule.all_adj(c, boats))
+			all_adj.append_array(adj_rule.all_adj(c, opts.boats))
 			left -= 1
 	return g
 
@@ -187,7 +198,7 @@ func generate(n: int, m: int) -> GridModel:
 	# Reset rng
 	rng.seed = rng.seed
 	var adj_rule: AdjacencyRule
-	if diagonals:
+	if opts.diagonals:
 		adj_rule = DiagAdj.new(rng, n, m)
 	else:
 		adj_rule = SquareAdj.new()
@@ -198,7 +209,7 @@ func generate(n: int, m: int) -> GridModel:
 	grid.set_auto_update_hints(false)
 	for i in n:
 		for j in m:
-			if diagonals:
+			if opts.diagonals:
 				var diag_adj: DiagAdj = adj_rule as DiagAdj
 				if j < m - 1 and g[i][2 * j + 1] != g[i][2 * j + 2]:
 					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
@@ -213,7 +224,7 @@ func generate(n: int, m: int) -> GridModel:
 					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
 				if i < n - 1 and g[i][j] != g[i + 1][j]:
 					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
-	if boats:
+	if opts.boats:
 		randomize_boats(grid)
 	randomize_water(grid, false)
 	# Necessary because we did unsafe updates

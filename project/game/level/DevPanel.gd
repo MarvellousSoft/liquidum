@@ -73,7 +73,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 				return g
 		else:
 			# TODO: This can be refactored to use RandomLevelGenerator
-			var gen := Generator.new(rng.randi(), $Diags.button_pressed, $Boats.button_pressed)
+			var gen := Generator.builder().with_diags($Diags.button_pressed).with_boats($Boats.button_pressed).build(rng.randi())
 			var g := gen.generate(rows, cols)
 			hints.apply_to_grid(g)
 			if $Aquariums.button_pressed:

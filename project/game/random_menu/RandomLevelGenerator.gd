@@ -1,8 +1,6 @@
 class_name RandomLevelGenerator
 
 const MAX_TIME_PER_SOLVE = 10.0
-const DIAGONALS_FLAG := 1
-const BOATS_FLAG := 2
 
 var gen_thread := Thread.new()
 var cancel_gen := false
@@ -25,8 +23,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, n: int, m: int, apply_hints: C
 			break
 		success_state = rng.state
 		var start_gen := Time.get_unix_time_from_system()
-		var gen_options: int = gen_options_builder.call(rng)
-		g = Generator.new(rng.randi(), bool(gen_options & DIAGONALS_FLAG), bool(gen_options & BOATS_FLAG)).generate(n, m)
+		g = gen_options_builder.call(rng).build(rng.randi()).generate(n, m)
 		total_gen += Time.get_unix_time_from_system() - start_gen
 		if force_boats and g.count_boats() == 0:
 			continue
@@ -60,7 +57,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, n: int, m: int, apply_hints: C
 	return g if found else null
 
 # apply_hints takes (rng, grid) and should use a Level.HintVisibility to modify the level hints
-# gen_options_builder takes rng and returns (diagonals, boats) as a bitflag
+# gen_options_builder takes rng and returns a Generator.Options
 # If forced_str is empty, the level is generated as "interesting" (SolvedUnique)
 func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	cancel_gen = false

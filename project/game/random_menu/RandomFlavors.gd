@@ -107,37 +107,38 @@ static func _aquariums(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	h.expected_aquariums.assign(grid.all_aquarium_counts().keys())
 	h.apply_to_grid(grid)
 
-static func _fixed_opts(opts: int) -> Callable:
-	return func(_rng: RandomNumberGenerator) -> int:
-		return opts
+static func _builder(options: Generator.Options) -> Callable:
+	return func(_rng: RandomNumberGenerator) -> Generator.Options:
+		return options
 
 static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor: Flavor) -> GridModel:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
+	var b := Generator.builder()
 	match flavor:
 		Flavor.Monday:
-			return await l_gen.generate(rng,7, 7, RandomFlavors._simple_hints, _fixed_opts(0), strategies, [])
+			return await l_gen.generate(rng,7, 7, RandomFlavors._simple_hints, _builder(b), strategies, [])
 		Flavor.Tuesday:
-			return await l_gen.generate(rng, 5, 5, RandomFlavors._continuity_hints, _fixed_opts(1), strategies, [])
+			return await l_gen.generate(rng, 5, 5, RandomFlavors._continuity_hints, _builder(b.with_diags()), strategies, [])
 		Flavor.Wednesday:
-			return await l_gen.generate(rng, 6, 6, RandomFlavors._hidden_hints, _fixed_opts(0), strategies, [])
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._hidden_hints, _builder(b), strategies, [])
 		Flavor.Thursday:
-			return await l_gen.generate(rng, 5, 5, RandomFlavors._simple_hints, _fixed_opts(1), strategies, [])
+			return await l_gen.generate(rng, 5, 5, RandomFlavors._simple_hints, _builder(b.with_diags()), strategies, [])
 		Flavor.Friday:
-			var g := await l_gen.generate(rng, 7, 7, RandomFlavors._simple_boats, _fixed_opts(2), strategies, [], true)
+			var g := await l_gen.generate(rng, 7, 7, RandomFlavors._simple_boats, _builder(b.with_diags().with_boats()), strategies, [], true)
 			assert(g._any_sol_boats())
 			return g
 		Flavor.Saturday:
-			return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _fixed_opts(0), strategies, [])
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _builder(b), strategies, [])
 		Flavor.Sunday:
-			return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _fixed_opts(3), strategies, [], true)
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _builder(b.with_diags().with_boats()), strategies, [], true)
 		Flavor.BoatsHiddenWater:
-			return await l_gen.generate(rng, 6, 6, RandomFlavors._boats_hidden_water, _fixed_opts(RandomLevelGenerator.BOATS_FLAG), strategies, [], true)
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._boats_hidden_water, _builder(b.with_boats()), strategies, [], true)
 		Flavor.SecretBoats:
-			return await l_gen.generate(rng, 6, 6, RandomFlavors._secret_boats, _fixed_opts(RandomLevelGenerator.BOATS_FLAG), strategies, [], true)
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._secret_boats, _builder(b.with_boats()), strategies, [], true)
 		Flavor.Everything:
-			return await l_gen.generate(rng, 5, 5, RandomFlavors._everything, _fixed_opts(3), strategies, [], true)
+			return await l_gen.generate(rng, 5, 5, RandomFlavors._everything, _builder(b.with_diags().with_boats()), strategies, [], true)
 		Flavor.Aquariums:
-			return await l_gen.generate(rng, 4, 4, RandomFlavors._aquariums, _fixed_opts(1), strategies, [])
+			return await l_gen.generate(rng, 4, 4, RandomFlavors._aquariums, _builder(b.with_diags()), strategies, [])
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null
