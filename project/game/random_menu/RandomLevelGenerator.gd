@@ -32,6 +32,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, n: int, m: int, apply_hints: C
 			continue
 		g.set_auto_update_hints(false)
 		apply_hints.call(rng, g)
+		assert(g.are_hints_satisfied())
 		var start_solve := Time.get_unix_time_from_system()
 		tries += 1
 		if not forced_strategies.is_empty():
@@ -61,7 +62,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, n: int, m: int, apply_hints: C
 # apply_hints takes (rng, grid) and should use a Level.HintVisibility to modify the level hints
 # gen_options_builder takes rng and returns (diagonals, boats) as a bitflag
 # If forced_str is empty, the level is generated as "interesting" (SolvedUnique)
-func generate(rng: RandomNumberGenerator,n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
+func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	cancel_gen = false
 	gen_thread.start(func(): return _inner_gen_level(rng, n, m, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats))
 	return await Global.wait_for_thread(gen_thread)

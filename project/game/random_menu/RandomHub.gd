@@ -136,7 +136,7 @@ static func _nothing(_rng: RandomNumberGenerator) -> int:
 	return 0
 
 # If a hint is 0 or the size of row/col, hide it. This makes puzzles more interesting.
-static func hide_obvious_hints(grid: GridModel) -> void:
+static func hide_too_easy_hints(grid: GridModel) -> void:
 	var hints := grid.row_hints()
 	for i in grid.rows():
 		if hints[i].water_count == grid.cols() or hints[i].water_count == 0:
@@ -155,7 +155,7 @@ static func _medium_visibility(rng: RandomNumberGenerator, grid: GridModel) -> v
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, mini(rng.randi_range(3, a.size() + 2), a.size()))
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size() - 2), 0))
 	h.apply_to_grid(grid)
-	hide_obvious_hints(grid)
+	hide_too_easy_hints(grid)
 
 
 static func _hard_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -167,7 +167,7 @@ static func _hard_visibility(rng: RandomNumberGenerator, grid: GridModel) -> voi
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-3, a.size()), 0))
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 	h.apply_to_grid(grid)
-	hide_obvious_hints(grid)
+	hide_too_easy_hints(grid)
 
 static func _expert_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
@@ -178,7 +178,7 @@ static func _expert_visibility(rng: RandomNumberGenerator, grid: GridModel) -> v
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, maxi(rng.randi_range(-4, a.size()), 0))
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, ceili(a.size() / 2)))
 	h.apply_to_grid(grid)
-	hide_obvious_hints(grid)
+	hide_too_easy_hints(grid)
 	if rng.randf() < 0.35:
 		Generator.randomize_aquarium_hints(rng, grid)
 	

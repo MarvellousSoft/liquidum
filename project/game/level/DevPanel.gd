@@ -67,9 +67,10 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		rng.seed = RandomHub.consistent_hash(str(rseed))
 		if flavor < 1000:
 			var g := await RandomFlavors.gen(l_gen, rng, flavor)
-			g.solution_c_left.clear()
-			g.solution_c_right.clear()
-			return g
+			if g != null:
+				g.solution_c_left.clear()
+				g.solution_c_right.clear()
+				return g
 		else:
 			# TODO: This can be refactored to use RandomLevelGenerator
 			var gen := Generator.new(rng.randi(), $Diags.button_pressed, $Boats.button_pressed)
