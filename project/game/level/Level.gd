@@ -171,7 +171,7 @@ func setup(try_load := true) -> void:
 			BrushPicker.disable_brush(E.BrushMode.NoBoat)
 		if is_campaign_level():
 			if section_number == 1 and level_number == 1:
-				BrushPicker.disable_brush(E.BrushMode.NoWater)
+				BrushPicker.hide()
 	else:
 		Counters.water.visible = true
 		Counters.boat.visible = true
