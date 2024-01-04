@@ -132,8 +132,8 @@ STREAK_TOOLTIP,Consecutive daily levels with less than 3 mistakes,Níveis do dia
 HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
 MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda Simples,Segunda Simples
-MONDAY_LEVEL_DESC,"No special rules,",Sem regras especiais.,Sem regras especiais.
-TUESDAY_LEVEL,Secret Boat Tuesday,Terça do Barco Escondido,Terça do Barco Escondido
+MONDAY_LEVEL_DESC,No special rules.,Sem regras especiais.,Sem regras especiais.
+TUESDAY_LEVEL,Secret Boat Tuesday,Terça Naval Secreta,Terça do Barco Escondido
 TUESDAY_LEVEL_DESC,Barcos com dicas escondidas.,Barcos com dicas escondidas.,Barcos com dicas escondidas.
 WEDNESDAY_LEVEL,Diagonal Wednesday,Quarta Diagonal,Quarta Diagonal
 WEDNESDAY_LEVEL_DESC,Diagonals and no hidden hints.,Diagonais e nenhuma dica escondida.,Diagonais e nenhuma dica escondida.
