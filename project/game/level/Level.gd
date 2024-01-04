@@ -115,6 +115,11 @@ func _input(event):
 		win()
 
 
+func _unhandled_input(event):
+	if event.is_action_pressed("return"):
+		Settings.toggle_pause()
+
+
 func setup(try_load := true) -> void:
 	if not grid.editor_mode():
 		grid.prettify_hints()
