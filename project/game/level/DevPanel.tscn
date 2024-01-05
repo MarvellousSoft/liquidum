@@ -26,7 +26,7 @@ text = "Forced strategies"
 
 [node name="Guesses" type="SpinBox" parent="."]
 layout_mode = 2
-max_value = 10.0
+max_value = 30.0
 value = 2.0
 rounded = true
 suffix = "guesses"

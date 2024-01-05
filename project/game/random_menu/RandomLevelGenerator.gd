@@ -1,6 +1,6 @@
 class_name RandomLevelGenerator
 
-const MAX_TIME_PER_SOLVE = 10.0
+const MAX_TIME_PER_SOLVE = 30.0
 
 var gen_thread := Thread.new()
 var cancel_gen := false

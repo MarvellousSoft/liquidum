@@ -1,6 +1,9 @@
 class_name DailyButton
 extends Control
 
+# 27 hours, enough
+const MAX_TIME := 100000
+
 @onready var MainButton: Button = %Button
 @onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
@@ -156,9 +159,6 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		if data.current_streak > 0:
 			data.current_streak = 0
 			UserData.save()
-
-# 27 hours, enough
-const MAX_TIME := 100000
 
 func upload_leaderboard(info: Level.WinInfo) -> int:
 	if not SteamManager.enabled:

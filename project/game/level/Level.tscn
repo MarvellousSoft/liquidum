@@ -272,9 +272,9 @@ script = ExtResource("2_wvis2")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
-offset_top = 450.0
+offset_top = 432.0
 offset_right = 3840.0
-offset_bottom = 1970.0
+offset_bottom = 2038.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
 unique_name_in_owner = true
