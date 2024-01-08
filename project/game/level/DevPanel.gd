@@ -51,7 +51,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 	var strategies := selected_strategies()
 	var forced_strategies := selected_forced_strategies()
 	while true:
-		if Time.get_unix_time_from_system() > time + 60:
+		if Time.get_unix_time_from_system() > time + 30:
 			print("Took too long generating")
 			$Seed.placeholder_text = "Gave up"
 			return null
@@ -83,7 +83,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 				if forced_strategies.is_empty():
 					var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 					g2.clear_content()
-					retry = SolverModel.new().full_solve(g2, strategies, func(): return Time.get_unix_time_from_system() > time + 20, true, int(Guesses.value)) != SolverModel.SolveResult.SolvedUnique
+					retry = SolverModel.new().full_solve(g2, strategies, func(): return Time.get_unix_time_from_system() > time + 30, true, int(Guesses.value)) != SolverModel.SolveResult.SolvedUnique
 				else:
 					var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
 					retry = not SolverModel.new().can_solve_with_strategies(g2, strategies, forced_strategies)
