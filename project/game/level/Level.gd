@@ -41,6 +41,7 @@ class WinInfo:
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
+@onready var LevelLabel: Label = %LevelLabel
 @onready var TitleEdit: LineEdit = $Title/Edit
 @onready var TutorialContainer = %TutorialContainer
 @onready var TutorialCenterContainer = %TutorialCenterContainer
@@ -67,11 +68,7 @@ var reset_mistakes_on_reset := true
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	DevContainer.visible = Global.is_dev_mode()
-	Description.text = description
-	DescriptionEdit.text = description
-	TitleLabel.text = full_name
-	Settings.set_level_name(full_name, section_number, level_number)
-	TitleEdit.text = full_name
+	set_level_names_and_descriptions()
 	reset_tutorial()
 	if is_campaign_level():
 		var data = FileManager.load_level_data(section_number, level_number)
@@ -107,6 +104,7 @@ func _process(dt):
 	if process_game and not grid.editor_mode():
 		running_time += dt
 		update_timer_label()
+	Global.alpha_fade_node(dt, %TutorialDisplayBG, %TutorialDisplay.is_active(), 4.0, true)
 
 
 func _input(event):
@@ -182,7 +180,9 @@ func setup(try_load := true) -> void:
 		Counters.mistake.hide()
 		TimerContainer.hide()
 	update_counters()
-
+	
+	%LevelLabel.visible = not grid.editor_mode()
+	
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
 		counter.startup(delay)
@@ -201,6 +201,18 @@ func setup(try_load := true) -> void:
 	await get_tree().create_timer(GridNode.get_grid_delay(grid.rows(), grid.cols())).timeout
 	
 	process_game = true
+
+
+func set_level_names_and_descriptions():
+	Description.text = description
+	DescriptionEdit.text = description
+	TitleLabel.text = full_name
+	Settings.set_level_name(full_name, section_number, level_number)
+	TitleEdit.text = full_name
+	if section_number != -1 and level_number != -1:
+		LevelLabel.text = "%d - %d %s" % [section_number, level_number, tr(full_name)]
+	else:
+		LevelLabel.text = full_name
 
 
 func is_campaign_level():
@@ -252,6 +264,58 @@ func update_timer_label() -> void:
 		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
 
 
+func maybe_save(delete_solution := false) -> void:
+	if game_won and not delete_solution:
+		# Already saved
+		return
+	if not level_name.is_empty():
+		if editor_mode():
+			# Let's put the visibility info in the grid
+			var grid_logic := GridNode.grid_logic
+			grid_logic.set_auto_update_hints(false)
+			_update_visibilities(grid_logic)
+			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
+			
+			grid_logic.set_auto_update_hints(true)
+		else:
+			if delete_solution:
+				if level_name == RandomHub.RANDOM:
+					FileManager.clear_level(level_name)
+					return
+				grid.clear_content()
+			var is_empty := grid.is_empty()
+			dummy_save.is_empty = is_empty
+			if is_empty and reset_mistakes_on_empty:
+				dummy_save.mistakes = 0
+				dummy_save.timer_secs = 0.0
+			else:
+				dummy_save.mistakes = Counters.mistake.count
+				dummy_save.timer_secs = running_time
+			dummy_save.grid_data = GridNode.grid_logic.export_data()
+			FileManager.save_level(level_name, dummy_save)
+
+
+func display_leaderboard(_data: DailyButton.LeaderboardData) -> void:
+	assert(game_won)
+	# TODO: Display
+
+func add_playtime_tracking(stats: Array[String]) -> void:
+	stats.append("total")
+	$SteamPlaytimeTracker.stats = stats
+
+
+func reset_level() -> void:
+	if ConfirmationScreen.start_confirmation(reset_text):
+		if not await ConfirmationScreen.pressed:
+			return
+	GridNode.grid_logic.clear_all()
+	GridNode.setup(GridNode.grid_logic)
+	if reset_mistakes_on_reset:
+		running_time = 0
+		Counters.mistake.set_count(0)
+	maybe_save()
+
+
 func win() -> void:
 	if game_won:
 		return
@@ -267,7 +331,6 @@ func win() -> void:
 	ResetButton.disabled = true
 	BackButton.disabled = true
 	Settings.disable_button()
-	
 	
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
@@ -399,49 +462,6 @@ func _get_solution_grid(mode := GridModel.LoadMode.SolutionNoClear) -> GridModel
 func _on_playtest_button_pressed() -> void:
 	var new_level = Global.create_level(_get_solution_grid(), "", full_name, description, ["playtest"])
 	TransitionManager.push_scene(new_level)
-
-
-func maybe_save(delete_solution := false) -> void:
-	if game_won and not delete_solution:
-		# Already saved
-		return
-	if not level_name.is_empty():
-		if editor_mode():
-			# Let's put the visibility info in the grid
-			var grid_logic := GridNode.grid_logic
-			grid_logic.set_auto_update_hints(false)
-			_update_visibilities(grid_logic)
-			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
-			
-			grid_logic.set_auto_update_hints(true)
-		else:
-			if delete_solution:
-				if level_name == RandomHub.RANDOM:
-					FileManager.clear_level(level_name)
-					return
-				grid.clear_content()
-			var is_empty := grid.is_empty()
-			dummy_save.is_empty = is_empty
-			if is_empty and reset_mistakes_on_empty:
-				dummy_save.mistakes = 0
-				dummy_save.timer_secs = 0.0
-			else:
-				dummy_save.mistakes = Counters.mistake.count
-				dummy_save.timer_secs = running_time
-			dummy_save.grid_data = GridNode.grid_logic.export_data()
-			FileManager.save_level(level_name, dummy_save)
-
-
-func reset_level() -> void:
-	if ConfirmationScreen.start_confirmation(reset_text):
-		if not await ConfirmationScreen.pressed:
-			return
-	GridNode.grid_logic.clear_all()
-	GridNode.setup(GridNode.grid_logic)
-	if reset_mistakes_on_reset:
-		running_time = 0
-		Counters.mistake.set_count(0)
-	maybe_save()
 
 
 func _on_back_button_pressed() -> void:
@@ -588,17 +608,14 @@ func _on_edit_text_changed(new_text: String) -> void:
 		return
 	full_name = new_text
 
-func display_leaderboard(_data: DailyButton.LeaderboardData) -> void:
-	assert(game_won)
-	# TODO: Display
 
 func _on_dev_mode_toggled(status):
 	DevContainer.visible = status
 
-func add_playtime_tracking(stats: Array[String]) -> void:
-	stats.append("total")
-	$SteamPlaytimeTracker.stats = stats
-
 
 func _on_dev_buttons_copy_to_editor():
 	DevButtons.do_copy_to_editor(GridNode.grid_logic, _hint_visibility())
+
+
+func _on_tutorial_button_pressed():
+	%TutorialDisplay.enable()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=29 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -13,8 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
 [ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="7_q4003"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
+[ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="13_3t8tl"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="13_4gky1"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
+[ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="15_nwo8g"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
@@ -289,13 +291,29 @@ offset_top = 71.0
 offset_right = 587.0
 offset_bottom = 71.0
 
-[node name="TimerContainer" type="HBoxContainer" parent="TopInfo"]
+[node name="LevelLabel" type="Label" parent="TopInfo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -94.0
+offset_right = 756.0
+offset_bottom = 115.0
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 54
+theme_override_font_sizes/font_size = 100
+text = "LEVELNAME"
+autowrap_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopInfo"]
+layout_mode = 0
+offset_left = 1949.0
+offset_right = 1989.0
+offset_bottom = 40.0
+
+[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-offset_right = 366.0
-offset_bottom = 120.0
 
-[node name="TimerIcon" type="TextureRect" parent="TopInfo/TimerContainer"]
+[node name="TimerIcon" type="TextureRect" parent="TopInfo/VBoxContainer/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
@@ -303,7 +321,7 @@ size_flags_vertical = 4
 texture = ExtResource("8_hu2r6")
 expand_mode = 1
 
-[node name="TimerLabel" type="Label" parent="TopInfo/TimerContainer"]
+[node name="TimerLabel" type="Label" parent="TopInfo/VBoxContainer/TimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -315,23 +333,19 @@ theme_override_font_sizes/font_size = 80
 text = "00:00"
 vertical_alignment = 2
 
-[node name="MistakeCounter" parent="TopInfo" instance=ExtResource("4_m6y7y")]
+[node name="MistakeCounter" parent="TopInfo/VBoxContainer" instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 1949.0
-offset_top = -10.0
-offset_right = 2679.0
-offset_bottom = 140.0
 check_for_satisfied = false
 
-[node name="Label" parent="TopInfo/MistakeCounter/HBoxContainer" index="1"]
+[node name="Label" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 96
 autowrap_mode = 0
 
-[node name="Counter" parent="TopInfo/MistakeCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
@@ -431,31 +445,57 @@ text = "PLAYTEST"
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 81.0
-offset_top = 270.0
-offset_right = 1036.0
-offset_bottom = 1868.0
+offset_left = 60.0
+offset_top = 294.0
+offset_right = 1015.0
+offset_bottom = 1892.0
+mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="TutorialContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TutorialContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 34
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TutorialContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Spacer" type="Control" parent="TutorialContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TutorialButton" type="Button" parent="TutorialContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 140)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 0
+icon = ExtResource("13_3t8tl")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TutorialContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_4105n")
 
-[node name="MarginContainer" type="MarginContainer" parent="TutorialContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TutorialContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 30
 
-[node name="TutorialCenterContainer" type="CenterContainer" parent="TutorialContainer/PanelContainer/MarginContainer"]
+[node name="TutorialCenterContainer" type="CenterContainer" parent="TutorialContainer/VBoxContainer/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TogetherSeparate" parent="TutorialContainer/PanelContainer/MarginContainer/TutorialCenterContainer" instance=ExtResource("13_kx7dw")]
+[node name="TogetherSeparate" parent="TutorialContainer/VBoxContainer/PanelContainer/MarginContainer/TutorialCenterContainer" instance=ExtResource("13_kx7dw")]
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="."]
@@ -554,6 +594,25 @@ placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
 caret_blink = true
 
+[node name="TutorialDisplayContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 3840.0
+offset_bottom = 2160.0
+mouse_filter = 2
+
+[node name="TutorialDisplayBG" type="ColorRect" parent="TutorialDisplayContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(3840, 2160)
+layout_mode = 2
+color = Color(0, 0.0352941, 0.141176, 0.886275)
+
+[node name="TutorialDisplay" parent="TutorialDisplayContainer" instance=ExtResource("15_nwo8g")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
 [node name="ContinueButton" type="Button" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -589,7 +648,7 @@ autostart = true
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
-[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/MistakeCounter" method="add_count"]
+[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/VBoxContainer/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
@@ -605,6 +664,7 @@ autostart = true
 [connection signal="use_strategies" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
+[connection signal="pressed" from="TutorialContainer/VBoxContainer/HBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
@@ -614,6 +674,6 @@ autostart = true
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
-[editable path="TopInfo/MistakeCounter"]
-[editable path="TopInfo/MistakeCounter/HBoxContainer/VisibilityButton"]
+[editable path="TopInfo/VBoxContainer/MistakeCounter"]
+[editable path="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]
