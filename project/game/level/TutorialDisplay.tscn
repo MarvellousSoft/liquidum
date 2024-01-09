@@ -22,11 +22,25 @@ corner_detail = 20
 theme = ExtResource("1_xlkyc")
 script = ExtResource("2_irhp8")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+theme_override_constants/h_separation = -85
+theme_override_constants/v_separation = 40
+columns = 2
+
+[node name="Control" type="Control" parent="GridContainer"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 theme_override_constants/separation = 100
 
-[node name="Back" type="Button" parent="HBoxContainer"]
+[node name="Back" type="Button" parent="GridContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -35,50 +49,46 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 100
 text = "<"
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="GridContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_srfop")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 70
 
-[node name="HSplitContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HSplitContainer" type="HBoxContainer" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer"]
+[node name="Icon" type="TextureRect" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer"]
+modulate = Color(0.85098, 1, 0.886275, 1)
 layout_mode = 2
 texture = ExtResource("3_s7fl0")
 expand_mode = 2
 
-[node name="Spacer" type="Control" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer"]
+[node name="Spacer" type="Control" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CloseButton" type="Button" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer"]
-layout_mode = 2
-focus_mode = 0
-text = "X"
-
-[node name="TutorialCenterContainer" type="CenterContainer" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TutorialCenterContainer" type="CenterContainer" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TogetherSeparate" parent="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("4_5facx")]
+[node name="TogetherSeparate" parent="GridContainer/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("4_5facx")]
 layout_mode = 2
 
-[node name="Forward" type="Button" parent="HBoxContainer"]
+[node name="Forward" type="Button" parent="GridContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -88,6 +98,6 @@ theme_override_font_sizes/font_size = 100
 text = ">
 "
 
-[connection signal="pressed" from="HBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HSplitContainer/CloseButton" to="." method="_on_close_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/Forward" to="." method="_on_forward_pressed"]
+[connection signal="pressed" from="GridContainer/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="GridContainer/HBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="GridContainer/HBoxContainer/Forward" to="." method="_on_forward_pressed"]

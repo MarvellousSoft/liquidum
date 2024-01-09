@@ -209,10 +209,11 @@ func set_level_names_and_descriptions():
 	TitleLabel.text = full_name
 	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
+	LevelLabel.text = tr(full_name)
 	if section_number != -1 and level_number != -1:
-		LevelLabel.text = "%d - %d %s" % [section_number, level_number, tr(full_name)]
+		%SectionNumber.text = "%d - %d" % [section_number, level_number]
 	else:
-		LevelLabel.text = full_name
+		%SectionNumber.text = ""
 
 
 func is_campaign_level():
