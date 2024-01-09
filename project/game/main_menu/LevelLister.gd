@@ -67,7 +67,8 @@ static func get_max_unlocked_level(section: int) -> int:
 			return 0
 	var count_completed := 0
 	var i := 1
-	while FileManager.has_level_data(section, i) and i <= INITIAL_UNLOCKED_LEVELS + count_completed:
+	var initial_unlock = INITIAL_UNLOCKED_LEVELS if section > 1 else 1
+	while FileManager.has_level_data(section, i) and i <= initial_unlock + count_completed:
 		var save := FileManager.load_level(LevelLister.level_name(section, i))
 		if save != null and save.is_completed():
 			count_completed += 1
