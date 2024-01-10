@@ -110,6 +110,5 @@ func _on_button_pressed(mode: E.BrushMode):
 	AudioManager.play_sfx("change_brush")
 	# Doing radio logic by hand since Godot`s isn`t working for some reason
 	for button in Buttons.keys():
-		if button != mode:
-			Buttons[button].button_pressed = false
+		Buttons[button].button_pressed = (button == mode)
 	brushed_picked.emit(mode)
