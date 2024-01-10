@@ -945,3 +945,21 @@ func test_aquariums() -> void:
 	..............
 	L.L._._.L.L._.
 """)
+
+func test_all_water() -> void:
+	assert_apply_strategies("""
+	+waters=2
+	h....2.
+	.......
+	.L.L.L.
+	.......
+	.L._.L.
+	""","""
+	+waters=2
+	h....2.
+	.......
+	.L.L.L.
+	.xxxx..
+	.L._.L.
+	"""
+	)

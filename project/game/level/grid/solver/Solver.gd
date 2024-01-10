@@ -1245,9 +1245,22 @@ func _make_guess(res: SolveResult) -> SolveResult:
 
 const MAX_GUESSES := 2
 
+static func _leftmost_empty_tile(grid: GridModel, i: int, j: int, corner: E.Corner) -> bool:
+	var c := grid.get_cell(i, j)
+	if not c.nothing_at(corner):
+		return false
+	if E.corner_is_left(corner) or c.cell_type() == E.CellType.Single:
+		return c.wall_at(E.Walls.Left)
+	else:
+		# Not single and on the right, definitely there's a diag wall
+		return true
+
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
-func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, guesses_left := MAX_GUESSES, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
+func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, guesses_left := MAX_GUESSES, min_boat_place := Vector2i.ZERO, look_for_multiple := true, rng: RandomNumberGenerator = null) -> SolveResult:
+	if rng == null:
+		rng = RandomNumberGenerator.new()
+		rng.seed = 42
 	assert(grid.editor_mode() and not grid.auto_update_hints())
 	if flush_undo:
 		grid.push_empty_undo()
@@ -1259,36 +1272,74 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 		#grid.copy_to_clipboard()
 		return SolveResult.Unsolvable
 	if status == E.HintStatus.Satisfied and grid.check_complete():
-		# Since we don't have "s that don't have boats" we need this
+		print("DONE")
+		# Since we don't use NoBoats properly we need this
 		if grid.any_schrodinger_boats():
 			return SolveResult.SolvedMultiple
 		return SolveResult.SolvedUniqueNoGuess
+	# First, let's try to find contradictions with just strategies
+	print("Will try to find easy contradiction")
+	var all_cells: Array[Vector2i] = []
 	for i in grid.rows():
 		for j in grid.cols():
-			for corner in E.Corner.values():
-				var c := grid.get_cell(i, j)
+			all_cells.append(Vector2i(i, j))
+	Global.shuffle(all_cells, rng)
+	for cell in all_cells:
+		var i := cell.x
+		var j := cell.y
+		var c := grid.get_cell(i, j)
+		for corner in c.corners():
+			if SolverModel._leftmost_empty_tile(grid, i, j, corner):
+				# New undo stack
+				c.put_water(corner, true)
+				apply_strategies(grid, strategy_list, false)
+				var new_status := grid.all_hints_status()
+				grid.undo()
+				if new_status == E.HintStatus.Wrong:
+					print("Figured out %s, %s has Nowater, tail recurse" % [Vector2i(i, j), E.Corner.find_key(corner)])
+					# Wrong means definitely no water. Tail recurse
+					c.put_nowater(corner, false, true)
+					return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple, rng))
+				# No contradiction when adding water. Let's see if there's a contradiciton using NoWater.
+				c.put_nowater(corner, true, true)
+				apply_strategies(grid, strategy_list, false)
+				new_status = grid.all_hints_status()
+				grid.undo()
+				if new_status == E.HintStatus.Wrong:
+					print("Figured out %s, %s has Water, tail recurse" % [Vector2i(i, j), E.Corner.find_key(corner)])
+					# Defitely there's water. Let's tail recurse.
+					c.put_water(corner, false)
+					return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple, rng))
+	print("Found no easy contradiction")
+	# Second, let's really recurse and backtrack
+	Global.shuffle(all_cells, rng)
+	for cell in all_cells:
+			var i := cell.x
+			var j := cell.y
+			var c := grid.get_cell(i, j)
+			for corner in c.corners():
 				if c.nothing_at(corner):
 					# New undo stack
 					c.put_water(corner, true)
-					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, look_for_multiple)
+					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, look_for_multiple, rng)
 					grid.undo()
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
 						c.put_nowater(corner, false)
-						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple))
+						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple, rng))
 					elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
 						grid.redo()
 						return r1
 					# Otherwise we need to try to solve with nowater
 					c.put_nowater(corner, true, true)
-					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false)
+					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false, rng)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
 						grid.undo()
 						c.put_water(corner, false)
 						# TODO: Maybe here we could store the undo stack and reuse it
 						# Doesn't really make it much faster
-						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple))
+						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple, rng))
 					# Could solve both ways, definitely not unique
 					# If GaveUp, might be multiple or unique, let's be pessimistic.
 					return SolveResult.SolvedMultiple
@@ -1308,19 +1359,19 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 			var c := grid.get_cell(i, j)
 			var b := c.put_boat(true, true)
 			assert(b)
-			var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), look_for_multiple)
+			var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), look_for_multiple, rng)
 			grid.undo()
 			if r1 == SolveResult.Unsolvable:
-				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple))
+				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple, rng))
 			elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
 				grid.redo()
 				return r1
-			var r2 := full_solve(grid, strategy_list, cancel_sig, true, guesses_left - 1, Vector2i(i, j + 1), false)
+			var r2 := full_solve(grid, strategy_list, cancel_sig, true, guesses_left - 1, Vector2i(i, j + 1), false, rng)
 			grid.undo(false)
 			if r2 == SolveResult.Unsolvable:
 				b = c.put_boat(false, true)
 				assert(b)
-				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple))
+				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, Vector2i(i, j + 1), look_for_multiple, rng))
 			else:
 				grid.redo(false)
 				return SolveResult.SolvedMultiple
