@@ -2,11 +2,38 @@ class_name SolverModel
 
 const Content := GridImpl.Content
 
+static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], a: int) -> GridModel.LineHint:
+	var h := hints[a]
+	if h.water_count == -1 and grid.grid_hints().total_water != -1:
+		var inferred := grid.grid_hints().total_water
+		for b in hints.size():
+			if b != a:
+				if hints[b].water_count == -1:
+					inferred = -1
+					break
+				inferred -= hints[b].water_count
+		if inferred != -1:
+			h = h.duplicate()
+			h.water_count = inferred
+	if h.boat_count == -1 and grid.grid_hints().total_boats != -1:
+		var inferred := grid.grid_hints().total_boats
+		for b in hints.size():
+			if b != a:
+				if hints[b].boat_count == -1:
+					inferred = -1
+					break
+				inferred -= hints[b].boat_count
+		if inferred != -1 and h == hints[a]:
+			h = h.duplicate()
+		if inferred != -1:
+			h.boat_count = inferred
+	return h
+
 static func _row_hint(grid: GridImpl, i: int) -> GridModel.LineHint:
-	return grid.row_hints()[i]
+	return _maybe_infer_hint(grid, grid.row_hints(), i)
 
 static func _col_hint(grid: GridImpl, j: int) -> GridModel.LineHint:
-	return grid.col_hints()[j]
+	return _maybe_infer_hint(grid, grid.col_hints(), j)
 
 class Strategy:
 	var grid: GridImpl
@@ -310,7 +337,7 @@ static func _boat_possible(grid: GridImpl, i: int, j: int, disallow_nowater_belo
 
 static func _maybe_extra_boat_col(grid: GridImpl, j: int) -> bool:
 	var hint := SolverModel._col_hint(grid, j).boat_count
-	return hint == -1 or hint < grid.count_boat_col(j)
+	return hint == -1 or grid.count_boat_col(j) < hint
 
 class BoatRowStrategy extends RowStrategy:
 	func description() -> String:
@@ -336,7 +363,7 @@ class BoatRowStrategy extends RowStrategy:
 
 static func _maybe_extra_boat_on_row(grid: GridImpl, i: int) -> bool:
 	var hint := SolverModel._row_hint(grid, i).boat_count
-	return hint == -1 or hint < grid.count_boat_row(i)
+	return hint == -1 or grid.count_boat_row(i) < hint
 
 # Aquariums that CAN and DO NOT have boats. The boat position might not be clear.
 # Returns an array of (l, r), meaning ONE boat is possible on grid[l][j]..grid[r][j]

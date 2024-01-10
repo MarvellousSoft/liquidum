@@ -48,8 +48,9 @@ func assert_grid_eq(a: String, b: String) -> void:
 	b = b.dedent().strip_edges()
 	if a != b:
 		print("Grids differ:\n%s\n\n%s" % [a, b])
-		show_grids.emit(a, b)
-		fail_later_if(a != b)
+		fail_later_if(true)
+		if fail == 1:
+			show_grids.emit(a, b)
 
 func all_strategies() -> Array:
 	return SolverModel.STRATEGY_LIST.keys()
@@ -66,8 +67,13 @@ func assert_can_solve(s: String, strategies := [], result := true) -> void:
 	var g := apply_strategies(s, strategies)
 	if g.are_hints_satisfied(true) != result:
 		fail_later_if(true)
-		print("Not solved:\n", g.to_str())
-		show_grids.emit(s, g.to_str())
+		if result:
+			print("Not solved:")
+		else:
+			print("Solved but shouldn't:")
+		print(g.to_str())
+		if fail == 1:
+			show_grids.emit(s, g.to_str())
 
 func assert_cant_solve(s: String, strategies := []) -> void:
 	assert_can_solve(s, strategies, false)

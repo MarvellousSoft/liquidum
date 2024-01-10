@@ -11,6 +11,13 @@ class LineHint:
 	var boat_count: int
 	# On columns this must always be Any
 	var boat_count_type: E.HintType
+	func duplicate() -> LineHint:
+		var h := LineHint.new()
+		h.water_count = water_count
+		h.water_count_type = water_count_type
+		h.boat_count = boat_count
+		h.boat_count_type = boat_count_type
+		return h
 
 class GridHints:
 	# Total water in the grid
