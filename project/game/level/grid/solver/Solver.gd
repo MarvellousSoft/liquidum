@@ -2,6 +2,12 @@ class_name SolverModel
 
 const Content := GridImpl.Content
 
+static func _row_hint(grid: GridImpl, i: int) -> GridModel.LineHint:
+	return grid.row_hints()[i]
+
+static func _col_hint(grid: GridImpl, j: int) -> GridModel.LineHint:
+	return grid.col_hints()[j]
+
 class Strategy:
 	var grid: GridImpl
 	func _init(grid_: GridImpl) -> void:
@@ -20,7 +26,8 @@ class RowStrategy extends Strategy:
 	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
-		if grid.row_hints()[i].water_count < 0:
+		var water_hint := SolverModel._row_hint(grid, i).water_count
+		if water_hint < 0:
 			return false
 		var dfs := RowDfs.new(i, grid)
 		var last_seen := grid.last_seen
@@ -37,7 +44,7 @@ class RowStrategy extends Strategy:
 		var nothing_left := 0.
 		for j in grid.cols():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := grid.row_hints()[i].water_count - grid.count_water_row(i)
+		var water_left := water_hint - grid.count_water_row(i)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(i, comps, water_left, nothing_left)
@@ -85,7 +92,8 @@ class ColumnStrategy extends Strategy:
 	func _apply_strategy(_values: Array[ColComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(j: int) -> bool:
-		if grid.col_hints()[j].water_count < 0:
+		var hint := SolverModel._col_hint(grid, j).water_count
+		if hint < 0:
 			return false
 		var dfs := ColDfs.new(j, grid)
 		var last_seen := grid.last_seen
@@ -105,7 +113,7 @@ class ColumnStrategy extends Strategy:
 		var nothing_left := 0.
 		for i in grid.rows():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := grid.col_hints()[j].water_count - grid.count_water_col(j)
+		var water_left := hint - grid.count_water_col(j)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(comps, water_left, nothing_left)
@@ -261,9 +269,10 @@ class MediumColStrategy extends ColumnStrategy:
 
 class AdvancedColStrategy extends ColumnStrategy:
 	func _apply(j: int) -> bool:
-		if grid.col_hints()[j].water_count <= 0:
+		var hint := SolverModel._col_hint(grid, j).water_count
+		if hint <= 0:
 			return false
-		var water_left := grid.col_hints()[j].water_count - grid.count_water_col(j)
+		var water_left := hint - grid.count_water_col(j)
 		if water_left <= 0:
 			return false
 		var single_i := -1
@@ -299,32 +308,35 @@ static func _boat_possible(grid: GridImpl, i: int, j: int, disallow_nowater_belo
 		return true
 	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
+static func _maybe_extra_boat_col(grid: GridImpl, j: int) -> bool:
+	var hint := SolverModel._col_hint(grid, j).boat_count
+	return hint == -1 or hint < grid.count_boat_col(j)
+
 class BoatRowStrategy extends RowStrategy:
 	func description() -> String:
 		return "If hint is all possible boat locations, then put the boats"
-	func _maybe_extra_boats(j: int) -> bool:
-		return grid._col_hints[j].boat_count == -1 or grid.get_col_hint_status(j, E.HintContent.Boat) == E.HintStatus.Normal
 	func _apply(i: int) -> bool:
-		var hint := grid._row_hints[i].boat_count
+		var hint := SolverModel._row_hint(grid, i).boat_count
 		if hint <= 0:
 			return false
 		var count := 0
 		for j in grid.cols():
 			if grid.get_cell(i, j).has_boat():
 				hint -= 1
-			elif SolverModel._boat_possible(grid, i, j) and _maybe_extra_boats(j):
+			elif SolverModel._boat_possible(grid, i, j) and SolverModel._maybe_extra_boat_col(grid, j):
 				count += 1
 		if hint > 0 and count == hint:
 			var any := false
 			for j in grid.cols():
-				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j) and _maybe_extra_boats(j):
+				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j) and SolverModel._maybe_extra_boat_col(grid, j):
 					if grid.get_cell(i, j).put_boat(false, true):
 						any = true
 			return any
 		return false
 
 static func _maybe_extra_boat_on_row(grid: GridImpl, i: int) -> bool:
-	return grid._row_hints[i].boat_count == -1 or grid.get_row_hint_status(i, E.HintContent.Boat) == E.HintStatus.Normal
+	var hint := SolverModel._row_hint(grid, i).boat_count
+	return hint == -1 or hint < grid.count_boat_row(i)
 
 # Aquariums that CAN and DO NOT have boats. The boat position might not be clear.
 # Returns an array of (l, r), meaning ONE boat is possible on grid[l][j]..grid[r][j]
@@ -393,7 +405,7 @@ class BoatColStrategy extends ColumnStrategy:
 	func description() -> String:
 		return "If hint is all possible aquariums, put boats in the ones where it's clear"
 	func _apply(j: int) -> bool:
-		var boats_left := grid.col_hints()[j].boat_count - grid.count_boat_col(j)
+		var boats_left := SolverModel._col_hint(grid, j).boat_count - grid.count_boat_col(j)
 		if boats_left <= 0:
 			return false
 		var possible_boats := SolverModel._list_possible_boats_on_col(grid, j)
@@ -427,7 +439,7 @@ class RowColStrategy extends Strategy:
 		return GridModel.must_be_implemented()
 	func _b_len() -> int:
 		return GridModel.must_be_implemented()
-	func _a_hints() -> Array[GridModel.LineHint]:
+	func _a_hint(_a: int) -> GridModel.LineHint:
 		return GridModel.must_be_implemented()
 	func _count_water_a(_a: int) -> float:
 		return GridModel.must_be_implemented()
@@ -500,7 +512,7 @@ class TogetherStrategy extends RowColStrategy:
 	func _basic_waters_and_nowaters(a: int) -> bool:
 		# Very simplistic logic, jut put water in the middle if the hint is big
 		# The function below also covers this, but we're using this for "easy mode"
-		var h := _a_hints()[a].water_count
+		var h := _a_hint(a).water_count
 		var b_len := _b_len()
 		var any := false
 		if h * 2 > b_len:
@@ -514,12 +526,12 @@ class TogetherStrategy extends RowColStrategy:
 	# need only to use the two pointers technique to check all possible solutions
 	# Assumes there's no water in this row/column
 	func _add_necessary_waters_and_nowaters(a: int) -> bool:
-		if _a_hints()[a].water_count <= 0.0:
+		var hint := int(2 * _a_hint(a).water_count)
+		if hint <= 0:
 			return false
 		if basic:
 			return _basic_waters_and_nowaters(a)
 		var any := false
-		var hint := int(2 * _a_hints()[a].water_count)
 		var r2 := -1
 		var l2 := 0
 		var max_solution_right := -1
@@ -559,7 +571,8 @@ class TogetherStrategy extends RowColStrategy:
 		return any
 
 	func _apply(a: int) -> bool:
-		if _a_hints()[a].water_count_type != E.HintType.Together:
+		var a_hint := _a_hint(a)
+		if a_hint.water_count_type != E.HintType.Together:
 			return false
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
@@ -587,7 +600,7 @@ class TogetherStrategy extends RowColStrategy:
 		while max_b2 < 2 * _b_len() - 1 and _content(a, max_b2 + 1) == Content.Nothing:
 			max_b2 += 1
 
-		var hint := _a_hints()[a].water_count
+		var hint := a_hint.water_count
 		var water_left2 := int(2 * (hint - _count_water_a(a)))
 		if water_left2 < 0:
 			# Invalid solution
@@ -640,8 +653,8 @@ class TogetherRowStrategy extends TogetherStrategy:
 		return grid.rows()
 	func _b_len() -> int:
 		return grid.cols()
-	func _a_hints() -> Array[GridModel.LineHint]:
-		return grid.row_hints()
+	func _a_hint(a: int) -> GridModel.LineHint:
+		return SolverModel._row_hint(grid, a)
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_row(a)
 
@@ -658,8 +671,8 @@ class TogetherColStrategy extends TogetherStrategy:
 		return grid.cols()
 	func _b_len() -> int:
 		return grid.rows()
-	func _a_hints() -> Array[GridModel.LineHint]:
-		return grid.col_hints()
+	func _a_hint(a: int) -> GridModel.LineHint:
+		return SolverModel._col_hint(grid, a)
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
@@ -760,13 +773,14 @@ class SeparateStrategy extends RowColStrategy:
 		return false
 
 	func _apply(a: int) -> bool:
-		if _a_hints()[a].water_count_type != E.HintType.Separated:
+		var hint := _a_hint(a)
+		if hint.water_count_type != E.HintType.Separated:
 			return false
 		if not basic and try_sections_strat(a):
 			return true
-		if _a_hints()[a].water_count_type != E.HintType.Separated or _a_hints()[a].water_count == -1.:
+		if hint.water_count_type != E.HintType.Separated or hint.water_count == -1.:
 			return false
-		var water_left2 := int(2 * (_a_hints()[a].water_count - _count_water_a(a)))
+		var water_left2 := int(2 * (hint.water_count - _count_water_a(a)))
 		if water_left2 < 0:
 			return false
 		var leftmost := 2 * _b_len()
@@ -852,8 +866,8 @@ class SeparateRowStrategy extends SeparateStrategy:
 		return grid.rows()
 	func _b_len() -> int:
 		return grid.cols()
-	func _a_hints() -> Array[GridModel.LineHint]:
-		return grid.row_hints()
+	func _a_hint(a: int) -> GridModel.LineHint:
+		return SolverModel._row_hint(grid, a)
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_row(a)
 
@@ -868,8 +882,8 @@ class SeparateColStrategy extends SeparateStrategy:
 		return grid.cols()
 	func _b_len() -> int:
 		return grid.rows()
-	func _a_hints() -> Array[GridModel.LineHint]:
-		return grid.col_hints()
+	func _a_hint(a: int) -> GridModel.LineHint:
+		return SolverModel._col_hint(grid, a)
 	func _count_water_a(a: int) -> float:
 		return grid.count_water_col(a)
 
@@ -961,7 +975,7 @@ class AllBoatsStrategy extends Strategy:
 		var possible_boats: Array[Array] = []
 		var total_possible := 0
 		for j in grid.cols():
-			if grid.col_hints()[j].boat_count != -1 and grid.get_col_hint_status(j, E.HintContent.Boat) != E.HintStatus.Normal:
+			if not SolverModel._maybe_extra_boat_col(grid, j):
 				possible_boats.append([])
 				continue
 			var p := SolverModel._list_possible_boats_on_col(grid, j)
