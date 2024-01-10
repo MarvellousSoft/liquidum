@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="2_y2uuo"]
 [ext_resource type="Texture2D" uid="uid://dguu4animlbb" path="res://assets/images/ui/icons/mouse_left_button.png" id="3_ma811"]
 [ext_resource type="Texture2D" uid="uid://bgodttpynf1hp" path="res://assets/images/ui/tutorial/air_cell_example.png" id="4_2bwax"]
-[ext_resource type="Texture2D" uid="uid://bjm6t8nm5ccbg" path="res://assets/images/ui/icons/mouse_right_button.png" id="4_hl8rs"]
+[ext_resource type="Texture2D" uid="uid://lc31l4wcqsjj" path="res://assets/images/ui/icons/mouse_right_button_highlight.png" id="4_bchqm"]
 
 [node name="Mouse" type="MarginContainer"]
 theme = ExtResource("1_j3v0c")
@@ -18,14 +18,14 @@ layout_mode = 2
 theme_override_constants/separation = 50
 
 [node name="Mouse" type="TextureRect" parent="VBoxContainer/SecondClick"]
-self_modulate = Color(0.45098, 0.941176, 0.776471, 1)
+self_modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 texture = ExtResource("2_y2uuo")
 expand_mode = 1
 
 [node name="LeftButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
-self_modulate = Color(0.45098, 0.941176, 0.776471, 1)
+self_modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
 offset_right = 40.0
@@ -34,12 +34,12 @@ texture = ExtResource("3_ma811")
 expand_mode = 1
 
 [node name="RightButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
-self_modulate = Color(0.85098, 1, 0.886275, 1)
+self_modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("4_hl8rs")
+texture = ExtResource("4_bchqm")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/SecondClick"]

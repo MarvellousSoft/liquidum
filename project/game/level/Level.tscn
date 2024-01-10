@@ -293,8 +293,8 @@ offset_bottom = 71.0
 
 [node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo"]
 layout_mode = 0
-offset_left = -102.0
-offset_right = 698.0
+offset_left = -90.0
+offset_right = 797.0
 offset_bottom = 115.0
 theme_override_constants/separation = 36
 
@@ -303,25 +303,25 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 54
-theme_override_font_sizes/font_size = 100
+theme_override_constants/outline_size = 36
+theme_override_font_sizes/font_size = 70
 text = "0 - 0"
 
 [node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(600, 0)
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 54
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 90
 text = "LEVELNAM"
 autowrap_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TopInfo"]
 layout_mode = 0
-offset_left = 1949.0
-offset_right = 1989.0
-offset_bottom = 40.0
+offset_left = 1989.0
+offset_right = 2707.0
+offset_bottom = 274.0
 
 [node name="TimerContainer" type="HBoxContainer" parent="TopInfo/VBoxContainer"]
 unique_name_in_owner = true
@@ -351,6 +351,9 @@ vertical_alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 check_for_satisfied = false
+
+[node name="HBoxContainer" parent="TopInfo/VBoxContainer/MistakeCounter" index="0"]
+alignment = 2
 
 [node name="Label" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -406,6 +409,7 @@ size_flags_horizontal = 4
 
 [node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_bottom = 0.0
 
 [node name="ResetButton" type="TextureButton" parent="."]
@@ -533,15 +537,14 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 36.0
-offset_top = 2040.0
+offset_top = 1948.0
 offset_right = 3804.0
-offset_bottom = 2140.0
+offset_bottom = 2113.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
 [node name="Edit" type="TextEdit" parent="Description"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -549,19 +552,20 @@ placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
 wrap_mode = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Description"]
+custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 mouse_filter = 2
 follow_focus = true
 horizontal_scroll_mode = 3
 
 [node name="Label" type="Label" parent="Description/Scroll"]
-custom_minimum_size = Vector2(3760, 100)
+custom_minimum_size = Vector2(3760, 140)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 70
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 horizontal_alignment = 1
 autowrap_mode = 3
