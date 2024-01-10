@@ -182,6 +182,7 @@ func setup(try_load := true) -> void:
 	update_counters()
 	
 	%LevelLabel.visible = not grid.editor_mode()
+	%TutorialButton.visible = not grid.editor_mode()
 	
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
