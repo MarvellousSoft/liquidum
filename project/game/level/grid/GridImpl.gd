@@ -228,7 +228,7 @@ class PureCell:
 		if type != E.Single:
 			return false
 		# Only things that can be replaced with boat
-		if c_left != Content.Nothing and c_left != Content.NoWater:
+		if c_left != Content.Nothing and c_left != Content.NoWater and c_left != Content.NoBoat and c_left != Content.NoBoatWater:
 			return false
 		c_left = Content.Boat
 		c_right = Content.Boat
