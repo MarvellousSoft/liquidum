@@ -288,13 +288,15 @@ class AdvancedColStrategy extends ColumnStrategy:
 		return "- If there's a single empty half-cell in the column, determine if it's water or nowater."
 
 # This cell is empty and we could put water below it
-static func _boat_possible(grid: GridImpl, i: int, j: int) -> bool:
+static func _boat_possible(grid: GridImpl, i: int, j: int, disallow_nowater_below := true) -> bool:
 	var c := grid._pure_cell(i, j)
 	if c.cell_type() != E.CellType.Single:
 		return false
 	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
 		return false
 	var below := grid._pure_cell(i + 1, j)._content_top()
+	if not disallow_nowater_below and below == Content.NoBoatWater or below == Content.NoWater:
+		return true
 	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
 class BoatRowStrategy extends RowStrategy:
