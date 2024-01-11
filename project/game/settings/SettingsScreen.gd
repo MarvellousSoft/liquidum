@@ -46,7 +46,7 @@ func toggle_pause() -> void:
 		AudioManager.play_sfx("disable_settings")
 		save_values()
 		AnimPlayer.play("disable")
-	emit_signal("pause_toggled", active)
+	pause_toggled.emit(active)
 
 
 func save_values():
@@ -62,6 +62,8 @@ func setup_values():
 	SoundSettings.bgm.set_value(Profile.get_option("bgm_volume")*100)
 	SoundSettings.sfx.set_value(Profile.get_option("sfx_volume")*100)
 	Fullscreen.button_pressed = Global.is_fullscreen()
+	%HighlightLinesContainer/CheckBox.button_pressed = Profile.get_option("highlight_grid")
+	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -113,10 +115,13 @@ func _on_dark_mode_toggled(on: bool) -> void:
 
 func _on_highlight_lines_toggled(on: bool) -> void:
 	checkbox_sound(on)
+	Profile.set_option("highlight_grid", on)
+
 
 
 func _on_show_preview_toggled(on: bool) -> void:
 	checkbox_sound(on)
+	Profile.set_option("show_grid_preview", on)
 
 
 func _on_drag_toggled(on: bool) -> void:

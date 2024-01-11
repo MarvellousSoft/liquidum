@@ -49,7 +49,6 @@ var wall_brush_active := false
 func _ready():
 	reset()
 
-
 func _process(_dt):
 	update_drag_preview()
 
@@ -476,14 +475,14 @@ func update_drag_preview() -> void:
 
 
 func remove_all_highlights():
-	for i in rows:
-		for j in columns:
-			get_cell(i, j).set_highlight(false)
-	HintBars.left.remove_all_highlights()
-	HintBars.top.remove_all_highlights()
+	highlight_grid(-1, -1)
 
 
 func highlight_grid(p_i : int, p_j : int) -> void:
+	if not Profile.get_option("highlight_grid"):
+		# basically removes highlight instead
+		p_i = -1
+		p_j = -1
 	for i in rows:
 		for j in columns:
 			get_cell(i, j).set_highlight(i == p_i or j == p_j)
@@ -493,6 +492,8 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 
 func show_boat_preview(p_i : int, p_j : int) -> void:
 	remove_all_preview()
+	if not Profile.get_option("show_grid_preview"):
+		return
 	var grid_cell := get_cell(p_i, p_j)
 	if grid_logic.get_cell(p_i, p_j).boat_possible(false) and not grid_cell.has_boat():
 		grid_cell.set_boat_preview(true)
@@ -504,6 +505,8 @@ func show_boat_preview(p_i : int, p_j : int) -> void:
 
 func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
 	remove_all_preview()
+	if not Profile.get_option("show_grid_preview"):
+		return
 	var corner := which as E.Corner if which != E.Waters.Single else E.Corner.TopLeft
 	var affected_cells = grid_logic.get_cell(p_i, p_j).water_would_flood_which(corner)
 	for cell_data in affected_cells:
@@ -530,9 +533,8 @@ func highlight_column(idx):
 func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
-	
-	if Profile.get_option("show_grid_preview"):
-		remove_all_preview()
+
+	remove_all_preview()
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
@@ -663,9 +665,8 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
 	
-	if Profile.get_option("highlight_grid"):
-		highlight_grid(i, j)
-	if Profile.get_option("show_grid_preview") and mouse_hold_status == E.MouseDragState.None:
+	highlight_grid(i, j)
+	if mouse_hold_status == E.MouseDragState.None:
 		if brush_mode == E.BrushMode.Water:
 			show_preview(i, j, which)
 		elif brush_mode == E.BrushMode.Boat:
@@ -794,10 +795,8 @@ func _add_row():
 
 
 func _on_left_grid():
-	if Profile.get_option("highlight_grid"):
-		remove_all_highlights()
-	if Profile.get_option("show_grid_preview"):
-		remove_all_preview()
+	remove_all_highlights()
+	remove_all_preview()
 
 
 func _on_hint_bar_top_mouse_entered_hint(idx):
@@ -806,8 +805,7 @@ func _on_hint_bar_top_mouse_entered_hint(idx):
 	remove_all_highlights()
 	highlight_column(idx)
 	HintBars.top.highlight_hints(idx)
-	if Profile.get_option("show_grid_preview"):
-		remove_all_preview()
+	remove_all_preview()
 
 
 func _on_hint_bar_left_mouse_entered_hint(idx):
@@ -816,8 +814,7 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 	remove_all_highlights()
 	highlight_row(idx)
 	HintBars.left.highlight_hints(idx)
-	if Profile.get_option("show_grid_preview"):
-		remove_all_preview()
+	remove_all_preview()
 
 
 func _on_block_mouse_entered(row : int, column : int):

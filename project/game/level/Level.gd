@@ -325,10 +325,9 @@ func win() -> void:
 	game_won = true
 	process_game = false
 	
-	if Profile.get_option("highlight_grid"):
-		GridNode.remove_all_highlights()
-	if Profile.get_option("show_grid_preview"):
-		GridNode.remove_all_preview()
+
+	GridNode.remove_all_highlights()
+	GridNode.remove_all_preview()
 	GridNode.disable()
 	ResetButton.disabled = true
 	BackButton.disabled = true
@@ -349,8 +348,7 @@ func win() -> void:
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
-	if Profile.get_option("show_grid_preview"):
-		GridNode.remove_all_preview()
+	GridNode.remove_all_preview()
 
 
 func _on_grid_updated() -> void:
@@ -540,10 +538,8 @@ func _on_button_mouse_entered() -> void:
 
 
 func _on_center_container_mouse_entered() -> void:
-	if Profile.get_option("highlight_grid"):
-		GridNode.remove_all_highlights()
-	if Profile.get_option("show_grid_preview"):
-		GridNode.remove_all_preview()
+	GridNode.remove_all_highlights()
+	GridNode.remove_all_preview()
 
 
 func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:
