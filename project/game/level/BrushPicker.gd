@@ -39,6 +39,11 @@ func _input(event):
 		pick_previous_brush()
 	elif event.is_action_pressed("pick_next_brush"):
 		pick_next_brush()
+	if event is InputEventKey:
+		if event.pressed and event.keycode >= KEY_1 and event.keycode <= KEY_9:
+			var valid := get_valid_buttons()
+			if event.keycode - KEY_1 < valid.size():
+				_on_button_pressed(valid[event.keycode - KEY_1])
 
 
 func disable():
@@ -69,12 +74,16 @@ func disable_brush(brush_type : E.BrushMode) -> void:
 	Buttons[brush_type].set_visible(false)
 
 
-func pick_next_brush() -> void:
-	var valid_buttons = []
+func get_valid_buttons() -> Array[E.BrushMode]:
+	var valid_buttons: Array[E.BrushMode] = []
 	for button_key in Buttons.keys():
 		var button_node = Buttons[button_key]
 		if button_node.visible:
 			valid_buttons.push_back(button_key)
+	return valid_buttons
+
+func pick_next_brush() -> void:
+	var valid_buttons := get_valid_buttons()
 	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
 	
 	var i = 0
@@ -84,16 +93,11 @@ func pick_next_brush() -> void:
 		if button_node.button_pressed:
 			break
 	i = i % valid_buttons.size()
-	Buttons[valid_buttons[i]].button_pressed = true
 	_on_button_pressed(valid_buttons[i])
 
 
 func pick_previous_brush() -> void:
-	var valid_buttons = []
-	for button_key in Buttons.keys():
-		var button_node = Buttons[button_key]
-		if button_node.visible:
-			valid_buttons.push_front(button_key)
+	var valid_buttons := get_valid_buttons()
 	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
 	
 	var i = 0
@@ -103,7 +107,6 @@ func pick_previous_brush() -> void:
 		if button_node.button_pressed:
 			break
 	i = i % valid_buttons.size()
-	Buttons[valid_buttons[i]].button_pressed = true
 	_on_button_pressed(valid_buttons[i])
 
 func _on_button_pressed(mode: E.BrushMode):
