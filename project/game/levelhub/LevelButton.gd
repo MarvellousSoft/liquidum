@@ -90,7 +90,7 @@ func _on_button_pressed():
 
 
 func _level_completed(info: Level.WinInfo) -> void:
-	if info.first_win:
+	if info.first_win and SteamManager.enabled:
 		SteamStats.update_campaign_stats()
 
 
