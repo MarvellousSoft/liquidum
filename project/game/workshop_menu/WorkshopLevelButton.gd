@@ -16,7 +16,7 @@ func _ready() -> void:
 	try_check_download()
 
 func load_level() -> LevelData:
-	var info := Steam.getItemInstallInfo(id)
+	var info: Dictionary = SteamManager.steam.getItemInstallInfo(id)
 	if not info.ret:
 		return null
 	var folder := ProjectSettings.localize_path(info.folder)
@@ -31,7 +31,7 @@ func try_check_download() -> void:
 		var save := FileManager.load_level(str(id))
 		OngoingSolution.visible = save != null and save.is_empty
 	else:
-		Steam.downloadItem(id, true)
+		SteamManager.steam.downloadItem(id, true)
 
 func _on_open_pressed() -> void:
 	var level_data := load_level()

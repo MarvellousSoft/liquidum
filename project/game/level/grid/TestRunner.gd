@@ -56,11 +56,11 @@ const INT_STATS := ["daily_levels", "random_all_levels", "random_insane_levels"]
 func _on_print_global_stats_pressed() -> void:
 	if not SteamManager.enabled:
 		return
-	Steam.requestGlobalStats(5)
-	await Steam.global_stats_received
+	SteamManager.steam.requestGlobalStats(5)
+	await SteamManager.steam.global_stats_received
 	for stat in PLAYED_STATS:
-		var val := Steam.getGlobalStatFloat(stat + "_secs")
-		var tot := Steam.getGlobalStatInt(stat + "_total")
+		var val := SteamManager.steam.getGlobalStatFloat(stat + "_secs")
+		var tot := SteamManager.steam.getGlobalStatInt(stat + "_total")
 		print("%s = %.0f tot %.0f avg" % [stat, val, val / tot])
 
 
@@ -68,11 +68,11 @@ func _on_print_local_stats_pressed():
 	if not SteamManager.enabled:
 		return
 	for stat in PLAYED_STATS:
-		var val := Steam.getStatFloat(stat + "_secs")
-		var tot := Steam.getStatInt(stat + "_total")
+		var val := SteamManager.steam.getStatFloat(stat + "_secs")
+		var tot := SteamManager.steam.getStatInt(stat + "_total")
 		print("%s = %.0f (total %d)" % [stat, val, tot])
 	for int_stat in INT_STATS:
-		print("%s = %d" % [int_stat, Steam.getStatInt(int_stat)])
+		print("%s = %d" % [int_stat, SteamManager.steam.getStatInt(int_stat)])
 
 
 func _on_preprocess_dailies_pressed() -> void:

@@ -1,27 +1,34 @@
 extends Node
 
 # TODO: Figure this out some other way
-var enabled := true
+var enabled := false
 const APP_ID := 2716690
+var steam = null
 
 var stats_received := false
+
+func _init() -> void:
+	if Engine.has_singleton("Steam"):
+		steam = Engine.get_singleton("Steam")
+	else:
+		print("Steam is not available.")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if enabled:
 		OS.set_environment("SteamAppId", str(APP_ID))
 		OS.set_environment("SteamGameId", str(APP_ID))
-		var res := Steam.steamInit()
+		var res: Dictionary = SteamManager.steam.steamInit()
 		print("Steam init: %s" % res)
-		print("Steam running: %s" % Steam.isSteamRunning())
-		if res.status != Steam.RESULT_OK:
+		print("Steam running: %s" % SteamManager.steam.isSteamRunning())
+		if res.status != SteamManager.steam.RESULT_OK:
 			enabled = false
 	if not enabled:
 		set_process(false)
 		set_process_input(false)
 		return
-	Steam.current_stats_received.connect(_stats_received)
-	Steam.requestCurrentStats()
+	SteamManager.steam.current_stats_received.connect(_stats_received)
+	SteamManager.steam.requestCurrentStats()
 
 func _stats_received(game: int, result: int, user: int) -> void:
 	if stats_received:
@@ -32,19 +39,19 @@ func _stats_received(game: int, result: int, user: int) -> void:
 
 func store_stats() -> void:
 	if not stats_received:
-		Steam.requestCurrentStats()
+		SteamManager.steam.requestCurrentStats()
 		return
 	print("Storing steam stats")
-	Steam.storeStats()
+	SteamManager.steam.storeStats()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		store_stats()
-		Steam.steamShutdown()
+		SteamManager.steam.steamShutdown()
 
 
 func _process(_dt: float) -> void:
-	Steam.run_callbacks()
+	SteamManager.steam.run_callbacks()
 
 class UploadResult:
 	var id: int
@@ -72,34 +79,34 @@ func upload_ugc_item(id: int, title: String, description: String, dir: String, p
 	return UploadResult.new(id, success)
 
 func _create_item_id() -> int:
-	Steam.createItem(SteamManager.APP_ID, Steam.WORKSHOP_FILE_TYPE_COMMUNITY)
-	var ret: Array = await Steam.item_created
-	var res: Steam.Result = ret[0]
+	SteamManager.steam.createItem(SteamManager.APP_ID, SteamManager.steam.WORKSHOP_FILE_TYPE_COMMUNITY)
+	var ret: Array = await SteamManager.steam.item_created
+	var res: int = ret[0]
 	var id: int = ret[1]
 	var needs_tos: bool = ret[2]
-	if res != Steam.RESULT_OK:
+	if res != SteamManager.steam.RESULT_OK:
 		push_error("Failed to create item: %s" % res)
 		return -1
 	print("Successfully created item %d" % id)
 	if needs_tos:
-		Steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
+		SteamManager.steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
 	return id
 
 func _upload_item(id: int, title: String, description: String, dir: String, preview_file: String) -> bool:
-	var update_id := Steam.startItemUpdate(SteamManager.APP_ID, id)
-	Steam.setItemContent(update_id, dir)
-	Steam.setItemTitle(update_id, title)
-	Steam.setItemDescription(update_id, description)
-	Steam.setItemPreview(update_id, preview_file)
-	Steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
+	var update_id: int = SteamManager.steam.startItemUpdate(SteamManager.APP_ID, id)
+	SteamManager.steam.setItemContent(update_id, dir)
+	SteamManager.steam.setItemTitle(update_id, title)
+	SteamManager.steam.setItemDescription(update_id, description)
+	SteamManager.steam.setItemPreview(update_id, preview_file)
+	SteamManager.steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
 	UploadingToWorkshop.update_handle = update_id
-	var ret: Array = await Steam.item_updated
-	var res: Steam.Result = ret[0]
+	var ret: Array = await SteamManager.steam.item_updated
+	var res: int = ret[0]
 	var needs_tos: bool = ret[1]
-	if res != Steam.RESULT_OK:
+	if res != SteamManager.steam.RESULT_OK:
 		push_error("Failed to upload item: %s" % res)
 		return false
 	if needs_tos:
-		Steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
+		SteamManager.steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
 	print("Successfuly updated item %d" % id)
 	return true

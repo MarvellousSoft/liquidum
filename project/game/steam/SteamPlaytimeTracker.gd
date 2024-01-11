@@ -21,11 +21,11 @@ func flush() -> void:
 		return
 	for stat in stats:
 		var stat_name := stat + "_secs"
-		var prev := Steam.getStatFloat(stat_name)
-		Steam.setStatFloat(stat_name, prev + time_to_add)
+		var prev: float = SteamManager.steam.getStatFloat(stat_name)
+		SteamManager.steam.setStatFloat(stat_name, prev + time_to_add)
 		var stat_tot_name := stat + "_total"
-		if Steam.getStatInt(stat_tot_name) == 0:
-			Steam.setStatInt(stat_tot_name, 1)
+		if SteamManager.steam.getStatInt(stat_tot_name) == 0:
+			SteamManager.steam.setStatInt(stat_tot_name, 1)
 	time_to_add = 0
 
 func _enter_tree() -> void:

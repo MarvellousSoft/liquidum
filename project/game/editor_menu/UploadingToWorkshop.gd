@@ -19,7 +19,7 @@ func stop() -> void:
 func _on_update_timeout():
 	if update_handle == 0 or not SteamManager.enabled:
 		return
-	var ret := Steam.getItemUpdateProgress(update_handle)
+	var ret: Dictionary = SteamManager.steam.getItemUpdateProgress(update_handle)
 	if ret.status == 0:
 		return
 	var pct := (float(ret.status) / 6.0) + (1.0 / 6.0) * (float(ret.processed) / float(ret.total))

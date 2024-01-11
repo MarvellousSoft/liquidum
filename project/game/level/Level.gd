@@ -86,7 +86,7 @@ func _ready():
 	GridNode.show()
 	setup()
 	if workshop_id != -1 and SteamManager.enabled:
-		Steam.startPlaytimeTracking([workshop_id])
+		SteamManager.steam.startPlaytimeTracking([workshop_id])
 
 
 func _enter_tree():
@@ -97,7 +97,7 @@ func _enter_tree():
 
 func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
-		Steam.stopPlaytimeTracking([workshop_id])
+		SteamManager.steam.stopPlaytimeTracking([workshop_id])
 
 
 func _process(dt):

@@ -5,14 +5,14 @@ extends Control
 func _ready() -> void:
 	if not SteamManager.enabled:
 		return
-	var ids := Steam.getSubscribedItems()
+	var ids: Array = SteamManager.steam.getSubscribedItems()
 	var button_class := preload("res://game/workshop_menu/WorkshopLevelButton.tscn")
 	for id in ids:
 		var button := button_class.instantiate()
 		button.id = id
 		ButtonsContainer.add_child(button)
-	Steam.item_downloaded.connect(_item_downloaded)
-	Steam.item_installed.connect(_item_installed)
+	SteamManager.steam.item_downloaded.connect(_item_downloaded)
+	SteamManager.steam.item_installed.connect(_item_installed)
 
 func _item_installed(app_id: int, _id: int) -> void:
 	if app_id == SteamManager.APP_ID:

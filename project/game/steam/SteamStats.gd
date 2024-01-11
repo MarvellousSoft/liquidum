@@ -6,7 +6,7 @@ class_name SteamStats
 
 
 static func flushNewAchievements() -> void:
-	Steam.storeStats()
+	SteamManager.steam.storeStats()
 
 static func set_random_levels(completed_count: Array[int]) -> void:
 	var any := false
@@ -22,7 +22,7 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 			if SteamStats._set_stat_with_goal(stat_name, completed_count[dif_val], 100, "random_100", 10):
 				any = true
 		else:
-			Steam.setStatInt(stat_name, completed_count[dif_val])
+			SteamManager.steam.setStatInt(stat_name, completed_count[dif_val])
 	if SteamStats._set_stat_with_goal("random_all_levels", tot, 25, "random_25", 5):
 		any = true
 	if tot > 0 and SteamStats._achieve("random_1", false):
@@ -37,8 +37,8 @@ static func set_current_streak(streak: int) -> void:
 		SteamStats.flushNewAchievements()
 
 static func _increment(stat: String) -> void:
-	var val := Steam.getStatInt(stat)
-	Steam.setStatInt(stat, val + 1)
+	var val : int= SteamManager.steam.getStatInt(stat)
+	SteamManager.steam.setStatInt(stat, val + 1)
 
 static func increment_daily_all() -> void:
 	SteamStats._increment("daily_all_levels")
@@ -51,14 +51,14 @@ static func increment_workshop() -> void:
 	var stat := "workshop_levels"
 	if SteamStats._achieve("workshop_levels_1", false):
 		any = true
-	if SteamStats._set_stat_with_goal(stat, Steam.getStatInt(stat) + 1, 5, "workshop_levels_5", 3):
+	if SteamStats._set_stat_with_goal(stat, SteamManager.steam.getStatInt(stat) + 1, 5, "workshop_levels_5", 3):
 		any = true
 	if any:
 		SteamStats.flushNewAchievements()
 
 static func _achieve(achievement: String, flush := true) -> bool:
-	if not Steam.getAchievement(achievement).achieved:
-		Steam.setAchievement(achievement)
+	if not SteamManager.steam.getAchievement(achievement).achieved:
+		SteamManager.steam.setAchievement(achievement)
 		if flush:
 			SteamStats.flushNewAchievements()
 		return true
@@ -70,11 +70,11 @@ static func unlock_daily_no_mistakes() -> void:
 # Returns whether the goal was just reached
 # Indicates progress every checkpoint values
 static func _set_stat_with_goal(stat: String, val: int, goal: int, achievement: String, checkpoint: int) -> bool:
-	var prev := Steam.getStatInt(stat)
+	var prev: int = SteamManager.steam.getStatInt(stat)
 	if prev != val:
-		Steam.setStatInt(stat, val)
+		SteamManager.steam.setStatInt(stat, val)
 		if val > prev and val < goal and (prev / checkpoint) != (val / checkpoint):
-			Steam.indicateAchievementProgress(achievement, val, goal)
+			SteamManager.steam.indicateAchievementProgress(achievement, val, goal)
 		return prev < goal and val >= goal
 	return false
 

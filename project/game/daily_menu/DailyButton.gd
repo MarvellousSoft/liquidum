@@ -78,7 +78,7 @@ func _update_streak() -> void:
 
 func _unixtime() -> int:
 	if SteamManager.enabled:
-		return Steam.getServerRealTime()
+		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
 func _today(dt: int = 0) -> String:
@@ -166,14 +166,14 @@ func upload_leaderboard(info: Level.WinInfo) -> int:
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
-	Steam.findOrCreateLeaderboard("daily_%s" % date, Steam.LEADERBOARD_SORT_METHOD_ASCENDING, Steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
-	var ret: Array = await Steam.leaderboard_find_result
+	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+	var ret: Array = await SteamManager.steam.leaderboard_find_result
 	if not ret[1]:
 		push_warning("Leaderboard not found for daily %s" % date)
 		return -1
 	var l_id: int = ret[0]
-	Steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
-	ret = await Steam.leaderboard_score_uploaded
+	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
+	ret = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)
 	return l_id
@@ -192,13 +192,13 @@ class ListEntry:
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
 		if override_name.is_empty():
-			if data.steam_id == Steam.getSteamID():
-				entry.text = Steam.getPersonaName()
+			if data.steam_id == SteamManager.steam.getSteamID():
+				entry.text = SteamManager.steam.getPersonaName()
 			else:
-				var nickname := Steam.getPlayerNickname(data.steam_id)
-				entry.text = Steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
-			Steam.getPlayerAvatar(Steam.AVATAR_SMALL, data.steam_id)
-			var ret: Array = await Steam.avatar_loaded
+				var nickname: String = SteamManager.steam.getPlayerNickname(data.steam_id)
+				entry.text = SteamManager.steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
+			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_SMALL, data.steam_id)
+			var ret: Array = await SteamManager.steam.avatar_loaded
 			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
 		else:
 			entry.text = override_name
@@ -216,14 +216,14 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 		return null
 	var data := LeaderboardData.new()
 	var list_has_rank := {}
-	Steam.downloadLeaderboardEntries(0, 0, Steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
-	var ret: Array = await Steam.leaderboard_scores_downloaded
+	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
+	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
 	for entry in ret[2]:
 		list_has_rank[entry.global_rank] = true
 		data.list.append(await ListEntry.create(entry))
-	var total := Steam.getLeaderboardEntryCount(l_id)
-	Steam.downloadLeaderboardEntries(1, 1000, Steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
-	ret = await Steam.leaderboard_scores_downloaded
+	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
+	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
+	ret = await SteamManager.steam.leaderboard_scores_downloaded
 	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
 	for entry in ret[2]:
 		for pct in percentiles:
