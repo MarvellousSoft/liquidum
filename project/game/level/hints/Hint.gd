@@ -100,6 +100,8 @@ func alpha_t(text : String, alpha : float) -> String:
 func update_label() -> void:
 	Number.text = ""
 	var value = str(hint_value) if hint_value != -1 else "?"
+	if is_boat:
+		set_visible(hint_value != -1 or (hint_type != E.HintType.Zero and hint_type != E.HintType.Hidden))
 	match hint_type:
 		E.HintType.Zero, E.HintType.Hidden:
 			Number.text += value

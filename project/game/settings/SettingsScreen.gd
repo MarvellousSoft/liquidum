@@ -149,3 +149,4 @@ func _on_language_item_selected(index: int) -> void:
 func _on_line_info_item_selected(index: int) -> void:
 	checkbox_sound(true)
 	Profile.set_option("line_info", index)
+	Profile.line_info_changed.emit()

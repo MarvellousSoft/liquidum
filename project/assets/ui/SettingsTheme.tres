@@ -75,12 +75,12 @@ corner_radius_bottom_left = 10
 [sub_resource type="ImageTexture" id="ImageTexture_wptlv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56pbt"]
-bg_color = Color(0.85098, 1, 0.886275, 1)
+bg_color = Color(0.266667, 0.266667, 0.266667, 1)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wworw"]
 bg_color = Color(0.266667, 0.266667, 0.266667, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 

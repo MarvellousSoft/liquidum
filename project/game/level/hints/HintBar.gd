@@ -26,7 +26,7 @@ func _ready():
 		child.queue_free()
 
 
-func setup(hints : Array, editor_mode : bool) -> void:
+func setup(hints : Array, editor_mode : bool, swap_water_boat := false) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
 	# Let's not remove all children to keep the current visibility when adding/removing rows
 	# Removing then adding does not keep the same value, but that's fine enough
@@ -44,8 +44,9 @@ func setup(hints : Array, editor_mode : bool) -> void:
 		var water_hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
-		#if hints[i].water_count == -1 and hints[i].water_count_type == E.HintType.Hidden:
-			#water_hint.dummy_hint()
+		if swap_water_boat:
+			boat_hint.move_to_front()
+			container.alignment = BoxContainer.ALIGNMENT_BEGIN
 
 
 	await get_tree().process_frame
@@ -121,7 +122,6 @@ func remove_all_highlights() -> void:
 
 func highlight_hints(idx : int) -> void:
 	var bar = Horizontal if is_horizontal else Vertical
-	assert(idx < bar.get_child_count(), "Not a valid index to get hint:" + str(idx))
 	var i = 0
 	for hint_container in bar.get_children():
 		for hint in hint_container.get_children():

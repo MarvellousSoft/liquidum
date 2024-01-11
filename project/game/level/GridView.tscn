@@ -74,7 +74,7 @@ columns = 2
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 2
+columns = 3
 
 [node name="TLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
@@ -84,6 +84,11 @@ layout_mode = 2
 [node name="HintBarTop" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
 is_horizontal = true
+
+[node name="TRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
 
 [node name="HintBarLeft" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
 layout_mode = 2
@@ -129,6 +134,30 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="RegularCell3" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+layout_mode = 2
+
+[node name="HintBarRight" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
+layout_mode = 2
+
+[node name="Horizontal" parent="CenterContainer/MainGridContainer/GridContainer/HintBarRight" index="0"]
+visible = false
+
+[node name="BLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer/HintBarRight"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
+
+[node name="BLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+
+[node name="HintBarBottom" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
+layout_mode = 2
+is_horizontal = true
+
+[node name="BRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
 [node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/MainGridContainer"]
@@ -303,7 +332,13 @@ antialiased = true
 
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
 [connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TRPanel" to="." method="_on_left_grid"]
 [connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_mouse_entered_hint"]
+[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarRight" to="." method="_on_hint_bar_right_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/HintBarRight/BLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/BLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarBottom" to="." method="_on_hint_bar_bottom_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/BRPanel" to="." method="_on_left_grid"]
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize" to="." method="_on_left_grid"]
 [connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_rem_col"]
@@ -320,3 +355,5 @@ antialiased = true
 [editable path="CenterContainer/MainGridContainer/GridContainer/HintBarLeft"]
 [editable path="CenterContainer/MainGridContainer/GridContainer/Columns/Row1/RegularCell"]
 [editable path="CenterContainer/MainGridContainer/GridContainer/Columns/Row1/RegularCell2"]
+[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarRight"]
+[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarBottom"]

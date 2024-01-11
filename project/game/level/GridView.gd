@@ -25,6 +25,8 @@ const MAX_GRID_C = 10
 @onready var HintBars = {
 	"top": $CenterContainer/MainGridContainer/GridContainer/HintBarTop,
 	"left": $CenterContainer/MainGridContainer/GridContainer/HintBarLeft,
+	"bottom": $CenterContainer/MainGridContainer/GridContainer/HintBarBottom,
+	"right": $CenterContainer/MainGridContainer/GridContainer/HintBarRight,
 }
 @onready var CellCornerGrid = $CellCornerGrid
 @onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
@@ -47,6 +49,7 @@ var editor_mode := false
 var wall_brush_active := false
 
 func _ready():
+	Profile.line_info_changed.connect(_on_line_info_changed)
 	reset()
 
 func _process(_dt):
@@ -105,14 +108,47 @@ func setup(grid_logic_: GridModel, fast_startup := false) -> void:
 	else:
 		SizePanel.modulate.a = 1.0
 
+func _inner_get_hints(hints: Array[GridModel.LineHint], count_water: Callable, count_boat: Callable) -> Array[GridModel.LineHint]:
+	var ret: Array[GridModel.LineHint] = []
+	var info: Profile.LineInfo = Profile.get_option("line_info")
+	if info == Profile.LineInfo.None or editor_mode:
+		return ret
+	for i in hints.size():
+		var h := GridModel.LineHint.new()
+		h.water_count = count_water.call(i)
+		h.boat_count = count_boat.call(i)
+		if info == Profile.LineInfo.ShowMissing:
+			if hints[i].water_count == -1.0:
+				h.water_count = -1.0
+			else:
+				h.water_count = hints[i].water_count - h.water_count
+			if hints[i].boat_count == -1:
+				h.boat_count = -1
+			else:
+				h.boat_count = hints[i].boat_count - h.boat_count
+		if h.boat_count == 0:
+			h.boat_count = -1 # Hide 0 boats since it's ugly and we try to avoid it
+		ret.append(h)
+	return ret
+
+func get_bottom_hints() -> Array[GridModel.LineHint]:
+	return _inner_get_hints(grid_logic.col_hints(), grid_logic.count_water_col, grid_logic.count_boat_col)
+
+func get_right_hints() -> Array[GridModel.LineHint]:
+	return _inner_get_hints(grid_logic.row_hints(), grid_logic.count_water_row, grid_logic.count_boat_row)
+
 #Assumes grid_logic is already setup
 func setup_hints(fast_startup: bool) -> void:
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
 	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
 	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
+	HintBars.bottom.setup(get_bottom_hints(), false, true)
+	HintBars.right.setup(get_right_hints(), false, true)
 	var delay = get_grid_delay(rows, columns)
 	HintBars.left.startup(editor_mode, delay + STARTUP_MAX_DELAY, fast_startup)
 	HintBars.top.startup(editor_mode, delay + STARTUP_MAX_DELAY*2, fast_startup)
+	HintBars.bottom.startup(editor_mode, delay + STARTUP_MAX_DELAY, fast_startup)
+	HintBars.right.startup(editor_mode, delay + STARTUP_MAX_DELAY*2, fast_startup)
 
 
 func setup_cell_corners() -> void:
@@ -286,32 +322,40 @@ func update_visuals(fast_update := false) -> void:
 			if fast_update:
 				cell.fast_update_waters()
 
+# get_status is null or Callable
+func _inner_update_hint(hints: Array[GridModel.LineHint], bar: HintBar, get_status: Callable) -> void:
+	for i in hints.size():
+		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
+			var hint: Hint = bar.get_hint(i, hint_type == E.HintContent.Boat)
+			if hint:
+				var val := float(hints[i].boat_count) if hint_type == E.HintContent.Boat else hints[i].water_count
+				hint.set_value(val)
+				hint.set_hint_type(hints[i].boat_count_type if hint_type == E.HintContent.Boat else hints[i].water_count_type)
+				hint.set_status(get_status.call(i, hint_type))
+
+func _inner_row_status(i: int, content: E.HintContent) -> E.HintStatus:
+	if editor_mode:
+		return E.HintStatus.Normal
+	var hints := grid_logic.row_hints()
+	var val := float(hints[i].boat_count) if content == E.HintContent.Boat else hints[i].water_count
+	if val == -1:
+		return E.HintStatus.Normal
+	return grid_logic.get_row_hint_status(i, content)
+
+func _inner_col_status(j: int, content: E.HintContent) -> E.HintStatus:
+	if editor_mode:
+		return E.HintStatus.Normal
+	var hints := grid_logic.col_hints()
+	var val := float(hints[j].boat_count) if content == E.HintContent.Boat else hints[j].water_count
+	if val == -1:
+		return E.HintStatus.Normal
+	return grid_logic.get_col_hint_status(j, content)
 
 func update_hints() -> void:
-	var row_hints := grid_logic.row_hints()
-	for i in rows:
-		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint: Hint = HintBars.left.get_hint(i, hint_type == E.HintContent.Boat)
-			if hint:
-				var val := float(row_hints[i].boat_count) if hint_type == E.HintContent.Boat else row_hints[i].water_count
-				hint.set_value(val)
-				hint.set_hint_type(row_hints[i].boat_count_type if hint_type == E.HintContent.Boat else row_hints[i].water_count_type)
-				if not editor_mode:
-					hint.set_status(grid_logic.get_row_hint_status(i, hint_type))
-				else:
-					hint.set_status(E.HintStatus.Normal)
-	var col_hints := grid_logic.col_hints()
-	for j in columns:
-		for hint_type in [E.HintContent.Water, E.HintContent.Boat]:
-			var hint: Hint = HintBars.top.get_hint(j, hint_type == E.HintContent.Boat)
-			if hint:
-				var val := float(col_hints[j].boat_count) if hint_type == E.HintContent.Boat else col_hints[j].water_count
-				hint.set_value(val)
-				hint.set_hint_type(col_hints[j].boat_count_type if hint_type == E.HintContent.Boat else col_hints[j].water_count_type)
-				if not editor_mode:
-					hint.set_status(grid_logic.get_col_hint_status(j, hint_type))
-				else:
-					hint.set_status(E.HintStatus.Normal)
+	_inner_update_hint(grid_logic.row_hints(), HintBars.left, _inner_row_status)
+	_inner_update_hint(grid_logic.col_hints(), HintBars.top, _inner_col_status)
+	_inner_update_hint(get_bottom_hints(), HintBars.bottom, _inner_col_status)
+	_inner_update_hint(get_right_hints(), HintBars.right, _inner_row_status)
 
 
 func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
@@ -477,7 +521,6 @@ func update_drag_preview() -> void:
 func remove_all_highlights():
 	highlight_grid(-1, -1)
 
-
 func highlight_grid(p_i : int, p_j : int) -> void:
 	if not Profile.get_option("highlight_grid"):
 		# basically removes highlight instead
@@ -488,6 +531,8 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 			get_cell(i, j).set_highlight(i == p_i or j == p_j)
 	HintBars.left.highlight_hints(p_i)
 	HintBars.top.highlight_hints(p_j)
+	HintBars.right.highlight_hints(p_i)
+	HintBars.bottom.highlight_hints(p_j)
 
 
 func show_boat_preview(p_i : int, p_j : int) -> void:
@@ -520,12 +565,16 @@ func remove_all_preview() -> void:
 			get_cell(i, j).remove_all_preview()
 
 
-func highlight_row(idx):
+func highlight_row(idx: int) -> void:
+	for bar in [HintBars.left, HintBars.right]:
+		bar.highlight_hints(idx)
 	for j in columns:
 		get_cell(idx, j).set_highlight(true)
 
 
-func highlight_column(idx):
+func highlight_column(idx: int) -> void:
+	for bar in [HintBars.top, HintBars.bottom]:
+		bar.highlight_hints(idx)
 	for i in rows:
 		get_cell(i, idx).set_highlight(true)
 
@@ -819,7 +868,6 @@ func _on_hint_bar_top_mouse_entered_hint(idx):
 		return
 	remove_all_highlights()
 	highlight_column(idx)
-	HintBars.top.highlight_hints(idx)
 	remove_all_preview()
 
 
@@ -828,7 +876,6 @@ func _on_hint_bar_left_mouse_entered_hint(idx):
 		return
 	remove_all_highlights()
 	highlight_row(idx)
-	HintBars.left.highlight_hints(idx)
 	remove_all_preview()
 
 
@@ -837,3 +884,23 @@ func _on_block_mouse_entered(row : int, column : int):
 		return
 	highlight_grid(row, column)
 	remove_all_preview()
+
+
+func _on_hint_bar_right_mouse_entered_hint(idx: int) -> void:
+	if disabled:
+		return
+	remove_all_highlights()
+	highlight_row(idx)
+	remove_all_preview()
+
+
+func _on_hint_bar_bottom_mouse_entered_hint(idx: int) -> void:
+	if disabled:
+		return
+	remove_all_highlights()
+	highlight_column(idx)
+	remove_all_preview()
+
+func _on_line_info_changed() -> void:
+	setup_hints(true)
+	update_hints()

@@ -1,6 +1,7 @@
 extends Node
 
 signal dark_mode_toggled(status: bool)
+signal line_info_changed()
 
 const LANGUAGES = [
 	"",
