@@ -8,6 +8,12 @@ const LANGUAGES = [
 	"pt_BR",
 ]
 
+enum LineInfo {
+	None,
+	ShowMissing,
+	ShowCurrent,
+}
+
 const VERSION := "v0.0.1"
 const SHOW_VERSION = true
 
@@ -21,6 +27,9 @@ var options = {
 	"show_grid_preview": true,
 	"locale": 0,
 	"dark_mode": false,
+	"drag_content": true,
+	"invert_mouse": false,
+	"line_info": LineInfo.None,
 }
 
 

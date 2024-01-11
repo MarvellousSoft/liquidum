@@ -66,6 +66,9 @@ func setup_values():
 	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
 	%LanguageSelectContainer/OptionButton.selected = Profile.get_option("locale")
 	%DarkModeContainer/CheckBox.button_pressed = Profile.get_option("dark_mode")
+	%DragContainer/CheckBox.button_pressed = Profile.get_option("drag_content")
+	%InvertMouseContainer/CheckBox.button_pressed = Profile.get_option("invert_mouse")
+	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -122,7 +125,6 @@ func _on_highlight_lines_toggled(on: bool) -> void:
 	Profile.set_option("highlight_grid", on)
 
 
-
 func _on_show_preview_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("show_grid_preview", on)
@@ -130,10 +132,12 @@ func _on_show_preview_toggled(on: bool) -> void:
 
 func _on_drag_toggled(on: bool) -> void:
 	checkbox_sound(on)
+	Profile.set_option("drag_content", on)
 
 
 func _on_invert_mouse_toggled(on: bool) -> void:
 	checkbox_sound(on)
+	Profile.set_option("invert_mouse", on)
 
 
 func _on_language_item_selected(index: int) -> void:
@@ -142,5 +146,6 @@ func _on_language_item_selected(index: int) -> void:
 	Profile.update_translation()
 
 
-func _on_line_info_item_selected(_index: int) -> void:
-	pass # Replace with function body.
+func _on_line_info_item_selected(index: int) -> void:
+	checkbox_sound(true)
+	Profile.set_option("line_info", index)
