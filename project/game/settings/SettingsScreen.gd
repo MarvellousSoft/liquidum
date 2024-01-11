@@ -65,6 +65,7 @@ func setup_values():
 	%HighlightLinesContainer/CheckBox.button_pressed = Profile.get_option("highlight_grid")
 	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
 	%LanguageSelectContainer/OptionButton.selected = Profile.get_option("locale")
+	%DarkModeContainer/CheckBox.button_pressed = Profile.get_option("dark_mode")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -112,6 +113,8 @@ func _on_button_mouse_entered():
 
 func _on_dark_mode_toggled(on: bool) -> void:
 	checkbox_sound(on)
+	Profile.set_option("dark_mode", on)
+	Profile.dark_mode_toggled.emit(on)
 
 
 func _on_highlight_lines_toggled(on: bool) -> void:

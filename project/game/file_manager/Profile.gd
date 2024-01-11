@@ -1,5 +1,7 @@
 extends Node
 
+signal dark_mode_toggled(status: bool)
+
 const LANGUAGES = [
 	"",
 	"en",
@@ -18,6 +20,7 @@ var options = {
 	"highlight_grid": true,
 	"show_grid_preview": true,
 	"locale": 0,
+	"dark_mode": false,
 }
 
 

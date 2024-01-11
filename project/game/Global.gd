@@ -15,12 +15,11 @@ const TUTORIALS = {
 }
 
 signal dev_mode_toggled(status : bool)
-signal dark_mode_toggled(status: bool)
 
 var previous_windowed_pos = false
 var _dev_mode := false
 var dev_mode_label: Label
-var dark_mode := false
+
 
 
 func _ready() -> void:
@@ -40,8 +39,6 @@ func _input(event):
 		_dev_mode = not _dev_mode and OS.is_debug_build()
 		dev_mode_label.visible = _dev_mode
 		dev_mode_toggled.emit(_dev_mode)
-	if event.is_action_pressed(&"toggle_dark_mode"):
-		toggle_dark_mode()
 
 
 func _notification(what : int):
@@ -54,11 +51,6 @@ func exit_game():
 	if window.mode == Window.MODE_WINDOWED:
 		Profile.set_option("previous_windowed_pos", window.position, true)
 	get_tree().quit()
-
-
-func toggle_dark_mode():
-	dark_mode = not dark_mode
-	dark_mode_toggled.emit(dark_mode)
 
 
 func is_dev_mode() -> bool:
