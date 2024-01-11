@@ -46,3 +46,4 @@ HSlider/styles/slider = SubResource("StyleBoxFlat_rnmwq")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 70
 Label/fonts/font = SubResource("FontVariation_blnni")
+TabContainer/font_sizes/font_size = 86

@@ -5,11 +5,11 @@ signal pause_toggled(active : bool)
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var SoundSettings = {
-	"master": $Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider,
-	"bgm": $Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider,
-	"sfx": $Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider,
+	"master": %MasterSoundContainer/HSlider,
+	"bgm": %BGMSoundContainer/HSlider,
+	"sfx": %SFXSoundContainer/HSlider,
 }
-@onready var Fullscreen = $Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox
+@onready var Fullscreen = %FullscreenContainer/CheckBox
 @onready var BG = $BG
 @onready var PauseButton = $PauseButton
 @onready var TitleContainer = %TitleContainer
@@ -84,14 +84,17 @@ func _on_volume_slider_value_changed(value, bus : int):
 func _on_pause_button_pressed():
 	toggle_pause()
 
+func checkbox_sound(on: bool) -> void:
+	if on:
+		AudioManager.play_sfx("checkbox_pressed")
+	else:
+		AudioManager.play_sfx("checkbox_unpressed")
+	
 
-func _on_fullscreen_toggled(button_pressed):
+func _on_fullscreen_toggled(button_pressed: bool) -> void:
 	if Global.is_fullscreen() != button_pressed:
 		Global.toggle_fullscreen()
-		if button_pressed:
-			AudioManager.play_sfx("checkbox_pressed")
-		else:
-			AudioManager.play_sfx("checkbox_unpressed")
+	checkbox_sound(button_pressed)
 
 
 func _on_save_n_quit_button_pressed():
@@ -102,3 +105,31 @@ func _on_save_n_quit_button_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_dark_mode_toggled(on: bool) -> void:
+	checkbox_sound(on)
+
+
+func _on_highlight_lines_toggled(on: bool) -> void:
+	checkbox_sound(on)
+
+
+func _on_show_preview_toggled(on: bool) -> void:
+	checkbox_sound(on)
+
+
+func _on_drag_toggled(on: bool) -> void:
+	checkbox_sound(on)
+
+
+func _on_invert_mouse_toggled(on: bool) -> void:
+	checkbox_sound(on)
+
+
+func _on_language_item_selected(_index: int) -> void:
+	pass # Replace with function body.
+
+
+func _on_line_info_item_selected(_index: int) -> void:
+	pass # Replace with function body.

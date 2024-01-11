@@ -152,3 +152,18 @@ PCT_50,50% percentile,Percentil 50%,Percentil 50%
 HARD_LEVEL_TOOLTIP,This level is hard,Esse nível é difícil,Esse nível é difícil
 USE_CUSTOM_SEED,Use custom seed,Usar seed própria,Usar seed própria
 SEED,Seed,Seed,Seed
+DARK_MODE,Dark mode,Modo escuro,Modo escuro
+HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
+SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
+DRAG_BUTTON,Fill with mouse drag,Preencher arrastando o mouse,Preencher arrastando o mouse
+INCOMPLETE_LINE_INFO,Incomplete line info,Informação de linhas incompletas,Informação de linhas incompletas
+LINE_INFO_NONE,None,Nenhuma,Nenhuma
+LINE_INFO_MISSING,Missing value,Valor faltando,Valor faltando
+LINE_INFO_CURRENT,Current value,Valor atual,Valor atual
+LANGUAGE_SELECT,Language/Idioma,Idioma/Language,Idioma/Language
+LANGUAGE_SYSTEM,System,Sistema,Sistema
+INVERT_MOUSE,Invert mouse buttons,Inverter botões do mouse,Inverter botões do mouse
+SOUND,Sound,Som,Som
+DISPLAY,Display,Aparência,Aparência
+GAMEPLAY,Gameplay,Jogabilidade,Jogabilidade
+CONTROLS,Controls,Controles,Controles

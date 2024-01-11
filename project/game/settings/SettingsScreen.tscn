@@ -199,6 +199,7 @@ offset_right = 3840.0
 offset_bottom = 2160.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer"]
+custom_minimum_size = Vector2(3000, 0)
 layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
@@ -222,46 +223,66 @@ text = "LEVEL_ID"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
+current_tab = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/MasterSoundContainer"]
+[node name="SOUND" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 97
+
+[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/MasterSoundContainer"]
 layout_mode = 2
 text = "MASTER_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/MasterSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/MasterSoundContainer"]
 layout_mode = 2
 value = 50.0
 
-[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/BGMSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/BGMSoundContainer"]
 layout_mode = 2
 text = "BGM_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/BGMSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/BGMSoundContainer"]
 layout_mode = 2
 
-[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/SFXSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/SFXSoundContainer"]
 layout_mode = 2
 text = "SFX_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/SFXSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/SFXSoundContainer"]
 layout_mode = 2
 
-[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="DISPLAY" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/FullscreenContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/FullscreenContainer"]
 custom_minimum_size = Vector2(200, 210)
 layout_mode = 2
 focus_mode = 0
@@ -272,15 +293,192 @@ texture_hover = ExtResource("5_nre0q")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/FullscreenContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/FullscreenContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "FULLSCREEN"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="DarkModeContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/DarkModeContainer"]
+custom_minimum_size = Vector2(200, 210)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/DarkModeContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "DARK_MODE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/LanguageSelectContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "LANGUAGE_SELECT"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/LanguageSelectContainer"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "LANGUAGE_SYSTEM"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+popup/item_2/text = "Português"
+popup/item_2/id = 2
+
+[node name="GAMEPLAY" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/HighlightLinesContainer"]
+custom_minimum_size = Vector2(200, 210)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/HighlightLinesContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "HIGHLIGHT_LINES"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ShowPreviewContainer"]
+custom_minimum_size = Vector2(200, 210)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ShowPreviewContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "SHOW_PREVIEW"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="DragContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/DragContainer"]
+custom_minimum_size = Vector2(200, 210)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/DragContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "DRAG_BUTTON"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="IncompleteInfoContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/IncompleteInfoContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "INCOMPLETE_LINE_INFO"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/IncompleteInfoContainer"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "LINE_INFO_NONE"
+popup/item_0/id = 0
+popup/item_1/text = "LINE_INFO_MISSING"
+popup/item_1/id = 1
+popup/item_2/text = "LINE_INFO_CURRENT"
+popup/item_2/id = 2
+
+[node name="CONTROLS" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/InvertMouseContainer"]
+custom_minimum_size = Vector2(200, 210)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("3_l1rea")
+texture_pressed = ExtResource("4_puohg")
+texture_hover = ExtResource("5_nre0q")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/InvertMouseContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "INVERT_MOUSE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="SaveNQuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 focus_mode = 0
 theme = ExtResource("6_um142")
 text = "SAVE_AND_EXIT"
@@ -302,14 +500,28 @@ libraries = {
 }
 speed_scale = 3.5
 
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
-[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
-[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
-[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/SFXSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/FullscreenContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/HighlightLinesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/HighlightLinesContainer/CheckBox" to="." method="_on_highlight_lines_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ShowPreviewContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ShowPreviewContainer/CheckBox" to="." method="_on_show_preview_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/DragContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/DragContainer/CheckBox" to="." method="_on_drag_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/IncompleteInfoContainer/OptionButton" to="." method="_on_line_info_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/IncompleteInfoContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_save_n_quit_button_pressed"]
 [connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]
