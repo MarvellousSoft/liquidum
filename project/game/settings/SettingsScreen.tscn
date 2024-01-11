@@ -227,10 +227,9 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 2
+tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
@@ -331,6 +330,7 @@ vertical_alignment = 2
 
 [node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/IncompleteInfoContainer"]
 layout_mode = 2
+focus_mode = 0
 item_count = 3
 selected = 0
 popup/item_0/text = "LINE_INFO_NONE"
@@ -416,6 +416,7 @@ vertical_alignment = 2
 
 [node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer"]
 layout_mode = 2
+focus_mode = 0
 item_count = 3
 selected = 0
 popup/item_0/text = "LANGUAGE_SYSTEM"
@@ -426,6 +427,7 @@ popup/item_2/text = "Português"
 popup/item_2/id = 2
 
 [node name="SOUND" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
