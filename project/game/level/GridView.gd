@@ -671,15 +671,16 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
-	
+
 	highlight_grid(i, j)
 	if mouse_hold_status == E.MouseDragState.None:
 		if brush_mode == E.BrushMode.Water:
 			show_preview(i, j, which)
 		elif brush_mode == E.BrushMode.Boat:
 			show_boat_preview(i, j)
-	
-	if mouse_hold_status == E.MouseDragState.None:
+		return
+	elif not Profile.get_option("drag_content") and mouse_hold_status != E.MouseDragState.Wall and mouse_hold_status != E.MouseDragState.RemoveWall:
+		mouse_hold_status = E.MouseDragState.None
 		return
 	
 	var cell_data := grid_logic.get_cell(i, j)
