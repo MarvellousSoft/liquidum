@@ -1,7 +1,7 @@
 extends Node
 
 # TODO: Figure this out some other way
-var enabled := false
+var enabled := true
 const APP_ID := 2716690
 var steam = null
 
@@ -11,6 +11,7 @@ func _init() -> void:
 	if Engine.has_singleton("Steam"):
 		steam = Engine.get_singleton("Steam")
 	else:
+		enabled = false
 		print("Steam is not available.")
 
 # Called when the node enters the scene tree for the first time.

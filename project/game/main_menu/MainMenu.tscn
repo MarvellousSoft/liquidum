@@ -1,6 +1,5 @@
-[gd_scene load_steps=9 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=8 format=3 uid="uid://c0quvd77qfdsd"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8bxuf"]
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="3_2f32g"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
@@ -17,7 +16,6 @@ shader_parameter/height = 0.005
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-theme = ExtResource("1_8bxuf")
 script = ExtResource("1_il4q0")
 
 [node name="Title" type="Control" parent="."]

@@ -47,6 +47,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/localization_editor/plugin.cfg")
 
+[gui]
+
+theme/custom="res://assets/ui/GeneralTheme.tres"
+
 [input]
 
 undo={
