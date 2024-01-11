@@ -133,8 +133,8 @@ func setup_cell_corners() -> void:
 			var corner = CELL_CORNER.instantiate()
 			CellCornerGrid.add_child(corner)
 			corner.setup(i, j)
-			corner.pressed_main_button.connect(_on_cell_corner_pressed_main_button)
-			corner.pressed_second_button.connect(_on_cell_corner_pressed_second_button)
+			corner.pressed_main_button.connect(_on_cell_corner_pressed_button.bind(true))
+			corner.pressed_second_button.connect(_on_cell_corner_pressed_button.bind(false))
 			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
 	
 	if not wall_brush_active:
@@ -214,8 +214,8 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 
 	cell.setup(self, cell_data, n, m, editor_mode, get_cell_delay(rows, columns), fast_startup)
 	
-	cell.pressed_main_button.connect(_on_cell_pressed_main_button)
-	cell.pressed_second_button.connect(_on_cell_pressed_second_button)
+	cell.pressed_main_button.connect(_on_cell_pressed_button.bind(true))
+	cell.pressed_second_button.connect(_on_cell_pressed_button.bind(false))
 	cell.override_mouse_entered.connect(_on_cell_mouse_entered)
 	cell.block_entered.connect(_on_block_mouse_entered)
 	
@@ -530,7 +530,15 @@ func highlight_column(idx):
 		get_cell(i, idx).set_highlight(true)
 
 
-func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> void:
+	if Profile.get_option("invert_mouse"):
+		main = not main
+	if main:
+		cell_pressed_main_button(i, j, which)
+	else:
+		cell_pressed_second_button(i, j, which)
+
+func cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
 
@@ -602,8 +610,7 @@ func _on_cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
 			get_cell(i, j).update_blocks(cell_data)
 	update()
 
-
-func _on_cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
+func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
 	var cell_data := grid_logic.get_cell(i, j)
@@ -722,15 +729,22 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	update()
 
+func _on_cell_corner_pressed_button(i: int, j: int, main: bool) -> void:
+	if Profile.get_option("invert_mouse"):
+		main = not main
+	if main:
+		cell_corner_pressed_main_button(i, j)
+	else:
+		cell_corner_pressed_second_button(i, j)
 
-func _on_cell_corner_pressed_main_button(i: int, j: int) -> void:
+func cell_corner_pressed_main_button(i: int, j: int) -> void:
 	if disabled:
 		return
 	mouse_hold_status = E.MouseDragState.Wall
 	previous_wall_index = [i, j]
 
 
-func _on_cell_corner_pressed_second_button(i: int, j: int) -> void:
+func cell_corner_pressed_second_button(i: int, j: int) -> void:
 	if disabled:
 		return
 	mouse_hold_status = E.MouseDragState.RemoveWall
