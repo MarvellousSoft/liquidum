@@ -107,6 +107,7 @@ locale/translations=PackedStringArray("res://localization/localizations.en.trans
 [liquidum]
 
 is_mobile=false
+dev_mode=false
 
 [rendering]
 

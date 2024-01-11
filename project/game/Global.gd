@@ -30,15 +30,20 @@ func _ready() -> void:
 	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
 	dev_mode_label.visible = false
 	add_child(dev_mode_label)
-
+	if ProjectSettings.get_setting("liquidum/dev_mode"):
+		toggle_dev_mode()
 
 func _input(event):
 	if event.is_action_pressed(&"toggle_fullscreen"):
 		toggle_fullscreen()
-	if event.is_action_pressed(&"toggle_dev_mode"):
-		_dev_mode = not _dev_mode and OS.is_debug_build()
-		dev_mode_label.visible = _dev_mode
-		dev_mode_toggled.emit(_dev_mode)
+	if event.is_action_pressed(&"toggle_dev_mode") and OS.is_debug_build():
+		toggle_dev_mode()
+
+
+func toggle_dev_mode():
+	_dev_mode = not _dev_mode
+	dev_mode_label.visible = _dev_mode
+	dev_mode_toggled.emit(_dev_mode)
 
 
 func _notification(what : int):
