@@ -80,11 +80,17 @@ func create_button(text: String) -> Button:
 	return button
 
 
+func is_mobile():
+	return ProjectSettings.get_setting("liquidum/is_mobile")
+
+
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
 
 
 func toggle_fullscreen():
+	if is_mobile():
+		return
 	var window = get_window()
 	var cur_screen = window.get_current_screen()
 	if window.mode == Window.MODE_WINDOWED:
