@@ -161,7 +161,7 @@ LINE_INFO_NONE,None,Nenhuma,Nenhuma
 LINE_INFO_MISSING,Missing value,Valor faltando,Valor faltando
 LINE_INFO_CURRENT,Current value,Valor atual,Valor atual
 LANGUAGE_SELECT,Language/Idioma,Idioma/Language,Idioma/Language
-LANGUAGE_SYSTEM,System,Sistema,Sistema
+LANGUAGE_SYSTEM,Local,Local,Local
 INVERT_MOUSE,Invert mouse buttons,Inverter botões do mouse,Inverter botões do mouse
 SOUND,Sound,Som,Som
 DISPLAY,Display,Aparência,Aparência

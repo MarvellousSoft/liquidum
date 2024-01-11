@@ -35,36 +35,36 @@ border_color = Color(0, 0.0352941, 0.141176, 1)
 [sub_resource type="FontVariation" id="FontVariation_blnni"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aa18h"]
-bg_color = Color(0.137255, 0.137255, 0.137255, 1)
+bg_color = Color(0.0666667, 0.313726, 0.45098, 1)
 border_width_left = 30
 border_width_top = 5
 border_width_right = 30
 border_width_bottom = 5
-border_color = Color(0.137255, 0.137255, 0.137255, 1)
+border_color = Color(0.0666667, 0.313726, 0.45098, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u7n1o"]
-bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+bg_color = Color(0.0156863, 0.105882, 0.219608, 1)
 border_width_left = 30
 border_width_top = 5
 border_width_right = 30
 border_width_bottom = 5
-border_color = Color(0.117647, 0.117647, 0.117647, 1)
+border_color = Color(0.0156863, 0.105882, 0.219608, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bn5w6"]
-bg_color = Color(0.168627, 0.168627, 0.168627, 1)
+bg_color = Color(0.0666667, 0.313726, 0.45098, 1)
 border_width_left = 30
 border_width_top = 5
 border_width_right = 30
 border_width_bottom = 5
-border_color = Color(0.168627, 0.168627, 0.168627, 1)
+border_color = Color(0.0666667, 0.313726, 0.45098, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -75,46 +75,46 @@ corner_radius_bottom_left = 10
 [sub_resource type="ImageTexture" id="ImageTexture_wptlv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56pbt"]
-bg_color = Color(0.266667, 0.266667, 0.266667, 1)
+bg_color = Color(0.0666667, 0.313726, 0.45098, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wworw"]
-bg_color = Color(0.266667, 0.266667, 0.266667, 1)
+bg_color = Color(0.0156863, 0.105882, 0.219608, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vwmc"]
-bg_color = Color(0.176471, 0.176471, 0.176471, 1)
+bg_color = Color(0.0313726, 0.180392, 0.294118, 1)
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_18oij"]
-bg_color = Color(0.176471, 0.176471, 0.176471, 1)
-border_width_left = 40
-border_width_right = 40
+bg_color = Color(0.0666667, 0.313726, 0.45098, 1)
+border_width_left = 50
+border_width_right = 50
 border_color = Color(0.8, 0.8, 0.8, 0)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
-expand_margin_left = 30.0
+expand_margin_left = 20.0
 expand_margin_top = 10.0
-expand_margin_right = 30.0
+expand_margin_right = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sefa1"]
-bg_color = Color(0.176471, 0.176471, 0.176471, 1)
-border_width_left = 40
-border_width_right = 40
+bg_color = Color(0.0313726, 0.180392, 0.294118, 1)
+border_width_left = 50
+border_width_right = 50
 border_color = Color(0.8, 0.8, 0.8, 0)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
-expand_margin_left = 30.0
+expand_margin_left = 20.0
 expand_margin_top = 10.0
-expand_margin_right = 30.0
+expand_margin_right = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2c1h4"]
-bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+bg_color = Color(0.0156863, 0.105882, 0.219608, 1)
 border_width_left = 50
 border_width_right = 50
 border_color = Color(0.8, 0.8, 0.8, 0)
@@ -148,7 +148,7 @@ OptionButton/styles/hover = SubResource("StyleBoxFlat_aa18h")
 OptionButton/styles/normal = SubResource("StyleBoxFlat_u7n1o")
 OptionButton/styles/pressed = SubResource("StyleBoxFlat_bn5w6")
 PopupMenu/colors/font_color = Color(0.85098, 1, 0.886275, 1)
-PopupMenu/colors/font_hover_color = Color(0.133333, 0.513726, 0.6, 1)
+PopupMenu/colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
 PopupMenu/font_sizes/font_separator_size = 30
 PopupMenu/font_sizes/font_size = 50
 PopupMenu/fonts/font = ExtResource("4_wi0dr")
@@ -156,6 +156,7 @@ PopupMenu/icons/radio_checked = SubResource("ImageTexture_gcd3l")
 PopupMenu/icons/radio_unchecked = SubResource("ImageTexture_wptlv")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_56pbt")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_wworw")
+TabContainer/colors/font_hovered_color = Color(0.85098, 1, 0.886275, 0.87451)
 TabContainer/colors/font_selected_color = Color(0.85098, 1, 0.886275, 1)
 TabContainer/colors/font_unselected_color = Color(0.85098, 1, 0.886275, 0.6)
 TabContainer/constants/side_margin = 50
