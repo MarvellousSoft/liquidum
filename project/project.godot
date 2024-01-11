@@ -104,6 +104,10 @@ debug_1={
 
 locale/translations=PackedStringArray("res://localization/localizations.en.translation", "res://localization/localizations.pt_BR.translation", "res://localization/localizations.pt.translation")
 
+[liquidum]
+
+is_mobile=false
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
