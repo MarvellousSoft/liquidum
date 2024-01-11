@@ -30,8 +30,7 @@ func _ready() -> void:
 	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
 	dev_mode_label.visible = false
 	add_child(dev_mode_label)
-	if ProjectSettings.get_setting("liquidum/dev_mode"):
-		toggle_dev_mode()
+
 
 func _input(event):
 	if event.is_action_pressed(&"toggle_fullscreen"):
