@@ -1,8 +1,9 @@
 extends Node
 
 const LANGUAGES = [
-	{"locale":"en", "name": "English"},
-	{"locale":"pt_BR", "name": "Português"},
+	"",
+	"en",
+	"pt_BR",
 ]
 
 const VERSION := "v0.0.1"
@@ -19,17 +20,15 @@ var options = {
 	"locale": 0,
 }
 
-func get_locale_idx(locale):
-	var idx = 0
-	for lang in LANGUAGES:
-		if lang.locale == locale:
-			return idx
-		idx += 1
-	push_error("Couldn't find given locale: " + str(locale))
 
-
-func update_translation():
-	TranslationServer.set_locale(LANGUAGES[get_option("locale")].locale)
+func update_translation() -> void:
+	var l_idx: int = get_option("locale")
+	var locale: String
+	if l_idx == 0:
+		locale = OS.get_locale()
+	else:
+		locale = LANGUAGES[l_idx]
+	TranslationServer.set_locale(locale)
 
 
 func get_save_data() -> Dictionary:
@@ -64,6 +63,7 @@ func set_save_data(data):
 			window.position = str_to_var("Vector2" + options.previous_windowed_pos)
 		else:
 			window.position = options.previous_windowed_pos
+	update_translation()
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):

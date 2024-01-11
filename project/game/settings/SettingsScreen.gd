@@ -64,6 +64,7 @@ func setup_values():
 	Fullscreen.button_pressed = Global.is_fullscreen()
 	%HighlightLinesContainer/CheckBox.button_pressed = Profile.get_option("highlight_grid")
 	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
+	%LanguageSelectContainer/OptionButton.selected = Profile.get_option("locale")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -132,8 +133,10 @@ func _on_invert_mouse_toggled(on: bool) -> void:
 	checkbox_sound(on)
 
 
-func _on_language_item_selected(_index: int) -> void:
-	pass # Replace with function body.
+func _on_language_item_selected(index: int) -> void:
+	checkbox_sound(true)
+	Profile.set_option("locale", index)
+	Profile.update_translation()
 
 
 func _on_line_info_item_selected(_index: int) -> void:
