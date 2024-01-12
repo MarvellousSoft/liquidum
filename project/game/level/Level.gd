@@ -586,10 +586,14 @@ func _on_dev_buttons_save():
 		g.set_auto_update_hints(true)
 
 
-func _on_continue_button_pressed():
-	TransitionManager.pop_scene()
+func _on_continue_button_pressed() -> void:
 	if not won_before:
 		had_first_win.emit()
+		# First time winning all levels
+		if LevelLister.all_campaign_levels_completed():
+			TransitionManager.change_scene(Global.load_no_mobile("res://game/credits/AllLevelsCompleted").instantiate())
+			return
+	TransitionManager.pop_scene()
 
 
 func _on_description_edit_text_changed() -> void:

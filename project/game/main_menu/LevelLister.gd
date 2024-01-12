@@ -132,9 +132,9 @@ static func count_section_ongoing_solutions(section: int) -> int:
 
 
 static func all_campaign_levels_completed() -> bool:
-	for section in range(1, 50):
-		if not FileManager.has_level_data(section, 1):
-			break
+	# Let's go on reverse because it's more efficient
+	var sections := count_all_game_sections()
+	for section in range(sections, 0, -1):
 		for level in range(1, 50):
 			if not FileManager.has_level_data(section, level):
 				break
