@@ -19,21 +19,18 @@ const MAX_GRID_R = 10
 const MIN_GRID_C = 1
 const MAX_GRID_C = 10
 
-@onready var MainGridCont = $CenterContainer/MainGridContainer
-@onready var GridCont = $CenterContainer/MainGridContainer/GridContainer
-@onready var Columns = $CenterContainer/MainGridContainer/GridContainer/Columns
+@onready var GridCont = $CenterContainer/GridContainer
+@onready var Columns = $CenterContainer/GridContainer/Columns
 @onready var HintBars = {
-	"top": $CenterContainer/MainGridContainer/GridContainer/HintBarTop,
-	"left": $CenterContainer/MainGridContainer/GridContainer/HintBarLeft,
-	"bottom": $CenterContainer/MainGridContainer/GridContainer/HintBarBottom,
-	"right": $CenterContainer/MainGridContainer/GridContainer/HintBarRight,
+	"top": %HintBarTop,
+	"left": %HintBarLeft,
+	"bottom": %HintBarBottom,
+	"right": %HintBarRight,
 }
 @onready var CellCornerGrid = $CellCornerGrid
 @onready var DragPreview = $DragPreviewCanvas/DragPreviewLine
 @onready var EditColumnSize = %EditColumnSize
 @onready var EditRowSize = %EditRowSize
-@onready var FillerPanelRight = %FillerPanelRight
-@onready var FillerPanelBottom = %FillerPanelBottom
 @onready var SizePanel = %SizePanel
 @onready var GridSizeLabel = %GridSizeLabel
 @onready var AnimPlayer = $AnimationPlayer
@@ -85,8 +82,6 @@ func setup(grid_logic_: GridModel, fast_startup := false) -> void:
 	columns = grid_logic.cols()
 	for node in [EditColumnSize, EditRowSize]:
 		node.visible = editor_mode
-	for node in [FillerPanelRight, FillerPanelBottom]:
-		node.visible = not editor_mode
 	reset()
 	for i in rows:
 		var new_row = HBoxContainer.new()
@@ -195,7 +190,7 @@ func disable() -> void:
 
 
 func get_grid_size() -> Vector2:
-	return MainGridCont.size
+	return GridCont.size
 
 
 func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := true) -> void:

@@ -17,7 +17,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CenterContainer/MainGridContainer/SizePanel:modulate")
+tracks/0/path = NodePath("CenterContainer/GridContainer/SizePanel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -32,7 +32,7 @@ resource_name = "startup"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CenterContainer/MainGridContainer/SizePanel:modulate")
+tracks/0/path = NodePath("CenterContainer/GridContainer/SizePanel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -64,109 +64,101 @@ offset_right = 40.0
 offset_bottom = 40.0
 use_top_left = true
 
-[node name="MainGridContainer" type="GridContainer" parent="CenterContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 40
-theme_override_constants/v_separation = 40
-columns = 2
-
-[node name="GridContainer" type="GridContainer" parent="CenterContainer/MainGridContainer"]
+[node name="GridContainer" type="GridContainer" parent="CenterContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 3
 
-[node name="TLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
+[node name="TLPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="HintBarTop" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
+[node name="HintBarTop" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
+unique_name_in_owner = true
 layout_mode = 2
 is_horizontal = true
 
-[node name="TRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
+[node name="TRPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="HintBarLeft" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
+[node name="HintBarLeft" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Horizontal" parent="CenterContainer/MainGridContainer/GridContainer/HintBarLeft" index="0"]
+[node name="Horizontal" parent="CenterContainer/GridContainer/HintBarLeft" index="0"]
 visible = false
 
-[node name="Columns" type="VBoxContainer" parent="CenterContainer/MainGridContainer/GridContainer"]
+[node name="Columns" type="VBoxContainer" parent="CenterContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="CenterContainer/MainGridContainer/GridContainer/Columns"]
+[node name="Row1" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="Row2" type="HBoxContainer" parent="CenterContainer/MainGridContainer/GridContainer/Columns"]
+[node name="Row2" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="Row3" type="HBoxContainer" parent="CenterContainer/MainGridContainer/GridContainer/Columns"]
+[node name="Row3" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/MainGridContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="HintBarRight" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
+[node name="RightVBox" type="VBoxContainer" parent="CenterContainer/GridContainer"]
 layout_mode = 2
+alignment = 2
 
-[node name="Horizontal" parent="CenterContainer/MainGridContainer/GridContainer/HintBarRight" index="0"]
-visible = false
-
-[node name="BLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer/HintBarRight"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-
-[node name="BLPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
-[node name="HintBarBottom" parent="CenterContainer/MainGridContainer/GridContainer" instance=ExtResource("2_q06jt")]
-layout_mode = 2
-is_horizontal = true
-
-[node name="BRPanel" type="Panel" parent="CenterContainer/MainGridContainer/GridContainer"]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(500, 500)
-layout_mode = 2
-
-[node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/MainGridContainer"]
+[node name="HintBarRight" parent="CenterContainer/GridContainer/RightVBox" instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
+
+[node name="Horizontal" parent="CenterContainer/GridContainer/RightVBox/HintBarRight" index="0"]
+visible = false
+
+[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer/RightVBox/HintBarRight"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/RightVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/GridContainer/RightVBox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
+[node name="-" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 8
@@ -180,7 +172,7 @@ theme_override_styles/pressed = ExtResource("7_8e5in")
 text = "-
 "
 
-[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditColumnSize"]
+[node name="+" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 8
@@ -193,21 +185,33 @@ theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
-[node name="FillerPanelRight" type="Panel" parent="CenterContainer/MainGridContainer"]
-unique_name_in_owner = true
+[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer"]
 modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
-mouse_filter = 2
 
-[node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/MainGridContainer"]
-unique_name_in_owner = true
-visible = false
+[node name="BottomHBox" type="HBoxContainer" parent="CenterContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+alignment = 2
+
+[node name="HintBarBottom" parent="CenterContainer/GridContainer/BottomHBox" instance=ExtResource("2_q06jt")]
+unique_name_in_owner = true
+layout_mode = 2
+is_horizontal = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/BottomHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 20
+
+[node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="-" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
+[node name="-" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -221,7 +225,7 @@ theme_override_styles/pressed = ExtResource("7_8e5in")
 text = "-
 "
 
-[node name="+" type="Button" parent="CenterContainer/MainGridContainer/EditRowSize"]
+[node name="+" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -235,21 +239,15 @@ theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
 text = "+"
 
-[node name="FillerPanelBottom" type="Panel" parent="CenterContainer/MainGridContainer"]
+[node name="SizePanel" type="MarginContainer" parent="CenterContainer/GridContainer"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
 
-[node name="SizePanel" type="MarginContainer" parent="CenterContainer/MainGridContainer"]
-unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-
-[node name="GridSizeLabel" type="Label" parent="CenterContainer/MainGridContainer/SizePanel"]
+[node name="GridSizeLabel" type="Label" parent="CenterContainer/GridContainer/SizePanel"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -330,30 +328,29 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
-[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/TRPanel" to="." method="_on_left_grid"]
-[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_mouse_entered_hint"]
-[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarRight" to="." method="_on_hint_bar_right_mouse_entered_hint"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/HintBarRight/BLPanel" to="." method="_on_left_grid"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/BLPanel" to="." method="_on_left_grid"]
-[connection signal="mouse_entered_hint" from="CenterContainer/MainGridContainer/GridContainer/HintBarBottom" to="." method="_on_hint_bar_bottom_mouse_entered_hint"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/GridContainer/BRPanel" to="." method="_on_left_grid"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize" to="." method="_on_left_grid"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_on_left_grid"]
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/-" to="." method="_rem_col"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_on_left_grid"]
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditColumnSize/+" to="." method="_add_col"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize" to="." method="_on_left_grid"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_on_left_grid"]
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/-" to="." method="_rem_row"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_on_left_grid"]
-[connection signal="pressed" from="CenterContainer/MainGridContainer/EditRowSize/+" to="." method="_add_row"]
-[connection signal="mouse_entered" from="CenterContainer/MainGridContainer/SizePanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/TRPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_mouse_entered_hint"]
+[connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/RightVBox/HintBarRight" to="." method="_on_hint_bar_right_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/RightVBox/HintBarRight/BLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize/-" to="." method="_on_left_grid"]
+[connection signal="pressed" from="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize/-" to="." method="_rem_col"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize/+" to="." method="_on_left_grid"]
+[connection signal="pressed" from="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize/+" to="." method="_add_col"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/BLPanel" to="." method="_on_left_grid"]
+[connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/BottomHBox/HintBarBottom" to="." method="_on_hint_bar_bottom_mouse_entered_hint"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize" to="." method="_on_left_grid"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/-" to="." method="_on_left_grid"]
+[connection signal="pressed" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/-" to="." method="_rem_row"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/+" to="." method="_on_left_grid"]
+[connection signal="pressed" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/+" to="." method="_add_row"]
+[connection signal="mouse_entered" from="CenterContainer/GridContainer/SizePanel" to="." method="_on_left_grid"]
 
-[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarTop"]
-[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarLeft"]
-[editable path="CenterContainer/MainGridContainer/GridContainer/Columns/Row1/RegularCell"]
-[editable path="CenterContainer/MainGridContainer/GridContainer/Columns/Row1/RegularCell2"]
-[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarRight"]
-[editable path="CenterContainer/MainGridContainer/GridContainer/HintBarBottom"]
+[editable path="CenterContainer/GridContainer/HintBarTop"]
+[editable path="CenterContainer/GridContainer/HintBarLeft"]
+[editable path="CenterContainer/GridContainer/Columns/Row1/RegularCell"]
+[editable path="CenterContainer/GridContainer/Columns/Row1/RegularCell2"]
+[editable path="CenterContainer/GridContainer/RightVBox/HintBarRight"]
+[editable path="CenterContainer/GridContainer/BottomHBox/HintBarBottom"]
