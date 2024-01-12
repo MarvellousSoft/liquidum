@@ -25,3 +25,4 @@ project/addons/godotsteam/win64/~godotsteam.debug.x86_64.dll
 *.tmp
 project/*.json
 build/*
+project/override.cfg

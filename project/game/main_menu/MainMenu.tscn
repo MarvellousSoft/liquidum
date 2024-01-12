@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=9 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="3_2f32g"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://d1cm4ha1d6dj5" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
 shader = ExtResource("3_2f32g")
@@ -148,7 +149,7 @@ offset_left = 118.0
 offset_top = 1620.0
 offset_right = 118.0
 offset_bottom = 1620.0
-theme = ExtResource("1_8bxuf")
+theme = ExtResource("6_nf8ou")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1930, 4000)
