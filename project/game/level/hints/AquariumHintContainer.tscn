@@ -103,6 +103,7 @@ theme_override_font_sizes/font_size = 52
 text = "AQ_AMOUNT"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(680, 700)
 layout_mode = 2
 horizontal_scroll_mode = 0

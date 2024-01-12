@@ -51,6 +51,7 @@ enabled=PackedStringArray("res://addons/localization_editor/plugin.cfg")
 [gui]
 
 theme/custom="res://assets/ui/GeneralTheme.tres"
+theme/custom_font="res://assets/fonts/Bold.otf"
 
 [input]
 

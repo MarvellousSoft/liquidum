@@ -28,11 +28,23 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 		child.startup(delay)
 		delay += HINT_DELAY
 	
+	# Start with some scroll so it's clear to users a scrollbar is there
+	var bar: ScrollBar = %ScrollContainer.get_v_scroll_bar()
+	var scroll_max: float = bar.max_value - %ScrollContainer.size.y
+	if not editor_mode and scroll_max > 0:
+		var tween := create_tween()
+		tween.tween_interval(delay)
+		tween.tween_property(bar, ^'value', scroll_max, 3)
+		tween.tween_property(bar, ^'value', 0, 3)
+		tween.tween_property(bar, ^'value', scroll_max / 3, 1)
+		var stop_tween := func(): tween.kill()
+		%ScrollContainer.scroll_started.bind(stop_tween)
+
 	if editor_mode:
 		Title.text = tr("AQUARIUMS_COUNTER_EDITOR")
 	else:
 		Title.text = tr("AQUARIUMS_COUNTER")
-	
+
 func visible_sizes() -> Array[float]:
 	var ans: Array[float] = []
 	for child in HintContainer.get_children():
