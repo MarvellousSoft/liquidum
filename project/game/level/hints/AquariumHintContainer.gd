@@ -38,7 +38,8 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 		tween.tween_property(bar, ^'value', 0, 3)
 		tween.tween_property(bar, ^'value', scroll_max / 3, 1)
 		var stop_tween := func(): tween.kill()
-		%ScrollContainer.scroll_started.bind(stop_tween)
+		%ScrollContainer.scroll_started.connect(stop_tween, CONNECT_ONE_SHOT)
+		%ScrollContainer.get_v_scroll_bar().scrolling.connect(stop_tween, CONNECT_ONE_SHOT)
 
 	if editor_mode:
 		Title.text = tr("AQUARIUMS_COUNTER_EDITOR")
