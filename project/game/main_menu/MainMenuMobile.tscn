@@ -1,16 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://crbw5uvchdcg6"]
+[gd_scene load_steps=5 format=3 uid="uid://crbw5uvchdcg6"]
 
 [ext_resource type="PackedScene" uid="uid://c0quvd77qfdsd" path="res://game/main_menu/MainMenu.tscn" id="1_pll8r"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="Script" path="res://game/mobile/MobileBGHelp.gd" id="3_a8cxv"]
-[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="4_35oqf"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gd3yx"]
-shader = ExtResource("4_35oqf")
-shader_parameter/wave_count = 9.0
-shader_parameter/speed = 0.7
-shader_parameter/height = 0.005
 
 [node name="MainMenu" instance=ExtResource("1_pll8r")]
 
@@ -23,25 +16,6 @@ layout_mode = 0
 offset_top = -1780.0
 offset_bottom = -500.0
 script = ExtResource("3_a8cxv")
-
-[node name="CenterContainer" parent="Title" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.3
-offset_top = 0.0
-offset_right = 720.0
-offset_bottom = 300.0
-
-[node name="TitleLabel" parent="Title/CenterContainer" index="0"]
-theme_override_font_sizes/font_size = 140
-
-[node name="ShaderEffect" parent="Title" index="1"]
-material = SubResource("ShaderMaterial_gd3yx")
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 717.0
-offset_bottom = 272.0
 
 [node name="MainButtonsContainer" parent="." index="3"]
 offset_top = 400.0

@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://yacgiejcfdct"]
+
+[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="1_st5mj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
+shader = ExtResource("1_st5mj")
+shader_parameter/wave_count = 9.0
+shader_parameter/speed = 0.7
+shader_parameter/height = 0.005
+
+[node name="Title" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_top = 441.0
+offset_right = 3860.0
+offset_bottom = 941.0
+
+[node name="TitleLabel" type="Label" parent="CenterContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/shadow_offset_x = 20
+theme_override_constants/shadow_offset_y = 20
+theme_override_constants/shadow_outline_size = 30
+theme_override_font_sizes/font_size = 500
+text = "Liquidum"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ShaderEffect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_hu5ly")
+layout_mode = 0
+offset_left = -51.0
+offset_top = -133.0
+offset_right = 3949.0
+offset_bottom = 1067.0

@@ -22,7 +22,7 @@ const ICONS = {
 	"shrimp": preload("res://assets/images/ui/icons/shrimp.png"),
 }
 
-@onready var Version: Label = $Version
+@onready var Version: Label = %Version
 @onready var ProfileButton: Button = $ProfileButton
 @onready var Camera = $Camera2D
 @onready var LevelHub = $LevelHub
@@ -131,3 +131,7 @@ func _on_level_hub_disable_focus():
 func _on_random_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.push_scene(preload("res://game/random_menu/RandomHub.tscn").instantiate())
+
+
+func _on_credits_button_pressed() -> void:
+	TransitionManager.push_scene(Global.load_no_mobile("res://game/credits/CreditsScreen").instantiate())

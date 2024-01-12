@@ -1,52 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=8 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
-[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="3_2f32g"]
+[ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://d1cm4ha1d6dj5" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
-shader = ExtResource("3_2f32g")
-shader_parameter/wave_count = 9.0
-shader_parameter/speed = 0.7
-shader_parameter/height = 0.005
-
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_il4q0")
 
-[node name="Title" type="Control" parent="."]
-anchors_preset = 0
-
-[node name="CenterContainer" type="CenterContainer" parent="Title"]
-layout_mode = 0
-offset_top = 441.0
-offset_right = 3860.0
-offset_bottom = 941.0
-
-[node name="TitleLabel" type="Label" parent="Title/CenterContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
-theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/shadow_offset_x = 20
-theme_override_constants/shadow_offset_y = 20
-theme_override_constants/shadow_outline_size = 30
-theme_override_font_sizes/font_size = 500
-text = "Liquidum"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="ShaderEffect" type="ColorRect" parent="Title"]
-material = SubResource("ShaderMaterial_hu5ly")
-layout_mode = 0
-offset_left = -51.0
-offset_top = -133.0
-offset_right = 3949.0
-offset_bottom = 1067.0
+[node name="Title" parent="." instance=ExtResource("2_h8530")]
 
 [node name="MainButtonsContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -99,12 +66,23 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "EXIT_BUTTON"
 
-[node name="Version" type="Label" parent="."]
+[node name="InfoVBox" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 2576.0
-offset_top = 1987.0
-offset_right = 3826.0
-offset_bottom = 2155.0
+offset_left = 3027.0
+offset_top = 1890.0
+offset_right = 3789.0
+offset_bottom = 2149.0
+theme_override_constants/separation = 30
+
+[node name="CreditsButton" type="Button" parent="InfoVBox"]
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "CREDITS_BUTTON"
+
+[node name="Version" type="Label" parent="InfoVBox"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_font_sizes/font_size = 90
 text = "VERSION"
 horizontal_alignment = 2
@@ -167,6 +145,7 @@ position_smoothing_speed = 4.0
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Workshop" to="." method="_on_workshop_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
