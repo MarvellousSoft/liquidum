@@ -19,6 +19,7 @@ signal dev_mode_toggled(status : bool)
 var previous_windowed_pos = false
 var _dev_mode := false
 var dev_mode_label: Label
+var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
 
 
 
@@ -49,6 +50,11 @@ func _notification(what : int):
 	if what == NOTIFICATION_EXIT_TREE:
 		exit_game()
 
+func load_mobile_compat(scene: String) -> PackedScene:
+	if is_mobile:
+		return load(scene + "Mobile.tscn")
+	else:
+		return load(scene + ".tscn")
 
 func exit_game():
 	var window = get_window()
@@ -80,16 +86,12 @@ func create_button(text: String) -> Button:
 	return button
 
 
-func is_mobile():
-	return ProjectSettings.get_setting("liquidum/is_mobile")
-
-
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
 
 
 func toggle_fullscreen():
-	if is_mobile():
+	if is_mobile:
 		return
 	var window = get_window()
 	var cur_screen = window.get_current_screen()
