@@ -141,10 +141,10 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 	var l_id := await upload_leaderboard(info)
 	var l_data := await get_leaderboard_data(l_id)
 	level.display_leaderboard(l_data)
-	if info.first_win and SteamManager.stats_received:
-		SteamStats.increment_daily_all()
 	if not info.first_win:
 		return
+	if SteamManager.stats_received:
+		SteamStats.increment_daily_all()
 	var data := UserData.current()
 	if info.mistakes < 3:
 		if SteamManager.stats_received:

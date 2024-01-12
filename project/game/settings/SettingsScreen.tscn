@@ -517,7 +517,7 @@ text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="SaveNQuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
@@ -563,7 +563,7 @@ speed_scale = 3.5
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/SaveNQuitButton" to="." method="_on_save_n_quit_button_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_save_n_quit_button_pressed"]
 [connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]
