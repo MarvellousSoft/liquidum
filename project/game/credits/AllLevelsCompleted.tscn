@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://bh1h58vx2ocdu"]
+
+[ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="1_5pd2q"]
+[ext_resource type="Script" path="res://game/credits/AllLevelsCompleted.gd" id="1_fn571"]
+
+[node name="AllLevelsCompleted" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fn571")
+
+[node name="Title" parent="." instance=ExtResource("1_5pd2q")]
+offset_left = 1938.0
+offset_top = 170.0
+offset_right = 1938.0
+offset_bottom = 170.0
+scale = Vector2(0.4, 0.4)
+
+[node name="ThankYou" type="Label" parent="."]
+layout_mode = 0
+offset_left = 339.0
+offset_top = 366.0
+offset_right = 2195.0
+offset_bottom = 527.0
+theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 140
+text = "THANK_YOU_FOR_PLAYING"
+horizontal_alignment = 2
+
+[node name="Continue" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+text = "CONTINUE"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_top = 672.0
+offset_right = 3840.0
+offset_bottom = 1881.0
+theme_override_constants/margin_left = 500
+theme_override_constants/margin_right = 500
+metadata/_edit_group_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Finished" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2000, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "FINISHED_ALL_LEVELS"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Win100" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2000, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "WIN_100_TIMES"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EmailUs" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2000, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "EMAIL_US"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="Continue" to="." method="_on_continue_pressed"]

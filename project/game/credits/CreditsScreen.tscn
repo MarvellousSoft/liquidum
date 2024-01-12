@@ -138,12 +138,11 @@ text = "OUR_OTHER_GAMES"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 1006.0
+offset_left = 1078.0
 offset_top = 1565.0
 offset_right = 3764.0
 offset_bottom = 2103.0
 theme_override_constants/separation = 100
-alignment = 1
 
 [node name="MarvInc" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -167,6 +166,16 @@ text = "PsyChO
 (coming
 soon!)"
 
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 308.0
+offset_bottom = 175.0
+focus_mode = 0
+text = "BACK"
+
 [connection signal="pressed" from="HBoxContainer/MarvInc" to="." method="_on_game_pressed" binds= [827940]]
 [connection signal="pressed" from="HBoxContainer/Alchemia" to="." method="_on_game_pressed" binds= [1960330]]
 [connection signal="pressed" from="HBoxContainer/Functional" to="." method="_on_game_pressed" binds= [1636730]]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
