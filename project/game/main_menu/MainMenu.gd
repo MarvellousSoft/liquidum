@@ -3,8 +3,14 @@ extends Control
 enum STATES {MAIN_MENU, LEVEL_HUB}
 
 const CAM_POS = {
-	"menu": Vector2(1930, 1080),
-	"level_hub": Vector2(1930, -1280),
+	"desktop": {
+		"menu": Vector2(1930, 1080),
+		"level_hub": Vector2(1930, -1280),
+	},
+	"mobile": {
+		"menu": Vector2(360, 540),
+		"level_hub": Vector2(360, -1140),
+	},
 }
 const EPS = .001
 const ZOOM_LERP = 4.0
@@ -26,13 +32,11 @@ var cam_target_zoom = NORMAL_ZOOM
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
-	randomize()
-	FileManager.load_game()
-	
 	if not SteamManager.enabled:
 		$MainButtonsContainer/VBoxContainer/Workshop.disabled = true
 	
-	Camera.position = CAM_POS.menu
+	var cam_pos = CAM_POS.mobile if Global.is_mobile() else CAM_POS.desktop
+	Camera.position = cam_pos.menu
 	AudioManager.play_bgm("main")
 	
 	await get_tree().process_frame
@@ -100,14 +104,16 @@ func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
 func _on_play_pressed():
+	var cam_pos = CAM_POS.mobile if Global.is_mobile() else CAM_POS.desktop
 	AudioManager.play_sfx("button_pressed")
-	Camera.position = CAM_POS.level_hub
+	Camera.position = cam_pos.level_hub
 	cur_state = STATES.LEVEL_HUB
 
 
 func _on_back_button_pressed():
+	var cam_pos = CAM_POS.mobile if Global.is_mobile() else CAM_POS.desktop
 	AudioManager.play_sfx("button_back")
-	Camera.position = CAM_POS.menu
+	Camera.position = cam_pos.menu
 	cur_state = STATES.MAIN_MENU
 
 
@@ -117,7 +123,8 @@ func _on_level_hub_enable_focus(pos, _my_section):
 
 
 func _on_level_hub_disable_focus():
-	Camera.position = CAM_POS.level_hub
+	var cam_pos = CAM_POS.mobile if Global.is_mobile() else CAM_POS.desktop
+	Camera.position = cam_pos.level_hub
 	cam_target_zoom = NORMAL_ZOOM
 
 

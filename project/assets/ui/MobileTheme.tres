@@ -1,0 +1,94 @@
+[gd_resource type="Theme" load_steps=13 format=3 uid="uid://cjvm0hkahhs31"]
+
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_qv3is"]
+[ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
+[ext_resource type="StyleBox" uid="uid://gqjj40bseq65" path="res://assets/ui/ButtonNormalStyle.tres" id="3_u1kds"]
+[ext_resource type="StyleBox" uid="uid://8i3c41sdwhm" path="res://assets/ui/ButtonPressedStyle.tres" id="4_oftan"]
+
+[sub_resource type="FontVariation" id="FontVariation_7w16d"]
+base_font = ExtResource("1_qv3is")
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_wfon5"]
+color = Color(0.0156863, 0.105882, 0.219608, 0.741176)
+grow_begin = -40.0
+grow_end = -40.0
+thickness = 20
+
+[sub_resource type="FontVariation" id="FontVariation_qs55u"]
+base_font = ExtResource("1_qv3is")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vcc8j"]
+bg_color = Color(0.85098, 1, 0.886275, 0.235294)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0, 0.0352941, 0.141176, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+anti_aliasing_size = 2.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osq2p"]
+bg_color = Color(0.670588, 1, 0.819608, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frb2o"]
+bg_color = Color(0.364706, 0.690196, 0.690196, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqwc6"]
+bg_color = Color(0.1484, 0.53, 0.53, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kpnn4"]
+bg_color = Color(0, 0.0352941, 0.141176, 0.356863)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
+
+[resource]
+Button/colors/font_color = Color(0.85098, 1, 0.886275, 1)
+Button/colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
+Button/colors/font_pressed_color = Color(0.85098, 1, 0.886275, 1)
+Button/constants/h_separation = 0
+Button/font_sizes/font_size = 31
+Button/fonts/font = SubResource("FontVariation_7w16d")
+Button/styles/hover = ExtResource("2_eaqbs")
+Button/styles/normal = ExtResource("3_u1kds")
+Button/styles/pressed = ExtResource("4_oftan")
+HSeparator/styles/separator = SubResource("StyleBoxLine_wfon5")
+Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
+Label/font_sizes/font_size = 38
+Label/fonts/font = SubResource("FontVariation_qs55u")
+LineEdit/font_sizes/font_size = 82
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")
+PopupMenu/font_sizes/font_size = 50
+ProgressBar/font_sizes/font_size = 82
+ProgressBar/fonts/font = ExtResource("1_qv3is")
+TextEdit/font_sizes/font_size = 60
+TextEdit/fonts/font = ExtResource("1_qv3is")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_osq2p")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_frb2o")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_kqwc6")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kpnn4")

@@ -1,0 +1,154 @@
+[gd_scene load_steps=7 format=3 uid="uid://crbw5uvchdcg6"]
+
+[ext_resource type="PackedScene" uid="uid://c0quvd77qfdsd" path="res://game/main_menu/MainMenu.tscn" id="1_pll8r"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
+[ext_resource type="Script" path="res://game/mobile/MobileBGHelp.gd" id="3_a8cxv"]
+[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="4_35oqf"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gd3yx"]
+shader = ExtResource("4_35oqf")
+shader_parameter/wave_count = 9.0
+shader_parameter/speed = 0.7
+shader_parameter/height = 0.005
+
+[node name="MainMenu" instance=ExtResource("1_pll8r")]
+
+[node name="MobileBGHelp" parent="." index="0" instance=ExtResource("2_qxpit")]
+layout_mode = 0
+script = ExtResource("3_a8cxv")
+
+[node name="MobileBGHelp2" parent="." index="1" instance=ExtResource("2_qxpit")]
+layout_mode = 0
+offset_top = -1780.0
+offset_bottom = -500.0
+script = ExtResource("3_a8cxv")
+
+[node name="CenterContainer" parent="Title" index="0"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.3
+offset_top = 0.0
+offset_right = 720.0
+offset_bottom = 300.0
+
+[node name="TitleLabel" parent="Title/CenterContainer" index="0"]
+theme_override_font_sizes/font_size = 140
+
+[node name="ShaderEffect" parent="Title" index="1"]
+material = SubResource("ShaderMaterial_gd3yx")
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 717.0
+offset_bottom = 272.0
+
+[node name="MainButtonsContainer" parent="." index="3"]
+offset_top = 400.0
+offset_right = 720.0
+offset_bottom = 850.0
+theme = ExtResource("5_sgldn")
+
+[node name="Workshop" parent="MainButtonsContainer/VBoxContainer" index="3"]
+visible = false
+
+[node name="ExitButton" parent="MainButtonsContainer/VBoxContainer" index="4"]
+visible = false
+
+[node name="ProfileButton" parent="." index="5"]
+offset_left = 581.0
+offset_top = 1148.0
+offset_right = 1181.0
+offset_bottom = 1748.0
+scale = Vector2(0.2, 0.2)
+
+[node name="BackButton" parent="." index="6"]
+offset_left = 68.0
+offset_top = -1740.0
+offset_right = 184.0
+offset_bottom = -1670.0
+theme = ExtResource("5_sgldn")
+
+[node name="LevelHub" parent="." index="7"]
+scale = Vector2(0.5, 0.5)
+
+[node name="LevelSection1" parent="LevelHub/Sections" index="0"]
+offset_left = 357.5
+offset_top = 2137.5
+offset_right = 317.5
+offset_bottom = 2097.5
+
+[node name="LevelSection2" parent="LevelHub/Sections" index="1"]
+offset_left = 1250.0
+offset_top = 2287.5
+offset_right = 1210.0
+offset_bottom = 2247.5
+
+[node name="LevelSection3" parent="LevelHub/Sections" index="2"]
+offset_left = 350.0
+offset_top = 3012.5
+offset_right = 310.0
+offset_bottom = 2972.5
+
+[node name="LevelSection4" parent="LevelHub/Sections" index="3"]
+offset_left = 1222.5
+offset_top = 3090.0
+offset_right = 1182.5
+offset_bottom = 3050.0
+
+[node name="LevelSection5" parent="LevelHub/Sections" index="4"]
+offset_left = 332.5
+offset_top = 3925.0
+offset_right = 292.5
+offset_bottom = 3885.0
+
+[node name="LevelSection6" parent="LevelHub/Sections" index="5"]
+offset_left = 1270.0
+offset_top = 3940.0
+offset_right = 1230.0
+offset_bottom = 3900.0
+
+[node name="DailyButton" parent="." index="8"]
+offset_left = 64.0
+offset_top = 997.0
+offset_right = 64.0
+offset_bottom = 997.0
+theme = ExtResource("5_sgldn")
+
+[node name="VBoxContainer" parent="DailyButton/HBox" index="0"]
+theme_override_constants/separation = 17
+
+[node name="Spacer" type="Control" parent="DailyButton/HBox/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="CurStreak" parent="DailyButton/HBox/VBoxContainer/StreakContainer" index="0"]
+theme_override_font_sizes/font_size = 26
+
+[node name="BestStreak" parent="DailyButton/HBox/VBoxContainer/StreakContainer" index="1"]
+theme_override_font_sizes/font_size = 26
+
+[node name="Completed" parent="DailyButton/HBox" index="1"]
+custom_minimum_size = Vector2(75, 75)
+
+[node name="NotCompleted" parent="DailyButton/HBox" index="2"]
+theme_override_font_sizes/font_size = 75
+vertical_alignment = 0
+
+[node name="Camera2D" parent="." index="9"]
+position = Vector2(360, 2560)
+editor_draw_limits = true
+
+[editable path="LevelHub"]
+[editable path="LevelHub/Sections/LevelSection1"]
+[editable path="LevelHub/Sections/LevelSection1/Levels/LevelButton1"]
+[editable path="LevelHub/Sections/LevelSection2"]
+[editable path="LevelHub/Sections/LevelSection2/Levels/LevelButton1"]
+[editable path="LevelHub/Sections/LevelSection3"]
+[editable path="LevelHub/Sections/LevelSection3/Levels/LevelButton1"]
+[editable path="LevelHub/Sections/LevelSection4"]
+[editable path="LevelHub/Sections/LevelSection4/Levels/LevelButton1"]
+[editable path="LevelHub/Sections/LevelSection5"]
+[editable path="LevelHub/Sections/LevelSection5/Levels/LevelButton1"]
+[editable path="LevelHub/Sections/LevelSection6"]
+[editable path="LevelHub/Sections/LevelSection6/Levels/LevelButton1"]
+[editable path="DailyButton"]
