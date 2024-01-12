@@ -38,6 +38,7 @@ func _update() -> void:
 
 	date = _today()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
+	deadline -= Time.get_time_zone_from_system().bias * 60
 	
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
@@ -82,7 +83,8 @@ func _unixtime() -> int:
 	return int(Time.get_unix_time_from_system())
 
 func _today(dt: int = 0) -> String:
-	var today := Time.get_datetime_string_from_unix_time(_unixtime() - dt)
+	var tz := Time.get_time_zone_from_system()
+	var today := Time.get_datetime_string_from_unix_time(_unixtime() - dt + int(tz.bias) * 60)
 	return today.substr(0, today.find('T'))
 
 func _yesterday() -> String:
