@@ -320,10 +320,10 @@ layout_mode = 2
 texture = ExtResource("3_hmelr")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect7" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_hmelr")
+texture = ExtResource("5_radaj")
 expand_mode = 1
 
 [node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
@@ -338,17 +338,13 @@ layout_mode = 2
 texture = ExtResource("2_52dlp")
 expand_mode = 1
 
-[node name="Wrong" type="Label" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2"]
+[node name="Correct" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 50
-theme_override_font_sizes/font_size = 100
-text = "X"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("4_2mbyg")
+expand_mode = 1
 
 [node name="Example3" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer"]
 layout_mode = 2

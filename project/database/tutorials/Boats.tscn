@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ch4qbch3yjybq" path="res://assets/images/ui/tutorial/water_diag_cell_example.png" id="7_833hx"]
 [ext_resource type="Texture2D" uid="uid://cartq0gwrn18m" path="res://assets/images/ui/tutorial/boat_diag_cell_bottom_open_example.png" id="10_klw33"]
 
-[node name="UnknownHints" type="MarginContainer"]
+[node name="Boats" type="MarginContainer"]
 theme = ExtResource("1_huabo")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
