@@ -5,7 +5,7 @@ const RANDOM := "random"
 
 @onready var Continue: Button = $Difficulties/VBox/Continue
 @onready var ContinueSeparator: HSeparator = $Difficulties/VBox/ContinueSeparator
-@onready var Completed: VBoxContainer = $CompletedCount
+@onready var Completed: VBoxContainer = %CompletedCount
 
 var gen := RandomLevelGenerator.new()
 
@@ -13,7 +13,6 @@ var gen := RandomLevelGenerator.new()
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
 func _ready() -> void:
-	$Seed.visible = Global.is_dev_mode()
 	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
 	# Unlock difficulty after unlocking this section
 	var difs := {
@@ -55,9 +54,9 @@ func _update() -> void:
 		var dif := FileManager.load_random_level().difficulty
 		Continue.text = "%s - %s" % [tr("CONTINUE"), tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())]
 	for dif in Difficulty:
-		var label: Label = Completed.get_node(dif)
-		label.visible = not $Difficulties/VBox.get_node(dif).disabled
-		label.text = "%s - %d" % [tr("%s_BUTTON" % dif.to_upper()), UserData.current().random_levels_completed[Difficulty[dif]]]
+		var cont: Node = Completed.get_node(dif)
+		cont.visible = not $Difficulties/VBox.get_node(dif).disabled
+		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
 
 func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")

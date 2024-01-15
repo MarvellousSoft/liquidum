@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk2tvsodhb3va"]
+[gd_scene load_steps=5 format=3 uid="uid://bk2tvsodhb3va"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_1yoql"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
+[ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="4_jxjxy"]
 
 [node name="RandomHub" type="Control"]
 layout_mode = 3
@@ -130,47 +131,129 @@ select_all_on_focus = true
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
 
-[node name="CompletedCount" type="VBoxContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.3
-anchor_bottom = 0.7
+anchor_top = 0.5
+anchor_bottom = 0.5
 offset_left = 50.0
-scale = Vector2(1, 1.02248)
+grow_vertical = 2
+theme = ExtResource("4_jxjxy")
+metadata/_edit_group_ = true
+
+[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="CompletedCount"]
+[node name="Title" type="Label" parent="PanelContainer/CompletedCount"]
 layout_mode = 2
 text = "RANDOM_COMPLETED"
 
-[node name="HSeparator" type="HSeparator" parent="CompletedCount"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount"]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Easy" type="Label" parent="CompletedCount"]
+[node name="Easy" type="MarginContainer" parent="PanelContainer/CompletedCount"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
-text = "Easy = ?"
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
 
-[node name="Medium" type="Label" parent="CompletedCount"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Easy"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
-text = "Medium = ?"
 
-[node name="Hard" type="Label" parent="CompletedCount"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
-text = "Hard = ?"
+text = "EASY_BUTTON"
 
-[node name="Expert" type="Label" parent="CompletedCount"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
-text = "Expert = ?"
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
 
-[node name="Insane" type="Label" parent="CompletedCount"]
+[node name="Medium" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Medium"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
-text = "Insane = ?"
+text = "MEDIUM_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Hard" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Hard"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "HARD_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Expert" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Expert"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "EXPERT_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Insane" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Insane"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "INSANE_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
 
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="pressed" from="Difficulties/VBox/Easy" to="." method="_on_dif_pressed" binds= [0]]
