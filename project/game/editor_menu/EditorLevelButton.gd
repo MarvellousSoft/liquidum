@@ -29,13 +29,12 @@ func _on_button_mouse_entered():
 
 const IMG_FILE := "user://level_preview.png"
 
-func _create_grid_image(level_data: LevelData) -> void:
+func _create_grid_image(grid_logic: GridModel) -> void:
 	var v := SubViewport.new()
 	var view: GridView = preload("res://game/level/GridView.tscn").instantiate()
 	v.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	v.add_child(view)
 	add_child(v)
-	var grid_logic := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 	view.setup(grid_logic, true)
 	await RenderingServer.frame_post_draw
 	var sz := view.get_grid_size()
@@ -51,7 +50,12 @@ func _on_upload_button_pressed() -> void:
 		return
 	UploadButton.disabled = true
 	var level_data := FileManager.load_editor_level(id)
-	await _create_grid_image(level_data)
+	var loaded := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.SolutionNoClear)
+	if loaded.count_waters() == 0:
+		push_warning("Not uploading empty level")
+		return
+	loaded.clear_content()
+	await _create_grid_image(loaded)
 	var metadata := FileManager.load_editor_level_metadata(id)
 	var res = await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, level_data.description, FileManager._editor_level_dir(id), IMG_FILE)
 	if res.id != -1 and metadata.steam_id != res.id:
