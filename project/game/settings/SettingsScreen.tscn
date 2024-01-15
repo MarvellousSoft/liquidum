@@ -227,9 +227,11 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
+current_tab = 1
 tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
@@ -341,7 +343,6 @@ popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
 [node name="DISPLAY" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]

@@ -44,6 +44,7 @@ scale = Vector2(3, 3)
 texture = ExtResource("2_rym2r")
 
 [node name="RicaName" type="Label" parent="."]
+layout_mode = 0
 offset_left = 441.0
 offset_top = 1020.0
 offset_right = 1576.0
@@ -79,6 +80,7 @@ theme_override_font_sizes/font_size = 70
 text = "MADE_USING"
 
 [node name="MadeUsing" type="Label" parent="MadeUsing"]
+layout_mode = 0
 offset_left = 606.0
 offset_right = 1438.0
 offset_bottom = 94.1719
@@ -88,6 +90,7 @@ theme_override_font_sizes/font_size = 70
 text = "SPECIAL_THANKS_TITLE"
 
 [node name="MadeUsing" type="Label" parent="MadeUsing/MadeUsing"]
+layout_mode = 0
 offset_top = 191.0
 offset_right = 853.0
 offset_bottom = 591.0
