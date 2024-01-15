@@ -107,10 +107,12 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
-func _level_completed(_info: Level.WinInfo, dif: Difficulty) -> void:
+func _level_completed(info: Level.WinInfo, dif: Difficulty) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
+	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and SteamManager.enabled:
+		SteamStats.increment_insane_good()
 
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")

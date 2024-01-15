@@ -18,11 +18,7 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 			each = false
 		tot += completed_count[dif_val]
 		var stat_name := "random_%s_levels" % [dif.to_lower()]
-		if dif_val == RandomHub.Difficulty.Insane:
-			if SteamStats._set_stat_with_goal(stat_name, completed_count[dif_val], 100, "random_100", 10):
-				any = true
-		else:
-			SteamManager.steam.setStatInt(stat_name, completed_count[dif_val])
+		SteamManager.steam.setStatInt(stat_name, completed_count[dif_val])
 	if SteamStats._set_stat_with_goal("random_all_levels", tot, 25, "random_25", 5):
 		any = true
 	if tot > 0 and SteamStats._achieve("random_1", false):
@@ -37,7 +33,7 @@ static func set_current_streak(streak: int) -> void:
 		SteamStats.flushNewAchievements()
 
 static func _increment(stat: String) -> void:
-	var val : int= SteamManager.steam.getStatInt(stat)
+	var val: int = SteamManager.steam.getStatInt(stat)
 	SteamManager.steam.setStatInt(stat, val + 1)
 
 static func increment_daily_all() -> void:
@@ -45,6 +41,12 @@ static func increment_daily_all() -> void:
 
 static func increment_daily_good() -> void:
 	SteamStats._increment("daily_good_levels")
+
+static func increment_insane_good() -> void:
+	const name := "random_insane_good_levels"
+	var prev: int = SteamManager.steam.getStatInt(name)
+	if SteamStats._set_stat_with_goal(name, prev + 1, 100, "random_100", 10):
+		SteamStats.flushNewAchievements()
 
 static func increment_workshop() -> void:
 	var any := false
