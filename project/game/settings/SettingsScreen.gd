@@ -11,7 +11,7 @@ signal pause_toggled(active : bool)
 }
 @onready var Fullscreen = %FullscreenContainer/CheckBox
 @onready var BG = $BG
-@onready var PauseButton = $PauseButton
+@onready var PauseButton: TextureButton = $PauseButton
 @onready var TitleContainer = %TitleContainer
 @onready var LevelTitle = %LevelTitle
 @onready var LevelID = %LevelID
@@ -26,6 +26,7 @@ func _ready():
 
 func disable_button():
 	is_disabled = true
+	create_tween().tween_property(PauseButton, "modulate:a", 0.5, 1)
 	PauseButton.disabled = true
 
 

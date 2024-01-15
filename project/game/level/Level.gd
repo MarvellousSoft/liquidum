@@ -32,7 +32,7 @@ class WinInfo:
 @onready var DevContainer = %DevContainer
 @onready var DevButtons: DevPanel = %DevButtons
 @onready var WaveEffect = %WaveEffect
-@onready var ResetButton = %ResetButton
+@onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
 @onready var Settings: SettingsScreen = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
@@ -330,6 +330,8 @@ func win() -> void:
 	GridNode.remove_all_preview()
 	GridNode.disable()
 	ResetButton.disabled = true
+	var tween := create_tween()
+	tween.tween_property(ResetButton, "modulate:a", 0.5, 1)
 	BackButton.disabled = true
 	Settings.disable_button()
 	
