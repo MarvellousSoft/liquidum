@@ -65,3 +65,8 @@ func _on_forward_pressed():
 
 func _on_close_button_pressed():
 	disable()
+
+func _input(event: InputEvent) -> void:
+	if active and event.is_action_pressed(&"return"):
+		disable()
+		accept_event()
