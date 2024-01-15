@@ -18,6 +18,13 @@ const MIN_GRID_R = 1
 const MAX_GRID_R = 10
 const MIN_GRID_C = 1
 const MAX_GRID_C = 10
+# Maybe make this customisable later
+const BRUSH_KEYS := {
+	KEY_W: E.BrushMode.Water,
+	KEY_X: E.BrushMode.NoWater,
+	KEY_B: E.BrushMode.Boat,
+	KEY_N: E.BrushMode.NoBoat,
+}
 
 @onready var GridCont = $CenterContainer/GridContainer
 @onready var Columns = $CenterContainer/GridContainer/Columns
@@ -44,6 +51,9 @@ var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 var previous_wall_index := []
 var editor_mode := false
 var wall_brush_active := false
+var last_cell_entered: RegularCell = null
+var last_cell_entered_waters := E.Waters.Single
+var current_brush_override := 0
 
 func _ready():
 	Profile.line_info_changed.connect(_on_line_info_changed)
@@ -53,7 +63,10 @@ func _process(_dt):
 	update_drag_preview()
 
 
-func _input(event):
+func _input(event: InputEvent) -> void:
+	if current_brush_override != 0 and not Input.is_key_pressed(current_brush_override):
+		mouse_hold_status = E.MouseDragState.None
+		current_brush_override = 0
 	if event is InputEventMouseButton:
 		if not event.pressed:
 			mouse_hold_status = E.MouseDragState.None
@@ -64,7 +77,13 @@ func _input(event):
 	elif grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
 		update()
-
+	if current_brush_override == 0 and last_cell_entered != null and event is InputEventKey and event.is_pressed() and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		var cell := last_cell_entered
+		var key := (event as InputEventKey).keycode
+		if BRUSH_KEYS.has(key):
+			cell_pressed_main_button(cell.row, cell.column, last_cell_entered_waters, BRUSH_KEYS[key])
+			current_brush_override = key
+			accept_event()
 
 func reset() -> void:
 	for child in Columns.get_children():
@@ -165,7 +184,7 @@ func setup_cell_corners() -> void:
 			CellCornerGrid.add_child(corner)
 			corner.setup(i, j)
 			corner.pressed_main_button.connect(_on_cell_corner_pressed_button.bind(true))
-			corner.pressed_second_button.connect(_on_cell_corner_pressed_button.bind(false))
+			corner.pressed_second_button.connect(_on_cell_corner_pressed_button.bind(-1, false))
 			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
 	
 	if not wall_brush_active:
@@ -531,7 +550,7 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 
 
 func show_boat_preview(p_i : int, p_j : int) -> void:
-	remove_all_preview()
+	remove_all_preview(false)
 	if not Profile.get_option("show_grid_preview"):
 		return
 	var grid_cell := get_cell(p_i, p_j)
@@ -544,7 +563,7 @@ func show_boat_preview(p_i : int, p_j : int) -> void:
 
 
 func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
-	remove_all_preview()
+	remove_all_preview(false)
 	if not Profile.get_option("show_grid_preview"):
 		return
 	var corner := which as E.Corner if which != E.Waters.Single else E.Corner.TopLeft
@@ -554,7 +573,9 @@ func show_preview(p_i : int, p_j : int, which : E.Waters) -> void:
 		cell.set_water_preview(cell_data.loc, true)
 
 
-func remove_all_preview() -> void:
+func remove_all_preview(out := true) -> void:
+	if out:
+		last_cell_entered = null
 	for i in rows:
 		for j in columns:
 			get_cell(i, j).remove_all_preview()
@@ -578,19 +599,23 @@ func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> voi
 	if Profile.get_option("invert_mouse"):
 		main = not main
 	if main:
-		cell_pressed_main_button(i, j, which)
+		cell_pressed_main_button(i, j, which, -1)
 	else:
 		cell_pressed_second_button(i, j, which)
 
-func cell_pressed_main_button(i: int, j: int, which: E.Waters) -> void:
+func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: int) -> void:
 	if disabled:
 		return
 
+	current_brush_override = 0
 	remove_all_preview()
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
-	match brush_mode:
+	var used_brush := brush_mode
+	if override_brush != -1:
+		used_brush = override_brush as E.BrushMode
+	match used_brush:
 		E.BrushMode.Water:
 			grid_logic.push_empty_undo()
 			if cell_data.water_at(corner):
@@ -715,6 +740,8 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
+	last_cell_entered = get_cell(i, j)
+	last_cell_entered_waters = which
 
 	highlight_grid(i, j)
 	if mouse_hold_status == E.MouseDragState.None:
@@ -774,7 +801,9 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	update()
 
-func _on_cell_corner_pressed_button(i: int, j: int, main: bool) -> void:
+func _on_cell_corner_pressed_button(i: int, j: int, override_brush: int, main: bool) -> void:
+	if override_brush != -1:
+		return
 	if Profile.get_option("invert_mouse"):
 		main = not main
 	if main:

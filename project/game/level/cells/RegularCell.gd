@@ -1,3 +1,4 @@
+class_name RegularCell
 extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
@@ -347,7 +348,7 @@ func decrease_water_level(corner : E.Waters, dt : float) -> void:
 		water.material.set_shader_parameter("level", level)
 
 
-func _on_button_gui_input(event, which : E.Waters) -> void:
+func _on_button_gui_input(event: InputEvent, which: E.Waters) -> void:
 	if Buttons[which].disabled:
 		return
 	if event is InputEventMouseButton and event.pressed:
@@ -356,6 +357,7 @@ func _on_button_gui_input(event, which : E.Waters) -> void:
 				pressed_main_button.emit(row, column, which)
 			MOUSE_BUTTON_RIGHT:
 				pressed_second_button.emit(row, column, which)
+
 
 
 func _on_button_mouse_entered(which : E.Waters):
