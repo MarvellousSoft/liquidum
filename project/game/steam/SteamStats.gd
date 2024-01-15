@@ -4,6 +4,10 @@ class_name SteamStats
 
 # Achievements
 
+# Leaderboards
+static var current_streak_id: int = 0
+static var max_streak_id: int = 0
+
 
 static func flushNewAchievements() -> void:
 	SteamManager.steam.storeStats()
@@ -28,9 +32,34 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 	if any:
 		SteamStats.flushNewAchievements()
 
+static func _find_leaderboard(name: String) -> int:
+	SteamManager.steam.findLeaderboard(name)
+	var ret: Array = await SteamManager.steam.leaderboard_find_result
+	if not ret[1]:
+		push_warning("Leaderboard %s not found" % name)
+		return 0
+	else:
+		return ret[0]
+
 static func set_current_streak(streak: int) -> void:
-	if SteamStats._set_stat_with_goal("daily_streak_current", streak, 7, "daily_streak_7", 2):
+	const CUR := "daily_streak_current"
+	const MAX := "daily_streak_max"
+	var upload_current: bool = (streak != SteamManager.steam.getStatInt(CUR))
+	var cur_max_streak: int = SteamManager.steam.getStatInt(MAX)
+	var upload_max := (streak != cur_max_streak)
+	SteamManager.steam.setStatInt(MAX, maxi(cur_max_streak, streak))
+	if SteamStats._set_stat_with_goal(CUR, streak, 7, "daily_streak_7", 2):
 		SteamStats.flushNewAchievements()
+	if upload_current:
+		if current_streak_id == 0:
+			current_streak_id = await _find_leaderboard("current_streak")
+		if current_streak_id != 0:
+			SteamManager.steam.uploadLeaderboardScore(streak, false, PackedInt32Array(), current_streak_id)
+	if upload_max:
+		if max_streak_id == 0:
+			max_streak_id = await _find_leaderboard("max_streak")
+		if max_streak_id != 0:
+			SteamManager.steam.uploadLeaderboardScore(streak, true, PackedInt32Array(), max_streak_id)
 
 static func _increment(stat: String) -> void:
 	var val: int = SteamManager.steam.getStatInt(stat)
