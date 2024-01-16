@@ -234,15 +234,12 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(100, 700)
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
 clip_tabs = false
 tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(100, 600)
 layout_mode = 2
-theme_override_constants/margin_top = 150
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
 layout_mode = 2
@@ -440,6 +437,7 @@ popup/item_2/text = "Português"
 popup/item_2/id = 2
 
 [node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 600)
 layout_mode = 2
 theme_override_constants/margin_left = 60
