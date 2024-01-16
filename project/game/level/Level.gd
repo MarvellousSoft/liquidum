@@ -113,6 +113,12 @@ func _input(event):
 	if event.is_action_pressed("debug_1"):
 		win()
 
+func _notification(what: int) -> void:
+	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
+		maybe_save()
+	elif what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		Settings.toggle_pause()
+
 
 func _unhandled_input(event):
 	if event.is_action_pressed("return"):
@@ -479,11 +485,6 @@ func _on_back_button_pressed() -> void:
 func _on_settings_screen_pause_toggled(paused: bool) -> void:
 	process_game = not paused
 	$SteamPlaytimeTracker.set_tracking(not paused)
-
-
-func _notification(what: int) -> void:
-	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
-		maybe_save()
 
 
 func _on_autosaver_timeout():

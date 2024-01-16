@@ -74,6 +74,14 @@ func _enter_tree() -> void:
 	call_deferred("update_profile_button")
 
 
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		if cur_state == STATES.MAIN_MENU:
+			Settings.toggle_pause()
+		elif cur_state == STATES.LEVEL_HUB and not LevelHub.level_focused:
+			_on_back_button_pressed()
+
+
 func update_level_hub():
 	LevelHub.update_sections()
 

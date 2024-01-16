@@ -540,9 +540,9 @@ layout_mode = 2
 
 [node name="PauseButton" type="TextureButton" parent="."]
 offset_left = 577.0
-offset_top = 27.0
+offset_top = 42.0
 offset_right = 1089.0
-offset_bottom = 539.0
+offset_bottom = 554.0
 scale = Vector2(0.2, 0.2)
 focus_mode = 0
 texture_normal = ExtResource("8_dbu50")

@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnyhmx7iypi5o"]
+
+[ext_resource type="Script" path="res://game/splash/Splash.gd" id="1_mvxer"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_8epj1"]
+
+[node name="Splash" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mvxer")
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_8epj1")]
+layout_mode = 0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 734.0
+offset_bottom = 95.0
+text = "SPLASH_LOADING"
+horizontal_alignment = 1
+vertical_alignment = 1

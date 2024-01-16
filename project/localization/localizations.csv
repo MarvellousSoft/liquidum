@@ -6,6 +6,7 @@ EXIT_BUTTON,Exit,Sair,Saída
 PROFILE_TOOLTIP,Change profile,Mudar perfil,Mudar perfil
 PLAY_BUTTON,Dive,Mergulhar,Mergulhar
 PLAY_TOOLTIP,Campaign levels,Níveis da campanha,Níveis da campanha
+SPLASH_LOADING,Loading...,Carregando...,Carregando...
 CHANGE_PROFILE_BUTTON,Change Profile,Mudar Perfil,Mudar Perfil
 LEVEL_EDITOR_BUTTON,Create,Criar,Criar
 LEVEL_EDITOR_TOOLTIP,Level editor,Editor de níveis,Editor de níveis

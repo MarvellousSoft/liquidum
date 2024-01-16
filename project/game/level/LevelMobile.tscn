@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dl8ycx77sa8oq"]
+[gd_scene load_steps=33 format=3 uid="uid://dl8ycx77sa8oq"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_0bakg"]
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="14_hwkp3"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="15_6ld02"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
+[ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="18_4jcdt"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
 
@@ -107,10 +108,10 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.6),
+"times": PackedFloat32Array(0.1, 1),
 "transitions": PackedFloat32Array(0.535887, 1),
 "update": 0,
-"values": [Vector2(3027, 2242), Vector2(3027, 1962)]
+"values": [Vector2(415, 1500), Vector2(415, 1146)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -136,12 +137,33 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("%BrushPicker:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
 _data = {
 "RESET": SubResource("Animation_72efb"),
 "show": SubResource("Animation_aqku1")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mldsp"]
+shader = ExtResource("18_4jcdt")
+shader_parameter/strength = 0.055
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/radius = 0.0
+shader_parameter/aberration = 0.046
+shader_parameter/width = 0.0463
+shader_parameter/feather = 0.326
 
 [sub_resource type="Animation" id="Animation_1qr1w"]
 length = 0.001
@@ -297,11 +319,11 @@ layout_mode = 2
 
 [node name="TopButtons" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 33.0
-offset_right = 531.0
-offset_bottom = 133.0
-theme_override_constants/separation = 93
+offset_left = 55.0
+offset_top = 42.0
+offset_right = 555.0
+offset_bottom = 142.0
+theme_override_constants/separation = 45
 
 [node name="BackButton" type="Button" parent="TopButtons"]
 unique_name_in_owner = true
@@ -310,6 +332,9 @@ size_flags_vertical = 4
 focus_mode = 0
 theme = ExtResource("3_uwkov")
 text = "BACK"
+
+[node name="Spacer" type="Control" parent="TopButtons"]
+layout_mode = 2
 
 [node name="TutorialButton" type="Button" parent="TopButtons"]
 unique_name_in_owner = true
@@ -322,6 +347,10 @@ theme_override_colors/icon_normal_color = Color(0.85098, 1, 0.886275, 1)
 icon = ExtResource("14_hwkp3")
 icon_alignment = 1
 expand_icon = true
+
+[node name="Spacer2" type="Control" parent="TopButtons"]
+custom_minimum_size = Vector2(71, 0)
+layout_mode = 2
 
 [node name="ResetButton" type="TextureButton" parent="TopButtons"]
 unique_name_in_owner = true
@@ -337,6 +366,8 @@ stretch_mode = 6
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
+offset_top = 8.0
+offset_bottom = 8.0
 
 [node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo"]
 visible = false
@@ -409,12 +440,12 @@ check_for_satisfied = false
 
 [node name="HBoxContainer" parent="TopInfo/HBoxContainer/MistakeCounter" index="0"]
 theme_override_constants/separation = 40
-alignment = 2
 
 [node name="VisibilityButton" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="0"]
 visible = false
 
 [node name="Label" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -424,6 +455,7 @@ autowrap_mode = 0
 [node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
+horizontal_alignment = 0
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -663,8 +695,8 @@ visible = false
 layout_mode = 2
 offset_left = 3027.0
 offset_top = 2242.0
-offset_right = 3754.0
-offset_bottom = 2367.0
+offset_right = 3277.0
+offset_bottom = 2342.0
 focus_mode = 0
 text = "CONTINUE"
 
@@ -678,7 +710,8 @@ layer = 2
 
 [node name="WaveEffect" parent="WaveLayer" instance=ExtResource("18_ioxu2")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(720, 1280)
+material = SubResource("ShaderMaterial_mldsp")
+custom_minimum_size = Vector2(0, 0)
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0

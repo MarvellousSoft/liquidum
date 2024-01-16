@@ -4,6 +4,12 @@ func _input(event):
 	if event.is_action_pressed("return"):
 		_on_back_button_pressed()
 
+
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		_on_back_button_pressed()
+
+
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
 	TransitionManager.pop_scene()
