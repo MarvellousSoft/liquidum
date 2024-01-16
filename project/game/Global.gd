@@ -27,7 +27,6 @@ var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
 func _ready() -> void:
 	dev_mode_label = Label.new()
 	dev_mode_label.text = "dev mode"
-	dev_mode_label.scale = Vector2(5, 5)
 	dev_mode_label.position.x = get_viewport().get_visible_rect().size.x - 400
 	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
 	dev_mode_label.visible = false

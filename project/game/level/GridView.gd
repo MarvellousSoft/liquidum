@@ -184,7 +184,7 @@ func setup_cell_corners() -> void:
 			CellCornerGrid.add_child(corner)
 			corner.setup(i, j)
 			corner.pressed_main_button.connect(_on_cell_corner_pressed_button.bind(true))
-			corner.pressed_second_button.connect(_on_cell_corner_pressed_button.bind(-1, false))
+			corner.pressed_second_button.connect(_on_cell_corner_pressed_button.bind(false))
 			corner.mouse_entered_button.connect(_on_cell_corner_mouse_entered)
 	
 	if not wall_brush_active:
@@ -801,9 +801,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	update()
 
-func _on_cell_corner_pressed_button(i: int, j: int, override_brush: int, main: bool) -> void:
-	if override_brush != -1:
-		return
+func _on_cell_corner_pressed_button(i: int, j: int, main: bool) -> void:
 	if Profile.get_option("invert_mouse"):
 		main = not main
 	if main:

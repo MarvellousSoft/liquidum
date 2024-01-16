@@ -5,6 +5,7 @@ project/.godot/
 project/.import/
 project/export.cfg
 project/export_presets.cfg
+project/video.avi
 
 # Imported translations (automatically generated from CSV files)
 *.translation
