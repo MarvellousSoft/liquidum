@@ -1,0 +1,104 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpwvkjj46nv4s"]
+
+[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="1_lutuy"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_hpxdw"]
+[ext_resource type="Theme" uid="uid://dj21rv23idpsb" path="res://assets/ui/SettingsMobileTheme.tres" id="3_crrjp"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="4_s1c65"]
+
+[node name="SettingsScreen" instance=ExtResource("1_lutuy")]
+
+[node name="MobileBGHelp" parent="." index="1" instance=ExtResource("2_hpxdw")]
+visible = false
+
+[node name="Settings" parent="." index="2"]
+theme = ExtResource("3_crrjp")
+
+[node name="CenterContainer" parent="Settings" index="0"]
+offset_top = 200.0
+offset_right = 722.0
+offset_bottom = 1280.0
+
+[node name="VBoxContainer" parent="Settings/CenterContainer" index="0"]
+custom_minimum_size = Vector2(0, 1080)
+theme_override_constants/separation = 69
+
+[node name="TitleContainer" parent="Settings/CenterContainer/VBoxContainer" index="0"]
+visible = false
+theme_override_constants/separation = 0
+
+[node name="LevelTitle" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" index="0"]
+theme_override_font_sizes/font_size = 60
+
+[node name="LevelID" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" index="1"]
+theme_override_font_sizes/font_size = 50
+
+[node name="TabContainer" parent="Settings/CenterContainer/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(100, 700)
+size_flags_vertical = 1
+clip_tabs = false
+
+[node name="GAMEPLAY" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="1"]
+custom_minimum_size = Vector2(100, 600)
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="DISPLAY" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="2"]
+custom_minimum_size = Vector2(720, 600)
+theme_override_constants/margin_top = 10
+
+[node name="VBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY" index="0"]
+theme_override_constants/separation = 47
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="LanguageMobileLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox" index="2"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "LANGUAGE_SELECT"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="LanguageSelectContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox" index="3"]
+theme_override_constants/separation = 10
+
+[node name="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer" index="0"]
+visible = false
+theme_override_font_sizes/font_size = 20
+
+[node name="SOUND" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="3"]
+custom_minimum_size = Vector2(720, 600)
+
+[node name="CONTROLS" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="4"]
+custom_minimum_size = Vector2(100, 500)
+
+[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer" index="0"]
+custom_minimum_size = Vector2(66, 70)
+
+[node name="BackButton" parent="Settings/CenterContainer/VBoxContainer" index="2"]
+theme = ExtResource("4_s1c65")
+
+[node name="QuitButton" parent="Settings/CenterContainer/VBoxContainer" index="3"]
+theme = ExtResource("4_s1c65")
+
+[node name="BottomMargin" type="Control" parent="Settings/CenterContainer/VBoxContainer" index="4"]
+layout_mode = 2
+
+[node name="PauseButton" parent="." index="3"]
+offset_left = 577.0
+offset_top = 27.0
+offset_right = 1089.0
+offset_bottom = 539.0
+scale = Vector2(0.2, 0.2)
+ignore_texture_size = true
+stretch_mode = 0

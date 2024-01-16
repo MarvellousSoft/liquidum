@@ -49,6 +49,7 @@ text = "X hours left"
 vertical_alignment = 1
 
 [node name="StreakContainer" type="VBoxContainer" parent="HBox/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "STREAK_TOOLTIP"
 theme_override_constants/separation = 15

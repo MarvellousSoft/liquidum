@@ -1,26 +1,28 @@
-[gd_scene load_steps=29 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=31 format=3 uid="uid://dl8ycx77sa8oq"]
 
-[ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
-[ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
-[ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="3_2xjqf"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="3_ceab8"]
-[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_gfx50"]
-[ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="4_m6y7y"]
-[ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="4_qded4"]
-[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="5_1j60w"]
-[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="5_2usht"]
-[ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="5_c2kft"]
-[ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
-[ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="7_q4003"]
-[ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
-[ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="13_3t8tl"]
-[ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="13_4gky1"]
-[ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
-[ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="15_nwo8g"]
-[ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_0bakg"]
+[ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="3_uwkov"]
+[ext_resource type="PackedScene" uid="uid://cpwvkjj46nv4s" path="res://game/settings/SettingsScreenMobile.tscn" id="4_dk1gs"]
+[ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="4_lwsqm"]
+[ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="5_dv3ih"]
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="6_gng55"]
+[ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="7_7ge7w"]
+[ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="8_iaefn"]
+[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="9_bwhp3"]
+[ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="10_bdk8m"]
+[ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="11_qqfwp"]
+[ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="12_po5ls"]
+[ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="13_0ya0j"]
+[ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="14_hwkp3"]
+[ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="15_6ld02"]
+[ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
+[ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
+[ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
-base_font = ExtResource("5_2usht")
+base_font = ExtResource("6_gng55")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4105n"]
 bg_color = Color(0.133333, 0.513726, 0.6, 0.854902)
@@ -269,20 +271,25 @@ _data = {
 [node name="Level" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-theme = ExtResource("3_ceab8")
-script = ExtResource("2_wvis2")
+theme = ExtResource("1_0bakg")
+script = ExtResource("2_5r7gi")
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_vch05")]
+layout_mode = 0
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
-offset_top = 432.0
-offset_right = 3840.0
-offset_bottom = 2038.0
+offset_top = 216.0
+offset_right = 2400.0
+offset_bottom = 2216.0
+scale = Vector2(0.3, 0.3)
 
-[node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
+[node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
 layout_mode = 2
 
 [node name="TopInfo" type="Control" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
@@ -332,7 +339,7 @@ modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
 size_flags_vertical = 4
-texture = ExtResource("8_hu2r6")
+texture = ExtResource("5_dv3ih")
 expand_mode = 1
 
 [node name="TimerLabel" type="Label" parent="TopInfo/VBoxContainer/TimerContainer"]
@@ -347,7 +354,7 @@ theme_override_font_sizes/font_size = 80
 text = "00:00"
 vertical_alignment = 2
 
-[node name="MistakeCounter" parent="TopInfo/VBoxContainer" instance=ExtResource("4_m6y7y")]
+[node name="MistakeCounter" parent="TopInfo/VBoxContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 check_for_satisfied = false
@@ -367,6 +374,7 @@ theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 2929.0
@@ -380,7 +388,7 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme = ExtResource("3_ceab8")
+theme = ExtResource("1_0bakg")
 
 [node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
 layout_mode = 2
@@ -392,41 +400,44 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 alignment = 1
 
-[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "WATERS_COUNTER"
 
-[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("6_dltj2")]
+[node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("8_iaefn")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
+[node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_bottom = 0.0
 
 [node name="ResetButton" type="TextureButton" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 offset_left = 3335.0
 offset_top = 49.0
 offset_right = 3535.0
 offset_bottom = 249.0
-texture_normal = ExtResource("3_2xjqf")
-texture_pressed = ExtResource("4_qded4")
-texture_hover = ExtResource("5_c2kft")
+texture_normal = ExtResource("10_bdk8m")
+texture_pressed = ExtResource("11_qqfwp")
+texture_hover = ExtResource("12_po5ls")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="DevContainer" type="ScrollContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 25.0
 offset_top = 720.0
@@ -443,7 +454,7 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="DevButtons" parent="DevContainer/MarginContainer" instance=ExtResource("7_q4003")]
+[node name="DevButtons" parent="DevContainer/MarginContainer" instance=ExtResource("13_0ya0j")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -451,6 +462,7 @@ size_flags_vertical = 4
 
 [node name="PlaytestButton" type="Button" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 offset_left = 100.0
 offset_top = 290.0
@@ -461,6 +473,7 @@ text = "PLAYTEST"
 
 [node name="TutorialButton" type="Button" parent="."]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(140, 140)
 layout_mode = 2
 offset_left = 99.0
@@ -471,12 +484,13 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 focus_mode = 0
 theme_override_colors/icon_normal_color = Color(0.85098, 1, 0.886275, 1)
-icon = ExtResource("13_3t8tl")
+icon = ExtResource("14_hwkp3")
 icon_alignment = 1
 expand_icon = true
 
 [node name="TutorialContainer" type="MarginContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 60.0
@@ -507,7 +521,7 @@ modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 0
-texture = ExtResource("13_3t8tl")
+texture = ExtResource("14_hwkp3")
 expand_mode = 3
 
 [node name="TutorialCenterContainer" type="CenterContainer" parent="TutorialContainer/PanelContainer/MarginContainer/VBoxContainer"]
@@ -516,20 +530,22 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TogetherSeparate" parent="TutorialContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("13_kx7dw")]
+[node name="TogetherSeparate" parent="TutorialContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("15_6ld02")]
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 100.0
-offset_top = 63.0
-offset_right = 400.0
-offset_bottom = 188.0
+offset_left = 46.0
+offset_top = 28.0
+offset_right = 162.0
+offset_bottom = 94.0
 focus_mode = 0
+theme = ExtResource("3_uwkov")
 text = "BACK"
 
 [node name="Description" type="MarginContainer" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 12
@@ -571,6 +587,7 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="Title" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -616,6 +633,7 @@ max_length = 64
 caret_blink = true
 
 [node name="TutorialDisplayContainer" type="CenterContainer" parent="."]
+visible = false
 z_index = 2
 layout_mode = 0
 offset_right = 3840.0
@@ -629,7 +647,7 @@ custom_minimum_size = Vector2(3840, 2160)
 layout_mode = 2
 color = Color(0, 0.0352941, 0.141176, 0.886275)
 
-[node name="TutorialDisplay" parent="TutorialDisplayContainer" instance=ExtResource("15_nwo8g")]
+[node name="TutorialDisplay" parent="TutorialDisplayContainer" instance=ExtResource("17_46m0x")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -654,12 +672,19 @@ libraries = {
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 layer = 2
 
-[node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
+[node name="WaveEffect" parent="WaveLayer" instance=ExtResource("18_ioxu2")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(720, 1280)
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 720.0
+offset_bottom = 1280.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
+[node name="SettingsScreen" parent="." instance=ExtResource("4_dk1gs")]
 unique_name_in_owner = true
-layer = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -670,7 +695,7 @@ libraries = {
 wait_time = 30.0
 autostart = true
 
-[node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
+[node name="SteamPlaytimeTracker" parent="." instance=ExtResource("20_o7ta7")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]

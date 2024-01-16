@@ -8,14 +8,20 @@ const CAM_POS = {
 		"level_hub": Vector2(1930, -1280),
 	},
 	"mobile": {
-		"menu": Vector2(360, 540),
-		"level_hub": Vector2(360, -1140),
+		"menu": Vector2(360, 640),
+		"level_hub": Vector2(360, -1136),
 	},
 }
 const EPS = .001
 const ZOOM_LERP = 4.0
-const LEVEL_ZOOM = 2.6
-const NORMAL_ZOOM = 1.0
+const LEVEL_ZOOM = {
+	"desktop": 2.6,
+	"mobile": 2.6,
+}
+const NORMAL_ZOOM = {
+	"desktop": 1.0,
+	"mobile": 1.0,
+}
 const ICONS = {
 	"fish": preload("res://assets/images/ui/icons/double-fish.png"),
 	"turtle": preload("res://assets/images/ui/icons/turtle.png"),
@@ -28,13 +34,14 @@ const ICONS = {
 @onready var LevelHub = $LevelHub
 @onready var Settings = $SettingsScreen
 
-var cam_target_zoom = NORMAL_ZOOM
+var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
 	if not SteamManager.enabled:
 		$MainButtonsContainer/VBoxContainer/Workshop.disabled = true
 	
+	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
 	Camera.position = cam_pos.menu
 	AudioManager.play_bgm("main")
@@ -119,13 +126,13 @@ func _on_back_button_pressed():
 
 func _on_level_hub_enable_focus(pos, _my_section):
 	Camera.position = pos
-	cam_target_zoom = LEVEL_ZOOM
+	cam_target_zoom = LEVEL_ZOOM.mobile if Global.is_mobile else LEVEL_ZOOM.desktop
 
 
 func _on_level_hub_disable_focus():
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
 	Camera.position = cam_pos.level_hub
-	cam_target_zoom = NORMAL_ZOOM
+	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 
 
 func _on_random_button_pressed() -> void:

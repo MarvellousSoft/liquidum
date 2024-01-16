@@ -151,3 +151,10 @@ func _on_line_info_item_selected(index: int) -> void:
 	checkbox_sound(true)
 	Profile.set_option("line_info", index)
 	Profile.line_info_changed.emit()
+
+
+func _on_back_button_pressed():
+	AudioManager.play_sfx("button_back")
+	save_values()
+	FileManager.save_game()
+	toggle_pause()

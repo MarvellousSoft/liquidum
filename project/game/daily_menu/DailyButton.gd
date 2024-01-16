@@ -26,7 +26,7 @@ func _update() -> void:
 	var unlocked := Global.is_dev_mode() or LevelLister.section_complete(4)
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
-	$HBox/VBoxContainer/StreakContainer.visible = unlocked
+	%StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
 	Completed.visible = false
 	if unlocked:

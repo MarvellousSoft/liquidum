@@ -34,7 +34,7 @@ class WinInfo:
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
-@onready var Settings: SettingsScreen = $SettingsScreen
+@onready var Settings = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionEdit: TextEdit = $Description/Edit
@@ -67,7 +67,10 @@ var reset_mistakes_on_reset := true
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
-	DevContainer.visible = Global.is_dev_mode()
+	if not Global.is_mobile:
+		DevContainer.visible = Global.is_dev_mode()
+	else:
+		DevContainer.visible = false
 	set_level_names_and_descriptions()
 	reset_tutorial()
 	if is_campaign_level():
@@ -614,7 +617,8 @@ func _on_edit_text_changed(new_text: String) -> void:
 
 
 func _on_dev_mode_toggled(status):
-	DevContainer.visible = status
+	if not Global.is_mobile:
+		DevContainer.visible = status
 
 
 func _on_dev_buttons_copy_to_editor():

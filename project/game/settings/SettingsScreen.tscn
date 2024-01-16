@@ -227,22 +227,18 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 1
+current_tab = 3
 tab_focus_mode = 0
 
-[node name="GAMEPLAY" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
 visible = false
+custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
+theme_override_constants/margin_top = 150
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_right = 0.7
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 97
+layout_mode = 2
+theme_override_constants/separation = 75
 alignment = 1
 
 [node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
@@ -342,15 +338,14 @@ popup/item_1/id = 1
 popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
-[node name="DISPLAY" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
+theme_override_constants/margin_top = 200
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_right = 0.7
-anchor_bottom = 1.0
+layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
 
@@ -427,18 +422,16 @@ popup/item_1/id = 1
 popup/item_2/text = "Português"
 popup/item_2/id = 2
 
-[node name="SOUND" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
 visible = false
+custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
+theme_override_constants/margin_left = 1000
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 1000
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_right = 0.7
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
 
@@ -479,18 +472,12 @@ horizontal_alignment = 1
 [node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer"]
 layout_mode = 2
 
-[node name="CONTROLS" type="Control" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
+[node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_right = 0.7
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
 
@@ -517,6 +504,13 @@ theme_override_constants/line_spacing = 47
 text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("6_um142")
+text = "SAVE_AND_BACK"
 
 [node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -564,6 +558,8 @@ speed_scale = 3.5
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_save_n_quit_button_pressed"]
 [connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]

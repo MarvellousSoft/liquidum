@@ -1,6 +1,5 @@
 extends Node
 
-const LEVEL_SCENE = preload("res://game/level/Level.tscn")
 const COLORS = {
 	"normal": Color("#d9ffe2ff"),
 	"satisfied": Color("#61fc89ff"),
@@ -15,6 +14,8 @@ const TUTORIALS = {
 }
 
 signal dev_mode_toggled(status : bool)
+
+@onready var level_scene = load_mobile_compat("res://game/level/Level")
 
 var previous_windowed_pos = false
 var _dev_mode := false
@@ -31,6 +32,8 @@ func _ready() -> void:
 	dev_mode_label.position.y = get_viewport().get_visible_rect().size.y - 100
 	dev_mode_label.visible = false
 	add_child(dev_mode_label)
+	if ProjectSettings.get_setting("liquidum/dev_mode"):
+		toggle_dev_mode()
 
 
 func _input(event):
@@ -72,7 +75,7 @@ func is_dev_mode() -> bool:
 
 
 func create_level(grid_: GridModel, level_name_: String, full_name_: String, description_: String, tracking_stats: Array[String], level_number := -1, section_number := -1) -> Level:
-	var level : Level = LEVEL_SCENE.instantiate()
+	var level : Level = level_scene.instantiate()
 	level.grid = grid_
 	level.level_name = level_name_
 	level.full_name = full_name_

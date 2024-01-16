@@ -11,12 +11,14 @@ shader_parameter/height = 0.005
 [node name="Title" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+mouse_filter = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
 offset_top = 441.0
 offset_right = 3860.0
 offset_bottom = 941.0
+mouse_filter = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer"]
 layout_mode = 2
@@ -37,3 +39,4 @@ offset_left = -51.0
 offset_top = -133.0
 offset_right = 3949.0
 offset_bottom = 1067.0
+mouse_filter = 2
