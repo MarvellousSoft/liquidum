@@ -616,6 +616,7 @@ max_length = 64
 caret_blink = true
 
 [node name="TutorialDisplayContainer" type="CenterContainer" parent="."]
+z_index = 2
 layout_mode = 0
 offset_right = 3840.0
 offset_bottom = 2160.0
@@ -651,11 +652,13 @@ libraries = {
 }
 
 [node name="WaveLayer" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
 unique_name_in_owner = true
 
 [node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
+layer = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -669,9 +672,6 @@ autostart = true
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
-[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/VBoxContainer/MistakeCounter" method="add_count"]
-[connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
-[connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]

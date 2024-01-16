@@ -51,7 +51,7 @@ var mouse_hold_status : E.MouseDragState = E.MouseDragState.None
 var previous_wall_index := []
 var editor_mode := false
 var wall_brush_active := false
-var last_cell_entered: RegularCell = null
+var last_cell_entered = null
 var last_cell_entered_waters := E.Waters.Single
 var current_brush_override := 0
 
@@ -78,7 +78,7 @@ func _input(event: InputEvent) -> void:
 		grid_logic.redo()
 		update()
 	if current_brush_override == 0 and last_cell_entered != null and event is InputEventKey and event.is_pressed() and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		var cell := last_cell_entered
+		var cell = last_cell_entered
 		var key := (event as InputEventKey).keycode
 		if BRUSH_KEYS.has(key):
 			cell_pressed_main_button(cell.row, cell.column, last_cell_entered_waters, BRUSH_KEYS[key])
