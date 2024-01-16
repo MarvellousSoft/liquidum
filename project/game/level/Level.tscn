@@ -673,6 +673,9 @@ autostart = true
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
+[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/VBoxContainer/MistakeCounter" method="add_count"]
+[connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
+[connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]

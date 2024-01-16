@@ -470,6 +470,7 @@ size_flags_horizontal = 4
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
 layout_mode = 0
+offset_right = 0.0
 offset_bottom = 0.0
 
 [node name="CenterContainer" parent="BrushPicker" index="0"]
@@ -701,6 +702,9 @@ autostart = true
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("20_o7ta7")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
+[connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/HBoxContainer/MistakeCounter" method="add_count"]
+[connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
+[connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="mouse_entered" from="TopButtons/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="TopButtons/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="TopButtons/TutorialButton" to="." method="_on_tutorial_button_pressed"]
