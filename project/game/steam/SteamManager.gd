@@ -39,6 +39,8 @@ func _stats_received(game: int, result: int, user: int) -> void:
 	SteamStats.update_campaign_stats()
 
 func store_stats() -> void:
+	if not SteamManager.enabled:
+		return
 	if not stats_received:
 		SteamManager.steam.requestCurrentStats()
 		return

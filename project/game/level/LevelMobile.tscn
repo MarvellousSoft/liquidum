@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="10_bdk8m"]
 [ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="11_qqfwp"]
 [ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="12_po5ls"]
-[ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="13_0ya0j"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="14_hwkp3"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="15_6ld02"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
@@ -23,6 +22,15 @@
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("6_gng55")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxt4x"]
+bg_color = Color(0.0156863, 0.105882, 0.219608, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+expand_margin_left = 7.0
+expand_margin_right = 7.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4105n"]
 bg_color = Color(0.133333, 0.513726, 0.6, 0.854902)
@@ -271,7 +279,7 @@ _data = {
 [node name="Level" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-theme = ExtResource("1_0bakg")
+theme = ExtResource("3_uwkov")
 script = ExtResource("2_5r7gi")
 
 [node name="MobileBGHelp" parent="." instance=ExtResource("2_vch05")]
@@ -279,26 +287,59 @@ layout_mode = 0
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
-offset_top = 216.0
-offset_right = 2400.0
-offset_bottom = 2216.0
-scale = Vector2(0.3, 0.3)
+offset_top = 251.0
+offset_right = 720.0
+offset_bottom = 957.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="TopButtons" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 33.0
+offset_right = 531.0
+offset_bottom = 133.0
+theme_override_constants/separation = 93
+
+[node name="BackButton" type="Button" parent="TopButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("3_uwkov")
+text = "BACK"
+
+[node name="TutorialButton" type="Button" parent="TopButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(0.85098, 1, 0.886275, 1)
+icon = ExtResource("14_hwkp3")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ResetButton" type="TextureButton" parent="TopButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("10_bdk8m")
+texture_pressed = ExtResource("11_qqfwp")
+texture_hover = ExtResource("12_po5ls")
+ignore_texture_size = true
+stretch_mode = 6
+
 [node name="TopInfo" type="Control" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
-offset_left = 587.0
-offset_top = 71.0
-offset_right = 587.0
-offset_bottom = 71.0
 
 [node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo"]
+visible = false
 layout_mode = 0
 offset_left = -90.0
 offset_right = 797.0
@@ -324,25 +365,26 @@ theme_override_font_sizes/font_size = 90
 text = "LEVELNAM"
 autowrap_mode = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopInfo"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopInfo"]
 layout_mode = 0
-offset_left = 1989.0
-offset_right = 2707.0
-offset_bottom = 274.0
+offset_top = 144.0
+offset_right = 684.0
+offset_bottom = 259.0
+theme_override_constants/separation = 30
 
-[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/VBoxContainer"]
+[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TimerIcon" type="TextureRect" parent="TopInfo/VBoxContainer/TimerContainer"]
+[node name="TimerIcon" type="TextureRect" parent="TopInfo/HBoxContainer/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(150, 120)
+custom_minimum_size = Vector2(96, 76)
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("5_dv3ih")
 expand_mode = 1
 
-[node name="TimerLabel" type="Label" parent="TopInfo/VBoxContainer/TimerContainer"]
+[node name="TimerLabel" type="Label" parent="TopInfo/HBoxContainer/TimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -350,26 +392,36 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 36
 theme_override_fonts/font = SubResource("FontVariation_hmnss")
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 53
 text = "00:00"
 vertical_alignment = 2
 
-[node name="MistakeCounter" parent="TopInfo/VBoxContainer" instance=ExtResource("7_7ge7w")]
+[node name="VSeparator" type="VSeparator" parent="TopInfo/HBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
+
+[node name="MistakeCounter" parent="TopInfo/HBoxContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 check_for_satisfied = false
 
-[node name="HBoxContainer" parent="TopInfo/VBoxContainer/MistakeCounter" index="0"]
+[node name="HBoxContainer" parent="TopInfo/HBoxContainer/MistakeCounter" index="0"]
+theme_override_constants/separation = 40
 alignment = 2
 
-[node name="Label" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="1"]
+[node name="VisibilityButton" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="0"]
+visible = false
+
+[node name="Label" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="1"]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
-theme_override_font_sizes/font_size = 96
+theme_override_font_sizes/font_size = 55
 autowrap_mode = 0
 
-[node name="Counter" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
@@ -417,76 +469,52 @@ size_flags_horizontal = 4
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 0
 offset_bottom = 0.0
 
-[node name="ResetButton" type="TextureButton" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-offset_left = 3335.0
-offset_top = 49.0
-offset_right = 3535.0
-offset_bottom = 249.0
-texture_normal = ExtResource("10_bdk8m")
-texture_pressed = ExtResource("11_qqfwp")
-texture_hover = ExtResource("12_po5ls")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="CenterContainer" parent="BrushPicker" index="0"]
+offset_top = 1090.0
+offset_right = 720.0
+offset_bottom = 1280.0
 
-[node name="DevContainer" type="ScrollContainer" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 25.0
-offset_top = 720.0
-offset_right = 1025.0
-offset_bottom = 1920.0
-scale = Vector2(0.8, 0.8)
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
+[node name="PanelContainer" parent="BrushPicker/CenterContainer" index="0"]
+theme = ExtResource("3_uwkov")
 
-[node name="MarginContainer" type="MarginContainer" parent="DevContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 120
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+[node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="0"]
+custom_minimum_size = Vector2(100, 100)
 
-[node name="DevButtons" parent="DevContainer/MarginContainer" instance=ExtResource("13_0ya0j")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+[node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="1"]
+custom_minimum_size = Vector2(100, 100)
 
-[node name="PlaytestButton" type="Button" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-offset_left = 100.0
-offset_top = 290.0
-offset_right = 827.0
-offset_bottom = 415.0
-focus_mode = 0
-text = "PLAYTEST"
+[node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="2"]
+custom_minimum_size = Vector2(100, 100)
 
-[node name="TutorialButton" type="Button" parent="."]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(140, 140)
-layout_mode = 2
-offset_left = 99.0
-offset_top = 252.0
-offset_right = 239.0
-offset_bottom = 392.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0.85098, 1, 0.886275, 1)
-icon = ExtResource("14_hwkp3")
-icon_alignment = 1
-expand_icon = true
+[node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="3"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="4"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="5"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="0"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="1"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="2"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="3"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="4"]
+custom_minimum_size = Vector2(100, 100)
+
+[node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="5"]
+custom_minimum_size = Vector2(100, 100)
 
 [node name="TutorialContainer" type="MarginContainer" parent="."]
 unique_name_in_owner = true
@@ -533,57 +561,32 @@ size_flags_vertical = 4
 [node name="TogetherSeparate" parent="TutorialContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("15_6ld02")]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
-offset_left = 46.0
-offset_top = 28.0
-offset_right = 162.0
-offset_bottom = 94.0
-focus_mode = 0
-theme = ExtResource("3_uwkov")
-text = "BACK"
-
 [node name="Description" type="MarginContainer" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 36.0
-offset_top = 1948.0
-offset_right = 3804.0
-offset_bottom = 2113.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 0
+offset_top = 979.0
+offset_right = 720.0
+offset_bottom = 1079.0
 mouse_filter = 2
 
-[node name="Edit" type="TextEdit" parent="Description"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
-wrap_mode = 1
-
 [node name="Scroll" type="ScrollContainer" parent="Description"]
-custom_minimum_size = Vector2(0, 180)
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 mouse_filter = 2
 follow_focus = true
 horizontal_scroll_mode = 3
 
 [node name="Label" type="Label" parent="Description/Scroll"]
-custom_minimum_size = Vector2(3760, 140)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
-theme_override_font_sizes/font_size = 70
-text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+theme_override_font_sizes/font_size = 32
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Title" type="Control" parent="."]
@@ -698,29 +701,18 @@ autostart = true
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("20_o7ta7")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
+[connection signal="mouse_entered" from="TopButtons/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="TopButtons/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="TopButtons/TutorialButton" to="." method="_on_tutorial_button_pressed"]
+[connection signal="mouse_entered" from="TopButtons/ResetButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="TopButtons/ResetButton" to="." method="reset_level"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
-[connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ResetButton" to="." method="reset_level"]
-[connection signal="copy_to_editor" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_copy_to_editor"]
-[connection signal="full_solve" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_full_solve"]
-[connection signal="generate" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_generate"]
-[connection signal="load_grid" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_load_grid"]
-[connection signal="randomize_visibility" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
-[connection signal="randomize_water" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_water"]
-[connection signal="save" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_save"]
-[connection signal="use_strategies" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
-[connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
-[connection signal="pressed" from="TutorialButton" to="." method="_on_tutorial_button_pressed"]
-[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
-[editable path="TopInfo/VBoxContainer/MistakeCounter"]
-[editable path="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
+[editable path="TopInfo/HBoxContainer/MistakeCounter"]
+[editable path="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]

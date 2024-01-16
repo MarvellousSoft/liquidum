@@ -2,7 +2,10 @@ class_name Level
 extends Control
 
 const COUNTER_DELAY_STARTUP = .3
-const DESIRED_GRID_W = 1300
+const DESIRED_GRID_W = {
+	"desktop": 1300,
+	"mobile": 700,
+}
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -25,19 +28,15 @@ class WinInfo:
 	"boat": %BoatCounter,
 	"mistake": %MistakeCounter,
 }
-@onready var PlaytestButton = %PlaytestButton
 @onready var BrushPicker = %BrushPicker
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
 @onready var AnimPlayer = $AnimationPlayer
-@onready var DevContainer = %DevContainer
-@onready var DevButtons: DevPanel = %DevButtons
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
 @onready var Settings = $SettingsScreen
 @onready var ContinueAnim = $ContinueButton/AnimationPlayer
 @onready var Description: Label = $Description/Scroll/Label
-@onready var DescriptionEdit: TextEdit = $Description/Edit
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
@@ -68,9 +67,8 @@ var reset_mistakes_on_reset := true
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	if not Global.is_mobile:
-		DevContainer.visible = Global.is_dev_mode()
-	else:
-		DevContainer.visible = false
+		%DevContainer.visible = Global.is_dev_mode()
+		%PlaytestButton.visible = false
 	set_level_names_and_descriptions()
 	reset_tutorial()
 	if is_campaign_level():
@@ -82,8 +80,7 @@ func _ready():
 			TutorialContainer.hide()
 	else:
 		TutorialContainer.hide()
-		
-	%PlaytestButton.visible = false
+	
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
@@ -95,7 +92,8 @@ func _ready():
 func _enter_tree():
 	if GridNode:
 		scale_grid()
-		PlaytestButton.visible = editor_mode()
+		if not Global.is_mobile:
+			%PlaytestButton.visible = editor_mode()
 
 
 func _exit_tree() -> void:
@@ -124,7 +122,8 @@ func _unhandled_input(event):
 func setup(try_load := true) -> void:
 	if not grid.editor_mode():
 		grid.prettify_hints()
-	DevButtons.setup(grid.editor_mode())
+	if not Global.is_mobile:
+		%DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
 	
@@ -134,7 +133,7 @@ func setup(try_load := true) -> void:
 		if grid.editor_mode():
 			var data := FileManager.load_editor_level(level_name)
 			if data != null:
-				DescriptionEdit.text = data.description
+				$Description/Edit.text = data.description
 				description = data.description
 				TitleEdit.text = data.full_name
 				full_name = data.full_name
@@ -153,9 +152,10 @@ func setup(try_load := true) -> void:
 				dummy_save = save
 	BrushPicker.setup(grid.editor_mode())
 	GridNode.setup(grid)
-	PlaytestButton.visible = editor_mode()
 	DescriptionScroll.visible = not editor_mode()
-	DescriptionEdit.visible = editor_mode()
+	if not Global.is_mobile:
+		%PlaytestButton.visible = editor_mode()
+		%DescriptionEdit.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
 	TitleBanner.visible = not editor_mode() and full_name != ""
 	if not editor_mode():
@@ -209,7 +209,8 @@ func setup(try_load := true) -> void:
 
 func set_level_names_and_descriptions():
 	Description.text = description
-	DescriptionEdit.text = description
+	if not Global.is_mobile:
+		$Description/Edit.text = description
 	TitleLabel.text = full_name
 	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
@@ -235,7 +236,8 @@ func scale_grid() -> void:
 	await get_tree().process_frame
 	
 	var g_size = GridNode.get_grid_size()
-	var s = min( DESIRED_GRID_W / g_size.x, DESIRED_GRID_W / g_size.y )
+	var w = DESIRED_GRID_W.desktop if not Global.is_mobile else DESIRED_GRID_W.mobile
+	var s = min( w / g_size.x, w / g_size.y )
 	GridNode.scale = Vector2(s, s)
 	GridNode.modulate.a = prev_a
 	GridNode.setup_cell_corners()
@@ -357,8 +359,8 @@ func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 
 
 func _on_grid_updated() -> void:
-	if DevButtons.god_mode_enabled():
-		GridNode.apply_strategies(DevButtons.selected_strategies(), false, false)
+	if not Global.is_mobile and %DevButtons.god_mode_enabled():
+		GridNode.apply_strategies(%DevButtons.selected_strategies(), false, false)
 	update_counters()
 	if not editor_mode() and GridNode.is_level_finished():
 		win()
@@ -495,22 +497,22 @@ func _on_grid_view_updated_size():
 func _on_dev_buttons_full_solve():
 	if editor_mode():
 		var g2 := _get_solution_grid(GridModel.LoadMode.Testing)
-		DevButtons.start_solve(g2)
+		%DevButtons.start_solve(g2)
 	else:
-		var r: SolverModel.SolveResult = GridNode.full_solve(DevButtons.selected_strategies(), true, false)
-		DevButtons.set_solve_type(r)
+		var r: SolverModel.SolveResult = GridNode.full_solve(%DevButtons.selected_strategies(), true, false)
+		%DevButtons.set_solve_type(r)
 
 
 func _on_dev_buttons_use_strategies():
-	GridNode.apply_strategies(DevButtons.selected_strategies(), true, false)
+	GridNode.apply_strategies(%DevButtons.selected_strategies(), true, false)
 
 
 func _on_dev_buttons_generate() -> void:
 	if not editor_mode():
 		return
-	if DevButtons.should_reset_visible_aquariums():
+	if %DevButtons.should_reset_visible_aquariums():
 		AquariumHints.set_should_be_visible({})
-	var new_grid: GridModel = await DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
+	var new_grid: GridModel = await %DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
 	if new_grid != null:
 		assert(new_grid.editor_mode())
 		var vis := HintVisibility.from_grid(new_grid)
@@ -604,7 +606,7 @@ func _on_continue_button_pressed() -> void:
 func _on_description_edit_text_changed() -> void:
 	if not editor_mode():
 		return
-	description = DescriptionEdit.text
+	description = $Description/Edit.text
 
 
 func _on_edit_text_changed(new_text: String) -> void:
@@ -618,11 +620,11 @@ func _on_edit_text_changed(new_text: String) -> void:
 
 func _on_dev_mode_toggled(status):
 	if not Global.is_mobile:
-		DevContainer.visible = status
+		%DevContainer.visible = status
 
 
 func _on_dev_buttons_copy_to_editor():
-	DevButtons.do_copy_to_editor(GridNode.grid_logic, _hint_visibility())
+	%DevButtons.do_copy_to_editor(GridNode.grid_logic, _hint_visibility())
 
 
 func _on_tutorial_button_pressed():

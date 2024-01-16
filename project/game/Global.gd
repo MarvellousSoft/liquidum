@@ -45,8 +45,9 @@ func _input(event):
 
 func toggle_dev_mode():
 	_dev_mode = not _dev_mode
-	dev_mode_label.visible = _dev_mode
 	dev_mode_toggled.emit(_dev_mode)
+	if not is_mobile:
+		dev_mode_label.visible = _dev_mode
 
 
 func _notification(what : int):
