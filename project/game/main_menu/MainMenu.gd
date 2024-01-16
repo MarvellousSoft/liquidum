@@ -29,7 +29,6 @@ const ICONS = {
 }
 
 @onready var Version: Label = %Version
-@onready var ProfileButton: Button = $ProfileButton
 @onready var Camera = $Camera2D
 @onready var LevelHub = $LevelHub
 @onready var Settings = $SettingsScreen
@@ -38,8 +37,8 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
-	if not SteamManager.enabled:
-		$MainButtonsContainer/VBoxContainer/Workshop.disabled = true
+	if not SteamManager.enabled and not Global.is_mobile:
+		%Workshop.disabled = true
 	
 	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
@@ -80,7 +79,8 @@ func update_level_hub():
 
 
 func update_profile_button() -> void:
-	ProfileButton.icon = ICONS[FileManager.current_profile]
+	if not Global.is_mobile:
+		%ProfileButton.icon = ICONS[FileManager.current_profile]
 
 
 func _on_editor_button_pressed():

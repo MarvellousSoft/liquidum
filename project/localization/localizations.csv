@@ -6,6 +6,7 @@ EXIT_BUTTON,Exit,Sair,Saída
 PROFILE_TOOLTIP,Change profile,Mudar perfil,Mudar perfil
 PLAY_BUTTON,Dive,Mergulhar,Mergulhar
 PLAY_TOOLTIP,Campaign levels,Níveis da campanha,Níveis da campanha
+CHANGE_PROFILE_BUTTON,Change Profile,Mudar Perfil,Mudar Perfil
 LEVEL_EDITOR_BUTTON,Create,Criar,Criar
 LEVEL_EDITOR_TOOLTIP,Level editor,Editor de níveis,Editor de níveis
 EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?,Tem certeza de que deseja sair do jogo?
@@ -157,7 +158,7 @@ DARK_MODE,Dark mode,Modo escuro,Modo escuro
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
 DRAG_BUTTON,Fill with mouse drag,Preencher arrastando o mouse,Preencher arrastando o mouse
-INCOMPLETE_LINE_INFO,Incomplete line info,Informação de linhas incompletas,Informação de linhas incompletas
+INCOMPLETE_LINE_INFO,Incomplete line info,Info. de linhas incompletas,Info. de linhas incompletas
 LINE_INFO_NONE,None,Nenhuma,Nenhuma
 LINE_INFO_MISSING,Missing value,Valor faltando,Valor faltando
 LINE_INFO_CURRENT,Current value,Valor atual,Valor atual

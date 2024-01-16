@@ -1,104 +1,589 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpwvkjj46nv4s"]
+[gd_scene load_steps=15 format=3 uid="uid://cpwvkjj46nv4s"]
 
-[ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="1_lutuy"]
+[ext_resource type="Script" path="res://game/settings/SettingsScreen.gd" id="1_eau0i"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_hpxdw"]
 [ext_resource type="Theme" uid="uid://dj21rv23idpsb" path="res://assets/ui/SettingsMobileTheme.tres" id="3_crrjp"]
+[ext_resource type="Texture2D" uid="uid://dlxn50psp55f3" path="res://assets/images/ui/settings/checkbox_unpressed.png" id="4_d7qef"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="4_s1c65"]
+[ext_resource type="Texture2D" uid="uid://guhcktb4xm66" path="res://assets/images/ui/settings/checkbox_pressed.png" id="5_olws7"]
+[ext_resource type="Texture2D" uid="uid://mdkrgn1ytnhh" path="res://assets/images/ui/settings/checkbox_hover.png" id="6_gfgdl"]
+[ext_resource type="Texture2D" uid="uid://ciuyao6wf8s54" path="res://assets/images/ui/settings/settings_button_normal.png" id="8_dbu50"]
+[ext_resource type="Texture2D" uid="uid://bxwmppfcxxjb2" path="res://assets/images/ui/settings/settings_button_pressed.png" id="9_pp4id"]
+[ext_resource type="Texture2D" uid="uid://c3va1ykebf8as" path="res://assets/images/ui/settings/settings_button_hover.png" id="10_2idhi"]
 
-[node name="SettingsScreen" instance=ExtResource("1_lutuy")]
+[sub_resource type="Animation" id="Animation_mqb4d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BG:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Settings:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Settings:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
-[node name="MobileBGHelp" parent="." index="1" instance=ExtResource("2_hpxdw")]
+[sub_resource type="Animation" id="Animation_84cm6"]
+resource_name = "disable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BG:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Settings:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Settings:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mh6ii"]
+resource_name = "enable"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BG:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Settings:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Settings:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sb0jh"]
+_data = {
+"RESET": SubResource("Animation_mqb4d"),
+"disable": SubResource("Animation_84cm6"),
+"enable": SubResource("Animation_mh6ii")
+}
+
+[node name="SettingsScreen" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_eau0i")
+
+[node name="BG" type="ColorRect" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.0352941, 0.141176, 0.980392)
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_hpxdw")]
 visible = false
 
-[node name="Settings" parent="." index="2"]
+[node name="Settings" type="Control" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 theme = ExtResource("3_crrjp")
 
-[node name="CenterContainer" parent="Settings" index="0"]
+[node name="CenterContainer" type="CenterContainer" parent="Settings"]
+layout_mode = 0
 offset_top = 200.0
 offset_right = 722.0
 offset_bottom = 1280.0
 
-[node name="VBoxContainer" parent="Settings/CenterContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer"]
 custom_minimum_size = Vector2(0, 1080)
+layout_mode = 2
 theme_override_constants/separation = 69
+alignment = 1
 
-[node name="TitleContainer" parent="Settings/CenterContainer/VBoxContainer" index="0"]
+[node name="TitleContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
+layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="LevelTitle" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" index="0"]
+[node name="LevelTitle" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_font_sizes/font_size = 60
+text = "LEVEL_NAME"
+horizontal_alignment = 1
 
-[node name="LevelID" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" index="1"]
+[node name="LevelID" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_font_sizes/font_size = 50
+text = "LEVEL_ID"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="TabContainer" parent="Settings/CenterContainer/VBoxContainer" index="1"]
+[node name="TabContainer" type="TabContainer" parent="Settings/CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(100, 700)
-size_flags_vertical = 1
+layout_mode = 2
+tab_alignment = 1
+current_tab = 2
 clip_tabs = false
+tab_focus_mode = 0
 
-[node name="GAMEPLAY" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="1"]
+[node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 600)
+layout_mode = 2
+theme_override_constants/margin_top = 150
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer" index="0"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+layout_mode = 2
+theme_override_constants/separation = 75
+alignment = 1
+
+[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer"]
 custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer" index="0"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "HIGHLIGHT_LINES"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer"]
 custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer" index="0"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "SHOW_PREVIEW"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="DragContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer"]
 custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="DISPLAY" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="2"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "DRAG_BUTTON"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="IncompleteInfoContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/IncompleteInfoContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "INCOMPLETE_LINE_INFO"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/IncompleteInfoContainer"]
+layout_mode = 2
+focus_mode = 0
+item_count = 3
+selected = 0
+popup/item_0/text = "LINE_INFO_NONE"
+popup/item_0/id = 0
+popup/item_1/text = "LINE_INFO_MISSING"
+popup/item_1/id = 1
+popup/item_2/text = "LINE_INFO_CURRENT"
+popup/item_2/id = 2
+
+[node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(720, 600)
+layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="VBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY" index="0"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
+layout_mode = 2
 theme_override_constants/separation = 47
+alignment = 1
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer" index="0"]
+[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer"]
 custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer" index="0"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "FULLSCREEN"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="DarkModeContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer"]
 custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="LanguageMobileLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox" index="2"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "DARK_MODE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="LanguageMobileLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "LANGUAGE_SELECT"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="LanguageSelectContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox" index="3"]
+[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer" index="0"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer"]
 visible = false
+layout_mode = 2
+theme_override_constants/line_spacing = 47
 theme_override_font_sizes/font_size = 20
+text = "LANGUAGE_SELECT"
+horizontal_alignment = 1
+vertical_alignment = 2
 
-[node name="SOUND" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="3"]
-custom_minimum_size = Vector2(720, 600)
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer"]
+layout_mode = 2
+focus_mode = 0
+item_count = 3
+selected = 0
+popup/item_0/text = "LANGUAGE_SYSTEM"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+popup/item_2/text = "Português"
+popup/item_2/id = 2
 
-[node name="CONTROLS" parent="Settings/CenterContainer/VBoxContainer/TabContainer" index="4"]
-custom_minimum_size = Vector2(100, 500)
+[node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+custom_minimum_size = Vector2(100, 600)
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 30
 
-[node name="CheckBox" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer" index="0"]
-custom_minimum_size = Vector2(66, 70)
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
 
-[node name="BackButton" parent="Settings/CenterContainer/VBoxContainer" index="2"]
-theme = ExtResource("4_s1c65")
-
-[node name="QuitButton" parent="Settings/CenterContainer/VBoxContainer" index="3"]
-theme = ExtResource("4_s1c65")
-
-[node name="BottomMargin" type="Control" parent="Settings/CenterContainer/VBoxContainer" index="4"]
+[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PauseButton" parent="." index="3"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer"]
+layout_mode = 2
+text = "MASTER_SOUND"
+horizontal_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer"]
+layout_mode = 2
+value = 50.0
+
+[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer"]
+layout_mode = 2
+text = "BGM_SOUND"
+horizontal_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer"]
+layout_mode = 2
+
+[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer"]
+layout_mode = 2
+text = "SFX_SOUND"
+horizontal_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer"]
+layout_mode = 2
+
+[node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(100, 500)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
+layout_mode = 2
+theme_override_constants/separation = 97
+alignment = 1
+
+[node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "INVERT_MOUSE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "SAVE_AND_BACK"
+
+[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "SAVE_AND_EXIT"
+
+[node name="BottomMargin" type="Control" parent="Settings/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PauseButton" type="TextureButton" parent="."]
 offset_left = 577.0
 offset_top = 27.0
 offset_right = 1089.0
 offset_bottom = 539.0
 scale = Vector2(0.2, 0.2)
+focus_mode = 0
+texture_normal = ExtResource("8_dbu50")
+texture_pressed = ExtResource("9_pp4id")
+texture_hover = ExtResource("10_2idhi")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sb0jh")
+}
+speed_scale = 3.5
+
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_highlight_lines_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_show_preview_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/DragContainer/CheckBox" to="." method="_on_drag_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_line_info_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [1]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_save_n_quit_button_pressed"]
+[connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]

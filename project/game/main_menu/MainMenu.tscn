@@ -54,6 +54,7 @@ focus_mode = 0
 text = "LEVEL_EDITOR_BUTTON"
 
 [node name="Workshop" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "WORKSHOP_TOOLTIP"
@@ -89,6 +90,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ProfileButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 55.0
 offset_top = 41.0
