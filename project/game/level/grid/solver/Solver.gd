@@ -2,7 +2,7 @@ class_name SolverModel
 
 const Content := GridImpl.Content
 
-static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], a: int) -> GridModel.LineHint:
+static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], a: int, is_row: bool) -> GridModel.LineHint:
 	var h := hints[a]
 	if h.water_count == -1 and grid.grid_hints().total_water != -1:
 		var inferred := grid.grid_hints().total_water
@@ -15,6 +15,10 @@ static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], 
 		if inferred != -1:
 			h = h.duplicate()
 			h.water_count = inferred
+	if h.boat_count == -1 and not is_row and h.boat_count_type == E.HintType.Together:
+		if h == hints[a]:
+			h = h.duplicate()
+		h.boat_count = 1
 	if h.boat_count == -1 and grid.grid_hints().total_boats != -1:
 		var inferred := grid.grid_hints().total_boats
 		for b in hints.size():
@@ -30,10 +34,10 @@ static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], 
 	return h
 
 static func _row_hint(grid: GridImpl, i: int) -> GridModel.LineHint:
-	return _maybe_infer_hint(grid, grid.row_hints(), i)
+	return _maybe_infer_hint(grid, grid.row_hints(), i, true)
 
 static func _col_hint(grid: GridImpl, j: int) -> GridModel.LineHint:
-	return _maybe_infer_hint(grid, grid.col_hints(), j)
+	return _maybe_infer_hint(grid, grid.col_hints(), j, false)
 
 class Strategy:
 	var grid: GridImpl
