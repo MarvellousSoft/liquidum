@@ -68,6 +68,8 @@ var won_before := false
 var reset_mistakes_on_empty := true
 var reset_mistakes_on_reset := true
 var solve_thread: Thread =  null
+var last_saved: int
+var last_saved_ago: int = -1
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -101,6 +103,7 @@ func _enter_tree():
 		if not Global.is_mobile:
 			%PlaytestButton.visible = editor_mode()
 			%UniquenessCheck.visible = editor_mode() and not Global.is_dev_mode()
+			%LastSaved.visible = editor_mode()
 
 
 func _exit_tree() -> void:
@@ -109,8 +112,15 @@ func _exit_tree() -> void:
 	# Cancel solve if it still exists
 	CancelUniqCheck.button_pressed = true
 
+func update_last_saved() -> void:
+	var new_last_saved_ago := (Time.get_ticks_msec() - last_saved) / 1000
+	if last_saved_ago != new_last_saved_ago:
+		last_saved_ago = new_last_saved_ago
+		%LastSaved/Time.text = " %ds " % [last_saved_ago]
 
 func _process(dt):
+	if grid.editor_mode():
+		update_last_saved()
 	if process_game and not grid.editor_mode():
 		running_time += dt
 		update_timer_label()
@@ -141,6 +151,7 @@ func setup(try_load := true) -> void:
 		%DevButtons.setup(grid.editor_mode())
 	running_time = 0
 	game_won = false
+	last_saved = Time.get_ticks_msec()
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -172,6 +183,7 @@ func setup(try_load := true) -> void:
 		%PlaytestButton.visible = editor_mode()
 		%UniquenessCheck.visible = editor_mode() and not Global.is_dev_mode()
 		$Description/Edit.visible = editor_mode()
+		%LastSaved.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
 	TitleBanner.visible = not editor_mode() and full_name != ""
 	if not editor_mode():
@@ -298,7 +310,7 @@ func maybe_save(delete_solution := false) -> void:
 			grid_logic.set_auto_update_hints(false)
 			_update_visibilities(grid_logic)
 			FileManager.save_editor_level(level_name, null, LevelData.new(full_name, description, grid_logic.export_data(), ""))
-			
+			last_saved = Time.get_ticks_msec()
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
@@ -316,6 +328,7 @@ func maybe_save(delete_solution := false) -> void:
 				dummy_save.timer_secs = running_time
 			dummy_save.grid_data = GridNode.grid_logic.export_data()
 			FileManager.save_level(level_name, dummy_save)
+			last_saved = Time.get_ticks_msec()
 
 
 func display_leaderboard(_data: DailyButton.LeaderboardData) -> void:

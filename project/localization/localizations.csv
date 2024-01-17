@@ -185,6 +185,7 @@ RESTART_MAY_BE_NECESSARY,(A restart may be necessary),(Pode ser necessário rein
 HAS_UNIQUE,Has unique solution:,Tem solução única:,Tem solução única:
 UNKNOWN,Unknown,Desconhecido,Desconhecido
 UNIQUE_TOO_HARD,Could not verify,Não foi possível verificar,Não foi possível verificar
-UNIQUE_TOO_HARD_TOOLTIP,Level is too hard to verify,O nível é difícil demais pra verificar,O nível é difícil demais pra verificar
 CHECK,Check,Verificar,Verificar
 CANCEL,Cancel,Cancelar,Cancelar
+AGO,ago,atrás,atrás
+LAST_SAVED,Saved:,Salvo:,Salvo:

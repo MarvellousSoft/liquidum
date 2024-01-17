@@ -589,15 +589,39 @@ size_flags_vertical = 4
 [node name="TogetherSeparate" parent="TutorialContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("13_kx7dw")]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
+[node name="BackAndTimeSaved" type="HBoxContainer" parent="."]
+layout_mode = 0
 offset_left = 100.0
 offset_top = 63.0
-offset_right = 400.0
-offset_bottom = 188.0
+offset_right = 140.0
+offset_bottom = 103.0
+theme_override_constants/separation = 75
+
+[node name="BackButton" type="Button" parent="BackAndTimeSaved"]
+unique_name_in_owner = true
+layout_mode = 2
 focus_mode = 0
 text = "BACK"
+
+[node name="LastSaved" type="HBoxContainer" parent="BackAndTimeSaved"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LastSaved" type="Label" parent="BackAndTimeSaved/LastSaved"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "LAST_SAVED"
+
+[node name="Time" type="Label" parent="BackAndTimeSaved/LastSaved"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = " 10s "
+
+[node name="Ago" type="Label" parent="BackAndTimeSaved/LastSaved"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "AGO"
 
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -761,8 +785,8 @@ autostart = true
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
 [connection signal="pressed" from="TutorialButton" to="." method="_on_tutorial_button_pressed"]
-[connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="BackAndTimeSaved/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BackAndTimeSaved/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
