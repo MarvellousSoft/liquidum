@@ -227,7 +227,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 3
+current_tab = 1
 tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
@@ -339,7 +339,6 @@ popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
 [node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 theme_override_constants/margin_top = 200
@@ -397,20 +396,24 @@ text = "DARK_MODE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+[node name="LanguageVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 100
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox/LanguageSelectContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "LANGUAGE_SELECT"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox/LanguageSelectContainer"]
 layout_mode = 2
 focus_mode = 0
 item_count = 3
@@ -421,6 +424,12 @@ popup/item_1/text = "English"
 popup/item_1/id = 1
 popup/item_2/text = "Português"
 popup/item_2/id = 2
+
+[node name="Restart" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "RESTART_MAY_BE_NECESSARY"
+horizontal_alignment = 1
 
 [node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -473,6 +482,7 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 
@@ -548,8 +558,8 @@ speed_scale = 3.5
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
-[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/LanguageVBox/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
