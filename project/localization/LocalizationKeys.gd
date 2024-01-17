@@ -216,6 +216,12 @@ const PLACE_BOAT = "PLACE_BOAT"
 const PLACE_NOBOAT = "PLACE_NOBOAT"
 const UNDO = "UNDO"
 const REDO = "REDO"
+const TAP = "TAP"
+const HOLD = "HOLD"
+const DRAG_TOUCH = "DRAG_TOUCH"
+const CONTROL_LIST = "CONTROL_LIST"
+const PREVIEW = "PREVIEW"
+const MOUSE_HOVER = "MOUSE_HOVER"
 
 const KEYS = [
  "TEST",
@@ -430,5 +436,11 @@ const KEYS = [
  "PLACE_BOAT",
  "PLACE_NOBOAT",
  "UNDO",
- "REDO"
+ "REDO",
+ "TAP",
+ "HOLD",
+ "DRAG_TOUCH",
+ "CONTROL_LIST",
+ "PREVIEW",
+ "MOUSE_HOVER"
 ]

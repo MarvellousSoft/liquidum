@@ -488,7 +488,7 @@ layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
 layout_mode = 2
-theme_override_constants/separation = 97
+theme_override_constants/separation = 80
 alignment = 1
 
 [node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
@@ -515,11 +515,17 @@ text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="ControlList" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 85
+text = "CONTROL_LIST"
+horizontal_alignment = 1
+
 [node name="Controls" type="CenterContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls"]
-custom_minimum_size = Vector2(2500, 500)
+custom_minimum_size = Vector2(2500, 450)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -546,6 +552,11 @@ horizontal_alignment = 2
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "MOUSE_DRAG"
+horizontal_alignment = 2
+
+[node name="Label14" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "MOUSE_HOVER"
 horizontal_alignment = 2
 
 [node name="Label11" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
@@ -613,6 +624,10 @@ text = "PLACE_X"
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "PLACE_DRAG"
+
+[node name="Label14" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PREVIEW"
 
 [node name="Label11" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2

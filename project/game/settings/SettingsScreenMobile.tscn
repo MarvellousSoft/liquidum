@@ -504,7 +504,7 @@ layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
 layout_mode = 2
-theme_override_constants/separation = 97
+theme_override_constants/separation = 50
 alignment = 1
 
 [node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
@@ -530,6 +530,60 @@ theme_override_constants/line_spacing = 47
 text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="ControlList" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "CONTROL_LIST"
+horizontal_alignment = 1
+
+[node name="Controls" type="CenterContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls"]
+custom_minimum_size = Vector2(100, 250)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="HBoxContainer" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 50
+theme_override_constants/v_separation = 20
+columns = 2
+
+[node name="Key1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "TAP"
+horizontal_alignment = 2
+
+[node name="Control1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+text = "PLACE_BRUSH"
+autowrap_mode = 3
+
+[node name="Key2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "HOLD"
+horizontal_alignment = 2
+
+[node name="Control2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+text = "PREVIEW"
+autowrap_mode = 3
+
+[node name="Key3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "DRAG_TOUCH"
+horizontal_alignment = 2
+
+[node name="Control3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+text = "PLACE_DRAG"
+autowrap_mode = 3
 
 [node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
