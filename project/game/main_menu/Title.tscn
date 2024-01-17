@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://yacgiejcfdct"]
 
-[ext_resource type="FontFile" uid="uid://bdawk6cky3km0" path="res://assets/fonts/Comfortaa-Light.ttf" id="1_dnxh3"]
 [ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="1_st5mj"]
+[ext_resource type="FontFile" uid="uid://divxru3x843oj" path="res://assets/fonts/Comfortaa-Bold.ttf" id="1_wnywq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
 shader = ExtResource("1_st5mj")
@@ -28,7 +28,7 @@ theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/shadow_offset_x = 20
 theme_override_constants/shadow_offset_y = 20
 theme_override_constants/shadow_outline_size = 30
-theme_override_fonts/font = ExtResource("1_dnxh3")
+theme_override_fonts/font = ExtResource("1_wnywq")
 theme_override_font_sizes/font_size = 500
 text = "liquidum"
 horizontal_alignment = 2
