@@ -32,10 +32,23 @@ rounded = true
 suffix = "guesses"
 select_all_on_focus = true
 
-[node name="FullSolve" type="Button" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 80
+
+[node name="FullSolve" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Full solve"
+
+[node name="CancelSolve" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Cancel"
 
 [node name="FullSolveType" type="Label" parent="."]
 layout_mode = 2
@@ -108,8 +121,9 @@ text = "Copy to editor"
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="ForcedStrategyList" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="FullSolve" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/FullSolve" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/CancelSolve" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="GodMode" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="GodMode" to="." method="_on_god_mode_pressed"]
 [connection signal="mouse_entered" from="Seed" to="." method="_on_button_mouse_entered"]

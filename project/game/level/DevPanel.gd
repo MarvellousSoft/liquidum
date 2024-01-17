@@ -16,6 +16,7 @@ signal copy_to_editor()
 @onready var ForcedStrategyList: MenuButton = $ForcedStrategyList
 @onready var Guesses: SpinBox = $Guesses
 @onready var FlavorOptions: OptionButton = $FlavorOptions
+@onready var CancelSolve: Button = %CancelSolve
 
 var l_gen := RandomLevelGenerator.new()
 var solve_thread: Thread = Thread.new()
@@ -133,17 +134,20 @@ func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
 	return g
 
 func _solve(g: GridModel) -> SolverModel.SolveResult:
-	return SolverModel.new().full_solve(g, selected_strategies(), func(): return false, true, int(Guesses.value))
+	return SolverModel.new().full_solve(g, selected_strategies(), func(): return CancelSolve.button_pressed, true, int(Guesses.value))
 
 func _process(_dt: float) -> void:
 	if solve_thread.is_started() and not solve_thread.is_alive():
 		var r = solve_thread.wait_to_finish()
 		set_solve_type(r)
-		$FullSolve.disabled = false
+		%FullSolve.disabled = false
+		CancelSolve.visible = false
 
 func start_solve(g: GridModel) -> void:
 	assert(not solve_thread.is_started())
-	$FullSolve.disabled = true
+	%FullSolve.disabled = true
+	CancelSolve.visible = true
+	CancelSolve.button_pressed = false
 	solve_thread.start(_solve.bind(g))
 
 func _on_strategies_pressed():
