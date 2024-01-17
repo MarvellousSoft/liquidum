@@ -645,6 +645,18 @@ func _on_tutorial_button_pressed():
 static func check_uniqueness_inner(copied_grid: GridModel, cancel: Callable) -> SolverModel.SolveResult:
 	return SolverModel.new().full_solve(copied_grid, SolverModel.STRATEGY_LIST.keys(), cancel)
 
+static func solve_result_to_uniqueness(r: SolverModel.SolveResult) -> String:
+	match r:
+		SolverModel.SolveResult.SolvedUniqueNoGuess, SolverModel.SolveResult.SolvedUnique:
+			return "YES"
+		SolverModel.SolveResult.SolvedMultiple:
+			return "NO"
+		_:
+			if r != SolverModel.SolveResult.GaveUp:
+				push_error("It shouldn't be unsolvable")
+			return "UNIQUE_TOO_HARD"
+
+
 func check_uniqueness() -> void:
 	CheckUniqueness.disabled = true
 	CancelUniqCheck.disabled = false
@@ -655,16 +667,7 @@ func check_uniqueness() -> void:
 	var copied_grid := _get_solution_grid(GridModel.LoadMode.Testing)
 	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return CancelUniqCheck.button_pressed))
 	var r: SolverModel.SolveResult = await Global.wait_for_thread(solve_thread)
-	match r:
-		SolverModel.SolveResult.SolvedUniqueNoGuess, SolverModel.SolveResult.SolvedUnique:
-			UniqResult.text = "YES"
-		SolverModel.SolveResult.SolvedMultiple:
-			UniqResult.text = "NO"
-		_:
-			if r != SolverModel.SolveResult.GaveUp:
-				push_error("It shouldn't be unsolvable")
-			UniqResult.text = "UNIQUE_TOO_HARD"
-			UniqResult.tooltip_text = "UNIQUE_TOO_HARD_TOOLTIP"
+	UniqResult.text = Level.solve_result_to_uniqueness(r)
 
 	UniqOngoing.visible = false
 	UniqResult.visible = true

@@ -65,7 +65,7 @@ class UploadResult:
 
 var uploading := false
 
-func upload_ugc_item(id: int, title: String, description: String, dir: String, preview_file: String) -> UploadResult:
+func upload_ugc_item(id: int, title: String, description: String, dir: String, preview_file: String, tags: Array[String]) -> UploadResult:
 	if uploading:
 		return UploadResult.new(id, false)
 	UploadingToWorkshop.start()
@@ -76,7 +76,7 @@ func upload_ugc_item(id: int, title: String, description: String, dir: String, p
 		id = await _create_item_id()
 	var success := false
 	if id != -1:
-		success = await _upload_item(id, title, description, dir, preview_file)
+		success = await _upload_item(id, title, description, dir, preview_file, tags)
 	uploading = false
 	UploadingToWorkshop.stop()
 	return UploadResult.new(id, success)
@@ -95,12 +95,13 @@ func _create_item_id() -> int:
 		SteamManager.steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
 	return id
 
-func _upload_item(id: int, title: String, description: String, dir: String, preview_file: String) -> bool:
+func _upload_item(id: int, title: String, description: String, dir: String, preview_file: String, tags: Array[String]) -> bool:
 	var update_id: int = SteamManager.steam.startItemUpdate(SteamManager.APP_ID, id)
 	SteamManager.steam.setItemContent(update_id, dir)
 	SteamManager.steam.setItemTitle(update_id, title)
 	SteamManager.steam.setItemDescription(update_id, description)
 	SteamManager.steam.setItemPreview(update_id, preview_file)
+	SteamManager.steam.setItemTags(update_id, tags)
 	SteamManager.steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
 	UploadingToWorkshop.update_handle = update_id
 	var ret: Array = await SteamManager.steam.item_updated

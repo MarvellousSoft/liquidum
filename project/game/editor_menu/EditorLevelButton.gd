@@ -50,6 +50,13 @@ func _create_grid_image(grid_logic: GridModel) -> void:
 	img.save_png(IMG_FILE)
 	remove_child(v)
 
+func _is_unique_str(grid: GridModel) -> String:
+	grid.force_editor_mode(true)
+	var start_time := Time.get_ticks_msec()
+	var r := Level.check_uniqueness_inner(grid, func(): return Time.get_ticks_msec() - start_time > 5000)
+	return Level.solve_result_to_uniqueness(r)
+
+
 func _on_upload_button_pressed() -> void:
 	if not SteamManager.enabled:
 		return
@@ -61,8 +68,20 @@ func _on_upload_button_pressed() -> void:
 		return
 	loaded.clear_content()
 	await _create_grid_image(loaded)
+	var unique_str := _is_unique_str(loaded)
+	var tags: Array[String] = []
+	if unique_str == "YES":
+		tags.append("Unique solution")
+	elif unique_str == "NO":
+		tags.append("Multiple solutions")
+	var description := level_data.description
+	if description != "":
+		description = description.rstrip("\n") + "\n\n"
+	# Always english for this string.
+	var en_tr := TranslationServer.get_translation_object("en")
+	description += "%s %s" % [en_tr.get_message("HAS_UNIQUE"), en_tr.get_message(unique_str)]
 	var metadata := FileManager.load_editor_level_metadata(id)
-	var res = await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, level_data.description, FileManager._editor_level_dir(id), IMG_FILE)
+	var res = await SteamManager.upload_ugc_item(metadata.steam_id, level_data.full_name, description, FileManager._editor_level_dir(id), IMG_FILE, tags)
 	if res.id != -1 and metadata.steam_id != res.id:
 		metadata.steam_id = res.id
 		FileManager.save_editor_level(id, metadata, null)
