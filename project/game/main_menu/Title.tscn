@@ -30,7 +30,7 @@ theme_override_constants/shadow_offset_y = 20
 theme_override_constants/shadow_outline_size = 30
 theme_override_fonts/font = ExtResource("1_wnywq")
 theme_override_font_sizes/font_size = 500
-text = "liquidum"
+text = "Liquidum"
 horizontal_alignment = 2
 vertical_alignment = 1
 
