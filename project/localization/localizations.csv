@@ -189,3 +189,6 @@ CHECK,Check,Verificar,Verificar
 CANCEL,Cancel,Cancelar,Cancelar
 AGO,ago,atrás,atrás
 LAST_SAVED,Saved:,Salvo:,Salvo:
+SHARE,Share,Compartilhar,Compartilhar
+COPIED_TO_CLIPBOARD,Copied to clipboard,Copiado,Copiado
+SHARE_TEXT,I won Liquidum daily %s in %s with %d mistakes,Ganhei o nível diário %s de Liquidum em %s com %d erros,Ganhei o nível diário %s de Liquidum em %s com %d erros

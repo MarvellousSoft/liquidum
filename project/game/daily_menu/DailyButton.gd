@@ -36,7 +36,7 @@ func _update() -> void:
 		OngoingSolution.visible = false
 		return
 
-	date = _today()
+	date = DailyButton._today()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
 	deadline -= Time.get_time_zone_from_system().bias * 60
 	
@@ -70,24 +70,24 @@ func _update_time_left() -> void:
 
 func _update_streak() -> void:
 	var data := UserData.current()
-	if data.current_streak > 0 and data.last_day < _yesterday():
+	if data.current_streak > 0 and data.last_day < DailyButton._yesterday():
 		data.current_streak = 0
 		UserData.save()
 	CurStreak.text = tr("CUR_STREAK") % data.current_streak
 	BestStreak.text = tr("BEST_STREAK") % data.best_streak
 
 
-func _unixtime() -> int:
+static func _unixtime() -> int:
 	if SteamManager.enabled:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-func _today(dt: int = 0) -> String:
+static func _today(dt: int = 0) -> String:
 	var tz := Time.get_time_zone_from_system()
 	var today := Time.get_datetime_string_from_unix_time(_unixtime() - dt + int(tz.bias) * 60)
 	return today.substr(0, today.find('T'))
 
-func _yesterday() -> String:
+static func _yesterday() -> String:
 	return _today(24 * 60 * 60)
 
 func _on_timer_timeout():
@@ -120,7 +120,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 
 func _on_button_pressed() -> void:
 	MainButton.disabled = true
-	var today := _today()
+	var today := DailyButton._today()
 	if not FileManager.has_daily_level(today):
 		GeneratingLevel.enable()
 		var level := await DailyButton.gen_level(gen, today)
@@ -138,6 +138,7 @@ func _on_button_pressed() -> void:
 	MainButton.disabled = false
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
+	level.get_node("%ShareButton").visible = true
 	var l_id := await upload_leaderboard(info)
 	var l_data := await get_leaderboard_data(l_id)
 	level.display_leaderboard(l_data)

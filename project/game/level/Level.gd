@@ -35,7 +35,7 @@ class WinInfo:
 @onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
 @onready var Settings = $SettingsScreen
-@onready var ContinueAnim = $ContinueButton/AnimationPlayer
+@onready var ContinueAnim = %ContinueContainer/AnimationPlayer
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
@@ -287,16 +287,18 @@ func update_counters() -> void:
 		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
 	AquariumHints.update_values(GridNode.grid_logic.grid_hints().expected_aquariums, GridNode.grid_logic.all_aquarium_counts(), GridNode.editor_mode)
 
-
-func update_timer_label() -> void:
+func _timer_str() -> String:
 	var t = int(running_time)
 	var hours = t/3600
 	var minutes = t%3600/60
 	var seconds = t%60
 	if hours > 0:
-		TimerLabel.text = "%02d:%02d:%02d" % [hours,minutes,seconds]
+		return "%02d:%02d:%02d" % [hours,minutes,seconds]
 	else:
-		TimerLabel.text = "%02d:%02d" % [minutes,seconds]
+		return "%02d:%02d" % [minutes,seconds]
+
+func update_timer_label() -> void:
+	TimerLabel.text = _timer_str()
 
 
 func maybe_save(delete_solution := false) -> void:
@@ -693,3 +695,9 @@ func _on_check_uniqueness_pressed() -> void:
 	if solve_thread.is_started():
 		return
 	await check_uniqueness()
+
+
+func _on_share_button_pressed() -> void:
+	DisplayServer.clipboard_set(tr("SHARE_TEXT") % [DailyButton._today(), _timer_str(), int(Counters.mistake.count)])
+	%ShareButton.disabled = true
+	%ShareButton.text = "COPIED_TO_CLIPBOARD"

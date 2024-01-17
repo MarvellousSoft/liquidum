@@ -193,6 +193,9 @@ const CHECK = "CHECK"
 const CANCEL = "CANCEL"
 const AGO = "AGO"
 const LAST_SAVED = "LAST_SAVED"
+const SHARE = "SHARE"
+const COPIED_TO_CLIPBOARD = "COPIED_TO_CLIPBOARD"
+const SHARE_TEXT = "SHARE_TEXT"
 
 const KEYS = [
  "TEST",
@@ -384,5 +387,8 @@ const KEYS = [
  "CHECK",
  "CANCEL",
  "AGO",
- "LAST_SAVED"
+ "LAST_SAVED",
+ "SHARE",
+ "COPIED_TO_CLIPBOARD",
+ "SHARE_TEXT"
 ]

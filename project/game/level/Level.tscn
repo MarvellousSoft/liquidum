@@ -56,77 +56,103 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("..:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(3027, 2242)]
+"update": 1,
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("..:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/../Description:modulate")
+tracks/2/path = NodePath("..:offset_bottom")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"update": 1,
+"values": [-75.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..:offset_top")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [200.0]
 }
 
 [sub_resource type="Animation" id="Animation_aqku1"]
 resource_name = "show"
+length = 0.6
+step = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
+tracks/0/path = NodePath("..:visible")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.6),
-"transitions": PackedFloat32Array(0.535887, 1),
-"update": 0,
-"values": [Vector2(3027, 2242), Vector2(3027, 1962)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
+tracks/1/path = NodePath("..:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/../Description:modulate")
+tracks/2/path = NodePath("..:offset_top")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [200.0, -75.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("..:offset_bottom")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [200.0, -75.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
@@ -433,6 +459,7 @@ stretch_mode = 0
 
 [node name="UniquenessCheck" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.5
@@ -729,18 +756,37 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="ContinueButton" type="Button" parent="."]
+[node name="ContinueContainer" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 200.0
+offset_right = -75.0
+offset_bottom = -75.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 125
+alignment = 2
+
+[node name="ShareButton" type="Button" parent="ContinueContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-offset_left = 3027.0
-offset_top = 2242.0
-offset_right = 3754.0
-offset_bottom = 2367.0
+focus_mode = 0
+text = "SHARE"
+
+[node name="ContinueButton" type="Button" parent="ContinueContainer"]
+layout_mode = 2
 focus_mode = 0
 text = "CONTINUE"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueButton"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueContainer"]
+root_node = NodePath("../ContinueButton")
 libraries = {
 "": SubResource("AnimationLibrary_dnqfm")
 }
@@ -789,8 +835,9 @@ autostart = true
 [connection signal="pressed" from="BackAndTimeSaved/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
-[connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="ContinueContainer/ShareButton" to="." method="_on_share_button_pressed"]
+[connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
