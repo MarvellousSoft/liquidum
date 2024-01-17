@@ -161,7 +161,7 @@ func setup(try_load := true) -> void:
 	DescriptionScroll.visible = not editor_mode()
 	if not Global.is_mobile:
 		%PlaytestButton.visible = editor_mode()
-		%DescriptionEdit.visible = editor_mode()
+		$Description/Edit.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
 	TitleBanner.visible = not editor_mode() and full_name != ""
 	if not editor_mode():
