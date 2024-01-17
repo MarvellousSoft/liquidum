@@ -288,15 +288,17 @@ func update_counters() -> void:
 		Counters.boat.set_count(GridNode.get_expected_boats() if GridNode.editor_mode else GridNode.get_missing_boats())
 	AquariumHints.update_values(GridNode.grid_logic.grid_hints().expected_aquariums, GridNode.grid_logic.all_aquarium_counts(), GridNode.editor_mode)
 
-func _timer_str() -> String:
-	var t = int(running_time)
-	var hours = t/3600
-	var minutes = t%3600/60
-	var seconds = t%60
+static func time_str(secs: int) -> String:
+	var hours = secs / 3600
+	var minutes = secs % 3600 / 60
+	var seconds = secs % 60
 	if hours > 0:
-		return "%02d:%02d:%02d" % [hours,minutes,seconds]
+		return "%02d:%02d:%02d" % [hours, minutes, seconds]
 	else:
-		return "%02d:%02d" % [minutes,seconds]
+		return "%02d:%02d" % [minutes, seconds]
+
+func _timer_str() -> String:
+	return Level.time_str(int(running_time))
 
 func update_timer_label() -> void:
 	TimerLabel.text = _timer_str()
@@ -333,10 +335,6 @@ func maybe_save(delete_solution := false) -> void:
 			FileManager.save_level(level_name, dummy_save)
 			last_saved = Time.get_ticks_msec()
 
-
-func display_leaderboard(_data: DailyButton.LeaderboardData) -> void:
-	assert(game_won)
-	# TODO: Display
 
 func add_playtime_tracking(stats: Array[String]) -> void:
 	stats.append("total")

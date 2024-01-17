@@ -52,7 +52,7 @@ func _update() -> void:
 func _update_time_left() -> void:
 	if MainButton.disabled:
 		return
-	var secs_left := deadline - _unixtime()
+	var secs_left := deadline - DailyButton._unixtime()
 	if secs_left > 0:
 		var num: int
 		var txt: String
@@ -135,13 +135,15 @@ func _on_button_pressed() -> void:
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
+		await TransitionManager.transition_finished
+
 	MainButton.disabled = false
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
 	var l_id := await upload_leaderboard(info)
 	var l_data := await get_leaderboard_data(l_id)
-	level.display_leaderboard(l_data)
+	display_leaderboard(l_data, level)
 	if not info.first_win:
 		return
 	if SteamManager.stats_received:
@@ -210,7 +212,7 @@ class ListEntry:
 
 class LeaderboardData:
 	var list: Array[ListEntry]
-	# Only the secs of the top 100 scores that have no mistakes
+	# Only the secs of the top 1000 scores that have no mistakes
 	# Used to draw an histogram
 	var top_no_mistakes: Array[int]
 
@@ -241,3 +243,10 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 			# If this happens, we can do extra requests. But are we really that popular?
 			push_warning("%.2f percentile not in top entries" % pct[0])
 	return data
+
+func display_leaderboard(data: LeaderboardData, level: Level) -> void:
+	if data == null or Global.is_mobile:
+		return
+	var display := preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
+	level.add_child(display)
+	display.display(data)
