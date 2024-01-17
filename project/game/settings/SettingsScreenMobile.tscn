@@ -346,7 +346,6 @@ popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
 [node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-custom_minimum_size = Vector2(720, 600)
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
