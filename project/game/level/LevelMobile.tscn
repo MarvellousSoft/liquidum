@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="3_uwkov"]
-[ext_resource type="PackedScene" uid="uid://cpwvkjj46nv4s" path="res://game/settings/SettingsScreenMobile.tscn" id="4_dk1gs"]
+[ext_resource type="PackedScene" uid="uid://c71gf2qx41ep" path="res://game/settings/SettingsScreenMobile.tscn" id="4_dk1gs"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="4_lwsqm"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="5_dv3ih"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="6_gng55"]
@@ -65,89 +65,114 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
+tracks/0/path = NodePath("%ContinueButton/..:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(3027, 2242)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%ContinueButton/..:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/../Description:modulate")
+tracks/2/path = NodePath("%ContinueButton/..:offset_bottom")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_aqku1"]
-resource_name = "show"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 1),
-"transitions": PackedFloat32Array(0.535887, 1),
-"update": 0,
-"values": [Vector2(415, 1500), Vector2(415, 1146)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false, true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/../Description:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [-50.0]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("%BrushPicker:modulate")
+tracks/3/path = NodePath("%ContinueButton/..:offset_top")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(1),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_aqku1"]
+resource_name = "show"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%BrushPicker:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.0163535, 0, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%ContinueButton/..:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(-0.0221253, 0, 0.0192394),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("%ContinueButton/..:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.439171),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("%ContinueButton/..:offset_bottom")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [200.0, -50.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("%ContinueButton/..:offset_top")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [200.0, -50.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
@@ -301,6 +326,8 @@ _data = {
 [node name="Level" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+offset_right = 720.0
+offset_bottom = 1280.0
 theme = ExtResource("3_uwkov")
 script = ExtResource("2_5r7gi")
 
@@ -689,18 +716,36 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="ContinueButton" type="Button" parent="."]
+[node name="ContinueContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -70.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 50
+
+[node name="ShareButton" type="Button" parent="ContinueContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-offset_left = 3027.0
-offset_top = 2242.0
-offset_right = 3277.0
-offset_bottom = 2342.0
+focus_mode = 0
+text = "SHARE"
+
+[node name="ContinueButton" type="Button" parent="ContinueContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 focus_mode = 0
 text = "CONTINUE"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueButton"]
+[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
+unique_name_in_owner = true
+root_node = NodePath("../ContinueButton")
 libraries = {
 "": SubResource("AnimationLibrary_dnqfm")
 }
@@ -745,8 +790,8 @@ autostart = true
 [connection signal="pressed" from="TopButtons/ResetButton" to="." method="reset_level"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
-[connection signal="mouse_entered" from="ContinueButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 

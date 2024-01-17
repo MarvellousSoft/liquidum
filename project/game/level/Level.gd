@@ -35,7 +35,7 @@ class WinInfo:
 @onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
 @onready var Settings = $SettingsScreen
-@onready var ContinueAnim = %ContinueContainer/AnimationPlayer
+@onready var ContinueAnim = %ContinueAnim
 @onready var Description: Label = $Description/Scroll/Label
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
@@ -110,7 +110,8 @@ func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.stopPlaytimeTracking([workshop_id])
 	# Cancel solve if it still exists
-	CancelUniqCheck.button_pressed = true
+	if CancelUniqCheck != null:
+		CancelUniqCheck.button_pressed = true
 
 func update_last_saved() -> void:
 	var new_last_saved_ago := (Time.get_ticks_msec() - last_saved) / 1000

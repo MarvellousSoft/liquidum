@@ -785,7 +785,8 @@ layout_mode = 2
 focus_mode = 0
 text = "CONTINUE"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ContinueContainer"]
+[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
+unique_name_in_owner = true
 root_node = NodePath("../ContinueButton")
 libraries = {
 "": SubResource("AnimationLibrary_dnqfm")
