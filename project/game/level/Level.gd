@@ -44,6 +44,10 @@ class WinInfo:
 @onready var TitleEdit: LineEdit = $Title/Edit
 @onready var TutorialContainer = %TutorialContainer
 @onready var TutorialCenterContainer = %TutorialCenterContainer
+@onready var CancelUniqCheck: Button = %CancelUniqCheck
+@onready var CheckUniqueness: Button = %CheckUniqueness
+@onready var UniqResult: Label = %UniqResult
+@onready var UniqOngoing: Node = %UniqOngoing
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -63,12 +67,14 @@ var reset_text := &"CONFIRM_RESET_LEVEL"
 var won_before := false
 var reset_mistakes_on_empty := true
 var reset_mistakes_on_reset := true
+var solve_thread: Thread =  null
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	if not Global.is_mobile:
 		%DevContainer.visible = Global.is_dev_mode()
 		%PlaytestButton.visible = false
+		%UniquenessCheck.visible = false
 	set_level_names_and_descriptions()
 	reset_tutorial()
 	if is_campaign_level():
@@ -94,11 +100,14 @@ func _enter_tree():
 		scale_grid()
 		if not Global.is_mobile:
 			%PlaytestButton.visible = editor_mode()
+			%UniquenessCheck.visible = editor_mode() and not Global.is_dev_mode()
 
 
 func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.stopPlaytimeTracking([workshop_id])
+	# Cancel solve if it still exists
+	CancelUniqCheck.button_pressed = true
 
 
 func _process(dt):
@@ -161,6 +170,7 @@ func setup(try_load := true) -> void:
 	DescriptionScroll.visible = not editor_mode()
 	if not Global.is_mobile:
 		%PlaytestButton.visible = editor_mode()
+		%UniquenessCheck.visible = editor_mode() and not Global.is_dev_mode()
 		$Description/Edit.visible = editor_mode()
 	TitleEdit.visible = editor_mode()
 	TitleBanner.visible = not editor_mode() and full_name != ""
@@ -622,6 +632,7 @@ func _on_edit_text_changed(new_text: String) -> void:
 func _on_dev_mode_toggled(status):
 	if not Global.is_mobile:
 		%DevContainer.visible = status
+		%UniquenessCheck.visible = not status and editor_mode()
 
 
 func _on_dev_buttons_copy_to_editor():
@@ -630,3 +641,39 @@ func _on_dev_buttons_copy_to_editor():
 
 func _on_tutorial_button_pressed():
 	%TutorialDisplay.enable()
+
+static func check_uniqueness_inner(copied_grid: GridModel, cancel: Callable) -> SolverModel.SolveResult:
+	return SolverModel.new().full_solve(copied_grid, SolverModel.STRATEGY_LIST.keys(), cancel)
+
+func check_uniqueness() -> void:
+	CheckUniqueness.disabled = true
+	CancelUniqCheck.disabled = false
+	CancelUniqCheck.button_pressed = false
+	UniqResult.visible = false
+	UniqResult.tooltip_text = ""
+	UniqOngoing.visible = true
+	var copied_grid := _get_solution_grid(GridModel.LoadMode.Testing)
+	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return CancelUniqCheck.button_pressed))
+	var r: SolverModel.SolveResult = await Global.wait_for_thread(solve_thread)
+	match r:
+		SolverModel.SolveResult.SolvedUniqueNoGuess, SolverModel.SolveResult.SolvedUnique:
+			UniqResult.text = "YES"
+		SolverModel.SolveResult.SolvedMultiple:
+			UniqResult.text = "NO"
+		_:
+			if r != SolverModel.SolveResult.GaveUp:
+				push_error("It shouldn't be unsolvable")
+			UniqResult.text = "UNIQUE_TOO_HARD"
+			UniqResult.tooltip_text = "UNIQUE_TOO_HARD_TOOLTIP"
+
+	UniqOngoing.visible = false
+	UniqResult.visible = true
+	CancelUniqCheck.disabled = true
+	CheckUniqueness.disabled = false
+
+func _on_check_uniqueness_pressed() -> void:
+	if solve_thread == null:
+		solve_thread = Thread.new()
+	if solve_thread.is_started():
+		return
+	await check_uniqueness()

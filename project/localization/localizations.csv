@@ -182,3 +182,9 @@ FINISHED_ALL_LEVELS,You have finished all campaign levels and unlocked the Insan
 WIN_100_TIMES,"Winning 100 levels in Insane difficulty unlocks the hardest achievement in the game, good luck!","Vencer 100 níveis na dificuldade Insana desbloqueia a conquista mais difícil do jogo, boa sorte!","Vencer 100 níveis na dificuldade Insana desbloqueia a conquista mais difícil do jogo, boa sorte!"
 EMAIL_US,Feel free to send us an email at marvellous.amoeba@gmail.com with feedback about the game.,Por favor nos envie um email em marvellous.amoeba@gmail.com com suas opiniões sobre o jogo.,Por favor nos envie um email em marvellous.amoeba@gmail.com com suas opiniões sobre o jogo.
 RESTART_MAY_BE_NECESSARY,(A restart may be necessary),(Pode ser necessário reiniciar o jogo),(Pode ser necessário reiniciar o jogo)
+HAS_UNIQUE,Has unique solution:,Tem solução única:,Tem solução única:
+UNKNOWN,Unknown,Desconhecido,Desconhecido
+UNIQUE_TOO_HARD,Could not verify,Não foi possível verificar,Não foi possível verificar
+UNIQUE_TOO_HARD_TOOLTIP,Level is too hard to verify,O nível é difícil demais pra verificar,O nível é difícil demais pra verificar
+CHECK,Check,Verificar,Verificar
+CANCEL,Cancel,Cancelar,Cancelar

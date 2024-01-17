@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=31 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="6_dltj2"]
 [ext_resource type="PackedScene" uid="uid://cwlbk71x1xkkg" path="res://game/level/DevPanel.tscn" id="7_q4003"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="8_hu2r6"]
+[ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="12_myc3a"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="12_xpik2"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="13_3t8tl"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="13_4gky1"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
@@ -268,7 +270,11 @@ _data = {
 
 [node name="Level" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("3_ceab8")
 script = ExtResource("2_wvis2")
 
@@ -425,8 +431,72 @@ texture_hover = ExtResource("5_c2kft")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="UniquenessCheck" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+grow_vertical = 2
+theme = ExtResource("12_myc3a")
+
+[node name="MarginContainer" type="MarginContainer" parent="UniquenessCheck"]
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBox" type="VBoxContainer" parent="UniquenessCheck/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="HasUnique" type="Label" parent="UniquenessCheck/MarginContainer/VBox"]
+layout_mode = 2
+text = "HAS_UNIQUE"
+
+[node name="Margin" type="MarginContainer" parent="UniquenessCheck/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="UniqResult" type="Label" parent="UniquenessCheck/MarginContainer/VBox/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UNKNOWN"
+
+[node name="UniqOngoing" parent="UniquenessCheck/MarginContainer/VBox/Margin" instance=ExtResource("12_xpik2")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="UniquenessCheck/MarginContainer/VBox"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UniquenessCheck/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 120
+alignment = 1
+
+[node name="CheckUniqueness" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "CHECK"
+
+[node name="CancelUniqCheck" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+disabled = true
+toggle_mode = true
+text = "CANCEL"
+
 [node name="DevContainer" type="ScrollContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 25.0
 offset_top = 720.0
@@ -679,6 +749,7 @@ autostart = true
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]
+[connection signal="pressed" from="UniquenessCheck/MarginContainer/VBox/HBoxContainer2/CheckUniqueness" to="." method="_on_check_uniqueness_pressed"]
 [connection signal="copy_to_editor" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_copy_to_editor"]
 [connection signal="full_solve" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_generate"]
