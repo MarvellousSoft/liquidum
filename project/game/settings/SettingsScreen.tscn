@@ -227,7 +227,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 1
+current_tab = 3
 tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
@@ -339,6 +339,7 @@ popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
 [node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 theme_override_constants/margin_top = 200
@@ -482,7 +483,6 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 
@@ -514,6 +514,145 @@ theme_override_constants/line_spacing = 47
 text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="Controls" type="CenterContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls"]
+custom_minimum_size = Vector2(2500, 500)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 125
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "LEFT_MOUSE_CLICK"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "RIGHT_MOUSE_CLICK"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "MOUSE_DRAG"
+horizontal_alignment = 2
+
+[node name="Label11" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "NUMBER_KEYS"
+horizontal_alignment = 2
+
+[node name="Label12" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "TAB"
+horizontal_alignment = 2
+
+[node name="Label13" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "SHIFT_TAB"
+horizontal_alignment = 2
+
+[node name="Label4" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "W"
+horizontal_alignment = 2
+
+[node name="Label5" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "X"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "B"
+horizontal_alignment = 2
+
+[node name="Label7" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "N"
+horizontal_alignment = 2
+
+[node name="Label8" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Z"
+horizontal_alignment = 2
+
+[node name="Label9" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Y"
+horizontal_alignment = 2
+
+[node name="Label10" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "ESC"
+horizontal_alignment = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_BRUSH"
+
+[node name="Label2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_X"
+
+[node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_DRAG"
+
+[node name="Label11" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "NUMBER_CONTROLS"
+
+[node name="Label12" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "NEXT_BRUSH"
+
+[node name="Label13" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PREV_BRUSH"
+
+[node name="Label4" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_WATER"
+
+[node name="Label5" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_NOWATER"
+
+[node name="Label6" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_BOAT"
+
+[node name="Label7" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_NOBOAT"
+
+[node name="Label8" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "UNDO"
+
+[node name="Label9" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "REDO"
+
+[node name="Label10" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "SETTINGS_CONTROL"
 
 [node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
 layout_mode = 2
