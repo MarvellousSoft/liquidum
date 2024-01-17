@@ -12,10 +12,13 @@ config_version=5
 
 config/name="Liquidum"
 run/main_scene="res://game/splash/Splash.tscn"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/bg_color=Color(0.192157, 0.690196, 0.690196, 1)
 boot_splash/image="res://assets/images/splash_image.PNG"
-config/icon="res://icon.svg"
+config/icon="res://assets/images/icons/256_256.png"
+config/macos_native_icon="res://assets/images/icons/icon.icns"
+config/windows_native_icon="res://assets/images/icons/icon.ico"
 
 [autoload]
 
