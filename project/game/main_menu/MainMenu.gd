@@ -16,7 +16,7 @@ const EPS = .001
 const ZOOM_LERP = 4.0
 const LEVEL_ZOOM = {
 	"desktop": 2.6,
-	"mobile": 2.6,
+	"mobile": 2.4,
 }
 const NORMAL_ZOOM = {
 	"desktop": 1.0,
@@ -59,7 +59,8 @@ func _process(dt):
 			z = cam_target_zoom
 		Camera.zoom.x = z
 		Camera.zoom.y = z
-
+	Global.alpha_fade_node(dt, %BackButton, not LevelHub.level_focused, 4.0, true)
+	
 
 func _unhandled_input(event):
 	if event.is_action_pressed("return"):

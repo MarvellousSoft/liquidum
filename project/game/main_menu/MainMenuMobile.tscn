@@ -6,7 +6,7 @@
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="8_i0ntq"]
-[ext_resource type="PackedScene" uid="uid://cpwvkjj46nv4s" path="res://game/settings/SettingsScreenMobile.tscn" id="9_7nw1q"]
+[ext_resource type="PackedScene" uid="uid://c71gf2qx41ep" path="res://game/settings/SettingsScreenMobile.tscn" id="9_7nw1q"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="9_fra4p"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="10_4sssi"]
 
@@ -208,6 +208,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0

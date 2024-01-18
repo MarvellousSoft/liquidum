@@ -6,7 +6,19 @@ const LERP = 2.0
 const DIST_EPS = .4
 const CENTRAL_POS = Vector2(-103, -135)
 const RADIUS = 500
-const ELLIPSE_RATIO = Vector2(1.1, .75)
+const ELLIPSE_RATIO = {
+	"desktop": Vector2(1.1, .75),
+	"mobile": Vector2(.75, 1.1),
+}
+const LEVELS_SCALE = {
+	"desktop": Vector2(.5, .5),
+	"mobile": Vector2(.4, .4),
+}
+const BACK_POSITION = {
+	"desktop": Vector2(-791, -447),
+	"mobile": Vector2(-330, -477),
+}
+
 const STYLES = {
 	"normal": {
 		"normal": preload("res://assets/ui/SectionButton/NormalStyle.tres"),
@@ -52,6 +64,7 @@ func _ready():
 	Levels.hide()
 	MouseBlocker.hide()
 	AnimPlayer.seek(randf_range(0.0, AnimPlayer.current_animation_length))
+	BackButton.position = BACK_POSITION.mobile if Global.is_mobile else BACK_POSITION.desktop
 
 
 func _input(event):
@@ -86,6 +99,8 @@ func setup(hub_ref, section, unlocked_levels) -> void:
 	for button in Levels.get_children():
 		Levels.remove_child(button)
 		button.queue_free()
+	
+	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
 	var total_levels = LevelLister.get_levels_in_section(my_section)
 	for i in range(1, total_levels + 1):
@@ -171,9 +186,10 @@ func get_formatted_time(time: float) -> String:
 func position_level_button(button, total_levels, i):
 	var angle = PI/2 + i*2*PI/float(total_levels)
 	var sc = Levels.scale.x
+	var ellipse = ELLIPSE_RATIO.mobile if Global.is_mobile else ELLIPSE_RATIO.desktop
 	button.position = Vector2(
-		cos(angle)*RADIUS*ELLIPSE_RATIO.x/sc,
-		sin(angle)*RADIUS*ELLIPSE_RATIO.y/sc,
+		cos(angle)*RADIUS*ellipse.x/sc,
+		sin(angle)*RADIUS*ellipse.y/sc,
 	)
 
 
