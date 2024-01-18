@@ -53,7 +53,7 @@ movie_writer/movie_file="C:/Users/yanco/Documents/Code/puzzle-aqua/project/video
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/localization_editor/plugin.cfg")
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/localization_editor/plugin.cfg")
 
 [gui]
 

@@ -6,6 +6,8 @@ project/.import/
 project/export.cfg
 project/export_presets.cfg
 project/video.avi
+project/android/build/*
+!project/android/build/AndroidManifest.xml
 
 # Imported translations (automatically generated from CSV files)
 *.translation
