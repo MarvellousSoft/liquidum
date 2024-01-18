@@ -134,13 +134,19 @@ func _on_button_pressed() -> void:
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
-		await TransitionManager.transition_finished
+		await level.ready
+		var l_id := await get_leaderboard()
+		var l_data := await get_leaderboard_data(l_id)
+		if not l_data.list.is_empty():
+			display_leaderboard(l_data, level)
+
 
 	MainButton.disabled = false
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
-	var l_id := await upload_leaderboard(info)
+	var l_id := await get_leaderboard()
+	await upload_leaderboard(l_id, info)
 	var l_data := await get_leaderboard_data(l_id)
 	display_leaderboard(l_data, level)
 	if not info.first_win:
@@ -164,23 +170,24 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			data.current_streak = 0
 			UserData.save()
 
-func upload_leaderboard(info: Level.WinInfo) -> int:
-	if not SteamManager.enabled:
-		return -1
-	# We need to store both mistakes and time in the same score.
-	# Mistakes take priority.
-	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
+func get_leaderboard() -> int:
 	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
 	if not ret[1]:
 		push_warning("Leaderboard not found for daily %s" % date)
 		return -1
-	var l_id: int = ret[0]
+	return ret[0]
+
+func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
+	if not SteamManager.enabled:
+		return
+	# We need to store both mistakes and time in the same score.
+	# Mistakes take priority.
+	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
 	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
-	ret = await SteamManager.steam.leaderboard_score_uploaded
+	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)
-	return l_id
 
 class ListEntry:
 	var global_rank: int
@@ -206,7 +213,6 @@ class ListEntry:
 			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
 		else:
 			entry.text = override_name
-		print("%s %d/%d" % [entry.text, entry.secs, entry.mistakes])
 		return entry
 
 class LeaderboardData:
@@ -219,13 +225,15 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 	if not SteamManager.enabled:
 		return null
 	var data := LeaderboardData.new()
+	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
+	if total == 0:
+		return data
 	var list_has_rank := {}
 	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
 	for entry in ret[2]:
 		list_has_rank[entry.global_rank] = true
 		data.list.append(await ListEntry.create(entry))
-	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
 	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
 	ret = await SteamManager.steam.leaderboard_scores_downloaded
 	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
