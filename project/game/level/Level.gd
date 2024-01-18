@@ -647,6 +647,8 @@ func _on_dev_mode_toggled(status):
 	if not Global.is_mobile:
 		%DevContainer.visible = status
 		%UniquenessCheck.visible = not status and editor_mode()
+		if has_node("LeaderboardDisplay"):
+			$LeaderboardDisplay.visible = not status
 
 
 func _on_dev_buttons_copy_to_editor():
