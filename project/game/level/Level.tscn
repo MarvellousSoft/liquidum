@@ -776,6 +776,7 @@ alignment = 2
 
 [node name="ShareButton" type="Button" parent="ContinueContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 focus_mode = 0
 text = "SHARE"

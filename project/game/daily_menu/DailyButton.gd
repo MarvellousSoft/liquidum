@@ -83,9 +83,12 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-static func _today(dt: int = 0) -> String:
+static func _unixtime_ok_timezone() -> int:
 	var tz := Time.get_time_zone_from_system()
-	var today := Time.get_datetime_string_from_unix_time(_unixtime() - dt + int(tz.bias) * 60)
+	return _unixtime() + int(tz.bias) * 60
+
+static func _today(dt: int = 0) -> String:
+	var today := Time.get_datetime_string_from_unix_time(_unixtime_ok_timezone() - dt)
 	return today.substr(0, today.find('T'))
 
 static func _yesterday() -> String:

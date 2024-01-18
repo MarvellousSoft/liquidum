@@ -709,7 +709,7 @@ func _on_share_button_pressed() -> void:
 			tr("MISTAKES" if Counters.mistake.count > 1 else "MISTAKE")
 		]
 
-	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime()).weekday
+	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
 	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
 		tr("SHARE_TEXT"), DailyButton._today(),
 		WEEKDAY_EMOJI[weekday], tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
