@@ -227,18 +227,19 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-current_tab = 3
+current_tab = 1
 tab_focus_mode = 0
 
 [node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
 visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
-theme_override_constants/margin_top = 150
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
 layout_mode = 2
-theme_override_constants/separation = 75
+theme_override_constants/separation = 50
 alignment = 1
 
 [node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/VBox"]
@@ -339,10 +340,8 @@ popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
 [node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
-theme_override_constants/margin_top = 200
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
 layout_mode = 2
@@ -437,8 +436,9 @@ visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 theme_override_constants/margin_left = 1000
-theme_override_constants/margin_top = 200
+theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 1000
+theme_override_constants/margin_bottom = 50
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
 layout_mode = 2
@@ -483,8 +483,11 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
 layout_mode = 2
