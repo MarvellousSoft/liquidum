@@ -695,8 +695,25 @@ func _on_check_uniqueness_pressed() -> void:
 		return
 	await check_uniqueness()
 
+const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
 func _on_share_button_pressed() -> void:
-	DisplayServer.clipboard_set(tr("SHARE_TEXT") % [DailyButton._today(), _timer_str(), int(Counters.mistake.count)])
+	var mistake_str: String
+	if Counters.mistake.count == 0:
+		mistake_str = "🏆 0 %s" % tr("MISTAKES")
+	else:
+		mistake_str = "❌ %d %s" % [
+			int(Counters.mistake.count),
+			tr("MISTAKES" if Counters.mistake.count > 1 else "MISTAKE")
+		]
+
+	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime()).weekday
+	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
+		tr("SHARE_TEXT"), DailyButton._today(),
+		WEEKDAY_EMOJI[weekday], tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
+		_timer_str(),
+		mistake_str,
+	]
+	DisplayServer.clipboard_set(text)
 	%ShareButton.disabled = true
 	%ShareButton.text = "COPIED_TO_CLIPBOARD"

@@ -191,7 +191,7 @@ AGO,ago,atrás,atrás
 LAST_SAVED,Saved:,Salvo:,Salvo:
 SHARE,Share,Compartilhar,Compartilhar
 COPIED_TO_CLIPBOARD,Copied to clipboard,Copiado,Copiado
-SHARE_TEXT,I won Liquidum daily %s in %s with %d mistakes,Ganhei o nível diário %s de Liquidum em %s com %d erros,Ganhei o nível diário %s de Liquidum em %s com %d erros
+SHARE_TEXT,I won #liquidum daily on,Ganhei o #liquidum diário de,Ganhei o #liquidum diário de
 LEFT_MOUSE_CLICK,Left mouse button,Botão esquerdo do mouse,Botão esquerdo do mouse
 PLACE_BRUSH,Use the current brush,Usa o pincel atual,Usa o pincel atual
 RIGHT_MOUSE_CLICK,Right mouse button,Botão direito do mouse,Botão direito do mouse
@@ -219,3 +219,5 @@ CONTROL_LIST,Control list:,Lista de controles:,Lista de controles:
 PREVIEW,Preview placing water or boat,Simula colocar água ou barco,Simula colocar água ou barco
 MOUSE_HOVER,Hover mouse,Colocar mouse em cima,Colocar mouse em cima
 LEADERBOARDS,Leaderboards,Ranking,Ranking
+MISTAKE,mistake,erro,erro
+MISTAKES,mistakes,erros,erros

@@ -3,6 +3,7 @@ extends Control
 
 # 27 hours, enough
 const MAX_TIME := 100000
+const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
 @onready var MainButton: Button = %Button
 @onready var TimeLeft: Label = %TimeLeft
@@ -96,8 +97,6 @@ func _on_timer_timeout():
 func _process(_dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
-
-const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
 static func _level_name(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
