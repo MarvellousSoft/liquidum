@@ -10,10 +10,10 @@ const BOAT_TYPE_VISIBLE := 8
 signal mouse_entered_hint(idx : int)
 
 @export var is_horizontal := false
+@export_range(0.0, 1.0) var max_alpha: float = 1.0
 
 @onready var Horizontal = $Horizontal
 @onready var Vertical = $Vertical
-@onready var AnimPlayer = $AnimationPlayer
 
 func _ready():
 	Vertical.visible = not is_horizontal
@@ -57,7 +57,7 @@ func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
 	if not editor_mode and not fast_startup:
 		modulate.a = 0.0
 		await get_tree().create_timer(delay).timeout
-		AnimPlayer.play("startup")
+		create_tween().tween_property(self, 'modulate:a', max_alpha, 1)
 	else:
 		modulate.a = 1.0
 

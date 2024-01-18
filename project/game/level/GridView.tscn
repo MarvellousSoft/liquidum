@@ -139,6 +139,7 @@ alignment = 2
 [node name="HintBarRight" parent="CenterContainer/GridContainer/RightVBox" instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
 layout_mode = 2
+max_alpha = 0.5
 
 [node name="Horizontal" parent="CenterContainer/GridContainer/RightVBox/HintBarRight" index="0"]
 visible = false
@@ -199,6 +200,7 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 is_horizontal = true
+max_alpha = 0.5
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/BottomHBox"]
 layout_mode = 2
