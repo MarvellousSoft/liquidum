@@ -42,12 +42,6 @@ class WinInfo:
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
 @onready var LevelLabel: Label = %LevelLabel
 @onready var TitleEdit: LineEdit = $Title/Edit
-@onready var TutorialContainer = %TutorialContainer
-@onready var TutorialCenterContainer = %TutorialCenterContainer
-@onready var CancelUniqCheck: Button = %CancelUniqCheck
-@onready var CheckUniqueness: Button = %CheckUniqueness
-@onready var UniqResult: Label = %UniqResult
-@onready var UniqOngoing: Node = %UniqOngoing
 
 var update_expected_waters : bool
 var update_expected_boats : bool
@@ -78,16 +72,20 @@ func _ready():
 		%PlaytestButton.visible = false
 		%UniquenessCheck.visible = false
 	set_level_names_and_descriptions()
-	reset_tutorial()
+	if not Global.is_mobile:
+		reset_tutorial()
 	if is_campaign_level():
 		var data = FileManager.load_level_data(section_number, level_number)
 		if not data.tutorial.is_empty():
-			TutorialContainer.show()
-			add_tutorial(data.tutorial)
+			if not Global.is_mobile:
+				%TutorialContainer.show()
+				add_tutorial(data.tutorial)
 		else:
-			TutorialContainer.hide()
+			if not Global.is_mobile:
+				%TutorialContainer.hide()
 	else:
-		TutorialContainer.hide()
+		if not Global.is_mobile:
+			%TutorialContainer.hide()
 	
 	GridNode.hide()
 	await TransitionManager.transition_finished
@@ -110,8 +108,8 @@ func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.stopPlaytimeTracking([workshop_id])
 	# Cancel solve if it still exists
-	if CancelUniqCheck != null:
-		CancelUniqCheck.button_pressed = true
+	if not Global.is_mobile and %CancelUniqCheck != null:
+		%CancelUniqCheck.button_pressed = true
 
 func update_last_saved() -> void:
 	var new_last_saved_ago := (Time.get_ticks_msec() - last_saved) / 1000
@@ -273,12 +271,12 @@ func scale_grid() -> void:
 
 
 func reset_tutorial():
-	for child in TutorialCenterContainer.get_children():
-		TutorialCenterContainer.remove_child(child)
+	for child in %TutorialCenterContainer.get_children():
+		%TutorialCenterContainer.remove_child(child)
 
 
 func add_tutorial(tutorial_name):
-	TutorialCenterContainer.add_child(Global.get_tutorial(tutorial_name))
+	%TutorialCenterContainer.add_child(Global.get_tutorial(tutorial_name))
 
 
 func update_counters() -> void:
@@ -368,6 +366,7 @@ func win() -> void:
 	var tween := create_tween()
 	tween.tween_property(ResetButton, "modulate:a", 0.5, 1)
 	BackButton.disabled = true
+	%TutorialButton.disabled = true
 	Settings.disable_button()
 	
 	AudioManager.play_sfx("win_level")
@@ -674,21 +673,21 @@ static func solve_result_to_uniqueness(r: SolverModel.SolveResult) -> String:
 
 
 func check_uniqueness() -> void:
-	CheckUniqueness.disabled = true
-	CancelUniqCheck.disabled = false
-	CancelUniqCheck.button_pressed = false
-	UniqResult.visible = false
-	UniqResult.tooltip_text = ""
-	UniqOngoing.visible = true
+	%CheckUniqueness.disabled = true
+	%CancelUniqCheck.disabled = false
+	%CancelUniqCheck.button_pressed = false
+	%UniqResult.visible = false
+	%UniqResult.tooltip_text = ""
+	%UniqOngoing.visible = true
 	var copied_grid := _get_solution_grid(GridModel.LoadMode.Testing)
-	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return CancelUniqCheck.button_pressed))
+	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return %CancelUniqCheck.button_pressed))
 	var r: SolverModel.SolveResult = await Global.wait_for_thread(solve_thread)
-	UniqResult.text = Level.solve_result_to_uniqueness(r)
+	%UniqResult.text = Level.solve_result_to_uniqueness(r)
 
-	UniqOngoing.visible = false
-	UniqResult.visible = true
-	CancelUniqCheck.disabled = true
-	CheckUniqueness.disabled = false
+	%UniqOngoing.visible = false
+	%UniqResult.visible = true
+	%CancelUniqCheck.disabled = true
+	%CheckUniqueness.disabled = false
 
 func _on_check_uniqueness_pressed() -> void:
 	if solve_thread == null:
