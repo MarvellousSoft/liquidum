@@ -246,6 +246,9 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 func display_leaderboard(data: LeaderboardData, level: Level) -> void:
 	if data == null or Global.is_mobile:
 		return
-	var display := preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
-	level.add_child(display)
-	display.display(data)
+	if not level.has_node("LeaderboardDisplay"):
+		var display := preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
+		display.modulate.a = 0
+		level.add_child(display)
+		level.create_tween().tween_property(display, "modulate:a", 1, 1)
+	level.get_node("LeaderboardDisplay").display(data)
