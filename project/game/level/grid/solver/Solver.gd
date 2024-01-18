@@ -335,7 +335,7 @@ static func _boat_possible(grid: GridImpl, i: int, j: int, disallow_nowater_belo
 	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
 		return false
 	var below := grid._pure_cell(i + 1, j)._content_top()
-	if not disallow_nowater_below and below == Content.NoBoatWater or below == Content.NoWater:
+	if not disallow_nowater_below and (below == Content.NoBoatWater or below == Content.NoWater):
 		return true
 	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
