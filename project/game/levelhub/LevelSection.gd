@@ -4,11 +4,14 @@ const LEVELBUTTON = preload("res://game/levelhub/LevelButton.tscn")
 const ALPHA_SPEED = 3.0
 const LERP = 2.0
 const DIST_EPS = .4
-const CENTRAL_POS = Vector2(-103, -135)
+const CENTRAL_POS = {
+	"desktop": Vector2(-103, -135),
+	"mobile": Vector2(-97, -135),
+}
 const RADIUS = 500
 const ELLIPSE_RATIO = {
 	"desktop": Vector2(1.1, .75),
-	"mobile": Vector2(.75, 1.1),
+	"mobile": Vector2(.65, 0.9),
 }
 const LEVELS_SCALE = {
 	"desktop": Vector2(.5, .5),
@@ -16,7 +19,7 @@ const LEVELS_SCALE = {
 }
 const BACK_POSITION = {
 	"desktop": Vector2(-791, -447),
-	"mobile": Vector2(-330, -477),
+	"mobile": Vector2(-350, -720),
 }
 
 const STYLES = {
@@ -79,11 +82,12 @@ func _process(dt):
 		Global.alpha_fade_node(dt, node, not focused, ALPHA_SPEED)
 	Global.alpha_fade_node(dt, LevelInfoContainer, showing_level_info and focused, ALPHA_SPEED)
 	Global.alpha_fade_node(dt, SectionNumber, not focused or not showing_level_info, ALPHA_SPEED)
+	var central = CENTRAL_POS.mobile if Global.is_mobile else CENTRAL_POS.desktop
 	if focused:
-		if MainButton.position != CENTRAL_POS:
-			MainButton.position = lerp(MainButton.position, CENTRAL_POS, clamp(LERP, 0.0, 1.0))
-			if MainButton.position.distance_to(CENTRAL_POS) < DIST_EPS:
-				MainButton.position = CENTRAL_POS
+		if MainButton.position != central:
+			MainButton.position = lerp(MainButton.position, central, clamp(LERP, 0.0, 1.0))
+			if MainButton.position.distance_to(central) < DIST_EPS:
+				MainButton.position = central
 	for level in Levels.get_children():
 		level.set_effect_alpha(Levels.modulate.a)
 
@@ -184,7 +188,7 @@ func get_formatted_time(time: float) -> String:
 
 
 func position_level_button(button, total_levels, i):
-	var angle = PI/2 + i*2*PI/float(total_levels)
+	var angle = PI + i*2*PI/float(total_levels)
 	var sc = Levels.scale.x
 	var ellipse = ELLIPSE_RATIO.mobile if Global.is_mobile else ELLIPSE_RATIO.desktop
 	button.position = Vector2(

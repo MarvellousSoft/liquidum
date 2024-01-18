@@ -6,6 +6,7 @@ signal disable_focus()
 @onready var Sections = $Sections
 
 var level_focused := false
+var section_focused := -1
 var level_to_unlock = -1
 var section_to_unlock = -1
 
@@ -13,16 +14,25 @@ func _ready() -> void:
 	update_sections()
 
 
+func _process(dt):
+	var idx = 1
+	for section in Sections.get_children():
+		Global.alpha_fade_node(dt, section, not level_focused or idx == section_focused, 4.0, true)
+		idx += 1
+
 
 func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_dev_mode)
 	check_unlocks()
 
+
 func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_dev_mode)
 
+
 func _on_dev_mode(_on: bool) -> void:
 	update_sections()
+
 
 func update_sections() -> void:
 	var idx = 1
@@ -72,6 +82,7 @@ func unlock_section(prev_section):
 
 func _on_level_section_enable_focus(pos, my_section):
 	level_focused = true
+	section_focused = my_section
 	enable_focus.emit(pos, my_section)
 
 

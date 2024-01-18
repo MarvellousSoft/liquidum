@@ -16,7 +16,7 @@ const EPS = .001
 const ZOOM_LERP = 4.0
 const LEVEL_ZOOM = {
 	"desktop": 2.6,
-	"mobile": 2.4,
+	"mobile": 2.0,
 }
 const NORMAL_ZOOM = {
 	"desktop": 1.0,

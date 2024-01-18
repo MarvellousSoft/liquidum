@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dns62u0n4j1k3"]
+[gd_scene load_steps=20 format=3 uid="uid://dns62u0n4j1k3"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" uid="uid://cskgyvxp485ui" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="10_lt5bs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7tmt"]
 bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
@@ -459,6 +460,8 @@ grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 focus_mode = 0
+theme = ExtResource("10_lt5bs")
+theme_override_font_sizes/font_size = 66
 text = "BACK"
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
