@@ -680,7 +680,9 @@ func check_uniqueness() -> void:
 	%UniqResult.tooltip_text = ""
 	%UniqOngoing.visible = true
 	var copied_grid := _get_solution_grid(GridModel.LoadMode.Testing)
-	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return %CancelUniqCheck.button_pressed))
+	# Need to store in a variable because threads
+	var cancel_but: Button = %CancelUniqCheck
+	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return cancel_but.button_pressed))
 	var r: SolverModel.SolveResult = await Global.wait_for_thread(solve_thread)
 	%UniqResult.text = Level.solve_result_to_uniqueness(r)
 
