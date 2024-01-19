@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dns62u0n4j1k3"]
+[gd_scene load_steps=21 format=3 uid="uid://dns62u0n4j1k3"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
@@ -8,6 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://dw5db25mri8oa" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" uid="uid://cskgyvxp485ui" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
+[ext_resource type="Script" path="res://game/ui/OutlineLabelConvert.gd" id="8_lakdo"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="10_lt5bs"]
 
@@ -351,6 +352,7 @@ text = "Level Name That is Very Big"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+script = ExtResource("8_lakdo")
 
 [node name="Completed" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -361,6 +363,7 @@ theme_override_constants/outline_size = 30
 theme_override_font_sizes/font_size = 30
 text = "COMPLETED_LEVEL"
 horizontal_alignment = 1
+script = ExtResource("8_lakdo")
 
 [node name="Spacer" type="Control" parent="Button/LevelInfoContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
@@ -376,6 +379,7 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 20
 text = "BEST_TIME"
 horizontal_alignment = 1
+script = ExtResource("8_lakdo")
 
 [node name="BestMistakes" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -386,6 +390,7 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 20
 text = "BEST_MISTAKES"
 horizontal_alignment = 1
+script = ExtResource("8_lakdo")
 
 [node name="UnlockParticles" type="GPUParticles2D" parent="Button"]
 position = Vector2(91, 130)

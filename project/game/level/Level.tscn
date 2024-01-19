@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=32 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="15_nwo8g"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
+[ext_resource type="Script" path="res://game/ui/OutlineLabelConvert.gd" id="17_oqjtt"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
@@ -273,7 +274,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 1, 1.3, 3.2, 3.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 0.670588), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -338,6 +339,7 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 36
 theme_override_font_sizes/font_size = 70
 text = "0 - 0"
+script = ExtResource("17_oqjtt")
 
 [node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer"]
 unique_name_in_owner = true
@@ -348,6 +350,7 @@ theme_override_constants/outline_size = 54
 theme_override_font_sizes/font_size = 90
 text = "LEVELNAM"
 autowrap_mode = 3
+script = ExtResource("17_oqjtt")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TopInfo"]
 layout_mode = 0
@@ -724,6 +727,7 @@ theme_override_font_sizes/font_size = 120
 text = "Level title"
 horizontal_alignment = 1
 text_overrun_behavior = 3
+script = ExtResource("17_oqjtt")
 
 [node name="Edit" type="LineEdit" parent="Title"]
 visible = false
@@ -807,6 +811,7 @@ layer = 3
 libraries = {
 "": SubResource("AnimationLibrary_b8al2")
 }
+speed_scale = 0.3
 
 [node name="Autosaver" type="Timer" parent="."]
 wait_time = 30.0
