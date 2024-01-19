@@ -2,6 +2,18 @@ extends CanvasLayer
 
 signal pressed(status : bool)
 
+const CONTENT_THEMES = {
+	"desktop": preload("res://assets/ui/SettingsTheme.tres"),
+	"mobile": preload("res://assets/ui/SettingsMobileTheme.tres"),
+}
+
+const BUTTON_THEMES = {
+	"desktop": preload("res://assets/ui/GeneralTheme.tres"),
+	"mobile": preload("res://assets/ui/MobileTheme.tres"),
+}
+
+
+
 @onready var AnimPlayer = $AnimationPlayer
 @onready var BG = $BG
 @onready var MainTitle = %MainTitle
@@ -11,6 +23,16 @@ signal pressed(status : bool)
 var active := false
 
 func _ready():
+	if Global.is_mobile:
+		%CenterContainer.size = Vector2(720, 1280)
+		%Content.theme = CONTENT_THEMES.mobile
+		%Yes.theme = BUTTON_THEMES.mobile
+		%No.theme = BUTTON_THEMES.mobile
+	else:
+		%CenterContainer.size = Vector2(3840, 2160)
+		%Content.theme = CONTENT_THEMES.desktop
+		%Yes.theme = BUTTON_THEMES.desktop
+		%No.theme = BUTTON_THEMES.desktop
 	BG.hide()
 
 

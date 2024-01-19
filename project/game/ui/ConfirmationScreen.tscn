@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cywdde1vhvqko"]
+[gd_scene load_steps=9 format=3 uid="uid://cywdde1vhvqko"]
 
 [ext_resource type="Script" path="res://game/ui/ConfirmationScreen.gd" id="1_40f4i"]
-[ext_resource type="Theme" uid="uid://dsx7oo1jar5n8" path="res://assets/ui/SettingsTheme.tres" id="2_k308u"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_owsub"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_8015s"]
+[ext_resource type="Theme" uid="uid://dj21rv23idpsb" path="res://assets/ui/SettingsMobileTheme.tres" id="3_5r6cq"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="4_3562h"]
 
 [sub_resource type="Animation" id="Animation_mqb4d"]
 length = 0.001
@@ -178,19 +179,24 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_8015s")]
+visible = false
+
 [node name="Content" type="Control" parent="."]
+unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-theme = ExtResource("2_k308u")
+theme = ExtResource("3_5r6cq")
 
 [node name="CenterContainer" type="CenterContainer" parent="Content"]
-layout_mode = 0
-offset_right = 3840.0
-offset_bottom = 2160.0
+unique_name_in_owner = true
+layout_mode = 1
+offset_right = 722.0
+offset_bottom = 1280.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Content/CenterContainer"]
 layout_mode = 2
@@ -211,18 +217,18 @@ alignment = 1
 
 [node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(500, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
-theme = ExtResource("6_owsub")
+theme = ExtResource("4_3562h")
 text = "YES"
 
 [node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(500, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
-theme = ExtResource("6_owsub")
+theme = ExtResource("4_3562h")
 text = "NO"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

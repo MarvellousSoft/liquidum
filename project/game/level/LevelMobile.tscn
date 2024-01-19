@@ -29,8 +29,8 @@ corner_radius_top_left = 7
 corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
-expand_margin_left = 7.0
-expand_margin_right = 7.0
+expand_margin_left = 3.0
+expand_margin_right = 3.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3453y"]
 
@@ -312,7 +312,7 @@ offset_left = 55.0
 offset_top = 42.0
 offset_right = 555.0
 offset_bottom = 142.0
-theme_override_constants/separation = 45
+theme_override_constants/separation = 36
 
 [node name="BackButton" type="Button" parent="TopButtons"]
 unique_name_in_owner = true
@@ -327,7 +327,7 @@ layout_mode = 2
 
 [node name="TutorialButton" type="Button" parent="TopButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -338,7 +338,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Spacer2" type="Control" parent="TopButtons"]
-custom_minimum_size = Vector2(71, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="ResetButton" type="TextureButton" parent="TopButtons"]
@@ -386,19 +386,22 @@ text = "LEVELNAM"
 autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopInfo"]
+custom_minimum_size = Vector2(0, 69)
 layout_mode = 0
-offset_top = 144.0
-offset_right = 684.0
-offset_bottom = 259.0
+offset_top = 146.0
+offset_right = 720.0
+offset_bottom = 227.0
 theme_override_constants/separation = 30
+alignment = 1
 
 [node name="TimerContainer" type="HBoxContainer" parent="TopInfo/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="TimerIcon" type="TextureRect" parent="TopInfo/HBoxContainer/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(96, 76)
+custom_minimum_size = Vector2(69.12, 54.72)
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("5_dv3ih")
@@ -412,12 +415,12 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 36
 theme_override_fonts/font = SubResource("FontVariation_hmnss")
-theme_override_font_sizes/font_size = 53
+theme_override_font_sizes/font_size = 40
 text = "00:00"
 vertical_alignment = 2
 
 [node name="VSeparator" type="VSeparator" parent="TopInfo/HBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
@@ -425,9 +428,11 @@ theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
 [node name="MistakeCounter" parent="TopInfo/HBoxContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
 check_for_satisfied = false
 
 [node name="HBoxContainer" parent="TopInfo/HBoxContainer/MistakeCounter" index="0"]
+custom_minimum_size = Vector2(0, 0)
 theme_override_constants/separation = 40
 
 [node name="VisibilityButton" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="0"]
@@ -438,12 +443,12 @@ custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
-theme_override_font_sizes/font_size = 55
+theme_override_font_sizes/font_size = 40
 autowrap_mode = 0
 
 [node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 40
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 40
 horizontal_alignment = 0
 
 [node name="HintsContainer" type="VBoxContainer" parent="."]
@@ -493,6 +498,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_right = 0.0
 offset_bottom = 0.0
+mouse_filter = 2
 
 [node name="CenterContainer" parent="BrushPicker" index="0"]
 offset_top = 1090.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bsgjxsq2lu5y2"]
+[gd_scene load_steps=13 format=3 uid="uid://bsgjxsq2lu5y2"]
 
 [ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="2_hnkmi"]
@@ -73,12 +73,29 @@ tracks/0/keys = {
 "values": [100, 115, 100]
 }
 
+[sub_resource type="Animation" id="Animation_5bxwh"]
+resource_name = "update_counter_mobile"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HBoxContainer/Counter:theme_override_font_sizes/font_size")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [40, 60, 40]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_infr8"]
 _data = {
 "RESET": SubResource("Animation_ott8p"),
 "startup": SubResource("Animation_eidh2"),
 "update_counter": SubResource("Animation_irywk"),
-"update_counter_big": SubResource("Animation_8cqt4")
+"update_counter_big": SubResource("Animation_8cqt4"),
+"update_counter_mobile": SubResource("Animation_5bxwh")
 }
 
 [node name="Counter" type="BoxContainer"]

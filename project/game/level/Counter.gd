@@ -68,8 +68,10 @@ func set_unknown():
 
 func update_label() -> void:
 	Counter.text = str(count)
-	if counter_name == "MISTAKES_COUNTER":
+	if counter_name == "MISTAKES_COUNTER" and not Global.is_mobile:
 		AnimPlayer.play("update_counter_big")
+	elif Global.is_mobile:
+		AnimPlayer.play("update_counter_mobile")
 	else:
 		AnimPlayer.play("update_counter")
 	if not editor_mode:
