@@ -33,12 +33,20 @@ var options = {
 	"line_info": LineInfo.None,
 }
 
+const STEAM_LANGUAGES := {
+	brazilian = "pt_BR",
+	english = "en",
+}
+
 
 func update_translation() -> void:
 	var l_idx: int = get_option("locale")
 	var locale: String
 	if l_idx == 0:
-		locale = OS.get_locale()
+		if SteamManager.enabled:
+			locale = STEAM_LANGUAGES.get(SteamManager.steam.getCurrentGameLanguage(), OS.get_locale())
+		else:
+			locale = OS.get_locale()
 	else:
 		locale = LANGUAGES[l_idx]
 	TranslationServer.set_locale(locale)
