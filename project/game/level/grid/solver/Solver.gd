@@ -539,10 +539,10 @@ class TogetherStrategy extends RowColStrategy:
 			- If there's water and its close to the border, we might need to expand it to the other side
 			- If there's the space between two obstacles is less than N, then it can't have any water
 			"""
-	
+
 	func _basic_waters_and_nowaters(a: int) -> bool:
 		# Very simplistic logic, jut put water in the middle if the hint is big
-		# The function below also covers this, but we're using this for "easy mode"
+		# The function below also covers this, but we're using this for "basic mode"
 		var h := _a_hint(a).water_count
 		var b_len := _b_len()
 		var any := false
@@ -553,13 +553,32 @@ class TogetherStrategy extends RowColStrategy:
 					any = true
 		return any
 
+	# If there's no water and a single empty aquarium, add water to it from the bottom
+	# Assumes there's no water and the hint is {?}
+	func _maybe_add_single_water(a: int) -> bool:
+		if not basic:
+			return false
+		var last_empty_b2 := -1
+		for b2 in 2 * _b_len():
+			if _content(a, b2) == Content.Nothing or _content(a, b2) == Content.NoBoat:
+				if last_empty_b2 != -1 and ((_content(a, b2 - 1) != Content.Nothing and _content(a, b2 - 1) != Content.NoBoat) or _wall_right(a, b2 - 1)):
+					# Not a single aquarium
+					return false
+				last_empty_b2 = b2
+		# Should be true if we haven't fucked up
+		if last_empty_b2 != -1:
+			# Add water to the single aquarium as {?} implies non-zero water
+			_cell(a, last_empty_b2 / 2).put_water(_corner(a, last_empty_b2), false)
+			return true
+		return false
+
 	# Like the subset sum strategy on rows, but since it's required to be together, we actually
 	# need only to use the two pointers technique to check all possible solutions
 	# Assumes there's no water in this row/column
 	func _add_necessary_waters_and_nowaters(a: int) -> bool:
 		var hint := int(2 * _a_hint(a).water_count)
 		if hint <= 0:
-			return false
+			return _maybe_add_single_water(a)
 		if basic:
 			return _basic_waters_and_nowaters(a)
 		var any := false
@@ -1045,8 +1064,40 @@ class AquariumsStrategy extends Strategy:
 		- If there's exactly one way to fill an aquarium to a certain value that's required, do it.
 		- Mostly ignores aquariums that have "pools", unless they are already filled.
 		"""
+	func _maybe_add_last_aquarium(hints: Dictionary) -> void:
+		var water_left := grid.grid_hints().total_water - grid.count_waters()
+		if not hints.has(0.0) or water_left <= 0 or hints.has(water_left):
+			return
+		var all_cur := grid.all_aquarium_counts()
+		if all_cur.get(0.0, 0) == hints[0.0] + 1:
+			# We can only fill one more aquarium so it must have this value
+			hints[water_left] = 1
+	func _infer_if_rest_is_0(hints: Dictionary, all_aqs: Array[GridImpl.AquariumInfo]) -> void:
+		if grid.grid_hints().total_water == -1:
+			return
+		var fixed_aqs := {}
+		var water_in_hints_and_fixed_aqs := 0.0
+		var biggest_aq := 0.0
+		for h in hints:
+			water_in_hints_and_fixed_aqs += h * hints[h]
+		for aq in all_aqs:
+			biggest_aq = maxf(biggest_aq, aq.total_empty + aq.total_water)
+			if aq.fixed_water() and not hints.has(aq.total_water):
+				fixed_aqs[aq.total_water] = fixed_aqs.get(aq.total_water, 0) + 1
+				water_in_hints_and_fixed_aqs += aq.total_water
+		if grid.grid_hints().total_water != water_in_hints_and_fixed_aqs:
+			return
+		var filled_aqs_count := 0
+		while biggest_aq > 0:
+			if not hints.has(biggest_aq):
+				hints[biggest_aq] = fixed_aqs.get(biggest_aq, 0)
+			filled_aqs_count += hints[biggest_aq]
+			biggest_aq -= 0.5
+		if all_aqs.size() >= filled_aqs_count:
+			hints[0.0] = all_aqs.size() - filled_aqs_count
 	func apply_any() -> bool:
 		var hint := grid.grid_hints().expected_aquariums.duplicate()
+		_maybe_add_last_aquarium(hint)
 		if hint.is_empty():
 			return false
 		var all_aqs: Array[GridImpl.AquariumInfo] = []
@@ -1065,6 +1116,7 @@ class AquariumsStrategy extends Strategy:
 						dfs.flood(i, j, corner)
 						dfs.info.remove_m1()
 						all_aqs.append(dfs.info)
+		_infer_if_rest_is_0(hint, all_aqs)
 		var var_aqs: Array[GridImpl.AquariumInfo] = []
 		var any_pools := false
 		var ways_to_reach := {}
