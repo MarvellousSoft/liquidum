@@ -59,17 +59,20 @@ func _on_print_global_stats_pressed() -> void:
 	SteamManager.steam.requestGlobalStats(5)
 	await SteamManager.steam.global_stats_received
 	for stat in PLAYED_STATS:
-		var val := SteamManager.steam.getGlobalStatFloat(stat + "_secs")
-		var tot := SteamManager.steam.getGlobalStatInt(stat + "_total")
+		var val = SteamManager.steam.getGlobalStatFloat(stat + "_secs")
+		var tot = SteamManager.steam.getGlobalStatInt(stat + "_total")
 		print("%s = %.0f tot %.0f avg" % [stat, val, val / tot])
+	for stat in INT_STATS:
+		var val = SteamManager.steam.getGlobalStatInt(stat)
+		print("%s = %d" % [stat, val])
 
 
 func _on_print_local_stats_pressed():
 	if not SteamManager.enabled:
 		return
 	for stat in PLAYED_STATS:
-		var val := SteamManager.steam.getStatFloat(stat + "_secs")
-		var tot := SteamManager.steam.getStatInt(stat + "_total")
+		var val = SteamManager.steam.getStatFloat(stat + "_secs")
+		var tot = SteamManager.steam.getStatInt(stat + "_total")
 		print("%s = %.0f (total %d)" % [stat, val, tot])
 	for int_stat in INT_STATS:
 		print("%s = %d" % [int_stat, SteamManager.steam.getStatInt(int_stat)])
@@ -128,3 +131,8 @@ func _on_dif_button_pressed():
 	%DifButton.visible = true
 	%DifOptions.disabled = false
 	FileManager.save_preprocessed_difficulty(prep)
+
+
+func _on_reset_stats_pressed():
+	SteamManager.steam.resetAllStats(true)
+	SteamManager.steam.requestCurrentStats()

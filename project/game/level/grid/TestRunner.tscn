@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5np4b83uqkua"]
+[gd_scene load_steps=5 format=3 uid="uid://b5np4b83uqkua"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_4ps32"]
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_ojaat"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
@@ -13,7 +12,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_4ps32")
 script = ExtResource("1_xrxil")
 
 [node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
@@ -93,6 +91,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Print global stats
 "
+
+[node name="ResetStats" type="Button" parent="Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "Reset stats & achievements"
 
 [node name="DailiesHBox" type="HBoxContainer" parent="Buttons"]
 layout_mode = 2
@@ -183,5 +186,6 @@ text = "Cancel"
 [connection signal="pressed" from="Buttons/FullSolve" to="." method="_on_full_solve_pressed"]
 [connection signal="pressed" from="Buttons/PrintLocalStats" to="." method="_on_print_local_stats_pressed"]
 [connection signal="pressed" from="Buttons/PrintGlobalStats" to="." method="_on_print_global_stats_pressed"]
+[connection signal="pressed" from="Buttons/ResetStats" to="." method="_on_reset_stats_pressed"]
 [connection signal="pressed" from="Buttons/DailiesHBox/DailiesButton" to="." method="_on_preprocess_dailies_pressed"]
 [connection signal="pressed" from="Buttons/DifHBox/DifButton" to="." method="_on_dif_button_pressed"]

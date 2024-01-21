@@ -1,9 +1,10 @@
 extends Node
 
-# TODO: Figure this out some other way
 var enabled := true
 const APP_ID := 2716690
 var steam = null
+# This is used to globally wipe stats if necessary. Use with care.
+const STATS_VERSION := 1
 
 var stats_received := false
 
@@ -33,6 +34,14 @@ func _ready() -> void:
 
 func _stats_received(game: int, result: int, user: int) -> void:
 	if stats_received:
+		return
+	if STATS_VERSION != SteamManager.steam.getStatInt("version"):
+		print("Resetting all stats!")
+		SteamManager.steam.resetAllStats(false)
+		SteamManager.steam.setStatInt("version", STATS_VERSION)
+		SteamManager.steam.storeStats()
+		await SteamManager.steam.user_stats_stored
+		SteamManager.steam.requestCurrentStats()
 		return
 	print("Steam stats received! (result = %d, game = %d, user = %d)" % [result, game, user])
 	stats_received = true
