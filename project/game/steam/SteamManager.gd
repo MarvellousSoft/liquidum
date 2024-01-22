@@ -9,7 +9,7 @@ const STATS_VERSION := 1
 var stats_received := false
 
 func _init() -> void:
-	if Engine.has_singleton("Steam"):
+	if not Global.is_mobile and Engine.has_singleton("Steam"):
 		steam = Engine.get_singleton("Steam")
 	else:
 		enabled = false
@@ -111,7 +111,7 @@ func _upload_item(id: int, title: String, description: String, dir: String, prev
 	SteamManager.steam.setItemDescription(update_id, description)
 	SteamManager.steam.setItemPreview(update_id, preview_file)
 	SteamManager.steam.setItemTags(update_id, tags)
-	SteamManager.steam.setItemVisibility(update_id, Steam.REMOTE_STORAGE_PUBLISHED_VISIBILITY_PUBLIC)
+	SteamManager.steam.setItemVisibility(update_id, SteamManager.steam.REMOTE_STORAGE_PUBLISHED_VISIBILITY_PUBLIC)
 	SteamManager.steam.submitItemUpdate(update_id, Time.get_datetime_string_from_system(true, true))
 	UploadingToWorkshop.update_handle = update_id
 	var ret: Array = await SteamManager.steam.item_updated

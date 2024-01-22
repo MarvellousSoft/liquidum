@@ -34,6 +34,7 @@ ConfirmationScreen="*res://game/ui/ConfirmationScreen.tscn"
 GeneratingLevel="*res://game/ui/GeneratingLevel.tscn"
 SteamManager="*res://game/steam/SteamManager.tscn"
 UploadingToWorkshop="*res://game/editor_menu/UploadingToWorkshop.tscn"
+AdManager="*res://game/ads/AdManager.gd"
 
 [debug]
 

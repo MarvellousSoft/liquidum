@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dl8ycx77sa8oq"]
+[gd_scene load_steps=32 format=3 uid="uid://dl8ycx77sa8oq"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_0bakg"]
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
 [ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="18_4jcdt"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
+[ext_resource type="Script" path="res://game/ads/BottomAdShower.gd" id="20_ff4mn"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
@@ -701,6 +702,9 @@ wait_time = 30.0
 autostart = true
 
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("20_o7ta7")]
+
+[node name="BottomAdShower" type="Node" parent="."]
+script = ExtResource("20_ff4mn")
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/HBoxContainer/MistakeCounter" method="add_count"]
