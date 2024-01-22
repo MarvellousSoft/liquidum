@@ -29,10 +29,10 @@ func _ready():
 func pop_scene() -> void:
 	if not stack.is_empty():
 		var scene: Node = stack.pop_back()
-		change_scene(scene, false)
+		await change_scene(scene, false)
 
 func push_scene(scene: Node) -> void:
-	change_scene(scene, true)
+	await change_scene(scene, true)
 
 func change_scene(scene: Node, add_to_stack := false) -> void:
 	active = true

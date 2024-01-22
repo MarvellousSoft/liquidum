@@ -3,8 +3,11 @@ extends Node
 # Keep at least these many pixels available to show a banner ad
 const BOTTOM_BUFFER_FOR_AD := 50
 
+signal big_ad_loaded()
+
 var _ad_view: AdView = null
 var _big_ad: InterstitialAd = null
+var _loading_big_ad: bool = false
 
 func _ready() -> void:
 	if not Global.is_mobile:
@@ -14,11 +17,9 @@ func _ready() -> void:
 	listener.on_initialization_complete = _on_initialization_complete
 	MobileAds.initialize()
 
-func show_big_ad(exit_ad: Callable) -> void:
-	if not Global.is_mobile:
-		exit_ad.call()
-		return
-	destroy_ads()
+# MUST be called before show_big_ad
+func preload_big_ad() -> void:
+	destroy_big_ad()
 	var unit_id: String = ""
 	if OS.get_name() == "Android":
 		if OS.is_debug_build():
@@ -32,19 +33,24 @@ func show_big_ad(exit_ad: Callable) -> void:
 		else:
 			# TODO: Get proper unit id
 			unit_id = "ca-app-pub-3940256099942544/4411468910"
-	if unit_id.is_empty():
-		exit_ad.call()
-		return
 	var req := AdRequest.new()
 	var callback := InterstitialAdLoadCallback.new()
-	callback.on_ad_loaded = _big_ad_loaded.bind(exit_ad)
+	callback.on_ad_loaded = _big_ad_loaded
 	callback.on_ad_failed_to_load = func(err):
 		print("Ad failed to load: %s", err)
-		exit_ad.call()
+		_loading_big_ad = false
+		big_ad_loaded.emit()
+	_loading_big_ad = true
 	InterstitialAdLoader.new().load(unit_id, req, callback)
 
-func _big_ad_loaded(ad: InterstitialAd, exit_ad: Callable) -> void:
-	_big_ad = ad
+func show_big_ad(exit_ad: Callable) -> void:
+	if _big_ad == null and not _loading_big_ad:
+		preload_big_ad()
+	if _loading_big_ad:
+		await big_ad_loaded
+	if _big_ad == null:
+		exit_ad.call()
+		return
 	var callback := FullScreenContentCallback.new()
 	callback.on_ad_clicked = func(): print("Ad clicked")
 	callback.on_ad_dismissed_full_screen_content = exit_ad
@@ -53,14 +59,19 @@ func _big_ad_loaded(ad: InterstitialAd, exit_ad: Callable) -> void:
 		exit_ad.call()
 	callback.on_ad_impression = func(): print("Ad impression")
 	callback.on_ad_showed_full_screen_content = func(): print("Ad showed content")
-	ad.full_screen_content_callback = callback
-	ad.show()
+	_big_ad.full_screen_content_callback = callback
+	_big_ad.show()
+	
 
+func _big_ad_loaded(ad: InterstitialAd) -> void:
+	_big_ad = ad
+	_loading_big_ad = false
+	big_ad_loaded.emit()
 
-func show_ad_bottom() -> void:
+func show_bottom_ad() -> void:
 	if not Global.is_mobile:
 		return
-	var ad := create_banner_ad()
+	var ad := create_bottom_ad()
 	var req := AdRequest.new()
 	var listener := AdListener.new()
 	listener.on_ad_clicked = func(): print("Add clicked")
@@ -71,13 +82,16 @@ func show_ad_bottom() -> void:
 	ad.ad_listener = listener
 	ad.load_ad(req)
 
-func destroy_ads() -> void:
+func destroy_bottom_ad() -> void:
 	if _ad_view != null:
 		_ad_view.destroy()
 		_ad_view = null
+
+func destroy_big_ad() -> void:
 	if _big_ad != null:
 		_big_ad.destroy()
 		_big_ad = null
+		_loading_big_ad = false
 
 func _get_black_bar_size() -> int:
 	var w_size := DisplayServer.window_get_size()
@@ -85,10 +99,10 @@ func _get_black_bar_size() -> int:
 	var black_bar_size := (float(w_size.y) - shown_size.size.y) / 2.0
 	# The above logic is wrong and needs fixing
 	black_bar_size = 0.0
-	return maxi(black_bar_size, 0)
+	return maxi(floori(black_bar_size), 0)
 
-func create_banner_ad() -> AdView:
-	destroy_ads()
+func create_bottom_ad() -> AdView:
+	destroy_bottom_ad()
 	var unit_id: String
 	if OS.get_name() == "Android":
 		if OS.is_debug_build():

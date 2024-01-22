@@ -376,7 +376,9 @@ func win() -> void:
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
 	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count), running_time))
-	
+
+	if _show_level_completed_ad():
+		AdManager.preload_big_ad()
 	await get_tree().create_timer(1.5).timeout
 	
 	ContinueAnim.play("show")
@@ -616,6 +618,12 @@ func _on_dev_buttons_save():
 	if editor_mode():
 		g.set_auto_update_hints(true)
 
+func _show_level_completed_ad() -> bool:
+	if Global.is_mobile:
+		if level_number == -1 or level_number > 3 or section_number > 1:
+			if ["Android", "iOS"].has(OS.get_name()):
+				return true
+	return false
 
 func _on_continue_button_pressed() -> void:
 	if not won_before:
@@ -625,11 +633,10 @@ func _on_continue_button_pressed() -> void:
 			TransitionManager.change_scene(Global.load_no_mobile("res://game/credits/AllLevelsCompleted").instantiate())
 			return
 	
-	if Global.is_mobile:
-		if level_number == -1 or level_number > 3 or section_number > 1:
-			if ["Android", "iOS"].has(OS.get_name()):
-				return TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
-	TransitionManager.pop_scene()
+	if _show_level_completed_ad():
+		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
+	else:
+		TransitionManager.pop_scene()
 
 
 func _on_description_edit_text_changed() -> void:
