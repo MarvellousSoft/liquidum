@@ -150,4 +150,4 @@ func _on_random_button_pressed() -> void:
 
 
 func _on_credits_button_pressed() -> void:
-	TransitionManager.push_scene(Global.load_no_mobile("res://game/credits/CreditsScreen").instantiate())
+	TransitionManager.push_scene(Global.load_mobile_compat("res://game/credits/CreditsScreen").instantiate())

@@ -69,6 +69,13 @@ tooltip_text = "RANDOM_TOOLTIP"
 focus_mode = 0
 text = "CHANGE_PROFILE_BUTTON"
 
+[node name="CreditsButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "RANDOM_TOOLTIP"
+focus_mode = 0
+text = "CREDITS_BUTTON"
+
 [node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -279,6 +286,7 @@ editor_draw_limits = true
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/MenuProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox" method="_on_timer_timeout"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
