@@ -205,10 +205,12 @@ alignment = 1
 
 [node name="MainTitle" type="Label" parent="Content/CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 text = "DEFAULT_CONFIRMATION"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -218,7 +220,6 @@ alignment = 1
 [node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 focus_mode = 0
 theme = ExtResource("4_3562h")
 text = "YES"
@@ -226,7 +227,6 @@ text = "YES"
 [node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 focus_mode = 0
 theme = ExtResource("4_3562h")
 text = "NO"

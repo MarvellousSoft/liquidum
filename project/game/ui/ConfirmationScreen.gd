@@ -25,11 +25,13 @@ var active := false
 func _ready():
 	if Global.is_mobile:
 		%CenterContainer.size = Vector2(720, 1280)
+		%MainTitle.custom_minimum_size.x = 500
 		%Content.theme = CONTENT_THEMES.mobile
 		%Yes.theme = BUTTON_THEMES.mobile
 		%No.theme = BUTTON_THEMES.mobile
 	else:
 		%CenterContainer.size = Vector2(3840, 2160)
+		%MainTitle.custom_minimum_size.x = 3000
 		%Content.theme = CONTENT_THEMES.desktop
 		%Yes.theme = BUTTON_THEMES.desktop
 		%No.theme = BUTTON_THEMES.desktop

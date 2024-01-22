@@ -29,7 +29,7 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = -1
 offset_left = 50.0
-offset_top = 50.0
+offset_top = 75.0
 focus_mode = 0
 text = "BACK"
 
