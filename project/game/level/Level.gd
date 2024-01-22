@@ -624,6 +624,11 @@ func _on_continue_button_pressed() -> void:
 		if LevelLister.all_campaign_levels_completed():
 			TransitionManager.change_scene(Global.load_no_mobile("res://game/credits/AllLevelsCompleted").instantiate())
 			return
+	
+	if Global.is_mobile:
+		if level_number == -1 or level_number > 3 or section_number > 1:
+			if ["Android", "iOS"].has(OS.get_name()):
+				return TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
 	TransitionManager.pop_scene()
 
 
