@@ -57,6 +57,8 @@ func store_stats() -> void:
 	SteamManager.steam.storeStats()
 
 func _notification(what: int) -> void:
+	if not enabled:
+		return
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		store_stats()
 		SteamManager.steam.steamShutdown()
