@@ -2,12 +2,12 @@ extends CanvasLayer
 
 signal pressed(status : bool)
 
-const CONTENT_THEMES = {
+const SETTINGS_THEMES = {
 	"desktop": preload("res://assets/ui/SettingsTheme.tres"),
 	"mobile": preload("res://assets/ui/SettingsMobileTheme.tres"),
 }
 
-const BUTTON_THEMES = {
+const MAIN_THEMES = {
 	"desktop": preload("res://assets/ui/GeneralTheme.tres"),
 	"mobile": preload("res://assets/ui/MobileTheme.tres"),
 }
@@ -26,15 +26,15 @@ func _ready():
 	if Global.is_mobile:
 		%CenterContainer.size = Vector2(720, 1280)
 		%MainTitle.custom_minimum_size.x = 500
-		%Content.theme = CONTENT_THEMES.mobile
-		%Yes.theme = BUTTON_THEMES.mobile
-		%No.theme = BUTTON_THEMES.mobile
+		%Content.theme = SETTINGS_THEMES.mobile
+		%Yes.theme = MAIN_THEMES.mobile
+		%No.theme = MAIN_THEMES.mobile
 	else:
 		%CenterContainer.size = Vector2(3840, 2160)
 		%MainTitle.custom_minimum_size.x = 3000
-		%Content.theme = CONTENT_THEMES.desktop
-		%Yes.theme = BUTTON_THEMES.desktop
-		%No.theme = BUTTON_THEMES.desktop
+		%Content.theme = SETTINGS_THEMES.desktop
+		%Yes.theme = MAIN_THEMES.desktop
+		%No.theme = MAIN_THEMES.desktop
 	BG.hide()
 
 
