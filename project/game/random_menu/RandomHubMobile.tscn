@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqwh2k5t2yiks"]
+[gd_scene load_steps=6 format=3 uid="uid://dqwh2k5t2yiks"]
 
 [ext_resource type="PackedScene" uid="uid://c71gf2qx41ep" path="res://game/settings/SettingsScreenMobile.tscn" id="1_04r1x"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_ealrb"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_y4iuk"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="3_sxuv2"]
 [ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="3_t071m"]
 
 [node name="RandomHubMobile" type="Control"]
@@ -12,6 +13,9 @@ offset_right = 720.0
 offset_bottom = 1280.0
 theme = ExtResource("1_ealrb")
 script = ExtResource("2_y4iuk")
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("3_sxuv2")]
+layout_mode = 0
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
@@ -39,11 +43,17 @@ anchors_preset = -1
 anchor_top = 0.2
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
 
 [node name="VBox" type="VBoxContainer" parent="Difficulties"]
 layout_mode = 2
 theme_override_constants/separation = 75
 alignment = 1
+
+[node name="InitialSep" type="HSeparator" parent="Difficulties/VBox"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="Continue" type="Button" parent="Difficulties/VBox"]
 layout_mode = 2
@@ -95,14 +105,11 @@ text = "INSANE_BUTTON"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = 27.0
-offset_right = 742.0
-offset_bottom = 636.0
-grow_vertical = 2
+layout_mode = 2
+offset_left = 138.0
+offset_top = 1188.0
+offset_right = 581.0
+offset_bottom = 1612.0
 theme = ExtResource("3_t071m")
 metadata/_edit_group_ = true
 
@@ -130,7 +137,7 @@ layout_mode = 2
 
 [node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 35
 text = "EASY_BUTTON"
 
 [node name="Count" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
@@ -150,7 +157,7 @@ layout_mode = 2
 
 [node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 35
 text = "MEDIUM_BUTTON"
 
 [node name="Count" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
@@ -170,7 +177,7 @@ layout_mode = 2
 
 [node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 35
 text = "HARD_BUTTON"
 
 [node name="Count" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
@@ -190,7 +197,7 @@ layout_mode = 2
 
 [node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 35
 text = "EXPERT_BUTTON"
 
 [node name="Count" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
@@ -210,7 +217,7 @@ layout_mode = 2
 
 [node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 35
 text = "INSANE_BUTTON"
 
 [node name="Count" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]

@@ -1,4 +1,4 @@
 extends ColorRect
 
 func _ready():
-	hide()
+	queue_free()
