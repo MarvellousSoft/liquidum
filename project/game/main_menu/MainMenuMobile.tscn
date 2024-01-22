@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="9_fra4p"]
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="10_4sssi"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenuMobile" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("5_sgldn")

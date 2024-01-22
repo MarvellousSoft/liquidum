@@ -194,7 +194,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
 	var rng := RandomNumberGenerator.new()
-	var seed_str: String = $Seed.text
+	var seed_str: String = $Seed.text if has_node("Seed") else ""
 	if seed_str.is_empty():
 		var data := UserData.current()
 		data.random_levels_created[dif] += 1

@@ -146,7 +146,7 @@ func _on_level_hub_disable_focus():
 
 func _on_random_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	TransitionManager.push_scene(preload("res://game/random_menu/RandomHub.tscn").instantiate())
+	TransitionManager.push_scene(Global.load_mobile_compat("res://game/random_menu/RandomHub").instantiate())
 
 
 func _on_credits_button_pressed() -> void:
