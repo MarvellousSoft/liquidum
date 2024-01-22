@@ -5,7 +5,8 @@ signal cancel
 @onready var Cancel: Button = $All/PanelContainer/VBoxContainer/Cancel
 
 func _ready() -> void:
-	$All.size = get_viewport().get_visible_rect().size
+	$All.set_deferred("size", get_viewport().get_visible_rect().size)
+
 
 func enable() -> void:
 	show()
