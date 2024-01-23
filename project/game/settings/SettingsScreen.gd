@@ -33,7 +33,14 @@ func disable_button():
 func enable_button():
 	is_disabled = false
 	PauseButton.disabled = false
-	DisplayServer.VSYNC_MAILBOX
+
+
+func hide_button():
+	PauseButton.hide()
+
+
+func show_button():
+	PauseButton.show()
 
 
 func toggle_pause() -> void:

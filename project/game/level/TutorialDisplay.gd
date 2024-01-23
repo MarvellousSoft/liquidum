@@ -2,6 +2,8 @@ extends MarginContainer
 
 const FADE_SPEED = 4.0
 
+signal tutorial_closed
+
 @onready var TutContainer = %TutorialCenterContainer
 
 var active = false
@@ -66,6 +68,8 @@ func _on_forward_pressed():
 
 func _on_close_button_pressed():
 	disable()
+	tutorial_closed.emit()
+	
 
 func _input(event: InputEvent) -> void:
 	if active and event.is_action_pressed(&"return"):

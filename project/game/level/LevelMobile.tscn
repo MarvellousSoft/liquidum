@@ -52,7 +52,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("%ContinueButton/..:visible")
+tracks/0/path = NodePath("..:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -64,7 +64,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("%ContinueButton/..:modulate")
+tracks/1/path = NodePath("..:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -76,7 +76,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/..:offset_bottom")
+tracks/2/path = NodePath("..:offset_bottom")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -88,7 +88,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("%ContinueButton/..:offset_top")
+tracks/3/path = NodePath("..:offset_top")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -116,7 +116,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("%ContinueButton/..:visible")
+tracks/1/path = NodePath("..:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -128,7 +128,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("%ContinueButton/..:modulate")
+tracks/2/path = NodePath("..:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -140,7 +140,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("%ContinueButton/..:offset_bottom")
+tracks/3/path = NodePath("..:offset_bottom")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -152,7 +152,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("%ContinueButton/..:offset_top")
+tracks/4/path = NodePath("..:offset_top")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -414,7 +414,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 36
+theme_override_constants/outline_size = 22
 theme_override_fonts/font = SubResource("FontVariation_hmnss")
 theme_override_font_sizes/font_size = 40
 text = "00:00"
@@ -443,12 +443,12 @@ visible = false
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
+theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 autowrap_mode = 0
 
 [node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2"]
-theme_override_constants/outline_size = 40
+theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 0
 
@@ -510,40 +510,40 @@ offset_bottom = 1280.0
 theme = ExtResource("3_uwkov")
 
 [node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="0"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="1"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="2"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="3"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="4"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="5"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="0"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="1"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="2"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="3"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="4"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="5"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(75, 75)
 
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -565,8 +565,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 30
-theme_override_font_sizes/font_size = 24
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 22
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 "
 horizontal_alignment = 1
@@ -619,27 +619,6 @@ placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
 caret_blink = true
 
-[node name="TutorialDisplayContainer" type="CenterContainer" parent="."]
-visible = false
-z_index = 2
-layout_mode = 0
-offset_right = 3840.0
-offset_bottom = 2160.0
-mouse_filter = 2
-
-[node name="TutorialDisplayBG" type="ColorRect" parent="TutorialDisplayContainer"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(3840, 2160)
-layout_mode = 2
-color = Color(0, 0.0352941, 0.141176, 0.886275)
-
-[node name="TutorialDisplay" parent="TutorialDisplayContainer" instance=ExtResource("17_46m0x")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-mouse_filter = 2
-
 [node name="ContinueContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 1
@@ -648,6 +627,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -246.0
 offset_right = -70.0
 offset_bottom = -50.0
 grow_horizontal = 0
@@ -673,6 +653,42 @@ root_node = NodePath("../ContinueButton")
 libraries = {
 "": SubResource("AnimationLibrary_dnqfm")
 }
+
+[node name="TutorialDisplayBG" type="ColorRect" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+z_index = 2
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+offset_right = 720.0
+offset_bottom = 1280.0
+color = Color(0, 0.0352941, 0.141176, 0.886275)
+
+[node name="TutorialDisplayContainer" type="CenterContainer" parent="TutorialDisplayBG"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 48.0
+offset_top = 68.0
+offset_right = 1428.0
+offset_bottom = 2626.0
+scale = Vector2(0.45, 0.45)
+mouse_filter = 2
+
+[node name="TutorialDisplay" parent="TutorialDisplayBG/TutorialDisplayContainer" instance=ExtResource("17_46m0x")]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("3_uwkov")
+
+[node name="GridContainer" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay" index="0"]
+theme_override_constants/v_separation = 140
+
+[node name="Title" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/GridContainer" index="0"]
+theme_override_font_sizes/font_size = 80
+
+[node name="CloseButton" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/GridContainer" index="1"]
+custom_minimum_size = Vector2(150, 150)
+theme_override_font_sizes/font_size = 120
 
 [node name="WaveLayer" type="CanvasLayer" parent="."]
 layer = 2
@@ -719,9 +735,11 @@ script = ExtResource("20_ff4mn")
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="tutorial_closed" from="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay" to="." method="_on_tutorial_display_tutorial_closed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
 [editable path="TopInfo/HBoxContainer/MistakeCounter"]
 [editable path="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]
+[editable path="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay"]

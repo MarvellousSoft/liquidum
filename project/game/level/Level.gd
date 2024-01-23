@@ -6,6 +6,14 @@ const DESIRED_GRID_W = {
 	"desktop": 1300,
 	"mobile": 700,
 }
+const SIZES = {
+	"desktop" = {
+		"window_size": Vector2(3840, 2160),
+	},
+	"mobile" = {
+		"window_size": Vector2(720, 1280),
+	}
+}
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -76,10 +84,9 @@ func _ready():
 		reset_tutorial()
 	if is_campaign_level():
 		var data = FileManager.load_level_data(section_number, level_number)
-		if not data.tutorial.is_empty():
-			if not Global.is_mobile:
-				%TutorialContainer.show()
-				add_tutorial(data.tutorial)
+		if not data.tutorial.is_empty() and not Global.is_mobile:
+			%TutorialContainer.show()
+			add_tutorial(data.tutorial)
 		else:
 			if not Global.is_mobile:
 				%TutorialContainer.hide()
@@ -111,11 +118,6 @@ func _exit_tree() -> void:
 	if not Global.is_mobile and %CancelUniqCheck != null:
 		%CancelUniqCheck.button_pressed = true
 
-func update_last_saved() -> void:
-	var new_last_saved_ago := (Time.get_ticks_msec() - last_saved) / 1000
-	if last_saved_ago != new_last_saved_ago:
-		last_saved_ago = new_last_saved_ago
-		%LastSaved/Time.text = " %ds " % [last_saved_ago]
 
 func _process(dt):
 	if grid.editor_mode():
@@ -232,7 +234,19 @@ func setup(try_load := true) -> void:
 	await get_tree().create_timer(GridNode.get_grid_delay(grid.rows(), grid.cols())).timeout
 	
 	process_game = true
+	
+	if is_campaign_level() and Global.is_mobile:
+		await get_tree().create_timer(.5).timeout
+		var data = FileManager.load_level_data(section_number, level_number)
+		if not data.tutorial.is_empty():
+			_on_tutorial_button_pressed()
 
+
+func update_last_saved() -> void:
+	var new_last_saved_ago := (Time.get_ticks_msec() - last_saved) / 1000
+	if last_saved_ago != new_last_saved_ago:
+		last_saved_ago = new_last_saved_ago
+		%LastSaved/Time.text = " %ds " % [last_saved_ago]
 
 func set_level_names_and_descriptions():
 	Description.text = description
@@ -667,7 +681,9 @@ func _on_dev_buttons_copy_to_editor():
 
 
 func _on_tutorial_button_pressed():
+	process_game = false
 	%TutorialDisplay.enable()
+	%SettingsScreen.hide_button()
 
 static func check_uniqueness_inner(copied_grid: GridModel, cancel: Callable) -> SolverModel.SolveResult:
 	return SolverModel.new().full_solve(copied_grid, SolverModel.STRATEGY_LIST.keys(), cancel)
@@ -732,3 +748,8 @@ func _on_share_button_pressed() -> void:
 	DisplayServer.clipboard_set(text)
 	%ShareButton.disabled = true
 	%ShareButton.text = "COPIED_TO_CLIPBOARD"
+
+
+func _on_tutorial_display_tutorial_closed():
+	process_game = true
+	%SettingsScreen.show_button()
