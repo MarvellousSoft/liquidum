@@ -6,7 +6,7 @@ const COLORS = {
 	"error": Color("#ff6a6aff"),
 }
 const TUTORIALS = {
-	"mouse": preload("res://database/tutorials/Mouse.tscn"),
+	"mouse1": preload("res://database/tutorials/Mouse1.tscn"),
 	"mouse2": preload("res://database/tutorials/Mouse2.tscn"),
 	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),

@@ -1,15 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8gs3yl6iwrio"]
+[gd_scene load_steps=9 format=3 uid="uid://b8gs3yl6iwrio"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_j3v0c"]
-[ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="2_d4ckx"]
-[ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="2_y2uuo"]
-[ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_g7ukb"]
-[ext_resource type="Texture2D" uid="uid://bjm6t8nm5ccbg" path="res://assets/images/ui/icons/mouse_right_button.png" id="4_hl8rs"]
-[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_qcr8y"]
-[ext_resource type="Texture2D" uid="uid://cmpsec1uccgvg" path="res://assets/images/ui/icons/mouse_left_button_highlight.png" id="6_ori1m"]
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ndfat"]
+[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_rvbrf"]
+[ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_67h40"]
+[ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="4_co5dh"]
+[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_u4nd8"]
+[ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="6_r5ton"]
+[ext_resource type="Texture2D" uid="uid://cmpsec1uccgvg" path="res://assets/images/ui/icons/mouse_left_button_highlight.png" id="7_h06jf"]
+[ext_resource type="Texture2D" uid="uid://bjm6t8nm5ccbg" path="res://assets/images/ui/icons/mouse_right_button.png" id="8_jvu8e"]
 
 [node name="Mouse" type="MarginContainer"]
-theme = ExtResource("1_j3v0c")
+theme = ExtResource("1_ndfat")
+script = ExtResource("2_rvbrf")
+tutorial_name = "TUT_MOUSE1"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -44,31 +47,31 @@ theme_override_constants/separation = 0
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect6" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1"]
@@ -76,7 +79,7 @@ modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("4_qcr8y")
+texture = ExtResource("5_u4nd8")
 expand_mode = 1
 
 [node name="Example2" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
@@ -99,31 +102,31 @@ theme_override_constants/separation = 0
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2"]
@@ -131,7 +134,7 @@ modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("4_qcr8y")
+texture = ExtResource("5_u4nd8")
 expand_mode = 1
 
 [node name="Example3" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
@@ -154,31 +157,31 @@ theme_override_constants/separation = 0
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3"]
@@ -186,7 +189,7 @@ modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("4_qcr8y")
+texture = ExtResource("5_u4nd8")
 expand_mode = 1
 
 [node name="Example4" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
@@ -209,31 +212,31 @@ theme_override_constants/separation = 0
 [node name="TextureRect6" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect7" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect9" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect8" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("2_d4ckx")
+texture = ExtResource("4_co5dh")
 expand_mode = 1
 
 [node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1
 
 [node name="Wrong" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4"]
@@ -259,7 +262,7 @@ theme_override_constants/separation = 50
 self_modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
-texture = ExtResource("2_y2uuo")
+texture = ExtResource("6_r5ton")
 expand_mode = 1
 
 [node name="LeftButton" type="TextureRect" parent="VBoxContainer/MainClick/Mouse"]
@@ -268,7 +271,7 @@ custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("6_ori1m")
+texture = ExtResource("7_h06jf")
 expand_mode = 1
 
 [node name="RightButton" type="TextureRect" parent="VBoxContainer/MainClick/Mouse"]
@@ -277,7 +280,7 @@ custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("4_hl8rs")
+texture = ExtResource("8_jvu8e")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/MainClick"]
@@ -296,5 +299,5 @@ layout_mode = 2
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MainClick"]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
-texture = ExtResource("3_g7ukb")
+texture = ExtResource("3_67h40")
 expand_mode = 1

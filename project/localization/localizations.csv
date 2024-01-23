@@ -226,3 +226,8 @@ DISABLED,Disabled,Desligado,Desligado
 ENABLED,Enabled,Ligado,Ligado
 ADAPTATIVE,Adaptative,Adaptativo,Adaptativo
 MAILBOX,Mailbox,Mailbox,Mailbox
+TUT_BOATS,Boats,Barcos,Barcos
+TUT_MOUSE1,Basics 1,Básicos 1,Básicos 1
+TUT_MOUSE2,Basics 2,Básicos 2,Básicos 2
+TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
+TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
