@@ -3,16 +3,18 @@ extends Cell
 
 const COLORS = {
 	"normal": {
-		"dark": Color("#000924ff"),
-		"bg": Color("#d9ffe2ff"),
-		"water_color": Color("#abffd1ff"),
-		"depth_color": Color("#145d87ff"),
+		"dark": Color(0, 0.035, 0.141),
+		"bg": Color(0.851, 1, 0.886),
+		"water_color": Color(0.671, 1, 0.82),
+		"depth_color": Color(0.078, 0.365, 0.529),
+		"ray_value": 0.3,
 	},
 	"dark": {
-		"dark": Color("#abffd1ff"),
-		"bg": Color("#093659ff"),
-		"water_color": Color("#000924ff"),
-		"depth_color": Color("#73f0c6ff"),
+		"dark": Color(0.671, 1, 0.82),
+		"bg": Color(0.035, 0.212, 0.349),
+		"water_color": Color(0.671, 1, 0.82),
+		"depth_color": Color(0.275, 0.812, 0.702),
+		"ray_value": 1.0,
 	}
 }
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
@@ -144,7 +146,7 @@ func _ready():
 	BoatAnim.seek(randf_range(0.0, BoatAnim.current_animation_length), true)
 	BoatAnim.speed_scale = randf_range(MIN_BOAT_ANIM_SPEED, MAX_BOAT_ANIM_SPEED)
 	
-	update_dark_mode()
+	update_dark_mode(Profile.get_option("dark_mode"))
 
 
 func _process(dt):
@@ -179,17 +181,18 @@ func disable():
 		button.disabled = true
 
 
-func update_dark_mode() -> void:
-	var colors = COLORS.dark if Profile.get_option("dark_mode") else COLORS.normal
+func update_dark_mode(is_dark : bool) -> void:
+	var colors = COLORS.dark if is_dark else COLORS.normal
 	%Hints.modulate = colors.dark
 	%Walls.modulate = colors.dark
 	%Blocks.modulate = colors.dark
 	%Boat.modulate = colors.dark
 	%BoatPreview.modulate = colors.dark
-	%BG.modulate = colors.bg
+	%BG.color = colors.bg
 	for water in Waters.values():
 		water.material.set_shader_parameter("water_color", colors.water_color)
 		water.material.set_shader_parameter("depth_color", colors.depth_color)
+		water.material.set_shader_parameter("ray_value", colors.ray_value)
 
 
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:

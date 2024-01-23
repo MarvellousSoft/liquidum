@@ -9,6 +9,7 @@ uniform float depth = 60.0;
 uniform vec3 water_color : source_color;
 uniform vec3 depth_color : source_color;
 uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+uniform float ray_value : hint_range(0.0, 1.0) = 0.3;
 
 uniform sampler2D noise_sampler : repeat_enable;
 
@@ -36,7 +37,7 @@ void fragment() {
 		
 	COLOR.rgb = screen_color * mix(water_color, depth_color, depth_mask);
 	COLOR.rgb = mix(COLOR.rgb, depth_color, depth_mask * 0.9);
-	COLOR.rgb += ray * 0.3;
+	COLOR.rgb += ray * ray_value;
 	float alpha = texture(TEXTURE, UV).a;
 	COLOR.a = smoothstep(0.0, 0.06, wave_mask);
 	COLOR.a *= alpha * final_alpha;

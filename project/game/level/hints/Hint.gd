@@ -6,7 +6,7 @@ const COLORS = {
 		"dark": Color("#000924ff"),
 	},
 	"dark": {
-		"dark": Color("#abffd1ff"),
+		"dark": Color(0.671, 1, 0.82),
 	}
 }
 const ALPHA_SPEED = 4.0
@@ -47,7 +47,7 @@ func _ready():
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
 	
-	update_dark_mode()
+	update_dark_mode(Profile.get_option("dark_mode"))
 
 
 func _process(dt):
@@ -73,8 +73,8 @@ func _process(dt):
 		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
 
 
-func update_dark_mode():
-	var colors = COLORS.dark if Profile.get_option("dark_mode") else COLORS.normal
+func update_dark_mode(is_dark : bool) -> void:
+	var colors = COLORS.dark if is_dark else COLORS.normal
 	%Hints.modulate = colors.dark
 	%Boat.modulate = colors.dark
 
