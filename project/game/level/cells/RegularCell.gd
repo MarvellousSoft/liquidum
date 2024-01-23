@@ -1,6 +1,20 @@
 class_name RegularCell
 extends Cell
 
+const COLORS = {
+	"normal": {
+		"dark": Color("#000924ff"),
+		"bg": Color("#d9ffe2ff"),
+		"water_color": Color("#abffd1ff"),
+		"depth_color": Color("#145d87ff"),
+	},
+	"dark": {
+		"dark": Color("#abffd1ff"),
+		"bg": Color("#093659ff"),
+		"water_color": Color("#000924ff"),
+		"depth_color": Color("#73f0c6ff"),
+	}
+}
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
 const BOAT_ALPHA_SPEED = 1.0
@@ -119,6 +133,7 @@ var highlight := false
 var editor_mode := false
 
 func _ready():
+	Profile.dark_mode_toggled.connect(update_dark_mode)
 	Highlight.modulate.a = 0.0
 	for water in Waters.values():
 		water.material = water.material.duplicate()
@@ -128,6 +143,8 @@ func _ready():
 		preview.material.set_shader_parameter("level", 1.0)
 	BoatAnim.seek(randf_range(0.0, BoatAnim.current_animation_length), true)
 	BoatAnim.speed_scale = randf_range(MIN_BOAT_ANIM_SPEED, MAX_BOAT_ANIM_SPEED)
+	
+	update_dark_mode()
 
 
 func _process(dt):
@@ -160,6 +177,19 @@ func disable():
 	highlight = false
 	for button in Buttons.values():
 		button.disabled = true
+
+
+func update_dark_mode() -> void:
+	var colors = COLORS.dark if Profile.get_option("dark_mode") else COLORS.normal
+	%Hints.modulate = colors.dark
+	%Walls.modulate = colors.dark
+	%Blocks.modulate = colors.dark
+	%Boat.modulate = colors.dark
+	%BoatPreview.modulate = colors.dark
+	%BG.modulate = colors.bg
+	for water in Waters.values():
+		water.material.set_shader_parameter("water_color", colors.water_color)
+		water.material.set_shader_parameter("depth_color", colors.depth_color)
 
 
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:

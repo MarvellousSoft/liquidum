@@ -1,6 +1,14 @@
 class_name Hint
 extends Control
 
+const COLORS = {
+	"normal": {
+		"dark": Color("#000924ff"),
+	},
+	"dark": {
+		"dark": Color("#abffd1ff"),
+	}
+}
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
 const HIGHLIGHT_SPEED = 5.0
@@ -30,6 +38,7 @@ var is_dummy := false
 var highlight := false
 
 func _ready():
+	Profile.dark_mode_toggled.connect(update_dark_mode)
 	Highlight.modulate.a = 0.0
 	disable_editor()
 	DummyLabel.hide()
@@ -37,6 +46,8 @@ func _ready():
 	set_status(E.HintStatus.Normal)
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
+	
+	update_dark_mode()
 
 
 func _process(dt):
@@ -60,6 +71,12 @@ func _process(dt):
 		HintsContainer.modulate.a = min(HintsContainer.modulate.a + ALPHA_SPEED*dt, 1.0)
 	else:
 		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
+
+
+func update_dark_mode():
+	var colors = COLORS.dark if Profile.get_option("dark_mode") else COLORS.normal
+	%Hints.modulate = colors.dark
+	%Boat.modulate = colors.dark
 
 
 func set_boat(value):

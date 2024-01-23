@@ -20,6 +20,7 @@ anchors_preset = 0
 script = ExtResource("1_s2nml")
 
 [node name="Hints" type="Control" parent="."]
+unique_name_in_owner = true
 anchors_preset = 0
 
 [node name="Top" type="TextureRect" parent="Hints"]

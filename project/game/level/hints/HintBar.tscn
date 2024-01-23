@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://sogub73jvlos" path="res://game/level/hints/Hint.tscn" id="2_fgutn"]
 
 [node name="HintBar" type="Control"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

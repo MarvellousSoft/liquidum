@@ -327,13 +327,14 @@ grow_vertical = 2
 script = ExtResource("1_102n5")
 
 [node name="BG" type="ColorRect" parent="."]
+unique_name_in_owner = true
 z_index = -1
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
-color = Color(0.85098, 1, 0.886275, 1)
+color = Color(0.0352941, 0.211765, 0.34902, 1)
 
 [node name="Preview" type="Control" parent="."]
 anchors_preset = 0
@@ -582,6 +583,8 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Blocks" type="Control" parent="."]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Blocks"]
@@ -685,6 +688,8 @@ texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
 
 [node name="Hints" type="Control" parent="."]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
 offset_right = 500.0
 offset_bottom = 500.0
@@ -729,6 +734,8 @@ mouse_filter = 2
 texture = ExtResource("21_23xke")
 
 [node name="Walls" type="Control" parent="."]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -792,6 +799,7 @@ texture = ExtResource("23_s1mmw")
 flip_h = true
 
 [node name="Boat" type="TextureRect" parent="."]
+unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
 layout_mode = 0
@@ -811,6 +819,7 @@ libraries = {
 autoplay = "idle"
 
 [node name="BoatPreview" type="TextureRect" parent="."]
+unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
 layout_mode = 0
