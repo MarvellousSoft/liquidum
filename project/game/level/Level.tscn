@@ -836,6 +836,7 @@ autostart = true
 [connection signal="pressed" from="BackAndTimeSaved/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="tutorial_closed" from="TutorialDisplayContainer/TutorialDisplay" to="." method="_on_tutorial_display_tutorial_closed"]
 [connection signal="pressed" from="ContinueContainer/ShareButton" to="." method="_on_share_button_pressed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
