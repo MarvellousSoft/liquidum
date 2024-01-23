@@ -567,11 +567,18 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.water_locs
+	# This cell is empty and we could put water below it
 	func boat_possible(disallow_nowater_below := true) -> bool:
-		# TODO: Move that logic here
-		return SolverModel._boat_possible(grid, i, j, disallow_nowater_below)
+		if cell_type() != E.CellType.Single:
+			return false
+		if water_full() or block_full() or wall_at(E.Walls.Bottom):
+			return false
+		var below := grid._pure_cell(i + 1, j)._content_top()
+		if not disallow_nowater_below and (below == Content.NoBoatWater or below == Content.NoWater):
+			return true
+		return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 	func boat_would_flood_which() -> Array[WaterPosition]:
-		if SolverModel._boat_possible(grid, i, j, false):
+		if boat_possible(false):
 			var c := grid.get_cell(i + 1, j)
 			return c.water_would_flood_which(E.diag_to_corner(c.cell_type(), E.Side.Top))
 		else:
@@ -1750,10 +1757,10 @@ func prettify_hints() -> void:
 	else:
 		# 0 hint but there's no boat possible, let's remove it to make it prettier
 		for i in n:
-			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return SolverModel._boat_possible(self, i, j)):
+			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return get_cell(i, j).boat_possible()):
 				_row_hints[i].boat_count = -1
 		for j in m:
-			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return SolverModel._boat_possible(self, i, j)):
+			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return get_cell(i, j).boat_possible()):
 				_col_hints[j].boat_count = -1
 
 func any_schrodinger_boats() -> bool:
@@ -1763,7 +1770,7 @@ func any_schrodinger_boats() -> bool:
 				continue
 			for j in m:
 				# We can freely remove or add a boat on this cell and the solution remains valid
-				if _col_hints[j].boat_count == -1 and SolverModel._boat_possible(self, i, j):
+				if _col_hints[j].boat_count == -1 and get_cell(i, j).boat_possible():
 					return true
 	return false
 

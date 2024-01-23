@@ -163,9 +163,9 @@ func randomize_boats(grid: GridModel) -> void:
 	Global.shuffle(all_cells, rng)
 	var boat_pct := rng.randf_range(0.3, 0.9)
 	for idx in all_cells:
-		if not SolverModel._boat_possible(grid, idx.x, idx.y):
-			continue
 		var c := grid.get_cell(idx.x, idx.y)
+		if not c.boat_possible():
+			continue
 		if rng.randf() < boat_pct:
 			if not c.put_boat(true):
 				push_error("Boat placing should succeed")

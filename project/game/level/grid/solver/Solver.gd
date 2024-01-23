@@ -327,17 +327,6 @@ class AdvancedColStrategy extends ColumnStrategy:
 	func description() -> String:
 		return "- If there's a single empty half-cell in the column, determine if it's water or nowater."
 
-# This cell is empty and we could put water below it
-static func _boat_possible(grid: GridImpl, i: int, j: int, disallow_nowater_below := true) -> bool:
-	var c := grid._pure_cell(i, j)
-	if c.cell_type() != E.CellType.Single:
-		return false
-	if c.water_full() or c.block_full() or grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-		return false
-	var below := grid._pure_cell(i + 1, j)._content_top()
-	if not disallow_nowater_below and (below == Content.NoBoatWater or below == Content.NoWater):
-		return true
-	return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
 
 static func _maybe_extra_boat_col(grid: GridImpl, j: int) -> bool:
 	var hint := SolverModel._col_hint(grid, j).boat_count
@@ -352,15 +341,17 @@ class BoatRowStrategy extends RowStrategy:
 			return false
 		var count := 0
 		for j in grid.cols():
-			if grid.get_cell(i, j).has_boat():
+			var c := grid.get_cell(i, j)
+			if c.has_boat():
 				hint -= 1
-			elif SolverModel._boat_possible(grid, i, j) and SolverModel._maybe_extra_boat_col(grid, j):
+			elif c.boat_possible() and SolverModel._maybe_extra_boat_col(grid, j):
 				count += 1
 		if hint > 0 and count == hint:
 			var any := false
 			for j in grid.cols():
-				if !grid.get_cell(i, j).has_boat() and SolverModel._boat_possible(grid, i, j) and SolverModel._maybe_extra_boat_col(grid, j):
-					if grid.get_cell(i, j).put_boat(false, true):
+				var c := grid.get_cell(i, j)
+				if !c.has_boat() and c.boat_possible() and SolverModel._maybe_extra_boat_col(grid, j):
+					if c.put_boat(false, true):
 						any = true
 			return any
 		return false
@@ -379,27 +370,29 @@ static func _list_possible_boats_on_col(grid: GridImpl, j: int) -> Array[Vector2
 	var i := grid.rows() - 1
 	var ans: Array[Vector2i] = []
 	while i >= 0:
-		if grid.get_cell(i, j).cell_type() != E.CellType.Single:
+		var c := grid.get_cell(i, j)
+		if c.cell_type() != E.CellType.Single:
 			i -= 1
 			continue
-		var boat_possible := SolverModel._boat_possible(grid, i, j)
-		var had_boat := grid.get_cell(i, j).has_boat()
+		var boat_possible := c.boat_possible()
+		var had_boat := c.has_boat()
 		if not boat_possible:
 			i -= 1
 			continue
 		var r := i
 		var l := i
-		var stop_moving := grid.get_cell(i, j).nowater_full()
+		var stop_moving := c.nowater_full()
 		# Cross-eliminate tiles that already have satisfied row hints
 		var any_possible := not had_boat and _maybe_extra_boat_on_row(grid, i)
 		i -= 1
 		# Skip rest of this aquarium. Best effort, they might still be connected through the side.
 		while i >= 0 and grid.get_cell(i, j).cell_type() == E.CellType.Single and !grid.get_cell(i, j).wall_at(E.Walls.Bottom):
-			assert(had_boat or stop_moving or not grid.get_cell(i, j).nothing_full() or SolverModel._boat_possible(grid, i, j))
+			c = grid.get_cell(i, j)
+			assert(had_boat or stop_moving or not c.nothing_full() or c.boat_possible())
 			# Stop moving l when we see nowater, but leave the first nowater as a boat might be there
-			if not stop_moving and grid.get_cell(i, j).nothing_full():
+			if not stop_moving and c.nothing_full():
 				l = i
-			if not stop_moving and grid.get_cell(i, j).nowater_full():
+			if not stop_moving and c.nowater_full():
 				l = i
 				stop_moving = true
 			if l == i:
@@ -1359,9 +1352,9 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 		return SolveResult.Unsolvable
 	for i in grid.rows():
 		for j in grid.cols():
-			if Vector2i(i, j) < min_boat_place or !SolverModel._boat_possible(grid, i, j) or grid.get_cell(i, j).has_boat():
-				continue
 			var c := grid.get_cell(i, j)
+			if Vector2i(i, j) < min_boat_place or !c.boat_possible() or c.has_boat():
+				continue
 			var b := c.put_boat(true, true)
 			assert(b)
 			var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, Vector2i(i, j + 1), look_for_multiple)
