@@ -18,7 +18,7 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 	var each := true
 	for dif in RandomHub.Difficulty:
 		var dif_val: int = RandomHub.Difficulty[dif]
-		if completed_count[dif_val] == 0:
+		if completed_count[dif_val] < 5:
 			each = false
 		tot += completed_count[dif_val]
 		var stat_name := "random_%s_levels" % [dif.to_lower()]
