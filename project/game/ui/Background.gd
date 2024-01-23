@@ -18,7 +18,6 @@ var target_bottom_color
 
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
-	_on_dark_mode_toggled(false)
 	target_top_color = BG.material.get_shader_parameter("top_color")
 	target_bottom_color = BG.material.get_shader_parameter("bottom_color")
 

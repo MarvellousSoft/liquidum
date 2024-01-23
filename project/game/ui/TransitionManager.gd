@@ -22,7 +22,6 @@ var stack: Array[Node] = []
 
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
-	_on_dark_mode_toggled(false)
 	Effect.material.set_shader_parameter("cutoff", 1.0)
 	visible = false
 

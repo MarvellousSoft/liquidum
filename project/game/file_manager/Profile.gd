@@ -87,6 +87,7 @@ func set_save_data(data):
 		else:
 			window.position = options.previous_windowed_pos
 	update_translation()
+	dark_mode_toggled.emit(options.dark_mode)
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):
