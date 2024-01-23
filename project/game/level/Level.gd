@@ -275,6 +275,7 @@ func scale_grid() -> void:
 	GridNode.modulate.a = 0.0
 	
 	await get_tree().process_frame
+	await get_tree().process_frame
 	
 	var g_size = GridNode.get_grid_size()
 	var w = DESIRED_GRID_W.desktop if not Global.is_mobile else DESIRED_GRID_W.mobile
