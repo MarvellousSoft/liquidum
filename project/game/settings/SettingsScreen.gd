@@ -33,6 +33,7 @@ func disable_button():
 func enable_button():
 	is_disabled = false
 	PauseButton.disabled = false
+	DisplayServer.VSYNC_MAILBOX
 
 
 func toggle_pause() -> void:
@@ -70,6 +71,7 @@ func setup_values():
 	%DragContainer/CheckBox.button_pressed = Profile.get_option("drag_content")
 	%InvertMouseContainer/CheckBox.button_pressed = Profile.get_option("invert_mouse")
 	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
+	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -158,3 +160,9 @@ func _on_back_button_pressed():
 	save_values()
 	FileManager.save_game()
 	toggle_pause()
+
+
+func _on_vsync_mode_selected(vsync_mode: int) -> void:
+	checkbox_sound(true)
+	Profile.set_option("vsync", vsync_mode)
+	DisplayServer.window_set_vsync_mode(vsync_mode)

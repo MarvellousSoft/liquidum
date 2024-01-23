@@ -402,6 +402,33 @@ text = "DARK_MODE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="VsyncContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VsyncContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "VSYNC"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VsyncContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+item_count = 4
+selected = 1
+popup/item_0/text = "DISABLED"
+popup/item_0/id = 0
+popup/item_1/text = "ENABLED"
+popup/item_1/id = 1
+popup/item_2/text = "ADAPTATIVE"
+popup/item_2/id = 2
+popup/item_3/text = "MAILBOX"
+popup/item_3/id = 3
+
 [node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -633,6 +660,7 @@ speed_scale = 3.5
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VsyncContainer/OptionButton" to="." method="_on_vsync_mode_selected"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VBoxContainer/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VBoxContainer/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]

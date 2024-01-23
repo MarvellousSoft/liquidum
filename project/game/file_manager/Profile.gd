@@ -31,6 +31,7 @@ var options = {
 	"drag_content": true,
 	"invert_mouse": false,
 	"line_info": LineInfo.None,
+	"vsync": int(DisplayServer.VSYNC_ADAPTIVE),
 }
 
 const STEAM_LANGUAGES := {
@@ -76,6 +77,7 @@ func set_save_data(data):
 	AudioManager.set_bus_volume(AudioManager.BGM_BUS, options.bgm_volume)
 	AudioManager.set_bus_volume(AudioManager.SFX_BUS, options.sfx_volume)
 	
+	DisplayServer.window_set_vsync_mode(options.vsync)
 	if Global.is_fullscreen() != options.fullscreen:
 		Global.toggle_fullscreen()
 	if not options.fullscreen and options.previous_windowed_pos:
