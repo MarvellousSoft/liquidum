@@ -568,12 +568,14 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.flood(i, j, corner)
 		return dfs.water_locs
 	# This cell is empty and we could put water below it
-	func boat_possible(disallow_nowater_below := true) -> bool:
-		if cell_type() != E.CellType.Single:
+	func boat_possible(disallow_nowater_below := true, only_permanent_content := false) -> bool:
+		if cell_type() != E.CellType.Single or block_full() or wall_at(E.Walls.Bottom):
 			return false
-		if water_full() or block_full() or wall_at(E.Walls.Bottom):
+		if not only_permanent_content and water_full():
 			return false
 		var below := grid._pure_cell(i + 1, j)._content_top()
+		if only_permanent_content:
+			return below != Content.Block
 		if not disallow_nowater_below and (below == Content.NoBoatWater or below == Content.NoWater):
 			return true
 		return below == Content.Water or below == Content.Nothing or below == Content.NoBoat
@@ -1757,10 +1759,10 @@ func prettify_hints() -> void:
 	else:
 		# 0 hint but there's no boat possible, let's remove it to make it prettier
 		for i in n:
-			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return get_cell(i, j).boat_possible()):
+			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return get_cell(i, j).boat_possible(true, true)):
 				_row_hints[i].boat_count = -1
 		for j in m:
-			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return get_cell(i, j).boat_possible()):
+			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return get_cell(i, j).boat_possible(true, true)):
 				_col_hints[j].boat_count = -1
 
 func any_schrodinger_boats() -> bool:
