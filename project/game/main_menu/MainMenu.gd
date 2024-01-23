@@ -47,7 +47,7 @@ func _ready():
 	
 	await get_tree().process_frame
 	
-	Version.text = Profile.VERSION
+	Version.text = "v" + Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION
 
 

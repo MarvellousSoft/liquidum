@@ -15,8 +15,8 @@ enum LineInfo {
 	ShowCurrent,
 }
 
-const VERSION := "v0.0.1"
-const SHOW_VERSION = true
+var VERSION: String = ProjectSettings.get_setting("application/config/version")
+const SHOW_VERSION := true
 
 var options = {
 	"master_volume": 0.25,
