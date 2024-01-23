@@ -1188,28 +1188,30 @@ class AquariumsStrategy extends Strategy:
 					break
 		return any
 
+# We need these func's because of a Godot internal issue on release builds
+# https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
-	BasicRow = BasicRowStrategy.new,
-	BasicCol = BasicColStrategy.new,
-	BoatRow = BoatRowStrategy.new,
-	BoatCol = BoatColStrategy.new,
-	MediumRow = MediumRowStrategy.new,
-	MediumCol = MediumColStrategy.new,
-	AdvancedRow = AdvancedRowStrategy.new,
-	AdvancedCol = AdvancedColStrategy.new,
-	TogetherRowBasic = TogetherRowStrategy.new.bind(true),
-	TogetherRowAdvanced = TogetherRowStrategy.new.bind(false),
-	TogetherColBasic = TogetherColStrategy.new.bind(true),
-	TogetherColAdvanced = TogetherColStrategy.new.bind(false),
-	SeparateRowBasic = SeparateRowStrategy.new.bind(true),
-	SeparateRowAdvanced = SeparateRowStrategy.new.bind(false),
-	SeparateColBasic = SeparateColStrategy.new.bind(true),
-	SeparateColAdvanced = SeparateColStrategy.new.bind(false),
-	AllWatersEasy = AllWatersEasyStrategy.new,
-	AllWatersMedium = AllWatersMediumStrategy.new,
-	AllBoats = AllBoatsStrategy.new,
-	AquariumsBasic = AquariumsStrategy.new.bind(true),
-	AquariumsAdvanced = AquariumsStrategy.new.bind(false),
+	BasicRow = func(grid): return BasicRowStrategy.new(grid),
+	BasicCol = func(grid): return BasicColStrategy.new(grid),
+	BoatRow = func(grid): return BoatRowStrategy.new(grid),
+	BoatCol = func(grid): return BoatColStrategy.new(grid),
+	MediumRow = func(grid): return MediumRowStrategy.new(grid),
+	MediumCol = func(grid): return MediumColStrategy.new(grid),
+	AdvancedRow = func(grid): return AdvancedRowStrategy.new(grid),
+	AdvancedCol = func(grid): return AdvancedColStrategy.new(grid),
+	TogetherRowBasic = func(grid): return TogetherRowStrategy.new(grid, true),
+	TogetherRowAdvanced = func(grid): return TogetherRowStrategy.new(grid, false),
+	TogetherColBasic = func(grid): return TogetherColStrategy.new(grid, true),
+	TogetherColAdvanced = func(grid): return TogetherColStrategy.new(grid, false),
+	SeparateRowBasic = func(grid): return SeparateRowStrategy.new(grid, true),
+	SeparateRowAdvanced = func(grid): return SeparateRowStrategy.new(grid, false),
+	SeparateColBasic = func(grid): return SeparateColStrategy.new(grid, true),
+	SeparateColAdvanced = func(grid): return SeparateColStrategy.new(grid, false),
+	AllWatersEasy = func(grid): return AllWatersEasyStrategy.new(grid),
+	AllWatersMedium = func(grid): return AllWatersMediumStrategy.new(grid),
+	AllBoats = func(grid): return AllBoatsStrategy.new(grid),
+	AquariumsBasic = func(grid): return AquariumsStrategy.new(grid, true),
+	AquariumsAdvanced = func(grid): return AquariumsStrategy.new(grid, false),
 }
 
 # Get a place in the solution that must have nowater and put a block on it
