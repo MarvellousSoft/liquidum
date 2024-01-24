@@ -24,8 +24,10 @@ func _init(api_) -> void:
 	api = api_
 	api.billing_resume.connect(_on_billing_resume)
 	api.connected.connect(_on_connected)
-	api.product_details_query_completed.connect(_on_product_details_query_completed)
-	api.product_details_query_error.connect(_on_product_details_query_error)
+	api.disconnected.connect(_on_disconnected)
+	api.connect_error.connect(_on_connect_error)
+	api.sku_details_query_completed.connect(_on_sku_details_query_completed)
+	api.sku_details_query_error.connect(_on_sku_details_query_error)
 	api.purchases_updated.connect(_on_purchases_updated)
 	api.purchase_error.connect(_on_purchase_error)
 	api.query_purchases_response.connect(_on_query_purchases_response)
@@ -39,18 +41,25 @@ static func setup() -> AndroidPayment:
 		return null
 
 func _on_connected() -> void:
+	print("Connected to Android Payments")
 	api.querySkuDetails([PURCHASE_NAME], "inapp")
 
-func _on_product_details_query_completed(product_details):
-	for available_product in product_details:
-		print("Product: %s" % available_product)
+func _on_disconnected() -> void:
+	print("Disconnected Android payments")
 
-func _on_product_details_query_error(response_id, error_message, products_queried):
+func _on_connect_error(id, err):
+	push_error("Failed to connect: id %s err %s" % [id, err])
+
+func _on_sku_details_query_completed(sku_details):
+	for available_product in sku_details:
+		print("Product: %s" % available_product.title)
+
+func _on_sku_details_query_error(response_id, error_message, products_queried):
 	print("Query err id: %s err %s products %s" % [response_id, error_message, products_queried])
 
 func _on_billing_resume():
 	if api.getConnectionState() == ConnectionState.CONNECTED:
-		api.queryPurchases(PURCHASE_NAME)
+		api.queryPurchases("inapp")
 
 func do_purchase() -> void:
 	api.purchase(PURCHASE_NAME)
@@ -70,6 +79,7 @@ func _on_purchase_error(response_id, error_message):
 	print("Purchase error id: %s msg: %s" % [response_id, error_message])
 
 func _process_purchase(purchase):
+	print("Processing purchase: %s" % purchase)
 	if PURCHASE_NAME in purchase.products and purchase.purchase_state == PurchaseState.PURCHASED:
 		disable_ads.emit()
 		if not purchase.is_acknowledged:
