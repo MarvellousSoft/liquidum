@@ -20,7 +20,6 @@ func set_group(value: String) -> void:
 
 func set_key_value(key: String, value: String) -> void:
 	if SteamManager.enabled:
-		print("Setting rich presence: %s -- %s" % [key, value])
 		SteamManager.steam.setRichPresence(key, value)
 
 func _exit_tree() -> void:

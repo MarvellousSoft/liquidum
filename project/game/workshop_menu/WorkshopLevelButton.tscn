@@ -2,9 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_mrar7"]
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
-[ext_resource type="Texture2D" uid="uid://buvq2enne6wju" path="res://assets/images/ui/icons/ongoing_solution_icon.png" id="3_ycly6"]
+[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="3_v4w4y"]
 
 [node name="WorkshopLevelButton" type="MarginContainer"]
+size_flags_horizontal = 4
 theme = ExtResource("1_mrar7")
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 30
@@ -14,16 +15,23 @@ script = ExtResource("2_7eonp")
 
 [node name="Open" type="Button" parent="."]
 layout_mode = 2
-size_flags_horizontal = 4
 auto_translate = false
 focus_mode = 0
-text = "Level ?"
+text = "My workshop level name"
 
-[node name="OngoingSolution" type="TextureRect" parent="."]
-visible = false
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("3_ycly6")
-expand_mode = 1
+[node name="OngoingSolution" parent="Open" instance=ExtResource("3_v4w4y")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="Open" to="." method="_on_open_pressed"]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://gcs722ssavfm"]
+[gd_scene load_steps=4 format=3 uid="uid://gcs722ssavfm"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_7r58g"]
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopMenu.gd" id="2_hwdrt"]
+[ext_resource type="PackedScene" uid="uid://dh07n2tm2va1t" path="res://game/workshop_menu/WorkshopLevelButton.tscn" id="3_7uwtg"]
 
 [node name="WorkshopMenu" type="Control"]
 layout_mode = 3
@@ -15,32 +16,62 @@ script = ExtResource("2_hwdrt")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
-offset_left = 886.0
 offset_top = 406.0
-offset_right = 1712.0
+offset_right = 3840.0
 offset_bottom = 504.0
+theme_override_font_sizes/font_size = 120
 text = "WORKSHOP_LEVELS"
+horizontal_alignment = 1
 
 [node name="Back" type="Button" parent="."]
-layout_mode = 2
-offset_left = 83.0
-offset_top = 74.0
-offset_right = 341.0
-offset_bottom = 199.0
+layout_mode = 1
+anchors_preset = -1
+offset_left = 75.0
+offset_top = 75.0
 focus_mode = 0
 text = "BACK"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-layout_mode = 0
-offset_left = 897.0
-offset_top = 721.0
-offset_right = 2752.0
-offset_bottom = 1893.0
-horizontal_scroll_mode = 0
+[node name="OpenWorkshop" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 75.0
+offset_right = -75.0
+grow_horizontal = 0
+focus_mode = 0
+text = "OPEN_WORKSHOP"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.3
+anchor_right = 1.0
+anchor_bottom = 0.9
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(2000, 1300)
+layout_mode = 2
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="CenterContainer/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="WorkshopLevelButton" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+
+[node name="WorkshopLevelButton2" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+
+[node name="WorkshopLevelButton3" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+
+[node name="WorkshopLevelButton4" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="OpenWorkshop" to="." method="_on_open_workshop_pressed"]

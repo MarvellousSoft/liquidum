@@ -3,7 +3,7 @@ extends Control
 var id: int
 
 @onready var Open: Button = $Open
-@onready var OngoingSolution = $OngoingSolution
+@onready var OngoingSolution = %OngoingSolution
 var tween_check: Tween
 
 func _ready() -> void:
@@ -29,7 +29,7 @@ func try_check_download() -> void:
 		Open.text = level.full_name
 		Open.disabled = false
 		var save := FileManager.load_level(str(id))
-		OngoingSolution.visible = save != null and save.is_empty
+		OngoingSolution.visible = save != null and not save.is_solution_empty()
 	else:
 		SteamManager.steam.downloadItem(id, true)
 
