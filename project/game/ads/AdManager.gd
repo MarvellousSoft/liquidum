@@ -8,18 +8,28 @@ signal big_ad_loaded()
 var _ad_view: AdView = null
 var _big_ad: InterstitialAd = null
 var _loading_big_ad: bool = false
+var disabled := false
 
 func _ready() -> void:
 	if not Global.is_mobile:
 		return
+	if OS.get_name() == "Android":
+		var payment := AndroidPayment.setup()
+		if payment != null:
+			payment.disable_ads.connect(_on_disable_ads)
 	MobileAds.set_ios_app_pause_on_background(true)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete = _on_initialization_complete
 	MobileAds.initialize()
 
+func _on_disable_ads() -> void:
+	disabled = true
+
 # MUST be called before show_big_ad
 func preload_big_ad() -> void:
 	destroy_big_ad()
+	if disabled:
+		return
 	var unit_id: String = ""
 	if OS.get_name() == "Android":
 		if OS.is_debug_build():
@@ -44,6 +54,8 @@ func preload_big_ad() -> void:
 func show_big_ad(exit_ad: Callable) -> void:
 	if _big_ad == null and not _loading_big_ad:
 		preload_big_ad()
+	if disabled:
+		return
 	if _loading_big_ad:
 		await big_ad_loaded
 	if _big_ad == null:
@@ -67,7 +79,7 @@ func _big_ad_loaded(ad: InterstitialAd) -> void:
 	big_ad_loaded.emit()
 
 func show_bottom_ad() -> void:
-	if not Global.is_mobile:
+	if not Global.is_mobile or disabled:
 		return
 	var ad := create_bottom_ad()
 	var req := AdRequest.new()
