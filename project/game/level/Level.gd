@@ -659,7 +659,7 @@ func _on_dev_buttons_save():
 		g.set_auto_update_hints(true)
 
 func _show_level_completed_ad() -> bool:
-	if Global.is_mobile:
+	if Global.is_mobile and not AdManager.disabled:
 		if level_number == -1 or level_number > 3 or section_number > 1:
 			if ["Android", "iOS"].has(OS.get_name()):
 				return true
