@@ -1,7 +1,5 @@
 class_name IosPayment
-extends Node
-
-signal disable_ads()
+extends PlatformPayment
 
 const PURCHASE_ID := "TODO"
 var api = null

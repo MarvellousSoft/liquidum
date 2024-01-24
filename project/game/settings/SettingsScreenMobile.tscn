@@ -612,7 +612,16 @@ layout_mode = 2
 text = "PLACE_DRAG"
 autowrap_mode = 3
 
+[node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "REMOVE_ADS"
+
 [node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
@@ -671,6 +680,8 @@ speed_scale = 3.5
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/RemoveAdsButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/RemoveAdsButton" to="." method="_on_remove_ads_button_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_button_mouse_entered"]

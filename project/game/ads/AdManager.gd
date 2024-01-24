@@ -4,37 +4,37 @@ extends Node
 const BOTTOM_BUFFER_FOR_AD := 50
 
 signal big_ad_loaded()
-signal buy_remove_ads()
+signal ads_disabled()
 
 var _ad_view: AdView = null
 var _big_ad: InterstitialAd = null
 var _loading_big_ad: bool = false
 var disabled := false
+var payment: PlatformPayment = null
 
 func _ready() -> void:
 	if not Global.is_mobile:
 		return
 	if OS.get_name() == "Android":
-		var payment := AndroidPayment.setup()
-		if payment != null:
-			add_child(payment)
-			payment.disable_ads.connect(_on_disable_ads)
-			buy_remove_ads.connect(payment.do_purchase)
+		payment = AndroidPayment.setup()
 	elif OS.get_name() == "iOS":
-		var payment := IosPayment.setup()
-		if payment != null:
-			add_child(payment)
-			payment.disable_ads.connect(_on_disable_ads)
-			buy_remove_ads.connect(payment.do_purchase)
+		payment = IosPayment.setup()
+	if payment != null:
+		add_child(payment)
+		payment.disable_ads.connect(_on_disable_ads)
 	MobileAds.set_ios_app_pause_on_background(true)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete = _on_initialization_complete
 	MobileAds.initialize()
 
+func buy_ad_removal() -> void:
+	if payment != null:
+		payment.do_purchase()
+
 func _on_disable_ads() -> void:
 	disabled = true
+	ads_disabled.emit()
 
-# MUST be called before show_big_ad
 func preload_big_ad() -> void:
 	destroy_big_ad()
 	if disabled:

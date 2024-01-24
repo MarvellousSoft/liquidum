@@ -23,6 +23,7 @@ SFX_SOUND,Sound effects volume,Volume de efeitos sonoros,Volume de efeitos sonor
 FULLSCREEN,Fullscreen,Tela Cheia,Tela cheia
 SAVE_AND_EXIT,Quit game,Fechar o jogo,Fechar o jogo
 SAVE_AND_BACK,Back,Voltar,Voltar
+REMOVE_ADS,Remove ads,Remover anúncios,Remover anúncios
 AQUARIUMS_COUNTER,Aquariums Needed,Aquários Necessários,Aquários Necessários
 AQUARIUMS_COUNTER_EDITOR,Total Aquariums,Aquários Totais,Aquários Totais
 SIZE,Size,Tam.,Tamanho

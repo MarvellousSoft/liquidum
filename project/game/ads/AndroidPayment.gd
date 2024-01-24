@@ -1,11 +1,9 @@
 class_name AndroidPayment
-extends Node
+extends PlatformPayment
 
 const PURCHASE_NAME := "TODO"
 
 var api
-
-signal disable_ads()
 
 # Matches BillingClient.ConnectionState in the Play Billing Library
 enum ConnectionState {

@@ -22,6 +22,14 @@ var is_disabled := false
 func _ready():
 	TitleContainer.hide()
 	BG.hide()
+	if Global.is_mobile:
+		update_remove_ads_button()
+		AdManager.ads_disabled.connect(update_remove_ads_button)
+
+func update_remove_ads_button() -> void:
+	if Global.is_mobile:
+		%RemoveAdsButton.visible = not AdManager.disabled
+		%RemoveAdsButton.disabled = (AdManager.payment == null)
 
 
 func disable_button():
@@ -173,3 +181,7 @@ func _on_vsync_mode_selected(vsync_mode: int) -> void:
 	checkbox_sound(true)
 	Profile.set_option("vsync", vsync_mode)
 	DisplayServer.window_set_vsync_mode(vsync_mode)
+
+
+func _on_remove_ads_button_pressed() -> void:
+	AdManager.buy_ad_removal()
