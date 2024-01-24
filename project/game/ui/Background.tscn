@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cyipmucbrxt1i"]
+[gd_scene load_steps=12 format=3 uid="uid://cyipmucbrxt1i"]
 
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="1_rmur7"]
 [ext_resource type="Script" path="res://game/ui/Background.gd" id="1_slr8i"]
 [ext_resource type="Shader" path="res://assets/shaders/Background.gdshader" id="1_vkkdf"]
+[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_3o51c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xpma"]
 shader = ExtResource("1_vkkdf")
@@ -22,7 +23,7 @@ gradient = SubResource("Gradient_63qul")
 lifetime_randomness = 0.01
 particle_flag_disable_z = true
 emission_shape = 3
-emission_box_extents = Vector3(1930, 1, 1)
+emission_box_extents = Vector3(360, 1, 1)
 angle_min = -5.0
 angle_max = 5.0
 direction = Vector3(0, -1, 0)
@@ -40,7 +41,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/ratio")
+tracks/0/path = NodePath("BG:material:shader_parameter/ratio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -57,7 +58,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/ratio")
+tracks/0/path = NodePath("BG:material:shader_parameter/ratio")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -77,16 +78,18 @@ _data = {
 layer = -1
 script = ExtResource("1_slr8i")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_0xpma")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_3o51c")]
+visible = false
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-position = Vector2(1896, 2336)
+[node name="BG" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_0xpma")
+offset_right = 720.0
+offset_bottom = 1280.0
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(360, 1480)
 amount = 15
 process_material = SubResource("ParticleProcessMaterial_hkg60")
 texture = ExtResource("1_rmur7")
