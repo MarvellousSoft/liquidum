@@ -25,14 +25,12 @@ func preload_big_ad() -> void:
 		if OS.is_debug_build():
 			unit_id = "ca-app-pub-3940256099942544/1033173712"
 		else:
-			# TODO: Get proper unit id
-			unit_id = "ca-app-pub-3940256099942544/1033173712"
+			unit_id = "ca-app-pub-8067794432001522/7836458492"
 	elif OS.get_name() == "iOS":
 		if OS.is_debug_build():
 			unit_id = "ca-app-pub-3940256099942544/4411468910"
 		else:
-			# TODO: Get proper unit id
-			unit_id = "ca-app-pub-3940256099942544/4411468910"
+			unit_id = "ca-app-pub-8067794432001522/4513179203"
 	var req := AdRequest.new()
 	var callback := InterstitialAdLoadCallback.new()
 	callback.on_ad_loaded = _big_ad_loaded
@@ -108,14 +106,12 @@ func create_bottom_ad() -> AdView:
 		if OS.is_debug_build():
 			unit_id = "ca-app-pub-3940256099942544/6300978111"
 		else:
-			# TODO: Get proper unit id
-			unit_id = "ca-app-pub-3940256099942544/6300978111"
+			unit_id = "ca-app-pub-8067794432001522/9245796985"
 	elif OS.get_name() == "iOS":
 		if OS.is_debug_build():
 			unit_id = "ca-app-pub-3940256099942544/2934735716"
 		else:
-			# TODO: Get proper unit id
-			unit_id = "ca-app-pub-3940256099942544/2934735716"
+			unit_id = "ca-app-pub-8067794432001522/6860937108"
 	var size := AdSize.get_portrait_anchored_adaptive_banner_ad_size(AdSize.FULL_WIDTH)
 	var black_bar_h := _get_black_bar_size()
 	if size.height < black_bar_h:
