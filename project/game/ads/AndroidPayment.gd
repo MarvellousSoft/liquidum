@@ -3,7 +3,7 @@ extends Node
 
 const PURCHASE_NAME := "TODO"
 
-var payment
+var api
 
 signal disable_ads()
 
@@ -22,25 +22,26 @@ enum PurchaseState {
 	PENDING,
 }
 
-func _init(payment_) -> void:
-	payment = payment_
-	payment.billing_resume.connect(_on_billing_resume)
-	payment.connected.connect(_on_connected)
-	payment.product_details_query_completed.connect(_on_product_details_query_completed)
-	payment.product_details_query_error.connect(_on_product_details_query_error)
-	payment.purchases_updated.connect(_on_purchases_updated)
-	payment.purchase_error.connect(_on_purchase_error)
-	payment.query_purchases_response.connect(_on_query_purchases_response)
-	payment.startConnection()
+func _init(api_) -> void:
+	api = api_
+	api.billing_resume.connect(_on_billing_resume)
+	api.connected.connect(_on_connected)
+	api.product_details_query_completed.connect(_on_product_details_query_completed)
+	api.product_details_query_error.connect(_on_product_details_query_error)
+	api.purchases_updated.connect(_on_purchases_updated)
+	api.purchase_error.connect(_on_purchase_error)
+	api.query_purchases_response.connect(_on_query_purchases_response)
+	api.startConnection()
 
 static func setup() -> AndroidPayment:
 	if Engine.has_singleton("GodotGooglePlayBilling"):
 		return AndroidPayment.new(Engine.get_singleton("GodotGooglePlayBilling"))
 	else:
+		print("Unavailable Android payments")
 		return null
 
 func _on_connected() -> void:
-	payment.querySkuDetails([PURCHASE_NAME], "inapp")
+	api.querySkuDetails([PURCHASE_NAME], "inapp")
 
 func _on_product_details_query_completed(product_details):
 	for available_product in product_details:
@@ -50,8 +51,11 @@ func _on_product_details_query_error(response_id, error_message, products_querie
 	print("Query err id: %s err %s products %s" % [response_id, error_message, products_queried])
 
 func _on_billing_resume():
-	if payment.getConnectionState() == ConnectionState.CONNECTED:
-		payment.queryPurchases(PURCHASE_NAME)
+	if api.getConnectionState() == ConnectionState.CONNECTED:
+		api.queryPurchases(PURCHASE_NAME)
+
+func do_purchase() -> void:
+	api.purchase(PURCHASE_NAME)
 
 func _on_query_purchases_response(query_result):
 	if query_result.status == OK:
@@ -71,4 +75,4 @@ func _process_purchase(purchase):
 	if PURCHASE_NAME in purchase.products and purchase.purchase_state == PurchaseState.PURCHASED:
 		disable_ads.emit()
 		if not purchase.is_acknowledged:
-			payment.acknowledgePurchase(purchase.purchase_token)
+			api.acknowledgePurchase(purchase.purchase_token)

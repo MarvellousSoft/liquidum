@@ -4,6 +4,7 @@ extends Node
 const BOTTOM_BUFFER_FOR_AD := 50
 
 signal big_ad_loaded()
+signal buy_remove_ads()
 
 var _ad_view: AdView = null
 var _big_ad: InterstitialAd = null
@@ -16,7 +17,15 @@ func _ready() -> void:
 	if OS.get_name() == "Android":
 		var payment := AndroidPayment.setup()
 		if payment != null:
+			add_child(payment)
 			payment.disable_ads.connect(_on_disable_ads)
+			buy_remove_ads.connect(payment.do_purchase)
+	elif OS.get_name() == "iOS":
+		var payment := IosPayment.setup()
+		if payment != null:
+			add_child(payment)
+			payment.disable_ads.connect(_on_disable_ads)
+			buy_remove_ads.connect(payment.do_purchase)
 	MobileAds.set_ios_app_pause_on_background(true)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete = _on_initialization_complete
