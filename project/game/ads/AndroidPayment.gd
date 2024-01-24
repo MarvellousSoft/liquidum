@@ -1,7 +1,7 @@
 class_name AndroidPayment
 extends PlatformPayment
 
-const PURCHASE_NAME := "TODO"
+const PURCHASE_NAME := "disable_ads"
 
 var api
 
