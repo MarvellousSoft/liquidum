@@ -2,14 +2,25 @@ class_name AquariumHintContainer
 extends Control
 
 const HINT_DELAY = .3
+const COLORS = {
+	"normal": {
+		"font_color": Color(0.016, 0.106, 0.22),
+	},
+	"dark": {
+		"font_color": Color(0.671, 1, 0.82),
+	}
+}
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 @onready var Title = %Title
 
 func _ready():
+	Profile.dark_mode_toggled.connect(update_dark_mode)
 	for child in HintContainer.get_children():
 		child.queue_free()
+	update_dark_mode(Profile.get_option("dark_mode"))
+
 
 func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
 	if not editor_mode and expected.is_empty():
@@ -43,8 +54,13 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 
 	if editor_mode:
 		Title.text = tr("AQUARIUMS_COUNTER_EDITOR")
+		%Amount.text = tr("AQ_AMOUNT_EDITOR")
+		%Header.add_theme_constant_override("separation", 150)
 	else:
 		Title.text = tr("AQUARIUMS_COUNTER")
+		%Amount.text = tr("AQ_AMOUNT")
+		%Header.add_theme_constant_override("separation", 100)
+
 
 func visible_sizes() -> Array[float]:
 	var ans: Array[float] = []
@@ -53,15 +69,24 @@ func visible_sizes() -> Array[float]:
 			ans.append(child.aquarium_size)
 	return ans
 
+
 func set_should_be_visible(sizes: Dictionary) -> void:
 	for child in HintContainer.get_children():
 		child.set_should_be_visible(sizes.has(child.aquarium_size))
+
+
+func update_dark_mode(is_dark : bool) -> void:
+	var colors = COLORS.dark if is_dark else COLORS.normal
+	for label in [%Title, %Size, %Amount]:
+		label.add_theme_color_override("font_color", colors.font_color)
+
 
 func _visible() -> Dictionary:
 	var ans := {}
 	for sz in visible_sizes():
 		ans[sz] = true
 	return ans
+
 
 func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool, disable_instant_startup := false) -> void:
 	var visible_ := _visible()
