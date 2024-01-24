@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dlcfb4y7xjjl3"]
+[gd_scene load_steps=32 format=3 uid="uid://dlcfb4y7xjjl3"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_yywdk"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="15_nwo8g"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
+[ext_resource type="PackedScene" uid="uid://lov0qq857vqf" path="res://game/steam/SteamRichPresence.tscn" id="21_s7rk0"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
@@ -812,6 +813,8 @@ wait_time = 30.0
 autostart = true
 
 [node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
+
+[node name="SteamRichPresence" parent="." instance=ExtResource("21_s7rk0")]
 
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/VBoxContainer/MistakeCounter" method="add_count"]

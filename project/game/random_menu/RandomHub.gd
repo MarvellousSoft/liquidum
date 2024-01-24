@@ -98,6 +98,7 @@ func load_existing() -> void:
 	if data == null:
 		return
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()])
+	level.difficulty = data.difficulty
 	level.won.connect(_level_completed.bind(data.difficulty))
 	TransitionManager.push_scene(level)
 

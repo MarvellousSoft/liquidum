@@ -72,6 +72,8 @@ var reset_mistakes_on_reset := true
 var solve_thread: Thread =  null
 var last_saved: int
 var last_saved_ago: int = -1
+# Used only for rich presence
+var difficulty := -1
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -83,6 +85,11 @@ func _ready():
 	if not Global.is_mobile:
 		reset_tutorial()
 	if is_campaign_level():
+		if not Global.is_mobile:
+			$SteamRichPresence.set_group("campaign")
+			$SteamRichPresence.set_display("#Campaign")
+			$SteamRichPresence.set_key_value("section", str(section_number))
+			$SteamRichPresence.set_key_value("level", str(level_number))
 		var data = FileManager.load_level_data(section_number, level_number)
 		if not data.tutorial.is_empty() and not Global.is_mobile:
 			%TutorialContainer.show()
@@ -93,6 +100,24 @@ func _ready():
 	else:
 		if not Global.is_mobile:
 			%TutorialContainer.hide()
+			if grid.editor_mode():
+				$SteamRichPresence.set_group("editor")
+				$SteamRichPresence.set_display("#Editor")
+			elif workshop_id != -1:
+				$SteamRichPresence.set_group("workshop")
+				$SteamRichPresence.set_display("#Workshop")
+				$SteamRichPresence.set_key_value("level", full_name)
+			elif level_name.begins_with("daily_"):
+				$SteamRichPresence.set_group("daily")
+				$SteamRichPresence.set_display("#Daily")
+			elif difficulty != -1:
+				$SteamRichPresence.set_group("random")
+				$SteamRichPresence.set_display("#Random")
+				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
+			else:
+				# Assuming we're on playtesting
+				$SteamRichPresence.set_group("editor")
+				$SteamRichPresence.set_display("#Editor")
 	
 	GridNode.hide()
 	await TransitionManager.transition_finished

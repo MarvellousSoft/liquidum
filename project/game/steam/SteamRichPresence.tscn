@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://lov0qq857vqf"]
+
+[ext_resource type="Script" path="res://game/steam/SteamRichPresence.gd" id="1_vtbho"]
+
+[node name="SteamRichPresence" type="Node"]
+script = ExtResource("1_vtbho")
