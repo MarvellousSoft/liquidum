@@ -1,6 +1,5 @@
-[gd_scene load_steps=32 format=3 uid="uid://dl8ycx77sa8oq"]
+[gd_scene load_steps=31 format=3 uid="uid://dl8ycx77sa8oq"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_0bakg"]
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
 [ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="3_uwkov"]
@@ -299,12 +298,13 @@ layout_mode = 0
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
-offset_top = 251.0
+offset_top = 227.0
 offset_right = 720.0
-offset_bottom = 957.0
+offset_bottom = 927.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="TopButtons" type="HBoxContainer" parent="."]
@@ -356,35 +356,8 @@ stretch_mode = 6
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
-offset_top = 8.0
-offset_bottom = 8.0
-
-[node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo"]
-visible = false
-layout_mode = 0
-offset_left = -90.0
-offset_right = 797.0
-offset_bottom = 115.0
-theme_override_constants/separation = 36
-
-[node name="SectionNumber" type="Label" parent="TopInfo/LevelNameContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 36
-theme_override_font_sizes/font_size = 70
-text = "0 - 0"
-
-[node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(720, 0)
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 54
-theme_override_font_sizes/font_size = 90
-text = "LEVELNAM"
-autowrap_mode = 3
+offset_top = 3.0
+offset_bottom = 3.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopInfo"]
 custom_minimum_size = Vector2(0, 69)
@@ -452,47 +425,61 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 0
 
-[node name="HintsContainer" type="VBoxContainer" parent="."]
-visible = false
+[node name="HintsContainer" type="HBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = 2929.0
-offset_top = 512.0
-offset_right = 3628.0
-offset_bottom = 1772.0
-theme_override_constants/separation = 60
+offset_top = 920.0
+offset_right = 720.0
+offset_bottom = 1001.0
+theme_override_constants/separation = 30
 alignment = 1
 
-[node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-theme = ExtResource("1_0bakg")
-
-[node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 10
-
-[node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("7_7ge7w")]
+[node name="WaterCounter" parent="HintsContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "WATERS_COUNTER"
 
-[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("7_7ge7w")]
+[node name="VisibilityButton" parent="HintsContainer/WaterCounter/HBoxContainer" index="0"]
+visible = false
+
+[node name="Label" parent="HintsContainer/WaterCounter/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 0)
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 22
+theme_override_font_sizes/font_size = 40
+autowrap_mode = 0
+
+[node name="Counter" parent="HintsContainer/WaterCounter/HBoxContainer" index="2"]
+theme_override_constants/outline_size = 22
+theme_override_font_sizes/font_size = 40
+
+[node name="HintsContainerSeparator1" type="VSeparator" parent="HintsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
+
+[node name="BoatCounter" parent="HintsContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("8_iaefn")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
+[node name="VisibilityButton" parent="HintsContainer/BoatCounter/HBoxContainer" index="0"]
+visible = false
+
+[node name="Label" parent="HintsContainer/BoatCounter/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 0)
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 22
+theme_override_font_sizes/font_size = 40
+autowrap_mode = 0
+
+[node name="Counter" parent="HintsContainer/BoatCounter/HBoxContainer" index="2"]
+theme_override_constants/outline_size = 22
+theme_override_font_sizes/font_size = 40
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
@@ -502,7 +489,7 @@ offset_bottom = 0.0
 mouse_filter = 2
 
 [node name="CenterContainer" parent="BrushPicker" index="0"]
-offset_top = 1090.0
+offset_top = 1110.0
 offset_right = 720.0
 offset_bottom = 1280.0
 
@@ -545,12 +532,21 @@ custom_minimum_size = Vector2(75, 75)
 [node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="5"]
 custom_minimum_size = Vector2(75, 75)
 
+[node name="AquariumHintContainer" parent="." instance=ExtResource("8_iaefn")]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 43.0
+offset_top = 1347.0
+offset_right = 703.0
+offset_bottom = 2501.0
+size_flags_horizontal = 4
+
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_top = 979.0
+offset_top = 997.0
 offset_right = 720.0
-offset_bottom = 1079.0
+offset_bottom = 1117.0
 mouse_filter = 2
 
 [node name="Scroll" type="ScrollContainer" parent="Description"]
@@ -741,5 +737,9 @@ script = ExtResource("20_ff4mn")
 
 [editable path="TopInfo/HBoxContainer/MistakeCounter"]
 [editable path="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
+[editable path="HintsContainer/WaterCounter"]
+[editable path="HintsContainer/WaterCounter/HBoxContainer/VisibilityButton"]
+[editable path="HintsContainer/BoatCounter"]
+[editable path="HintsContainer/BoatCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]
 [editable path="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay"]

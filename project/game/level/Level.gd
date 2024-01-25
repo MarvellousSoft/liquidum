@@ -30,7 +30,6 @@ class WinInfo:
 @onready var GridNode: GridView = %GridView
 @onready var TimerContainer = %TimerContainer
 @onready var TimerLabel = %TimerLabel
-@onready var CountersPanel = %CountersPanel
 @onready var Counters = {
 	"water": %WaterCounter,
 	"boat": %BoatCounter,
@@ -48,7 +47,6 @@ class WinInfo:
 @onready var DescriptionScroll: ScrollContainer = $Description/Scroll
 @onready var TitleBanner: PanelContainer = $Title/TitleBanner
 @onready var TitleLabel: Label = $Title/TitleBanner/Label
-@onready var LevelLabel: Label = %LevelLabel
 @onready var TitleEdit: LineEdit = $Title/Edit
 
 var update_expected_waters : bool
@@ -219,7 +217,10 @@ func setup(try_load := true) -> void:
 		update_expected_boats = e_boats > 0
 		Counters.water.visible = e_waters != -1
 		Counters.boat.visible = e_boats > 0
-		CountersPanel.visible = Counters.water.visible or Counters.boat.visible
+		if not Global.is_mobile:
+			%CountersPanel.visible = Counters.water.visible or Counters.boat.visible
+		else:
+			%HintsContainerSeparator1.visible = Counters.water.visible and Counters.boat.visible
 		var no_boat_hint := func(h: GridModel.LineHint) -> bool: return h.boat_count <= 0 and (h.boat_count_type == E.HintType.Hidden or h.boat_count_type == E.HintType.Zero)
 		if e_boats <= 0 and grid.row_hints().all(no_boat_hint) and grid.col_hints().all(no_boat_hint):
 			BrushPicker.disable_brush(E.BrushMode.Boat)
@@ -238,8 +239,10 @@ func setup(try_load := true) -> void:
 		TimerContainer.hide()
 	update_counters()
 	
-	%LevelLabel.visible = not grid.editor_mode()
 	%TutorialButton.visible = not grid.editor_mode()
+	
+	if not Global.is_mobile:
+		%LevelLabel.visible = not grid.editor_mode()
 	
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
@@ -280,11 +283,12 @@ func set_level_names_and_descriptions():
 	TitleLabel.text = full_name
 	Settings.set_level_name(full_name, section_number, level_number)
 	TitleEdit.text = full_name
-	LevelLabel.text = tr(full_name)
-	if section_number != -1 and level_number != -1:
-		%SectionNumber.text = "%d - %d" % [section_number, level_number]
-	else:
-		%SectionNumber.text = ""
+	if not Global.is_mobile:
+		%LevelLabel.text = tr(full_name)
+		if section_number != -1 and level_number != -1:
+			%SectionNumber.text = "%d - %d" % [section_number, level_number]
+		else:
+			%SectionNumber.text = ""
 
 
 func is_campaign_level():

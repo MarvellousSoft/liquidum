@@ -22,8 +22,9 @@ layout_mode = 0
 
 [node name="Title" parent="." instance=ExtResource("3_nkgyg")]
 layout_mode = 0
+offset_top = 35.0
 offset_right = 500.0
-offset_bottom = 500.0
+offset_bottom = 535.0
 scale = Vector2(0.2, 0.2)
 
 [node name="Back" type="Button" parent="."]
