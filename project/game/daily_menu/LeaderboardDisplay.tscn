@@ -2,10 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="1_0nana"]
 [ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
-[ext_resource type="PackedScene" uid="uid://b0c2nhetec00u" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
+[ext_resource type="PackedScene" uid="uid://cnqgy1qwrpgp5" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
 
 [node name="LeaderboardDisplay" type="Control"]
-custom_minimum_size = Vector2(1000, 1000)
+custom_minimum_size = Vector2(1100, 1000)
 layout_mode = 3
 anchors_preset = 4
 anchor_top = 0.5
@@ -30,6 +30,7 @@ text = "LEADERBOARDS"
 horizontal_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1

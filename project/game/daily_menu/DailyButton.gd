@@ -14,6 +14,7 @@ const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDA
 @onready var BestStreak = %BestStreak
 
 var date: String
+var yesterday: String
 var deadline: int
 var gen := RandomLevelGenerator.new()
 
@@ -38,6 +39,7 @@ func _update() -> void:
 		return
 
 	date = DailyButton._today()
+	yesterday = DailyButton._yesterday()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
 	deadline -= Time.get_time_zone_from_system().bias * 60
 	
@@ -71,7 +73,7 @@ func _update_time_left() -> void:
 
 func _update_streak() -> void:
 	var data := UserData.current()
-	if data.current_streak > 0 and data.last_day < DailyButton._yesterday():
+	if data.current_streak > 0 and data.last_day < yesterday:
 		data.current_streak = 0
 		UserData.save()
 	CurStreak.text = tr("CUR_STREAK") % data.current_streak
@@ -121,6 +123,8 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	return null
 
 func _on_button_pressed() -> void:
+	# Update date if needed
+	_update_time_left()
 	MainButton.disabled = true
 	var today := DailyButton._today()
 	if not FileManager.has_daily_level(today):
@@ -138,20 +142,21 @@ func _on_button_pressed() -> void:
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
 		await level.ready
-		var l_id := await get_leaderboard()
+		var l_id := await get_leaderboard(date)
 		var l_data := await get_leaderboard_data(l_id)
-		if not l_data.list.is_empty():
-			display_leaderboard(l_data, level)
+		l_id = await get_leaderboard(yesterday)
+		var y_data := await get_leaderboard_data(l_id)
+		display_leaderboard(l_data, y_data, level)
 
 
 	MainButton.disabled = false
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
-	var l_id := await get_leaderboard()
+	var l_id := await get_leaderboard(date)
 	await upload_leaderboard(l_id, info)
 	var l_data := await get_leaderboard_data(l_id)
-	display_leaderboard(l_data, level)
+	display_leaderboard(l_data, null, level)
 	if not info.first_win:
 		return
 	if SteamManager.stats_received:
@@ -173,11 +178,11 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			data.current_streak = 0
 			UserData.save()
 
-func get_leaderboard() -> int:
-	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+func get_leaderboard(for_date: String) -> int:
+	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
 	if not ret[1]:
-		push_warning("Leaderboard not found for daily %s" % date)
+		push_warning("Leaderboard not found for daily %s" % for_date)
 		return -1
 	return ret[0]
 
@@ -254,13 +259,19 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 			push_warning("%.2f percentile not in top entries" % pct[0])
 	return data
 
-func display_leaderboard(data: LeaderboardData, level: Level) -> void:
-	if data == null or Global.is_mobile:
+func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData, level: Level) -> void:
+	if today == null or Global.is_mobile:
 		return
+	var display: LeaderboardDisplay
 	if not level.has_node("LeaderboardDisplay"):
-		var display := preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
+		display = preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
 		display.modulate.a = 0
 		display.visible = not Global.is_dev_mode()
 		level.add_child(display)
 		level.create_tween().tween_property(display, "modulate:a", 1, 1)
-	level.get_node("LeaderboardDisplay").display(data)
+	display = level.get_node("LeaderboardDisplay")
+	display.display(today, date, yesterday_data, yesterday)
+	if yesterday == null:
+		display.show_today()
+	else:
+		display.show_yesterday()
