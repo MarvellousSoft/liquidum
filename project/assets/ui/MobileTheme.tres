@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=13 format=3 uid="uid://cjvm0hkahhs31"]
+[gd_resource type="Theme" load_steps=14 format=3 uid="uid://cjvm0hkahhs31"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_qv3is"]
 [ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
@@ -7,6 +7,24 @@
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_qv3is")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vg74k"]
+bg_color = Color(0.223529, 0.254902, 0.258824, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.117647, 0.12549, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_wfon5"]
 color = Color(0.0156863, 0.105882, 0.219608, 0.741176)
@@ -74,6 +92,7 @@ Button/colors/font_pressed_color = Color(0.85098, 1, 0.886275, 1)
 Button/constants/h_separation = 0
 Button/font_sizes/font_size = 31
 Button/fonts/font = SubResource("FontVariation_7w16d")
+Button/styles/disabled = SubResource("StyleBoxFlat_vg74k")
 Button/styles/hover = ExtResource("2_eaqbs")
 Button/styles/normal = ExtResource("3_u1kds")
 Button/styles/pressed = ExtResource("4_oftan")
