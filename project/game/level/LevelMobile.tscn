@@ -13,7 +13,7 @@
 [ext_resource type="StyleBox" uid="uid://cmdnydafpre5e" path="res://assets/ui/SeparatorMobile.tres" id="11_iu1ri"]
 [ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="11_qqfwp"]
 [ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="12_po5ls"]
-[ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="12_todxc"]
+[ext_resource type="Texture2D" uid="uid://b3qiioa6xn156" path="res://assets/images/ui/aquarium_button_normal.png" id="13_l7clo"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="14_hwkp3"]
 [ext_resource type="PackedScene" uid="uid://dll4b7dbqueu3" path="res://game/level/hints/AquariumHintContainerMobile.tscn" id="15_b0gmy"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
@@ -537,7 +537,7 @@ custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-icon = ExtResource("12_todxc")
+icon = ExtResource("13_l7clo")
 flat = true
 expand_icon = true
 

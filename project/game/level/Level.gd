@@ -15,8 +15,8 @@ const SIZES = {
 	}
 }
 const AQUARIUM_BUTTON_ICONS = {
-	"normal" : preload("res://assets/images/ui/tutorial/empty_cell_example.png"),
-	"pressed" : preload("res://assets/images/ui/tutorial/water_cell_example.png"),
+	"normal" : preload("res://assets/images/ui/aquarium_button_normal.png"),
+	"pressed" : preload("res://assets/images/ui/aquarium_button_pressed.png"),
 }
 
 signal won(info: WinInfo)
