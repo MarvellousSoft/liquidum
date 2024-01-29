@@ -1,14 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://cstnq5njfyida"]
+[gd_scene load_steps=4 format=3 uid="uid://cstnq5njfyida"]
 
 [ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="1_0nana"]
-[ext_resource type="Texture2D" uid="uid://beax5oseh6sd5" path="res://assets/images/icons/256_256.png" id="1_6g3ok"]
-[ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/hint/x.png" id="1_b00u2"]
 [ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
-[ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="2_1gbhw"]
+[ext_resource type="PackedScene" uid="uid://b0c2nhetec00u" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
 
 [node name="LeaderboardDisplay" type="Control"]
 custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 3
+anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 50.0
@@ -23,95 +22,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "LEADERBOARDS"
 horizontal_alignment = 1
 
-[node name="Panel" type="PanelContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+tab_alignment = 1
+tab_focus_mode = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel"]
-layout_mode = 2
-
-[node name="Grid" type="GridContainer" parent="VBoxContainer/Panel/ScrollContainer"]
+[node name="TODAY" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/h_separation = 20
-columns = 5
 
-[node name="E1" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
+[node name="YESTERDAY" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
-
-[node name="E2" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-
-[node name="E3" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-
-[node name="Mistakes" type="TextureRect" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-texture = ExtResource("1_b00u2")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Time" type="TextureRect" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-modulate = Color(0.670588, 1, 0.819608, 1)
-layout_mode = 2
-texture = ExtResource("2_1gbhw")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Icon1" type="TextureRect" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-texture = ExtResource("1_6g3ok")
-expand_mode = 2
-
-[node name="Pos1" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "1."
-
-[node name="Name1" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Person name"
-text_overrun_behavior = 3
-
-[node name="Mistakes1" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 1
-
-[node name="Time1" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "01:32"
-horizontal_alignment = 1
-
-[node name="Icon2" type="TextureRect" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-texture = ExtResource("1_6g3ok")
-expand_mode = 2
-
-[node name="Pos2" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "3."
-
-[node name="Name2" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Very long name"
-text_overrun_behavior = 3
-
-[node name="Mistakes2" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "1"
-horizontal_alignment = 1
-
-[node name="Time2" type="Label" parent="VBoxContainer/Panel/ScrollContainer/Grid"]
-layout_mode = 2
-text = "05:41"
-horizontal_alignment = 1

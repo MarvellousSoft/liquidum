@@ -1,8 +1,7 @@
 extends Control
 
-@onready var Grid: GridContainer = %Grid
-
-func display(data: DailyButton.LeaderboardData) -> void:
+func display_day(node: Node, data: DailyButton.LeaderboardData) -> void:
+	var Grid: GridContainer = node.get_node(^"%Grid")
 	# Leave the first five for copying so we don't need to programatically set stuff
 	while Grid.get_child_count() > 10:
 		var c := Grid.get_child(Grid.get_child_count() - 1)
@@ -25,3 +24,6 @@ func display(data: DailyButton.LeaderboardData) -> void:
 			Grid.add_child(c)
 	for c in ["Icon1", "Pos1", "Name1", "Mistakes1", "Time1"]:
 		Grid.get_node(c).hide()
+
+func display(data: DailyButton.LeaderboardData) -> void:
+	display_day(%TODAY, data)

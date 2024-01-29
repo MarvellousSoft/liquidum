@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=18 format=3 uid="uid://c6108lc3jg2cv"]
+[gd_resource type="Theme" load_steps=22 format=3 uid="uid://c6108lc3jg2cv"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 [ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_hda1e"]
@@ -82,6 +82,61 @@ expand_margin_right = 15.0
 expand_margin_bottom = 15.0
 anti_aliasing_size = 2.5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ovfql"]
+bg_color = Color(0.85098, 1, 0.886275, 0.235294)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0, 0.0352941, 0.141176, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+anti_aliasing_size = 2.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j4afe"]
+content_margin_top = 10.0
+content_margin_bottom = 20.0
+bg_color = Color(0.45098, 0.941176, 0.776471, 0.0941176)
+border_width_left = 50
+border_width_right = 50
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+expand_margin_left = 15.0
+expand_margin_right = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sfcym"]
+content_margin_top = 10.0
+content_margin_bottom = 20.0
+bg_color = Color(0.85098, 1, 0.886275, 0.235294)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_color = Color(0, 0.0352941, 0.141176, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+expand_margin_left = 15.0
+expand_margin_right = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkbyg"]
+content_margin_top = 10.0
+content_margin_bottom = 20.0
+bg_color = Color(0.45098, 0.941176, 0.776471, 0.0941176)
+border_width_left = 50
+border_width_right = 50
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+expand_margin_left = 15.0
+expand_margin_right = 15.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osq2p"]
 bg_color = Color(0.847059, 0.996078, 0.882353, 1)
 corner_radius_top_left = 10
@@ -135,6 +190,15 @@ PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")
 PopupMenu/font_sizes/font_size = 50
 ProgressBar/font_sizes/font_size = 82
 ProgressBar/fonts/font = ExtResource("1_x6xj1")
+TabContainer/colors/font_hovered_color = Color(0.0156863, 0.105882, 0.219608, 1)
+TabContainer/colors/font_selected_color = Color(0.0352941, 0.211765, 0.34902, 1)
+TabContainer/colors/font_unselected_color = Color(0, 0.0352941, 0.141176, 1)
+TabContainer/font_sizes/font_size = 50
+TabContainer/fonts/font = ExtResource("1_x6xj1")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_ovfql")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_j4afe")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_sfcym")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_jkbyg")
 TextEdit/font_sizes/font_size = 60
 TextEdit/fonts/font = ExtResource("1_x6xj1")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_osq2p")
