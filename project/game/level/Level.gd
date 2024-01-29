@@ -229,7 +229,7 @@ func setup(try_load := true) -> void:
 		if not Global.is_mobile:
 			%CountersPanel.visible = Counters.water.visible or Counters.boat.visible
 		else:
-			%AquariumButton.visible = AquariumHints.visible
+			%AquariumButton.visible = not grid.grid_hints().expected_aquariums.is_empty()
 			%HintsContainerSeparator1.visible = Counters.water.visible and Counters.boat.visible
 			%HintsContainerSeparator2.visible = %AquariumButton.visible and (Counters.water.visible or Counters.boat.visible)
 		var no_boat_hint := func(h: GridModel.LineHint) -> bool: return h.boat_count <= 0 and (h.boat_count_type == E.HintType.Hidden or h.boat_count_type == E.HintType.Zero)

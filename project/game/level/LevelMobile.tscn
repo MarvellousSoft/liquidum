@@ -25,22 +25,6 @@
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("6_gng55")
 
-[sub_resource type="Animation" id="Animation_x76te"]
-resource_name = "enable"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("%AquariumHintContainer:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(24, 1305), Vector2(24, 1033)]
-}
-
 [sub_resource type="Animation" id="Animation_8b2um"]
 resource_name = "disable"
 length = 0.2
@@ -55,6 +39,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(24, 1033), Vector2(24, 1305)]
+}
+
+[sub_resource type="Animation" id="Animation_x76te"]
+resource_name = "enable"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%AquariumHintContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(24, 1305), Vector2(24, 1033)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_eff0b"]
@@ -467,7 +467,7 @@ theme_override_constants/margin_right = 15
 [node name="HintsContainer" type="HBoxContainer" parent="HintsMarginContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-theme_override_constants/separation = 26
+theme_override_constants/separation = 18
 alignment = 1
 
 [node name="WaterCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
@@ -475,6 +475,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 counter_name = "WATERS_COUNTER"
+
+[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/WaterCounter" index="0"]
+theme_override_constants/separation = 5
 
 [node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="0"]
 visible = false
@@ -484,12 +487,12 @@ custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 22
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 25
 autowrap_mode = 0
 
 [node name="Counter" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 22
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 25
 
 [node name="HintsContainerSeparator1" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
 unique_name_in_owner = true
@@ -503,6 +506,9 @@ unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
+[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/BoatCounter" index="0"]
+theme_override_constants/separation = 5
+
 [node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="0"]
 visible = false
 
@@ -511,12 +517,12 @@ custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 22
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 25
 autowrap_mode = 0
 
 [node name="Counter" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 22
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 25
 
 [node name="HintsContainerSeparator2" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
 unique_name_in_owner = true
