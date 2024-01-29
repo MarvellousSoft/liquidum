@@ -1,0 +1,228 @@
+[gd_scene load_steps=15 format=3 uid="uid://ia3hnfeb7d5g"]
+
+[ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_e3so7"]
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_srwyb"]
+[ext_resource type="PackedScene" uid="uid://bxiiha43788p7" path="res://game/level/hints/HintOptionButton.tscn" id="2_0q0sn"]
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_qf0ip"]
+[ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="4_mmf7c"]
+[ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="5_5bk8y"]
+[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="6_crc6u"]
+
+[sub_resource type="FontVariation" id="FontVariation_aaqvh"]
+base_font = ExtResource("3_qf0ip")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
+noise_type = 2
+fractal_gain = 0.4
+fractal_weighted_strength = 0.25
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bi3kj"]
+width = 500
+height = 500
+seamless = true
+seamless_blend_skirt = 0.4
+noise = SubResource("FastNoiseLite_t7cfv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qre3a"]
+shader = ExtResource("4_mmf7c")
+shader_parameter/level = 0.0
+shader_parameter/final_alpha = 1.0
+shader_parameter/size = Vector2(100, 100)
+shader_parameter/wave_width = 50.0
+shader_parameter/wave_height = 5.0
+shader_parameter/depth = 40.0
+shader_parameter/water_color = Color(0.670588, 1, 0.819608, 1)
+shader_parameter/depth_color = Color(0.0784314, 0.364706, 0.529412, 1)
+shader_parameter/ray_value = 0.3
+shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
+
+[sub_resource type="Animation" id="Animation_2wtmy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_jehb0"]
+resource_name = "startup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_geoow"]
+_data = {
+"RESET": SubResource("Animation_2wtmy"),
+"startup": SubResource("Animation_jehb0")
+}
+
+[node name="AquariumHint" type="HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -3140.0
+offset_bottom = -2079.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_srwyb")
+theme_override_constants/separation = 11
+script = ExtResource("1_e3so7")
+
+[node name="VisibilityButton" parent="." instance=ExtResource("2_0q0sn")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+button_pressed = false
+
+[node name="BG" parent="VisibilityButton" index="0"]
+custom_minimum_size = Vector2(50, 50)
+
+[node name="LeftContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(123, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 2
+
+[node name="Size" type="Label" parent="LeftContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 40
+text = "3.5"
+vertical_alignment = 2
+
+[node name="Water" type="TextureRect" parent="LeftContainer"]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
+material = SubResource("ShaderMaterial_qre3a")
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_5bk8y")
+expand_mode = 1
+
+[node name="WallLeft" type="TextureRect" parent="LeftContainer/Water"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+texture = ExtResource("6_crc6u")
+expand_mode = 1
+
+[node name="WallRight" type="TextureRect" parent="LeftContainer/Water"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+texture = ExtResource("6_crc6u")
+expand_mode = 1
+flip_h = true
+
+[node name="WallBottom" type="TextureRect" parent="LeftContainer/Water"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+rotation = -1.5708
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("6_crc6u")
+expand_mode = 1
+
+[node name="WallTop" type="TextureRect" parent="LeftContainer/Water"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+rotation = -1.5708
+pivot_offset = Vector2(25, 25)
+texture = ExtResource("6_crc6u")
+expand_mode = 1
+flip_h = true
+
+[node name="MiddleSeparator" type="Panel" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="RightContainer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 2
+
+[node name="ExpectedAmount" type="Label" parent="RightContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 40
+text = "x4"
+vertical_alignment = 2
+
+[node name="Separator2" type="Panel" parent="RightContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="CurrentAmount" type="Label" parent="RightContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = SubResource("FontVariation_aaqvh")
+theme_override_font_sizes/font_size = 40
+text = "(4)"
+vertical_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_geoow")
+}
+
+[editable path="VisibilityButton"]

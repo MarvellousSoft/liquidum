@@ -14,6 +14,10 @@ const SIZES = {
 		"window_size": Vector2(720, 1280),
 	}
 }
+const AQUARIUM_BUTTON_ICONS = {
+	"normal" : preload("res://assets/images/ui/tutorial/empty_cell_example.png"),
+	"pressed" : preload("res://assets/images/ui/tutorial/water_cell_example.png"),
+}
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -87,6 +91,8 @@ func _ready():
 	set_level_names_and_descriptions()
 	if not Global.is_mobile:
 		reset_tutorial()
+	else:
+		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -223,7 +229,9 @@ func setup(try_load := true) -> void:
 		if not Global.is_mobile:
 			%CountersPanel.visible = Counters.water.visible or Counters.boat.visible
 		else:
+			%AquariumButton.visible = AquariumHints.visible
 			%HintsContainerSeparator1.visible = Counters.water.visible and Counters.boat.visible
+			%HintsContainerSeparator2.visible = %AquariumButton.visible and (Counters.water.visible or Counters.boat.visible)
 		var no_boat_hint := func(h: GridModel.LineHint) -> bool: return h.boat_count <= 0 and (h.boat_count_type == E.HintType.Hidden or h.boat_count_type == E.HintType.Zero)
 		if e_boats <= 0 and grid.row_hints().all(no_boat_hint) and grid.col_hints().all(no_boat_hint):
 			BrushPicker.disable_brush(E.BrushMode.Boat)
@@ -787,11 +795,23 @@ func _on_tutorial_display_tutorial_closed():
 	process_game = true
 	%SettingsScreen.show_button()
 
+
 func _on_show_timer_changed(status: bool) -> void:
 	TimerContainer.visible = status and not editor_mode()
+
 
 func _on_allow_mistakes_changed(status: bool) -> void:
 	Counters.mistake.visible = not status and not editor_mode()
 
+
 func _on_progress_on_unkown_changed(_status: bool) -> void:
 	GridNode.update_hints()
+
+
+func _on_aquarium_buttons_toggled(toggled_on):
+	if toggled_on:
+		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.pressed
+		%AquariumAnim.play("enable")
+	else:
+		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
+		%AquariumAnim.play("disable")

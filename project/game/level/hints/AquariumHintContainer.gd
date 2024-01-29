@@ -59,7 +59,9 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	else:
 		Title.text = tr("AQUARIUMS_COUNTER")
 		%Amount.text = tr("AQ_AMOUNT")
-		%Header.add_theme_constant_override("separation", 100)
+		if not Global.is_mobile:
+			%Header.add_theme_constant_override("separation", 100)
+			
 
 
 func visible_sizes() -> Array[float]:
@@ -79,6 +81,9 @@ func update_dark_mode(is_dark : bool) -> void:
 	var colors = COLORS.dark if is_dark else COLORS.normal
 	for label in [%Title, %Size, %Amount]:
 		label.add_theme_color_override("font_color", colors.font_color)
+	if Global.is_mobile:
+		for label in [%Size2, %Amount2]:
+			label.add_theme_color_override("font_color", colors.font_color)
 
 
 func _visible() -> Dictionary:
@@ -94,7 +99,11 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 		if not expected.has(sz):
 			expected[sz] = 0
 	while HintContainer.get_child_count() < expected.size():
-		var c := preload("res://game/level/hints/AquariumHint.tscn").instantiate()
+		var c
+		if not Global.is_mobile:
+			c = preload("res://game/level/hints/AquariumHint.tscn").instantiate()
+		else:
+			c = preload("res://game/level/hints/AquariumHintMobile.tscn").instantiate()
 		HintContainer.add_child(c)
 		if editor_mode and not disable_instant_startup:
 			c.instant_startup()

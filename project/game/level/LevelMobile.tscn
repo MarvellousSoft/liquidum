@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dl8ycx77sa8oq"]
+[gd_scene load_steps=35 format=3 uid="uid://dl8ycx77sa8oq"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
@@ -8,12 +8,14 @@
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="5_dv3ih"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="6_gng55"]
 [ext_resource type="PackedScene" uid="uid://bsgjxsq2lu5y2" path="res://game/level/Counter.tscn" id="7_7ge7w"]
-[ext_resource type="PackedScene" uid="uid://07qsytklbnnd" path="res://game/level/hints/AquariumHintContainer.tscn" id="8_iaefn"]
 [ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="9_bwhp3"]
 [ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="10_bdk8m"]
+[ext_resource type="StyleBox" uid="uid://cmdnydafpre5e" path="res://assets/ui/SeparatorMobile.tres" id="11_iu1ri"]
 [ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="11_qqfwp"]
 [ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="12_po5ls"]
+[ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="12_todxc"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="14_hwkp3"]
+[ext_resource type="PackedScene" uid="uid://dll4b7dbqueu3" path="res://game/level/hints/AquariumHintContainerMobile.tscn" id="15_b0gmy"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
 [ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="18_4jcdt"]
 [ext_resource type="PackedScene" uid="uid://bu7mp6nx8xfdw" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
@@ -23,14 +25,43 @@
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("6_gng55")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxt4x"]
-bg_color = Color(0.0156863, 0.105882, 0.219608, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-expand_margin_left = 3.0
-expand_margin_right = 3.0
+[sub_resource type="Animation" id="Animation_x76te"]
+resource_name = "enable"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%AquariumHintContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(24, 1305), Vector2(24, 1033)]
+}
+
+[sub_resource type="Animation" id="Animation_8b2um"]
+resource_name = "disable"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%AquariumHintContainer:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(24, 1033), Vector2(24, 1305)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eff0b"]
+_data = {
+"disable": SubResource("Animation_8b2um"),
+"enable": SubResource("Animation_x76te")
+}
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3453y"]
 
@@ -181,7 +212,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HintsContainer:modulate")
+tracks/0/path = NodePath("HintsMarginContainer/HintsContainer:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -233,7 +264,7 @@ length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HintsContainer:modulate")
+tracks/0/path = NodePath("HintsMarginContainer/HintsContainer:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -304,7 +335,6 @@ offset_bottom = 927.0
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="TopButtons" type="HBoxContainer" parent="."]
@@ -397,7 +427,7 @@ vertical_alignment = 2
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
+theme_override_styles/separator = ExtResource("11_iu1ri")
 
 [node name="MistakeCounter" parent="TopInfo/HBoxContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
@@ -425,24 +455,31 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 0
 
-[node name="HintsContainer" type="HBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_top = 920.0
+[node name="HintsMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_top = 931.0
 offset_right = 720.0
-offset_bottom = 1001.0
-theme_override_constants/separation = 30
+offset_bottom = 1012.0
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="HintsContainer" type="HBoxContainer" parent="HintsMarginContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 26
 alignment = 1
 
-[node name="WaterCounter" parent="HintsContainer" instance=ExtResource("7_7ge7w")]
+[node name="WaterCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 counter_name = "WATERS_COUNTER"
 
-[node name="VisibilityButton" parent="HintsContainer/WaterCounter/HBoxContainer" index="0"]
+[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="0"]
 visible = false
 
-[node name="Label" parent="HintsContainer/WaterCounter/HBoxContainer" index="1"]
+[node name="Label" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -450,26 +487,26 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 autowrap_mode = 0
 
-[node name="Counter" parent="HintsContainer/WaterCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 
-[node name="HintsContainerSeparator1" type="VSeparator" parent="HintsContainer"]
+[node name="HintsContainerSeparator1" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_styles/separator = SubResource("StyleBoxFlat_vxt4x")
+theme_override_styles/separator = ExtResource("11_iu1ri")
 
-[node name="BoatCounter" parent="HintsContainer" instance=ExtResource("7_7ge7w")]
+[node name="BoatCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="VisibilityButton" parent="HintsContainer/BoatCounter/HBoxContainer" index="0"]
+[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="0"]
 visible = false
 
-[node name="Label" parent="HintsContainer/BoatCounter/HBoxContainer" index="1"]
+[node name="Label" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -477,9 +514,32 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 autowrap_mode = 0
 
-[node name="Counter" parent="HintsContainer/BoatCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="2"]
 theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
+
+[node name="HintsContainerSeparator2" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/separator = ExtResource("11_iu1ri")
+
+[node name="AquariumButton" type="Button" parent="HintsMarginContainer/HintsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("12_todxc")
+flat = true
+expand_icon = true
+
+[node name="AquariumAnim" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton"]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_eff0b")
+}
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
@@ -532,21 +592,12 @@ custom_minimum_size = Vector2(75, 75)
 [node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="5"]
 custom_minimum_size = Vector2(75, 75)
 
-[node name="AquariumHintContainer" parent="." instance=ExtResource("8_iaefn")]
-unique_name_in_owner = true
-layout_mode = 2
-offset_left = 43.0
-offset_top = 1347.0
-offset_right = 703.0
-offset_bottom = 2501.0
-size_flags_horizontal = 4
-
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_top = 997.0
+offset_top = 1007.0
 offset_right = 720.0
-offset_bottom = 1117.0
+offset_bottom = 1127.0
 mouse_filter = 2
 
 [node name="Scroll" type="ScrollContainer" parent="Description"]
@@ -568,6 +619,13 @@ text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="AquariumHintContainer" parent="." instance=ExtResource("15_b0gmy")]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 1305.0
+offset_right = 724.0
+offset_bottom = 1555.0
 
 [node name="Title" type="Control" parent="."]
 visible = false
@@ -727,6 +785,7 @@ script = ExtResource("20_ff4mn")
 [connection signal="pressed" from="TopButtons/TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="mouse_entered" from="TopButtons/ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="TopButtons/ResetButton" to="." method="reset_level"]
+[connection signal="toggled" from="HintsMarginContainer/HintsContainer/AquariumButton" to="." method="_on_aquarium_buttons_toggled"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
@@ -737,9 +796,9 @@ script = ExtResource("20_ff4mn")
 
 [editable path="TopInfo/HBoxContainer/MistakeCounter"]
 [editable path="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer/VisibilityButton"]
-[editable path="HintsContainer/WaterCounter"]
-[editable path="HintsContainer/WaterCounter/HBoxContainer/VisibilityButton"]
-[editable path="HintsContainer/BoatCounter"]
-[editable path="HintsContainer/BoatCounter/HBoxContainer/VisibilityButton"]
+[editable path="HintsMarginContainer/HintsContainer/WaterCounter"]
+[editable path="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer/VisibilityButton"]
+[editable path="HintsMarginContainer/HintsContainer/BoatCounter"]
+[editable path="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer/VisibilityButton"]
 [editable path="BrushPicker"]
 [editable path="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay"]

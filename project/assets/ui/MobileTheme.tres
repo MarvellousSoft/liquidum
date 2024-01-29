@@ -4,6 +4,7 @@
 [ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
 [ext_resource type="StyleBox" uid="uid://gqjj40bseq65" path="res://assets/ui/ButtonNormalStyle.tres" id="3_u1kds"]
 [ext_resource type="StyleBox" uid="uid://8i3c41sdwhm" path="res://assets/ui/ButtonPressedStyle.tres" id="4_oftan"]
+[ext_resource type="StyleBox" uid="uid://csn6hdcaxri2x" path="res://assets/ui/Panel.tres" id="5_o5cjq"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_qv3is")
@@ -34,24 +35,6 @@ thickness = 20
 
 [sub_resource type="FontVariation" id="FontVariation_qs55u"]
 base_font = ExtResource("1_qv3is")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vcc8j"]
-bg_color = Color(0.85098, 1, 0.886275, 0.235294)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(0, 0.0352941, 0.141176, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-corner_detail = 20
-expand_margin_left = 15.0
-expand_margin_top = 15.0
-expand_margin_right = 15.0
-expand_margin_bottom = 15.0
-anti_aliasing_size = 2.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osq2p"]
 bg_color = Color(0.670588, 1, 0.819608, 1)
@@ -101,7 +84,7 @@ Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 38
 Label/fonts/font = SubResource("FontVariation_qs55u")
 LineEdit/font_sizes/font_size = 82
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_vcc8j")
+PanelContainer/styles/panel = ExtResource("5_o5cjq")
 PopupMenu/font_sizes/font_size = 50
 ProgressBar/font_sizes/font_size = 82
 ProgressBar/fonts/font = ExtResource("1_qv3is")
