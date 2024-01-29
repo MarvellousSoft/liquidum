@@ -74,7 +74,7 @@ func save_values():
 	FileManager.save_profile()
 
 
-func setup_values():
+func setup_values() -> void:
 	SoundSettings.master.set_value(Profile.get_option("master_volume")*100)
 	SoundSettings.bgm.set_value(Profile.get_option("bgm_volume")*100)
 	SoundSettings.sfx.set_value(Profile.get_option("sfx_volume")*100)
@@ -87,6 +87,7 @@ func setup_values():
 	%InvertMouseContainer/CheckBox.button_pressed = Profile.get_option("invert_mouse")
 	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
 	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
+	%ShowTimerContainer/CheckBox.button_pressed = Profile.get_option("show_timer")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -185,3 +186,9 @@ func _on_vsync_mode_selected(vsync_mode: int) -> void:
 
 func _on_remove_ads_button_pressed() -> void:
 	AdManager.buy_ad_removal()
+
+
+func _on_show_timer_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("show_timer", on)
+	Profile.show_timer_changed.emit(on)

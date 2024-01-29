@@ -75,6 +75,8 @@ var difficulty := -1
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
+	Profile.show_timer_changed.connect(_on_show_timer_changed)
+	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	if not Global.is_mobile:
 		%DevContainer.visible = Global.is_dev_mode()
 		%PlaytestButton.visible = false
@@ -123,7 +125,6 @@ func _ready():
 	setup()
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.startPlaytimeTracking([workshop_id])
-
 
 func _enter_tree():
 	if GridNode:
@@ -783,3 +784,6 @@ func _on_share_button_pressed() -> void:
 func _on_tutorial_display_tutorial_closed():
 	process_game = true
 	%SettingsScreen.show_button()
+
+func _on_show_timer_changed(status: bool) -> void:
+	TimerContainer.visible = status and not editor_mode()

@@ -2,6 +2,7 @@ extends Node
 
 signal dark_mode_toggled(status: bool)
 signal line_info_changed()
+signal show_timer_changed(status: bool)
 
 const LANGUAGES = [
 	"",
@@ -32,6 +33,7 @@ var options = {
 	"invert_mouse": false,
 	"line_info": LineInfo.None,
 	"vsync": int(DisplayServer.VSYNC_ADAPTIVE),
+	"show_timer": true,
 }
 
 const STEAM_LANGUAGES := {
