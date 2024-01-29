@@ -90,6 +90,7 @@ func setup_values() -> void:
 	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
 	%ShowTimerContainer/CheckBox.button_pressed = Profile.get_option("show_timer")
 	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
+	%ProgressOnUnknownContainer/CheckBox.button_pressed = Profile.get_option("progress_on_unknown")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -200,3 +201,8 @@ func _on_allow_mistakes_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("allow_mistakes", on)
 	Profile.allow_mistakes_changed.emit(on)
+
+func _on_progress_on_unknown_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("progress_on_unknown", on)
+	Profile.progress_on_unkown_changed.emit(on)

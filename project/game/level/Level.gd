@@ -77,6 +77,7 @@ func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	Profile.show_timer_changed.connect(_on_show_timer_changed)
 	Profile.allow_mistakes_changed.connect(_on_allow_mistakes_changed)
+	Profile.progress_on_unkown_changed.connect(_on_progress_on_unkown_changed)
 	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	Counters.mistake.visible = not grid.editor_mode() and not Profile.get_option("allow_mistakes")
 	if not Global.is_mobile:
@@ -791,3 +792,6 @@ func _on_show_timer_changed(status: bool) -> void:
 
 func _on_allow_mistakes_changed(status: bool) -> void:
 	Counters.mistake.visible = not status and not editor_mode()
+
+func _on_progress_on_unkown_changed(_status: bool) -> void:
+	GridNode.update_hints()

@@ -154,7 +154,7 @@ func set_hint_visibility(which : E.Walls, value : bool) -> void:
 
 
 func set_status(status: E.HintStatus) -> void:
-	if hint_value == -1:
+	if hint_value == -1 and not Profile.get_option("progress_on_unknown"):
 		Number.add_theme_color_override("default_color", Global.COLORS.normal)
 	else:
 		match status:
