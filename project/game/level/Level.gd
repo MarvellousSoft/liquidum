@@ -101,8 +101,8 @@ func _ready():
 			$SteamRichPresence.set_key_value("level", str(level_number))
 		var data = FileManager.load_level_data(section_number, level_number)
 		if not data.tutorial.is_empty() and not Global.is_mobile:
-			%TutorialContainer.show()
-			add_tutorial(data.tutorial)
+			if add_tutorial(data.tutorial):
+				%TutorialContainer.show()
 		else:
 			if not Global.is_mobile:
 				%TutorialContainer.hide()
@@ -277,7 +277,7 @@ func setup(try_load := true) -> void:
 	if is_campaign_level() and Global.is_mobile:
 		await get_tree().create_timer(.5).timeout
 		var data = FileManager.load_level_data(section_number, level_number)
-		if not data.tutorial.is_empty():
+		if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 			_on_tutorial_button_pressed()
 
 
@@ -331,7 +331,12 @@ func reset_tutorial():
 
 
 func add_tutorial(tutorial_name):
-	%TutorialCenterContainer.add_child(Global.get_tutorial(tutorial_name))
+	var tut = Global.get_tutorial(tutorial_name)
+	if not tut:
+		return false
+	else:
+		%TutorialCenterContainer.add_child(tut)
+		return true
 
 
 func update_counters() -> void:

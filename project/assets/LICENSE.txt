@@ -40,3 +40,7 @@ https://audio-sx.com
 - audio/sfx/checkbox_out.wav
 - audio/sfx/change_brush.wav
 by Little Robot Sound Factory, www.littlerobotsoundfactory.com
+
+- images/ui/icons/finger_touch.png
+- images/ui/icons/finger_hold.png
+by Juraj Sedlák, https://thenounproject.com/yumminky/, CC BY 3.0

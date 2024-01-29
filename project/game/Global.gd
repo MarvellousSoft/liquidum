@@ -6,8 +6,16 @@ const COLORS = {
 	"error": Color("#ff6a6aff"),
 }
 const TUTORIALS = {
-	"mouse1": preload("res://database/tutorials/Mouse1.tscn"),
-	"mouse2": preload("res://database/tutorials/Mouse2.tscn"),
+	"mouse1": {
+		"desktop": preload("res://database/tutorials/Mouse1.tscn"),
+		"mobile": preload("res://database/tutorials/Mouse1Mobile.tscn"),
+	},
+	"mouse2": {
+		"desktop": preload("res://database/tutorials/Mouse2.tscn"),
+	},
+	"preview": {
+		"mobile": preload("res://database/tutorials/HoldPreview.tscn"),
+	},
 	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
 	"boats": preload("res://database/tutorials/Boats.tscn"),
@@ -138,11 +146,31 @@ func wait_for_thread(t: Thread) -> Variant:
 		await get_tree().create_timer(0.5).timeout
 	return t.wait_to_finish()
 
+#Checks if a certain tutorial exists in the current mode
+func has_tutorial(tutorial_name):
+	assert(TUTORIALS.has(tutorial_name), "Not a valid tutorial name: " + str(tutorial_name))
+	var tut = TUTORIALS[tutorial_name]
+	if tut is Dictionary:
+		if is_mobile:
+			return tut.has("mobile")
+		else:
+			return tut.has("desktop")
+	return true
+
 
 func get_tutorial(tutorial_name):
 	assert(TUTORIALS.has(tutorial_name), "Not a valid tutorial name: " + str(tutorial_name))
-	return TUTORIALS[tutorial_name].instantiate()
-
+	var tut = TUTORIALS[tutorial_name]
+	if tut is Dictionary:
+		if is_mobile:
+			if tut.has("mobile"):
+				return tut.mobile.instantiate()
+			return false
+		else:
+			if tut.has("desktop"):
+				return tut.desktop.instantiate()
+			return false
+	return tut.instantiate()
 
 func alpha_fade_node(dt: float, node: Node, show: bool, alpha_speed := 1.0, toggle_visibility := false, max_alpha := 1.0, min_alpha := 0.0) -> void:
 	if show:

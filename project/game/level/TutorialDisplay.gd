@@ -26,8 +26,9 @@ func setup():
 		for level_number in LevelLister.count_section_levels(section_number + 1):
 			var data = FileManager.load_level_data(section_number + 1, level_number + 1)
 			if not data.tutorial.is_empty() and\
-			   LevelLister.get_max_unlocked_level(section_number + 1) >= level_number + 1:
-				tutorials.append(data.tutorial)
+			   LevelLister.get_max_unlocked_level(section_number + 1) >= level_number + 1 and\
+			   Global.has_tutorial(data.tutorial):
+					tutorials.append(data.tutorial)
 	idx = tutorials.size() - 1
 	update_tutorial()
 	%Back.visible = tutorials.size() > 1
@@ -53,8 +54,9 @@ func update_tutorial():
 		for child in TutContainer.get_children():
 			TutContainer.remove_child(child)
 		var tut = Global.get_tutorial(tutorials[idx])
-		%Title.text = tut.tutorial_name
-		TutContainer.add_child(tut)
+		if tut:
+			%Title.text = tut.tutorial_name
+			TutContainer.add_child(tut)
 
 
 func _on_back_pressed():
