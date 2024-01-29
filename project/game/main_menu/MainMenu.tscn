@@ -1,11 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=10 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://dr18tk67tc6uq" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
+[ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="3_nnq5w"]
 [ext_resource type="PackedScene" uid="uid://3tdi0fi37paw" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://d1cm4ha1d6dj5" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
+[ext_resource type="Script" path="res://game/main_menu/DiscordButton.gd" id="4_r0s65"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 
 [node name="MainMenu" type="Control"]
@@ -69,11 +71,22 @@ text = "EXIT_BUTTON"
 
 [node name="InfoVBox" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 3027.0
-offset_top = 1890.0
-offset_right = 3789.0
-offset_bottom = 2149.0
+offset_left = 3014.0
+offset_top = 1662.0
+offset_right = 3776.0
+offset_bottom = 2135.0
 theme_override_constants/separation = 45
+
+[node name="DiscordButton" type="TextureButton" parent="InfoVBox"]
+modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+texture_normal = ExtResource("3_nnq5w")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_r0s65")
 
 [node name="CreditsButton" type="Button" parent="InfoVBox"]
 layout_mode = 2
@@ -148,6 +161,9 @@ position_smoothing_speed = 4.0
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Workshop" to="." method="_on_workshop_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_pressed"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
