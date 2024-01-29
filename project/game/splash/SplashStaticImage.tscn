@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctlfkomdff3l1"]
+
+[ext_resource type="Script" path="res://game/splash/SplashStaticImage.gd" id="1_yau7v"]
+[ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="2_s8hbw"]
+
+[node name="SplashStaticImage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yau7v")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.0156863, 0.105882, 0.219608, 1)
+custom_minimum_size = Vector2(1000, 1000)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_s8hbw")
+expand_mode = 1
+stretch_mode = 5

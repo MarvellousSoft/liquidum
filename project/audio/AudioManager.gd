@@ -143,7 +143,7 @@ func set_bgm_last_pos(bgm_name, pos):
 
 #SFX methods
 
-func play_sfx(sfx_name: String):
+func play_sfx(sfx_name: String) -> AudioStreamPlayer:
 	if not SFXS.has(sfx_name):
 		push_error("Not a valid sfx name: " + sfx_name)
 	
@@ -157,6 +157,7 @@ func play_sfx(sfx_name: String):
 	player.stream.random_pitch = 1.0 + sfx.random_pitch_var
 	
 	player.play()
+	return player
 
 
 func get_sfx_duration(sfx_name: String):
@@ -165,7 +166,7 @@ func get_sfx_duration(sfx_name: String):
 	return SFXS[name].asset.get_length()
 
 
-func get_sfx_player():
+func get_sfx_player() -> AudioStreamPlayer:
 	var player = $SFXS.get_child(cur_sfx_player)
 	cur_sfx_player = (cur_sfx_player+1)%$SFXS.get_child_count()
 	return player
