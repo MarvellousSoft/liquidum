@@ -15,13 +15,8 @@ var current_profile := DEFAULT_PROFILE
 
 
 func _notification(what: int) -> void:
-	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
-		save_profile()
-
-
-func save_and_quit() -> void:
-	save_game()
-	Global.exit_game()
+	if what == MainLoop.NOTIFICATION_CRASH:
+		save_game()
 
 
 func save_game() -> void:
@@ -115,6 +110,7 @@ func load_profile() -> void:
 
 
 func save_profile() -> void:
+	push_warning("Saving profile")
 	var profile_data := Profile.get_save_data()
 	_save_json_data(_profile_dir(), PROFILE_FILE, profile_data)
 

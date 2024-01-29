@@ -49,9 +49,9 @@ func toggle_dev_mode():
 		dev_mode_label.visible = _dev_mode
 
 
-func _notification(what : int):
-	if what == NOTIFICATION_EXIT_TREE:
-		exit_game()
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Global.exit_game()
 
 func load_mobile_compat(scene: String) -> PackedScene:
 	if is_mobile:
@@ -63,10 +63,13 @@ func load_mobile_compat(scene: String) -> PackedScene:
 func load_no_mobile(scene: String) -> PackedScene:
 	return load(scene + ".tscn")
 
-func exit_game():
+func exit_game() -> void:
 	var window = get_window()
 	if window.mode == Window.MODE_WINDOWED:
-		Profile.set_option("previous_windowed_pos", window.position, true)
+		Profile.set_option("previous_windowed_pos", window.position)
+	FileManager.save_game()
+	var scene := Global.load_mobile_compat("res://game/ui/Quitting")
+	get_tree().change_scene_to_packed(scene)
 	get_tree().quit()
 
 

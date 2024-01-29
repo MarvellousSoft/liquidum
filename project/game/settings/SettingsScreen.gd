@@ -66,7 +66,7 @@ func toggle_pause() -> void:
 	pause_toggled.emit(active)
 
 
-func save_values():
+func save_values(do_save := true) -> void:
 	Profile.set_option("master_volume", SoundSettings.master.get_value()/100.0)
 	Profile.set_option("bgm_volume", SoundSettings.bgm.get_value()/100.0)
 	Profile.set_option("sfx_volume", SoundSettings.sfx.get_value()/100.0)
@@ -125,8 +125,8 @@ func _on_fullscreen_toggled(button_pressed: bool) -> void:
 
 func _on_save_n_quit_button_pressed():
 	AudioManager.play_sfx("button_back")
-	save_values()
-	FileManager.save_and_quit()
+	save_values(false)
+	Global.exit_game()
 
 
 func _on_button_mouse_entered():
