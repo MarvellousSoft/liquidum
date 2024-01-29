@@ -1,5 +1,7 @@
 class_name GridModel
 
+# Profile.allow_mistakes is true and the user did an error
+signal invalid_place_allowed()
 
 static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")

@@ -71,7 +71,8 @@ func save_values(do_save := true) -> void:
 	Profile.set_option("bgm_volume", SoundSettings.bgm.get_value()/100.0)
 	Profile.set_option("sfx_volume", SoundSettings.sfx.get_value()/100.0)
 	Profile.set_option("fullscreen", Fullscreen.button_pressed)
-	FileManager.save_profile()
+	if do_save:
+		FileManager.save_profile()
 
 
 func setup_values() -> void:
@@ -88,6 +89,7 @@ func setup_values() -> void:
 	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
 	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
 	%ShowTimerContainer/CheckBox.button_pressed = Profile.get_option("show_timer")
+	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -192,3 +194,9 @@ func _on_show_timer_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("show_timer", on)
 	Profile.show_timer_changed.emit(on)
+
+
+func _on_allow_mistakes_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("allow_mistakes", on)
+	Profile.allow_mistakes_changed.emit(on)

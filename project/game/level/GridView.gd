@@ -3,7 +3,7 @@ extends Control
 
 
 signal updated
-signal mistake_made
+signal mistake_made()
 signal updated_size
 
 const STARTUP_MAX_DELAY = 0.1
@@ -93,9 +93,15 @@ func reset() -> void:
 		CellCornerGrid.remove_child(child)
 		child.queue_free()
 
+func _on_invalid_place() -> void:
+	mistake_made.emit()
+
 # If fast_startup, don't do an animation in the beginning
 func setup(grid_logic_: GridModel, fast_startup := false) -> void:
+	if grid_logic:
+		grid_logic.invalid_place_allowed.disconnect(_on_invalid_place)
 	grid_logic = grid_logic_
+	grid_logic.invalid_place_allowed.connect(_on_invalid_place)
 	editor_mode = grid_logic.editor_mode()
 	rows = grid_logic.rows()
 	columns = grid_logic.cols()
@@ -494,7 +500,7 @@ func highlight_error(i: int, j: int, which: E.Waters, play_sfx := true) -> void:
 	cell.play_error(which)
 	if play_sfx:
 		AudioManager.play_sfx("error")
-	emit_signal("mistake_made")
+	mistake_made.emit()
 
 
 func enable_wall_editor():

@@ -1,6 +1,7 @@
 class_name GridImpl
 extends GridModel
 
+
 enum Content { Nothing, Water, NoWater, Block, Boat, NoBoat, NoBoatWater }
 enum IsTogether { Separate, Together, Zero }
 
@@ -423,7 +424,7 @@ class CellWithLoc extends GridModel.CellModel:
 		return false
 	func put_water(corner: E.Corner, flush_undo := true) -> float:
 		if !grid.is_corner_partially_valid(Content.Water, i, j, corner):
-			return false
+			return 0.0
 		var added_waters := 0.0
 		if !water_at(corner):
 			var dfs := grid._flood_water(i, j, corner, true)
@@ -1553,7 +1554,11 @@ func is_solution_partially_valid() -> bool:
 	return true
 
 func is_corner_partially_valid(c: Content, i: int, j: int, corner: E.Corner) -> bool:
-	return editor_mode() or _is_content_partial_solution(c, _content_sol(i, j, corner))
+	var valid := editor_mode() or _is_content_partial_solution(c, _content_sol(i, j, corner))
+	if not valid and Profile.get_option("allow_mistakes"):
+		invalid_place_allowed.emit()
+		return true
+	return valid
 
 func validate_hint(count: float, type: E.HintType) -> void:
 	if count != -1 and type != E.HintType.Hidden:
