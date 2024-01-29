@@ -153,8 +153,7 @@ func _process(dt):
 
 
 func _input(event):
-	#TODO: Remove or make it harder on release
-	if event.is_action_pressed("debug_1"):
+	if Global.is_dev_mode() and event.is_action_pressed(&"debug_1"):
 		win()
 
 func _notification(what: int) -> void:
