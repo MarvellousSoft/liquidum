@@ -186,6 +186,7 @@ grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
 [node name="MobileBGHelp" parent="." instance=ExtResource("2_hpxdw")]
+visible = false
 
 [node name="Settings" type="Control" parent="."]
 visible = false

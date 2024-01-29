@@ -100,7 +100,7 @@ func _on_editor_button_pressed():
 
 func _on_profile_button_pressed():
 	AudioManager.play_sfx("button_pressed")
-	var profile := preload("res://game/profile_menu/ProfileScreen.tscn").instantiate()
+	var profile := Global.load_mobile_compat("res://game/profile_menu/ProfileScreen").instantiate()
 	TransitionManager.push_scene(profile)
 
 func _on_workshop_pressed():

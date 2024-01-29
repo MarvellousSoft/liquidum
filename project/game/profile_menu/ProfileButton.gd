@@ -1,8 +1,7 @@
 extends Control
 
 @export var profile_name: String
-@onready var MainButton: Button = $SelectButton
-@onready var Selected = $SelectButton/Selected
+@onready var Selected = %Selected
 
 signal select(profile: String)
 signal delete(profile: String)

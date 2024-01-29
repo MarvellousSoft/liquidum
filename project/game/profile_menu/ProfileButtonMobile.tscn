@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://dor5eoyssh1ql"]
+
+[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_r44ne"]
+[ext_resource type="Script" path="res://game/profile_menu/ProfileButton.gd" id="2_nldj7"]
+[ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="2_p3n5h"]
+[ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="3_he6nh"]
+[ext_resource type="StyleBox" uid="uid://w8cqsiejchla" path="res://assets/ui/NegativeButtonNormalStyle.tres" id="4_dheo6"]
+[ext_resource type="StyleBox" uid="uid://cq8rna3kxgycu" path="res://assets/ui/NegativeButtonHoverStyle.tres" id="5_q18mb"]
+[ext_resource type="StyleBox" uid="uid://bo7xt6vgeh2hc" path="res://assets/ui/NegativeButtonPressedStyle.tres" id="6_mnibn"]
+
+[node name="ProfileButtonMobile" type="VBoxContainer"]
+offset_right = 432.0
+offset_bottom = 184.0
+theme = ExtResource("1_r44ne")
+theme_override_constants/separation = 40
+script = ExtResource("2_nldj7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 60
+alignment = 1
+
+[node name="SelectButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+icon = ExtResource("2_p3n5h")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Selected" type="TextureRect" parent="HBoxContainer/SelectButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+texture = ExtResource("3_he6nh")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DeleteButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_override_styles/normal = ExtResource("4_dheo6")
+theme_override_styles/hover = ExtResource("5_q18mb")
+theme_override_styles/pressed = ExtResource("6_mnibn")
+text = "X"
+
+[node name="ProfileInfo" type="Label" parent="."]
+layout_mode = 2
+text = "X LEVELS_COMPLETED"
+horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="HBoxContainer/SelectButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/SelectButton" to="." method="_on_select_button_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/DeleteButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/DeleteButton" to="." method="_on_delete_button_pressed"]

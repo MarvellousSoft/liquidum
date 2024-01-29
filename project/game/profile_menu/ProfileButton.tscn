@@ -24,6 +24,7 @@ icon = ExtResource("3_rpuc4")
 icon_alignment = 1
 
 [node name="Selected" type="TextureRect" parent="SelectButton"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = -75.0
 offset_top = -55.0

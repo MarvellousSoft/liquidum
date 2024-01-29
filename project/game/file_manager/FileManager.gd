@@ -110,7 +110,6 @@ func load_profile() -> void:
 
 
 func save_profile() -> void:
-	push_warning("Saving profile")
 	var profile_data := Profile.get_save_data()
 	_save_json_data(_profile_dir(), PROFILE_FILE, profile_data)
 

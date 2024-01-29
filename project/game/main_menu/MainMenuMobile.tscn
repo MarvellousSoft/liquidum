@@ -287,6 +287,7 @@ editor_draw_limits = true
 [node name="DiscordButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
 offset_left = 606.0
 offset_top = 1164.0
 offset_right = 706.0
