@@ -466,7 +466,7 @@ class CellWithLoc extends GridModel.CellModel:
 		if !grid.is_corner_partially_valid(Content.NoBoat, i, j, corner):
 			return false
 		if water_at(corner):
-			return false
+			remove_content(corner, false)
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
 		if pure().put_noboat(corner, force_no_mix):
 			grid._push_undo_changes(changes, false)
@@ -538,6 +538,8 @@ class CellWithLoc extends GridModel.CellModel:
 		if c.pure()._content_top() != Content.Water:
 			if not c.put_water(E.diag_to_corner(c.cell_type(), E.Side.Top), false):
 				return false
+		if water_at(E.Corner.TopLeft):
+			remove_content(E.Corner.TopLeft, false)
 		var changes: Array[Change] = [CellChange.new(i, j, pure().clone())]
 		if pure()._put_boat():
 			if flood:

@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="13_kx7dw"]
 [ext_resource type="PackedScene" uid="uid://cqxcsefprpluj" path="res://game/level/TutorialDisplay.tscn" id="15_nwo8g"]
 [ext_resource type="PackedScene" uid="uid://cvc05fffw42ma" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
-[ext_resource type="PackedScene" uid="uid://lov0qq857vqf" path="res://game/steam/SteamRichPresence.tscn" id="21_s7rk0"]
+[ext_resource type="PackedScene" path="res://game/steam/SteamRichPresence.tscn" id="21_s7rk0"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")
