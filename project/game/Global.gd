@@ -29,6 +29,22 @@ const COLORS = {
 	"satisfied": Color("#61fc89ff"),
 	"error": Color("#ff6a6aff"),
 }
+const WATER_COLORS = {
+	"normal": {
+		"dark": Color(0, 0.035, 0.141),
+		"bg": Color(0.851, 1, 0.886),
+		"water_color": Color(0.671, 1, 0.82),
+		"depth_color": Color(0.078, 0.365, 0.529),
+		"ray_value": 0.3,
+	},
+	"dark": {
+		"dark": Color(0.671, 1, 0.82),
+		"bg": Color(0.035, 0.212, 0.349),
+		"water_color": Color(0.671, 1, 0.82),
+		"depth_color": Color(0.275, 0.812, 0.702),
+		"ray_value": 1.0,
+	}
+}
 const TUTORIALS = {
 	"mouse1": {
 		"desktop": preload("res://database/tutorials/Mouse1.tscn"),
@@ -243,3 +259,10 @@ func get_settings_theme(is_dark : bool):
 			return SETTINGS_THEME.desktop.dark
 		else:
 			return SETTINGS_THEME.desktop.normal
+
+
+func get_color(is_dark : bool):
+	if is_dark:
+		return WATER_COLORS.dark
+	else:
+		return WATER_COLORS.normal

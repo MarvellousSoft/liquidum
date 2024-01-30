@@ -1,5 +1,14 @@
 extends Control
 
+const IMAGES = {
+	"dark": {
+		"no_boat": preload("res://assets/images/ui/brush/brish_picker_noboat_dark.png"),
+	},
+	"normal": {
+		"no_boat": preload("res://assets/images/ui/brush/brish_picker_noboat.png"),
+	}
+}
+
 signal brushed_picked(mode : E.BrushMode)
 
 var editor_mode := false
@@ -26,6 +35,8 @@ var active := true
 @onready var AnimPlayer = $AnimationPlayer
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	setup(editor_mode)
 	for button in E.BrushMode.values():
 		(Buttons[button] as TextureButton).pressed.connect(_on_button_pressed.bind(button))
@@ -82,6 +93,7 @@ func get_valid_buttons() -> Array[E.BrushMode]:
 			valid_buttons.push_back(button_key)
 	return valid_buttons
 
+
 func pick_next_brush() -> void:
 	var valid_buttons := get_valid_buttons()
 	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
@@ -109,9 +121,20 @@ func pick_previous_brush() -> void:
 	i = i % valid_buttons.size()
 	_on_button_pressed(valid_buttons[i])
 
+
 func _on_button_pressed(mode: E.BrushMode):
 	AudioManager.play_sfx("change_brush")
 	# Doing radio logic by hand since Godot`s isn`t working for some reason
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == mode)
 	brushed_picked.emit(mode)
+
+
+func _on_dark_mode_changed(is_dark):
+	var color = Global.get_color(is_dark)
+	var images = IMAGES.dark if is_dark else IMAGES.normal
+	%Boat.modulate = color.dark
+	%Water.material.set_shader_parameter("water_color", color.water_color)
+	%Water.material.set_shader_parameter("depth_color", color.depth_color)
+	%Water.material.set_shader_parameter("ray_value", color.ray_value)
+	%NoBoat.texture = images.no_boat

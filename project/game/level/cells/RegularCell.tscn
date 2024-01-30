@@ -441,6 +441,7 @@ mouse_filter = 2
 texture = ExtResource("7_v8ssd")
 
 [node name="NoContent" type="Control" parent="."]
+unique_name_in_owner = true
 anchors_preset = 0
 
 [node name="Single" type="HBoxContainer" parent="NoContent"]

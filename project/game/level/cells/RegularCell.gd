@@ -1,22 +1,6 @@
 class_name RegularCell
 extends Cell
 
-const COLORS = {
-	"normal": {
-		"dark": Color(0, 0.035, 0.141),
-		"bg": Color(0.851, 1, 0.886),
-		"water_color": Color(0.671, 1, 0.82),
-		"depth_color": Color(0.078, 0.365, 0.529),
-		"ray_value": 0.3,
-	},
-	"dark": {
-		"dark": Color(0.671, 1, 0.82),
-		"bg": Color(0.035, 0.212, 0.349),
-		"water_color": Color(0.671, 1, 0.82),
-		"depth_color": Color(0.275, 0.812, 0.702),
-		"ray_value": 1.0,
-	}
-}
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
 const BOAT_ALPHA_SPEED = 1.0
@@ -27,6 +11,14 @@ const EPS = 0.1
 const HIGHLIGHT_SPEED = 5.0
 const PREVIEW_MAX_ALPHA = 0.4
 const PREVIEW_ALPHA_SPEED = 1.6
+const IMAGES = {
+	"normal": {
+		"no_boat": preload("res://assets/images/ui/cell/noboat.png"),
+	},
+	"dark": {
+		"no_boat": preload("res://assets/images/ui/cell/noboat_dark.png"),
+	},
+}
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal released_main_button(i: int, j: int, which: E.Waters)
@@ -183,7 +175,8 @@ func disable():
 
 
 func update_dark_mode(is_dark : bool) -> void:
-	var colors = COLORS.dark if is_dark else COLORS.normal
+	var colors = Global.get_color(is_dark)
+	var images = IMAGES.dark if is_dark else IMAGES.normal
 	%Hints.modulate = colors.dark
 	%Walls.modulate = colors.dark
 	%Blocks.modulate = colors.dark
@@ -194,6 +187,8 @@ func update_dark_mode(is_dark : bool) -> void:
 		water.material.set_shader_parameter("water_color", colors.water_color)
 		water.material.set_shader_parameter("depth_color", colors.depth_color)
 		water.material.set_shader_parameter("ray_value", colors.ray_value)
+	for content in NoContent.values():
+		content.boat.texture = images.no_boat
 
 
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:
@@ -358,6 +353,7 @@ func get_final_alpha(water: TextureRect) -> float:
 
 func set_final_alpha(water: TextureRect, value: float) -> void:
 	water.material.set_shader_parameter("final_alpha", value)
+
 
 func increase_water_level(corner : E.Waters, dt : float) -> void:
 	var water = Waters[corner] as Node
