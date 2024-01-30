@@ -35,6 +35,7 @@ shader_parameter/wave_height = 5.0
 shader_parameter/depth = 40.0
 shader_parameter/water_color = Color(0.670588, 1, 0.819608, 1)
 shader_parameter/depth_color = Color(0.0784314, 0.364706, 0.529412, 1)
+shader_parameter/ray_value = 0.3
 shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
 
 [sub_resource type="Animation" id="Animation_no0ke"]
@@ -135,12 +136,15 @@ script = ExtResource("1_5hp8l")
 layout_mode = 0
 offset_right = 3840.0
 offset_bottom = 400.0
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Images" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 

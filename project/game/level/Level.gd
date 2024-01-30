@@ -161,9 +161,12 @@ func _process(dt):
 	Global.alpha_fade_node(dt, %TutorialDisplayBG, %TutorialDisplay.is_active(), 4.0, true)
 
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if Global.is_dev_mode() and event.is_action_pressed(&"debug_1"):
 		win()
+	if Global.is_mobile and event is InputEventMouseMotion and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		# We don't have these in real mobiles so let's hide them in desktop
+		accept_event()
 
 func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
@@ -176,10 +179,15 @@ func _notification(what: int) -> void:
 		else:
 			_on_back_button_pressed()
 
-
 func _unhandled_input(event):
 	if event.is_action_pressed("return"):
 		Settings.toggle_pause()
+
+func _on_input_fallback_gui_input(event: InputEvent) -> void:
+	if Global.is_mobile and event.is_pressed() and event is InputEventMouseButton:
+		print("Huzza %s" % event)
+		GridNode.remove_all_highlights()
+		GridNode.remove_all_preview()
 
 
 func setup(try_load := true) -> void:
@@ -834,3 +842,4 @@ func _on_aquarium_buttons_toggled(toggled_on):
 	else:
 		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
 		%AquariumAnim.play("disable")
+

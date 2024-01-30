@@ -379,11 +379,20 @@ script = ExtResource("2_5r7gi")
 [node name="MobileBGHelp" parent="." instance=ExtResource("2_vch05")]
 layout_mode = 0
 
+[node name="InputFallback" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
 offset_top = 227.0
 offset_right = 720.0
 offset_bottom = 927.0
+mouse_filter = 2
 
 [node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
@@ -402,11 +411,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 0
+mouse_filter = 1
 theme = ExtResource("3_uwkov")
 text = "BACK"
 
 [node name="Spacer" type="Control" parent="TopButtons"]
 layout_mode = 2
+mouse_filter = 1
 
 [node name="TutorialButton" type="Button" parent="TopButtons"]
 unique_name_in_owner = true
@@ -415,6 +426,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
+mouse_filter = 1
 theme_override_colors/icon_normal_color = Color(0.85098, 1, 0.886275, 1)
 icon = ExtResource("14_hwkp3")
 icon_alignment = 1
@@ -423,11 +435,13 @@ expand_icon = true
 [node name="Spacer2" type="Control" parent="TopButtons"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+mouse_filter = 1
 
 [node name="ResetButton" type="TextureButton" parent="TopButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+mouse_filter = 1
 texture_normal = ExtResource("10_bdk8m")
 texture_pressed = ExtResource("11_qqfwp")
 texture_hover = ExtResource("12_po5ls")
@@ -440,6 +454,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_top = 3.0
 offset_bottom = 3.0
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopInfo"]
 custom_minimum_size = Vector2(0, 69)
@@ -447,6 +462,7 @@ layout_mode = 0
 offset_top = 146.0
 offset_right = 720.0
 offset_bottom = 227.0
+mouse_filter = 2
 theme_override_constants/separation = 30
 alignment = 1
 
@@ -454,12 +470,14 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="TimerIcon" type="TextureRect" parent="TopInfo/HBoxContainer/TimerContainer"]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(69.12, 54.72)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 texture = ExtResource("5_dv3ih")
 expand_mode = 1
 
@@ -479,6 +497,7 @@ vertical_alignment = 2
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
 [node name="MistakeCounter" parent="TopInfo/HBoxContainer" instance=ExtResource("7_7ge7w")]
@@ -513,12 +532,14 @@ offset_top = 931.0
 offset_right = 720.0
 offset_bottom = 1012.0
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 
 [node name="HintsContainer" type="HBoxContainer" parent="HintsMarginContainer"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 18
 alignment = 1
 
@@ -551,6 +572,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
 [node name="BoatCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
@@ -581,6 +603,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
 [node name="AquariumButton" type="Button" parent="HintsMarginContainer/HintsContainer"]
@@ -853,6 +876,7 @@ autostart = true
 [node name="BottomAdShower" type="Node" parent="."]
 script = ExtResource("20_ff4mn")
 
+[connection signal="gui_input" from="InputFallback" to="." method="_on_input_fallback_gui_input"]
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/HBoxContainer/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]

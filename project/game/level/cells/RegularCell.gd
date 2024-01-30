@@ -29,6 +29,7 @@ const PREVIEW_MAX_ALPHA = 0.4
 const PREVIEW_ALPHA_SPEED = 1.6
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
+signal released_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
 signal block_entered
 signal override_mouse_entered(i: int, j: int, which: E.Waters)
@@ -384,12 +385,15 @@ func decrease_water_level(corner : E.Waters, dt : float) -> void:
 func _on_button_gui_input(event: InputEvent, which: E.Waters) -> void:
 	if Buttons[which].disabled:
 		return
-	if event is InputEventMouseButton and event.pressed:
-		match event.button_index:
-			MOUSE_BUTTON_LEFT:
-				pressed_main_button.emit(row, column, which)
-			MOUSE_BUTTON_RIGHT:
-				pressed_second_button.emit(row, column, which)
+	if event is InputEventMouseButton:
+		if event.pressed:
+			match event.button_index:
+				MOUSE_BUTTON_LEFT:
+					pressed_main_button.emit(row, column, which)
+				MOUSE_BUTTON_RIGHT:
+					pressed_second_button.emit(row, column, which)
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			released_main_button.emit(row, column, which)
 
 
 

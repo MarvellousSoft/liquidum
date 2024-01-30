@@ -41,6 +41,7 @@ const BRUSH_KEYS := {
 @onready var SizePanel = %SizePanel
 @onready var GridSizeLabel = %GridSizeLabel
 @onready var AnimPlayer = $AnimationPlayer
+@onready var LongTouchTimer: Timer = $LongTouchTimer
 
 var disabled = false
 var brush_mode : E.BrushMode = E.BrushMode.Water
@@ -54,6 +55,8 @@ var wall_brush_active := false
 var last_cell_entered = null
 var last_cell_entered_waters := E.Waters.Single
 var current_brush_override := 0
+var pending_long_touch := Vector3i(-1, -1, -1)
+var is_long_touching := false
 
 func _ready():
 	Profile.line_info_changed.connect(_on_line_info_changed)
@@ -69,6 +72,7 @@ func _input(event: InputEvent) -> void:
 		current_brush_override = 0
 	if event is InputEventMouseButton:
 		if not event.pressed:
+			is_long_touching = false
 			mouse_hold_status = E.MouseDragState.None
 			previous_wall_index = []
 	elif grid_logic and event.is_action_pressed(&"undo"):
@@ -272,6 +276,7 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 	
 	cell.pressed_main_button.connect(_on_cell_pressed_button.bind(true))
 	cell.pressed_second_button.connect(_on_cell_pressed_button.bind(false))
+	cell.released_main_button.connect(_on_cell_released_main_button)
 	cell.override_mouse_entered.connect(_on_cell_mouse_entered)
 	cell.block_entered.connect(_on_block_mouse_entered)
 	
@@ -594,12 +599,25 @@ func highlight_column(idx: int) -> void:
 
 
 func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> void:
-	if Profile.get_option("invert_mouse"):
+	if not Global.is_mobile and Profile.get_option("invert_mouse"):
 		main = not main
 	if main:
 		cell_pressed_main_button(i, j, which, -1)
 	else:
 		cell_pressed_second_button(i, j, which)
+
+func _on_cell_released_main_button(i: int, j: int, which: E.Waters) -> void:
+	if not LongTouchTimer.is_stopped():
+		LongTouchTimer.stop()
+		_process_click(pending_long_touch.x, pending_long_touch.y, pending_long_touch.z, brush_mode)
+		# The mouse released already happened in this case
+		mouse_hold_status = E.MouseDragState.None
+		pending_long_touch = Vector3i(-1, -1, -1)
+
+func _on_long_touch_timer_timeout() -> void:
+	_show_preview(pending_long_touch.x, pending_long_touch.y, pending_long_touch.z)
+	is_long_touching = true
+	pending_long_touch = Vector3i(-1, -1, -1)
 
 func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: int) -> void:
 	if disabled:
@@ -608,11 +626,18 @@ func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: i
 	current_brush_override = 0
 	remove_all_preview()
 	
-	var cell_data := grid_logic.get_cell(i, j)
-	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	var used_brush := brush_mode
 	if override_brush != -1:
 		used_brush = override_brush as E.BrushMode
+	if Global.is_mobile:
+		pending_long_touch = Vector3i(i, j, which)
+		LongTouchTimer.start()
+	else:
+		_process_click(i, j, which, used_brush)
+
+func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
+	var cell_data := grid_logic.get_cell(i, j)
+	var corner := E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	match used_brush:
 		E.BrushMode.Water:
 			grid_logic.push_empty_undo()
@@ -734,19 +759,29 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 				highlight_error(i, j, which)
 	update()
 
+func _show_preview(i: int, j: int, which: E.Waters) -> void:
+	if brush_mode == E.BrushMode.Water:
+		show_preview(i, j, which)
+	elif brush_mode == E.BrushMode.Boat:
+		show_boat_preview(i, j)
 
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
 		return
+
 	last_cell_entered = get_cell(i, j)
 	last_cell_entered_waters = which
-
 	highlight_grid(i, j)
+	if is_long_touching:
+		return _show_preview(i, j, which)
+	if not LongTouchTimer.is_stopped():
+		LongTouchTimer.stop()
+		_process_click(pending_long_touch.x, pending_long_touch.y, pending_long_touch.z, brush_mode)
+	
+
 	if mouse_hold_status == E.MouseDragState.None:
-		if brush_mode == E.BrushMode.Water:
-			show_preview(i, j, which)
-		elif brush_mode == E.BrushMode.Boat:
-			show_boat_preview(i, j)
+		if not Global.is_mobile:
+			_show_preview(i, j, which)
 		return
 	elif not Profile.get_option("drag_content") and mouse_hold_status != E.MouseDragState.Wall and mouse_hold_status != E.MouseDragState.RemoveWall:
 		mouse_hold_status = E.MouseDragState.None

@@ -126,7 +126,6 @@ placeholder_text = "SEED"
 max_length = 10
 virtual_keyboard_type = 2
 deselect_on_focus_loss_enabled = false
-drag_and_drop_selection_enabled = false
 select_all_on_focus = true
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]

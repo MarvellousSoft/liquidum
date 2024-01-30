@@ -330,6 +330,10 @@ begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
+[node name="LongTouchTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
 [connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/TRPanel" to="." method="_on_left_grid"]
@@ -349,6 +353,7 @@ antialiased = true
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/+" to="." method="_on_left_grid"]
 [connection signal="pressed" from="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize/+" to="." method="_add_row"]
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/SizePanel" to="." method="_on_left_grid"]
+[connection signal="timeout" from="LongTouchTimer" to="." method="_on_long_touch_timer_timeout"]
 
 [editable path="CenterContainer/GridContainer/HintBarTop"]
 [editable path="CenterContainer/GridContainer/HintBarLeft"]

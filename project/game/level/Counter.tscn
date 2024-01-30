@@ -100,11 +100,13 @@ _data = {
 
 [node name="Counter" type="BoxContainer"]
 modulate = Color(1, 1, 1, 0)
+mouse_filter = 2
 script = ExtResource("1_bwmcc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 81)
 layout_mode = 2
+mouse_filter = 2
 theme = ExtResource("2_wetut")
 theme_override_constants/separation = 15
 
@@ -112,6 +114,7 @@ theme_override_constants/separation = 15
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 2
 
 [node name="BG" parent="HBoxContainer/VisibilityButton" index="0"]
 custom_minimum_size = Vector2(50, 50)
