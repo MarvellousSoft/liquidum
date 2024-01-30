@@ -54,6 +54,7 @@ const TUTORIALS = {
 		"desktop": preload("res://database/tutorials/Mouse2.tscn"),
 	},
 	"preview": {
+		"desktop": preload("res://database/tutorials/HoverPreview.tscn"),
 		"mobile": preload("res://database/tutorials/HoldPreview.tscn"),
 	},
 	"together_separate": preload("res://database/tutorials/TogetherSeparate.tscn"),

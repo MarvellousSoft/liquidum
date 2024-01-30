@@ -160,7 +160,7 @@ SEED,Seed,Seed,Seed
 DARK_MODE,Dark mode,Modo escuro,Modo escuro
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
-DRAG_BUTTON,Fill with mouse drag,Preencher arrastando o mouse,Preencher arrastando o mouse
+DRAG_BUTTON,Fill with drag,Preencher arrastando,Preencher arrastando
 INCOMPLETE_LINE_INFO,Incomplete line info,Info. de linhas incompletas,Info. de linhas incompletas
 LINE_INFO_NONE,None,Nenhuma,Nenhuma
 LINE_INFO_MISSING,Missing value,Valor faltando,Valor faltando
@@ -243,3 +243,4 @@ PROGRESS_ON_UNKNOWN,"Color ""?"" hints","Colore dicas ""?""","Colore dicas ""?""
 LESS_THREE_MISTAKES,at most 2 mistakes,até 2 erros,até 2 erros
 PREVIEW_TUT,Preview,Simular,Simular
 TUT_PREVIEW,Water preview,Simular água,Simular água
+HOVER,Hover,Passar,Passar

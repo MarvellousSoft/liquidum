@@ -16,6 +16,7 @@ The following assets have an specific license/attribution to them.
 - images/ui/icons/checkmark.png
 - images/ui/icons/mouse_icon.png
 - images/ui/tutorial/info.png
+- images/ui/tutorial/arrow-cursor.png
 by Delapouite under CC BY 3.0
 
 - images/ui/checkbox_pressed.png

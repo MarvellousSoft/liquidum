@@ -1,0 +1,208 @@
+[gd_scene load_steps=9 format=3 uid="uid://cvbnroqec253l"]
+
+[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_h4jjk"]
+[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_eh2o0"]
+[ext_resource type="Texture2D" uid="uid://cwle5kbt8vmin" path="res://assets/images/ui/tutorial/empty_cell_bottom_right_open_example.png" id="3_h8qng"]
+[ext_resource type="Texture2D" uid="uid://ccj56pxysxo6d" path="res://assets/images/ui/tutorial/empty_cell_right_open_example.png" id="4_cdc1m"]
+[ext_resource type="Texture2D" uid="uid://dld8m87hv7j5r" path="res://assets/images/ui/icons/mouse.png" id="5_5r75p"]
+[ext_resource type="Texture2D" uid="uid://cmy73jdwvtbbf" path="res://assets/images/ui/tutorial/arrow-cursor.png" id="6_3s8rj"]
+[ext_resource type="Texture2D" uid="uid://bli5cxgvrmfa7" path="res://assets/images/ui/tutorial/water_cell_no_border_example.png" id="6_i3vb2"]
+[ext_resource type="Texture2D" uid="uid://dasypwk0w0uqo" path="res://assets/images/ui/tutorial/water_cell_full_no_border_example.png" id="7_t4pva"]
+
+[node name="Mouse" type="Control"]
+custom_minimum_size = Vector2(840, 640)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 840.0
+offset_bottom = 640.0
+theme = ExtResource("1_h4jjk")
+script = ExtResource("2_eh2o0")
+tutorial_name = "TUT_PREVIEW"
+
+[node name="Equal" type="Label" parent="."]
+layout_mode = 2
+offset_left = 334.0
+offset_top = 42.0
+offset_right = 446.0
+offset_bottom = 275.0
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 200
+text = "="
+vertical_alignment = 1
+
+[node name="ClickedEmptyAquarium" type="Control" parent="."]
+layout_mode = 2
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 384.0
+
+[node name="AquariumEmpty" type="GridContainer" parent="ClickedEmptyAquarium"]
+layout_mode = 2
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_h8qng")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_h8qng")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_cdc1m")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_cdc1m")
+expand_mode = 1
+flip_h = true
+
+[node name="Mouse" type="TextureRect" parent="ClickedEmptyAquarium"]
+modulate = Color(0.0156863, 0.105882, 0.219608, 1)
+layout_mode = 2
+offset_left = 21.0
+offset_top = 434.0
+offset_right = 248.0
+offset_bottom = 661.0
+rotation = -0.261799
+texture = ExtResource("5_5r75p")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="ClickedEmptyAquarium"]
+layout_mode = 0
+offset_top = 317.0
+offset_right = 300.0
+offset_bottom = 415.0
+theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 50
+text = "HOVER"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium"]
+modulate = Color(0.0156863, 0.105882, 0.219608, 1)
+layout_mode = 0
+offset_left = 59.0
+offset_top = 62.0
+offset_right = 174.0
+offset_bottom = 177.0
+texture = ExtResource("6_3s8rj")
+expand_mode = 1
+
+[node name="PreviewAquarium" type="Control" parent="."]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 485.0
+offset_right = 785.0
+offset_bottom = 415.0
+
+[node name="AquariumEmpty" type="GridContainer" parent="PreviewAquarium"]
+layout_mode = 2
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_h8qng")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_h8qng")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_cdc1m")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_cdc1m")
+expand_mode = 1
+flip_h = true
+
+[node name="PreviewWater" type="GridContainer" parent="PreviewAquarium"]
+modulate = Color(1, 1, 1, 0.662745)
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("6_i3vb2")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("6_i3vb2")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("7_t4pva")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("7_t4pva")
+expand_mode = 1
+flip_h = true
+
+[node name="Preview" type="Label" parent="PreviewAquarium"]
+layout_mode = 0
+offset_left = -17.0
+offset_top = 317.0
+offset_right = 330.0
+offset_bottom = 415.0
+theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 50
+text = "PREVIEW_TUT"
+horizontal_alignment = 1
