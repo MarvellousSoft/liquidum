@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://lc31l4wcqsjj" path="res://assets/images/ui/icons/mouse_right_button_highlight.png" id="4_bchqm"]
 
 [node name="Mouse2" type="MarginContainer"]
+offset_right = 892.0
+offset_bottom = 300.0
 theme = ExtResource("1_j3v0c")
 script = ExtResource("2_sy81x")
 tutorial_name = "TUT_MOUSE2"

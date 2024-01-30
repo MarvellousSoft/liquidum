@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c0quvd77qfdsd"]
+[gd_scene load_steps=11 format=3 uid="uid://c0quvd77qfdsd"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="2_h8530"]
@@ -9,6 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://d1cm4ha1d6dj5" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 [ext_resource type="Script" path="res://game/main_menu/DiscordButton.gd" id="4_r0s65"]
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_vktdt"]
+diffuse_texture = ExtResource("3_nnq5w")
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -83,7 +86,7 @@ custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
-texture_normal = ExtResource("3_nnq5w")
+texture_normal = SubResource("CanvasTexture_vktdt")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("4_r0s65")

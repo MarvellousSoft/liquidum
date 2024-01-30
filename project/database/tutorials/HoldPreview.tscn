@@ -1,270 +1,29 @@
-[gd_scene load_steps=7 format=3 uid="uid://8svv0ujilpye"]
+[gd_scene load_steps=8 format=3 uid="uid://fx455413trsr"]
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_dv8s0"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_42eqt"]
-[ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_6cxyn"]
-[ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="4_wovd3"]
-[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_lqc0o"]
-[ext_resource type="Texture2D" uid="uid://d0s2k5bifvwxk" path="res://assets/images/ui/icons/finger_touch.png" id="6_4tnxd"]
+[ext_resource type="Texture2D" uid="uid://cwle5kbt8vmin" path="res://assets/images/ui/tutorial/empty_cell_bottom_right_open_example.png" id="3_lax3h"]
+[ext_resource type="Texture2D" uid="uid://ccj56pxysxo6d" path="res://assets/images/ui/tutorial/empty_cell_right_open_example.png" id="4_lpiat"]
+[ext_resource type="Texture2D" uid="uid://dw3v7lvd4emcq" path="res://assets/images/ui/icons/finger_hold.png" id="5_torcd"]
+[ext_resource type="Texture2D" uid="uid://bli5cxgvrmfa7" path="res://assets/images/ui/tutorial/water_cell_no_border_example.png" id="6_o5u4a"]
+[ext_resource type="Texture2D" uid="uid://dasypwk0w0uqo" path="res://assets/images/ui/tutorial/water_cell_full_no_border_example.png" id="7_xyofp"]
 
-[node name="Mouse" type="MarginContainer"]
+[node name="Mouse" type="Control"]
+custom_minimum_size = Vector2(840, 415)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 839.0
+offset_bottom = 415.0
 theme = ExtResource("1_dv8s0")
 script = ExtResource("2_42eqt")
-tutorial_name = "TUT_MOUSE1"
+tutorial_name = "TUT_PREVIEW"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Equal" type="Label" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 50
-
-[node name="NumberHint" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 50
-alignment = 1
-
-[node name="ExamplesContainer" type="VBoxContainer" parent="VBoxContainer/NumberHint"]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Example1" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
-layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
-
-[node name="Number" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
-text = " 4"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example1"]
-modulate = Color(0.380392, 0.988235, 0.537255, 1)
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("5_lqc0o")
-expand_mode = 1
-
-[node name="Example2" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
-layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
-
-[node name="Number" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
-text = " 3"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example2"]
-modulate = Color(0.380392, 0.988235, 0.537255, 1)
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("5_lqc0o")
-expand_mode = 1
-
-[node name="Example3" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
-layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
-
-[node name="Number" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
-text = " 3"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="Correct" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example3"]
-modulate = Color(0.380392, 0.988235, 0.537255, 1)
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("5_lqc0o")
-expand_mode = 1
-
-[node name="Example4" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer"]
-layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
-
-[node name="Number" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
-text = " 2"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 0
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect7" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect9" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect8" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_wovd3")
-expand_mode = 1
-
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4/HBoxContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("3_6cxyn")
-expand_mode = 1
-
-[node name="Wrong" type="Label" parent="VBoxContainer/NumberHint/ExamplesContainer/Example4"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 50
-theme_override_font_sizes/font_size = 85
-text = "X"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Separator2" type="HSeparator" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="MainClick" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 50
-
-[node name="Mouse" type="TextureRect" parent="VBoxContainer/MainClick"]
-self_modulate = Color(0.85098, 1, 0.886275, 1)
-custom_minimum_size = Vector2(300, 300)
-layout_mode = 2
-texture = ExtResource("6_4tnxd")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="VBoxContainer/MainClick"]
-layout_mode = 2
+offset_left = 334.0
+offset_top = 42.0
+offset_right = 446.0
+offset_bottom = 275.0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_constants/outline_size = 10
@@ -272,12 +31,165 @@ theme_override_font_sizes/font_size = 200
 text = "="
 vertical_alignment = 1
 
-[node name="Spacer" type="Control" parent="VBoxContainer/MainClick"]
-custom_minimum_size = Vector2(30, 0)
+[node name="ClickedEmptyAquarium" type="Control" parent="."]
 layout_mode = 2
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 384.0
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/MainClick"]
-custom_minimum_size = Vector2(300, 300)
+[node name="AquariumEmpty" type="GridContainer" parent="ClickedEmptyAquarium"]
 layout_mode = 2
-texture = ExtResource("3_6cxyn")
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_lax3h")
 expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_lax3h")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_lpiat")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_lpiat")
+expand_mode = 1
+flip_h = true
+
+[node name="Mouse" type="TextureRect" parent="ClickedEmptyAquarium"]
+modulate = Color(0.0156863, 0.105882, 0.219608, 1)
+layout_mode = 2
+offset_left = 16.0
+offset_top = 52.0
+offset_right = 243.0
+offset_bottom = 279.0
+rotation = -0.261799
+texture = ExtResource("5_torcd")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="ClickedEmptyAquarium"]
+layout_mode = 0
+offset_top = 317.0
+offset_right = 300.0
+offset_bottom = 415.0
+theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 50
+text = "HOLD"
+horizontal_alignment = 1
+
+[node name="PreviewAquarium" type="Control" parent="."]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 485.0
+offset_right = 785.0
+offset_bottom = 415.0
+
+[node name="AquariumEmpty" type="GridContainer" parent="PreviewAquarium"]
+layout_mode = 2
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_lax3h")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("3_lax3h")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_lpiat")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_lpiat")
+expand_mode = 1
+flip_h = true
+
+[node name="PreviewWater" type="GridContainer" parent="PreviewAquarium"]
+modulate = Color(1, 1, 1, 0.662745)
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = 0
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("6_o5u4a")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("6_o5u4a")
+expand_mode = 1
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("7_xyofp")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("7_xyofp")
+expand_mode = 1
+flip_h = true
+
+[node name="Preview" type="Label" parent="PreviewAquarium"]
+offset_left = -17.0
+offset_top = 317.0
+offset_right = 330.0
+offset_bottom = 415.0
+theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 50
+text = "PREVIEW_TUT"
+horizontal_alignment = 1
