@@ -1,14 +1,14 @@
-[gd_resource type="Theme" load_steps=22 format=3 uid="uid://c6108lc3jg2cv"]
+[gd_resource type="Theme" load_steps=22 format=3 uid="uid://ciyxsj3glraox"]
 
-[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
-[ext_resource type="StyleBox" uid="uid://bu8vlk21sg5aa" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
-[ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_hda1e"]
-[ext_resource type="StyleBox" uid="uid://gqjj40bseq65" path="res://assets/ui/ButtonNormalStyle.tres" id="3_7bdy7"]
-[ext_resource type="StyleBox" uid="uid://8i3c41sdwhm" path="res://assets/ui/ButtonPressedStyle.tres" id="4_7wtpn"]
-[ext_resource type="StyleBox" uid="uid://csn6hdcaxri2x" path="res://assets/ui/Panel.tres" id="6_px5lc"]
+[ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_7hy3e"]
+[ext_resource type="StyleBox" uid="uid://csx8vco4fgi7s" path="res://assets/ui/ButtonDarkDisabledStyle.tres" id="2_4237h"]
+[ext_resource type="StyleBox" uid="uid://cqvciwx1t7gyt" path="res://assets/ui/ButtonDarkHoverStyle.tres" id="3_g7d8u"]
+[ext_resource type="StyleBox" uid="uid://bf5404yrc0cad" path="res://assets/ui/ButtonDarkNormalStyle.tres" id="4_vdbyh"]
+[ext_resource type="StyleBox" uid="uid://6k8f8u5gpvl4" path="res://assets/ui/ButtonDarkPressedStyle.tres" id="5_ehh71"]
+[ext_resource type="StyleBox" uid="uid://dru6mfs2uswpl" path="res://assets/ui/PanelDark.tres" id="6_j4aop"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
-base_font = ExtResource("1_x6xj1")
+base_font = ExtResource("1_7hy3e")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m3p"]
 bg_color = Color(0.847059, 0.996078, 0.882353, 1)
@@ -39,14 +39,14 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_wfon5"]
-color = Color(0.0156863, 0.105882, 0.219608, 0.741176)
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7x83v"]
+color = Color(0.85098, 1, 0.886275, 0.741176)
 grow_begin = -40.0
 grow_end = -40.0
 thickness = 20
 
 [sub_resource type="FontVariation" id="FontVariation_qs55u"]
-base_font = ExtResource("1_x6xj1")
+base_font = ExtResource("1_7hy3e")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ovfql"]
 bg_color = Color(0.85098, 1, 0.886275, 0.235294)
@@ -140,23 +140,23 @@ Button/colors/font_pressed_color = Color(0.85098, 1, 0.886275, 1)
 Button/constants/h_separation = 0
 Button/font_sizes/font_size = 82
 Button/fonts/font = SubResource("FontVariation_7w16d")
-Button/styles/disabled = ExtResource("2_fwtui")
-Button/styles/hover = ExtResource("2_hda1e")
-Button/styles/normal = ExtResource("3_7bdy7")
-Button/styles/pressed = ExtResource("4_7wtpn")
+Button/styles/disabled = ExtResource("2_4237h")
+Button/styles/hover = ExtResource("3_g7d8u")
+Button/styles/normal = ExtResource("4_vdbyh")
+Button/styles/pressed = ExtResource("5_ehh71")
 HScrollBar/styles/grabber = SubResource("StyleBoxFlat_j8m3p")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_ad02q")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_syvu6")
 HScrollBar/styles/scroll = SubResource("StyleBoxFlat_ktx56")
-HSeparator/styles/separator = SubResource("StyleBoxLine_wfon5")
+HSeparator/styles/separator = SubResource("StyleBoxLine_7x83v")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82
 Label/fonts/font = SubResource("FontVariation_qs55u")
 LineEdit/font_sizes/font_size = 82
-PanelContainer/styles/panel = ExtResource("6_px5lc")
+PanelContainer/styles/panel = ExtResource("6_j4aop")
 PopupMenu/font_sizes/font_size = 50
 ProgressBar/font_sizes/font_size = 82
-ProgressBar/fonts/font = ExtResource("1_x6xj1")
+ProgressBar/fonts/font = ExtResource("1_7hy3e")
 TabContainer/colors/font_hovered_color = Color(0.0156863, 0.105882, 0.219608, 1)
 TabContainer/colors/font_selected_color = Color(0.0352941, 0.211765, 0.34902, 1)
 TabContainer/colors/font_unselected_color = Color(0, 0.0352941, 0.141176, 0.501961)
@@ -166,7 +166,7 @@ TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_pnpu3")
 TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_sfcym")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_8j4fw")
 TextEdit/font_sizes/font_size = 60
-TextEdit/fonts/font = ExtResource("1_x6xj1")
+TextEdit/fonts/font = ExtResource("1_7hy3e")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_osq2p")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_frb2o")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_kqwc6")

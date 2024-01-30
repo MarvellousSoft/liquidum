@@ -37,9 +37,10 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	if not SteamManager.enabled and not Global.is_mobile:
 		%Workshop.disabled = true
-	
 	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
 	Camera.position = cam_pos.menu
@@ -156,3 +157,8 @@ func _on_random_button_pressed() -> void:
 
 func _on_credits_button_pressed() -> void:
 	TransitionManager.push_scene(Global.load_mobile_compat("res://game/credits/CreditsScreen").instantiate())
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	theme = Global.get_theme(is_dark)
+	

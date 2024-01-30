@@ -20,11 +20,14 @@ var active := false
 var is_disabled := false
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	TitleContainer.hide()
 	BG.hide()
 	if Global.is_mobile:
 		update_remove_ads_button()
 		AdManager.ads_disabled.connect(update_remove_ads_button)
+
 
 func update_remove_ads_button() -> void:
 	if Global.is_mobile:
@@ -202,7 +205,18 @@ func _on_allow_mistakes_toggled(on: bool) -> void:
 	Profile.set_option("allow_mistakes", on)
 	Profile.allow_mistakes_changed.emit(on)
 
+
 func _on_progress_on_unknown_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("progress_on_unknown", on)
 	Profile.progress_on_unkown_changed.emit(on)
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	%Settings.theme = Global.get_settings_theme(is_dark)
+	if Global.is_mobile:
+		for node in [%RemoveAdsButton, %BackButton, %QuitButton]:
+			node.theme = Global.get_theme(is_dark)
+	else:
+		for node in [%BackButton, %QuitButton]:
+			node.theme = Global.get_theme(is_dark)

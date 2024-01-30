@@ -1,5 +1,25 @@
 extends Node
 
+const THEME = {
+	"desktop": {
+		"normal": preload("res://assets/ui/GeneralTheme.tres"),
+		"dark": preload("res://assets/ui/GeneralDarkTheme.tres"),
+	},
+	"mobile": {
+		"normal": preload("res://assets/ui/MobileTheme.tres"),
+		"dark": preload("res://assets/ui/MobileDarkTheme.tres"),
+	},
+}
+const SETTINGS_THEME = {
+	"desktop": {
+		"normal": preload("res://assets/ui/SettingsTheme.tres"),
+		"dark": preload("res://assets/ui/SettingsDarkTheme.tres"),
+	},
+	"mobile": {
+		"normal": preload("res://assets/ui/SettingsMobileTheme.tres"),
+		"dark": preload("res://assets/ui/SettingsMobileDarkTheme.tres"),
+	},
+}
 const COLORS = {
 	"normal": Color("#d9ffe2ff"),
 	"satisfied": Color("#61fc89ff"),
@@ -175,6 +195,7 @@ func get_tutorial(tutorial_name):
 			return false
 	return tut.instantiate()
 
+
 func alpha_fade_node(dt: float, node: Node, show: bool, alpha_speed := 1.0, toggle_visibility := false, max_alpha := 1.0, min_alpha := 0.0) -> void:
 	if show:
 		node.modulate.a = min(node.modulate.a + alpha_speed*dt, max_alpha)
@@ -185,3 +206,29 @@ func alpha_fade_node(dt: float, node: Node, show: bool, alpha_speed := 1.0, togg
 			node.show()
 		else:
 			node.hide()
+
+
+func get_theme(is_dark : bool):
+	if is_mobile:
+		if is_dark:
+			return THEME.mobile.dark
+		else:
+			return THEME.mobile.normal
+	else:
+		if is_dark:
+			return THEME.desktop.dark
+		else:
+			return THEME.desktop.normal
+
+
+func get_settings_theme(is_dark : bool):
+	if is_mobile:
+		if is_dark:
+			return SETTINGS_THEME.mobile.dark
+		else:
+			return SETTINGS_THEME.mobile.normal
+	else:
+		if is_dark:
+			return SETTINGS_THEME.desktop.dark
+		else:
+			return SETTINGS_THEME.desktop.normal

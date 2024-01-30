@@ -13,6 +13,8 @@ var gen := RandomLevelGenerator.new()
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
 func _ready() -> void:
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
 	# Unlock difficulty after unlocking this section
 	var difs := {
@@ -34,17 +36,28 @@ func _ready() -> void:
 			button.disabled = true
 			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
 
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		if $SettingsScreen.active:
+			$SettingsScreen.toggle_pause()
+		else:
+			_on_back_pressed()
+
+
 func _on_dev_mode(_on: bool) -> void:
 	get_tree().reload_current_scene()
+
 
 func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_dev_mode)
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
 
+
 func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_dev_mode)
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
+
 
 func _update() -> void:
 	var has_random_level := (FileManager.load_level(RANDOM) != null)
@@ -58,9 +71,11 @@ func _update() -> void:
 		cont.visible = not $Difficulties/VBox.get_node(dif).disabled
 		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
 
+
 func _on_back_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
+
 
 static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, dif: Difficulty) -> GridModel:
 	match dif:
@@ -78,6 +93,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 			push_error("Uknown difficulty %d" % dif)
 			return null
 
+
 func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
 	if gen.running():
 		return
@@ -93,6 +109,7 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
 	FileManager.save_random_level(data)
 	load_existing()
 
+
 func load_existing() -> void:
 	var data := FileManager.load_random_level()
 	if data == null:
@@ -102,11 +119,13 @@ func load_existing() -> void:
 	level.won.connect(_level_completed.bind(data.difficulty))
 	TransitionManager.push_scene(level)
 
+
 func _confirm_new_level() -> bool:
 	AudioManager.play_sfx("button_pressed")
 	if Continue.visible and ConfirmationScreen.start_confirmation(&"CONFIRM_NEW_RANDOM"):
 		return await ConfirmationScreen.pressed
 	return true
+
 
 func _level_completed(info: Level.WinInfo, dif: Difficulty) -> void:
 	# Save was already deleted
@@ -115,9 +134,11 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty) -> void:
 	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and SteamManager.enabled:
 		SteamStats.increment_insane_good()
 
+
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	load_existing()
+
 
 static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: int) -> void:
 	var b: Array[int] = []
@@ -127,11 +148,14 @@ static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, c
 	for i in a.size():
 		a[i] |= b[i]
 
+
 static func _expert_options(rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder().with_diags(rng.randf() < 0.5).with_boats(rng.randf() < 0.35)
 
+
 static func _diags(rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder().with_diags().with_boats(rng.randf() < 0.5)
+
 
 static func _nothing(_rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder()
@@ -149,8 +173,10 @@ static func hide_too_easy_hints(grid: GridModel, rows := true, cols := true) -> 
 			if hints[j].water_count == grid.rows() or hints[j].water_count == 0:
 				hints[j].water_count = -1
 
+
 static func _easy_visibility(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
+
 
 static func _medium_visibility(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
@@ -191,6 +217,7 @@ static func _expert_visibility(rng: RandomNumberGenerator, grid: GridModel) -> v
 static func consistent_hash(x: String) -> int:
 	return x.sha1_buffer().decode_s64(0)
 
+
 func _on_dif_pressed(dif: Difficulty) -> void:
 	if not await _confirm_new_level():
 		return
@@ -210,7 +237,6 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	gen_and_play(rng, dif)
 
 
-
 func _on_cancel_gen_pressed():
 	gen.cancel()
 
@@ -219,9 +245,6 @@ func _on_custom_seed_button_pressed() -> void:
 	$CustomSeedButton.visible = false
 	$Seed.visible = true
 
-func _notification(what: int) -> void:
-	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		if $SettingsScreen.active:
-			$SettingsScreen.toggle_pause()
-		else:
-			_on_back_pressed()
+
+func _on_dark_mode_changed(is_dark : bool):
+	theme = Global.get_theme(is_dark)

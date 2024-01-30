@@ -185,6 +185,7 @@ grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
 [node name="Settings" type="Control" parent="."]
+unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
@@ -786,6 +787,7 @@ layout_mode = 2
 text = "SETTINGS_CONTROL"
 
 [node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
@@ -793,6 +795,7 @@ theme = ExtResource("6_um142")
 text = "SAVE_AND_BACK"
 
 [node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0

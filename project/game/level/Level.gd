@@ -80,10 +80,12 @@ var difficulty := -1
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	Profile.show_timer_changed.connect(_on_show_timer_changed)
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	Profile.allow_mistakes_changed.connect(_on_allow_mistakes_changed)
 	Profile.progress_on_unkown_changed.connect(_on_progress_on_unkown_changed)
 	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	Counters.mistake.visible = not grid.editor_mode() and not Profile.get_option("allow_mistakes")
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	if not Global.is_mobile:
 		%DevContainer.visible = Global.is_dev_mode()
 		%PlaytestButton.visible = false
@@ -842,4 +844,8 @@ func _on_aquarium_buttons_toggled(toggled_on):
 	else:
 		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
 		%AquariumAnim.play("disable")
+
+
+func _on_dark_mode_changed(is_dark):
+	theme = Global.get_theme(is_dark)
 

@@ -46,6 +46,10 @@ const STEAM_LANGUAGES := {
 }
 
 
+func _ready():
+	dark_mode_toggled.connect(_on_dark_mode_toggled)
+
+
 func update_translation() -> void:
 	var l_idx: int = get_option("locale")
 	var locale: String
@@ -126,3 +130,7 @@ func set_option(opt_name: String, value, should_save := false):
 	options[opt_name] = value
 	if should_save:
 		FileManager.save_profile()
+
+
+func _on_dark_mode_toggled(is_dark):
+	ProjectSettings.set_setting("gui/theme/custom", Global.get_theme(is_dark))
