@@ -37,7 +37,7 @@ var options = {
 	"vsync": int(DisplayServer.VSYNC_ADAPTIVE),
 	"show_timer": true,
 	"allow_mistakes": false,
-	"progress_on_unknown": true,
+	"progress_on_unknown": false,
 }
 
 const STEAM_LANGUAGES := {

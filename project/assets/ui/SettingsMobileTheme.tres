@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bkfk4nnoesxml" path="res://assets/images/ui/settings/slider_grabber_disabled.png" id="2_r3b1p"]
 [ext_resource type="Texture2D" uid="uid://cdaxqbm7a7kgc" path="res://assets/images/ui/settings/slider_grabber_highlight.png" id="3_opqjn"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="4_vs7jr"]
-[ext_resource type="StyleBox" path="res://assets/ui/TabMobileStyle.tres" id="5_nvakl"]
+[ext_resource type="StyleBox" uid="uid://dch5upnkbfqgf" path="res://assets/ui/TabMobileStyle.tres" id="5_nvakl"]
 
 [sub_resource type="FontVariation" id="FontVariation_dorkb"]
 spacing_top = 15
