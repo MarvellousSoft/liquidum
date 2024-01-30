@@ -1,11 +1,11 @@
 [gd_resource type="Theme" load_steps=22 format=3 uid="uid://jsohplro1gdq"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_7hy3e"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkDisabledStyle.tres" id="2_4237h"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkHoverStyle.tres" id="3_g7d8u"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkNormalStyle.tres" id="4_vdbyh"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkPressedStyle.tres" id="5_ehh71"]
-[ext_resource type="StyleBox" path="res://assets/ui/PanelDark.tres" id="6_j4aop"]
+[ext_resource type="StyleBox" uid="uid://csx8vco4fgi7s" path="res://assets/ui/ButtonDarkDisabledStyle.tres" id="2_4237h"]
+[ext_resource type="StyleBox" uid="uid://cqvciwx1t7gyt" path="res://assets/ui/ButtonDarkHoverStyle.tres" id="3_g7d8u"]
+[ext_resource type="StyleBox" uid="uid://bf5404yrc0cad" path="res://assets/ui/ButtonDarkNormalStyle.tres" id="4_vdbyh"]
+[ext_resource type="StyleBox" uid="uid://6k8f8u5gpvl4" path="res://assets/ui/ButtonDarkPressedStyle.tres" id="5_ehh71"]
+[ext_resource type="StyleBox" uid="uid://dru6mfs2uswpl" path="res://assets/ui/PanelDark.tres" id="6_j4aop"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_7hy3e")

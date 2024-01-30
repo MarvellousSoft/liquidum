@@ -70,6 +70,10 @@ profile_name = "shrimp"
 [node name="SelectButton" parent="CenterContainer/Profiles/Shrimp" index="0"]
 icon = ExtResource("6_hojuy")
 
+[node name="Selected" parent="CenterContainer/Profiles/Shrimp/SelectButton" index="0"]
+offset_left = -76.0
+offset_right = 614.0
+
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="delete" from="CenterContainer/Profiles/Fish" to="." method="delete_profile"]

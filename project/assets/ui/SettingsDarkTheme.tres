@@ -1,13 +1,13 @@
 [gd_resource type="Theme" load_steps=25 format=3 uid="uid://y7gen0ny7ius"]
 
 [ext_resource type="Texture2D" uid="uid://c4rw43qeo0sjc" path="res://assets/images/ui/settings/slider_grabber_normal.png" id="1_fpfad"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkDisabledStyle.tres" id="1_h2hxw"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkHoverStyle.tres" id="2_jo0cc"]
+[ext_resource type="StyleBox" uid="uid://csx8vco4fgi7s" path="res://assets/ui/ButtonDarkDisabledStyle.tres" id="1_h2hxw"]
+[ext_resource type="StyleBox" uid="uid://cqvciwx1t7gyt" path="res://assets/ui/ButtonDarkHoverStyle.tres" id="2_jo0cc"]
 [ext_resource type="Texture2D" uid="uid://bkfk4nnoesxml" path="res://assets/images/ui/settings/slider_grabber_disabled.png" id="2_np45v"]
 [ext_resource type="Texture2D" uid="uid://cdaxqbm7a7kgc" path="res://assets/images/ui/settings/slider_grabber_highlight.png" id="3_8ngbu"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkNormalStyle.tres" id="3_ri1ey"]
+[ext_resource type="StyleBox" uid="uid://bf5404yrc0cad" path="res://assets/ui/ButtonDarkNormalStyle.tres" id="3_ri1ey"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="4_3smsa"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonDarkPressedStyle.tres" id="4_euwrw"]
+[ext_resource type="StyleBox" uid="uid://6k8f8u5gpvl4" path="res://assets/ui/ButtonDarkPressedStyle.tres" id="4_euwrw"]
 
 [sub_resource type="FontVariation" id="FontVariation_dorkb"]
 spacing_top = 15
