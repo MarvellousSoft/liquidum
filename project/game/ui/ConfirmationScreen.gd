@@ -2,17 +2,6 @@ extends CanvasLayer
 
 signal pressed(status : bool)
 
-const SETTINGS_THEMES = {
-	"desktop": preload("res://assets/ui/SettingsTheme.tres"),
-	"mobile": preload("res://assets/ui/SettingsMobileTheme.tres"),
-}
-
-const MAIN_THEMES = {
-	"desktop": preload("res://assets/ui/GeneralTheme.tres"),
-	"mobile": preload("res://assets/ui/MobileTheme.tres"),
-}
-
-
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var BG = $BG
@@ -23,18 +12,14 @@ const MAIN_THEMES = {
 var active := false
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	if Global.is_mobile:
 		%CenterContainer.size = Vector2(720, 1280)
 		%MainTitle.custom_minimum_size.x = 500
-		%Content.theme = SETTINGS_THEMES.mobile
-		%Yes.theme = MAIN_THEMES.mobile
-		%No.theme = MAIN_THEMES.mobile
 	else:
 		%CenterContainer.size = Vector2(3840, 2160)
 		%MainTitle.custom_minimum_size.x = 3000
-		%Content.theme = SETTINGS_THEMES.desktop
-		%Yes.theme = MAIN_THEMES.desktop
-		%No.theme = MAIN_THEMES.desktop
 	BG.hide()
 
 
@@ -83,3 +68,8 @@ func _on_no_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	%Content.theme = Global.get_settings_theme(is_dark)
+	%ButtonsContainer.theme = Global.get_theme(is_dark)

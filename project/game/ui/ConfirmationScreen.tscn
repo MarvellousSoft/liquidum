@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cywdde1vhvqko"]
+[gd_scene load_steps=8 format=3 uid="uid://cywdde1vhvqko"]
 
 [ext_resource type="Script" path="res://game/ui/ConfirmationScreen.gd" id="1_40f4i"]
 [ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_8015s"]
 [ext_resource type="Theme" uid="uid://dj21rv23idpsb" path="res://assets/ui/SettingsMobileTheme.tres" id="3_5r6cq"]
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="4_3562h"]
 
 [sub_resource type="Animation" id="Animation_mqb4d"]
 length = 0.001
@@ -212,32 +211,31 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 120
 alignment = 1
 
-[node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
+[node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("4_3562h")
 text = "YES"
 
-[node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/HBoxContainer"]
+[node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("4_3562h")
 text = "NO"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 3.5
 libraries = {
 "": SubResource("AnimationLibrary_sb0jh")
 }
-speed_scale = 3.5
 
-[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Content/CenterContainer/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_pressed"]
-[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/HBoxContainer/No" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Content/CenterContainer/VBoxContainer/HBoxContainer/No" to="." method="_on_no_pressed"]
+[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_yes_pressed"]
+[connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/No" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/No" to="." method="_on_no_pressed"]
