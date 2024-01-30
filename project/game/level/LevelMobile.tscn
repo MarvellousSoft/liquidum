@@ -613,10 +613,10 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton/FingerAnim"]
+autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_myebw")
 }
-autoplay = "idle"
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true

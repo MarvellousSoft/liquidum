@@ -202,20 +202,6 @@ offset_right = 3789.0
 offset_bottom = 2149.0
 theme_override_constants/separation = 30
 
-[node name="CreditsButton" type="Button" parent="InfoVBox"]
-layout_mode = 2
-size_flags_horizontal = 8
-focus_mode = 0
-text = "CREDITS_BUTTON"
-
-[node name="Version" type="Label" parent="InfoVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 90
-text = "VERSION"
-horizontal_alignment = 2
-vertical_alignment = 1
-
 [node name="BackButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -282,22 +268,34 @@ position_smoothing_enabled = true
 position_smoothing_speed = 4.0
 editor_draw_limits = true
 
-[node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
-
 [node name="DiscordButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
-offset_left = 606.0
-offset_top = 1164.0
-offset_right = 706.0
-offset_bottom = 1264.0
+offset_left = 609.0
+offset_top = 1132.0
+offset_right = 709.0
+offset_bottom = 1232.0
 size_flags_horizontal = 8
 focus_mode = 0
 texture_normal = ExtResource("10_avytv")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("11_1qmyh")
+
+[node name="Version" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 580.0
+offset_top = 1228.0
+offset_right = 712.0
+offset_bottom = 1266.0
+theme_override_font_sizes/font_size = 30
+text = "VERSION"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
@@ -306,7 +304,6 @@ script = ExtResource("11_1qmyh")
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox" method="_on_timer_timeout"]
-[connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="disable_focus" from="LevelHub" to="." method="_on_level_hub_disable_focus"]
