@@ -16,6 +16,8 @@ var visibility_active := true
 var editor_mode := false
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	disable_editor()
 	MainLabel.text = counter_name
 
@@ -84,3 +86,8 @@ func update_label() -> void:
 				Counter.add_theme_color_override("font_color", Global.COLORS.error)
 	else:
 		Counter.add_theme_color_override("font_color", Global.COLORS.normal)
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	var color = Global.get_color(is_dark)
+	%Label.add_theme_color_override("font_color", color.dark)

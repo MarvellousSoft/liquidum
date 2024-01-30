@@ -413,7 +413,6 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme = ExtResource("3_ceab8")
 
 [node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
 layout_mode = 2
