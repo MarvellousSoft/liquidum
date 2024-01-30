@@ -17,14 +17,17 @@ size_flags_horizontal = 3
 theme_override_constants/h_separation = 20
 columns = 5
 
-[node name="E1" type="Label" parent="Grid"]
+[node name="E1" type="Control" parent="Grid"]
+custom_minimum_size = Vector2(95, 95)
 layout_mode = 2
 
-[node name="E2" type="Label" parent="Grid"]
+[node name="E2" type="Control" parent="Grid"]
+custom_minimum_size = Vector2(75, 95)
 layout_mode = 2
 
 [node name="Date" type="Label" parent="Grid"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "2024-01-01"
 
 [node name="Mistakes" type="TextureRect" parent="Grid"]
@@ -35,6 +38,7 @@ stretch_mode = 5
 
 [node name="Time" type="TextureRect" parent="Grid"]
 modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 texture = ExtResource("2_lmufn")
 expand_mode = 2
@@ -44,6 +48,7 @@ stretch_mode = 5
 layout_mode = 2
 texture = ExtResource("3_ef8ai")
 expand_mode = 2
+stretch_mode = 5
 
 [node name="Pos1" type="Label" parent="Grid"]
 layout_mode = 2
@@ -52,6 +57,7 @@ text = "1."
 [node name="Name1" type="Label" parent="Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 60
 text = "Person name"
 text_overrun_behavior = 3
 
@@ -69,6 +75,7 @@ horizontal_alignment = 1
 layout_mode = 2
 texture = ExtResource("3_ef8ai")
 expand_mode = 2
+stretch_mode = 5
 
 [node name="Pos2" type="Label" parent="Grid"]
 layout_mode = 2
@@ -77,7 +84,8 @@ text = "3."
 [node name="Name2" type="Label" parent="Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Very long name"
+theme_override_font_sizes/font_size = 60
+text = "Very long name indeed"
 text_overrun_behavior = 3
 
 [node name="Mistakes2" type="Label" parent="Grid"]

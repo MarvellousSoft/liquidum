@@ -216,14 +216,18 @@ class ListEntry:
 			else:
 				var nickname: String = SteamManager.steam.getPlayerNickname(data.steam_id)
 				entry.text = SteamManager.steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
-			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_SMALL, data.steam_id)
+			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
 			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+			entry.image.generate_mipmaps()
 		else:
 			entry.text = override_name
 		return entry
 
 class LeaderboardData:
+	# Is this user present on list?
+	var has_self: bool = false
+	# List of friends and percentiles
 	var list: Array[ListEntry]
 	# Only the secs of the top 1000 scores that have no mistakes
 	# Used to draw an histogram
@@ -241,6 +245,8 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
 	for entry in ret[2]:
 		list_has_rank[entry.global_rank] = true
+		if entry.steam_id == SteamManager.steam.getSteamID():
+			data.has_self = true
 		data.list.append(await ListEntry.create(entry))
 	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
 	ret = await SteamManager.steam.leaderboard_scores_downloaded
@@ -271,7 +277,7 @@ func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData
 		level.create_tween().tween_property(display, "modulate:a", 1, 1)
 	display = level.get_node("LeaderboardDisplay")
 	display.display(today, date, yesterday_data, yesterday)
-	if yesterday == null:
+	if yesterday == null or (today != null and today.has_self):
 		display.show_today()
 	else:
 		display.show_yesterday()
