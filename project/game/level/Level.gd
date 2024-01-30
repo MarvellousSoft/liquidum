@@ -187,6 +187,11 @@ func setup(try_load := true) -> void:
 		grid.prettify_hints()
 	if not Global.is_mobile:
 		%DevButtons.setup(grid.editor_mode())
+	else:
+		if section_number == 5 and level_number == 1:
+			%AquariumButton/FingerAnim.show()
+		else:
+			%AquariumButton/FingerAnim.queue_free()
 	running_time = 0
 	game_won = false
 	last_saved = Time.get_ticks_msec()
@@ -820,6 +825,10 @@ func _on_progress_on_unkown_changed(_status: bool) -> void:
 
 func _on_aquarium_buttons_toggled(toggled_on):
 	if toggled_on:
+		if %AquariumButton.has_node("FingerAnim"):
+			var player: AnimationPlayer = %AquariumButton/FingerAnim/AnimationPlayer
+			if player.assigned_animation != "disappear":
+				player.play(&"disappear")
 		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.pressed
 		%AquariumAnim.play("enable")
 	else:
