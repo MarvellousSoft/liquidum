@@ -813,10 +813,10 @@ expand_mode = 3
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Boat"]
+autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_k3t6r")
 }
-autoplay = "idle"
 
 [node name="BoatPreview" type="TextureRect" parent="."]
 unique_name_in_owner = true

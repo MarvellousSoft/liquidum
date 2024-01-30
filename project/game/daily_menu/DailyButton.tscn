@@ -103,4 +103,4 @@ wait_time = 30.0
 autostart = true
 
 [connection signal="pressed" from="HBox/VBoxContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="timeout" from="Timer" to="HBox" method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
