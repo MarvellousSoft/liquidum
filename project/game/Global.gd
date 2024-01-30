@@ -9,6 +9,10 @@ const THEME = {
 		"normal": preload("res://assets/ui/MobileTheme.tres"),
 		"dark": preload("res://assets/ui/MobileDarkTheme.tres"),
 	},
+	"font": {
+		"normal": preload("res://assets/ui/DarkFont.tres"),
+		"dark": preload("res://assets/ui/LightFont.tres"),
+	},
 }
 const SETTINGS_THEME = {
 	"desktop": {
@@ -219,6 +223,13 @@ func get_theme(is_dark : bool):
 			return THEME.desktop.dark
 		else:
 			return THEME.desktop.normal
+
+
+func get_font_theme(is_dark : bool):
+	if is_dark:
+		return THEME.font.dark
+	else:
+		return THEME.font.normal
 
 
 func get_settings_theme(is_dark : bool):

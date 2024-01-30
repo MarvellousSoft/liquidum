@@ -248,3 +248,4 @@ func _on_custom_seed_button_pressed() -> void:
 
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
+	%PanelContainer.theme = Global.get_font_theme(is_dark)

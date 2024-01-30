@@ -131,6 +131,7 @@ select_all_on_focus = true
 [node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.5

@@ -104,6 +104,7 @@ focus_mode = 0
 text = "INSANE_BUTTON"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 offset_left = 138.0
