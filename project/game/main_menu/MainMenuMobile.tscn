@@ -67,14 +67,14 @@ text = "RANDOM_BUTTON"
 [node name="MenuProfileButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-tooltip_text = "RANDOM_TOOLTIP"
+tooltip_text = "PROFILE_TOOLTIP"
 focus_mode = 0
 text = "CHANGE_PROFILE_BUTTON"
 
 [node name="CreditsButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-tooltip_text = "RANDOM_TOOLTIP"
+tooltip_text = "CREDITS_TOOLTIP"
 focus_mode = 0
 text = "CREDITS_BUTTON"
 

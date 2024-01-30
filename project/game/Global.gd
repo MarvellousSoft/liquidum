@@ -76,6 +76,9 @@ func exit_game() -> void:
 	if window.mode == Window.MODE_WINDOWED:
 		Profile.set_option("previous_windowed_pos", window.position)
 	FileManager.save_game()
+	call_deferred(&"_do_exit")
+
+func _do_exit() -> void:
 	var scene := Global.load_mobile_compat("res://game/ui/Quitting")
 	get_tree().change_scene_to_packed(scene)
 	get_tree().quit()

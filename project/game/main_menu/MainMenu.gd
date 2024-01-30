@@ -77,10 +77,15 @@ func _enter_tree() -> void:
 
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		if cur_state == STATES.MAIN_MENU:
+		if Settings.active:
 			Settings.toggle_pause()
-		elif cur_state == STATES.LEVEL_HUB and not LevelHub.level_focused:
-			_on_back_button_pressed()
+		elif cur_state == STATES.MAIN_MENU:
+			Global.exit_game()
+		elif cur_state == STATES.LEVEL_HUB:
+			if LevelHub.level_focused:
+				LevelHub.get_focused_section()._on_back_button_pressed()
+			else:
+				_on_back_button_pressed()
 
 
 func update_level_hub():

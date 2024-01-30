@@ -21,3 +21,7 @@ func _on_other_games_pressed():
 		SteamManager.steam.activateGameOverlayToWebPage(GAMES_LINK)
 	else:
 		OS.shell_open(GAMES_LINK)
+
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		_on_back_pressed()

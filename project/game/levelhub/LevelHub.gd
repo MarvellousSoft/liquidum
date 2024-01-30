@@ -91,3 +91,8 @@ func _on_level_section_disable_focus():
 	#Wait a frame to any back button event wont also trigger on level hub
 	await get_tree().process_frame
 	level_focused = false
+
+func get_focused_section():
+	if not level_focused:
+		return null
+	return Sections.get_child(section_focused - 1)

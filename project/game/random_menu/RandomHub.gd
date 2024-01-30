@@ -218,3 +218,10 @@ func _on_cancel_gen_pressed():
 func _on_custom_seed_button_pressed() -> void:
 	$CustomSeedButton.visible = false
 	$Seed.visible = true
+
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		if $SettingsScreen.active:
+			$SettingsScreen.toggle_pause()
+		else:
+			_on_back_pressed()

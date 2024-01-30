@@ -3,12 +3,14 @@ extends Control
 var done := false
 
 func _ready() -> void:
-	print(name)
 	# The override is not working, I'm not sure why
 	if Global.is_mobile and not name.ends_with("Mobile"):
-		get_tree().change_scene_to_file("res://game/splash/SplashMobile.tscn")
+		call_deferred(&"_open_mobile_version")
 		return
 	FileManager.load_game()
+
+func _open_mobile_version() -> void:
+	get_tree().change_scene_to_file("res://game/splash/SplashMobile.tscn")
 
 func _play_audio() -> void:
 	if not done:

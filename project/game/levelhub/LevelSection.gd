@@ -92,11 +92,6 @@ func _process(dt):
 		level.set_effect_alpha(Levels.modulate.a)
 
 
-func _notification(what: int) -> void:
-	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST and focused:
-		_on_back_button_pressed()
-
-
 func setup(hub_ref, section, unlocked_levels) -> void:
 	hub = hub_ref
 	set_number(section)
@@ -233,6 +228,7 @@ func _on_button_pressed():
 
 
 func _on_back_button_pressed():
+	assert(focused)
 	AudioManager.play_sfx("zoom_out")
 	unfocus()
 

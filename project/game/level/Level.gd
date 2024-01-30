@@ -169,7 +169,12 @@ func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
 		maybe_save()
 	elif what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		Settings.toggle_pause()
+		if Settings.active:
+			Settings.toggle_pause()
+		elif %TutorialDisplay.active:
+			%TutorialDisplay._on_close_button_pressed()
+		else:
+			_on_back_button_pressed()
 
 
 func _unhandled_input(event):
