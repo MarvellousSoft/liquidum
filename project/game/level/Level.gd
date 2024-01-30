@@ -18,6 +18,14 @@ const AQUARIUM_BUTTON_ICONS = {
 	"normal" : preload("res://assets/images/ui/aquarium_button_normal.png"),
 	"pressed" : preload("res://assets/images/ui/aquarium_button_pressed.png"),
 }
+const THEMES = {
+	"normal": {
+		"tutorial_panel": preload("res://assets/ui/TutorialPanel.tres"),
+	},
+	"dark": {
+		"tutorial_panel": preload("res://assets/ui/TutorialPanelDark.tres"),
+	},
+}
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -847,5 +855,7 @@ func _on_aquarium_buttons_toggled(toggled_on):
 
 
 func _on_dark_mode_changed(is_dark):
+	var themes = THEMES.dark if is_dark else THEMES.normal
 	theme = Global.get_theme(is_dark)
+	%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
 

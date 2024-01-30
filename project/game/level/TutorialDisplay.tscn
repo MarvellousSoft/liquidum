@@ -2,21 +2,9 @@
 
 [ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_xlkyc"]
 [ext_resource type="Script" path="res://game/level/TutorialDisplay.gd" id="2_irhp8"]
+[ext_resource type="StyleBox" uid="uid://dme1286tgr172" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="3_s7fl0"]
 [ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="4_5facx"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srfop"]
-bg_color = Color(0.133333, 0.513726, 0.6, 1)
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color(0.0352941, 0.211765, 0.34902, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-corner_detail = 20
 
 [node name="TutorialDisplay" type="MarginContainer"]
 theme = ExtResource("1_xlkyc")
@@ -56,10 +44,11 @@ theme_override_font_sizes/font_size = 100
 text = "<"
 
 [node name="PanelContainer" type="PanelContainer" parent="GridContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_srfop")
+theme_override_styles/panel = ExtResource("3_1ywdi")
 
 [node name="MarginContainer" type="MarginContainer" parent="GridContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
