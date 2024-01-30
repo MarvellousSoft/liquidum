@@ -70,7 +70,7 @@ func set_unknown():
 
 func update_label() -> void:
 	Counter.text = str(count)
-	if counter_name == "MISTAKES_COUNTER" and not Global.is_mobile:
+	if is_mistake_counter() and not Global.is_mobile:
 		AnimPlayer.play("update_counter_big")
 	elif Global.is_mobile:
 		AnimPlayer.play("update_counter_mobile")
@@ -88,6 +88,11 @@ func update_label() -> void:
 		Counter.add_theme_color_override("font_color", Global.COLORS.normal)
 
 
+func is_mistake_counter():
+	return counter_name == "MISTAKES_COUNTER"
+
+
 func _on_dark_mode_changed(is_dark : bool):
 	var color = Global.get_color(is_dark)
-	%Label.add_theme_color_override("font_color", color.dark)
+	if not is_mistake_counter():
+		%Label.add_theme_color_override("font_color", color.dark)

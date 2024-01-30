@@ -1,6 +1,5 @@
-[gd_scene load_steps=20 format=3 uid="uid://dns62u0n4j1k3"]
+[gd_scene load_steps=18 format=3 uid="uid://dns62u0n4j1k3"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_8nqmb"]
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
 [ext_resource type="StyleBox" uid="uid://3bg71hyojyij" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
@@ -9,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" uid="uid://cskgyvxp485ui" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="10_lt5bs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7tmt"]
 bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
@@ -54,16 +52,15 @@ gradient = SubResource("Gradient_ovksr")
 lifetime_randomness = 0.5
 direction = Vector3(0, 0, 0)
 spread = 180.0
+gravity = Vector3(0, 0, 0)
 initial_velocity_min = 500.0
 initial_velocity_max = 500.0
-orbit_velocity_max = 0.01
-gravity = Vector3(0, 0, 0)
 tangential_accel_max = 26.97
-attractor_interaction_enabled = false
 scale_min = 0.5
 color_ramp = SubResource("GradientTexture1D_3u54o")
 turbulence_noise_strength = 17.78
 turbulence_noise_scale = 2.659
+attractor_interaction_enabled = false
 
 [sub_resource type="Animation" id="Animation_i0d6d"]
 length = 0.001
@@ -250,7 +247,6 @@ offset_right = -3840.0
 offset_bottom = -2160.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_8nqmb")
 script = ExtResource("2_5vo2a")
 
 [node name="Button" type="Button" parent="."]
@@ -399,11 +395,11 @@ speed_scale = 1.5
 explosiveness = 1.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "float"
+speed_scale = 0.7
 libraries = {
 "": SubResource("AnimationLibrary_nwjf5")
 }
-autoplay = "float"
-speed_scale = 0.7
 
 [node name="Levels" type="Control" parent="."]
 anchors_preset = 0
@@ -460,7 +456,6 @@ grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 focus_mode = 0
-theme = ExtResource("10_lt5bs")
 theme_override_font_sizes/font_size = 66
 text = "BACK"
 
