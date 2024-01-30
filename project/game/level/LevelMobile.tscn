@@ -726,6 +726,7 @@ offset_left = 24.0
 offset_top = 1305.0
 offset_right = 724.0
 offset_bottom = 1555.0
+theme = null
 
 [node name="Title" type="Control" parent="."]
 visible = false

@@ -438,6 +438,7 @@ counter_name = "BOATS_COUNTER"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
+theme = null
 
 [node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
 unique_name_in_owner = true

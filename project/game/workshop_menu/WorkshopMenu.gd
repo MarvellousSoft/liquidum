@@ -2,6 +2,12 @@ extends Control
 
 @onready var Buttons: BoxContainer = %ButtonsContainer
 
+
+func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+
+
 func _enter_tree() -> void:
 	if not SteamManager.enabled:
 		return
@@ -34,3 +40,7 @@ func _on_back_pressed():
 func _on_open_workshop_pressed() -> void:
 	if SteamManager.enabled:
 		SteamManager.steam.activateGameOverlayToWebPage("https://steamcommunity.com/app/2716690/workshop/")
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	theme = Global.get_theme(is_dark)
