@@ -606,7 +606,7 @@ func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> voi
 	else:
 		cell_pressed_second_button(i, j, which)
 
-func _on_cell_released_main_button(i: int, j: int, which: E.Waters) -> void:
+func _on_cell_released_main_button(_i: int, _j: int, _which: E.Waters) -> void:
 	if not LongTouchTimer.is_stopped():
 		LongTouchTimer.stop()
 		_process_click(pending_long_touch.x, pending_long_touch.y, pending_long_touch.z, brush_mode)

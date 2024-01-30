@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=22 format=3 uid="uid://c6108lc3jg2cv"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
-[ext_resource type="StyleBox" uid="uid://bu8vlk21sg5aa" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
 [ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_hda1e"]
 [ext_resource type="StyleBox" uid="uid://gqjj40bseq65" path="res://assets/ui/ButtonNormalStyle.tres" id="3_7bdy7"]
 [ext_resource type="StyleBox" uid="uid://8i3c41sdwhm" path="res://assets/ui/ButtonPressedStyle.tres" id="4_7wtpn"]

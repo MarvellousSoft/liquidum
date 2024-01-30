@@ -188,6 +188,14 @@ theme_override_font_sizes/font_size = 26
 text = "BEST_STREAK"
 vertical_alignment = 1
 
+[node name="3Mistakes" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "LESS_THREE_MISTAKES"
+horizontal_alignment = 1
+
 [node name="Timer" type="Timer" parent="MainButtonsContainer/VBoxContainer/DailyButton"]
 wait_time = 30.0
 autostart = true
