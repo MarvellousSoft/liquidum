@@ -17,6 +17,7 @@ var date: String
 var yesterday: String
 var deadline: int
 var gen := RandomLevelGenerator.new()
+var already_uploaded_today := false
 
 func _ready() -> void:
 	Global.dev_mode_toggled.connect(func(_on): _update())
@@ -134,6 +135,7 @@ func _on_button_pressed() -> void:
 		if level != null:
 			FileManager.save_daily_level(today, level)
 	var level_data := FileManager.load_daily_level(today)
+	already_uploaded_today = false
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily"])
 		level.reset_text = &"CONFIRM_RESET_DAILY"
@@ -144,6 +146,8 @@ func _on_button_pressed() -> void:
 		await level.ready
 		var l_id := await get_leaderboard(date)
 		var l_data := await get_leaderboard_data(l_id)
+		if l_data.has_self:
+			already_uploaded_today = true
 		l_id = await get_leaderboard(yesterday)
 		var y_data := await get_leaderboard_data(l_id)
 		display_leaderboard(l_data, y_data, level)
@@ -154,7 +158,8 @@ func _on_button_pressed() -> void:
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
 	var l_id := await get_leaderboard(date)
-	await upload_leaderboard(l_id, info)
+	if not already_uploaded_today:
+		await upload_leaderboard(l_id, info)
 	var l_data := await get_leaderboard_data(l_id)
 	display_leaderboard(l_data, null, level)
 	if not info.first_win:
