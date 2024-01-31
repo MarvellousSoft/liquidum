@@ -148,6 +148,12 @@ offset_right = 118.0
 offset_bottom = 1620.0
 theme = ExtResource("6_nf8ou")
 
+[node name="VBoxContainer" parent="DailyButton/HBox" index="0"]
+theme_override_constants/separation = 52
+
+[node name="OngoingSolution" parent="DailyButton/HBox/VBoxContainer/Button" index="0"]
+z_index = 1
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1930, 4000)
 position_smoothing_enabled = true
