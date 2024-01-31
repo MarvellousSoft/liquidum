@@ -50,6 +50,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "STREAK_TOOLTIP"
+theme_override_constants/h_separation = 25
 columns = 2
 
 [node name="CurStreakLabel" type="Label" parent="HBox/VBoxContainer/StreakContainer"]

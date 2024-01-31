@@ -170,8 +170,12 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[node name="CurStreak" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer"]
-unique_name_in_owner = true
+[node name="GridContainer" type="GridContainer" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="CurStreakName" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -179,13 +183,30 @@ theme_override_font_sizes/font_size = 26
 text = "CUR_STREAK"
 vertical_alignment = 1
 
-[node name="BestStreak" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer"]
+[node name="CurStreak" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 26
+text = "0"
+vertical_alignment = 1
+
+[node name="BestStreakName" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
 text = "BEST_STREAK"
+vertical_alignment = 1
+
+[node name="BestStreak" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
+text = "0"
 vertical_alignment = 1
 
 [node name="3Mistakes" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer/StreakContainer"]
