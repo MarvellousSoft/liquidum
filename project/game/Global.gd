@@ -108,10 +108,6 @@ func load_mobile_compat(scene: String) -> PackedScene:
 	else:
 		return load(scene + ".tscn")
 
-# Mostly a reminder that this needs a mobile version, and the switch becomes just changing the method name
-func load_no_mobile(scene: String) -> PackedScene:
-	return load(scene + ".tscn")
-
 func exit_game() -> void:
 	var window = get_window()
 	if window.mode == Window.MODE_WINDOWED:

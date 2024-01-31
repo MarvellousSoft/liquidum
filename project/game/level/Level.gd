@@ -728,7 +728,7 @@ func _on_continue_button_pressed() -> void:
 		had_first_win.emit()
 		# First time winning all levels
 		if LevelLister.all_campaign_levels_completed():
-			TransitionManager.change_scene(Global.load_no_mobile("res://game/credits/AllLevelsCompleted").instantiate())
+			TransitionManager.change_scene(Global.load_mobile_compat("res://game/credits/AllLevelsCompleted").instantiate())
 			return
 	
 	if _show_level_completed_ad():

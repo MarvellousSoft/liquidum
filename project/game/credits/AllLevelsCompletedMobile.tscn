@@ -1,0 +1,87 @@
+[gd_scene load_steps=6 format=3 uid="uid://lfkj4ecbu7xr"]
+
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_cun8k"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_373je"]
+[ext_resource type="Script" path="res://game/credits/AllLevelsCompleted.gd" id="2_lxti4"]
+[ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="3_putwa"]
+[ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_3ntkg"]
+
+[node name="AllLevelsCompletedMobile" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 720.0
+offset_bottom = 1280.0
+theme = ExtResource("1_cun8k")
+script = ExtResource("2_lxti4")
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_373je")]
+layout_mode = 0
+
+[node name="Title" parent="." instance=ExtResource("3_putwa")]
+offset_left = -61.0
+offset_top = 117.0
+offset_right = -61.0
+offset_bottom = 117.0
+scale = Vector2(0.215, 0.23)
+
+[node name="ThankYou" type="Label" parent="."]
+offset_top = 117.0
+offset_right = 720.0
+offset_bottom = 178.0
+theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 50
+text = "THANK_YOU_FOR_PLAYING"
+horizontal_alignment = 1
+
+[node name="Continue" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+text = "CONTINUE"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 0.85
+theme = ExtResource("4_3ntkg")
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_right = 70
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Finished" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "FINISHED_ALL_LEVELS"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EmailUs" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "EMAIL_US"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="Continue" to="." method="_on_continue_pressed"]
