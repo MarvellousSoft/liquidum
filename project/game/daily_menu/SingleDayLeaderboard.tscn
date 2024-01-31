@@ -54,7 +54,19 @@ stretch_mode = 5
 layout_mode = 2
 text = "1."
 
-[node name="Name1" type="Label" parent="Grid"]
+[node name="NameContainer1" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Dev" type="Label" parent="Grid/NameContainer1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_override_font_sizes/font_size = 40
+text = "[dev]"
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="Grid/NameContainer1"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 60
@@ -81,11 +93,24 @@ stretch_mode = 5
 layout_mode = 2
 text = "3."
 
-[node name="Name2" type="Label" parent="Grid"]
+[node name="NameContainer2" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Dev" type="Label" parent="Grid/NameContainer2"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_override_font_sizes/font_size = 40
+text = "[dev]"
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="Grid/NameContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 60
-text = "Very long name indeed"
+text = "Very long person name"
 text_overrun_behavior = 3
 
 [node name="Mistakes2" type="Label" parent="Grid"]

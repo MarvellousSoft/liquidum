@@ -22,8 +22,9 @@ func _display_day(node: Node, data: DailyButton.LeaderboardData, date: String) -
 			icon.texture = ImageTexture.create_from_image(item.image)
 		var pos := Grid.get_node("Pos1").duplicate()
 		pos.text = "%d." % item.global_rank
-		var name_ := Grid.get_node("Name1").duplicate()
-		name_.text = item.text
+		var name_ := Grid.get_node("NameContainer1").duplicate()
+		name_.get_node("Name").text = item.text
+		name_.get_node("Dev").visible = item.is_dev
 		var mistakes := Grid.get_node("Mistakes1").duplicate()
 		mistakes.text = str(item.mistakes)
 		var time := Grid.get_node("Time1").duplicate()
@@ -31,7 +32,7 @@ func _display_day(node: Node, data: DailyButton.LeaderboardData, date: String) -
 		for c in [icon, pos, name_, mistakes, time]:
 			c.show()
 			Grid.add_child(c)
-	for c in ["Icon1", "Pos1", "Name1", "Mistakes1", "Time1"]:
+	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
 		Grid.get_node(c).hide()
 
 func display(today: DailyButton.LeaderboardData, today_date: String, yesterday: DailyButton.LeaderboardData, yesterday_date: String) -> void:

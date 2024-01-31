@@ -202,6 +202,8 @@ func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)
 
+const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
+
 class ListEntry:
 	var global_rank: int
 	# Name. Might be "10% percentile"
@@ -210,11 +212,13 @@ class ListEntry:
 	var image: Image
 	var mistakes: int
 	var secs: int
+	var is_dev: bool
 	static func create(data: Dictionary, override_name := "") -> ListEntry:
 		var entry := ListEntry.new()
 		entry.global_rank = data.global_rank
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
+		entry.is_dev = DEV_IDS.has(data.steam_id)
 		if override_name.is_empty():
 			if data.steam_id == SteamManager.steam.getSteamID():
 				entry.text = SteamManager.steam.getPersonaName()
@@ -238,6 +242,7 @@ class LeaderboardData:
 	# Used to draw an histogram
 	var top_no_mistakes: Array[int]
 
+
 func get_leaderboard_data(l_id: int) -> LeaderboardData:
 	if not SteamManager.enabled:
 		return null
@@ -257,6 +262,10 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 	ret = await SteamManager.steam.leaderboard_scores_downloaded
 	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
 	for entry in ret[2]:
+		for dev_id in DEV_IDS:
+			if entry.steam_id == dev_id and not list_has_rank.has(entry.global_rank):
+				data.list.append(await ListEntry.create(entry))
+				list_has_rank[entry.global_rank] = true
 		for pct in percentiles:
 			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
 				data.list.append(await ListEntry.create(entry, tr(pct[1])))
