@@ -226,6 +226,7 @@ func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := t
 	SolverModel.new().apply_strategies(grid_logic, strategies, flush_undo)
 	update(do_emit_signal)
 
+
 func full_solve(strategies: Array, flush_undo := true, do_emit_signal := true) -> SolverModel.SolveResult:
 	grid_logic.force_editor_mode(true)
 	var result := SolverModel.new().full_solve(grid_logic, strategies, func(): return false, flush_undo)
@@ -297,12 +298,14 @@ func update(do_emit_signal := true, fast_update := false) -> void:
 func is_level_finished() -> bool:
 	return grid_logic.is_equal_solution()
 
+
 func update_walls() -> void:
 	for i in rows:
 		for j in columns:
 			var cell_data := grid_logic.get_cell(i, j)
 			var cell := get_cell(i, j) as Cell
 			cell.copy_data(cell_data)
+
 
 func update_visuals(fast_update := false) -> void:
 	for i in rows:
@@ -358,15 +361,18 @@ func _inner_update_hint(hints: Array[GridModel.LineHint], bar: HintBar, get_stat
 				hint.set_hint_type(hints[i].boat_count_type if hint_type == E.HintContent.Boat else hints[i].water_count_type)
 				hint.set_status(get_status.call(i, hint_type))
 
+
 func _inner_row_status(i: int, content: E.HintContent) -> E.HintStatus:
 	if editor_mode:
 		return E.HintStatus.Normal
 	return grid_logic.get_row_hint_status(i, content)
 
+
 func _inner_col_status(j: int, content: E.HintContent) -> E.HintStatus:
 	if editor_mode:
 		return E.HintStatus.Normal
 	return grid_logic.get_col_hint_status(j, content)
+
 
 func update_hints() -> void:
 	_inner_update_hint(grid_logic.row_hints(), HintBars.left, _inner_row_status)
@@ -538,6 +544,7 @@ func update_drag_preview() -> void:
 func remove_all_highlights():
 	highlight_grid(-1, -1)
 
+
 func highlight_grid(p_i : int, p_j : int) -> void:
 	if not Profile.get_option("highlight_grid"):
 		# basically removes highlight instead
@@ -598,6 +605,50 @@ func highlight_column(idx: int) -> void:
 		get_cell(i, idx).set_highlight(true)
 
 
+func check_for_feedback(i : int, j: int, row_s : E.HintStatus , col_s : E.HintStatus, content : E.HintContent):
+	if row_s != E.HintStatus.Satisfied and _inner_row_status(i, content) == E.HintStatus.Satisfied:
+		start_row_feedback(i, j)
+	if col_s != E.HintStatus.Satisfied and _inner_col_status(j, E.HintContent.Water) == E.HintStatus.Satisfied:
+		start_col_feedback(i, j)
+
+
+func start_row_feedback(i, j):
+	var idx = 0
+	get_cell(i, j).play_feedback_animation()
+	while true:
+		idx += 1
+		await get_tree().create_timer(.1).timeout
+		var propagated = false
+		if j + idx <= columns - 1:
+			propagated = true
+			get_cell(i, j + idx).play_feedback_animation()
+		if j - idx >= 0:
+			propagated = true
+			get_cell(i, j - idx).play_feedback_animation()
+		if not propagated:
+			break
+
+
+func start_col_feedback(i, j):
+	var idx = 0
+	var propagated
+	get_cell(i, j).play_feedback_animation()
+	while true:
+		await get_tree().create_timer(.1).timeout
+		
+		idx += 1
+		propagated = false
+		if i + idx <= rows - 1:
+			propagated = true
+			get_cell(i + idx, j).play_feedback_animation()
+		if i - idx >= 0:
+			propagated = true
+			get_cell(i - idx, j).play_feedback_animation()
+		
+		if not propagated:
+			break
+
+
 func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> void:
 	if not Global.is_mobile and Profile.get_option("invert_mouse"):
 		main = not main
@@ -605,6 +656,7 @@ func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> voi
 		cell_pressed_main_button(i, j, which, -1)
 	else:
 		cell_pressed_second_button(i, j, which)
+
 
 func _on_cell_released_main_button(_i: int, _j: int, _which: E.Waters) -> void:
 	if not LongTouchTimer.is_stopped():
@@ -614,10 +666,12 @@ func _on_cell_released_main_button(_i: int, _j: int, _which: E.Waters) -> void:
 		mouse_hold_status = E.MouseDragState.None
 		pending_long_touch = Vector3i(-1, -1, -1)
 
+
 func _on_long_touch_timer_timeout() -> void:
 	_show_preview(pending_long_touch.x, pending_long_touch.y, pending_long_touch.z)
 	is_long_touching = true
 	pending_long_touch = Vector3i(-1, -1, -1)
+
 
 func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: int) -> void:
 	if disabled:
@@ -635,9 +689,14 @@ func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: i
 	else:
 		_process_click(i, j, which, used_brush)
 
+
 func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner := E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
+	var row_w_s = _inner_row_status(i, E.HintContent.Water)
+	var col_w_s = _inner_col_status(j, E.HintContent.Water)
+	var row_b_s = _inner_row_status(i, E.HintContent.Boat)
+	var col_b_s = _inner_col_status(j, E.HintContent.Boat)
 	match used_brush:
 		E.BrushMode.Water:
 			grid_logic.push_empty_undo()
@@ -648,6 +707,7 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 			else:
 				mouse_hold_status = E.MouseDragState.Water
 				if cell_data.put_water(corner, false):
+					check_for_feedback(i, j, row_w_s, col_w_s, E.HintContent.Water)
 					play_water_sound()
 				else:
 					highlight_error(i, j, which)
@@ -672,6 +732,7 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 			else:
 				mouse_hold_status = E.MouseDragState.Boat
 				if cell_data.put_boat(false):
+					check_for_feedback(i, j, row_b_s, col_b_s, E.HintContent.Boat)
 					AudioManager.play_sfx("boat_put")
 				else:
 					highlight_error(i, j, which)
@@ -701,6 +762,7 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 					AudioManager.play_sfx("block_put")
 			get_cell(i, j).update_blocks(cell_data)
 	update()
+
 
 func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
@@ -759,11 +821,13 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 				highlight_error(i, j, which)
 	update()
 
+
 func _show_preview(i: int, j: int, which: E.Waters) -> void:
 	if brush_mode == E.BrushMode.Water:
 		show_preview(i, j, which)
 	elif brush_mode == E.BrushMode.Boat:
 		show_boat_preview(i, j)
+
 
 func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	if disabled:
@@ -789,8 +853,13 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
+	var row_w_s = _inner_row_status(i, E.HintContent.Water)
+	var col_w_s = _inner_col_status(j, E.HintContent.Water)
+	var row_b_s = _inner_row_status(i, E.HintContent.Boat)
+	var col_b_s = _inner_col_status(j, E.HintContent.Boat)
 	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
 		if cell_data.put_water(corner, false):
+			check_for_feedback(i, j, row_w_s, col_w_s, E.HintContent.Water)
 			play_water_sound()
 		else:
 			highlight_error(i, j, which)
@@ -808,6 +877,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
 		if cell_data.put_boat(false):
+			check_for_feedback(i, j, row_b_s, col_b_s, E.HintContent.Boat)
 			AudioManager.play_sfx("boat_put")
 		else:
 			highlight_error(i, j, which)
@@ -833,6 +903,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 		get_cell(i, j).update_blocks(cell_data)
 	
 	update()
+
 
 func _on_cell_corner_pressed_button(i: int, j: int, main: bool) -> void:
 	if Profile.get_option("invert_mouse"):

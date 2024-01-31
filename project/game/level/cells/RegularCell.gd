@@ -239,6 +239,10 @@ func get_type() -> E.CellType:
 	return type
 
 
+func play_feedback_animation():
+	AnimPlayer.play("feedback")
+
+
 func copy_data(data: GridModel.CellModel) -> void:
 	# Need to remove water when changing walls
 	remove_water()

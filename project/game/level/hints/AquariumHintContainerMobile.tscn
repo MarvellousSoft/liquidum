@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_vpkgi"]
 [ext_resource type="Script" path="res://game/level/hints/AquariumHintContainer.gd" id="2_vsnt4"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_gakqc"]
-[ext_resource type="StyleBox" path="res://assets/ui/SeparatorMobile.tres" id="4_fm4yl"]
+[ext_resource type="StyleBox" uid="uid://boea7tos60avy" path="res://assets/ui/SeparatorMobile.tres" id="4_fm4yl"]
 [ext_resource type="PackedScene" uid="uid://2wmberg2engi" path="res://game/level/hints/AquariumHintMobile.tscn" id="4_woeob"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y0s0c"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dg36xpbgk5g24"]
+[gd_scene load_steps=52 format=3 uid="uid://dg36xpbgk5g24"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Material" uid="uid://owbt514048nc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
@@ -291,6 +291,34 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5tm6i"]
+resource_name = "feedback"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_i3tnc"]
 resource_name = "startup"
@@ -310,6 +338,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7yamt"]
 _data = {
 "RESET": SubResource("Animation_so0f4"),
+"feedback": SubResource("Animation_5tm6i"),
 "startup": SubResource("Animation_i3tnc")
 }
 
@@ -324,6 +353,7 @@ offset_right = -3340.0
 offset_bottom = -1660.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(250, 250)
 script = ExtResource("1_102n5")
 
 [node name="BG" type="ColorRect" parent="."]

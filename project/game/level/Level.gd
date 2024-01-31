@@ -867,5 +867,6 @@ func _on_aquarium_buttons_toggled(toggled_on):
 func _on_dark_mode_changed(is_dark):
 	var themes = THEMES.dark if is_dark else THEMES.normal
 	theme = Global.get_theme(is_dark)
-	%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
+	if not Global.is_mobile:
+		%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
 
