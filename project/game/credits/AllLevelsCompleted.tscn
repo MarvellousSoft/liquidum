@@ -14,18 +14,18 @@ grow_vertical = 2
 script = ExtResource("1_fn571")
 
 [node name="Title" parent="." instance=ExtResource("1_5pd2q")]
-offset_left = 2050.0
+offset_left = 1802.0
 offset_top = 170.0
-offset_right = 2050.0
+offset_right = 1802.0
 offset_bottom = 170.0
 scale = Vector2(0.4, 0.4)
 
 [node name="ThankYou" type="Label" parent="."]
 layout_mode = 0
-offset_left = 339.0
+offset_left = 91.0
 offset_top = 366.0
-offset_right = 2195.0
-offset_bottom = 527.0
+offset_right = 1947.0
+offset_bottom = 530.0
 theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 50
@@ -35,9 +35,9 @@ horizontal_alignment = 2
 
 [node name="Exclamation" type="Label" parent="."]
 layout_mode = 0
-offset_left = 1715.0
+offset_left = 1467.0
 offset_top = 366.0
-offset_right = 3571.0
+offset_right = 3323.0
 offset_bottom = 530.0
 theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
