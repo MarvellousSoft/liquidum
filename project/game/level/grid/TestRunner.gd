@@ -89,6 +89,7 @@ func _on_preprocess_dailies_pressed() -> void:
 	%DailiesButton.visible = false
 	%DailiesCancel.visible = true
 	%DailiesCancel.button_pressed = false
+	var watch := Stopwatch.new()
 	while true:
 		var date := Time.get_datetime_string_from_unix_time(unixtime)
 		date = date.substr(0, date.find("T"))
@@ -98,6 +99,9 @@ func _on_preprocess_dailies_pressed() -> void:
 		if prep.success_state(dict) == 0:
 			await DailyButton.gen_level(gen, date)
 			prep.set_success_state(dict, gen.success_state)
+		if watch.elapsed() > 60.:
+			watch.elapsed_reset()
+			FileManager.save_dailies(year, prep)
 		%DailiesProgress.value += 1
 		unixtime += 24 * 60 * 60
 	%DailiesProgress.visible = false
@@ -117,6 +121,7 @@ func _on_dif_button_pressed():
 	%DifButton.visible = false
 	%DifCancel.visible = true
 	%DifCancel.button_pressed = false
+	var watch := Stopwatch.new()
 	var rng := RandomNumberGenerator.new()
 	for i in 1000:
 		if %DifCancel.button_pressed:
@@ -125,6 +130,9 @@ func _on_dif_button_pressed():
 			rng.seed = RandomHub.consistent_hash(str(i))
 			await RandomHub.gen_from_difficulty(gen, rng, dif)
 			prep.set_success_state(i, gen.success_state)
+		if watch.elapsed() > 60.:
+			watch.elapsed_reset()
+			FileManager.save_preprocessed_difficulty(prep)
 		%DifProgress.value += 1
 	%DifCancel.visible = false
 	%DifProgress.visible = false
