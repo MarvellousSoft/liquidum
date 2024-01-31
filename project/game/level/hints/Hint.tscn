@@ -19,6 +19,14 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_s2nml")
 
+[node name="Completed" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 500.0
+mouse_filter = 2
+color = Color(0.380392, 0.988235, 0.537255, 0.392157)
+
 [node name="Hints" type="Control" parent="."]
 unique_name_in_owner = true
 anchors_preset = 0

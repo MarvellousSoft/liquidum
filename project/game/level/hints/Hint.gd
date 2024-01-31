@@ -36,6 +36,7 @@ var hint_value := 0.0
 var hint_alpha := 1.0
 var is_dummy := false
 var highlight := false
+var cur_status : E.HintStatus = E.HintStatus.Normal
 
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
@@ -44,6 +45,7 @@ func _ready():
 	DummyLabel.hide()
 	set_boat(false)
 	set_status(E.HintStatus.Normal)
+	%Completed.modulate.a = 0
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
 	
@@ -51,10 +53,7 @@ func _ready():
 
 
 func _process(dt):
-	if highlight:
-		Highlight.modulate.a = min(Highlight.modulate.a + HIGHLIGHT_SPEED*dt, 1.0)
-	else:
-		Highlight.modulate.a = max(Highlight.modulate.a - HIGHLIGHT_SPEED*dt, 0.0)
+	Global.alpha_fade_node(dt, Highlight, highlight, HIGHLIGHT_SPEED)
 	
 	if is_dummy:
 		return
@@ -67,10 +66,12 @@ func _process(dt):
 		if hint_alpha > 0.0:
 			hint_alpha = max(hint_alpha - ALPHA_SPEED*dt, 0.0)
 			update_label()
-	if ToggleVisibility.is_pressed():
-		HintsContainer.modulate.a = min(HintsContainer.modulate.a + ALPHA_SPEED*dt, 1.0)
-	else:
-		HintsContainer.modulate.a = max(HintsContainer.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
+	
+	var allow_unknown = true
+	if not Profile.get_option("progress_on_unknown"):
+		allow_unknown = hint_value != -1
+	Global.alpha_fade_node(dt, %Completed, not editor_mode and cur_status == E.HintStatus.Satisfied and allow_unknown)
+	Global.alpha_fade_node(dt, HintsContainer, ToggleVisibility.is_pressed(), ALPHA_SPEED, false, 1.0, HIDE_ALPHA)
 
 
 func update_dark_mode(is_dark : bool) -> void:
@@ -154,6 +155,7 @@ func set_hint_visibility(which : E.Walls, value : bool) -> void:
 
 
 func set_status(status: E.HintStatus) -> void:
+	cur_status = status
 	if hint_value == -1 and not Profile.get_option("progress_on_unknown"):
 		Number.add_theme_color_override("default_color", Global.COLORS.normal)
 	else:
