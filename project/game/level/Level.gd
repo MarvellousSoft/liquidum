@@ -279,6 +279,8 @@ func setup(try_load := true) -> void:
 	update_counters()
 	
 	%TutorialButton.visible = not grid.editor_mode()
+	if not grid.editor_mode() and is_campaign_level():
+		%TutorialDisplay.show_level_tutorial(section_number, level_number)
 	
 	if not Global.is_mobile:
 		%LevelLabel.visible = not grid.editor_mode()
@@ -303,9 +305,9 @@ func setup(try_load := true) -> void:
 	process_game = true
 	
 	if is_campaign_level() and Global.is_mobile:
-		await get_tree().create_timer(.5).timeout
 		var data = FileManager.load_level_data(section_number, level_number)
 		if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
+			await get_tree().create_timer(.5).timeout
 			_on_tutorial_button_pressed()
 
 
