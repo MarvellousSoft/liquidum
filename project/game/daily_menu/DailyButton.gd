@@ -282,7 +282,4 @@ func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData
 		level.create_tween().tween_property(display, "modulate:a", 1, 1)
 	display = level.get_node("LeaderboardDisplay")
 	display.display(today, date, yesterday_data, yesterday)
-	if yesterday == null or (today != null and today.has_self):
-		display.show_today()
-	else:
-		display.show_yesterday()
+	display.show_today()
