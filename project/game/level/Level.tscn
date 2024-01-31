@@ -805,6 +805,7 @@ autostart = true
 
 [node name="SteamRichPresence" parent="." instance=ExtResource("21_s7rk0")]
 
+[connection signal="theme_changed" from="." to="." method="_on_theme_changed"]
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/VBoxContainer/MistakeCounter" method="add_count"]
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]

@@ -84,6 +84,7 @@ var last_saved: int
 var last_saved_ago: int = -1
 # Used only for rich presence
 var difficulty := -1
+var fully_setup := false
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -141,9 +142,10 @@ func _ready():
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
-	setup()
+	await setup()
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.startPlaytimeTracking([workshop_id])
+	fully_setup = true
 
 func _enter_tree():
 	if GridNode:
@@ -338,6 +340,12 @@ func is_campaign_level():
 
 func editor_mode() -> bool:
 	return GridNode.editor_mode
+
+func _on_theme_changed() -> void:
+	if fully_setup:
+		# I'm not super sure why this is necessary, but changing the theme seems to reset
+		# the scale field of the GridNode, so let's calculate it again.
+		scale_grid()
 
 
 func scale_grid() -> void:
