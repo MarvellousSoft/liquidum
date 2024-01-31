@@ -77,8 +77,8 @@ func _update_streak() -> void:
 	if data.current_streak > 0 and data.last_day < yesterday:
 		data.current_streak = 0
 		UserData.save()
-	CurStreak.text = tr("CUR_STREAK") % data.current_streak
-	BestStreak.text = tr("BEST_STREAK") % data.best_streak
+	CurStreak.text = str(data.current_streak)
+	BestStreak.text = str(data.best_streak)
 
 
 static func _unixtime() -> int:

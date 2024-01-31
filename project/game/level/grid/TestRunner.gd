@@ -61,7 +61,7 @@ func _on_print_global_stats_pressed() -> void:
 	for stat in PLAYED_STATS:
 		var val = SteamManager.steam.getGlobalStatFloat(stat + "_secs")
 		var tot = SteamManager.steam.getGlobalStatInt(stat + "_total")
-		print("%s = %.0f tot %.0f avg" % [stat, val, val / tot])
+		print("%s = %s tot %s avg" % [stat, Level.time_str(int(val)), Level.time_str(int(val / tot))])
 	for stat in INT_STATS:
 		var val = SteamManager.steam.getGlobalStatInt(stat)
 		print("%s = %d" % [stat, val])

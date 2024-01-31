@@ -1,6 +1,5 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtcuemu2b1rcx"]
+[gd_scene load_steps=4 format=3 uid="uid://dtcuemu2b1rcx"]
 
-[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_rhylt"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_ghr64"]
@@ -9,7 +8,6 @@
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 4
-theme = ExtResource("1_rhylt")
 script = ExtResource("2_u6wd6")
 
 [node name="HBox" type="HBoxContainer" parent="."]
@@ -48,11 +46,19 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[node name="StreakContainer" type="VBoxContainer" parent="HBox/VBoxContainer"]
+[node name="StreakContainer" type="GridContainer" parent="HBox/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "STREAK_TOOLTIP"
-theme_override_constants/separation = 15
+columns = 2
+
+[node name="CurStreakLabel" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "CUR_STREAK"
+vertical_alignment = 1
 
 [node name="CurStreak" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
 unique_name_in_owner = true
@@ -60,7 +66,15 @@ layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 60
-text = "CUR_STREAK"
+text = "0"
+vertical_alignment = 1
+
+[node name="BestStreakLabel" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "BEST_STREAK"
 vertical_alignment = 1
 
 [node name="BestStreak" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
@@ -69,14 +83,14 @@ layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 60
-text = "BEST_STREAK"
+text = "0"
 vertical_alignment = 1
 
 [node name="2Mistakes" type="Label" parent="HBox/VBoxContainer/StreakContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 25
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 40
 text = "LESS_THREE_MISTAKES"
 horizontal_alignment = 1
 
