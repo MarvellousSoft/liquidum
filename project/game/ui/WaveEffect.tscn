@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bu7mp6nx8xfdw"]
+[gd_scene load_steps=7 format=3 uid="uid://cpoyo7yv1jpj6"]
 
 [ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="1_ck5oo"]
 [ext_resource type="Script" path="res://game/ui/WaveEffect.gd" id="2_0nsrt"]

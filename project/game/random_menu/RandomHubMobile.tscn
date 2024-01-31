@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dqwh2k5t2yiks"]
+[gd_scene load_steps=6 format=3 uid="uid://bcm66bfohg152"]
 
-[ext_resource type="PackedScene" uid="uid://c71gf2qx41ep" path="res://game/settings/SettingsScreenMobile.tscn" id="1_04r1x"]
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_ealrb"]
+[ext_resource type="PackedScene" uid="uid://fbn8fagd6qbm" path="res://game/settings/SettingsScreenMobile.tscn" id="1_04r1x"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_ealrb"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_y4iuk"]
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="3_sxuv2"]
-[ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="3_t071m"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="3_sxuv2"]
+[ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="3_t071m"]
 
 [node name="RandomHubMobile" type="Control"]
 layout_mode = 3

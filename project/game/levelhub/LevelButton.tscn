@@ -1,13 +1,13 @@
-[gd_scene load_steps=18 format=3 uid="uid://bjsmnin37pr8t"]
+[gd_scene load_steps=18 format=3 uid="uid://dl1moq1i2jjs"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
-[ext_resource type="StyleBox" uid="uid://nqv6to7wgirr" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
+[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
-[ext_resource type="StyleBox" uid="uid://c4yj3hxo7u2s4" path="res://assets/ui/LevelButton/NormalStyle.tres" id="3_dht5y"]
-[ext_resource type="StyleBox" uid="uid://7vwnq01lpj8o" path="res://assets/ui/LevelButton/HoverStyle.tres" id="4_qjcst"]
-[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
-[ext_resource type="StyleBox" uid="uid://b2184kn03irus" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
+[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/NormalStyle.tres" id="3_dht5y"]
+[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/HoverStyle.tres" id="4_qjcst"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
+[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="10_5jj0t"]
 
@@ -184,17 +184,16 @@ gradient = SubResource("Gradient_8l20x")
 lifetime_randomness = 0.5
 direction = Vector3(0, 0, 0)
 spread = 180.0
+gravity = Vector3(0, 0, 0)
 initial_velocity_min = 500.0
 initial_velocity_max = 500.0
-orbit_velocity_max = 0.01
-gravity = Vector3(0, 0, 0)
 tangential_accel_max = 26.97
-attractor_interaction_enabled = false
 scale_min = 0.3
 scale_max = 0.6
 color_ramp = SubResource("GradientTexture1D_k2ynt")
 turbulence_noise_strength = 17.78
 turbulence_noise_scale = 2.659
+attractor_interaction_enabled = false
 
 [node name="LevelButton" type="Control"]
 layout_mode = 3
@@ -236,10 +235,10 @@ color = Color(0.670588, 1, 0.819608, 1)
 unique_name_in_owner = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.5
 libraries = {
 "": SubResource("AnimationLibrary_4p2d0")
 }
-speed_scale = 1.5
 
 [node name="UnlockParticles" type="GPUParticles2D" parent="."]
 position = Vector2(4, 12)

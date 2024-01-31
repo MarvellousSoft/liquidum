@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cstnq5njfyida"]
+[gd_scene load_steps=4 format=3 uid="uid://cfiruubugsdql"]
 
-[ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="1_0nana"]
+[ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="1_0nana"]
 [ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
-[ext_resource type="PackedScene" uid="uid://cnqgy1qwrpgp5" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
+[ext_resource type="PackedScene" uid="uid://di2bf2ormot60" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
 
 [node name="LeaderboardDisplay" type="Control"]
 custom_minimum_size = Vector2(1100, 1000)
@@ -34,7 +34,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-tab_focus_mode = 0
 
 [node name="TODAY" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
 unique_name_in_owner = true

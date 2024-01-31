@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cvc05fffw42ma"]
+[gd_scene load_steps=2 format=3 uid="uid://d1mr4677loeoa"]
 
 [ext_resource type="Script" path="res://game/steam/SteamPlaytimeTracker.gd" id="1_gjq3s"]
 

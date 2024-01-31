@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://be6w11mud00mj"]
+[gd_scene load_steps=8 format=3 uid="uid://cw4ujbeggu1mb"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_5qrc8"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_5qrc8"]
 [ext_resource type="Script" path="res://game/profile_menu/ProfileButton.gd" id="2_y0epb"]
-[ext_resource type="StyleBox" uid="uid://w8cqsiejchla" path="res://assets/ui/NegativeButtonNormalStyle.tres" id="3_pwy8f"]
+[ext_resource type="StyleBox" path="res://assets/ui/NegativeButtonNormalStyle.tres" id="3_pwy8f"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_rpuc4"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="4_1lb5w"]
-[ext_resource type="StyleBox" uid="uid://cq8rna3kxgycu" path="res://assets/ui/NegativeButtonHoverStyle.tres" id="6_ms7wt"]
-[ext_resource type="StyleBox" uid="uid://bo7xt6vgeh2hc" path="res://assets/ui/NegativeButtonPressedStyle.tres" id="7_legko"]
+[ext_resource type="StyleBox" path="res://assets/ui/NegativeButtonHoverStyle.tres" id="6_ms7wt"]
+[ext_resource type="StyleBox" path="res://assets/ui/NegativeButtonPressedStyle.tres" id="7_legko"]
 
 [node name="ProfileButton" type="VBoxContainer"]
 offset_right = 1618.0

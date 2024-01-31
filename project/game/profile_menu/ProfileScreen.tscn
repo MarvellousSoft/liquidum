@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bl27lmc6g415t"]
+[gd_scene load_steps=7 format=3 uid="uid://comqg7fyewdny"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_jfir4"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_jfir4"]
 [ext_resource type="Script" path="res://game/profile_menu/ProfileScreen.gd" id="2_4oxw6"]
-[ext_resource type="PackedScene" uid="uid://be6w11mud00mj" path="res://game/profile_menu/ProfileButton.tscn" id="3_irva6"]
+[ext_resource type="PackedScene" uid="uid://cw4ujbeggu1mb" path="res://game/profile_menu/ProfileButton.tscn" id="3_irva6"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_y8aab"]
 [ext_resource type="Texture2D" uid="uid://2oksbkw01gll" path="res://assets/images/ui/icons/turtle.png" id="5_0ooa3"]
 [ext_resource type="Texture2D" uid="uid://dbm5kpqt3p0hu" path="res://assets/images/ui/icons/shrimp.png" id="6_hojuy"]

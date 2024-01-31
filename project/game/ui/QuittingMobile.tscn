@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4yjom7k37ogp"]
+[gd_scene load_steps=2 format=3 uid="uid://hoqartr3bad1"]
 
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="1_yv1l2"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="1_yv1l2"]
 
 [node name="QuittingMobile" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://qhhd1gc6qgfm"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://c3bb61j6wfvs" path="res://assets/audio/sfx/splash1.wav" id="1_xgnpk"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/splash1.wav" id="1_xgnpk"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_dbtg3"]
 
 [resource]

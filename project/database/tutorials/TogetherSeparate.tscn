@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://8wk0fsy5tc5"]
+[gd_scene load_steps=7 format=3 uid="uid://coyce45pjwmr7"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_bb3ca"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_bb3ca"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="2_7e18s"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_lv41p"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="3_ubhew"]

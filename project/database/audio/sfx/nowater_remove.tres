@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bv8od7ni6gbw4"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://d3e4qtevmbhg5" path="res://assets/audio/sfx/put_nowater.wav" id="1_oi702"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/put_nowater.wav" id="1_oi702"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_mlfn7"]
 
 [resource]

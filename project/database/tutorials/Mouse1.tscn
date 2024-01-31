@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://b8gs3yl6iwrio"]
+[gd_scene load_steps=9 format=3 uid="uid://b6xay6niq2xml"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_ndfat"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ndfat"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_rvbrf"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_67h40"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="4_co5dh"]

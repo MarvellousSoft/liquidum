@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cqxcsefprpluj"]
+[gd_scene load_steps=6 format=3 uid="uid://b63agud8d16ep"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_xlkyc"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_xlkyc"]
 [ext_resource type="Script" path="res://game/level/TutorialDisplay.gd" id="2_irhp8"]
-[ext_resource type="StyleBox" uid="uid://dme1286tgr172" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
+[ext_resource type="StyleBox" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="3_s7fl0"]
-[ext_resource type="PackedScene" uid="uid://8wk0fsy5tc5" path="res://database/tutorials/TogetherSeparate.tscn" id="4_5facx"]
+[ext_resource type="PackedScene" uid="uid://coyce45pjwmr7" path="res://database/tutorials/TogetherSeparate.tscn" id="4_5facx"]
 
 [node name="TutorialDisplay" type="MarginContainer"]
 theme = ExtResource("1_xlkyc")

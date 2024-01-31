@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvauph5ly48yg"]
+[gd_scene load_steps=6 format=3 uid="uid://dpf2p7vtpwwqe"]
 
 [ext_resource type="Texture2D" uid="uid://n6gna2yn0ruj" path="res://assets/images/ui/cell/cornergrabber.png" id="1_mtb6s"]
 [ext_resource type="Script" path="res://game/level/cells/CellCorner.gd" id="2_1l5y6"]

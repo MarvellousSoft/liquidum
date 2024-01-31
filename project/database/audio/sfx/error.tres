@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dg507wbf8x186"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://b4il4hmc78u2w" path="res://assets/audio/sfx/error.wav" id="1_qs8fj"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/error.wav" id="1_qs8fj"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_k503i"]
 
 [resource]

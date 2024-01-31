@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b70bud1325byk"]
+[gd_scene load_steps=3 format=3 uid="uid://c71ydbrb1att0"]
 
 [ext_resource type="Script" path="res://game/splash/SplashStaticImage.gd" id="1_vqva2"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="2_q3u6w"]

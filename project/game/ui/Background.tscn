@@ -1,9 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyipmucbrxt1i"]
+[gd_scene load_steps=12 format=3 uid="uid://dtdbkn0fp6o8j"]
 
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="1_rmur7"]
 [ext_resource type="Script" path="res://game/ui/Background.gd" id="1_slr8i"]
 [ext_resource type="Shader" path="res://assets/shaders/Background.gdshader" id="1_vkkdf"]
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_3o51c"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_3o51c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xpma"]
 shader = ExtResource("1_vkkdf")

@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bhoqtcckfgxkg"]
+[gd_scene load_steps=6 format=3 uid="uid://c5qtewfqm58j3"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_actpp"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_actpp"]
 [ext_resource type="Script" path="res://game/editor_menu/UploadingToWorkshop.gd" id="1_iq228"]
-[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="2_o0b30"]
-[ext_resource type="StyleBox" uid="uid://8ys6eirm8td1" path="res://game/ui/BlackPanelContainer.tres" id="3_0rvp8"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="2_o0b30"]
+[ext_resource type="StyleBox" path="res://game/ui/BlackPanelContainer.tres" id="3_0rvp8"]
 [ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="3_rnbwf"]
 
 [node name="UploadingToWorkshop" type="CanvasLayer"]

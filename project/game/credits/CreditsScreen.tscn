@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://ccuyvp87tiihl"]
+[gd_scene load_steps=8 format=3 uid="uid://c3nklp4h1qqru"]
 
-[ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="1_kd1hx"]
+[ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="1_kd1hx"]
 [ext_resource type="Script" path="res://game/credits/CreditsScreen.gd" id="1_p25oe"]
 [ext_resource type="Texture2D" uid="uid://dwlbrh4a0vv8b" path="res://assets/images/ui/credits/rica.png" id="2_rym2r"]
 [ext_resource type="Texture2D" uid="uid://ct3bujc2krb43" path="res://assets/images/ui/credits/yan.png" id="3_feam5"]

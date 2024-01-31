@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dt8sw1afbtbw2"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://dh3uyum57kww5" path="res://assets/audio/sfx/its_marvellous.mp3" id="1_hvljf"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/its_marvellous.mp3" id="1_hvljf"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_3f5ov"]
 
 [resource]

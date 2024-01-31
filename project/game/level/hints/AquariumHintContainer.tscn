@@ -1,8 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://07qsytklbnnd"]
+[gd_scene load_steps=11 format=3 uid="uid://c7t6kdqc5bvy6"]
 
 [ext_resource type="Script" path="res://game/level/hints/AquariumHintContainer.gd" id="1_5rypm"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_wjtfv"]
-[ext_resource type="PackedScene" uid="uid://dhrvbdlu1caw2" path="res://game/level/hints/AquariumHint.tscn" id="3_6cjw2"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_wjtfv"]
+[ext_resource type="PackedScene" uid="uid://bhn03aekm8wud" path="res://game/level/hints/AquariumHint.tscn" id="3_6cjw2"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_16wfb"]
 
 [sub_resource type="FontVariation" id="FontVariation_o6mv5"]

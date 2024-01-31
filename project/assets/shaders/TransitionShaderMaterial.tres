@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ctkajpa32ml55"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dx4nqctb0ameo"]
 
 [ext_resource type="Shader" path="res://assets/shaders/Transition.gdshader" id="1_gpmpg"]
 

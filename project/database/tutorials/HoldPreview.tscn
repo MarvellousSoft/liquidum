@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://fx455413trsr"]
+[gd_scene load_steps=8 format=3 uid="uid://fcca2p8bdeeg"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_dv8s0"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_dv8s0"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_42eqt"]
 [ext_resource type="Texture2D" uid="uid://cwle5kbt8vmin" path="res://assets/images/ui/tutorial/empty_cell_bottom_right_open_example.png" id="3_lax3h"]
 [ext_resource type="Texture2D" uid="uid://ccj56pxysxo6d" path="res://assets/images/ui/tutorial/empty_cell_right_open_example.png" id="4_lpiat"]
@@ -146,6 +146,7 @@ flip_h = true
 
 [node name="PreviewWater" type="GridContainer" parent="PreviewAquarium"]
 modulate = Color(1, 1, 1, 0.662745)
+layout_mode = 0
 offset_right = 300.0
 offset_bottom = 300.0
 theme_override_constants/h_separation = -2
@@ -184,6 +185,7 @@ expand_mode = 1
 flip_h = true
 
 [node name="Preview" type="Label" parent="PreviewAquarium"]
+layout_mode = 0
 offset_left = -17.0
 offset_top = 317.0
 offset_right = 330.0

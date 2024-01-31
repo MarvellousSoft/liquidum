@@ -1,30 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bsceg1shixxfw"]
 
-[ext_resource path="res://addons/localization_editor/scenes/locales/LocalizationLocalesFilter.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/localization_editor/scenes/locales/LocalizationLocalesFilter.gd" id="1"]
 
 [node name="LocalizationLocalesFilter" type="MarginContainer"]
-margin_right = 1024.0
-margin_bottom = 38.0
 size_flags_horizontal = 3
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="HBox" type="HBoxContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 38.0
+layout_mode = 2
 
 [node name="Filter" type="LineEdit" parent="HBox"]
-margin_right = 937.0
-margin_bottom = 38.0
-hint_tooltip = "Enter text to filter locales"
+layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Filter"
 
 [node name="Selected" type="CheckBox" parent="HBox"]
-margin_left = 941.0
-margin_right = 1024.0
-margin_bottom = 38.0
-hint_tooltip = "Check to view only selected locales"
+layout_mode = 2
 text = "Selected"

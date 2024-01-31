@@ -1,9 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://bsgjxsq2lu5y2"]
+[gd_scene load_steps=13 format=3 uid="uid://cq2k6358oxu3f"]
 
 [ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="2_hnkmi"]
-[ext_resource type="Theme" uid="uid://cdi6swfl8433" path="res://assets/ui/CounterTheme.tres" id="2_wetut"]
-[ext_resource type="PackedScene" uid="uid://bxiiha43788p7" path="res://game/level/hints/HintOptionButton.tscn" id="3_86ios"]
+[ext_resource type="Theme" uid="uid://coxmpyqhwgjw1" path="res://assets/ui/CounterTheme.tres" id="2_wetut"]
+[ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="3_86ios"]
 
 [sub_resource type="FontVariation" id="FontVariation_5wwqj"]
 base_font = ExtResource("2_hnkmi")

@@ -1,11 +1,11 @@
-[gd_resource type="Theme" load_steps=14 format=3 uid="uid://cjvm0hkahhs31"]
+[gd_resource type="Theme" load_steps=14 format=3 uid="uid://dnk8htb63eidw"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_qv3is"]
-[ext_resource type="StyleBox" uid="uid://bu8vlk21sg5aa" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_bhxdr"]
-[ext_resource type="StyleBox" uid="uid://cp7wuoq4sf6wi" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
-[ext_resource type="StyleBox" uid="uid://gqjj40bseq65" path="res://assets/ui/ButtonNormalStyle.tres" id="3_u1kds"]
-[ext_resource type="StyleBox" uid="uid://8i3c41sdwhm" path="res://assets/ui/ButtonPressedStyle.tres" id="4_oftan"]
-[ext_resource type="StyleBox" uid="uid://csn6hdcaxri2x" path="res://assets/ui/Panel.tres" id="5_o5cjq"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_bhxdr"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonNormalStyle.tres" id="3_u1kds"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonPressedStyle.tres" id="4_oftan"]
+[ext_resource type="StyleBox" uid="uid://cs152l3r72fun" path="res://assets/ui/Panel.tres" id="5_o5cjq"]
 
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_qv3is")

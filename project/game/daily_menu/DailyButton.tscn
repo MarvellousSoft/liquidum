@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1cm4ha1d6dj5"]
+[gd_scene load_steps=5 format=3 uid="uid://dtcuemu2b1rcx"]
 
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_rhylt"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_rhylt"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
-[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_ghr64"]
 
 [node name="DailyButton" type="Control"]

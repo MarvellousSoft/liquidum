@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmjn7dq5vfhnt"]
+[gd_scene load_steps=2 format=3 uid="uid://6ar58c2ii1sk"]
 
 [ext_resource type="Script" path="res://game/steam/SteamManager.gd" id="1_28o4c"]
 

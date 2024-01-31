@@ -1,9 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bo7h8l5kg521u"]
+[gd_scene load_steps=8 format=3 uid="uid://clho752qmj2te"]
 
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_h2djh"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_h2djh"]
 [ext_resource type="Script" path="res://game/profile_menu/ProfileScreen.gd" id="2_7jonu"]
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_hi2l4"]
-[ext_resource type="PackedScene" path="res://game/profile_menu/ProfileButtonMobile.tscn" id="3_mfbmt"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_hi2l4"]
+[ext_resource type="PackedScene" uid="uid://cawa5v06l83m5" path="res://game/profile_menu/ProfileButtonMobile.tscn" id="3_mfbmt"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_qso1h"]
 [ext_resource type="Texture2D" uid="uid://2oksbkw01gll" path="res://assets/images/ui/icons/turtle.png" id="5_o75oy"]
 [ext_resource type="Texture2D" uid="uid://dbm5kpqt3p0hu" path="res://assets/images/ui/icons/shrimp.png" id="6_741er"]

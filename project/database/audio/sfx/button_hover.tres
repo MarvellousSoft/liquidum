@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bq0v7a1f1vdyi"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://djg33rfkpiadf" path="res://assets/audio/sfx/hover_button.wav" id="1_kbrj7"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/hover_button.wav" id="1_kbrj7"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_cfhnk"]
 
 [resource]

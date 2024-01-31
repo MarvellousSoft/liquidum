@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dh07n2tm2va1t"]
+[gd_scene load_steps=4 format=3 uid="uid://dte2gdbdkw8ap"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_mrar7"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_mrar7"]
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
-[ext_resource type="PackedScene" uid="uid://d3tmba0xubh11" path="res://game/levelhub/OngoingSolution.tscn" id="3_v4w4y"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_v4w4y"]
 
 [node name="WorkshopLevelButton" type="MarginContainer"]
 size_flags_horizontal = 4

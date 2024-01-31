@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7b2aqttx20gq"]
+[gd_scene load_steps=6 format=3 uid="uid://ckvgjuqcx6til"]
 
 [ext_resource type="Script" path="res://game/ui/TransitionManager.gd" id="1"]
-[ext_resource type="Material" uid="uid://ctkajpa32ml55" path="res://assets/shaders/TransitionShaderMaterial.tres" id="2_e4k7h"]
+[ext_resource type="Material" uid="uid://dx4nqctb0ameo" path="res://assets/shaders/TransitionShaderMaterial.tres" id="2_e4k7h"]
 
 [sub_resource type="Animation" id="Animation_x27hb"]
 length = 0.001
@@ -53,7 +53,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.2
 libraries = {
 "": SubResource("AnimationLibrary_hg3bf")
 }
-speed_scale = 1.2

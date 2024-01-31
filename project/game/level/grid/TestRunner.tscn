@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5np4b83uqkua"]
+[gd_scene load_steps=5 format=3 uid="uid://dqieg2p6bsmfi"]
 
 [ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
-[ext_resource type="PackedScene" uid="uid://qm8ijblbhiyt" path="res://game/level/GridView.tscn" id="2_ojaat"]
-[ext_resource type="PackedScene" uid="uid://plt8snslppc5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
+[ext_resource type="PackedScene" uid="uid://bde14y8dr2ugg" path="res://game/level/GridView.tscn" id="2_ojaat"]
+[ext_resource type="PackedScene" uid="uid://b66jv6csdnca5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
 [ext_resource type="Script" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
 [node name="TestRunner" type="Control"]

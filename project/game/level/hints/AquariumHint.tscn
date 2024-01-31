@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://dhrvbdlu1caw2"]
+[gd_scene load_steps=14 format=3 uid="uid://bhn03aekm8wud"]
 
 [ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
-[ext_resource type="PackedScene" uid="uid://bxiiha43788p7" path="res://game/level/hints/HintOptionButton.tscn" id="2_lgxd6"]
+[ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="2_lgxd6"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_utjnr"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_bqvbu"]
 [ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="4_4kw1v"]

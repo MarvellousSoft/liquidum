@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://plt8snslppc5"]
+[gd_scene load_steps=18 format=3 uid="uid://b66jv6csdnca5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]

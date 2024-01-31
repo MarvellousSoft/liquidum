@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bljmpbyn14lnb"]
+[gd_scene load_steps=3 format=3 uid="uid://edlqrx1gw8k0"]
 
 [ext_resource type="Script" path="res://game/level/hints/HintBar.gd" id="1_7js1u"]
-[ext_resource type="PackedScene" uid="uid://sogub73jvlos" path="res://game/level/hints/Hint.tscn" id="2_fgutn"]
+[ext_resource type="PackedScene" uid="uid://d0uxrjey3ce4f" path="res://game/level/hints/Hint.tscn" id="2_fgutn"]
 
 [node name="HintBar" type="Control"]
 layout_mode = 3

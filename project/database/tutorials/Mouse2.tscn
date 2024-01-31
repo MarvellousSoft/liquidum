@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bp6kuwanbskgw"]
+[gd_scene load_steps=7 format=3 uid="uid://b16tb4wwqgo85"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_j3v0c"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_j3v0c"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_sy81x"]
 [ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="2_y2uuo"]
 [ext_resource type="Texture2D" uid="uid://dguu4animlbb" path="res://assets/images/ui/icons/mouse_left_button.png" id="3_ma811"]

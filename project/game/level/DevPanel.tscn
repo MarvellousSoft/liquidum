@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwlbk71x1xkkg"]
+[gd_scene load_steps=3 format=3 uid="uid://k6240grbegxf"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_bh5km"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_bh5km"]
 [ext_resource type="Script" path="res://game/level/DevPanel.gd" id="2_3k7ls"]
 
 [node name="DevPanel" type="VBoxContainer"]

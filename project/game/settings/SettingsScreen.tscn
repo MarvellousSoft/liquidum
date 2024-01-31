@@ -1,14 +1,14 @@
-[gd_scene load_steps=14 format=3 uid="uid://dr18tk67tc6uq"]
+[gd_scene load_steps=14 format=3 uid="uid://uoquxrowsye8"]
 
 [ext_resource type="Script" path="res://game/settings/SettingsScreen.gd" id="1_bstu8"]
-[ext_resource type="Theme" uid="uid://dsx7oo1jar5n8" path="res://assets/ui/SettingsTheme.tres" id="2_5ky7v"]
+[ext_resource type="Theme" uid="uid://cm43saxtb07o1" path="res://assets/ui/SettingsTheme.tres" id="2_5ky7v"]
 [ext_resource type="Texture2D" uid="uid://ciuyao6wf8s54" path="res://assets/images/ui/settings/settings_button_normal.png" id="3_53c0p"]
 [ext_resource type="Texture2D" uid="uid://dlxn50psp55f3" path="res://assets/images/ui/settings/checkbox_unpressed.png" id="3_l1rea"]
 [ext_resource type="Texture2D" uid="uid://bxwmppfcxxjb2" path="res://assets/images/ui/settings/settings_button_pressed.png" id="4_fa5hr"]
 [ext_resource type="Texture2D" uid="uid://guhcktb4xm66" path="res://assets/images/ui/settings/checkbox_pressed.png" id="4_puohg"]
 [ext_resource type="Texture2D" uid="uid://c3va1ykebf8as" path="res://assets/images/ui/settings/settings_button_hover.png" id="5_epp2n"]
 [ext_resource type="Texture2D" uid="uid://mdkrgn1ytnhh" path="res://assets/images/ui/settings/checkbox_hover.png" id="5_nre0q"]
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="6_um142"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_um142"]
 
 [sub_resource type="Animation" id="Animation_mqb4d"]
 length = 0.001

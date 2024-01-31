@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bh0d4n3rlnltu"]
+[gd_scene format=3 uid="uid://nh5gh8kj505p"]
 
 [node name="LocalizationRemapDialogFile" type="FileDialog"]
-size = Vector2i(800, 600)
+size = Vector2i(1162, 600)

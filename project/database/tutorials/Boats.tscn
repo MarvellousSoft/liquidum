@@ -1,6 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://wwp34o1mlyab"]
+[gd_scene load_steps=12 format=3 uid="uid://bfyp7vx5tsdfn"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_huabo"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_huabo"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="2_4on23"]
 [ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_kj12x"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="2_m22ih"]

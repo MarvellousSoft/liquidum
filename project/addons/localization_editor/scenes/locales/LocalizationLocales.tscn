@@ -1,37 +1,28 @@
-[gd_scene load_steps=2 format=3 uid="uid://6ma47o0u2v2l"]
+[gd_scene load_steps=2 format=3 uid="uid://d1vh2nj5eobm7"]
 
 [ext_resource type="Script" path="res://addons/localization_editor/scenes/locales/LocalizationLocales.gd" id="1"]
 
 [node name="LocalizationLocales" type="MarginContainer"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( "1" )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="Panel" type="Panel" parent="."]
-offset_right = 1024.0
-offset_bottom = 600.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Scroll" type="ScrollContainer" parent="Panel"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBox" type="VBoxContainer" parent="Panel/Scroll"]
-offset_right = 1024.0
-offset_bottom = 600.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}

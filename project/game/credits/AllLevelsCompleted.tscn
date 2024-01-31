@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bh1h58vx2ocdu"]
+[gd_scene load_steps=4 format=3 uid="uid://dec0n4p5erydx"]
 
-[ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="1_5pd2q"]
+[ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="1_5pd2q"]
 [ext_resource type="Script" path="res://game/credits/AllLevelsCompleted.gd" id="1_fn571"]
-[ext_resource type="Theme" uid="uid://eojv5ynkq5oq" path="res://assets/ui/DarkFont.tres" id="3_sx6b2"]
+[ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="3_sx6b2"]
 
 [node name="AllLevelsCompleted" type="Control"]
 layout_mode = 3

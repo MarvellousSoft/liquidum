@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cywdde1vhvqko"]
+[gd_scene load_steps=8 format=3 uid="uid://5bymewa5wxxf"]
 
 [ext_resource type="Script" path="res://game/ui/ConfirmationScreen.gd" id="1_40f4i"]
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="2_8015s"]
-[ext_resource type="Theme" uid="uid://dj21rv23idpsb" path="res://assets/ui/SettingsMobileTheme.tres" id="3_5r6cq"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_8015s"]
+[ext_resource type="Theme" uid="uid://dcnk7jk5h3hov" path="res://assets/ui/SettingsMobileTheme.tres" id="3_5r6cq"]
 
 [sub_resource type="Animation" id="Animation_mqb4d"]
 length = 0.001

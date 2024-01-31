@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://d3tmba0xubh11"]
+[gd_scene load_steps=5 format=3 uid="uid://cwympyod5pu88"]
 
 [ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="1_psev4"]
 
@@ -105,7 +105,7 @@ texture = ExtResource("1_psev4")
 expand_mode = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_tqnon")
 }
-autoplay = "idle"

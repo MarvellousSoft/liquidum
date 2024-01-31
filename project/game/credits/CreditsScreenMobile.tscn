@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3i6escfr8lat"]
+[gd_scene load_steps=9 format=3 uid="uid://dif1c6q0u0wuq"]
 
-[ext_resource type="Theme" uid="uid://cjvm0hkahhs31" path="res://assets/ui/MobileTheme.tres" id="1_in2ub"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_in2ub"]
 [ext_resource type="Script" path="res://game/credits/CreditsScreen.gd" id="1_nqg2g"]
-[ext_resource type="PackedScene" uid="uid://co5dajioxg1kf" path="res://game/mobile/MobileBGHelp.tscn" id="3_78jen"]
-[ext_resource type="PackedScene" uid="uid://yacgiejcfdct" path="res://game/main_menu/Title.tscn" id="3_nkgyg"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="3_78jen"]
+[ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="3_nkgyg"]
 [ext_resource type="Texture2D" uid="uid://dwlbrh4a0vv8b" path="res://assets/images/ui/credits/rica.png" id="4_43c3x"]
 [ext_resource type="Texture2D" uid="uid://ct3bujc2krb43" path="res://assets/images/ui/credits/yan.png" id="5_hujda"]
 [ext_resource type="Texture2D" uid="uid://dgvo6glv50gdb" path="res://assets/images/ui/credits/godot.png" id="6_x6fjy"]

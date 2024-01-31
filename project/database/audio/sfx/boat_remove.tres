@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://c0m552mns3wfm"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
-[ext_resource type="AudioStream" uid="uid://bmbjee8n54sbo" path="res://assets/audio/sfx/destroy_boat.wav" id="1_x20te"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/destroy_boat.wav" id="1_x20te"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_34feq"]
 
 [resource]

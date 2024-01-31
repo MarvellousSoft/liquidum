@@ -1,9 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://sogub73jvlos"]
+[gd_scene load_steps=9 format=3 uid="uid://d0uxrjey3ce4f"]
 
 [ext_resource type="Script" path="res://game/level/hints/Hint.gd" id="1_s2nml"]
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="2_3rujp"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_kqie2"]
-[ext_resource type="PackedScene" uid="uid://bxiiha43788p7" path="res://game/level/hints/HintOptionButton.tscn" id="3_trrfp"]
+[ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="3_trrfp"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="5_oyftd"]
 [ext_resource type="Texture2D" uid="uid://bvlr02m8etbqm" path="res://assets/images/ui/hint/button_hint_type.png" id="6_o4fwo"]
 

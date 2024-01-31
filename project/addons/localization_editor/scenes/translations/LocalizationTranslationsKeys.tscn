@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://gmpsh88x1lgp"]
+[gd_scene load_steps=3 format=3 uid="uid://b8eimhx1gr6pi"]
 
-[ext_resource type="PackedScene" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsHead.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://bpmaw0y6cul8h" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsHead.tscn" id="1"]
 [ext_resource type="Script" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsKeys.gd" id="2"]
 
 [node name="LocalizationTranslationsKeys" type="Panel"]
@@ -9,22 +9,20 @@ size_flags_vertical = 3
 script = ExtResource("2")
 
 [node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 
 [node name="Head" parent="VBox" instance=ExtResource("1")]
-offset_right = 67.0
-offset_bottom = 61.0
+layout_mode = 2
 
 [node name="Scroll" type="ScrollContainer" parent="VBox"]
-offset_top = 65.0
-offset_right = 67.0
-offset_bottom = 65.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Keys" type="VBoxContainer" parent="VBox/Scroll"]
-offset_right = 67.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bssdhtctthadv"]
+[gd_scene load_steps=8 format=3 uid="uid://cdaplrx3hun6g"]
 
 [ext_resource type="Script" path="res://addons/localization_editor/scenes/auto_translate/translator/LocalizationAutoTranslate.gd" id="1_cuqef"]
 [ext_resource type="Texture2D" uid="uid://byv22srd37niw" path="res://addons/localization_editor/icons/Google.png" id="2_l1peq"]
@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c24qna6n2q27l" path="res://addons/localization_editor/icons/DeepL.png" id="4_142cw"]
 [ext_resource type="Texture2D" uid="uid://cfu2uuf8hh0c" path="res://addons/localization_editor/icons/Amazon.png" id="5_0oig7"]
 [ext_resource type="Texture2D" uid="uid://dekewvpr4ic2c" path="res://addons/localization_editor/icons/Microsoft.png" id="6_tal6j"]
-[ext_resource type="PackedScene" path="res://addons/ui_extensions/dropdown/Dropdown.tscn" id="7_jsbqb"]
+[ext_resource type="PackedScene" uid="uid://21j64u0a50td" path="res://addons/ui_extensions/dropdown/Dropdown.tscn" id="7_jsbqb"]
 
 [node name="LocalizationAutotranslateGoogle" type="MarginContainer"]
 anchors_preset = 15

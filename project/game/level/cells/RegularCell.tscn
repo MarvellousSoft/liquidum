@@ -1,7 +1,7 @@
-[gd_scene load_steps=51 format=3 uid="uid://ducq8gqvrwpyh"]
+[gd_scene load_steps=51 format=3 uid="uid://dg36xpbgk5g24"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
-[ext_resource type="Material" uid="uid://d1ftdv27nbupc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
+[ext_resource type="Material" uid="uid://owbt514048nc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
 [ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/cell/water_topleft.png" id="4_lwpcm"]
 [ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/water_topright.png" id="5_l8l5q"]

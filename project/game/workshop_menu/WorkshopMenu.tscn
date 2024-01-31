@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://gcs722ssavfm"]
+[gd_scene load_steps=4 format=3 uid="uid://bw8w0mew6x5p8"]
 
-[ext_resource type="Theme" uid="uid://c6108lc3jg2cv" path="res://assets/ui/GeneralTheme.tres" id="1_7r58g"]
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7r58g"]
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopMenu.gd" id="2_hwdrt"]
-[ext_resource type="PackedScene" uid="uid://dh07n2tm2va1t" path="res://game/workshop_menu/WorkshopLevelButton.tscn" id="3_7uwtg"]
+[ext_resource type="PackedScene" uid="uid://dte2gdbdkw8ap" path="res://game/workshop_menu/WorkshopLevelButton.tscn" id="3_7uwtg"]
 
 [node name="WorkshopMenu" type="Control"]
 layout_mode = 3
