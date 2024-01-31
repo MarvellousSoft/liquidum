@@ -239,7 +239,7 @@ YESTERDAY,Yesterday,Ontem,Ontem
 SHOW_TIMER,Show timer,Mostrar tempo,Mostrar tempo
 QUITTING,Quitting...,Fechando...,Fechando...
 ALLOW_MISTAKES,Allow mistakes,Permitir erros,Permitir erros
-PROGRESS_ON_UNKNOWN,"Color ""?"" hints","Colore dicas ""?""","Colore dicas ""?"""
+PROGRESS_ON_UNKNOWN,"Color ""?"" hints","Colorir dicas ""?""","Colorir dicas ""?"""
 LESS_THREE_MISTAKES,(at most 2 mistakes),(até 2 erros),(até 2 erros)
 PREVIEW_TUT,Preview,Simular,Simular
 TUT_PREVIEW,Water preview,Simular água,Simular água

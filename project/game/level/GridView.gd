@@ -6,6 +6,7 @@ signal updated
 signal mistake_made()
 signal updated_size
 
+const FEEDBACK_DELAY = 0.12
 const STARTUP_MAX_DELAY = 0.1
 const MAX_STARTUP_TIME = 2.8
 const REGULAR_CELL = preload("res://game/level/cells/RegularCell.tscn")
@@ -606,9 +607,12 @@ func highlight_column(idx: int) -> void:
 
 
 func check_for_feedback(i : int, j: int, row_s : E.HintStatus , col_s : E.HintStatus, content : E.HintContent):
-	if row_s != E.HintStatus.Satisfied and _inner_row_status(i, content) == E.HintStatus.Satisfied:
+	var is_boat = content == E.HintContent.Boat
+	if HintBars.left.get_hint(i, is_boat).hint_value != -1 and\
+	   row_s != E.HintStatus.Satisfied and _inner_row_status(i, content) == E.HintStatus.Satisfied:
 		start_row_feedback(i, j)
-	if col_s != E.HintStatus.Satisfied and _inner_col_status(j, E.HintContent.Water) == E.HintStatus.Satisfied:
+	if HintBars.top.get_hint(j, is_boat).hint_value != -1 and\
+	   col_s != E.HintStatus.Satisfied and _inner_col_status(j, E.HintContent.Water) == E.HintStatus.Satisfied:
 		start_col_feedback(i, j)
 
 
@@ -617,7 +621,7 @@ func start_row_feedback(i, j):
 	get_cell(i, j).play_feedback_animation()
 	while true:
 		idx += 1
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(FEEDBACK_DELAY).timeout
 		var propagated = false
 		if j + idx <= columns - 1:
 			propagated = true
@@ -634,7 +638,7 @@ func start_col_feedback(i, j):
 	var propagated
 	get_cell(i, j).play_feedback_animation()
 	while true:
-		await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(FEEDBACK_DELAY).timeout
 		
 		idx += 1
 		propagated = false
