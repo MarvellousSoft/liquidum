@@ -14,12 +14,17 @@ const COLORS = {
 const CONSTS = {
 	"desktop": {
 		"window_size": Vector2(3840, 2160),
+		"lifetime": 20,
+		"amount": 40,
 	},
 	"mobile": {
 		"window_size": Vector2(720, 1280),
+		"lifetime": 12,
+		"amount": 15,
 	}
 }
 @onready var BG = $BG
+@onready var Effect = $Effect
 
 var target_top_color
 var target_bottom_color
@@ -31,7 +36,10 @@ func _ready():
 	var data = CONSTS.desktop if not Global.is_mobile else CONSTS.mobile
 	var ws = data.window_size
 	BG.size = ws
+	Effect.size = ws
 	%Particles.position = Vector2(ws.x/2, ws.y + 200)
+	%Particles.lifetime = data.lifetime
+	%Particles.amount = data.amount
 	var material = %Particles.process_material as ParticleProcessMaterial
 	material.emission_box_extents.x = ws.x/2
 
