@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cq2k6358oxu3f" path="res://game/level/Counter.tscn" id="7_7ge7w"]
 [ext_resource type="PackedScene" uid="uid://b66jv6csdnca5" path="res://game/level/BrushPicker.tscn" id="9_bwhp3"]
 [ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="10_bdk8m"]
-[ext_resource type="StyleBox" uid="uid://boea7tos60avy" path="res://assets/ui/SeparatorMobile.tres" id="11_iu1ri"]
+[ext_resource type="StyleBox" path="res://assets/ui/SeparatorMobile.tres" id="11_iu1ri"]
 [ext_resource type="Texture2D" uid="uid://bmhmlq4xn2rpv" path="res://assets/images/ui/icons/restart_pressed.png" id="11_qqfwp"]
 [ext_resource type="Texture2D" uid="uid://sckvadw2hv2e" path="res://assets/images/ui/icons/restart_hover.png" id="12_po5ls"]
 [ext_resource type="Texture2D" uid="uid://b3qiioa6xn156" path="res://assets/images/ui/aquarium_button_normal.png" id="13_l7clo"]
@@ -835,13 +835,13 @@ layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("3_uwkov")
 
-[node name="GridContainer" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay" index="0"]
-theme_override_constants/v_separation = 140
+[node name="VBox" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay" index="0"]
+theme_override_constants/separation = 140
 
-[node name="Title" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/GridContainer" index="0"]
+[node name="Title" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/VBox/TopContainer" index="1"]
 theme_override_font_sizes/font_size = 80
 
-[node name="CloseButton" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/GridContainer" index="1"]
+[node name="CloseButton" parent="TutorialDisplayBG/TutorialDisplayContainer/TutorialDisplay/VBox/TopContainer" index="2"]
 custom_minimum_size = Vector2(150, 150)
 theme_override_font_sizes/font_size = 120
 
