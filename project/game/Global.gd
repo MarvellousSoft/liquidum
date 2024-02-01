@@ -66,7 +66,6 @@ signal dev_mode_toggled(status : bool)
 
 @onready var level_scene = load_mobile_compat("res://game/level/Level")
 
-var previous_windowed_pos = false
 var _dev_mode := false
 var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
@@ -109,9 +108,8 @@ func load_mobile_compat(scene: String) -> PackedScene:
 		return load(scene + ".tscn")
 
 func exit_game() -> void:
-	var window = get_window()
-	if window.mode == Window.MODE_WINDOWED:
-		Profile.set_option("previous_windowed_pos", window.position)
+	if get_window().mode == Window.MODE_WINDOWED:
+		_store_window()
 	FileManager.save_game()
 	call_deferred(&"_do_exit")
 
@@ -147,30 +145,31 @@ func create_button(text: String) -> Button:
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
 
+func _store_window() -> void:
+	var window := get_window()
+	Profile.set_option("window_position", window.position)
+	Profile.set_option("window_size", window.size)
 
 func toggle_fullscreen():
 	if is_mobile:
 		return
 	var window = get_window()
-	var cur_screen = window.get_current_screen()
 	if window.mode == Window.MODE_WINDOWED:
-		Profile.set_option("previous_windowed_pos", window.position)
+		_store_window()
 	window.mode = Window.MODE_FULLSCREEN if window.mode == Window.MODE_WINDOWED else Window.MODE_WINDOWED
 	Profile.set_option("fullscreen", window.mode != Window.MODE_WINDOWED, true)
 	window.borderless =  window.mode != Window.MODE_WINDOWED
 	if window.mode == Window.MODE_WINDOWED:
-		var s_size = DisplayServer.screen_get_size()
-		var size = s_size*.8
-		window.size = size
-		var prev = Profile.get_option("previous_windowed_pos")
-		if prev:
-			if prev is String:
-				window.position = str_to_var("Vector2" + prev)
-			else:
-				window.position = prev
+		var wpos := Profile.get_vec2i("window_position")
+		var wsize := Profile.get_vec2i("window_size")
+		if wpos != Vector2i(-1, -1) and wsize != Vector2i(-1, -1):
+			window.position = wpos
+			window.size = wsize
 		else:
+			var s_size = DisplayServer.screen_get_size()
+			var size = s_size*.8
+			window.size = size
 			window.position = Vector2(s_size.x/2 - size.x/2, size.y/2)
-		window.set_current_screen(cur_screen)
 
 
 func shuffle(a: Array, rng: RandomNumberGenerator) -> void:

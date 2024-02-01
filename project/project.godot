@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Liquidum"
 run/main_scene="res://game/splash/Splash.tscn"
+config/project_settings_override="user://custom_settings.cfg"
 config/auto_accept_quit=false
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.1", "Forward Plus")

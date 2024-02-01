@@ -26,7 +26,8 @@ var options = {
 	"bgm_volume": 1.0,
 	"sfx_volume": 1.0,
 	"fullscreen": true,
-	"previous_windowed_pos": false,
+	"window_position": Vector2i(-1, -1),
+	"window_size": Vector2i(-1, -1),
 	"highlight_grid": true,
 	"show_grid_preview": true,
 	"locale": 0,
@@ -69,8 +70,28 @@ func get_save_data() -> Dictionary:
 		"version": VERSION,
 		"options": options,
 	}
-	
 	return data
+
+func get_vec2i(key: String) -> Vector2i:
+	var val = get_option(key)
+	if val is String:
+		return str_to_var("Vector2i" + val)
+	return val
+
+func get_override() -> ConfigFile:
+	var cfg := ConfigFile.new()
+	cfg.set_value("display", "window/size/mode", DisplayServer.WINDOW_MODE_FULLSCREEN if options.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
+	if not options.fullscreen:
+		cfg.set_value("display", "window/size/initial_position_type", 0)
+		var pos := get_vec2i("window_position")
+		if pos != Vector2i(-1, -1):
+			cfg.set_value("display", "window/size/initial_position", pos)
+		var wsize := get_vec2i("window_size")
+		if wsize != Vector2i(-1, -1):
+			cfg.set_value("display", "window/size/window_width_override", wsize.x)
+			cfg.set_value("display", "window/size/window_height_override", wsize.y)
+	cfg.set_value("display", "window/vsync/vsync_mode", options.vsync)
+	return cfg
 
 
 func set_save_data(data):
@@ -90,12 +111,14 @@ func set_save_data(data):
 	DisplayServer.window_set_vsync_mode(options.vsync)
 	if Global.is_fullscreen() != options.fullscreen:
 		Global.toggle_fullscreen()
-	if not options.fullscreen and options.previous_windowed_pos:
-		var window = get_window()
-		if options.previous_windowed_pos is String:
-			window.position = str_to_var("Vector2" + options.previous_windowed_pos)
-		else:
-			window.position = options.previous_windowed_pos
+	if not options.fullscreen:
+		var window := get_window()
+		var wpos := get_vec2i("window_position")
+		if wpos != Vector2i(-1, -1):
+			window.position = wpos
+		var wsize := get_vec2i("window_size")
+		if wsize != Vector2i(-1, -1):
+			window.size = wsize
 	update_translation()
 	dark_mode_toggled.emit(options.dark_mode)
 
