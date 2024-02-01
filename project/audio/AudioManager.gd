@@ -13,6 +13,7 @@ const BGM_PATH = "res://database/audio/bgm/"
 #SFX
 const MAX_SFX_NODES = 2000
 const MAX_POS_SFX_NODES = 2000
+const MIN_DUPLICATE_INTERVAL = .08
 const SFX_PATH = "res://database/audio/sfx/"
 
 @onready var BGMS = {}
@@ -22,6 +23,7 @@ const SFX_PATH = "res://database/audio/sfx/"
 @onready var FadeOutBGMPlayer = $FadeOutBGMPlayer
 
 var bgms_last_pos = {}
+var just_played_sfxs = {}
 var cur_bgm
 var cur_sfx_player := 1
 
@@ -30,6 +32,13 @@ func _ready():
 	setup_nodes()
 	setup_bgms()
 	setup_sfxs()
+
+
+func _process(dt):
+	for sfx_name in just_played_sfxs.keys():
+		just_played_sfxs[sfx_name] -= dt
+		if just_played_sfxs[sfx_name] <= 0.0:
+			just_played_sfxs.erase(sfx_name)
 
 
 func setup_nodes():
@@ -146,6 +155,12 @@ func set_bgm_last_pos(bgm_name, pos):
 func play_sfx(sfx_name: String) -> AudioStreamPlayer:
 	if not SFXS.has(sfx_name):
 		push_error("Not a valid sfx name: " + sfx_name)
+	
+	
+	#Check if sfxs was just played, don't play it if thats the case
+	if just_played_sfxs.has(name):
+		return
+	just_played_sfxs[name] = MIN_DUPLICATE_INTERVAL
 	
 	var sfx = SFXS[sfx_name]
 	var player = get_sfx_player()

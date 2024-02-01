@@ -255,3 +255,8 @@ func _on_level_first_win(button):
 	elif (completed_levels == section_levels - LevelLister.get_max_unlocked_levels()) and \
 		 section < LevelLister.count_all_game_sections():
 		hub.unlock_section(section)
+
+
+func _on_button_mouse_entered():
+	if not focused and not $Button.disabled:
+		AudioManager.play_sfx("button_hover")

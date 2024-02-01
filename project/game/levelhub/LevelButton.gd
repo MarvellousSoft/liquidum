@@ -99,8 +99,9 @@ func _on_level_had_first_win():
 
 
 func _on_button_mouse_entered():
-	AudioManager.play_sfx("button_hover")
-	mouse_entered.emit()
+	if not $Button.disabled:
+		AudioManager.play_sfx("button_hover")
+		mouse_entered.emit()
 
 
 func _on_button_mouse_exited():
