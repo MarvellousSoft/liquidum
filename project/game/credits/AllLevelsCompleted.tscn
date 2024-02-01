@@ -103,4 +103,5 @@ text = "EMAIL_US"
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[connection signal="mouse_entered" from="Continue" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Continue" to="." method="_on_continue_pressed"]
