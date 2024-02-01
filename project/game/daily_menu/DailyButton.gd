@@ -5,6 +5,8 @@ extends Control
 const MAX_TIME := 100000
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
+const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
+
 @onready var MainButton: Button = %Button
 @onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
@@ -20,10 +22,19 @@ var gen := RandomLevelGenerator.new()
 var already_uploaded_today := false
 
 func _ready() -> void:
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	Global.dev_mode_toggled.connect(func(_on): _update())
+
 
 func _enter_tree() -> void:
 	call_deferred("_update")
+
+
+func _process(_dt: float) -> void:
+	if size != MainButton.size:
+		size = MainButton.size
+
 
 func _update() -> void:
 	var unlocked := Global.is_dev_mode() or LevelLister.section_complete(4)
@@ -53,6 +64,7 @@ func _update() -> void:
 			NotCompleted.visible = not save.is_completed()
 	_update_time_left()
 	_update_streak()
+
 
 func _update_time_left() -> void:
 	if MainButton.disabled:
@@ -87,29 +99,32 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
+
 static func _unixtime_ok_timezone() -> int:
 	var tz := Time.get_time_zone_from_system()
 	return _unixtime() + int(tz.bias) * 60
+
 
 static func _today(dt: int = 0) -> String:
 	var today := Time.get_datetime_string_from_unix_time(_unixtime_ok_timezone() - dt)
 	return today.substr(0, today.find('T'))
 
+
 static func _yesterday() -> String:
 	return _today(24 * 60 * 60)
+
 
 func _on_timer_timeout():
 	_update_time_left()
 
-func _process(_dt: float) -> void:
-	if size != MainButton.size:
-		size = MainButton.size
 
 static func _level_name(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
 
+
 static func _level_desc(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL_DESC" % DAY_STR[weekday]
+
 
 static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
@@ -125,6 +140,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	if g != null:
 		return LevelData.new(_level_name(weekday), _level_desc(weekday), g.export_data(), "")
 	return null
+
 
 func _on_button_pressed() -> void:
 	# Update date if needed
@@ -155,8 +171,8 @@ func _on_button_pressed() -> void:
 		var y_data := await get_leaderboard_data(l_id)
 		display_leaderboard(l_data, y_data, level)
 
-
 	MainButton.disabled = false
+
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
@@ -186,6 +202,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			data.current_streak = 0
 			UserData.save()
 
+
 func get_leaderboard(for_date: String) -> int:
 	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
@@ -193,6 +210,7 @@ func get_leaderboard(for_date: String) -> int:
 		push_warning("Leaderboard not found for daily %s" % for_date)
 		return -1
 	return ret[0]
+
 
 func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	if not SteamManager.enabled:
@@ -205,7 +223,6 @@ func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)
 
-const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
 class ListEntry:
 	var global_rank: int
@@ -282,6 +299,7 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 			push_warning("%.2f percentile not in top entries" % pct[0])
 	return data
 
+
 func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData, level: Level) -> void:
 	if today == null or Global.is_mobile:
 		return
@@ -295,3 +313,11 @@ func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData
 	display = level.get_node("LeaderboardDisplay")
 	display.display(today, date, yesterday_data, yesterday)
 	display.show_today()
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	%Button.theme = Global.get_theme(is_dark)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

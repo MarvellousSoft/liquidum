@@ -34,13 +34,19 @@ func _item_downloaded(app_id: int, _id: int, _res: int) -> void:
 		reload_all_levels()
 
 func _on_back_pressed():
+	AudioManager.play_sfx("button_back")
 	TransitionManager.pop_scene()
 
 
 func _on_open_workshop_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	if SteamManager.enabled:
 		SteamManager.steam.activateGameOverlayToWebPage("https://steamcommunity.com/app/2716690/workshop/")
 
 
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

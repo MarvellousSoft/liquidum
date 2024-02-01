@@ -151,5 +151,7 @@ offset_bottom = 175.0
 focus_mode = 0
 text = "BACK"
 
+[connection signal="mouse_entered" from="OtherGames" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="OtherGames" to="." method="_on_other_games_pressed"]
+[connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

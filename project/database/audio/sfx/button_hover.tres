@@ -1,12 +1,12 @@
-[gd_resource type="Resource" load_steps=3 format=3]
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dg3c65xoov3ha"]
 
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/hover_button.wav" id="1_kbrj7"]
+[ext_resource type="AudioStream" uid="uid://dxohdchdhfyi7" path="res://assets/audio/sfx/hover.wav" id="1_nxmca"]
 [ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_cfhnk"]
 
 [resource]
 script = ExtResource("2_cfhnk")
-asset = ExtResource("1_kbrj7")
-base_db = 20.0
+asset = ExtResource("1_nxmca")
+base_db = -2.0
 random_db_var = 0.0
-base_pitch = 1.0
-random_pitch_var = 0.1
+base_pitch = 0.6
+random_pitch_var = 0.2

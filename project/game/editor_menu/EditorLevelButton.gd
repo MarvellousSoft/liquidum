@@ -1,5 +1,7 @@
 extends Control
 
+const IMG_FILE := "user://level_preview.png"
+
 signal play(id: String)
 signal edit(id: String)
 signal delete(id: String)
@@ -8,15 +10,18 @@ var id: String
 
 @onready var UploadButton: Button = $UploadButton
 
+func _ready() -> void:
+	UploadButton.disabled = not SteamManager.enabled
+
+
 func setup(id_: String, full_name: String) -> void:
 	id = id_
 	$PlayButton.text = full_name
 
-func _ready() -> void:
-	UploadButton.disabled = not SteamManager.enabled
 
 func _on_play_button_pressed():
 	play.emit(id)
+
 
 func _on_delete_button_pressed():
 	if ConfirmationScreen.start_confirmation():
@@ -27,7 +32,6 @@ func _on_delete_button_pressed():
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
-const IMG_FILE := "user://level_preview.png"
 
 func _create_grid_image(grid_logic: GridModel) -> void:
 	var v := SubViewport.new()
@@ -50,6 +54,7 @@ func _create_grid_image(grid_logic: GridModel) -> void:
 	img.save_png(IMG_FILE)
 	remove_child(v)
 
+
 func _is_unique_str(grid: GridModel) -> String:
 	grid.force_editor_mode(true)
 	var start_time := Time.get_ticks_msec()
@@ -58,6 +63,7 @@ func _is_unique_str(grid: GridModel) -> String:
 
 
 func _on_upload_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	if not SteamManager.enabled:
 		return
 	UploadButton.disabled = true

@@ -178,7 +178,6 @@ func _on_line_info_item_selected(index: int) -> void:
 
 
 func _on_back_button_pressed():
-	AudioManager.play_sfx("button_back")
 	save_values()
 	FileManager.save_game()
 	toggle_pause()
@@ -220,3 +219,15 @@ func _on_dark_mode_changed(is_dark : bool):
 	else:
 		for node in [%BackButton, %QuitButton]:
 			node.theme = Global.get_theme(is_dark)
+
+
+func _on_tab_container_tab_changed(_tab):
+	AudioManager.play_sfx("tab_changed")
+
+
+func _on_option_button_item_focused(index):
+	AudioManager.play_sfx("button_hover")
+
+
+func _on_tab_container_tab_hovered(tab):
+	AudioManager.play_sfx("tab_hover")

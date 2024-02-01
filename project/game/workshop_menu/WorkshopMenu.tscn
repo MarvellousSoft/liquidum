@@ -73,5 +73,7 @@ layout_mode = 2
 [node name="WorkshopLevelButton4" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 
+[connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="mouse_entered" from="OpenWorkshop" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="OpenWorkshop" to="." method="_on_open_workshop_pressed"]

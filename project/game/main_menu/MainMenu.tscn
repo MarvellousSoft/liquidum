@@ -163,6 +163,7 @@ position_smoothing_speed = 4.0
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/EditorButton" to="." method="_on_editor_button_pressed"]
@@ -173,6 +174,7 @@ position_smoothing_speed = 4.0
 [connection signal="mouse_entered" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/CreditsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]

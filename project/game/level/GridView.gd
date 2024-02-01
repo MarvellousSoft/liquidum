@@ -634,6 +634,7 @@ func start_row_feedback(i, j):
 
 
 func start_col_feedback(i, j):
+	AudioManager.play_sfx("complete_feedback")
 	var idx = 0
 	var propagated
 	get_cell(i, j).play_feedback_animation()

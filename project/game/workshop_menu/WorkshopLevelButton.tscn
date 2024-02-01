@@ -34,4 +34,5 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[connection signal="mouse_entered" from="Open" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Open" to="." method="_on_open_pressed"]

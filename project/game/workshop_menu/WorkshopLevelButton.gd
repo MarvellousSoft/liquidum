@@ -45,3 +45,7 @@ func _on_open_pressed() -> void:
 func _level_completed(info: Level.WinInfo) -> void:
 	if info.first_win and SteamManager.enabled:
 		SteamStats.increment_workshop()
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

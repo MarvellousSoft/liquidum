@@ -19,15 +19,22 @@ func _notification(what: int) -> void:
 
 
 func _on_game_pressed(app_id: int) -> void:
+	AudioManager.play_sfx("button_pressed")
 	if SteamManager.enabled:
 		SteamManager.steam.activateGameOverlayToStore(app_id)
 
 
 func _on_back_pressed() -> void:
+	AudioManager.play_sfx("button_back")
 	TransitionManager.pop_scene()
 
 
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
+
+
 func _on_other_games_pressed():
+	AudioManager.play_sfx("button_pressed")
 	if SteamManager.enabled:
 		SteamManager.steam.activateGameOverlayToWebPage(GAMES_LINK)
 	else:

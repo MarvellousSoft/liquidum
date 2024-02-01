@@ -57,7 +57,9 @@ expand_icon = true
 
 [connection signal="mouse_entered" from="PlayButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="mouse_entered" from="EditButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="EditButton" to="." method="_on_edit_button_pressed"]
+[connection signal="mouse_entered" from="UploadButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="UploadButton" to="." method="_on_upload_button_pressed"]
 [connection signal="mouse_entered" from="DeleteButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

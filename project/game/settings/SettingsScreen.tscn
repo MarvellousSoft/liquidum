@@ -819,6 +819,8 @@ libraries = {
 "": SubResource("AnimationLibrary_sb0jh")
 }
 
+[connection signal="tab_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_changed"]
+[connection signal="tab_hovered" from="Settings/CenterContainer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_hovered"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/FullscreenContainer/CheckBox" to="." method="_on_button_mouse_entered"]
