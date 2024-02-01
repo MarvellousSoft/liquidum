@@ -8,6 +8,8 @@ enum CursorMode {
 	NoWater,
 	Boat,
 	NoBoat,
+	Wall,
+	Block,
 }
 
 const IMAGES := [
@@ -16,10 +18,13 @@ const IMAGES := [
 	preload("res://assets/images/cursors/arrow-nowater.png"),
 	preload("res://assets/images/cursors/arrow-boat.png"),
 	preload("res://assets/images/cursors/arrow-noboat.png"),
+	preload("res://assets/images/cursors/arrow-wall.png"),
+	preload("res://assets/images/cursors/arrow-block.png"),
 ]
 
 static func set_cursor(mode: CursorMode) -> void:
-	print("Set cursor for %s " % CursorMode.find_key(mode))
+	if Global.is_mobile:
+		return
 	Input.set_custom_mouse_cursor(IMAGES[mode])
 
 static func reset_cursor() -> void:

@@ -487,13 +487,16 @@ func win() -> void:
 	
 	ContinueAnim.play("show")
 
+func _set_brush_cursor() -> void:
+	var brush_name = E.BrushMode.find_key(GridNode.brush_mode)
+	var new_cursor = CursorManager.CursorMode.get(brush_name, CursorManager.CursorMode.Normal)
+	CursorManager.set_cursor(new_cursor)
+	
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
-	var brush_name = E.BrushMode.find_key(mode)
-	var new_cursor = CursorManager.CursorMode.get(brush_name, CursorManager.CursorMode.Normal)
-	CursorManager.set_cursor(new_cursor)
 	GridNode.remove_all_preview()
+	_set_brush_cursor()
 
 
 func _on_grid_updated() -> void:
@@ -615,6 +618,10 @@ func _on_back_button_pressed() -> void:
 
 
 func _on_settings_screen_pause_toggled(paused: bool) -> void:
+	if paused:
+		CursorManager.reset_cursor()
+	else:
+		_set_brush_cursor()
 	process_game = not paused
 	$SteamPlaytimeTracker.set_tracking(not paused)
 
@@ -774,6 +781,7 @@ func _on_dev_buttons_copy_to_editor():
 
 
 func _on_tutorial_button_pressed():
+	CursorManager.reset_cursor()
 	AudioManager.play_sfx("button_pressed")
 	process_game = false
 	%TutorialDisplay.enable()
@@ -851,6 +859,7 @@ func _on_share_button_pressed() -> void:
 func _on_tutorial_display_tutorial_closed():
 	process_game = true
 	%SettingsScreen.show_button()
+	_set_brush_cursor()
 
 
 func _on_show_timer_changed(status: bool) -> void:
