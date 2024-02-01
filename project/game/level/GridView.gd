@@ -617,6 +617,7 @@ func check_for_feedback(i : int, j: int, row_s : E.HintStatus , col_s : E.HintSt
 
 
 func start_row_feedback(i, j):
+	AudioManager.play_sfx("complete_feedback")
 	var idx = 0
 	get_cell(i, j).play_feedback_animation()
 	while true:

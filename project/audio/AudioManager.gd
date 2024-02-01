@@ -158,9 +158,9 @@ func play_sfx(sfx_name: String) -> AudioStreamPlayer:
 	
 	
 	#Check if sfxs was just played, don't play it if thats the case
-	if just_played_sfxs.has(name):
+	if just_played_sfxs.has(sfx_name):
 		return
-	just_played_sfxs[name] = MIN_DUPLICATE_INTERVAL
+	just_played_sfxs[sfx_name] = MIN_DUPLICATE_INTERVAL
 	
 	var sfx = SFXS[sfx_name]
 	var player = get_sfx_player()
