@@ -177,6 +177,11 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
+[node name="PrepCheck" type="CheckBox" parent="Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "Check prep is correct"
+
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]

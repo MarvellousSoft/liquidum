@@ -99,6 +99,9 @@ func _on_preprocess_dailies_pressed() -> void:
 		if prep.success_state(dict) == 0:
 			await DailyButton.gen_level(gen, date)
 			prep.set_success_state(dict, gen.success_state)
+		elif $Buttons/PrepCheck.button_pressed:
+			# Check it is correct
+			await DailyButton.gen_level(gen, date)
 		if watch.elapsed() > 60.:
 			watch.elapsed_reset()
 			FileManager.save_dailies(year, prep)
@@ -113,7 +116,7 @@ func _on_preprocess_dailies_pressed() -> void:
 
 func _on_dif_button_pressed():
 	var dif: RandomHub.Difficulty = %DifOptions.get_selected_id()
-	var prep := PreprocessedDifficulty.current(dif)
+	var prep := FileManager.load_preprocessed_difficulty(dif)
 	var gen := RandomLevelGenerator.new()
 	%DifProgress.value = 0
 	%DifProgress.visible = true
@@ -126,10 +129,15 @@ func _on_dif_button_pressed():
 	for i in 1000:
 		if %DifCancel.button_pressed:
 			break
+		rng.seed = RandomHub.consistent_hash(str(i))
 		if prep.success_state(i) == 0:
-			rng.seed = RandomHub.consistent_hash(str(i))
 			await RandomHub.gen_from_difficulty(gen, rng, dif)
 			prep.set_success_state(i, gen.success_state)
+		elif $Buttons/PrepCheck.button_pressed:
+			# Check it is correct
+			rng.state = prep.success_state(i)
+			await RandomHub.gen_from_difficulty(gen, rng, dif)
+			assert(gen.success_state == prep.success_state(i))
 		if watch.elapsed() > 60.:
 			watch.elapsed_reset()
 			FileManager.save_preprocessed_difficulty(prep)

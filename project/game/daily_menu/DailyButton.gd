@@ -32,6 +32,7 @@ func _update() -> void:
 	%StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
 	Completed.visible = false
+	OngoingSolution.visible = false
 	if unlocked:
 		MainButton.tooltip_text = "DAILY_TOOLTIP"
 	else:
@@ -119,6 +120,8 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	if preprocessed_state != 0:
 		rng.state = preprocessed_state
 	var g: GridModel = await RandomFlavors.gen(l_gen, rng, weekday as RandomFlavors.Flavor)
+	if preprocessed_state != 0:
+		assert(preprocessed_state == l_gen.success_state)
 	if g != null:
 		return LevelData.new(_level_name(weekday), _level_desc(weekday), g.export_data(), "")
 	return null

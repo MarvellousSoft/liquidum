@@ -9,11 +9,11 @@ static func load_data(data_: Variant) -> PreprocessedDailies:
 	var preprocessed := PreprocessedDailies.new()
 	if data_ == null:
 		return preprocessed
-	preprocessed._success_states.assign(data_)
+	preprocessed._success_states.assign(data_.map(func(x): return int(x)))
 	return preprocessed
 
 func get_data() -> Variant:
-	return _success_states
+	return _success_states.map(func(x): return String.num_int64(x))
 
 func _idx(date_dict: Dictionary) -> int:
 	# Yes, I'm assuming all months are 31-day long and leaving some holes. Sue me.

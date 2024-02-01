@@ -21,15 +21,11 @@ static func load_data(dif: RandomHub.Difficulty, data_: Variant) -> Preprocessed
 	var preprocessed := PreprocessedDifficulty.new(dif)
 	if data_ == null:
 		return preprocessed
-	preprocessed._success_states.assign(data_)
+	preprocessed._success_states.assign(data_.map(func(x): return int(x)))
 	return preprocessed
 
 func get_data() -> Variant:
-	return _success_states
-
-func _idx(date_dict: Dictionary) -> int:
-	# Yes, I'm assuming all months are 31-day long and leaving some holes. Sue me.
-	return (date_dict.month - 1) * 31 + date_dict.day - 1
+	return _success_states.map(func(x): return String.num_int64(x))
 
 func success_state(idx: int) -> int:
 	return _success_states[idx] if idx < _success_states.size() else 0
