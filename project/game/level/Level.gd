@@ -87,6 +87,8 @@ var difficulty := -1
 var fully_setup := false
 
 func _ready():
+	# Doesn't auto translate
+	$Description/Edit.placeholder_text = tr("LEVEL_DESCRIPTION_PLACEHOLDER")
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	Profile.show_timer_changed.connect(_on_show_timer_changed)
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
