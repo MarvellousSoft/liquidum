@@ -22,6 +22,8 @@ config/icon="res://assets/images/icons/256_256.png"
 config/macos_native_icon="res://assets/images/icons/icon.icns"
 config/windows_native_icon="res://assets/images/icons/icon.ico"
 config/version="0.0.1"
+run/main_scene.mobile="res://game/splash/SplashMobile.tscn"
+boot_splash/image.mobile="res://assets/images/splash_mobile.png"
 
 [autoload]
 
@@ -50,6 +52,8 @@ window/size/viewport_height=2160
 window/size/mode=3
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
+window/size/viewport_width.mobile=720
+window/size/viewport_height.mobile=1280
 
 [editor]
 
@@ -63,6 +67,7 @@ enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/localiz
 
 theme/custom="res://assets/ui/GeneralTheme.tres"
 theme/custom_font="res://assets/fonts/Bold.otf"
+theme/custom.mobile="res://assets/ui/MobileTheme.tres"
 
 [input]
 
@@ -132,6 +137,10 @@ locale/translations=PackedStringArray("res://localization/localizations.en.trans
 
 is_mobile=false
 dev_mode=false
+
+[physics]
+
+common/physics_ticks_per_second.mobile=30
 
 [rendering]
 
