@@ -176,12 +176,14 @@ texture = ExtResource("7_ymcdx")
 expand_mode = 1
 
 [node name="Wall" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("5_lkn2k")
 expand_mode = 1
 
 [node name="Block" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("6_ksqdr")

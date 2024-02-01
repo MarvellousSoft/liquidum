@@ -3,6 +3,11 @@ extends Control
 
 @onready var LevelNode: VBoxContainer = %LevelNode
 
+func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+
+
 func _enter_tree() -> void:
 	call_deferred(&"load_all_levels")
 
@@ -32,6 +37,7 @@ func load_level(id: String) -> void:
 	var level := Global.create_level(GridImpl.empty_editor(1, 1), id, "", "", ["editor"])
 	TransitionManager.push_scene(level)
 
+
 func play_level(id: String) -> void:
 	AudioManager.play_sfx("button_pressed")
 	var data := FileManager.load_editor_level(id)
@@ -42,6 +48,7 @@ func play_level(id: String) -> void:
 func delete_level(id: String) -> void:
 	FileManager.clear_editor_level(id)
 	load_all_levels()
+
 
 static func save_to_editor(level_name: String, grid: GridModel) -> void:
 	var new_id := str(int(Time.get_unix_time_from_system() * 1000))
@@ -70,3 +77,7 @@ func _on_back_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_dark_mode_changed(is_dark : bool):
+	theme = Global.get_theme(is_dark)
