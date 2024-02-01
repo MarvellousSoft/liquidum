@@ -160,6 +160,7 @@ func _enter_tree():
 
 
 func _exit_tree() -> void:
+	CursorManager.reset_cursor()
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.stopPlaytimeTracking([workshop_id])
 	# Cancel solve if it still exists
@@ -243,6 +244,7 @@ func setup(try_load := true) -> void:
 				update_timer_label()
 				dummy_save = save
 	BrushPicker.setup(grid.editor_mode())
+	CursorManager.set_cursor(CursorManager.CursorMode.Water)
 	GridNode.setup(grid)
 	DescriptionScroll.visible = not editor_mode()
 	if not Global.is_mobile:
@@ -488,6 +490,9 @@ func win() -> void:
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
+	var brush_name = E.BrushMode.find_key(mode)
+	var new_cursor = CursorManager.CursorMode.get(brush_name, CursorManager.CursorMode.Normal)
+	CursorManager.set_cursor(new_cursor)
 	GridNode.remove_all_preview()
 
 

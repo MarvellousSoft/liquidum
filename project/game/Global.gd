@@ -141,7 +141,6 @@ func create_button(text: String) -> Button:
 	button.text = text
 	return button
 
-
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
 
