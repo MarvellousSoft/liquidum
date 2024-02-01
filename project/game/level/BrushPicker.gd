@@ -147,3 +147,7 @@ func _on_dark_mode_changed(is_dark):
 	for button in Buttons.values():
 		button.texture_pressed = images.picker_pressed
 		button.texture_hover = images.picker_hover
+
+
+func _on_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")

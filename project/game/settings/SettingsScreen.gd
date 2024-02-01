@@ -225,9 +225,5 @@ func _on_tab_container_tab_changed(_tab):
 	AudioManager.play_sfx("tab_changed")
 
 
-func _on_option_button_item_focused(index):
-	AudioManager.play_sfx("button_hover")
-
-
-func _on_tab_container_tab_hovered(tab):
+func _on_tab_container_tab_hovered(_tab):
 	AudioManager.play_sfx("tab_hover")

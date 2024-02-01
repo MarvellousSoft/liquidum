@@ -270,3 +270,10 @@ stretch_mode = 0
 libraries = {
 "": SubResource("AnimationLibrary_qwnij")
 }
+
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Water" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/NoWater" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Boat" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/NoBoat" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Wall" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Block" to="." method="_on_button_mouse_entered"]

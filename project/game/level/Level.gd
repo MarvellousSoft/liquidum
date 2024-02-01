@@ -1,6 +1,7 @@
 class_name Level
 extends Control
 
+const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = {
 	"desktop": 1300,
@@ -441,6 +442,7 @@ func add_playtime_tracking(stats: Array[String]) -> void:
 
 func reset_level() -> void:
 	if ConfirmationScreen.start_confirmation(reset_text):
+		AudioManager.play_sfx("button_pressed")
 		if not await ConfirmationScreen.pressed:
 			return
 	GridNode.grid_logic.clear_all()
@@ -767,12 +769,15 @@ func _on_dev_buttons_copy_to_editor():
 
 
 func _on_tutorial_button_pressed():
+	AudioManager.play_sfx("button_pressed")
 	process_game = false
 	%TutorialDisplay.enable()
 	%SettingsScreen.hide_button()
 
+
 static func check_uniqueness_inner(copied_grid: GridModel, cancel: Callable) -> SolverModel.SolveResult:
 	return SolverModel.new().full_solve(copied_grid, SolverModel.STRATEGY_LIST.keys(), cancel)
+
 
 static func solve_result_to_uniqueness(r: SolverModel.SolveResult) -> String:
 	match r:
@@ -805,16 +810,18 @@ func check_uniqueness() -> void:
 	%CancelUniqCheck.disabled = true
 	%CheckUniqueness.disabled = false
 
+
 func _on_check_uniqueness_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	if solve_thread == null:
 		solve_thread = Thread.new()
 	if solve_thread.is_started():
 		return
 	await check_uniqueness()
 
-const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
 func _on_share_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	var mistake_str: String
 	if Counters.mistake.count == 0:
 		mistake_str = "🏆 0 %s" % tr("MISTAKES")
@@ -873,3 +880,17 @@ func _on_dark_mode_changed(is_dark):
 		%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
 		$UniquenessCheck.theme = Global.get_font_theme(is_dark)
 
+
+
+func _on_cancel_uniq_check_pressed():
+	AudioManager.play_sfx("button_back")
+
+
+func _on_share_button_mouse_entered():
+	if not %ShareButton.disabled:
+		AudioManager.play_sfx("button_hover")
+
+
+func _on_cancel_uniq_check_mouse_entered():
+	if not %CancelUniqCheck.disabled:
+		AudioManager.play_sfx("button_hover")

@@ -989,6 +989,11 @@ func _add_row():
 		generic_error()
 
 
+func _row_col_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
+	_on_left_grid()
+
+
 func _on_left_grid():
 	remove_all_highlights()
 	remove_all_preview()
