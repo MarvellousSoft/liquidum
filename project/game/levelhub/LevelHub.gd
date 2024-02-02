@@ -36,7 +36,7 @@ func _on_dev_mode(_on: bool) -> void:
 
 
 func update_sections() -> void:
-	var level_lister: LevelLister = ExtraLevelLister if extra_levels else CampaignLevelLister
+	var level_lister: LevelLister = ExtraLevelLister as LevelLister if extra_levels else CampaignLevelLister as LevelLister
 	var count: int = level_lister.count_all_game_sections()
 	if extra_levels:
 		while Sections.get_child_count() > 0:

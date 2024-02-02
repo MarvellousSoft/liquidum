@@ -48,7 +48,7 @@ text = "PLAY_BUTTON"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-tooltip_text = "PLAY_TOOLTIP"
+tooltip_text = "EXTRA_LEVELS_TOOLTIP"
 focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
 
@@ -144,12 +144,6 @@ grow_vertical = 2
 focus_mode = 0
 text = "BACK"
 
-[node name="BackExtra" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
-offset_right = 14.0
-offset_bottom = 14.0
-
 [node name="LevelHub" parent="." instance=ExtResource("4_afxkm")]
 layout_mode = 1
 offset_top = -2360.0
@@ -166,6 +160,16 @@ offset_right = 8540.0
 offset_bottom = 2160.0
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="BackExtra" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4765.0
+offset_top = 43.0
+offset_right = 5007.0
+offset_bottom = 152.0
+focus_mode = 0
+text = "BACK"
 
 [node name="DailyButton" parent="." instance=ExtResource("4_o512o")]
 layout_mode = 2
@@ -209,11 +213,11 @@ position_smoothing_speed = 4.0
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="BackExtra" to="." method="_on_back_button_pressed"]
 [connection signal="disable_focus" from="LevelHub" to="." method="_on_level_hub_disable_focus"]
 [connection signal="enable_focus" from="LevelHub" to="." method="_on_level_hub_enable_focus"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
 [connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
+[connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BackExtra" to="." method="_on_back_button_pressed"]
 
 [editable path="DailyButton"]

@@ -91,7 +91,7 @@ func _process(dt):
 
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	extra = extra_
-	level_lister = ExtraLevelLister if extra else CampaignLevelLister
+	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	hub = hub_ref
 	set_number(section)
 	for button in Levels.get_children():

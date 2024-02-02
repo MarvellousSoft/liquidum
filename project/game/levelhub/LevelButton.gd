@@ -36,7 +36,7 @@ func extra_level() -> bool:
 	return lister == ExtraLevelLister
 
 func setup(section : int, level : int, active : bool, extra: bool) -> void:
-	lister = ExtraLevelLister if extra else CampaignLevelLister
+	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
 	my_level = level
 	MainButton.text = str(level)
