@@ -94,6 +94,7 @@ func setup_values() -> void:
 	%ShowTimerContainer/CheckBox.button_pressed = Profile.get_option("show_timer")
 	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
 	%ProgressOnUnknownContainer/CheckBox.button_pressed = Profile.get_option("progress_on_unknown")
+	%ShowBubblesContainer/CheckBox.button_pressed = Profile.get_option("show_bubbles")
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -227,3 +228,8 @@ func _on_tab_container_tab_changed(_tab):
 
 func _on_tab_container_tab_hovered(_tab):
 	AudioManager.play_sfx("tab_hover")
+
+
+func _on_show_bubbles_toggled(on: bool) -> void:
+	Profile.set_option("show_bubbles", on)
+	Profile.show_bubbles_changed.emit(on)

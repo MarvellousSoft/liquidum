@@ -295,6 +295,30 @@ text = "DARK_MODE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="ShowBubblesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/ShowBubblesContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/ShowBubblesContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "SHOW_BUBBLES"
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="VsyncContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -751,6 +775,8 @@ libraries = {
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/FullscreenContainer/CheckBox" to="." method="_on_fullscreen_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_show_bubbles_toggled"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VsyncContainer/OptionButton" to="." method="_on_vsync_mode_selected"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VBoxContainer/LanguageSelectContainer/OptionButton" to="." method="_on_language_item_selected"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/VBox/VBoxContainer/LanguageSelectContainer/OptionButton" to="." method="_on_button_mouse_entered"]

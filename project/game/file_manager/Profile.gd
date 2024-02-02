@@ -5,6 +5,7 @@ signal line_info_changed()
 signal show_timer_changed(status: bool)
 signal allow_mistakes_changed(status: bool)
 signal progress_on_unkown_changed(status: bool)
+signal show_bubbles_changed(on: bool)
 
 const LANGUAGES = [
 	"",
@@ -39,6 +40,7 @@ var options = {
 	"show_timer": true,
 	"allow_mistakes": false,
 	"progress_on_unknown": false,
+	"show_bubbles": true,
 }
 
 const STEAM_LANGUAGES := {
@@ -122,6 +124,7 @@ func set_save_data(data):
 			window.size = wsize
 	update_translation()
 	dark_mode_toggled.emit(options.dark_mode)
+	show_bubbles_changed.emit(options.show_bubbles)
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):

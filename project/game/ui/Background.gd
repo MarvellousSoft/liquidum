@@ -31,6 +31,7 @@ var target_bottom_color
 
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
+	Profile.show_bubbles_changed.connect(_on_show_bubbles_changed)
 	target_top_color = BG.material.get_shader_parameter("top_color")
 	target_bottom_color = BG.material.get_shader_parameter("bottom_color")
 	var data = CONSTS.desktop if not Global.is_mobile else CONSTS.mobile
@@ -63,3 +64,9 @@ func _on_dark_mode_toggled(dark_mode):
 	var colors = COLORS.dark_mode if dark_mode else COLORS.light_mode
 	target_top_color = colors.top_color
 	target_bottom_color = colors.bottom_color
+
+func _on_show_bubbles_changed(on: bool) -> void:
+	if not on:
+		%Particles.restart()
+	%Particles.visible = on
+	%Particles.emitting = on
