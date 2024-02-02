@@ -10,28 +10,28 @@
 [sub_resource type="FontVariation" id="FontVariation_7w16d"]
 base_font = ExtResource("1_x6xj1")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m3p"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ejhyr"]
 bg_color = Color(0.847059, 0.996078, 0.882353, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ad02q"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbdhj"]
 bg_color = Color(0.670588, 1, 0.819608, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syvu6"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_088s4"]
 bg_color = Color(0.45098, 0.941176, 0.776471, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ktx56"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3behk"]
 content_margin_left = 30.0
 bg_color = Color(0, 0.0352941, 0.141176, 0.356863)
 corner_radius_top_left = 10
@@ -144,10 +144,10 @@ Button/styles/disabled = ExtResource("2_fwtui")
 Button/styles/hover = ExtResource("2_hda1e")
 Button/styles/normal = ExtResource("3_7bdy7")
 Button/styles/pressed = ExtResource("4_7wtpn")
-HScrollBar/styles/grabber = SubResource("StyleBoxFlat_j8m3p")
-HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_ad02q")
-HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_syvu6")
-HScrollBar/styles/scroll = SubResource("StyleBoxFlat_ktx56")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_ejhyr")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_tbdhj")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_088s4")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_3behk")
 HSeparator/styles/separator = SubResource("StyleBoxLine_wfon5")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82

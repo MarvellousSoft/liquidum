@@ -38,13 +38,18 @@ func _on_dev_mode(_on: bool) -> void:
 func update_sections() -> void:
 	var level_lister: LevelLister = ExtraLevelLister if extra_levels else CampaignLevelLister
 	var count: int = level_lister.count_all_game_sections()
-	while Sections.get_child_count() > count:
-		var c := Sections.get_child(Sections.get_child_count() - 1)
-		Sections.remove_child(c)
-		c.queue_free()
+	if extra_levels:
+		while Sections.get_child_count() > 0:
+			var c := Sections.get_child(Sections.get_child_count() - 1)
+			Sections.remove_child(c)
+			c.queue_free()
 	while Sections.get_child_count() < count:
 		var c := preload("res://game/levelhub/LevelSection.tscn").instantiate()
 		Sections.add_child(c)
+		c.enable_focus.connect(_on_level_section_enable_focus)
+		c.disable_focus.connect(_on_level_section_disable_focus)
+	if extra_levels:
+		Sections.columns = int((count + 1) / 2)
 	var idx := 1
 	for section in Sections.get_children():
 		section.set_number(idx)

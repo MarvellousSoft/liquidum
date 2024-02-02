@@ -18,10 +18,11 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
-offset_bottom = -98.0
+offset_top = 100.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
 layout_mode = 2
@@ -37,9 +38,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/h_separation = 1300
+theme_override_constants/h_separation = 1250
 theme_override_constants/v_separation = 900
-columns = 4
+columns = 3
 
 [node name="LevelSection" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
 layout_mode = 2
@@ -51,16 +52,4 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="LevelSection4" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
-layout_mode = 2
-
-[node name="LevelSection5" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
-layout_mode = 2
-
-[node name="LevelSection6" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
-layout_mode = 2
-
-[node name="LevelSection7" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
-layout_mode = 2
-
-[node name="LevelSection8" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
 layout_mode = 2

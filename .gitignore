@@ -29,3 +29,6 @@ project/addons/godotsteam/win64/~godotsteam.debug.x86_64.dll
 project/*.json
 build/*
 project/override.cfg
+
+# Remove when we actually add DLCs
+project/database/extra_levels/*

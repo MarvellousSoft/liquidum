@@ -106,7 +106,7 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels, i)
 		var has_unlock_anim = (my_section == hub.section_to_unlock and i == hub.level_to_unlock)
-		button.setup(my_section, i, i <= unlocked_levels and not has_unlock_anim)
+		button.setup(my_section, i, i <= unlocked_levels and not has_unlock_anim, extra)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
@@ -234,7 +234,7 @@ func _on_back_button_pressed():
 
 func _on_level_button_mouse_entered(level_number : int):
 	var save = FileManager.load_level(level_lister.level_name(my_section, level_number))
-	var data = FileManager.load_campaign_level_data(my_section, level_number)
+	var data = FileManager.load_extra_level_data(my_section, level_number) if extra else FileManager.load_campaign_level_data(my_section, level_number)
 	if save:
 		show_level_info(data.full_name, save.is_completed(), save.best_time_secs, save.best_mistakes)
 	else:

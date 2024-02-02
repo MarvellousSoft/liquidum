@@ -25,14 +25,18 @@ signal had_first_win
 var my_section := -1
 var my_level := -1
 var data = false
+var lister: LevelLister = null
 
 
 func _ready():
 	ShaderEffect.material = ShaderEffect.material.duplicate()
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 
+func extra_level() -> bool:
+	return lister == ExtraLevelLister
 
-func setup(section : int, level : int, active : bool) -> void:
+func setup(section : int, level : int, active : bool, extra: bool) -> void:
+	lister = ExtraLevelLister if extra else CampaignLevelLister
 	my_section = section
 	my_level = level
 	MainButton.text = str(level)
@@ -40,7 +44,7 @@ func setup(section : int, level : int, active : bool) -> void:
 	HardIcon.visible = level >= 7 or section == 6
 	if active:
 		enable()
-		data = CampaignLevelLister.get_game_level_data(section, level)
+		data = lister.get_level_user_save(section, level)
 		change_style_boxes(data and data.is_completed())
 		set_ongoing_solution(data and not data.is_solution_empty())
 	else:
@@ -80,10 +84,15 @@ func disable() -> void:
 
 func _on_button_pressed():
 	if my_level != -1 and my_section != -1:
-		var level_data := FileManager.load_campaign_level_data(my_section, my_level)
-		var level_name := CampaignLevelLister.level_name(my_section, my_level)
+		var level_data := lister.get_level_data(my_section, my_level)
+		var level_name := lister.level_name(my_section, my_level)
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
-		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, ["l%02d_%02d" % [my_section, my_level]], my_level, my_section)
+		var section := -1 if extra_level() else my_section
+		var level_number := -1 if extra_level() else my_level
+		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, [lister.stat_name(my_section, my_level)], level_number, section)
+		if extra_level():
+			level_node.extra_section = my_section
+			level_node.extra_level_number = my_level
 		level_node.won.connect(_level_completed)
 		level_node.had_first_win.connect(_on_level_had_first_win)
 		TransitionManager.push_scene(level_node)

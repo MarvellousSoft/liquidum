@@ -33,7 +33,7 @@ func get_initial_unlocked_levels() -> int:
 	return INITIAL_UNLOCKED_LEVELS
 
 
-func get_game_level_data(section : int, level : int):
+func get_level_user_save(section : int, level : int):
 	if not FileManager.has_campaign_level(section, level):
 		push_error("Not a valid level (section %s - level %s)" % [str(section), str(level)])
 	return FileManager.load_level(CampaignLevelLister.level_name(section, level))
@@ -141,3 +141,9 @@ func all_campaign_levels_completed() -> bool:
 			if save == null or not save.is_completed():
 				return false
 	return true
+
+func get_level_data(section: int, level: int) -> LevelData:
+	return FileManager.load_campaign_level_data(section, level)
+
+func level_stat(section: int, level: int) -> String:
+	return "l%02d_%02d" % [section, level]

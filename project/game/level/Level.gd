@@ -86,6 +86,8 @@ var last_saved_ago: int = -1
 # Used only for rich presence
 var difficulty := -1
 var fully_setup := false
+var extra_section := -1
+var extra_level_number := -1
 
 func _ready():
 	# Doesn't auto translate
@@ -137,6 +139,9 @@ func _ready():
 				$SteamRichPresence.set_group("random")
 				$SteamRichPresence.set_display("#Random")
 				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
+			elif extra_section != -1 and extra_level_number != -1:
+				# TODO: Do this for extra levels
+				pass
 			else:
 				# Assuming we're on playtesting
 				$SteamRichPresence.set_group("editor")

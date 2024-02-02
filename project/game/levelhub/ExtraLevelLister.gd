@@ -41,7 +41,28 @@ func count_completed_section_levels(section: int) -> int:
 	for level in range(1, 50):
 		if not FileManager.has_campaign_level(section, level):
 			break
-		var save := FileManager.load_level(CampaignLevelLister.level_name(section, level), FileManager.get_current_profile())
+		var save := FileManager.load_level(ExtraLevelLister.level_name(section, level), FileManager.get_current_profile())
 		if save != null and save.is_completed():
 			count += 1
 	return count
+
+func count_section_ongoing_solutions(section: int) -> int:
+	var level := 1
+	var count := 0
+	while FileManager.has_campaign_level(section, level):
+		var save := FileManager.load_level(ExtraLevelLister.level_name(section, level))
+		if save != null and not save.is_solution_empty():
+			count += 1
+		level += 1
+	return count
+
+func get_level_user_save(section : int, level : int):
+	if not FileManager.has_extra_level_data(section, level):
+		push_error("Not a valid extra level (section %s - level %s)" % [str(section), str(level)])
+	return FileManager.load_level(ExtraLevelLister.level_name(section, level))
+
+func get_level_data(section: int, level: int) -> LevelData:
+	return FileManager.load_extra_level_data(section, level)
+
+func level_stat(section: int, level: int) -> String:
+	return "el%02d_%02d" % [section, level]

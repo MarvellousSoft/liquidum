@@ -1,11 +1,12 @@
 extends Control
 
-enum STATES {MAIN_MENU, LEVEL_HUB}
+enum STATES {MAIN_MENU, LEVEL_HUB, EXTRA_LEVEL_HUB}
 
 const CAM_POS = {
 	"desktop": {
 		"menu": Vector2(1930, 1080),
 		"level_hub": Vector2(1930, -1280),
+		"extra_level_hub": Vector2(6610, 1080),
 	},
 	"mobile": {
 		"menu": Vector2(360, 640),
@@ -37,6 +38,8 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
+	if ExtraLevelLister.count_all_game_sections() == 0:
+		%ExtraLevelsButton.hide()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	if not SteamManager.enabled and not Global.is_mobile:
@@ -61,7 +64,8 @@ func _process(dt):
 		Camera.zoom.x = z
 		Camera.zoom.y = z
 	Global.alpha_fade_node(dt, %BackButton, not LevelHub.level_focused, 4.0, true)
-	
+	if has_node("%ExtraLevelHub"):
+		Global.alpha_fade_node(dt, %BackExtra, not %ExtraLevelHub.level_focused, 4.0, true)
 
 func _unhandled_input(event):
 	if event.is_action_pressed(&"return"):
@@ -76,10 +80,15 @@ func _back_logic() -> void:
 	if Settings.active:
 		Settings.toggle_pause()
 	elif cur_state == STATES.MAIN_MENU:
-		Global.exit_game()
+		_on_exit_button_pressed()
 	elif cur_state == STATES.LEVEL_HUB:
 		if LevelHub.level_focused:
 			LevelHub.get_focused_section()._on_back_button_pressed()
+		else:
+			_on_back_button_pressed()
+	elif cur_state == STATES.EXTRA_LEVEL_HUB:
+		if %ExtraLevelHub.level_focused:
+			%ExtraLevelHub.get_focused_section()._on_back_button_pressed()
 		else:
 			_on_back_button_pressed()
 
@@ -148,6 +157,15 @@ func _on_level_hub_disable_focus():
 	Camera.position = cam_pos.level_hub
 	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 
+func _to_extra_levels() -> void:
+	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
+	Camera.position = cam_pos.extra_level_hub
+	cur_state = STATES.EXTRA_LEVEL_HUB
+	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
+
+func _on_extra_levels_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	_to_extra_levels()
 
 func _on_random_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
