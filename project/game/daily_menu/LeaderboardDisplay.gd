@@ -2,6 +2,8 @@ class_name LeaderboardDisplay
 extends Control
 
 func _ready() -> void:
+	Profile.dark_mode_toggled.connect(_update_theme)
+	_update_theme(Profile.get_option("dark_mode"))
 	# This is to prevent a Godot bug, I believe. When I add a theme override, it recalculates the
 	# sizes and positions of stuff and fixes the position of the TabBar, which is initially wrong
 	# for some reason.
@@ -46,3 +48,6 @@ func show_today() -> void:
 
 func show_yesterday() -> void:
 	%TabContainer.current_tab = 1
+
+func _update_theme(dark_mode: bool) -> void:
+	theme = Global.get_font_theme(dark_mode)

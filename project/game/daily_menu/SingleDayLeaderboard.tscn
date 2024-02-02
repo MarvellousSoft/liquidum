@@ -61,7 +61,7 @@ theme_override_constants/separation = 12
 
 [node name="Dev" type="Label" parent="Grid/NameContainer1"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_type_variation = &"DevLabel"
 theme_override_font_sizes/font_size = 40
 text = "[dev]"
 vertical_alignment = 1
@@ -101,7 +101,7 @@ theme_override_constants/separation = 10
 [node name="Dev" type="Label" parent="Grid/NameContainer2"]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_type_variation = &"DevLabel"
 theme_override_font_sizes/font_size = 40
 text = "[dev]"
 vertical_alignment = 1

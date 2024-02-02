@@ -887,7 +887,7 @@ func _on_aquarium_buttons_toggled(toggled_on):
 		%AquariumAnim.play("disable")
 
 
-func _on_dark_mode_changed(is_dark):
+func _on_dark_mode_changed(is_dark: bool) -> void:
 	var themes = THEMES.dark if is_dark else THEMES.normal
 	theme = Global.get_theme(is_dark)
 	if not Global.is_mobile:
