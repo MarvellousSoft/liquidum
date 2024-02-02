@@ -8,14 +8,16 @@ func _ready():
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"return"):
-		TransitionManager.pop_scene()
+		_back_logic()
 
+func _back_logic() -> void:
+	_on_back_pressed()
 
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		_on_back_pressed()
+		_back_logic()
 
 
 func _on_game_pressed(app_id: int) -> void:

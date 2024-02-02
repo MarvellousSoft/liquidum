@@ -139,6 +139,7 @@ locale/translations=PackedStringArray("res://localization/localizations.en.trans
 
 is_mobile=false
 dev_mode=false
+is_mobile.mobile=true
 
 [physics]
 

@@ -70,11 +70,6 @@ func _ready():
 	BackButton.position = BACK_POSITION.mobile if Global.is_mobile else BACK_POSITION.desktop
 
 
-func _input(event):
-	if event.is_action_pressed("return") and focused:
-		_on_back_button_pressed()
-
-
 func _process(dt):
 	for node in [Levels, BackButton]:
 		Global.alpha_fade_node(dt, node, focused, ALPHA_SPEED, true)

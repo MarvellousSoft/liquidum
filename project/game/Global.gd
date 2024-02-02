@@ -114,8 +114,10 @@ func exit_game() -> void:
 	call_deferred(&"_do_exit")
 
 func _do_exit() -> void:
-	var scene := Global.load_mobile_compat("res://game/ui/Quitting")
-	get_tree().change_scene_to_packed(scene)
+	var node := Global.load_mobile_compat("res://game/ui/Quitting").instantiate()
+	get_tree().current_scene.hide()
+	get_tree().root.add_child(node)
+	await get_tree().process_frame
 	get_tree().quit()
 
 

@@ -6,14 +6,16 @@ func _ready():
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 
 
-func _input(event):
-	if event.is_action_pressed("return"):
-		_on_back_button_pressed()
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"return"):
+		_back_logic()
 
+func _back_logic() -> void:
+	_on_back_button_pressed()
 
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		_on_back_button_pressed()
+		_back_logic()
 
 
 func select_profile(profile: String) -> void:

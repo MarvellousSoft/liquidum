@@ -184,20 +184,24 @@ func _input(event: InputEvent) -> void:
 		# We don't have these in real mobiles so let's hide them in desktop
 		accept_event()
 
+func _back_logic() -> void:
+	if Settings.active:
+		Settings.toggle_pause()
+	elif %TutorialDisplay.active:
+		%TutorialDisplay._on_close_button_pressed()
+	else:
+		_on_back_button_pressed()
+	
+
 func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH or what == Node.NOTIFICATION_EXIT_TREE:
 		maybe_save()
 	elif what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		if Settings.active:
-			Settings.toggle_pause()
-		elif %TutorialDisplay.active:
-			%TutorialDisplay._on_close_button_pressed()
-		else:
-			_on_back_button_pressed()
+		_back_logic()
 
 func _unhandled_input(event):
 	if event.is_action_pressed("return"):
-		Settings.toggle_pause()
+		_back_logic()
 
 func _on_input_fallback_gui_input(event: InputEvent) -> void:
 	if Global.is_mobile and event.is_pressed() and event is InputEventMouseButton:

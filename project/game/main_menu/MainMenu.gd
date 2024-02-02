@@ -64,29 +64,28 @@ func _process(dt):
 	
 
 func _unhandled_input(event):
-	if event.is_action_pressed("return"):
-		if cur_state == STATES.MAIN_MENU:
-			Settings.toggle_pause()
-		elif cur_state == STATES.LEVEL_HUB and not LevelHub.level_focused:
-			_on_back_button_pressed()
+	if event.is_action_pressed(&"return"):
+		_back_logic()
 
 
 func _enter_tree() -> void:
 	call_deferred("update_level_hub")
 	call_deferred("update_profile_button")
 
+func _back_logic() -> void:
+	if Settings.active:
+		Settings.toggle_pause()
+	elif cur_state == STATES.MAIN_MENU:
+		Global.exit_game()
+	elif cur_state == STATES.LEVEL_HUB:
+		if LevelHub.level_focused:
+			LevelHub.get_focused_section()._on_back_button_pressed()
+		else:
+			_on_back_button_pressed()
 
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		if Settings.active:
-			Settings.toggle_pause()
-		elif cur_state == STATES.MAIN_MENU:
-			Global.exit_game()
-		elif cur_state == STATES.LEVEL_HUB:
-			if LevelHub.level_focused:
-				LevelHub.get_focused_section()._on_back_button_pressed()
-			else:
-				_on_back_button_pressed()
+		_back_logic()
 
 
 func update_level_hub():

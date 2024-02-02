@@ -36,13 +36,20 @@ func _ready() -> void:
 			button.disabled = true
 			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
 
+func _back_logic() -> void:
+	if $SettingsScreen.active:
+		$SettingsScreen.toggle_pause()
+	else:
+		_on_back_pressed()
+	
+
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
-		if $SettingsScreen.active:
-			$SettingsScreen.toggle_pause()
-		else:
-			_on_back_pressed()
+		_back_logic()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"return"):
+		_back_logic()
 
 func _on_dev_mode(_on: bool) -> void:
 	get_tree().reload_current_scene()
