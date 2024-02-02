@@ -37,7 +37,7 @@ func _process(_dt: float) -> void:
 
 
 func _update() -> void:
-	var unlocked := Global.is_dev_mode() or LevelLister.section_complete(4)
+	var unlocked := Global.is_dev_mode() or CampaignLevelLister.section_complete(4)
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
 	%StreakContainer.visible = unlocked

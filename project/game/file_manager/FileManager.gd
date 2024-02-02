@@ -57,7 +57,7 @@ func get_current_profile() -> String:
 # Does not clear editor levels
 func clear_whole_profile(profile: String) -> void:
 	clear_profile(profile)
-	LevelLister.clear_all_level_saves(profile)
+	CampaignLevelLister.clear_all_level_saves(profile)
 	clear_user_data(profile)
 	if profile == current_profile:
 		# Reload stuff if necessary
@@ -226,7 +226,7 @@ func save_daily_level(date: String, data: LevelData) -> void:
 func has_daily_level(date: String) -> bool:
 	return FileAccess.file_exists("%s/%s%s" % [_level_dir(), _daily_basename(date), JSON_EXT])
 
-func _level_data_dir(section: int) -> String:
+func _campaign_level_data_dir(section: int) -> String:
 	return "%s/%02d" % [DATA_DIR, section]
 
 
@@ -234,12 +234,12 @@ func _level_data_file(level: int) -> String:
 	return "%02d.json" % level
 
 
-func has_level_data(section: int, level: int) -> bool:
-	return FileAccess.file_exists("%s/%s" % [_level_data_dir(section), _level_data_file(level)])
+func has_campaign_level(section: int, level: int) -> bool:
+	return FileAccess.file_exists("%s/%s" % [_campaign_level_data_dir(section), _level_data_file(level)])
 
 
-func load_level_data(section: int, level: int) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(_level_data_dir(section), _level_data_file(level)))
+func load_campaign_level_data(section: int, level: int) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_campaign_level_data_dir(section), _level_data_file(level)))
 	assert(not data.full_name.is_empty())
 	return data
 

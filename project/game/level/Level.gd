@@ -113,7 +113,7 @@ func _ready():
 			$SteamRichPresence.set_display("#Campaign")
 			$SteamRichPresence.set_key_value("section", str(section_number))
 			$SteamRichPresence.set_key_value("level", str(level_number))
-		var data = FileManager.load_level_data(section_number, level_number)
+		var data = FileManager.load_campaign_level_data(section_number, level_number)
 		if not data.tutorial.is_empty() and not Global.is_mobile:
 			if add_tutorial(data.tutorial):
 				%TutorialContainer.show()
@@ -316,7 +316,7 @@ func setup(try_load := true) -> void:
 	process_game = true
 	
 	if is_campaign_level() and Global.is_mobile:
-		var data = FileManager.load_level_data(section_number, level_number)
+		var data = FileManager.load_campaign_level_data(section_number, level_number)
 		if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 			await get_tree().create_timer(.5).timeout
 			_on_tutorial_button_pressed()
@@ -747,7 +747,7 @@ func _on_continue_button_pressed() -> void:
 	if not won_before:
 		had_first_win.emit()
 		# First time winning all levels
-		if LevelLister.all_campaign_levels_completed():
+		if CampaignLevelLister.all_campaign_levels_completed():
 			TransitionManager.change_scene(Global.load_mobile_compat("res://game/credits/AllLevelsCompleted").instantiate())
 			return
 	

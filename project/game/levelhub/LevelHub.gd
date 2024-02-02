@@ -38,9 +38,9 @@ func update_sections() -> void:
 	var idx = 1
 	for section in Sections.get_children():
 		section.set_number(idx)
-		var unlocked := LevelLister.get_max_unlocked_level(idx)
+		var unlocked := CampaignLevelLister.get_max_unlocked_level(idx)
 		if Global.is_dev_mode():
-			unlocked = LevelLister.count_section_levels(idx)
+			unlocked = CampaignLevelLister.count_section_levels(idx)
 		if unlocked == 0:
 			section.disable()
 		else:

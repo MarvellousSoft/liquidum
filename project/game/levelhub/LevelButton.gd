@@ -40,7 +40,7 @@ func setup(section : int, level : int, active : bool) -> void:
 	HardIcon.visible = level >= 7 or section == 6
 	if active:
 		enable()
-		data = LevelLister.get_game_level_data(section, level)
+		data = CampaignLevelLister.get_game_level_data(section, level)
 		change_style_boxes(data and data.is_completed())
 		set_ongoing_solution(data and not data.is_solution_empty())
 	else:
@@ -80,8 +80,8 @@ func disable() -> void:
 
 func _on_button_pressed():
 	if my_level != -1 and my_section != -1:
-		var level_data := FileManager.load_level_data(my_section, my_level)
-		var level_name := LevelLister.level_name(my_section, my_level)
+		var level_data := FileManager.load_campaign_level_data(my_section, my_level)
+		var level_name := CampaignLevelLister.level_name(my_section, my_level)
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, ["l%02d_%02d" % [my_section, my_level]], my_level, my_section)
 		level_node.won.connect(_level_completed)

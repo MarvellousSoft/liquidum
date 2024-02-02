@@ -27,9 +27,9 @@ func _ready() -> void:
 	for dif in difs:
 		var dif_name: String = dif
 		var button: Button = $Difficulties/VBox.get_node(dif_name.capitalize())
-		var open := LevelLister.section_complete(difs[dif] - 1)
+		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
 		if dif == "insane":
-			open = open and LevelLister.all_campaign_levels_completed()
+			open = open and CampaignLevelLister.all_campaign_levels_completed()
 		if open or Global.is_dev_mode():
 			button.tooltip_text = "%s_TOOLTIP" % dif_name.to_upper()
 		else:

@@ -39,10 +39,10 @@ func _input(event: InputEvent) -> void:
 func setup():
 	tutorials = []
 	for section_number in range(1, 50):
-		if not LevelLister.has_section(section_number) or (section_number > 1 and not LevelLister.section_complete(section_number - 1)):
+		if not CampaignLevelLister.has_section(section_number) or (section_number > 1 and not CampaignLevelLister.section_complete(section_number - 1)):
 			break
-		for level_number in range(1, LevelLister.get_max_unlocked_level(section_number) + 1, 1):
-			var data := FileManager.load_level_data(section_number, level_number)
+		for level_number in range(1, CampaignLevelLister.get_max_unlocked_level(section_number) + 1, 1):
+			var data := FileManager.load_campaign_level_data(section_number, level_number)
 			if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 					tutorials.append(data.tutorial)
 	idx = tutorials.size() - 1
@@ -51,7 +51,7 @@ func setup():
 	%Forward.visible = tutorials.size() > 1
 
 func show_level_tutorial(section: int, level: int) -> void:
-	var data := FileManager.load_level_data(section, level)
+	var data := FileManager.load_campaign_level_data(section, level)
 	if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 		idx = maxi(tutorials.find(data.tutorial), 0)
 		update_tutorial()
