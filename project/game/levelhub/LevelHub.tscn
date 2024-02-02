@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_35tjk")
 
 [node name="Sections" type="Control" parent="."]
+unique_name_in_owner = true
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0

@@ -3,16 +3,17 @@ extends Control
 signal enable_focus(pos : Vector2, my_section : int)
 signal disable_focus()
 
-@onready var Sections = $Sections
+@onready var Sections = %Sections
 
 var level_focused := false
 var section_focused := -1
 var level_to_unlock = -1
 var section_to_unlock = -1
+## Load extra levels instead of regular campaign levels
+@export var extra_levels := false
 
 func _ready() -> void:
 	update_sections()
-
 
 func _process(dt):
 	var idx = 1
@@ -35,22 +36,30 @@ func _on_dev_mode(_on: bool) -> void:
 
 
 func update_sections() -> void:
-	var idx = 1
+	var level_lister: LevelLister = ExtraLevelLister if extra_levels else CampaignLevelLister
+	var count: int = level_lister.count_all_game_sections()
+	while Sections.get_child_count() > count:
+		var c := Sections.get_child(Sections.get_child_count() - 1)
+		Sections.remove_child(c)
+		c.queue_free()
+	while Sections.get_child_count() < count:
+		var c := preload("res://game/levelhub/LevelSection.tscn").instantiate()
+		Sections.add_child(c)
+	var idx := 1
 	for section in Sections.get_children():
 		section.set_number(idx)
-		var unlocked := CampaignLevelLister.get_max_unlocked_level(idx)
+		var unlocked := level_lister.get_max_unlocked_level(idx)
 		if Global.is_dev_mode():
-			unlocked = CampaignLevelLister.count_section_levels(idx)
+			unlocked = level_lister.count_section_levels(idx)
 		if unlocked == 0:
 			section.disable()
 		else:
 			section.enable()
-			section.setup(self, idx, unlocked)
+			section.setup(self, idx, unlocked, extra_levels)
 		idx += 1
 
 
 func check_unlocks() -> void:
-	
 	#Unlock a new level
 	if level_to_unlock != -1:
 		var section = Sections.get_child(section_to_unlock - 1)
@@ -63,7 +72,7 @@ func check_unlocks() -> void:
 		section.disable()
 		await TransitionManager.transition_finished
 		#Unfocus previous sections
-		Sections.get_child(section_to_unlock - 2).unfocus()
+		get_focused_section().unfocus()
 		await get_tree().create_timer(.5).timeout
 		section.unlock()
 	level_to_unlock = -1

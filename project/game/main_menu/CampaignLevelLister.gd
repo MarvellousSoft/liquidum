@@ -1,23 +1,22 @@
-class_name CampaignLevelLister
+extends LevelLister
 
 const INITIAL_UNLOCKED_LEVELS := 3
 const MAX_UNSOLVED_LEVELS := 2
 
-
-static func level_name(section: int, level: int) -> String:
+func level_name(section: int, level: int) -> String:
 	return "level%02d_%02d" % [section, level]
 
-static func has_section(section: int) -> int:
+func has_section(section: int) -> int:
 	return FileManager.has_campaign_level(section, 1)
 
-static func get_levels_in_section(section: int) -> int:
+func get_levels_in_section(section: int) -> int:
 	var i := 1
 	while FileManager.has_campaign_level(section, i):
 		i += 1
 	return i - 1
 
 
-static func just_unlocked_level() -> Dictionary:
+func just_unlocked_level() -> Dictionary:
 	var level_info = {
 		"level_number": -1,
 		"section": -1,
@@ -26,28 +25,28 @@ static func just_unlocked_level() -> Dictionary:
 	return level_info
 
 
-static func get_max_unlocked_levels() -> int:
+func get_max_unlocked_levels(_section: int) -> int:
 	return MAX_UNSOLVED_LEVELS
 
 
-static func get_initial_unlocked_levels() -> int:
+func get_initial_unlocked_levels() -> int:
 	return INITIAL_UNLOCKED_LEVELS
 
 
-static func get_game_level_data(section : int, level : int):
+func get_game_level_data(section : int, level : int):
 	if not FileManager.has_campaign_level(section, level):
 		push_error("Not a valid level (section %s - level %s)" % [str(section), str(level)])
 	return FileManager.load_level(CampaignLevelLister.level_name(section, level))
 
 
-static func count_all_game_sections() -> int:
+func count_all_game_sections() -> int:
 	for i in range(1, 100):
 		if not has_section(i):
 			return i - 1
 	return -1
 
 
-static func section_complete(section: int) -> bool:
+func section_complete(section: int) -> bool:
 	var count_uncompleted := 0
 	for i in range(1, 100):
 		if not FileManager.has_campaign_level(section, i) or count_uncompleted > MAX_UNSOLVED_LEVELS:
@@ -61,7 +60,7 @@ static func section_complete(section: int) -> bool:
 	return count_uncompleted <= MAX_UNSOLVED_LEVELS
 
 # Levels 1-return are unlocked in this section. If 0, none is unlocked.
-static func get_max_unlocked_level(section: int) -> int:
+func get_max_unlocked_level(section: int) -> int:
 	if section > 1:
 		if not CampaignLevelLister.section_complete(section - 1):
 			return 0
@@ -76,7 +75,7 @@ static func get_max_unlocked_level(section: int) -> int:
 	return i - 1
 
 
-static func count_section_levels(section : int) -> int:
+func count_section_levels(section : int) -> int:
 	var count := 0
 	for level in range(1, 50):
 		if not FileManager.has_campaign_level(section, level):
@@ -85,7 +84,7 @@ static func count_section_levels(section : int) -> int:
 	return count
 
 
-static func count_completed_section_levels(section : int) -> int:
+func count_completed_section_levels(section : int) -> int:
 	var count := 0
 	for level in range(1, 50):
 		if not FileManager.has_campaign_level(section, level):
@@ -96,7 +95,7 @@ static func count_completed_section_levels(section : int) -> int:
 	return count
 
 
-static func count_completed_levels(profile_name: String) -> int:
+func count_completed_levels(profile_name: String) -> int:
 	var count := 0
 	for section in range(1, 50):
 		if not FileManager.has_campaign_level(section, 1):
@@ -110,7 +109,7 @@ static func count_completed_levels(profile_name: String) -> int:
 	return count
 
 
-static func clear_all_level_saves(profile_name: String) -> void:
+func clear_all_level_saves(profile_name: String) -> void:
 	for section in range(1, 50):
 		if not FileManager.has_campaign_level(section, 1):
 			break
@@ -120,7 +119,7 @@ static func clear_all_level_saves(profile_name: String) -> void:
 			FileManager.clear_level(CampaignLevelLister.level_name(section, level), profile_name)
 
 
-static func count_section_ongoing_solutions(section: int) -> int:
+func count_section_ongoing_solutions(section: int) -> int:
 	var count := 0
 	for level in range(1, 50):
 		if not FileManager.has_campaign_level(section, level):
@@ -131,7 +130,7 @@ static func count_section_ongoing_solutions(section: int) -> int:
 	return count
 
 
-static func all_campaign_levels_completed() -> bool:
+func all_campaign_levels_completed() -> bool:
 	# Let's go on reverse because it's more efficient
 	var sections := count_all_game_sections()
 	for section in range(sections, 0, -1):

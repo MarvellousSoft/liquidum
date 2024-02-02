@@ -54,6 +54,8 @@ var my_section := -1
 var focused := false
 var showing_level_info := false
 var hub = null
+var level_lister: LevelLister = null
+var extra := false
 
 
 func _ready():
@@ -87,7 +89,9 @@ func _process(dt):
 		level.set_effect_alpha(Levels.modulate.a)
 
 
-func setup(hub_ref, section, unlocked_levels) -> void:
+func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
+	extra = extra_
+	level_lister = ExtraLevelLister if extra else CampaignLevelLister
 	hub = hub_ref
 	set_number(section)
 	for button in Levels.get_children():
@@ -96,7 +100,7 @@ func setup(hub_ref, section, unlocked_levels) -> void:
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
-	var total_levels = CampaignLevelLister.get_levels_in_section(my_section)
+	var total_levels := level_lister.count_section_levels(my_section)
 	for i in range(1, total_levels + 1):
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
@@ -107,7 +111,7 @@ func setup(hub_ref, section, unlocked_levels) -> void:
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
 		
-	OngoingSolution.visible = CampaignLevelLister.count_section_ongoing_solutions(my_section) > 0
+	OngoingSolution.visible = level_lister.count_section_ongoing_solutions(my_section) > 0
 	update_level_count_label()
 	update_style_boxes(is_section_completed())
 
@@ -200,14 +204,14 @@ func disable_level(level):
 
 
 func is_section_completed():
-	return CampaignLevelLister.count_completed_section_levels(my_section) >=\
-		   CampaignLevelLister.count_section_levels(my_section)
+	return level_lister.count_completed_section_levels(my_section) >=\
+		   level_lister.count_section_levels(my_section)
 
 
 func update_level_count_label():
 	LevelCount.text = "%d/%d" % \
-		[CampaignLevelLister.count_completed_section_levels(my_section),\
-		 CampaignLevelLister.count_section_levels(my_section)]
+		[level_lister.count_completed_section_levels(my_section),\
+		 level_lister.count_section_levels(my_section)]
 
 
 func update_style_boxes(completed : bool):
@@ -229,7 +233,7 @@ func _on_back_button_pressed():
 
 
 func _on_level_button_mouse_entered(level_number : int):
-	var save = FileManager.load_level(CampaignLevelLister.level_name(my_section, level_number))
+	var save = FileManager.load_level(level_lister.level_name(my_section, level_number))
 	var data = FileManager.load_campaign_level_data(my_section, level_number)
 	if save:
 		show_level_info(data.full_name, save.is_completed(), save.best_time_secs, save.best_mistakes)
@@ -243,12 +247,12 @@ func _on_level_button_mouse_exited():
 
 func _on_level_first_win(button):
 	var section = button.my_section
-	var completed_levels = CampaignLevelLister.count_completed_section_levels(section)
-	var section_levels = CampaignLevelLister.count_section_levels(section)
-	if completed_levels < section_levels - CampaignLevelLister.get_max_unlocked_levels():
-		hub.prepare_to_unlock_level(section, CampaignLevelLister.get_max_unlocked_level(section))
-	elif (completed_levels == section_levels - CampaignLevelLister.get_max_unlocked_levels()) and \
-		 section < CampaignLevelLister.count_all_game_sections():
+	var completed_levels = level_lister.count_completed_section_levels(section)
+	var section_levels = level_lister.count_section_levels(section)
+	if completed_levels < section_levels - level_lister.get_max_unlocked_levels(section):
+		hub.prepare_to_unlock_level(section, level_lister.get_max_unlocked_level(section))
+	elif (completed_levels == section_levels - level_lister.get_max_unlocked_levels(section)) and \
+		 section < level_lister.count_all_game_sections():
 		hub.unlock_section(section)
 
 

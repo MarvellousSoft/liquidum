@@ -2,6 +2,7 @@ extends Node
 
 const CURRENT_PROFILE := "user://cur_profile.txt"
 const DATA_DIR := "res://database/levels"
+const EXTRA_DIR := "res://database/extra_levels"
 const DAILIES_DIR := "res://database/dailies"
 const RANDOM_DIR := "res://database/random"
 const DEFAULT_PROFILE := "fish"
@@ -226,9 +227,20 @@ func save_daily_level(date: String, data: LevelData) -> void:
 func has_daily_level(date: String) -> bool:
 	return FileAccess.file_exists("%s/%s%s" % [_level_dir(), _daily_basename(date), JSON_EXT])
 
+
+func _extra_level_data_dir(section: int) -> String:
+	return "%s/%02d" % [EXTRA_DIR, section]
+
+func has_extra_level_data(section: int, level: int) -> bool:
+	return FileAccess.file_exists("%s/%s" % [_extra_level_data_dir(section), _level_data_file(level)])
+
+func load_extra_level_data(section: int, level: int) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_campaign_level_data_dir(section), _level_data_file(level)))
+	assert(not data.full_name.is_empty())
+	return data
+
 func _campaign_level_data_dir(section: int) -> String:
 	return "%s/%02d" % [DATA_DIR, section]
-
 
 func _level_data_file(level: int) -> String:
 	return "%02d.json" % level
