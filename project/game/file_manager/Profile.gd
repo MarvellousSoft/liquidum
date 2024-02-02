@@ -49,6 +49,7 @@ const STEAM_LANGUAGES := {
 
 func _ready():
 	dark_mode_toggled.connect(_on_dark_mode_toggled)
+	dark_mode_toggled.connect(CursorManager._dark_mode_toggled)
 
 
 func update_translation() -> void:
