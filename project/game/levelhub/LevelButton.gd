@@ -89,7 +89,7 @@ func _on_button_pressed():
 		var grid := GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution)
 		var section := -1 if extra_level() else my_section
 		var level_number := -1 if extra_level() else my_level
-		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, [lister.stat_name(my_section, my_level)], level_number, section)
+		var level_node := Global.create_level(grid, level_name, level_data.full_name, level_data.description, [lister.level_stat(my_section, my_level)], level_number, section)
 		if extra_level():
 			level_node.extra_section = my_section
 			level_node.extra_level_number = my_level

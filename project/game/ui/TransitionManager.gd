@@ -36,13 +36,12 @@ func push_scene(scene: Node) -> void:
 func change_scene(scene: Node, add_to_stack := false) -> void:
 	active = true
 	visible = true
+
 	AudioManager.play_sfx("wave_in")
-	
 	AnimPlayer.play_backwards("transition_out")
-	
-	
 	await AnimPlayer.animation_finished
-	
+
+	var watch := Stopwatch.new()
 	var tree := get_tree()
 	if add_to_stack:
 		var old_scene := tree.current_scene
@@ -52,12 +51,13 @@ func change_scene(scene: Node, add_to_stack := false) -> void:
 		tree.unload_current_scene()
 	tree.root.add_child(scene)
 	tree.current_scene = scene
-	
-	await get_tree().create_timer(.2).timeout
-	
+	var wait := 0.2 - watch.elapsed()
+	if wait > 0:
+		await get_tree().create_timer(wait).timeout
+
 	AudioManager.play_sfx("wave_out")
 	AnimPlayer.play("transition_out")
-	
+
 	await AnimPlayer.animation_finished
 	
 	visible = false
