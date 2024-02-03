@@ -38,7 +38,8 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
-	if ExtraLevelLister.count_all_game_sections() == 0:
+	# TODO: when we actually need extra levels, fix this
+	if not OS.is_debug_build() or ExtraLevelLister.count_all_game_sections() == 0:
 		%ExtraLevelsButton.hide()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
