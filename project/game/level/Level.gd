@@ -797,10 +797,6 @@ func _on_tutorial_button_pressed():
 	%SettingsScreen.hide_button()
 
 
-static func check_uniqueness_inner(copied_grid: GridModel, cancel: Callable) -> SolverModel.SolveResult:
-	return SolverModel.new().full_solve(copied_grid, SolverModel.STRATEGY_LIST.keys(), cancel)
-
-
 static func solve_result_to_uniqueness(r: SolverModel.SolveResult) -> String:
 	match r:
 		SolverModel.SolveResult.SolvedUniqueNoGuess, SolverModel.SolveResult.SolvedUnique:
@@ -823,8 +819,16 @@ func check_uniqueness() -> void:
 	var copied_grid := _get_solution_grid(GridModel.LoadMode.Testing)
 	# Need to store in a variable because threads
 	var cancel_but: Button = %CancelUniqCheck
-	solve_thread.start(Level.check_uniqueness_inner.bind(copied_grid, func(): return cancel_but.button_pressed))
-	var r: SolverModel.SolveResult = await Global.wait_for_thread(solve_thread)
+	var solver := SolverModel.new()
+	var strategies := SolverModel.STRATEGY_LIST.keys()
+	var cancel_func := func(): return cancel_but.button_pressed
+	var callable := func(): return solver.full_solve(copied_grid, strategies, cancel_func)
+	var err := solve_thread.start(callable)
+	var r := SolverModel.SolveResult.GaveUp
+	if err:
+		push_error("Couldn't initialize thread: %s" % err)
+	else:
+		r = await Global.wait_for_thread(solve_thread)
 	%UniqResult.text = Level.solve_result_to_uniqueness(r)
 
 	%UniqOngoing.visible = false

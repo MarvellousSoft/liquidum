@@ -58,7 +58,7 @@ func _create_grid_image(grid_logic: GridModel) -> void:
 func _is_unique_str(grid: GridModel) -> String:
 	grid.force_editor_mode(true)
 	var start_time := Time.get_ticks_msec()
-	var r := Level.check_uniqueness_inner(grid, func(): return Time.get_ticks_msec() - start_time > 5000)
+	var r := SolverModel.new().full_solve(grid, SolverModel.STRATEGY_LIST.keys(), func(): return Time.get_ticks_msec() - start_time > 5000)
 	return Level.solve_result_to_uniqueness(r)
 
 
