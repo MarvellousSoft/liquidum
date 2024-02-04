@@ -877,6 +877,7 @@ autostart = true
 [node name="BottomAdShower" type="Node" parent="."]
 script = ExtResource("20_ff4mn")
 
+[connection signal="theme_changed" from="." to="." method="_on_theme_changed"]
 [connection signal="gui_input" from="InputFallback" to="." method="_on_input_fallback_gui_input"]
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
 [connection signal="mistake_made" from="CenterContainer/GridView" to="TopInfo/HBoxContainer/MistakeCounter" method="add_count"]
