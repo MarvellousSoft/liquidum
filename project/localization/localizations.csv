@@ -158,6 +158,7 @@ HARD_LEVEL_TOOLTIP,This level is hard,Esse nível é difícil,Esse nível é dif
 USE_CUSTOM_SEED,Use custom seed,Usar seed própria,Usar seed própria
 SEED,Seed,Seed,Seed
 DARK_MODE,Dark mode,Modo escuro,Modo escuro
+BLUE_FILTER,Blue light filter,Filtro de luz azul,Filtro de luz azul
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
 HIGHLIGHT_HINTS,Highlight finished rows/columns,Destacar linhas/colunas completas,Destacar linhas/colunas completas
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água

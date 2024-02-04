@@ -42,6 +42,7 @@ UploadingToWorkshop="*res://game/editor_menu/UploadingToWorkshop.tscn"
 AdManager="*res://game/ads/AdManager.gd"
 CampaignLevelLister="*res://game/main_menu/CampaignLevelLister.gd"
 ExtraLevelLister="*res://game/levelhub/ExtraLevelLister.gd"
+BlueFilter="*res://game/ui/BlueFilter.tscn"
 
 [debug]
 

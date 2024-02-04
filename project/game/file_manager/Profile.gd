@@ -33,6 +33,7 @@ var options = {
 	"show_grid_preview": true,
 	"locale": 0,
 	"dark_mode": false,
+	"blue_filter": 0,
 	"drag_content": true,
 	"invert_mouse": false,
 	"line_info": LineInfo.None,
@@ -126,6 +127,7 @@ func set_save_data(data):
 	update_translation()
 	dark_mode_toggled.emit(options.dark_mode)
 	show_bubbles_changed.emit(options.show_bubbles)
+	BlueFilter.set_value(float(options.blue_filter)/100.0)
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):
