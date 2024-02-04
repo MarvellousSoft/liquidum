@@ -132,10 +132,12 @@ func _on_fullscreen_toggled(button_pressed: bool) -> void:
 
 func _on_save_n_quit_button_pressed():
 	AudioManager.play_sfx("button_back")
-	save_values(false)
-	if active:
-		toggle_pause()
-	Global.exit_game()
+	if ConfirmationScreen.start_confirmation(&"EXIT_CONFIRMATION"):
+		if await ConfirmationScreen.pressed:
+			save_values(false)
+			if active:
+				toggle_pause()
+			Global.exit_game()
 
 
 func _on_button_mouse_entered():
