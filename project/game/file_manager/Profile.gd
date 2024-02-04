@@ -39,6 +39,7 @@ var options = {
 	"vsync": int(DisplayServer.VSYNC_ADAPTIVE),
 	"show_timer": true,
 	"allow_mistakes": false,
+	"highlight_finished_row_col": true,
 	"progress_on_unknown": false,
 	"show_bubbles": true,
 }

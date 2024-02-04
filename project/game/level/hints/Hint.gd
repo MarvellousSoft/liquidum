@@ -70,7 +70,7 @@ func _process(dt):
 	var allow_unknown = true
 	if not Profile.get_option("progress_on_unknown"):
 		allow_unknown = hint_value != -1
-	Global.alpha_fade_node(dt, %Completed, not editor_mode and cur_status == E.HintStatus.Satisfied and allow_unknown)
+	Global.alpha_fade_node(dt, %Completed, not editor_mode and cur_status == E.HintStatus.Satisfied and allow_unknown and Profile.get_option("highlight_finished_row_col"))
 	Global.alpha_fade_node(dt, HintsContainer, ToggleVisibility.is_pressed(), ALPHA_SPEED, false, 1.0, HIDE_ALPHA)
 
 

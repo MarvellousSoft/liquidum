@@ -159,6 +159,7 @@ USE_CUSTOM_SEED,Use custom seed,Usar seed própria,Usar seed própria
 SEED,Seed,Seed,Seed
 DARK_MODE,Dark mode,Modo escuro,Modo escuro
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
+HIGHLIGHT_HINTS,Highlight finished rows/columns,Destacar linhas/colunas completas,Destacar linhas/colunas completas
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
 DRAG_BUTTON,Fill with drag,Preencher arrastando,Preencher arrastando
 INCOMPLETE_LINE_INFO,Incomplete line info,Info. de linhas incompletas,Info. de linhas incompletas

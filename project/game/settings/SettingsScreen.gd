@@ -84,6 +84,7 @@ func setup_values() -> void:
 	SoundSettings.sfx.set_value(Profile.get_option("sfx_volume")*100)
 	Fullscreen.button_pressed = Global.is_fullscreen()
 	%HighlightLinesContainer/CheckBox.button_pressed = Profile.get_option("highlight_grid")
+	%HighlightHintsContainer/CheckBox.button_pressed = Profile.get_option("highlight_finished_row_col")
 	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
 	%LanguageSelectContainer/OptionButton.selected = Profile.get_option("locale")
 	%DarkModeContainer/CheckBox.button_pressed = Profile.get_option("dark_mode")
@@ -237,3 +238,7 @@ func _on_tab_container_tab_hovered(_tab):
 func _on_show_bubbles_toggled(on: bool) -> void:
 	Profile.set_option("show_bubbles", on)
 	Profile.show_bubbles_changed.emit(on)
+
+
+func _on_highlight_hints_toggled(on : bool) -> void:
+	Profile.set_option("highlight_finished_row_col", on)
