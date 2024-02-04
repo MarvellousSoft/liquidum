@@ -90,8 +90,6 @@ var extra_section := -1
 var extra_level_number := -1
 
 func _ready():
-	# Doesn't auto translate
-	$Description/Edit.placeholder_text = tr("LEVEL_DESCRIPTION_PLACEHOLDER")
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
 	Profile.show_timer_changed.connect(_on_show_timer_changed)
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
@@ -101,6 +99,8 @@ func _ready():
 	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	Counters.mistake.visible = not grid.editor_mode() and not Profile.get_option("allow_mistakes")
 	if not Global.is_mobile:
+		# Doesn't auto translate
+		$Description/Edit.placeholder_text = tr("LEVEL_DESCRIPTION_PLACEHOLDER")
 		%DevContainer.visible = Global.is_dev_mode()
 		%PlaytestButton.visible = false
 		%UniquenessCheck.visible = false
