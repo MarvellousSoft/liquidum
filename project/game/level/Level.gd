@@ -16,8 +16,14 @@ const SIZES = {
 	}
 }
 const AQUARIUM_BUTTON_ICONS = {
-	"normal" : preload("res://assets/images/ui/aquarium_button_normal.png"),
-	"pressed" : preload("res://assets/images/ui/aquarium_button_pressed.png"),
+	"dark": {
+		"normal" : preload("res://assets/images/ui/aquarium_button/aquarium_button_dark_normal.png"),
+		"pressed" : preload("res://assets/images/ui/aquarium_button/aquarium_button_dark_pressed.png"),
+	},
+	"normal": {
+		"normal" : preload("res://assets/images/ui/aquarium_button/aquarium_button_normal.png"),
+		"pressed" : preload("res://assets/images/ui/aquarium_button/aquarium_button_pressed.png"),
+	}
 }
 const THEMES = {
 	"normal": {
@@ -108,7 +114,7 @@ func _ready():
 	if not Global.is_mobile:
 		reset_tutorial()
 	else:
-		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
+		update_aquarium_button_icon()
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -837,6 +843,14 @@ func check_uniqueness() -> void:
 	%CheckUniqueness.disabled = false
 
 
+func update_aquarium_button_icon():
+	var aquarium_button = AQUARIUM_BUTTON_ICONS.dark if Profile.get_option("dark_mode") else AQUARIUM_BUTTON_ICONS.normal
+	if %AquariumButton.button_pressed:
+		%AquariumButton.icon = aquarium_button.pressed
+	else:
+		%AquariumButton.icon = aquarium_button.normal
+
+
 func _on_check_uniqueness_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	if solve_thread == null:
@@ -893,11 +907,10 @@ func _on_aquarium_buttons_toggled(toggled_on):
 			var player: AnimationPlayer = %AquariumButton/FingerAnim/AnimationPlayer
 			if player.assigned_animation != "disappear":
 				player.play(&"disappear")
-		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.pressed
 		%AquariumAnim.play("enable")
 	else:
-		%AquariumButton.icon = AQUARIUM_BUTTON_ICONS.normal
 		%AquariumAnim.play("disable")
+	update_aquarium_button_icon()
 
 
 func _on_dark_mode_changed(is_dark: bool) -> void:
@@ -906,6 +919,8 @@ func _on_dark_mode_changed(is_dark: bool) -> void:
 	if not Global.is_mobile:
 		%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
 		$UniquenessCheck.theme = Global.get_font_theme(is_dark)
+	else:
+		update_aquarium_button_icon()
 
 
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://et6wl4ro6l3a"
-path="res://.godot/imported/aquarium_button_pressed.png-96f8010119f914bd80bc650eaf5dd19a.ctex"
+uid="uid://b3qiioa6xn156"
+path="res://.godot/imported/aquarium_button_normal.png-40c71f736abf4080cb72ba2fd8319d1c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/aquarium_button_pressed.png"
-dest_files=["res://.godot/imported/aquarium_button_pressed.png-96f8010119f914bd80bc650eaf5dd19a.ctex"]
+source_file="res://assets/images/ui/aquarium_button/aquarium_button_normal.png"
+dest_files=["res://.godot/imported/aquarium_button_normal.png-40c71f736abf4080cb72ba2fd8319d1c.ctex"]
 
 [params]
 

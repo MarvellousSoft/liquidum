@@ -11,6 +11,11 @@ const COLORS = {
 	}
 }
 
+const PANELS = {
+	"dark": preload("res://assets/ui/AquariumHintContainerMobileDarkPanel.tres"),
+	"normal": preload("res://assets/ui/AquariumHintContainerMobilePanel.tres"),
+}
+
 @onready var AnimPlayer = $AnimationPlayer
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 @onready var Title = %Title
@@ -84,6 +89,11 @@ func update_dark_mode(is_dark : bool) -> void:
 	if Global.is_mobile:
 		for label in [%Size2, %Amount2]:
 			label.add_theme_color_override("font_color", colors.font_color)
+		if is_dark:
+			%PanelContainer.add_theme_stylebox_override("panel", PANELS.dark)
+		else:
+			%PanelContainer.add_theme_stylebox_override("panel", PANELS.normal)
+		
 
 
 func _visible() -> Dictionary:
@@ -117,3 +127,5 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 		var c := HintContainer.get_child(i)
 		c.set_values(sizes[i], expected[sizes[i]], current.get(sizes[i], 0), editor_mode)
 		c.set_should_be_visible(visible_.has(sizes[i]))
+	for node in [%VSeparator, %Size2, %Amount2]:
+		node.visible = HintContainer.get_child_count() > 1
