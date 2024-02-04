@@ -622,13 +622,14 @@ libraries = {
 }
 
 [node name="FingerAnim" type="TextureRect" parent="HintsMarginContainer/HintsContainer/AquariumButton"]
-visible = false
-modulate = Color(0.0352941, 0.211765, 0.34902, 1)
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
 layout_mode = 0
 offset_left = 25.0
 offset_top = 46.0
 offset_right = 125.0
 offset_bottom = 146.0
+scale = Vector2(1.1683, 1.1683)
 pivot_offset = Vector2(42, 18)
 texture = ExtResource("14_fetof")
 expand_mode = 1
