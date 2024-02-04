@@ -187,6 +187,10 @@ func update_dark_mode(is_dark : bool) -> void:
 		water.material.set_shader_parameter("water_color", colors.water_color)
 		water.material.set_shader_parameter("depth_color", colors.depth_color)
 		water.material.set_shader_parameter("ray_value", colors.ray_value)
+	for water in Previews.values():
+		water.material.set_shader_parameter("water_color", colors.water_color)
+		water.material.set_shader_parameter("depth_color", colors.depth_color)
+		water.material.set_shader_parameter("ray_value", colors.ray_value)
 	for content in NoContent.values():
 		content.boat.texture = images.no_boat
 

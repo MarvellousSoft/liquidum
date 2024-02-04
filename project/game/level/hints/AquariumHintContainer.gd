@@ -127,5 +127,6 @@ func update_values(expected: Dictionary, current: Dictionary, editor_mode: bool,
 		var c := HintContainer.get_child(i)
 		c.set_values(sizes[i], expected[sizes[i]], current.get(sizes[i], 0), editor_mode)
 		c.set_should_be_visible(visible_.has(sizes[i]))
-	for node in [%VSeparator, %Size2, %Amount2]:
-		node.visible = HintContainer.get_child_count() > 1
+	if Global.is_mobile:
+		for node in [%VSeparator, %Size2, %Amount2]:
+			node.visible = HintContainer.get_child_count() > 1
