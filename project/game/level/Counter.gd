@@ -95,4 +95,12 @@ func is_mistake_counter():
 func _on_dark_mode_changed(is_dark : bool):
 	var color = Global.get_color(is_dark)
 	if not is_mistake_counter():
-		%Label.add_theme_color_override("font_color", color.dark)
+		if not Global.is_mobile:
+			%Label.add_theme_color_override("font_color", color.dark)
+		else:
+			if is_dark:
+				%Label.add_theme_color_override("font_outline", color.bg)
+				%Label.add_theme_color_override("font_color", color.dark)
+			else:
+				%Label.add_theme_color_override("font_outline", color.dark)
+				%Label.add_theme_color_override("font_color", color.bg)
