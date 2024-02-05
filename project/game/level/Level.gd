@@ -159,6 +159,10 @@ func _ready():
 				# Assuming we're on playtesting
 				$SteamRichPresence.set_group("editor")
 				$SteamRichPresence.set_display("#Editor")
+		else:
+			if difficulty != -1:
+				%PlayAgainButton.show()
+				update_play_again_button_label()
 	
 	GridNode.hide()
 	await TransitionManager.transition_finished

@@ -82,7 +82,8 @@ func _update() -> void:
 
 func _play_new_level_again():
 	if Global.play_new_dif_again != -1:
-		$Seed.text = ""
+		if not Global.is_mobile:
+			$Seed.text = ""
 		_on_dif_pressed(Global.play_new_dif_again)
 		Global.play_new_dif_again = -1
 
