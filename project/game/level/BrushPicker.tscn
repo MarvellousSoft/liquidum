@@ -216,6 +216,7 @@ expand_mode = 1
 [node name="FingerAnim" type="TextureRect" parent="CenterContainer/PanelContainer/Images/NoWater"]
 visible = false
 modulate = Color(0.0352941, 0.211765, 0.34902, 1)
+layout_mode = 0
 offset_left = 92.0
 offset_top = 154.0
 offset_right = 278.0
