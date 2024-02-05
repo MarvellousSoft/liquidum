@@ -261,6 +261,8 @@ class LeaderboardData:
 	# Only the secs of the top 1000 scores that have no mistakes
 	# Used to draw an histogram
 	var top_no_mistakes: Array[int]
+	func sort() -> void:
+		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
 
 func get_leaderboard_data(l_id: int) -> LeaderboardData:
@@ -297,6 +299,7 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 		if not list_has_rank.has(ceili(float(total) * pct[0])):
 			# If this happens, we can do extra requests. But are we really that popular?
 			push_warning("%.2f percentile not in top entries" % pct[0])
+	data.sort()
 	return data
 
 
