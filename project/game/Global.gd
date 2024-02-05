@@ -69,8 +69,7 @@ signal dev_mode_toggled(status : bool)
 var _dev_mode := false
 var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
-
-
+var play_new_dif_again = -1
 
 func _ready() -> void:
 	dev_mode_label = Label.new()

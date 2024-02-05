@@ -59,6 +59,7 @@ func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_dev_mode)
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
+	call_deferred(&"_play_new_level_again")
 
 
 func _exit_tree() -> void:
@@ -77,6 +78,13 @@ func _update() -> void:
 		var cont: Node = Completed.get_node(dif)
 		cont.visible = not $Difficulties/VBox.get_node(dif).disabled
 		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
+
+
+func _play_new_level_again():
+	if Global.play_new_dif_again != -1:
+		$Seed.text = ""
+		_on_dif_pressed(Global.play_new_dif_again)
+		Global.play_new_dif_again = -1
 
 
 func _on_back_pressed() -> void:
