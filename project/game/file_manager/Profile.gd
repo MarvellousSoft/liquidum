@@ -29,6 +29,7 @@ var options = {
 	"fullscreen": true,
 	"window_position": Vector2i(-1, -1),
 	"window_size": Vector2i(-1, -1),
+	"window_screen": 0,
 	"highlight_grid": true,
 	"show_grid_preview": true,
 	"locale": 0,
@@ -86,8 +87,9 @@ func get_vec2i(key: String) -> Vector2i:
 func get_override() -> ConfigFile:
 	var cfg := ConfigFile.new()
 	cfg.set_value("display", "window/size/mode", DisplayServer.WINDOW_MODE_FULLSCREEN if options.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
+	cfg.set_value("display", "window/size/initial_screen", options.window_screen)
+	cfg.set_value("display", "window/size/initial_position_type", 2 if options.fullscreen else 0)
 	if not options.fullscreen:
-		cfg.set_value("display", "window/size/initial_position_type", 0)
 		var pos := get_vec2i("window_position")
 		if pos != Vector2i(-1, -1):
 			cfg.set_value("display", "window/size/initial_position", pos)
@@ -114,10 +116,11 @@ func set_save_data(data):
 	AudioManager.set_bus_volume(AudioManager.SFX_BUS, options.sfx_volume)
 	
 	DisplayServer.window_set_vsync_mode(options.vsync)
+	var window := get_window()
+	window.current_screen = options.window_screen
 	if Global.is_fullscreen() != options.fullscreen:
 		Global.toggle_fullscreen()
 	if not options.fullscreen:
-		var window := get_window()
 		var wpos := get_vec2i("window_position")
 		if wpos != Vector2i(-1, -1):
 			window.position = wpos

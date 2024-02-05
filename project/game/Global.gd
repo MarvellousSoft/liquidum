@@ -150,6 +150,7 @@ func _store_window() -> void:
 	var window := get_window()
 	Profile.set_option("window_position", window.position)
 	Profile.set_option("window_size", window.size)
+	Profile.set_option("window_screen", window.current_screen)
 
 func toggle_fullscreen():
 	if is_mobile:
