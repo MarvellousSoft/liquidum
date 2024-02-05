@@ -31,6 +31,7 @@ AQ_AMOUNT,Total  (Cur.),Total  (Atual),Total  (Atual)
 AQ_AMOUNT_EDITOR,Total  ,Total  ,Total  
 BACK,Back,Voltar,Voltar
 CONTINUE,Continue,Continuar,Continuar
+PLAY_AGAIN_NEW_LEVEL,New %s level,Novo nível %s,Novo nível %s
 CREATE_NEW_LEVEL,Create new level,Criar nível novo,Criar novo nível
 YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil

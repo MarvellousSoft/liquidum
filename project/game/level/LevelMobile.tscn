@@ -660,7 +660,6 @@ custom_minimum_size = Vector2(75, 75)
 custom_minimum_size = Vector2(75, 75)
 
 [node name="FingerAnim" parent="BrushPicker/CenterContainer/PanelContainer/Images/NoWater" index="0"]
-layout_mode = 0
 offset_left = 20.0
 offset_top = 14.0
 offset_right = 113.0
@@ -798,14 +797,23 @@ theme_override_constants/separation = 50
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_horizontal = 8
 focus_mode = 0
 text = "SHARE"
 
 [node name="ContinueButton" type="Button" parent="ContinueContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 focus_mode = 0
 text = "CONTINUE"
+
+[node name="PlayAgainButton" type="Button" parent="ContinueContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "PLAY_AGAIN_NEW_LEVEL"
 
 [node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
 unique_name_in_owner = true

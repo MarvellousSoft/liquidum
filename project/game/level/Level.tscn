@@ -779,6 +779,12 @@ layout_mode = 2
 focus_mode = 0
 text = "CONTINUE"
 
+[node name="PlayAgainButton" type="Button" parent="ContinueContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "PLAY_AGAIN_NEW_LEVEL"
+
 [node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
 unique_name_in_owner = true
 root_node = NodePath("../ContinueButton")
@@ -842,6 +848,8 @@ autostart = true
 [connection signal="pressed" from="ContinueContainer/ShareButton" to="." method="_on_share_button_pressed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="mouse_entered" from="ContinueContainer/PlayAgainButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ContinueContainer/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 

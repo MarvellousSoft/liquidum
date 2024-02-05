@@ -33,6 +33,10 @@ const THEMES = {
 		"tutorial_panel": preload("res://assets/ui/TutorialPanelDark.tres"),
 	},
 }
+const DIFFICULTY_NAMES = [
+	"EASY_BUTTON", "MEDIUM_BUTTON", "HARD_BUTTON",\
+	"EXPERT_BUTTON", "INSANE_BUTTON"
+]
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -115,6 +119,7 @@ func _ready():
 		reset_tutorial()
 	else:
 		update_aquarium_button_icon()
+	%PlayAgainButton.hide()
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -142,6 +147,8 @@ func _ready():
 				$SteamRichPresence.set_group("daily")
 				$SteamRichPresence.set_display("#Daily")
 			elif difficulty != -1:
+				%PlayAgainButton.show()
+				update_play_again_button_label()
 				$SteamRichPresence.set_group("random")
 				$SteamRichPresence.set_display("#Random")
 				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
@@ -456,6 +463,10 @@ func maybe_save(delete_solution := false) -> void:
 func add_playtime_tracking(stats: Array[String]) -> void:
 	stats.append("total")
 	$SteamPlaytimeTracker.stats = stats
+
+
+func update_play_again_button_label() -> void:
+	%PlayAgainButton.text = tr("PLAY_AGAIN_NEW_LEVEL") % tr(DIFFICULTY_NAMES[difficulty]).to_lower()
 
 
 func reset_level() -> void:
@@ -938,3 +949,7 @@ func _on_share_button_mouse_entered():
 func _on_cancel_uniq_check_mouse_entered():
 	if not %CancelUniqCheck.disabled:
 		AudioManager.play_sfx("button_hover")
+
+
+func _on_play_again_button_pressed():
+	pass # Replace with function body.
