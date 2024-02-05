@@ -45,6 +45,7 @@ var options = {
 	"highlight_finished_row_col": true,
 	"progress_on_unknown": false,
 	"show_bubbles": true,
+	"bigger_hints_font": false,
 }
 
 const STEAM_LANGUAGES := {
