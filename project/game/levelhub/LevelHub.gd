@@ -49,7 +49,7 @@ func update_sections() -> void:
 		c.enable_focus.connect(_on_level_section_enable_focus)
 		c.disable_focus.connect(_on_level_section_disable_focus)
 	if extra_levels:
-		Sections.columns = int((count + 1) / 2)
+		Sections.columns = maxi(int((count + 1) / 2), 1)
 	var idx := 1
 	for section in Sections.get_children():
 		section.set_number(idx)
