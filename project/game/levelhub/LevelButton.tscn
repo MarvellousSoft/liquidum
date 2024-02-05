@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
+[ext_resource type="StyleBox" uid="uid://bt1jrn1w0q3lp" path="res://assets/ui/LevelButton/CompletedNormalDarkStyle.tres" id="3_1jxgl"]
 [ext_resource type="StyleBox" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/NormalStyle.tres" id="3_dht5y"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/HoverStyle.tres" id="4_qjcst"]
+[ext_resource type="StyleBox" uid="uid://bmbdcb1b5my73" path="res://assets/ui/LevelButton/CompletedHoverDarkStyle.tres" id="4_7ug45"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/PressedStyle.tres" id="5_eoh5v"]
+[ext_resource type="StyleBox" uid="uid://dst6a0cs2idec" path="res://assets/ui/LevelButton/CompletedPressedDarkStyle.tres" id="5_bu5nt"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="10_5jj0t"]
 
@@ -213,11 +213,10 @@ theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.745098)
 theme_override_colors/font_outline_color = Color(0.0784314, 0.364706, 0.529412, 1)
 theme_override_constants/outline_size = 60
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = ExtResource("3_dht5y")
-theme_override_styles/hover = ExtResource("4_qjcst")
-theme_override_styles/pressed = ExtResource("5_eoh5v")
+theme_override_styles/normal = ExtResource("3_1jxgl")
+theme_override_styles/hover = ExtResource("4_7ug45")
+theme_override_styles/pressed = ExtResource("5_bu5nt")
 theme_override_styles/disabled = ExtResource("3_84hro")
-disabled = true
 text = "1"
 
 [node name="ShaderEffect" type="ColorRect" parent="Button"]

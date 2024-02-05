@@ -24,15 +24,30 @@ const BACK_POSITION = {
 
 const STYLES = {
 	"normal": {
-		"normal": preload("res://assets/ui/SectionButton/NormalStyle.tres"),
-		"hover": preload("res://assets/ui/SectionButton/HoverStyle.tres"),
-		"pressed": preload("res://assets/ui/SectionButton/PressedStyle.tres"),
+		"normal": {
+			"normal": preload("res://assets/ui/SectionButton/NormalStyle.tres"),
+			"hover": preload("res://assets/ui/SectionButton/HoverStyle.tres"),
+			"pressed": preload("res://assets/ui/SectionButton/PressedStyle.tres"),
+		},
+		"completed": {
+			"normal": preload("res://assets/ui/SectionButton/CompletedNormalStyle.tres"),
+			"hover": preload("res://assets/ui/SectionButton/CompletedHoverStyle.tres"),
+			"pressed": preload("res://assets/ui/SectionButton/CompletedPressedStyle.tres"),
+		}
 	},
-	"completed": {
-		"normal": preload("res://assets/ui/SectionButton/CompletedNormalStyle.tres"),
-		"hover": preload("res://assets/ui/SectionButton/CompletedHoverStyle.tres"),
-		"pressed": preload("res://assets/ui/SectionButton/CompletedPressedStyle.tres"),
-	}
+	"dark": {
+		"normal": {
+			"normal": preload("res://assets/ui/SectionButton/NormalStyle.tres"),
+			"hover": preload("res://assets/ui/SectionButton/HoverStyle.tres"),
+			"pressed": preload("res://assets/ui/SectionButton/PressedStyle.tres"),
+		},
+		"completed": {
+			"normal": preload("res://assets/ui/SectionButton/CompletedNormalDarkStyle.tres"),
+			"hover": preload("res://assets/ui/SectionButton/CompletedHoverDarkStyle.tres"),
+			"pressed": preload("res://assets/ui/SectionButton/CompletedPressedDarkStyle.tres"),
+		}
+	},
+	
 }
 
 signal enable_focus(pos : Vector2, my_section : int)
@@ -59,6 +74,8 @@ var extra := false
 
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	AnimPlayer.play("float")
 	OngoingSolution.hide()
 	ShaderEffect.material = ShaderEffect.material.duplicate()
@@ -215,7 +232,8 @@ func update_level_count_label():
 
 
 func update_style_boxes(completed : bool):
-	var styles = STYLES.completed if completed else STYLES.normal
+	var style_theme = STYLES.dark if Profile.get_option("dark_mode") else STYLES.normal
+	var styles = style_theme.completed if completed else style_theme.normal
 	MainButton.add_theme_stylebox_override("normal", styles.normal)
 	MainButton.add_theme_stylebox_override("hover", styles.hover)
 	MainButton.add_theme_stylebox_override("pressed", styles.pressed)
@@ -259,3 +277,11 @@ func _on_level_first_win(button):
 func _on_button_mouse_entered():
 	if not focused and not $Button.disabled:
 		AudioManager.play_sfx("button_hover")
+
+
+func _on_dark_mode_changed(_is_dark : bool):
+	if level_lister:
+		update_style_boxes(is_section_completed())
+	else:
+		update_style_boxes(false)
+

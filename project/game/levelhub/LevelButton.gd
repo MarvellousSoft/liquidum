@@ -2,15 +2,29 @@ extends Control
 
 const STYLES = {
 	"normal": {
-		"normal": preload("res://assets/ui/LevelButton/NormalStyle.tres"),
-		"hover": preload("res://assets/ui/LevelButton/HoverStyle.tres"),
-		"pressed": preload("res://assets/ui/LevelButton/PressedStyle.tres"),
+		"normal": {
+			"normal": preload("res://assets/ui/LevelButton/NormalStyle.tres"),
+			"hover": preload("res://assets/ui/LevelButton/HoverStyle.tres"),
+			"pressed": preload("res://assets/ui/LevelButton/PressedStyle.tres"),
+		},
+		"completed": {
+			"normal": preload("res://assets/ui/LevelButton/CompletedNormalStyle.tres"),
+			"hover": preload("res://assets/ui/LevelButton/CompletedHoverStyle.tres"),
+			"pressed": preload("res://assets/ui/LevelButton/CompletedPressedStyle.tres"),
+		}
 	},
-	"completed": {
-		"normal": preload("res://assets/ui/LevelButton/CompletedNormalStyle.tres"),
-		"hover": preload("res://assets/ui/LevelButton/CompletedHoverStyle.tres"),
-		"pressed": preload("res://assets/ui/LevelButton/CompletedPressedStyle.tres"),
-	}
+	"dark": {
+		"normal": {
+			"normal": preload("res://assets/ui/LevelButton/NormalStyle.tres"),
+			"hover": preload("res://assets/ui/LevelButton/HoverStyle.tres"),
+			"pressed": preload("res://assets/ui/LevelButton/PressedStyle.tres"),
+		},
+		"completed": {
+			"normal": preload("res://assets/ui/LevelButton/CompletedNormalDarkStyle.tres"),
+			"hover": preload("res://assets/ui/LevelButton/CompletedHoverDarkStyle.tres"),
+			"pressed": preload("res://assets/ui/LevelButton/CompletedPressedDarkStyle.tres"),
+		}
+	},
 }
 
 signal pressed
@@ -29,6 +43,8 @@ var lister: LevelLister = null
 
 
 func _ready():
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	ShaderEffect.material = ShaderEffect.material.duplicate()
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 
@@ -61,7 +77,8 @@ func set_ongoing_solution(status: bool) -> void:
 
 
 func change_style_boxes(completed : bool) -> void:
-	var styles = STYLES.completed if completed else STYLES.normal
+	var style_theme = STYLES.dark if Profile.get_option("dark_mode") else STYLES.normal
+	var styles = style_theme.completed if completed else style_theme.normal
 	MainButton.add_theme_stylebox_override("normal", styles.normal)
 	MainButton.add_theme_stylebox_override("hover", styles.hover)
 	MainButton.add_theme_stylebox_override("pressed", styles.pressed)
@@ -115,3 +132,10 @@ func _on_button_mouse_entered():
 
 func _on_button_mouse_exited():
 	mouse_exited.emit()
+
+
+func _on_dark_mode_changed(_is_dark : bool):
+	if data:
+		change_style_boxes(data.is_completed())
+	else:
+		change_style_boxes(false)
