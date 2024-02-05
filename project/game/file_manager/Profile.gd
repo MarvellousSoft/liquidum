@@ -18,7 +18,7 @@ enum LineInfo {
 	ShowMissing,
 	ShowCurrent,
 }
-const MOBILE_MASTER_VOLUME = 0.5
+const MOBILE_MASTER_VOLUME = 0.7
 
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
 const SHOW_VERSION := true
