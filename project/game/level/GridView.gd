@@ -606,14 +606,25 @@ func highlight_column(idx: int) -> void:
 		get_cell(i, idx).set_highlight(true)
 
 
-func check_for_feedback(i : int, j: int, row_s : E.HintStatus , col_s : E.HintStatus, content : E.HintContent):
-	var is_boat = content == E.HintContent.Boat
-	if HintBars.left.get_hint(i, is_boat).hint_value != -1 and\
-	   row_s != E.HintStatus.Satisfied and _inner_row_status(i, content) == E.HintStatus.Satisfied:
-		start_row_feedback(i, j)
-	if HintBars.top.get_hint(j, is_boat).hint_value != -1 and\
-	   col_s != E.HintStatus.Satisfied and _inner_col_status(j, E.HintContent.Water) == E.HintStatus.Satisfied:
-		start_col_feedback(i, j)
+func check_for_feedback(i: int, j: int, prev_status: PreviousStatus) -> void:
+	for i2 in rows:
+		var feedback := grid_logic.row_hints()[i2].water_count != -1 and\
+		  prev_status.row_waters[i2] != E.HintStatus.Satisfied and\
+		  _inner_row_status(i2, E.HintContent.Water) == E.HintStatus.Satisfied
+		feedback = feedback or (grid_logic.row_hints()[i2].boat_count != -1 and\
+		  prev_status.row_boats[i2] != E.HintStatus.Satisfied and\
+		  _inner_row_status(i2, E.HintContent.Boat) == E.HintStatus.Satisfied)
+		if feedback:
+			start_row_feedback(i2, j)
+	for j2 in columns:
+		var feedback := grid_logic.col_hints()[j2].water_count != -1 and\
+		  prev_status.col_waters[j2] != E.HintStatus.Satisfied and\
+		  _inner_col_status(j2, E.HintContent.Water) == E.HintStatus.Satisfied
+		feedback = feedback or (grid_logic.col_hints()[j2].boat_count != -1 and\
+		  prev_status.col_boats[j2] != E.HintStatus.Satisfied and\
+		  _inner_col_status(j2, E.HintContent.Boat) == E.HintStatus.Satisfied)
+		if feedback:
+			start_col_feedback(i, j2)
 
 
 func start_row_feedback(i, j):
@@ -695,14 +706,27 @@ func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: i
 	else:
 		_process_click(i, j, which, used_brush)
 
+class PreviousStatus:
+	var row_waters: Array[E.HintStatus]
+	var col_waters: Array[E.HintStatus]
+	var row_boats: Array[E.HintStatus]
+	var col_boats: Array[E.HintStatus]
+
+func get_prev_status() -> PreviousStatus:
+	var p := PreviousStatus.new()
+	for i in rows:
+		p.row_waters.append(_inner_row_status(i, E.HintContent.Water))
+		p.row_boats.append(_inner_row_status(i, E.HintContent.Boat))
+	for j in columns:
+		p.col_waters.append(_inner_col_status(j, E.HintContent.Water))
+		p.col_boats.append(_inner_col_status(j, E.HintContent.Boat))
+	return p
+
 
 func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner := E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
-	var row_w_s = _inner_row_status(i, E.HintContent.Water)
-	var col_w_s = _inner_col_status(j, E.HintContent.Water)
-	var row_b_s = _inner_row_status(i, E.HintContent.Boat)
-	var col_b_s = _inner_col_status(j, E.HintContent.Boat)
+	var prev_status := get_prev_status()
 	match used_brush:
 		E.BrushMode.Water:
 			grid_logic.push_empty_undo()
@@ -713,7 +737,7 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 			else:
 				mouse_hold_status = E.MouseDragState.Water
 				if cell_data.put_water(corner, false):
-					check_for_feedback(i, j, row_w_s, col_w_s, E.HintContent.Water)
+					check_for_feedback(i, j, prev_status)
 					play_water_sound()
 				else:
 					highlight_error(i, j, which)
@@ -738,7 +762,7 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 			else:
 				mouse_hold_status = E.MouseDragState.Boat
 				if cell_data.put_boat(false):
-					check_for_feedback(i, j, row_b_s, col_b_s, E.HintContent.Boat)
+					check_for_feedback(i, j, prev_status)
 					AudioManager.play_sfx("boat_put")
 				else:
 					highlight_error(i, j, which)
@@ -859,13 +883,10 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 	
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
-	var row_w_s = _inner_row_status(i, E.HintContent.Water)
-	var col_w_s = _inner_col_status(j, E.HintContent.Water)
-	var row_b_s = _inner_row_status(i, E.HintContent.Boat)
-	var col_b_s = _inner_col_status(j, E.HintContent.Boat)
+	var prev_status := get_prev_status()
 	if mouse_hold_status == E.MouseDragState.Water and cell_data.nothing_at(corner):
 		if cell_data.put_water(corner, false):
-			check_for_feedback(i, j, row_w_s, col_w_s, E.HintContent.Water)
+			check_for_feedback(i, j, prev_status)
 			play_water_sound()
 		else:
 			highlight_error(i, j, which)
@@ -883,7 +904,7 @@ func _on_cell_mouse_entered(i: int, j: int, which: E.Waters) -> void:
 			highlight_error(i, j, which)
 	elif mouse_hold_status == E.MouseDragState.Boat and cell_data.nothing_at(corner):
 		if cell_data.put_boat(false):
-			check_for_feedback(i, j, row_b_s, col_b_s, E.HintContent.Boat)
+			check_for_feedback(i, j, prev_status)
 			AudioManager.play_sfx("boat_put")
 		else:
 			highlight_error(i, j, which)
