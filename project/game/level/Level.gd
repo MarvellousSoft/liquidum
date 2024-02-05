@@ -936,7 +936,8 @@ func _on_dark_mode_changed(is_dark: bool) -> void:
 		%TutorialPanelContainer.add_theme_stylebox_override("panel", themes.tutorial_panel)
 		$UniquenessCheck.theme = Global.get_font_theme(is_dark)
 	else:
-		%FingerAnim.modulate = Global.get_color(is_dark).dark
+		if has_node("%FingerAnim"):
+			%FingerAnim.modulate = Global.get_color(is_dark).dark
 		update_aquarium_button_icon()
 
 

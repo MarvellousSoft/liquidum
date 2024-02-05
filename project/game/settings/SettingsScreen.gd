@@ -84,6 +84,7 @@ func setup_values() -> void:
 	SoundSettings.sfx.set_value(Profile.get_option("sfx_volume")*100)
 	Fullscreen.button_pressed = Global.is_fullscreen()
 	%HighlightLinesContainer/CheckBox.button_pressed = Profile.get_option("highlight_grid")
+	%BiggerHintsContainer/CheckBox.button_pressed = Profile.get_option("bigger_hints_font")
 	%BlueFilterContainer/HSlider.value = Profile.get_option("blue_filter")
 	%HighlightHintsContainer/CheckBox.button_pressed = Profile.get_option("highlight_finished_row_col")
 	%ShowPreviewContainer/CheckBox.button_pressed = Profile.get_option("show_grid_preview")
@@ -248,3 +249,7 @@ func _on_highlight_hints_toggled(on : bool) -> void:
 func _on_blue_filter_slider_value_changed(value):
 	Profile.set_option("blue_filter", value)
 	BlueFilter.set_value(float(value)/100.0)
+
+
+func _on_bigger_hints_toggled(on : bool) -> void:
+	Profile.set_option("bigger_hints_font", on)

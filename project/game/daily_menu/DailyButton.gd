@@ -163,13 +163,14 @@ func _on_button_pressed() -> void:
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
 		await level.ready
-		var l_id := await get_leaderboard(date)
-		var l_data := await get_leaderboard_data(l_id)
-		if l_data.has_self:
-			already_uploaded_today = true
-		l_id = await get_leaderboard(yesterday)
-		var y_data := await get_leaderboard_data(l_id)
-		display_leaderboard(l_data, y_data, level)
+		if not Global.is_mobile:
+			var l_id := await get_leaderboard(date)
+			var l_data := await get_leaderboard_data(l_id)
+			if l_data.has_self:
+				already_uploaded_today = true
+			l_id = await get_leaderboard(yesterday)
+			var y_data := await get_leaderboard_data(l_id)
+			display_leaderboard(l_data, y_data, level)
 
 	MainButton.disabled = false
 
