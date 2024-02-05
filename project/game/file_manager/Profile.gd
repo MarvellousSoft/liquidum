@@ -18,6 +18,7 @@ enum LineInfo {
 	ShowMissing,
 	ShowCurrent,
 }
+const MOBILE_MASTER_VOLUME = 0.5
 
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
 const SHOW_VERSION := true
@@ -111,7 +112,10 @@ func set_save_data(data):
 	
 	set_data(data, "options", options)
 	
-	AudioManager.set_bus_volume(AudioManager.MASTER_BUS, options.master_volume)
+	if Global.is_mobile:
+		AudioManager.set_bus_volume(AudioManager.MASTER_BUS, MOBILE_MASTER_VOLUME)
+	else:
+		AudioManager.set_bus_volume(AudioManager.MASTER_BUS, options.master_volume)
 	AudioManager.set_bus_volume(AudioManager.BGM_BUS, options.bgm_volume)
 	AudioManager.set_bus_volume(AudioManager.SFX_BUS, options.sfx_volume)
 	

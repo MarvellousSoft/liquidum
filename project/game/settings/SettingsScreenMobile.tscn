@@ -654,6 +654,7 @@ alignment = 1
 
 [node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer"]
