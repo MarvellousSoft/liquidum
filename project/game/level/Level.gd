@@ -231,6 +231,7 @@ func setup(try_load := true) -> void:
 			%AquariumButton/FingerAnim.show()
 		else:
 			%AquariumButton/FingerAnim.queue_free()
+	BrushPicker.nowater_finger_anim(Global.is_mobile and section_number == 1 and level_number == 2)
 	running_time = 0
 	game_won = false
 	last_saved = Time.get_ticks_msec()

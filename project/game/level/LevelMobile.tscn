@@ -659,6 +659,14 @@ custom_minimum_size = Vector2(75, 75)
 [node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="1"]
 custom_minimum_size = Vector2(75, 75)
 
+[node name="FingerAnim" parent="BrushPicker/CenterContainer/PanelContainer/Images/NoWater" index="0"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 14.0
+offset_right = 113.0
+offset_bottom = 123.0
+rotation = -0.261799
+
 [node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="2"]
 custom_minimum_size = Vector2(75, 75)
 

@@ -60,6 +60,11 @@ func _input(event):
 			if event.keycode - KEY_1 < valid.size():
 				_on_button_pressed(valid[event.keycode - KEY_1])
 
+func nowater_finger_anim(show: bool) -> void:
+	if show:
+		%NoWater/FingerAnim.show()
+	else:
+		%NoWater/FingerAnim.queue_free()
 
 func disable():
 	active = false
@@ -128,6 +133,10 @@ func pick_previous_brush() -> void:
 
 func _on_button_pressed(mode: E.BrushMode):
 	AudioManager.play_sfx("change_brush")
+	if mode == E.BrushMode.NoWater and %NoWater.has_node("FingerAnim"):
+		var player: AnimationPlayer = %NoWater/FingerAnim/AnimationPlayer
+		if player.assigned_animation != "disappear":
+			player.play(&"disappear")
 	# Doing radio logic by hand since Godot`s isn`t working for some reason
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == mode)
