@@ -961,4 +961,4 @@ func _on_play_again_button_pressed():
 	if _show_level_completed_ad():
 		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
 	else:
-		TransitionManager.pop_scene()
+		TransitionManager.stack.back()._play_new_level_again()

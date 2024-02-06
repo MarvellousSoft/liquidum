@@ -10,5 +10,8 @@ func _ready() -> void:
 func exit_ad() -> void:
 	if is_inside_tree():
 		AdManager.destroy_big_ad()
-		TransitionManager.pop_scene()
+		if Global.play_new_dif_again != -1:
+			TransitionManager.stack.back()._play_new_level_again()
+		else:
+			TransitionManager.pop_scene()
 

@@ -59,7 +59,6 @@ func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_dev_mode)
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
-	call_deferred(&"_play_new_level_again")
 
 
 func _exit_tree() -> void:
@@ -81,11 +80,14 @@ func _update() -> void:
 
 
 func _play_new_level_again():
+	assert(Global.play_new_dif_again != -1)
 	if Global.play_new_dif_again != -1:
 		if not Global.is_mobile:
 			$Seed.text = ""
-		_on_dif_pressed(Global.play_new_dif_again)
+		await _on_dif_pressed(Global.play_new_dif_again)
 		Global.play_new_dif_again = -1
+	else:
+		TransitionManager.pop_scene()
 
 
 func _on_back_pressed() -> void:
@@ -133,12 +135,15 @@ func load_existing() -> void:
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()])
 	level.difficulty = data.difficulty
 	level.won.connect(_level_completed.bind(data.difficulty))
-	TransitionManager.push_scene(level)
+	if Global.play_new_dif_again != -1:
+		TransitionManager.change_scene(level)
+	else:
+		TransitionManager.push_scene(level)
 
 
 func _confirm_new_level() -> bool:
 	AudioManager.play_sfx("button_pressed")
-	if Continue.visible and ConfirmationScreen.start_confirmation(&"CONFIRM_NEW_RANDOM"):
+	if Global.play_new_dif_again == -1 and Continue.visible and ConfirmationScreen.start_confirmation(&"CONFIRM_NEW_RANDOM"):
 		return await ConfirmationScreen.pressed
 	return true
 
@@ -250,7 +255,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 			rng.state = success_state
 	else:
 		rng.seed = RandomHub.consistent_hash(seed_str)
-	gen_and_play(rng, dif)
+	await gen_and_play(rng, dif)
 
 
 func _on_cancel_gen_pressed():
