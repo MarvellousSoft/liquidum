@@ -165,7 +165,7 @@ _data = {
 }
 
 [node name="ConfirmationScreen" type="CanvasLayer"]
-layer = 3
+layer = 4
 script = ExtResource("1_40f4i")
 
 [node name="BG" type="ColorRect" parent="."]
