@@ -945,3 +945,13 @@ func test_aquariums() -> void:
 	..............
 	L.L._._.L.L._.
 """)
+	assert_cant_solve("""
+	+aqua=0.0:1
+	+waters=3.0
+	#.##
+	|/L.
+	ww#.
+	|.L/
+	ww..
+	L.L.
+	""")

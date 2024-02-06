@@ -1057,12 +1057,18 @@ class AquariumsStrategy extends Strategy:
 		- If there's exactly one way to fill an aquarium to a certain value that's required, do it.
 		- Mostly ignores aquariums that have "pools", unless they are already filled.
 		"""
-	func _maybe_add_last_aquarium(hints: Dictionary) -> void:
+	func _maybe_add_last_aquarium(hints: Dictionary, all_aqs: Array[GridImpl.AquariumInfo]) -> void:
 		var water_left := grid.grid_hints().total_water - grid.count_waters()
 		if not hints.has(0.0) or water_left <= 0 or hints.has(water_left):
 			return
-		var all_cur := grid.all_aquarium_counts()
-		if all_cur.get(0.0, 0) == hints[0.0] + 1:
+		var non_fixed_0s := 0
+		for aq in all_aqs:
+			if aq.total_water == 0 and not aq.fixed_water():
+				non_fixed_0s += 1
+			if not aq.fixed_water() and aq.total_water > 0:
+				return
+		# Now we know only 0s are non-fixed
+		if non_fixed_0s == hints[0.0] + 1:
 			# We can only fill one more aquarium so it must have this value
 			hints[water_left] = 1
 	func _infer_if_rest_is_0(hints: Dictionary, all_aqs: Array[GridImpl.AquariumInfo]) -> void:
@@ -1090,7 +1096,6 @@ class AquariumsStrategy extends Strategy:
 			hints[0.0] = all_aqs.size() - filled_aqs_count
 	func apply_any() -> bool:
 		var hint := grid.grid_hints().expected_aquariums.duplicate()
-		_maybe_add_last_aquarium(hint)
 		if hint.is_empty():
 			return false
 		var all_aqs: Array[GridImpl.AquariumInfo] = []
@@ -1134,6 +1139,7 @@ class AquariumsStrategy extends Strategy:
 						continue
 					reaches += val
 					ways_to_reach[reaches] = ways_to_reach.get(reaches, 0) + 1
+		_maybe_add_last_aquarium(hint, all_aqs)
 		var any := false
 		if basic:
 			for aq in var_aqs:

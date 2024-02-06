@@ -60,12 +60,12 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		var flavor = FlavorOptions.get_selected_id()
 		assert(flavor == 1000 or forced_strategies.is_empty(), "Can't generate flavor and have forced strategy")
 		var rng := RandomNumberGenerator.new()
-		var rseed := randi() % 1000000
+		var rseed: String = str(randi() % 1000000)
 		if $Seed.text != "":
-			rseed = int($Seed.text)
+			rseed = $Seed.text
 		else:
 			$Seed.placeholder_text = "Seed: %d" % rseed
-		rng.seed = RandomHub.consistent_hash(str(rseed))
+		rng.seed = RandomHub.consistent_hash(rseed)
 		if flavor < 1000:
 			var g := await RandomFlavors.gen(l_gen, rng, flavor)
 			if g != null:
