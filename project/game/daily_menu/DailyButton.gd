@@ -163,7 +163,7 @@ func _on_button_pressed() -> void:
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
 		await level.ready
-		if not Global.is_mobile:
+		if SteamManager.enabled:
 			var l_id := await get_leaderboard(date)
 			var l_data := await get_leaderboard_data(l_id)
 			if l_data.has_self:
@@ -177,11 +177,12 @@ func _on_button_pressed() -> void:
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
-	var l_id := await get_leaderboard(date)
-	if not already_uploaded_today:
-		await upload_leaderboard(l_id, info)
-	var l_data := await get_leaderboard_data(l_id)
-	display_leaderboard(l_data, null, level)
+	if SteamManager.enabled:
+		var l_id := await get_leaderboard(date)
+		if not already_uploaded_today:
+			await upload_leaderboard(l_id, info)
+		var l_data := await get_leaderboard_data(l_id)
+		display_leaderboard(l_data, null, level)
 	if not info.first_win:
 		return
 	if SteamManager.stats_received:
@@ -205,6 +206,8 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 
 
 func get_leaderboard(for_date: String) -> int:
+	if not SteamManager.enabled:
+		return -1
 	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
 	if not ret[1]:
@@ -262,14 +265,16 @@ class LeaderboardData:
 	# Only the secs of the top 1000 scores that have no mistakes
 	# Used to draw an histogram
 	var top_no_mistakes: Array[int]
+	func is_empty() -> bool:
+		return list.is_empty()
 	func sort() -> void:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
 
 func get_leaderboard_data(l_id: int) -> LeaderboardData:
-	if not SteamManager.enabled:
-		return null
 	var data := LeaderboardData.new()
+	if not SteamManager.enabled:
+		return data
 	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
 	if total == 0:
 		return data
@@ -305,7 +310,7 @@ func get_leaderboard_data(l_id: int) -> LeaderboardData:
 
 
 func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData, level: Level) -> void:
-	if today == null or Global.is_mobile:
+	if not SteamManager.enabled:
 		return
 	var display: LeaderboardDisplay
 	if not level.has_node("LeaderboardDisplay"):
