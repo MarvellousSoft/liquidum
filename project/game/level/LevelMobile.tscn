@@ -904,6 +904,7 @@ script = ExtResource("20_ff4mn")
 [connection signal="toggled" from="HintsMarginContainer/HintsContainer/AquariumButton" to="." method="_on_aquarium_buttons_toggled"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="pressed" from="ContinueContainer/ShareButton" to="." method="_on_share_button_pressed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="ContinueContainer/PlayAgainButton" to="." method="_on_play_again_button_pressed"]

@@ -906,7 +906,11 @@ func _on_share_button_pressed() -> void:
 		_timer_str(),
 		mistake_str,
 	]
-	DisplayServer.clipboard_set(text)
+	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):
+		var share = Engine.get_singleton("GodotAndroidShare")
+		share.shareText("Liquidum", "subject", text)
+	else:
+		DisplayServer.clipboard_set(text)
 	%ShareButton.disabled = true
 	%ShareButton.text = "COPIED_TO_CLIPBOARD"
 
