@@ -720,7 +720,7 @@ class TogetherColStrategy extends TogetherStrategy:
 		return grid.count_water_col(a)
 
 enum TogetherStatus { None, AlwaysTogether, MaybeSeparated }
-
+enum { BEFORE, DURING, AFTER, SEPARATED }
 class SeparateStrategy extends RowColStrategy:
 	var basic: bool
 	
@@ -826,13 +826,55 @@ class SeparateStrategy extends RowColStrategy:
 		var water_left2 := int(2 * (hint.water_count - _count_water_a(a)))
 		if water_left2 < 0:
 			return false
+		var any := false
+		if not basic:
+			# Maybe we need to put water in corners to avoid having contiguous water
+			for b2 in 2 * _b_len():
+				if _nothing(a, b2):
+					var b2_r := _skip_right(a, b2, _left() == E.Side.Left)
+					var state := BEFORE
+					var left2 := int(2 * hint.water_count)
+					for c2 in range(b2_r, 2 * _b_len()):
+						if _water_or_nothing(a, c2):
+							if state == BEFORE:
+								state = DURING
+							elif state == AFTER:
+								state = SEPARATED
+							left2 -= 1
+						elif state == DURING:
+							state = AFTER
+					if state != SEPARATED and left2 == 0:
+						any = true
+						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+					break
+				elif _content(a, b2) == Content.Water:
+					break
+			for b2 in range(2 * _b_len() - 1, -1, -1):
+				if _nothing(a, b2):
+					var b2_l := _skip_left(a, b2, true)
+					var state := BEFORE
+					var left2 := int(2 * hint.water_count)
+					for c2 in range(b2_l, -1, -1):
+						if _water_or_nothing(a, c2):
+							if state == BEFORE:
+								state = DURING
+							elif state == AFTER:
+								state = SEPARATED
+							left2 -= 1
+						elif state == DURING:
+							state = AFTER
+					if state != SEPARATED and left2 == 0:
+						any = true
+						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+					break
+				elif _content(a, b2) == Content.Water:
+					break
 		var leftmost := 2 * _b_len()
 		var rightmost := -1
 		for b2 in 2 * _b_len():
 			if _content(a, b2) == Content.Water:
 				leftmost = min(leftmost, b2)
 				rightmost = b2
-		var any := false
 		if rightmost == -1:
 			# We can mark connected components of size exactly the hint as nowater
 			# because otherwise it would be together. This will work differently in rows and cols.
@@ -845,17 +887,6 @@ class SeparateStrategy extends RowColStrategy:
 					rightmost = b2
 					if basic and _will_flood_how_many(a, b2) == water_left2:
 						_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-						any = true
-			if not basic:
-				# Single hole, in which case it might be necessary to put water on the corners of it
-				# to prevent creating a contiguous block of water
-				if rightmost != -1 and leftmost != -1:
-					var hole_sz := rightmost - leftmost + 1
-					if _content(a, leftmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, leftmost, true):
-						_cell(a, leftmost / 2).put_water(_corner(a, leftmost), false)
-						any = true
-					if _content(a, rightmost) == Content.Nothing and water_left2 == hole_sz - _will_flood_how_many(a, rightmost, true):
-						_cell(a, rightmost / 2).put_water(_corner(a, rightmost), false)
 						any = true
 			return any
 		if not basic:

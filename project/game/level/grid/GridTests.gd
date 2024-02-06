@@ -784,6 +784,24 @@ func test_separate_rule() -> void:
 	3#.w.xw
 	-L/L/L/
 	""", s)
+	assert_apply_strategies("""
+	h......
+	5......
+	-L/L/L/
+	""", """
+	h......
+	5w....w
+	-L/L/L/
+	""", s)
+	assert_apply_strategies("""
+	h......
+	5..w...
+	-L/L/L/
+	""", """
+	h......
+	5w.w..w
+	-L/L/L/
+	""", s)
 	s = ["BasicCol", "SeparateColBasic", "SeparateColAdvanced"]
 	# Kinda same but for cols
 	assert_can_solve("""
