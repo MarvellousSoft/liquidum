@@ -323,7 +323,13 @@ func setup(try_load := true) -> void:
 	for counter in Counters.values():
 		counter.startup(delay)
 		delay += COUNTER_DELAY_STARTUP
-	AquariumHints.startup(delay, grid.grid_hints().expected_aquariums, grid.all_aquarium_counts(), GridNode.editor_mode)
+	var expected_aqs := grid.grid_hints().expected_aquariums
+	if editor_mode():
+		expected_aqs = expected_aqs.duplicate()
+		for aq in visibility.expected_aquariums:
+			if not expected_aqs.has(aq):
+				expected_aqs[aq] = 0
+	AquariumHints.startup(delay, expected_aqs, grid.all_aquarium_counts(), GridNode.editor_mode)
 	
 	AnimPlayer.play("startup")
 	

@@ -33,13 +33,13 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 		return
 	show()
 	
-	await get_tree().create_timer(delay).timeout
-	AnimPlayer.play("startup")
-	
 	delay = HINT_DELAY
 	for child in HintContainer.get_children():
 		child.modulate.a = 0.0
 	update_values(expected, current, editor_mode, true)
+	await get_tree().create_timer(delay).timeout
+	AnimPlayer.play("startup")
+	
 	for child in HintContainer.get_children():
 		child.startup(delay)
 		delay += HINT_DELAY
