@@ -379,9 +379,14 @@ func _on_theme_changed() -> void:
 		# the scale field of the GridNode, so let's calculate it again.
 		scale_grid()
 
+var scaling_grid := false
 
 func scale_grid() -> void:
-	var prev_a = GridNode.modulate.a
+	if scaling_grid:
+		return
+	else:
+		scaling_grid = true
+	var prev_a := GridNode.modulate.a
 	GridNode.modulate.a = 0.0
 	
 	await get_tree().process_frame
@@ -393,6 +398,7 @@ func scale_grid() -> void:
 	GridNode.scale = Vector2(s, s)
 	GridNode.modulate.a = prev_a
 	GridNode.setup_cell_corners()
+	scaling_grid = false
 
 
 func reset_tutorial():
