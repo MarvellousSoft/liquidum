@@ -173,7 +173,7 @@ func focus():
 	AnimPlayer.pause()
 	focused = true
 	MouseBlocker.show()
-	enable_focus.emit(global_position, my_section)
+	enable_focus.emit(global_position, my_section, extra)
 
 
 func unfocus():

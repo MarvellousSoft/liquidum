@@ -1,10 +1,10 @@
 [gd_scene load_steps=18 format=3 uid="uid://dc0n1i0v2jf7g"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
-[ext_resource type="StyleBox" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
+[ext_resource type="StyleBox" uid="uid://11yal246hit7" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
 [ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
 [ext_resource type="PackedScene" uid="uid://dl1moq1i2jjs" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
-[ext_resource type="StyleBox" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
+[ext_resource type="StyleBox" uid="uid://cwsbd1i3afg30" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]

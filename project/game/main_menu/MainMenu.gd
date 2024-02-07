@@ -15,6 +15,10 @@ const CAM_POS = {
 }
 const EPS = .001
 const ZOOM_LERP = 4.0
+const EXTRA_LEVEL_ZOOM = {
+	"desktop": 2.1,
+	"mobile": 1.8,
+}
 const LEVEL_ZOOM = {
 	"desktop": 2.6,
 	"mobile": 2.0,
@@ -150,9 +154,12 @@ func _on_back_button_pressed():
 	cur_state = STATES.MAIN_MENU
 
 
-func _on_level_hub_enable_focus(pos, _my_section):
+func _on_level_hub_enable_focus(pos, extra):
 	Camera.position = pos
-	cam_target_zoom = LEVEL_ZOOM.mobile if Global.is_mobile else LEVEL_ZOOM.desktop
+	if not extra:
+		cam_target_zoom = LEVEL_ZOOM.mobile if Global.is_mobile else LEVEL_ZOOM.desktop
+	else:
+		cam_target_zoom = EXTRA_LEVEL_ZOOM.mobile if Global.is_mobile else EXTRA_LEVEL_ZOOM.desktop
 
 
 func _on_level_hub_disable_focus():

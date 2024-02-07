@@ -1,6 +1,6 @@
 extends Control
 
-signal enable_focus(pos : Vector2, my_section : int)
+signal enable_focus(pos : Vector2, extra : bool)
 signal disable_focus()
 
 @onready var Sections = %Sections
@@ -23,7 +23,7 @@ func _ready() -> void:
 func _process(dt):
 	var idx = 1
 	for section in Sections.get_children():
-		Global.alpha_fade_node(dt, section, not level_focused or idx == section_focused, 4.0, true)
+		Global.alpha_fade_node(dt, section, not level_focused or idx == section_focused, 4.0, false)
 		idx += 1
 
 
@@ -95,10 +95,10 @@ func unlock_section(prev_section):
 	section_to_unlock = prev_section + 1
 
 
-func _on_level_section_enable_focus(pos, my_section):
+func _on_level_section_enable_focus(pos, my_section, extra):
 	level_focused = true
 	section_focused = my_section
-	enable_focus.emit(pos, my_section)
+	enable_focus.emit(pos, extra)
 
 
 func _on_level_section_disable_focus():
