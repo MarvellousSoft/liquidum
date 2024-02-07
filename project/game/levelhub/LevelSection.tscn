@@ -321,6 +321,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(300, 0)
+layout_mode = 0
 offset_left = -54.0
 offset_top = 9.0
 offset_right = 246.0
