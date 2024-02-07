@@ -460,7 +460,7 @@ stretch_mode = 0
 [node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
-text = "HIGHLIGHT_LINES"
+text = "HIGHLIGHT_LINES_MOBILE"
 horizontal_alignment = 1
 vertical_alignment = 1
 

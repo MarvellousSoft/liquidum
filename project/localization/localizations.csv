@@ -161,6 +161,7 @@ SEED,Seed,Seed,Seed
 DARK_MODE,Dark mode,Modo escuro,Modo escuro
 BLUE_FILTER,Blue light filter,Filtro de luz azul,Filtro de luz azul
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
+HIGHLIGHT_LINES_MOBILE,Highligh last line touched,Destacar última linha tocada,Destacar última linha tocada
 HIGHLIGHT_HINTS,Highlight finished rows/columns,Destacar linhas/colunas completas,Destacar linhas/colunas completas
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
 DRAG_BUTTON,Fill with drag,Preencher arrastando,Preencher arrastando

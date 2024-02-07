@@ -706,6 +706,7 @@ func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: i
 	if Global.is_mobile:
 		pending_long_touch = Vector3i(i, j, which)
 		LongTouchTimer.start()
+		highlight_grid(i, j)
 	else:
 		_process_click(i, j, which, used_brush)
 
