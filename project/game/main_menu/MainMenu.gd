@@ -100,6 +100,8 @@ func _notification(what: int) -> void:
 
 func update_level_hub():
 	LevelHub.update_sections()
+	if has_node("%ExtraLevelHub"):
+		%ExtraLevelHub.update_sections()
 
 
 func update_profile_button() -> void:

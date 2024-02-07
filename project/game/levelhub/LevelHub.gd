@@ -13,6 +13,11 @@ var section_to_unlock = -1
 @export var extra_levels := false
 
 func _ready() -> void:
+	if extra_levels:
+		while Sections.get_child_count() > 0:
+			var c := Sections.get_child(Sections.get_child_count() - 1)
+			Sections.remove_child(c)
+			c.queue_free()
 	update_sections()
 
 func _process(dt):
@@ -38,11 +43,6 @@ func _on_dev_mode(_on: bool) -> void:
 func update_sections() -> void:
 	var level_lister: LevelLister = ExtraLevelLister as LevelLister if extra_levels else CampaignLevelLister as LevelLister
 	var count: int = level_lister.count_all_game_sections()
-	if extra_levels:
-		while Sections.get_child_count() > 0:
-			var c := Sections.get_child(Sections.get_child_count() - 1)
-			Sections.remove_child(c)
-			c.queue_free()
 	while Sections.get_child_count() < count:
 		var c := preload("res://game/levelhub/LevelSection.tscn").instantiate()
 		Sections.add_child(c)

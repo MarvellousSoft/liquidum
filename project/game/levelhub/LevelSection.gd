@@ -269,7 +269,7 @@ func _on_level_first_win(button):
 	var section_levels = level_lister.count_section_levels(section)
 	if completed_levels < section_levels - level_lister.get_max_unlocked_levels(section):
 		hub.prepare_to_unlock_level(section, level_lister.get_max_unlocked_level(section))
-	elif (completed_levels == section_levels - level_lister.get_max_unlocked_levels(section)) and \
+	elif not extra and (completed_levels == section_levels - level_lister.get_max_unlocked_levels(section)) and \
 		 section < level_lister.count_all_game_sections():
 		hub.unlock_section(section)
 
