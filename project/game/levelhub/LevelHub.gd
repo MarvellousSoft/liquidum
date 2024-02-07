@@ -56,11 +56,12 @@ func update_sections() -> void:
 		var unlocked := level_lister.get_max_unlocked_level(idx)
 		if Global.is_dev_mode():
 			unlocked = level_lister.count_section_levels(idx)
-		if unlocked == 0:
+		section.set_section_name(level_lister.section_name(idx))
+		if unlocked == 0 or level_lister.section_disabled(idx):
 			section.disable()
 		else:
 			section.enable()
-			section.setup(self, idx, unlocked, extra_levels, level_lister.section_name(idx))
+			section.setup(self, idx, unlocked, extra_levels)
 		idx += 1
 
 

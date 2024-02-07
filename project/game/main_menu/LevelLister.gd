@@ -38,3 +38,6 @@ func level_stat(_section: int, _level: int) -> String:
 # Section name, if it has one
 func section_name(_section: int) -> String:
 	return GridModel.must_be_implemented()
+
+func section_disabled(_section: int) -> bool:
+	return GridModel.must_be_implemented()

@@ -150,3 +150,6 @@ func level_stat(section: int, level: int) -> String:
 
 func section_name(_section: int) -> String:
 	return ""
+
+func section_disabled(_section: int) -> bool:
+	return false

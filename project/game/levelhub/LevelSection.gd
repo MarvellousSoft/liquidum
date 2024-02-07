@@ -105,16 +105,17 @@ func _process(dt):
 	for level in Levels.get_children():
 		level.set_effect_alpha(Levels.modulate.a)
 
-
-func setup(hub_ref, section, unlocked_levels, extra_: bool, section_name: String) -> void:
-	extra = extra_
-	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
-	hub = hub_ref
-	set_number(section)
+func set_section_name(section_name: String) -> void:
 	if not section_name.is_empty():
 		%SectionNumber.hide()
 		%SectionName.text = section_name
 		%SectionName.show()
+
+func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
+	extra = extra_
+	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
+	hub = hub_ref
+	set_number(section)
 	for button in Levels.get_children():
 		Levels.remove_child(button)
 		button.queue_free()

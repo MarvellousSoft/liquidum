@@ -83,3 +83,9 @@ func level_stat(section: int, level: int) -> String:
 
 func section_name(section: int) -> String:
 	return _config(section).get_value("section", "name", "No name")
+
+func section_disabled(section: int) -> bool:
+	var dlc: int = _config(section).get_value("section", "dlc", -1)
+	if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
+		return true
+	return false
