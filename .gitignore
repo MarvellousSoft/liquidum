@@ -31,4 +31,5 @@ build/*
 project/override.cfg
 
 # Remove when we actually add DLCs
-project/database/extra_levels/*
+!project/database/extra_levels/.gitkeep
+project/database/extra_levels/*/
