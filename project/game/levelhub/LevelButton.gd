@@ -51,16 +51,24 @@ func _ready():
 func extra_level() -> bool:
 	return lister == ExtraLevelLister
 
-func setup(section : int, level : int, active : bool, extra: bool) -> void:
+func setup(section : int, level: int, active : bool, extra: bool) -> void:
 	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
-	my_level = level
-	MainButton.text = str(level)
+	if level == -1:
+		assert(extra)
+		MainButton.text = "∞"
+	else:
+		my_level = level
+		MainButton.text = str(my_level)
+	
 	# Maybe make this less hardcoded in the future
-	HardIcon.visible = level >= 7 or section == 6
+	HardIcon.visible = my_level == -1 or my_level >= 7 or section == 6
 	if active:
 		enable()
-		data = lister.get_level_user_save(section, level)
+		if my_level == -1:
+			data = ExtraLevelLister.get_endless_user_save(section)
+		else:
+			data = lister.get_level_user_save(section, my_level)
 		change_style_boxes(data and data.is_completed())
 		set_ongoing_solution(data and not data.is_solution_empty())
 	else:
@@ -99,6 +107,30 @@ func disable() -> void:
 	HardIcon.modulate.a = 0.0
 
 
+func load_existing_endless() -> void:
+	var gdata := FileManager.load_extra_endless_level(my_section)
+	if gdata == null:
+		return
+	var key := ExtraLevelLister.endless_level_name(my_section)
+	var level_node := Global.create_level(GridImpl.import_data(gdata.grid_data, GridModel.LoadMode.Solution), key, "", "", ["random", key])
+	level_node.extra_section = my_section
+	TransitionManager.push_scene(level_node)
+
+func gen_and_load_endless() -> void:
+	# There might be an existing save
+	FileManager.clear_level(ExtraLevelLister.endless_level_name(my_section))
+	var gen := RandomLevelGenerator.new()
+	# TODO: Preprocess?
+	var rng := RandomNumberGenerator.new()
+	GeneratingLevel.enable()
+	var grid := await RandomFlavors.gen(gen, rng, ExtraLevelLister.section_endless_flavor(my_section))
+	GeneratingLevel.disable()
+	if grid == null:
+		return
+	var gdata := LevelData.new("", "", grid.export_data(), "")
+	FileManager.save_extra_endless_level(my_section, gdata)
+	load_existing_endless()
+
 func _on_button_pressed():
 	if my_level != -1 and my_section != -1:
 		var level_data := lister.get_level_data(my_section, my_level)
@@ -113,6 +145,14 @@ func _on_button_pressed():
 		level_node.won.connect(_level_completed)
 		level_node.had_first_win.connect(_on_level_had_first_win)
 		TransitionManager.push_scene(level_node)
+	elif my_level == -1 and my_section != -1:
+		assert(extra_level())
+		var has_endless_level := (ExtraLevelLister.get_endless_user_save(my_section) != null)
+		if has_endless_level:
+			# TODO: Add option to start a new one, using ConfirmationDialog
+			load_existing_endless()
+		else:
+			await gen_and_load_endless()
 
 
 func _level_completed(info: Level.WinInfo) -> void:

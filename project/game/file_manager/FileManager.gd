@@ -212,6 +212,18 @@ func save_random_level(data: LevelData) -> void:
 	_no_tutorial(data)
 	_save_json_data(_level_dir(), RANDOM, data.get_data())
 
+func _endless_json(section: int) -> String:
+	return ExtraLevelLister.endless_level_name(section) + JSON_EXT
+
+func load_extra_endless_level(section: int) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_level_dir(), _endless_json(section)))
+	_no_tutorial(data)
+	return data
+
+func save_extra_endless_level(section: int, data: LevelData) -> void:
+	_no_tutorial(data)
+	_save_json_data(_level_dir(), _endless_json(section), data.get_data())
+
 func _daily_basename(date: String) -> String:
 	return "daily_%s" % date
 

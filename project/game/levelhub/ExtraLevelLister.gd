@@ -70,10 +70,16 @@ func count_section_ongoing_solutions(section: int) -> int:
 		level += 1
 	return count
 
-func get_level_user_save(section : int, level : int):
+func get_level_user_save(section : int, level : int) -> UserLevelSaveData:
 	if not FileManager.has_extra_level_data(section, level):
 		push_error("Not a valid extra level (section %s - level %s)" % [str(section), str(level)])
 	return FileManager.load_level(ExtraLevelLister.level_name(section, level))
+
+func endless_level_name(section: int) -> String:
+	return "endless_%02d" % section
+
+func get_endless_user_save(section: int) -> UserLevelSaveData:
+	return FileManager.load_level(ExtraLevelLister.endless_level_name(section))
 
 func get_level_data(section: int, level: int) -> LevelData:
 	return FileManager.load_extra_level_data(section, level)
@@ -89,3 +95,10 @@ func section_disabled(section: int) -> bool:
 	if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
 		return true
 	return false
+
+func section_endless_flavor(section: int) -> int:
+	var flavor_name: String = _config(section).get_value("section", "endless_flavor", "")
+	if flavor_name.is_empty():
+		return -1
+	else:
+		return RandomFlavors.Flavor.get(flavor_name, -1)

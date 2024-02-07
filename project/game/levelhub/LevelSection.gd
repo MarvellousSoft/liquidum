@@ -63,6 +63,7 @@ signal disable_focus()
 @onready var LevelCount = %LevelCount
 @onready var SectionNumber = %SectionNumber
 @onready var LevelInfoContainer = %LevelInfoContainer
+@onready var SectionName = %SectionName
 
 
 var my_section := -1
@@ -96,6 +97,7 @@ func _process(dt):
 		Global.alpha_fade_node(dt, node, not focused, ALPHA_SPEED)
 	Global.alpha_fade_node(dt, LevelInfoContainer, showing_level_info and focused, ALPHA_SPEED)
 	Global.alpha_fade_node(dt, SectionNumber, not focused or not showing_level_info, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, SectionName, not focused or not showing_level_info, ALPHA_SPEED)
 	var central = CENTRAL_POS.mobile if Global.is_mobile else CENTRAL_POS.desktop
 	if focused:
 		if MainButton.position != central:
@@ -107,9 +109,9 @@ func _process(dt):
 
 func set_section_name(section_name: String) -> void:
 	if not section_name.is_empty():
-		%SectionNumber.hide()
-		%SectionName.text = section_name
-		%SectionName.show()
+		SectionNumber.hide()
+		SectionName.text = section_name
+		SectionName.show()
 
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	extra = extra_
@@ -122,17 +124,28 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
+	var flavor := ExtraLevelLister.section_endless_flavor(section) if extra else -1
 	var total_levels := level_lister.count_section_levels(my_section)
 	for i in range(1, total_levels + 1):
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
-		position_level_button(button, total_levels, i)
+		position_level_button(button, total_levels + int(flavor != -1), i)
 		var has_unlock_anim = (my_section == hub.section_to_unlock and i == hub.level_to_unlock)
 		button.setup(my_section, i, i <= unlocked_levels and not has_unlock_anim, extra)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
-		
+	
+	if flavor != -1:
+		assert(extra)
+		var button = LEVELBUTTON.instantiate()
+		Levels.add_child(button)
+		position_level_button(button, total_levels + 1, total_levels + 1)
+		# TODO: Figure out unlock
+		button.setup(my_section, -1, true, true)
+		button.mouse_exited.connect(_on_level_button_mouse_exited)
+		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
+	
 	OngoingSolution.visible = level_lister.count_section_ongoing_solutions(my_section) > 0
 	update_level_count_label()
 	update_style_boxes(is_section_completed())
@@ -256,6 +269,9 @@ func _on_back_button_pressed():
 
 
 func _on_level_button_mouse_entered(level_number : int):
+	if level_number == -1:
+		show_level_info("Endless", false, -1, -1)
+		return
 	var save = FileManager.load_level(level_lister.level_name(my_section, level_number))
 	var data = FileManager.load_extra_level_data(my_section, level_number) if extra else FileManager.load_campaign_level_data(my_section, level_number)
 	if save:
