@@ -13,12 +13,26 @@ func count_all_game_sections() -> int:
 		i += 1
 	return i - 1
 
+var _section_config: Array[ConfigFile] = []
+
+func _config(section: int) -> ConfigFile:
+	while _section_config.size() < section:
+		_section_config.append(null)
+	if _section_config[section - 1] == null:
+		var c := ConfigFile.new()
+		c.load("res://database/extra_levels/%02d/config.ini" % section)
+		_section_config[section - 1] = c
+	return _section_config[section - 1]
+
+func get_initial_unlocked_levels(section: int) -> int:
+	return _config(section).get_value("section", "initial_unlocked", CampaignLevelLister.INITIAL_UNLOCKED_LEVELS)
+
 # Levels 1-return are unlocked in this section. If 0, none is unlocked.
 # For now, extra level sections are always unlocked, but that's not too hard to change
 func get_max_unlocked_level(section: int) -> int:
 	var count_completed := 0
 	var i := 1
-	var initial_unlock = CampaignLevelLister.INITIAL_UNLOCKED_LEVELS
+	var initial_unlock := get_initial_unlocked_levels(section)
 	while FileManager.has_extra_level_data(section, i) and i <= initial_unlock + count_completed:
 		var save := FileManager.load_level(ExtraLevelLister.level_name(section, i))
 		if save != null and save.is_completed():
@@ -66,3 +80,6 @@ func get_level_data(section: int, level: int) -> LevelData:
 
 func level_stat(section: int, level: int) -> String:
 	return "el%02d_%02d" % [section, level]
+
+func section_name(section: int) -> String:
+	return _config(section).get_value("section", "name", "No name")

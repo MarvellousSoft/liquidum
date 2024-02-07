@@ -34,3 +34,7 @@ func get_level_data(_section: int, _level: int) -> LevelData:
 # Stat stored on steam stats
 func level_stat(_section: int, _level: int) -> String:
 	return GridModel.must_be_implemented()
+
+# Section name, if it has one
+func section_name(_section: int) -> String:
+	return GridModel.must_be_implemented()

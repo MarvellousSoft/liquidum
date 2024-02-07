@@ -147,3 +147,6 @@ func get_level_data(section: int, level: int) -> LevelData:
 
 func level_stat(section: int, level: int) -> String:
 	return "l%02d_%02d" % [section, level]
+
+func section_name(_section: int) -> String:
+	return ""

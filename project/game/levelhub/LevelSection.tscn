@@ -317,6 +317,23 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SectionName" type="Label" parent="Button"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 0)
+offset_left = -54.0
+offset_top = 9.0
+offset_right = 246.0
+offset_bottom = 267.0
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 60
+text = "Section name is this one indeed"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
 [node name="LevelInfoContainer" type="MarginContainer" parent="Button"]
 unique_name_in_owner = true
 layout_mode = 0

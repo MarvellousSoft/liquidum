@@ -106,11 +106,15 @@ func _process(dt):
 		level.set_effect_alpha(Levels.modulate.a)
 
 
-func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
+func setup(hub_ref, section, unlocked_levels, extra_: bool, section_name: String) -> void:
 	extra = extra_
 	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	hub = hub_ref
 	set_number(section)
+	if not section_name.is_empty():
+		%SectionNumber.hide()
+		%SectionName.text = section_name
+		%SectionName.show()
 	for button in Levels.get_children():
 		Levels.remove_child(button)
 		button.queue_free()
@@ -265,11 +269,14 @@ func _on_level_button_mouse_exited():
 
 func _on_level_first_win(button):
 	var section = button.my_section
-	var completed_levels = level_lister.count_completed_section_levels(section)
-	var section_levels = level_lister.count_section_levels(section)
-	if completed_levels < section_levels - level_lister.get_max_unlocked_levels(section):
+	var completed_levels := level_lister.count_completed_section_levels(section)
+	var section_levels := level_lister.count_section_levels(section)
+	if extra:
+		if level_lister.get_max_unlocked_level(section) < section_levels:
+			hub.prepare_to_unlock_level(section, level_lister.get_max_unlocked_level(section))
+	elif completed_levels < section_levels - level_lister.get_max_unlocked_levels(section):
 		hub.prepare_to_unlock_level(section, level_lister.get_max_unlocked_level(section))
-	elif not extra and (completed_levels == section_levels - level_lister.get_max_unlocked_levels(section)) and \
+	elif (completed_levels == section_levels - level_lister.get_max_unlocked_levels(section)) and \
 		 section < level_lister.count_all_game_sections():
 		hub.unlock_section(section)
 

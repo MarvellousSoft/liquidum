@@ -60,7 +60,7 @@ func update_sections() -> void:
 			section.disable()
 		else:
 			section.enable()
-			section.setup(self, idx, unlocked, extra_levels)
+			section.setup(self, idx, unlocked, extra_levels, level_lister.section_name(idx))
 		idx += 1
 
 
