@@ -24,6 +24,8 @@ enum Flavor {
 	Everything,
 	# A single hint in the row.
 	OneHint,
+	# small grid, diagonals, basic rules + ?
+	TrickySmall, 
 }
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -113,6 +115,14 @@ static func _one_hint(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	h.apply_to_grid(grid)
 	#RandomHub.hide_too_easy_hints(grid, false, true)
 
+static func _tricky_small(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.total_water = rng.randf() < 0.25
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(-3, a.size()))
+	h.apply_to_grid(grid)
+	RandomHub.hide_too_easy_hints(grid)
+
 static func _builder(options: Generator.Options) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Generator.Options:
 		return options
@@ -124,22 +134,6 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	var b := Generator.builder()
 	match flavor:
-		## Old Tuesday - Diagonals, together/separate
-		#Flavor.Tuesday:
-			#return await l_gen.generate(rng, 5, 5, RandomFlavors._continuity_hints, _builder(b.with_diags()), strategies, [])
-		## Wednesday - Simple, hidden hints
-		#Flavor.Wednesday:
-			#return await l_gen.generate(rng, 6, 6, RandomFlavors._hidden_hints, _builder(b), strategies, [])
-		## Friday - Simple, boats
-		#Flavor.Friday:
-			#var g := await l_gen.generate(rng, 7, 7, RandomFlavors._simple_boats, _builder(b.with_diags().with_boats()), strategies, [], true)
-			#assert(g._any_sol_boats())
-			#return g
-		#Flavor.Saturday:
-			#return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _builder(b), strategies, [])
-		## Sunday - Diagonals, boats
-		#Flavor.Sunday:
-			#return await l_gen.generate(rng, 6, 6, RandomFlavors._continuity_hints, _builder(b.with_diags().with_boats()), strategies, [], true)
 		Flavor.Diagonals:
 			return await l_gen.generate(rng, 5, 5, RandomFlavors._simple_hints, _builder(b.with_diags()), strategies, [])
 		Flavor.Basic:
@@ -154,6 +148,10 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate(rng, 5, 4, RandomFlavors._aquariums, RandomFlavors._aquarium_builder, strategies, [])
 		Flavor.OneHint:
 			return await l_gen.generate(rng, 6, 6, RandomFlavors._one_hint, _builder(b), strategies, [])
+		Flavor.TrickySmall:
+			var rows := rng.randi_range(3, 4)
+			var cols := rng.randi_range(3, 4)
+			return await l_gen.generate(rng, rows, cols, RandomFlavors._tricky_small, _builder(b.with_diags()), strategies, [])
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null
