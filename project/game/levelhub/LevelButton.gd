@@ -149,8 +149,13 @@ func _on_button_pressed():
 		assert(extra_level())
 		var has_endless_level := (ExtraLevelLister.get_endless_user_save(my_section) != null)
 		if has_endless_level:
-			# TODO: Add option to start a new one, using ConfirmationDialog
-			load_existing_endless()
+			if ConfirmationScreen.start_confirmation(&"CONFIRMATION_NEW_ENDLESS", &"ENDLESS_CONTINUE", &"ENDLESS_NEW"):
+				if await ConfirmationScreen.pressed:
+					load_existing_endless()
+				else:
+					await gen_and_load_endless()
+			else:
+				load_existing_endless()
 		else:
 			await gen_and_load_endless()
 

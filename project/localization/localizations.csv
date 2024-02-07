@@ -252,3 +252,6 @@ HOVER,Hover,Passar,Passar
 SHOW_BUBBLES,Show bubbles in background,Mostrar bolhas no fundo,Mostrar bolhas no fundo
 EXTRA_LEVELS_BUTTON,Extra islands,Ilhas extra,Ilhas extra
 EXTRA_LEVELS_TOOLTIP,Levels from DLCs,Níveis de DLCs,Níveis de DLCs
+CONFIRMATION_NEW_ENDLESS,Do you want to continue your progress or create a new level?,Você deseja continuar seu progresso ou criar um nível novo?,Você deseja continuar seu progresso ou criar um nível novo?
+ENDLESS_CONTINUE,Continue,Continuar,Continuar
+ENDLESS_NEW,New level,Novo nível,Novo nível
