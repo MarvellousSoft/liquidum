@@ -76,6 +76,9 @@ func _input(event: InputEvent) -> void:
 			is_long_touching = false
 			mouse_hold_status = E.MouseDragState.None
 			previous_wall_index = []
+			if Global.is_mobile:
+				# Remove highlight
+				highlight_grid(-1, -1)
 	elif grid_logic and event.is_action_pressed(&"undo"):
 		grid_logic.undo()
 		update()
