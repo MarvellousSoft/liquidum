@@ -33,6 +33,17 @@ func _item_downloaded(app_id: int, _id: int, _res: int) -> void:
 	if app_id == SteamManager.APP_ID:
 		reload_all_levels()
 
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		_back_logic()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"return"):
+		_back_logic()
+
+func _back_logic() -> void:
+	_on_back_pressed()
+
 func _on_back_pressed():
 	AudioManager.play_sfx("button_back")
 	TransitionManager.pop_scene()
