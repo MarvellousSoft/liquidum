@@ -66,3 +66,7 @@ icon = ExtResource("5_r7ve2")
 
 [connection signal="mouse_entered" from="HBoxContainer/Open" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="HBoxContainer/Open" to="." method="_on_open_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/ThumbUp" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="HBoxContainer/ThumbUp" to="." method="_on_thumb_toggled" binds= [true]]
+[connection signal="mouse_entered" from="HBoxContainer/ThumbDown" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="HBoxContainer/ThumbDown" to="." method="_on_thumb_toggled" binds= [false]]
