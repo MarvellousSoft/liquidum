@@ -1,11 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://dte2gdbdkw8ap"]
+[gd_scene load_steps=6 format=3 uid="uid://dte2gdbdkw8ap"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_mrar7"]
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_v4w4y"]
+[ext_resource type="Texture2D" uid="uid://cbroo6eud8n15" path="res://assets/images/icons/thumb-up.png" id="4_tofat"]
+[ext_resource type="Texture2D" uid="uid://3ryoreoxabsw" path="res://assets/images/icons/thumb-down.png" id="5_r7ve2"]
 
 [node name="WorkshopLevelButton" type="MarginContainer"]
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 theme = ExtResource("1_mrar7")
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 30
@@ -13,13 +15,19 @@ theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 30
 script = ExtResource("2_7eonp")
 
-[node name="Open" type="Button" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 75
+alignment = 1
+
+[node name="Open" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 auto_translate = false
 focus_mode = 0
 text = "My workshop level name"
 
-[node name="OngoingSolution" parent="Open" instance=ExtResource("3_v4w4y")]
+[node name="OngoingSolution" parent="HBoxContainer/Open" instance=ExtResource("3_v4w4y")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -34,5 +42,27 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="mouse_entered" from="Open" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Open" to="." method="_on_open_pressed"]
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="ThumbUp" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+disabled = true
+toggle_mode = true
+icon = ExtResource("4_tofat")
+
+[node name="ThumbDown" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+disabled = true
+toggle_mode = true
+icon = ExtResource("5_r7ve2")
+
+[connection signal="mouse_entered" from="HBoxContainer/Open" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/Open" to="." method="_on_open_pressed"]

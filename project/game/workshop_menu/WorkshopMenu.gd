@@ -6,6 +6,8 @@ extends Control
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	SteamManager.steam.item_downloaded.connect(_item_downloaded)
+	SteamManager.steam.item_installed.connect(_item_installed)
 
 
 func _enter_tree() -> void:
@@ -22,8 +24,9 @@ func reload_all_levels() -> void:
 		var button := button_class.instantiate()
 		button.id = id
 		Buttons.add_child(button)
-	SteamManager.steam.item_downloaded.connect(_item_downloaded)
-	SteamManager.steam.item_installed.connect(_item_installed)
+	for idx in Buttons.get_child_count():
+		await Buttons.get_child(idx).get_vote()
+
 
 func _item_installed(app_id: int, _id: int) -> void:
 	if app_id == SteamManager.APP_ID:

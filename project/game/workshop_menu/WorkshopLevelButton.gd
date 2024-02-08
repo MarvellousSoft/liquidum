@@ -2,7 +2,7 @@ extends Control
 
 var id: int
 
-@onready var Open: Button = $Open
+@onready var Open: Button = %Open
 @onready var OngoingSolution = %OngoingSolution
 var tween_check: Tween
 
@@ -15,6 +15,13 @@ func _ready() -> void:
 	OngoingSolution.hide()
 	try_check_download()
 
+func _on_vote_received(up: bool, down: bool, _skipped: bool) -> void:
+	%ThumbUp.disabled = false
+	%ThumbDown.disabled = false
+	%ThumbUp.button_pressed = up
+	%ThumbDown.button_pressed = down
+
+
 func load_level() -> LevelData:
 	var info: Dictionary = SteamManager.steam.getItemInstallInfo(id)
 	if not info.ret:
@@ -22,6 +29,14 @@ func load_level() -> LevelData:
 	var folder := ProjectSettings.localize_path(info.folder)
 	return FileManager.load_workshop_level(folder)
 
+func get_vote() -> void:
+	if Open.disabled or not SteamManager.enabled:
+		return
+	Steam.getUserItemVote(id)
+	var ret: Array = await Steam.get_item_vote_result
+	if ret[0] == Steam.RESULT_OK:
+		assert(ret[1] == id)
+		_on_vote_received(ret[2], ret[3], ret[4])
 
 func try_check_download() -> void:
 	var level := load_level()
