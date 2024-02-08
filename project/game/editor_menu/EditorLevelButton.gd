@@ -34,10 +34,18 @@ func _on_button_mouse_entered():
 
 
 func _create_grid_image(grid_logic: GridModel) -> void:
+	const BASE_SIZE := 1024.0
 	var v := SubViewport.new()
 	var bg := ColorRect.new()
 	bg.color = Color(0.192, 0.69, 0.69)
-	bg.size = Vector2(512, 512)
+	var w := BASE_SIZE
+	var h := BASE_SIZE
+	if grid_logic.rows() < grid_logic.cols():
+		h = BASE_SIZE * grid_logic.rows() / grid_logic.cols()
+	else:
+		w = BASE_SIZE * grid_logic.cols() / grid_logic.rows()
+	bg.size = Vector2(w, h)
+	v.size = bg.size
 	bg.z_index = -10
 	v.add_child(bg)
 	var view: GridView = preload("res://game/level/GridView.tscn").instantiate()
@@ -47,10 +55,12 @@ func _create_grid_image(grid_logic: GridModel) -> void:
 	view.setup(grid_logic, true)
 	await RenderingServer.frame_post_draw
 	var sz := view.get_grid_size()
-	view.scale = Vector2(512.0 / sz.x, 512.0 / sz.y)
-	view.position = Vector2(256, 256)
+	var sc := minf(w / sz.x, h / sz.y)
+	view.scale = Vector2(sc, sc)
+	view.position = bg.size / 2.0
 	await RenderingServer.frame_post_draw
-	var img := v.get_texture().get_image()
+	var tex := v.get_texture()
+	var img := tex.get_image()
 	img.save_png(IMG_FILE)
 	remove_child(v)
 
@@ -97,6 +107,7 @@ func _on_upload_button_pressed() -> void:
 	if err != Error.OK:
 		push_warning("Failed to delete image preview: %d" % err)
 	UploadButton.disabled = false
+	SteamManager.steam.activateGameOverlayToWebPage("https://steamcommunity.com/sharedfiles/filedetails/?id=%s" % metadata.steam_id)
 
 
 func _on_edit_button_pressed():
