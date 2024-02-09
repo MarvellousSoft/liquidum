@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dl1moq1i2jjs"]
+[gd_scene load_steps=19 format=3 uid="uid://dl1moq1i2jjs"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
@@ -85,6 +85,23 @@ tracks/4/keys = {
 "values": [Color(0.85098, 1, 0.886275, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_kv2hu"]
+resource_name = "float"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.3, 2.6, 4, 5.3, 6.6, 7.8, 9.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(18, -40), Vector2(-50, -107), Vector2(-83, -43), Vector2(-74, 15), Vector2(-25, -31), Vector2(-74, -112), Vector2(53, -120)]
+}
+
 [sub_resource type="Animation" id="Animation_sl2us"]
 resource_name = "unlock"
 length = 3.0
@@ -169,6 +186,7 @@ tracks/5/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4p2d0"]
 _data = {
 "RESET": SubResource("Animation_yarop"),
+"float": SubResource("Animation_kv2hu"),
 "unlock": SubResource("Animation_sl2us")
 }
 

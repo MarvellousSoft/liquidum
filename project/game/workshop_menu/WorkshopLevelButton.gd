@@ -26,8 +26,8 @@ func _on_vote_received(up: bool, down: bool, _skipped: bool) -> void:
 	%ThumbDown.button_pressed = down
 
 
-static func load_level_from_id(id: int) -> LevelData:
-	var info: Dictionary = SteamManager.steam.getItemInstallInfo(id)
+static func load_level_from_id(w_id: int) -> LevelData:
+	var info: Dictionary = SteamManager.steam.getItemInstallInfo(w_id)
 	if not info.ret:
 		return null
 	var folder := ProjectSettings.localize_path(info.folder)
@@ -44,10 +44,6 @@ func get_vote() -> void:
 	if ret[0] == SteamManager.steam.RESULT_OK:
 		assert(ret[1] == id)
 		_on_vote_received(ret[2], ret[3], ret[4])
-
-
-func _on_open_pressed() -> void:
-	var level_data := load_level()
 
 
 static func _level_completed(info: Level.WinInfo) -> void:

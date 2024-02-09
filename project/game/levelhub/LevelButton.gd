@@ -94,6 +94,12 @@ func setup_workshop(level_data: LevelData, id: int) -> void:
 	MainButton.text = ""
 	HardIcon.hide()
 	%AlternateText.show()
+	if randf() < 0.5:
+		AnimPlayer.play("float")
+	else:
+		AnimPlayer.play_backwards("float")
+	AnimPlayer.speed_scale = 0.9 + randf() * 0.2
+	AnimPlayer.advance(AnimPlayer.current_animation_length * randf())
 	if level_data != null:
 		%AlternateText.text = level_data.full_name
 		enable()
