@@ -30,6 +30,8 @@ func _ready() -> void:
 		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
 		if dif == "insane":
 			open = open and CampaignLevelLister.all_campaign_levels_completed()
+			if Global.is_mobile:
+				%UnlockText.visible = not open
 		if open or Global.is_dev_mode():
 			button.tooltip_text = "%s_TOOLTIP" % dif_name.to_upper()
 		else:
@@ -67,7 +69,7 @@ func _exit_tree() -> void:
 
 
 func _update() -> void:
-	var has_random_level := (FileManager.load_level(RANDOM) != null)
+	var has_random_level := (FileManager.load_level(RANDOM) != null and FileManager.load_random_level() != null)
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level
 	if has_random_level:

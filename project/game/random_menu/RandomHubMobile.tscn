@@ -103,6 +103,18 @@ size_flags_vertical = 3
 focus_mode = 0
 text = "INSANE_BUTTON"
 
+[node name="UnlockText" type="Label" parent="Difficulties/VBox"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 30
+text = "UNLOCK_RANDOM_MOBILE"
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
