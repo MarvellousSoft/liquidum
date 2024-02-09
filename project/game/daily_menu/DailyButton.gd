@@ -44,6 +44,10 @@ func _update() -> void:
 	NotCompleted.visible = unlocked
 	Completed.visible = false
 	OngoingSolution.visible = false
+	if Global.is_mobile:
+		%DailyUnlockText.visible = not unlocked
+		# Looks better
+		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 	if unlocked:
 		MainButton.tooltip_text = "DAILY_TOOLTIP"
 	else:

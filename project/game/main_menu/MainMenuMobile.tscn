@@ -100,14 +100,15 @@ layout_mode = 2
 theme_override_constants/separation = 17
 alignment = 1
 
-[node name="HBox" type="HBoxContainer" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer"]
+[node name="DailyHBox" type="HBoxContainer" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_constants/separation = 70
 alignment = 2
 
-[node name="Completed" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox"]
+[node name="Completed" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox"]
 unique_name_in_owner = true
 visible = false
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
@@ -118,7 +119,7 @@ tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
 texture = ExtResource("9_fra4p")
 expand_mode = 1
 
-[node name="NotCompleted" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox"]
+[node name="NotCompleted" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -132,7 +133,7 @@ theme_override_font_sizes/font_size = 75
 text = " !"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox"]
+[node name="Button" type="Button" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -140,7 +141,7 @@ tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_BUTTON"
 
-[node name="OngoingSolution" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox/Button" instance=ExtResource("10_4sssi")]
+[node name="OngoingSolution" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" instance=ExtResource("10_4sssi")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 70)
 offset_left = -52.0
@@ -224,6 +225,17 @@ theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 20
 text = "LESS_THREE_MISTAKES"
 horizontal_alignment = 1
+
+[node name="DailyUnlockText" type="Label" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 30
+text = "DAILY_UNLOCK_MOBILE"
+horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="Timer" type="Timer" parent="MainButtonsContainer/VBoxContainer/DailyButton"]
 wait_time = 30.0
@@ -338,7 +350,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/MenuProfileButton" to="." method="_on_profile_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/HBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_timer_timeout"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
