@@ -230,6 +230,23 @@ offset_bottom = 388.0
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
 
+[node name="AlternateText" type="Label" parent="Button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = -64.0
+offset_top = -11.0
+offset_right = 262.0
+offset_bottom = 293.0
+theme_override_colors/font_outline_color = Color(0.0784314, 0.364706, 0.529412, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 50
+text = "Alternate level name that's very very big"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text_overrun_behavior = 3
+
 [node name="OngoingSolution" parent="." instance=ExtResource("4_tmmmn")]
 unique_name_in_owner = true
 

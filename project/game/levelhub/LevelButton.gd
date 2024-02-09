@@ -1,3 +1,4 @@
+class_name LevelButton
 extends Control
 
 const STYLES = {
@@ -38,8 +39,20 @@ signal had_first_win
 
 var my_section := -1
 var my_level := -1
+var workshop_id := -1
 var data = false
 var lister: LevelLister = null
+
+var disabled: bool :
+	get:
+		return disabled
+	set(x):
+		disabled = x
+		if x:
+			disable()
+		else:
+			enable()
+		
 
 
 func _ready():
@@ -52,6 +65,7 @@ func extra_level() -> bool:
 	return lister == ExtraLevelLister
 
 func setup(section : int, level: int, active : bool, extra: bool) -> void:
+	%AlternateText.queue_free()
 	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
 	if level == -1:
@@ -74,6 +88,21 @@ func setup(section : int, level: int, active : bool, extra: bool) -> void:
 	else:
 		set_ongoing_solution(false)
 		disable()
+
+func setup_workshop(level_data: LevelData, id: int) -> void:
+	workshop_id = id
+	MainButton.text = ""
+	HardIcon.hide()
+	%AlternateText.show()
+	if level_data != null:
+		%AlternateText.text = level_data.full_name
+		enable()
+		data = FileManager.load_level(str(id))
+		change_style_boxes(data and data.is_completed())
+		set_ongoing_solution(data and not data.is_solution_empty())
+	else:
+		%AlternateText.text = "NOT_INSTALLED"
+		set_ongoing_solution(false)
 
 
 func unlock():
@@ -158,6 +187,15 @@ func _on_button_pressed():
 				load_existing_endless()
 		else:
 			await gen_and_load_endless()
+	elif workshop_id != -1:
+		var level_data := WorkshopLevelButton.load_level_from_id(workshop_id)
+		if level_data == null:
+			return
+		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), str(workshop_id), level_data.full_name, level_data.description, ["workshop"])
+		level.workshop_id = workshop_id
+		level.won.connect(WorkshopLevelButton._level_completed)
+		TransitionManager.push_scene(level)
+
 
 
 func _level_completed(info: Level.WinInfo) -> void:

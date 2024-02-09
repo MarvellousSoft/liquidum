@@ -22,7 +22,6 @@ offset_top = 100.0
 offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
-horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
 layout_mode = 2

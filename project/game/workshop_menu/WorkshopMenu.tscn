@@ -14,72 +14,100 @@ grow_vertical = 2
 theme = ExtResource("1_7r58g")
 script = ExtResource("2_hwdrt")
 
-[node name="Title" type="Label" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
-offset_top = 406.0
+mouse_filter = 2
+
+[node name="TopPart" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(3840, 600)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="ScrollContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+offset_top = 278.0
 offset_right = 3840.0
-offset_bottom = 504.0
+offset_bottom = 419.0
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
 theme_override_font_sizes/font_size = 120
 text = "WORKSHOP_LEVELS"
 horizontal_alignment = 1
 
-[node name="Back" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 75.0
+[node name="OpenWorkshop" type="Button" parent="ScrollContainer/VBoxContainer/TopPart"]
+layout_mode = 2
+offset_left = 3002.0
 offset_top = 75.0
-focus_mode = 0
-text = "BACK"
-
-[node name="OpenWorkshop" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_top = 75.0
-offset_right = -75.0
+offset_right = 3765.0
+offset_bottom = 184.0
 grow_horizontal = 0
 focus_mode = 0
 text = "OPEN_WORKSHOP"
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.3
-anchor_right = 1.0
-anchor_bottom = 0.9
-
-[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(2000, 1300)
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_bottom = 400
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="CenterContainer/ScrollContainer"]
+[node name="ButtonsContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 20
-alignment = 1
+theme_override_constants/h_separation = 1200
+theme_override_constants/v_separation = 1000
+columns = 3
 
-[node name="WorkshopLevelButton" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
 layout_mode = 2
+size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton2" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton2" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
 layout_mode = 2
+size_flags_horizontal = 6
 
-[node name="Open" parent="CenterContainer/ScrollContainer/ButtonsContainer/WorkshopLevelButton2/HBoxContainer" index="0"]
-text = "Other level"
-
-[node name="WorkshopLevelButton3" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton3" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
 layout_mode = 2
+size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton4" parent="CenterContainer/ScrollContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton4" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
 layout_mode = 2
+size_flags_horizontal = 6
 
+[node name="WorkshopLevelButton5" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="WorkshopLevelButton6" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="WorkshopLevelButton7" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="WorkshopLevelButton8" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 2
+offset_left = 60.0
+offset_top = 75.0
+offset_right = 302.0
+offset_bottom = 184.0
+focus_mode = 0
+text = "BACK"
+
+[connection signal="mouse_entered" from="ScrollContainer/VBoxContainer/TopPart/OpenWorkshop" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/TopPart/OpenWorkshop" to="." method="_on_open_workshop_pressed"]
 [connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
-[connection signal="mouse_entered" from="OpenWorkshop" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="OpenWorkshop" to="." method="_on_open_workshop_pressed"]
-
-[editable path="CenterContainer/ScrollContainer/ButtonsContainer/WorkshopLevelButton"]
-[editable path="CenterContainer/ScrollContainer/ButtonsContainer/WorkshopLevelButton2"]

@@ -1,6 +1,6 @@
 extends Control
 
-@onready var Buttons: BoxContainer = %ButtonsContainer
+@onready var Buttons: GridContainer = %ButtonsContainer
 
 
 func _ready():
