@@ -71,3 +71,8 @@ func _on_thumb_toggled(now_pressed: bool, up: bool) -> void:
 		var ret: Array = await SteamManager.steam.set_user_item_vote
 		if ret[0] != SteamManager.steam.RESULT_OK:
 			push_warning("Failed to vote")
+
+
+func _on_open_outside_pressed() -> void:
+	if SteamManager.enabled:
+		SteamManager.steam.activateGameOverlayToWebPage("https://steamcommunity.com/sharedfiles/filedetails/?id=%s" % id)

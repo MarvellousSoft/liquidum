@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dte2gdbdkw8ap"]
+[gd_scene load_steps=6 format=3 uid="uid://dte2gdbdkw8ap"]
 
 [ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
 [ext_resource type="PackedScene" uid="uid://dl1moq1i2jjs" path="res://game/levelhub/LevelButton.tscn" id="2_gtk5o"]
 [ext_resource type="Texture2D" uid="uid://cbroo6eud8n15" path="res://assets/images/icons/thumb-up.png" id="4_tofat"]
+[ext_resource type="Texture2D" uid="uid://dgo2eiiw66bp3" path="res://assets/images/icons/open_outside.png" id="5_d1g4h"]
 [ext_resource type="Texture2D" uid="uid://3ryoreoxabsw" path="res://assets/images/icons/thumb-down.png" id="5_r7ve2"]
 
 [node name="WorkshopLevelButton" type="Control"]
@@ -50,8 +51,21 @@ toggle_mode = true
 icon = ExtResource("5_r7ve2")
 expand_icon = true
 
+[node name="OpenOutside" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = -405.0
+offset_top = 265.0
+offset_right = -305.0
+offset_bottom = 365.0
+size_flags_horizontal = 8
+focus_mode = 0
+icon = ExtResource("5_d1g4h")
+expand_icon = true
+
 [connection signal="mouse_entered" from="Open" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="ThumbUp" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="ThumbUp" to="." method="_on_thumb_toggled" binds= [true]]
 [connection signal="mouse_entered" from="ThumbDown" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="ThumbDown" to="." method="_on_thumb_toggled" binds= [false]]
+[connection signal="mouse_entered" from="OpenOutside" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="OpenOutside" to="." method="_on_open_outside_pressed"]
