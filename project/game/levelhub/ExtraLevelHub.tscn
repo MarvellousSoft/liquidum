@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3dumcbhvuaox"]
+[gd_scene load_steps=3 format=3 uid="uid://b684of0yteu0u"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelHub.gd" id="1_bxko5"]
 [ext_resource type="PackedScene" uid="uid://dc0n1i0v2jf7g" path="res://game/levelhub/LevelSection.tscn" id="1_t5l7o"]

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 [ext_resource type="Script" path="res://game/main_menu/DiscordButton.gd" id="4_r0s65"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
-[ext_resource type="PackedScene" uid="uid://d3dumcbhvuaox" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
+[ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_vktdt"]
 diffuse_texture = ExtResource("3_nnq5w")
