@@ -915,8 +915,8 @@ func _on_share_button_pressed() -> void:
 		share.shareText("Liquidum", "subject", text)
 	else:
 		DisplayServer.clipboard_set(text)
-	%ShareButton.disabled = true
-	%ShareButton.text = "COPIED_TO_CLIPBOARD"
+	if OS.get_name() != "Android":
+		%ShareButton.text = "COPIED_TO_CLIPBOARD"
 
 
 func _on_tutorial_display_tutorial_closed():
