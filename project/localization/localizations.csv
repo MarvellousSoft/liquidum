@@ -259,6 +259,6 @@ ENDLESS_CONTINUE,Continue,Continuar,Continuar
 ENDLESS_NEW,New level,Novo nível,Novo nível
 MARATHON_MODE,Marathon mode,Modo maratona,Modo maratona
 MARATHON_TOOLTIP,"Play multiple levels in a row, with shared time and mistakes.","Jogue múltiplos níveis em seguida, com tempo e erros compartilhados.","Jogue múltiplos níveis em seguida, com tempo e erros compartilhados."
-CONTINUE_MARATHON,Continue marathon,Continuar maratona,Continuar maratona
+CONTINUE_MARATHON,Continue marathon (%d left),Continuar maratona (faltam %d),Continuar maratona (faltam %d)
 FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
-ABANDON_MARATHON,Abandon marathon,Abandonar maratona,Abandonar maratona
+ABANDON_MARATHON,Abandon,Desistir,Desistir

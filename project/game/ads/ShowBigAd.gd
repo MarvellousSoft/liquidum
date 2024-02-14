@@ -4,6 +4,8 @@ extends Control
 var marathon_dif := -1
 var marathon_left := -1
 var marathon_seed := ""
+var marathon_time := -1.0
+var marathon_mistakes := -1
 
 func _ready() -> void:
 	if not Global.is_mobile:
@@ -16,7 +18,7 @@ func exit_ad() -> void:
 		AdManager.destroy_big_ad()
 		if marathon_dif != -1:
 			var random_hub: RandomHub = TransitionManager.stack.back()
-			await random_hub.continue_marathon(marathon_dif, marathon_left, marathon_seed, true)
+			await random_hub.continue_marathon(marathon_dif, marathon_left, marathon_seed, true, marathon_time, marathon_mistakes)
 		elif Global.play_new_dif_again != -1:
 			TransitionManager.stack.back()._play_new_level_again()
 		else:

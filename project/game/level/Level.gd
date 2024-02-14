@@ -75,8 +75,9 @@ class WinInfo:
 var update_expected_waters : bool
 var update_expected_boats : bool
 var process_game := false
-var running_time : float
+var running_time : float = 0
 var grid: GridModel = null
+var initial_mistakes := 0
 var level_name := ""
 var level_number := -1
 var section_number := -1
@@ -118,6 +119,7 @@ func _ready():
 		%PlaytestButton.visible = false
 		%UniquenessCheck.visible = false
 	set_level_names_and_descriptions()
+	update_timer_label()
 	if not Global.is_mobile:
 		reset_tutorial()
 	else:
@@ -129,7 +131,7 @@ func _ready():
 	if marathon_left == 0:
 		%ContinueButton.text = "FINISH_MARATHON"
 	elif marathon_left > 0:
-		%ContinueButton.text = "CONTINUE_MARATHON"
+		%ContinueButton.text = tr("CONTINUE_MARATHON") % [marathon_left]
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -249,9 +251,9 @@ func setup(try_load := true) -> void:
 		else:
 			%AquariumButton/FingerAnim.queue_free()
 	BrushPicker.nowater_finger_anim(Global.is_mobile and section_number == 1 and level_number == 2)
-	running_time = 0
 	game_won = false
 	last_saved = Time.get_ticks_msec()
+	Counters.mistake.set_count(initial_mistakes)
 	
 	var visibility := HintVisibility.default(grid.rows(), grid.cols())
 	
@@ -805,12 +807,14 @@ func _on_continue_button_pressed() -> void:
 		show_big_ad.marathon_dif = difficulty
 		show_big_ad.marathon_left = marathon_left
 		show_big_ad.marathon_seed = marathon_seed
+		show_big_ad.marathon_time = running_time
+		show_big_ad.marathon_mistakes = int(Counters.mistake.count)
 		TransitionManager.change_scene(show_big_ad)
 	elif marathon_left == -1:
 		TransitionManager.pop_scene()
 	else:
 		var random_hub: RandomHub = TransitionManager.stack.back()
-		await random_hub.continue_marathon(difficulty, marathon_left, marathon_seed, true)
+		await random_hub.continue_marathon(difficulty, marathon_left, marathon_seed, true, running_time, int(Counters.mistake.count))
 
 
 func _on_description_edit_text_changed() -> void:

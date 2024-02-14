@@ -114,7 +114,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 			return null
 
 
-func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scene: bool) -> void:
+func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scene: bool, start_time: float, start_mistakes: int) -> void:
 	if left == 0:
 		TransitionManager.pop_scene()
 		return
@@ -123,10 +123,10 @@ func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scen
 	if change_scene:
 		# Hack so the following function uses TransitionManager.change_scene
 		Global.play_new_dif_again = 0
-	await gen_and_play(rng, dif, left - 1, seed_str)
+	await gen_and_play(rng, dif, left - 1, seed_str, start_time, start_mistakes)
 	Global.play_new_dif_again = -1
 
-func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_seed: String) -> void:
+func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_seed: String, marathon_time: float, marathon_mistakes: int) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
@@ -141,10 +141,10 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: in
 	data.marathon_left = marathon_left
 	data.marathon_seed = marathon_seed
 	FileManager.save_random_level(data)
-	load_existing()
+	load_existing(marathon_time, marathon_mistakes)
 
 
-func load_existing() -> void:
+func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 	var data := FileManager.load_random_level()
 	if data == null:
 		return
@@ -153,8 +153,13 @@ func load_existing() -> void:
 		tracking.append("marathon")
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", tracking)
 	level.difficulty = data.difficulty
-	level.marathon_left = data.marathon_left
-	level.marathon_seed = data.marathon_seed
+	if data.marathon_left != -1:
+		level.marathon_left = data.marathon_left
+		level.marathon_seed = data.marathon_seed
+		level.reset_mistakes_on_empty = false
+		level.reset_mistakes_on_reset = false
+		level.running_time = marathon_time
+		level.initial_mistakes = marathon_mistakes
 	level.won.connect(_level_completed.bind(data.difficulty))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
@@ -179,7 +184,7 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty) -> void:
 
 func _on_continue_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	load_existing()
+	load_existing(0, 0)
 
 
 static func _vis_array_or(rng: RandomNumberGenerator, a: Array[int], val: int, count: int) -> void:
@@ -268,7 +273,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	if marathon != 1:
 		if seed_str.is_empty():
 			seed_str = str(randi())
-		await continue_marathon(dif, marathon, seed_str, false)
+		await continue_marathon(dif, marathon, seed_str, false, 0, 0)
 		return
 	if seed_str.is_empty():
 		var data := UserData.current()
@@ -281,7 +286,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 			rng.state = success_state
 	else:
 		rng.seed = RandomHub.consistent_hash(seed_str)
-	await gen_and_play(rng, dif, -1, "")
+	await gen_and_play(rng, dif, -1, "", 0, 0)
 
 
 func _on_cancel_gen_pressed():
