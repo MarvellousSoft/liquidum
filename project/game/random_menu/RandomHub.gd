@@ -110,11 +110,23 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 		Difficulty.Insane:
 			return await l_gen.generate(rng, 6, 6, RandomHub._expert_visibility, RandomHub._expert_options, SolverModel.STRATEGY_LIST.keys(), [])
 		_:
-			push_error("Uknown difficulty %d" % dif)
+			push_error("Unknown difficulty %d" % dif)
 			return null
 
 
-func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
+func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scene: bool) -> void:
+	if left == 0:
+		TransitionManager.pop_scene()
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.seed = RandomHub.consistent_hash("%s-%d" % [seed_str, left])
+	if change_scene:
+		# Hack so the following function uses TransitionManager.change_scene
+		Global.play_new_dif_again = 0
+	await gen_and_play(rng, dif, left - 1, seed_str)
+	Global.play_new_dif_again = -1
+
+func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_seed: String) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
@@ -126,6 +138,8 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty) -> void:
 	FileManager.clear_level(RANDOM)
 	var data := LevelData.new("", "", g.export_data(), "")
 	data.difficulty = dif
+	data.marathon_left = marathon_left
+	data.marathon_seed = marathon_seed
 	FileManager.save_random_level(data)
 	load_existing()
 
@@ -134,8 +148,13 @@ func load_existing() -> void:
 	var data := FileManager.load_random_level()
 	if data == null:
 		return
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()])
+	var tracking: Array[String] = ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()]
+	if data.marathon_left != -1:
+		tracking.append("marathon")
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", tracking)
 	level.difficulty = data.difficulty
+	level.marathon_left = data.marathon_left
+	level.marathon_seed = data.marathon_seed
 	level.won.connect(_level_completed.bind(data.difficulty))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
@@ -233,7 +252,6 @@ static func _expert_visibility(rng: RandomNumberGenerator, grid: GridModel) -> v
 	hide_too_easy_hints(grid)
 	if rng.randf() < 0.35:
 		Generator.randomize_aquarium_hints(rng, grid)
-	
 
 # We're using this to generate seeds from sequential numbers since Godot docs says
 # similar seeds might lead to similar values.
@@ -246,6 +264,12 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		return
 	var rng := RandomNumberGenerator.new()
 	var seed_str: String = $Seed.text if has_node("Seed") else ""
+	var marathon := floori(%Marathon/Slider.value if has_node(^"%Marathon") else 1.0)
+	if marathon != 1:
+		if seed_str.is_empty():
+			seed_str = str(randi())
+		await continue_marathon(dif, marathon, seed_str, false)
+		return
 	if seed_str.is_empty():
 		var data := UserData.current()
 		data.random_levels_created[dif] += 1
@@ -257,7 +281,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 			rng.state = success_state
 	else:
 		rng.seed = RandomHub.consistent_hash(seed_str)
-	await gen_and_play(rng, dif)
+	await gen_and_play(rng, dif, -1, "")
 
 
 func _on_cancel_gen_pressed():
@@ -277,3 +301,7 @@ func _on_dark_mode_changed(is_dark : bool):
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+func _on_marathon_button_pressed() -> void:
+	%Marathon/Button.hide()
+	%Marathon/Slider.show()

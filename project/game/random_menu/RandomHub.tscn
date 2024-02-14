@@ -118,10 +118,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -335.0
+offset_top = -127.0
 offset_right = -50.0
 offset_bottom = -50.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_font_sizes/font_size = 60
 placeholder_text = "SEED"
 max_length = 10
 virtual_keyboard_type = 2
@@ -255,6 +258,35 @@ text = "999
 "
 horizontal_alignment = 2
 
+[node name="Marathon" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -50.0
+offset_bottom = -170.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Button" type="Button" parent="Marathon"]
+layout_mode = 2
+tooltip_text = "MARATHON_TOOLTIP"
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "MARATHON_MODE"
+
+[node name="Slider" type="SpinBox" parent="Marathon"]
+visible = false
+layout_mode = 2
+min_value = 1.0
+value = 1.0
+alignment = 1
+update_on_text_changed = true
+select_all_on_focus = true
+
 [connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="mouse_entered" from="Difficulties/VBox/Easy" to="." method="_on_button_mouse_entered"]
@@ -271,3 +303,4 @@ horizontal_alignment = 2
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="mouse_entered" from="CustomSeedButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="CustomSeedButton" to="." method="_on_custom_seed_button_pressed"]
+[connection signal="pressed" from="Marathon/Button" to="." method="_on_marathon_button_pressed"]

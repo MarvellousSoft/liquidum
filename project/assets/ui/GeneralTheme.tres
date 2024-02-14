@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=22 format=3 uid="uid://bjysepqligucr"]
+[gd_resource type="Theme" load_steps=25 format=3 uid="uid://bjysepqligucr"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
@@ -44,6 +44,16 @@ color = Color(0.0156863, 0.105882, 0.219608, 0.741176)
 grow_begin = -40.0
 grow_end = -40.0
 thickness = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t0th7"]
+bg_color = Color(0.670588, 1, 0.819608, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_itvc5"]
+bg_color = Color(0.847059, 0.996078, 0.882353, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_of71b"]
+color = Color(0, 0.0352941, 0.141176, 0.533333)
+thickness = 5
 
 [sub_resource type="FontVariation" id="FontVariation_qs55u"]
 base_font = ExtResource("1_x6xj1")
@@ -149,6 +159,9 @@ HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_tbdhj")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_088s4")
 HScrollBar/styles/scroll = SubResource("StyleBoxFlat_3behk")
 HSeparator/styles/separator = SubResource("StyleBoxLine_wfon5")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_t0th7")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_itvc5")
+HSlider/styles/slider = SubResource("StyleBoxLine_of71b")
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
 Label/font_sizes/font_size = 82
 Label/fonts/font = SubResource("FontVariation_qs55u")

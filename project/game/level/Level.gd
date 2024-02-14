@@ -95,9 +95,12 @@ var last_saved: int
 var last_saved_ago: int = -1
 # Used only for rich presence
 var difficulty := -1
+var marathon_left := -1
+var marathon_seed := ""
 var fully_setup := false
 var extra_section := -1
 var extra_level_number := -1
+
 
 func _ready():
 	Global.dev_mode_toggled.connect(_on_dev_mode_toggled)
@@ -120,6 +123,13 @@ func _ready():
 	else:
 		update_aquarium_button_icon()
 	%PlayAgainButton.hide()
+	if difficulty != -1 and marathon_left != 0:
+		%PlayAgainButton.show()
+		update_play_again_button_label()
+	if marathon_left == 0:
+		%ContinueButton.text = "FINISH_MARATHON"
+	elif marathon_left > 0:
+		%ContinueButton.text = "CONTINUE_MARATHON"
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -147,8 +157,6 @@ func _ready():
 				$SteamRichPresence.set_group("daily")
 				$SteamRichPresence.set_display("#Daily")
 			elif difficulty != -1:
-				%PlayAgainButton.show()
-				update_play_again_button_label()
 				$SteamRichPresence.set_group("random")
 				$SteamRichPresence.set_display("#Random")
 				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
@@ -162,11 +170,6 @@ func _ready():
 				# Assuming we're on playtesting
 				$SteamRichPresence.set_group("editor")
 				$SteamRichPresence.set_display("#Editor")
-		else:
-			if difficulty != -1:
-				%PlayAgainButton.show()
-				update_play_again_button_label()
-	
 	GridNode.hide()
 	await TransitionManager.transition_finished
 	GridNode.show()
@@ -486,7 +489,10 @@ func add_playtime_tracking(stats: Array[String]) -> void:
 
 
 func update_play_again_button_label() -> void:
-	%PlayAgainButton.text = tr("PLAY_AGAIN_NEW_LEVEL") % tr(DIFFICULTY_NAMES[difficulty]).to_lower()
+	if marathon_left == -1:
+		%PlayAgainButton.text = tr("PLAY_AGAIN_NEW_LEVEL") % tr(DIFFICULTY_NAMES[difficulty]).to_lower()
+	else:
+		%PlayAgainButton.text = "ABANDON_MARATHON"
 
 
 func reset_level() -> void:
@@ -795,9 +801,16 @@ func _on_continue_button_pressed() -> void:
 			return
 	
 	if _show_level_completed_ad():
-		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
-	else:
+		var show_big_ad: ShowBigAd = preload("res://game/ads/ShowBigAd.tscn").instantiate()
+		show_big_ad.marathon_dif = difficulty
+		show_big_ad.marathon_left = marathon_left
+		show_big_ad.marathon_seed = marathon_seed
+		TransitionManager.change_scene(show_big_ad)
+	elif marathon_left == -1:
 		TransitionManager.pop_scene()
+	else:
+		var random_hub: RandomHub = TransitionManager.stack.back()
+		await random_hub.continue_marathon(difficulty, marathon_left, marathon_seed, true)
 
 
 func _on_description_edit_text_changed() -> void:
@@ -976,9 +989,12 @@ func _on_cancel_uniq_check_mouse_entered():
 		AudioManager.play_sfx("button_hover")
 
 
-func _on_play_again_button_pressed():
-	Global.play_new_dif_again = difficulty
+func _on_play_again_button_pressed() -> void:
+	if marathon_left == -1:
+		Global.play_new_dif_again = difficulty
 	if _show_level_completed_ad():
 		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
-	else:
+	elif marathon_left == -1:
 		TransitionManager.stack.back()._play_new_level_again()
+	else:
+		TransitionManager.pop_scene()

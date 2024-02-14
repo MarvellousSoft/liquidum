@@ -257,3 +257,8 @@ EXTRA_LEVELS_TOOLTIP,Levels from DLCs,Níveis de DLCs,Níveis de DLCs
 CONFIRMATION_NEW_ENDLESS,Do you want to continue your progress or create a new level?,Você deseja continuar seu progresso ou criar um nível novo?,Você deseja continuar seu progresso ou criar um nível novo?
 ENDLESS_CONTINUE,Continue,Continuar,Continuar
 ENDLESS_NEW,New level,Novo nível,Novo nível
+MARATHON_MODE,Marathon mode,Modo maratona,Modo maratona
+MARATHON_TOOLTIP,"Play multiple levels in a row, with shared time and mistakes.","Jogue múltiplos níveis em seguida, com tempo e erros compartilhados.","Jogue múltiplos níveis em seguida, com tempo e erros compartilhados."
+CONTINUE_MARATHON,Continue marathon,Continuar maratona,Continuar maratona
+FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
+ABANDON_MARATHON,Abandon marathon,Abandonar maratona,Abandonar maratona
