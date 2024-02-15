@@ -119,7 +119,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 			return null
 
 
-func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String, change_scene: bool, start_time: float, start_mistakes: int) -> void:
+func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String, manually_seeded: bool, change_scene: bool, start_time: float, start_mistakes: int) -> void:
 	if left == 0:
 		TransitionManager.pop_scene()
 		return
@@ -128,10 +128,10 @@ func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String,
 	if change_scene:
 		# Hack so the following function uses TransitionManager.change_scene
 		Global.play_new_dif_again = 0
-	await gen_and_play(rng, dif, left - 1, total, seed_str, start_time, start_mistakes)
+	await gen_and_play(rng, dif, seed_str, manually_seeded, left - 1, total, start_time, start_mistakes)
 	Global.play_new_dif_again = -1
 
-func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_total: int, marathon_seed: String, marathon_time: float, marathon_mistakes: int) -> void:
+func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, seed_str: String, manually_seeded: bool, marathon_left: int, marathon_total: int, marathon_time: float, marathon_mistakes: int) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
@@ -145,7 +145,8 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: in
 	data.difficulty = dif
 	data.marathon_left = marathon_left
 	data.marathon_total = marathon_total
-	data.marathon_seed = marathon_seed
+	data.seed_str = seed_str
+	data.manually_seeded = manually_seeded
 	FileManager.save_random_level(data)
 	load_existing(marathon_time, marathon_mistakes)
 
@@ -159,15 +160,16 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		tracking.append("marathon")
 	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", tracking)
 	level.difficulty = data.difficulty
+	level.seed_str = data.seed_str
+	level.manually_seeded = data.manually_seeded
 	if data.marathon_left != -1:
 		level.marathon_left = data.marathon_left
 		level.marathon_total = data.marathon_total
-		level.marathon_seed = data.marathon_seed
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		level.running_time = marathon_time
 		level.initial_mistakes = marathon_mistakes
-	level.won.connect(_level_completed.bind(data.difficulty))
+	level.won.connect(_level_completed.bind(data.difficulty, data.manually_seeded))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
 	else:
@@ -181,11 +183,11 @@ func _confirm_new_level() -> bool:
 	return true
 
 
-func _level_completed(info: Level.WinInfo, dif: Difficulty) -> void:
+func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: bool) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
-	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and SteamManager.enabled:
+	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and not manually_seeded and SteamManager.enabled:
 		SteamStats.increment_insane_good()
 
 
@@ -277,23 +279,26 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	var rng := RandomNumberGenerator.new()
 	var seed_str: String = $Seed.text if has_node("Seed") else ""
 	var marathon := floori(%Marathon/Slider.value if has_node(^"%Marathon") else 1.0)
+	var manually_seeded := not seed_str.is_empty()
 	if marathon != 1:
 		if seed_str.is_empty():
 			seed_str = str(randi())
-		await continue_marathon(dif, marathon, marathon, seed_str, false, 0, 0)
+		await continue_marathon(dif, marathon, marathon, seed_str, manually_seeded, false, 0, 0)
 		return
 	if seed_str.is_empty():
 		var data := UserData.current()
 		data.random_levels_created[dif] += 1
 		var i := data.random_levels_created[dif]
-		rng.seed = RandomHub.consistent_hash(str(i))
+		seed_str = str(i)
+		rng.seed = RandomHub.consistent_hash(seed_str)
 		UserData.save()
 		var success_state := PreprocessedDifficulty.current(dif).success_state(i)
 		if success_state != 0:
 			rng.state = success_state
 	else:
 		rng.seed = RandomHub.consistent_hash(seed_str)
-	await gen_and_play(rng, dif, -1, -1, "", 0, 0)
+	assert(not seed_str.is_empty())
+	await gen_and_play(rng, dif, seed_str, manually_seeded, -1, -1, 0, 0)
 
 
 func _on_cancel_gen_pressed():

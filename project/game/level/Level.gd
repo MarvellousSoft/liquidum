@@ -98,7 +98,8 @@ var last_saved_ago: int = -1
 var difficulty := -1
 var marathon_left := -1
 var marathon_total := -1
-var marathon_seed := ""
+var seed_str := ""
+var manually_seeded := false
 var fully_setup := false
 var extra_section := -1
 var extra_level_number := -1
@@ -802,13 +803,14 @@ func _on_continue_button_pressed() -> void:
 		if is_campaign_level() and CampaignLevelLister.all_campaign_levels_completed():
 			TransitionManager.change_scene(Global.load_mobile_compat("res://game/credits/AllLevelsCompleted").instantiate())
 			return
-	
+
 	if _show_level_completed_ad():
 		var show_big_ad: ShowBigAd = preload("res://game/ads/ShowBigAd.tscn").instantiate()
 		show_big_ad.marathon_dif = difficulty
 		show_big_ad.marathon_left = marathon_left
 		show_big_ad.marathon_total = marathon_total
-		show_big_ad.marathon_seed = marathon_seed
+		show_big_ad.seed_str = seed_str
+		show_big_ad.manually_seeded = manually_seeded
 		show_big_ad.marathon_time = running_time
 		show_big_ad.marathon_mistakes = int(Counters.mistake.count)
 		TransitionManager.change_scene(show_big_ad)
@@ -816,7 +818,7 @@ func _on_continue_button_pressed() -> void:
 		TransitionManager.pop_scene()
 	else:
 		var random_hub: RandomHub = TransitionManager.stack.back()
-		await random_hub.continue_marathon(difficulty, marathon_left, marathon_total, marathon_seed, true, running_time, int(Counters.mistake.count))
+		await random_hub.continue_marathon(difficulty, marathon_left, marathon_total, seed_str, manually_seeded, true, running_time, int(Counters.mistake.count))
 
 
 func _on_description_edit_text_changed() -> void:
