@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw0ses7ylbbh3"]
+
+[ext_resource type="Script" path="res://game/credits/AssetsUsed.gd" id="1_xxgdc"]
+
+[node name="AssetsUsed" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xxgdc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_bottom = 100
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "If not specified, all assets in our project are under the license:
+CC BY 3.0 License
+https://creativecommons.org/licenses/by/3.0
+
+The complete list of assets (and this license) can be found in:
+https://github.com/MarvellousSoft/liquidum/tree/main/project/assets
+
+A simplified list of assets with an specific license/attribution are below:
+
+Many icons used in settings and in buttons.
+by Delapouite under CC BY 3.0
+
+Checkbox icons.
+by sbed under CC BY 3.0
+
+Timer and turtle icons.
+by Lorc under CC BY 3.0
+
+Our main background music.
+Music Info: “Ocean”
+Audio Synthezx Group
+https://audio-sx.com
+
+Sound effects for clicking things.
+by Little Robot Sound Factory, www.littlerobotsoundfactory.com
+
+Icons for finger touch.
+by Juraj Sedlák, https://thenounproject.com/yumminky/, CC BY 3.0
+
+Sound effect when you complete all levels.
+by qubodup, https://opengameart.org/users/qubodup, CC BY 3.0"
+autowrap_mode = 3
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 2
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 292.0
+offset_bottom = 159.0
+focus_mode = 0
+text = "BACK"
+
+[connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

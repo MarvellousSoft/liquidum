@@ -144,6 +144,12 @@ size_flags_horizontal = 4
 focus_mode = 0
 text = "OUR_OTHER_GAMES"
 
+[node name="AssetsUsed" type="Button" parent="ScrollContainer/MarginContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "ASSETS_USED"
+
 [node name="FinalSpace" type="HSeparator" parent="ScrollContainer/MarginContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -151,3 +157,5 @@ theme_override_constants/separation = 20
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="ScrollContainer/MarginContainer/VBox/OtherGames" to="." method="_on_other_games_pressed"]
+[connection signal="mouse_entered" from="ScrollContainer/MarginContainer/VBox/AssetsUsed" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="ScrollContainer/MarginContainer/VBox/AssetsUsed" to="." method="_on_assets_used_pressed"]

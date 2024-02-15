@@ -45,3 +45,8 @@ func _on_other_games_pressed():
 
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
+
+
+func _on_assets_used_pressed() -> void:
+	var node: Node = load(^"res://game/credits/AssetsUsed.tscn").instantiate()
+	TransitionManager.push_scene(node)

@@ -128,6 +128,20 @@ position = Vector2(528.1, 1834)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("6_lppim")
 
+[node name="AssetsUsed" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -50.0
+offset_bottom = -250.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+text = "ASSETS_USED"
+
 [node name="OtherGames" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -151,6 +165,8 @@ offset_bottom = 175.0
 focus_mode = 0
 text = "BACK"
 
+[connection signal="mouse_entered" from="AssetsUsed" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="AssetsUsed" to="." method="_on_assets_used_pressed"]
 [connection signal="mouse_entered" from="OtherGames" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="OtherGames" to="." method="_on_other_games_pressed"]
 [connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]

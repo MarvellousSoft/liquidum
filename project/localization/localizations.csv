@@ -262,3 +262,4 @@ MARATHON_TOOLTIP,"Play multiple levels in a row, with shared time and mistakes."
 CONTINUE_MARATHON,Continue marathon (%d left),Continuar maratona (faltam %d),Continuar maratona (faltam %d)
 FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
 ABANDON_MARATHON,Abandon,Desistir,Desistir
+ASSETS_USED,Assets used,Recursos usados,Recursos usados
