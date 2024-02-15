@@ -535,7 +535,7 @@ func win() -> void:
 	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count), running_time))
+	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count) - initial_mistakes, running_time))
 
 	if _show_level_completed_ad():
 		AdManager.preload_big_ad()
