@@ -212,10 +212,22 @@ tracks/4/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Seed:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.427451)]
+}
 
 [sub_resource type="Animation" id="Animation_4ayxj"]
 resource_name = "startup"
-length = 3.5
+length = 4.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -276,6 +288,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Seed:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(3.5, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.521569)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
 _data = {
@@ -292,6 +316,21 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_ceab8")
 script = ExtResource("2_wvis2")
+
+[node name="Seed" type="Label" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.427451)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -114.0
+offset_right = 362.0
+offset_bottom = -30.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 70
+text = "Seed: 123"
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0

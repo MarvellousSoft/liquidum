@@ -114,6 +114,12 @@ func _ready():
 	Profile.progress_on_unkown_changed.connect(_on_progress_on_unkown_changed)
 	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	Counters.mistake.visible = not grid.editor_mode() and not Profile.get_option("allow_mistakes")
+	var seed_label := get_node_or_null("%Seed")
+	if seed_label != null:
+		if seed_str.is_empty():
+			seed_label.queue_free()
+		else:
+			seed_label.text = "Seed: %s" % seed_str
 	if not Global.is_mobile:
 		# Doesn't auto translate
 		$Description/Edit.placeholder_text = tr("LEVEL_DESCRIPTION_PLACEHOLDER")
