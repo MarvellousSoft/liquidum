@@ -97,6 +97,7 @@ var last_saved_ago: int = -1
 # Used only for rich presence
 var difficulty := -1
 var marathon_left := -1
+var marathon_total := -1
 var marathon_seed := ""
 var fully_setup := false
 var extra_section := -1
@@ -806,6 +807,7 @@ func _on_continue_button_pressed() -> void:
 		var show_big_ad: ShowBigAd = preload("res://game/ads/ShowBigAd.tscn").instantiate()
 		show_big_ad.marathon_dif = difficulty
 		show_big_ad.marathon_left = marathon_left
+		show_big_ad.marathon_total = marathon_total
 		show_big_ad.marathon_seed = marathon_seed
 		show_big_ad.marathon_time = running_time
 		show_big_ad.marathon_mistakes = int(Counters.mistake.count)
@@ -814,7 +816,7 @@ func _on_continue_button_pressed() -> void:
 		TransitionManager.pop_scene()
 	else:
 		var random_hub: RandomHub = TransitionManager.stack.back()
-		await random_hub.continue_marathon(difficulty, marathon_left, marathon_seed, true, running_time, int(Counters.mistake.count))
+		await random_hub.continue_marathon(difficulty, marathon_left, marathon_total, marathon_seed, true, running_time, int(Counters.mistake.count))
 
 
 func _on_description_edit_text_changed() -> void:

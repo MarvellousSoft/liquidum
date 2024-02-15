@@ -67,14 +67,19 @@ func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_dev_mode)
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 
+func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> String:
+	var dif_name := tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())
+	if marathon_left != -1:
+		dif_name += " (%d⁄%d)" % [marathon_total - marathon_left, marathon_total]
+	return dif_name
 
 func _update() -> void:
 	var has_random_level := (FileManager.load_level(RANDOM) != null and FileManager.load_random_level() != null)
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level
 	if has_random_level:
-		var dif := FileManager.load_random_level().difficulty
-		Continue.text = "%s - %s" % [tr("CONTINUE"), tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())]
+		var data := FileManager.load_random_level()
+		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]
 	for dif in Difficulty:
 		var cont: Node = Completed.get_node(dif)
 		cont.visible = not $Difficulties/VBox.get_node(dif).disabled
@@ -114,7 +119,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 			return null
 
 
-func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scene: bool, start_time: float, start_mistakes: int) -> void:
+func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String, change_scene: bool, start_time: float, start_mistakes: int) -> void:
 	if left == 0:
 		TransitionManager.pop_scene()
 		return
@@ -123,10 +128,10 @@ func continue_marathon(dif: Difficulty, left: int, seed_str: String, change_scen
 	if change_scene:
 		# Hack so the following function uses TransitionManager.change_scene
 		Global.play_new_dif_again = 0
-	await gen_and_play(rng, dif, left - 1, seed_str, start_time, start_mistakes)
+	await gen_and_play(rng, dif, left - 1, total, seed_str, start_time, start_mistakes)
 	Global.play_new_dif_again = -1
 
-func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_seed: String, marathon_time: float, marathon_mistakes: int) -> void:
+func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: int, marathon_total: int, marathon_seed: String, marathon_time: float, marathon_mistakes: int) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
@@ -136,9 +141,10 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, marathon_left: in
 		return
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
-	var data := LevelData.new("", "", g.export_data(), "")
+	var data := LevelData.new(_dif_name(dif, marathon_left, marathon_total), "", g.export_data(), "")
 	data.difficulty = dif
 	data.marathon_left = marathon_left
+	data.marathon_total = marathon_total
 	data.marathon_seed = marathon_seed
 	FileManager.save_random_level(data)
 	load_existing(marathon_time, marathon_mistakes)
@@ -155,6 +161,7 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 	level.difficulty = data.difficulty
 	if data.marathon_left != -1:
 		level.marathon_left = data.marathon_left
+		level.marathon_total = data.marathon_total
 		level.marathon_seed = data.marathon_seed
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
@@ -273,7 +280,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 	if marathon != 1:
 		if seed_str.is_empty():
 			seed_str = str(randi())
-		await continue_marathon(dif, marathon, seed_str, false, 0, 0)
+		await continue_marathon(dif, marathon, marathon, seed_str, false, 0, 0)
 		return
 	if seed_str.is_empty():
 		var data := UserData.current()
@@ -286,7 +293,7 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 			rng.state = success_state
 	else:
 		rng.seed = RandomHub.consistent_hash(seed_str)
-	await gen_and_play(rng, dif, -1, "", 0, 0)
+	await gen_and_play(rng, dif, -1, -1, "", 0, 0)
 
 
 func _on_cancel_gen_pressed():

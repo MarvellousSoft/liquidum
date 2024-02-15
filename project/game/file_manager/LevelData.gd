@@ -10,6 +10,7 @@ var tutorial: String
 var difficulty: int = -1
 # If not -1, we're in the middle of a marathon
 var marathon_left: int = -1
+var marathon_total: int = -1
 var marathon_seed := ""
 
 func _init(full_name_: String, description_: String, grid_data_: Dictionary, tutorial_: String) -> void:
@@ -32,6 +33,7 @@ func get_data() -> Dictionary:
 		data.difficulty = difficulty
 		if marathon_left != -1:
 			data.marathon_left = marathon_left
+			data.marathon_total = marathon_total
 			data.marathon_seed = marathon_seed
 	return data
 
@@ -44,6 +46,7 @@ static func load_data(data_: Variant) -> LevelData:
 	var level_data := LevelData.new(data.full_name, data.get("description", ""), data.grid_data, data.get("tutorial", ""))
 	level_data.difficulty = data.get("difficulty", -1)
 	level_data.marathon_left = data.get("marathon_left", -1)
+	level_data.marathon_total = data.get("marathon_total", -1)
 	level_data.marathon_seed = data.get("marathon_seed", "")
 	return level_data
 
