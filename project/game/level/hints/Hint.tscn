@@ -80,6 +80,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="EditorButtons" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
@@ -97,7 +98,11 @@ size_flags_vertical = 3
 mouse_filter = 2
 alignment = 1
 
-[node name="Number" type="RichTextLabel" parent="VBoxContainer/HintsContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HintsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Number" type="RichTextLabel" parent="VBoxContainer/HintsContainer/VBoxContainer"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
@@ -107,16 +112,27 @@ theme_override_colors/default_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 64
 theme_override_fonts/normal_font = SubResource("FontVariation_tqca2")
-theme_override_font_sizes/normal_font_size = 128
+theme_override_font_sizes/normal_font_size = 190
 bbcode_enabled = true
-text = "[color=#ffffffff]{[/color]10[color=#fffffff]}[/color]"
+text = "[center][color=#ffffffff]{ [/color]10[color=#fffffff] }[/color][/center]"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
+[node name="BigHintBoat" type="TextureRect" parent="VBoxContainer/HintsContainer/VBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
+custom_minimum_size = Vector2(240, 245)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_kqie2")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Boat" type="TextureRect" parent="VBoxContainer/HintsContainer"]
 unique_name_in_owner = true
+visible = false
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
@@ -134,7 +150,7 @@ theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 64
 theme_override_fonts/font = SubResource("FontVariation_k7l4k")
-theme_override_font_sizes/font_size = 160
+theme_override_font_sizes/font_size = 230
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1

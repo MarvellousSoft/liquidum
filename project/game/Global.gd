@@ -100,17 +100,20 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		Global.exit_game()
 
+
 func load_mobile_compat(scene: String) -> PackedScene:
 	if is_mobile:
 		return load(scene + "Mobile.tscn")
 	else:
 		return load(scene + ".tscn")
 
+
 func exit_game() -> void:
 	if get_window().mode == Window.MODE_WINDOWED:
 		_store_window()
 	FileManager.save_game()
 	call_deferred(&"_do_exit")
+
 
 func _do_exit() -> void:
 	var node := Global.load_mobile_compat("res://game/ui/Quitting").instantiate()

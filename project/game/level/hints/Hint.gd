@@ -40,6 +40,7 @@ var cur_status : E.HintStatus = E.HintStatus.Normal
 
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
+	Profile.bigger_hints_changed.connect(update_bigger_hint)
 	Highlight.modulate.a = 0.0
 	disable_editor()
 	DummyLabel.hide()
@@ -50,6 +51,7 @@ func _ready():
 		set_hint_visibility(side, true)
 	
 	update_dark_mode(Profile.get_option("dark_mode"))
+	update_bigger_hint(Profile.get_option("bigger_hints_font"))
 
 
 func _process(dt):
@@ -78,11 +80,33 @@ func update_dark_mode(is_dark : bool) -> void:
 	var colors = COLORS.dark if is_dark else COLORS.normal
 	%Hints.modulate = colors.dark
 	%Boat.modulate = colors.dark
+	%BigHintBoat.modulate = colors.dark
+
+
+func update_bigger_hint(is_big: bool) -> void:
+	if is_big and not editor_mode:
+		Number.add_theme_font_size_override("normal_font_size", 190)
+		DummyLabel.add_theme_font_size_override("font_size", 230)
+	else:
+		Number.add_theme_font_size_override("normal_font_size", 128)
+		DummyLabel.add_theme_font_size_override("font_size", 160)
+	if is_boat:
+		if Profile.get_option("bigger_hints_font"):
+			%BigHintBoat.show()
+			Boat.hide()
+		else:
+			Boat.show()
+			%BigHintBoat.hide()
 
 
 func set_boat(value):
 	is_boat = value
-	Boat.visible = value
+	if Profile.get_option("bigger_hints_font"):
+		%BigHintBoat.visible = value
+		Boat.hide()
+	else:
+		Boat.visible = value
+		%BigHintBoat.hide()
 
 
 func set_value(new_value : float) -> void:
@@ -112,12 +136,12 @@ func set_visibility(vis: bool, type: bool) -> void:
 func alpha_t(text : String, alpha : float) -> String:
 	var color = Global.COLORS.normal
 	color.a = alpha
-	return "[color=%s]%s[/color]" % ["#"+color.to_html(true),text]
+	return "[center][color=%s]%s[/color][/center]" % ["#"+color.to_html(true),text]
 
 
 func update_label() -> void:
 	Number.text = ""
-	var value = str(hint_value) if hint_value != -1 else "?"
+	var value = "[center]"+str(hint_value)+"[/center]" if hint_value != -1 else "?"
 	if is_boat:
 		set_visible(hint_value != -1 or (hint_type != E.HintType.Zero and hint_type != E.HintType.Hidden))
 	match hint_type:

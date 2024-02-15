@@ -253,3 +253,4 @@ func _on_blue_filter_slider_value_changed(value):
 
 func _on_bigger_hints_toggled(on : bool) -> void:
 	Profile.set_option("bigger_hints_font", on)
+	Profile.bigger_hints_changed.emit(on)

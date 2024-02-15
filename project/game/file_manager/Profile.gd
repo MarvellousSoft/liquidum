@@ -6,6 +6,7 @@ signal show_timer_changed(status: bool)
 signal allow_mistakes_changed(status: bool)
 signal progress_on_unkown_changed(status: bool)
 signal show_bubbles_changed(on: bool)
+signal bigger_hints_changed(on: bool)
 
 const LANGUAGES = [
 	"",
