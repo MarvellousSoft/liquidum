@@ -91,7 +91,7 @@ func update_bigger_hint(is_big: bool) -> void:
 		Number.add_theme_font_size_override("normal_font_size", 128)
 		DummyLabel.add_theme_font_size_override("font_size", 160)
 	if is_boat:
-		if Profile.get_option("bigger_hints_font"):
+		if is_big and not editor_mode:
 			%BigHintBoat.show()
 			Boat.hide()
 		else:
@@ -101,7 +101,7 @@ func update_bigger_hint(is_big: bool) -> void:
 
 func set_boat(value):
 	is_boat = value
-	if Profile.get_option("bigger_hints_font"):
+	if Profile.get_option("bigger_hints_font") and not editor_mode:
 		%BigHintBoat.visible = value
 		Boat.hide()
 	else:
@@ -136,12 +136,14 @@ func set_visibility(vis: bool, type: bool) -> void:
 func alpha_t(text : String, alpha : float) -> String:
 	var color = Global.COLORS.normal
 	color.a = alpha
-	return "[center][color=%s]%s[/color][/center]" % ["#"+color.to_html(true),text]
+	return "[color=%s]%s[/color]" % ["#"+color.to_html(true),text]
 
 
 func update_label() -> void:
 	Number.text = ""
 	var value = str(hint_value) if hint_value != -1 else "?"
+	if editor_mode and (value == "0" or value == "?"):
+		value = "  "+value+"  " 
 	if is_boat:
 		set_visible(hint_value != -1 or (hint_type != E.HintType.Zero and hint_type != E.HintType.Hidden))
 	match hint_type:
