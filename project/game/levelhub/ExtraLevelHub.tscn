@@ -14,6 +14,7 @@ script = ExtResource("1_bxko5")
 extra_levels = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
