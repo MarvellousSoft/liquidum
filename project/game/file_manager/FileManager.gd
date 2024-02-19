@@ -247,7 +247,7 @@ func has_extra_level_data(section: int, level: int) -> bool:
 	return FileAccess.file_exists("%s/%s" % [_extra_level_data_dir(section), _level_data_file(level)])
 
 func load_extra_level_data(section: int, level: int) -> LevelData:
-	var data := LevelData.load_data(_load_json_data(_campaign_level_data_dir(section), _level_data_file(level)))
+	var data := LevelData.load_data(_load_json_data(_extra_level_data_dir(section), _level_data_file(level)))
 	assert(not data.full_name.is_empty())
 	return data
 

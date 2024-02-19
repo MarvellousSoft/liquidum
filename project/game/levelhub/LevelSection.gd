@@ -141,7 +141,8 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
 		position_level_button(button, total_levels + 1, total_levels + 1)
-		button.setup(my_section, -1, ExtraLevelLister.count_completed_section_levels(section) == total_levels, true)
+		var enabled := ExtraLevelLister.count_completed_section_levels(section) == total_levels or Global.is_dev_mode()
+		button.setup(my_section, -1, enabled, true)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
 	
