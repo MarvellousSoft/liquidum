@@ -17,6 +17,10 @@ project/android/build/*
 data_*/
 mono_crash.*.json
 
+# Screenshos
+!project/screenshots/.gitkeep
+project/screenshots/*
+
 #Steam Stuff
 
 project/addons/godotsteam/linux32/libsteam_api.so

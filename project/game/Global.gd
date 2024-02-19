@@ -87,6 +87,16 @@ func _input(event):
 		toggle_fullscreen()
 	if event.is_action_pressed(&"toggle_dev_mode") and OS.is_debug_build():
 		toggle_dev_mode()
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_0:
+		var view := get_viewport()
+		view.size = Vector2(3840, 2160)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var img := view.get_texture().get_image()
+		var i := 1
+		while FileAccess.file_exists("res://screenshots/%02d.png" % i):
+			i += 1
+		img.save_png("res://screenshots/%02d.png" % i)
 
 
 func toggle_dev_mode():
