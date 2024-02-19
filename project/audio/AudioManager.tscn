@@ -12,3 +12,5 @@ bus = &"BGM"
 bus = &"BGM"
 
 [node name="SFXS" type="Node" parent="."]
+
+[connection signal="finished" from="BGMPlayer" to="." method="_on_bgm_player_finished"]
