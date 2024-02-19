@@ -117,7 +117,7 @@ func _ready():
 	var seed_label := get_node_or_null("%Seed")
 	if seed_label != null:
 		if seed_str.is_empty():
-			seed_label.queue_free()
+			seed_label.hide()
 		else:
 			seed_label.text = "Seed: %s" % seed_str
 	if not Global.is_mobile:
