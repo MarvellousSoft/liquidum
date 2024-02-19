@@ -171,11 +171,15 @@ func _ready():
 				$SteamRichPresence.set_display("#Random")
 				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
 			elif extra_section != -1 and extra_level_number == -1:
-				# TODO: Endless extra level
-				pass
+				$SteamRichPresence.set_group("extra_island")
+				$SteamRichPresence.set_display("#ExtraIsland")
+				$SteamRichPresence.set_key_value("section", ExtraLevelLister.section_name(extra_level_number))
+				$SteamRichPresence.set_key_value("level", "∞")
 			elif extra_section != -1 and extra_level_number != -1:
-				# TODO: Do this for extra levels
-				pass
+				$SteamRichPresence.set_group("extra_island")
+				$SteamRichPresence.set_display("#ExtraIsland")
+				$SteamRichPresence.set_key_value("section", ExtraLevelLister.section_name(extra_level_number))
+				$SteamRichPresence.set_key_value("level", str(extra_level_number))
 			else:
 				# Assuming we're on playtesting
 				$SteamRichPresence.set_group("editor")
