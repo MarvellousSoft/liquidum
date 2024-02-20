@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=13 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="10_4sssi"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="10_avytv"]
 [ext_resource type="Script" path="res://game/main_menu/DiscordButton.gd" id="11_1qmyh"]
+[ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="12_a1g2a"]
 
 [node name="MainMenuMobile" type="Control"]
 layout_mode = 3
@@ -25,6 +26,11 @@ layout_mode = 0
 layout_mode = 0
 offset_top = -1780.0
 offset_bottom = -500.0
+
+[node name="MobileBGHelp3" parent="." instance=ExtResource("2_qxpit")]
+layout_mode = 0
+offset_left = 2283.0
+offset_right = 3003.0
 
 [node name="Title" parent="." instance=ExtResource("4_edxlj")]
 offset_left = -129.0
@@ -62,7 +68,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
-text = "PLAY_BUTTON"
+text = "EXTRA_LEVELS_BUTTON"
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2
@@ -250,6 +256,39 @@ offset_right = 3789.0
 offset_bottom = 2149.0
 theme_override_constants/separation = 30
 
+[node name="ExtraLevelHub" parent="." instance=ExtResource("12_a1g2a")]
+unique_name_in_owner = true
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 2283.0
+offset_right = 3723.0
+offset_bottom = 2560.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(0.5, 0.5)
+
+[node name="MarginContainer" parent="ExtraLevelHub/ScrollContainer" index="0"]
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 100
+
+[node name="Sections" parent="ExtraLevelHub/ScrollContainer/MarginContainer" index="0"]
+theme_override_constants/h_separation = 700
+columns = 2
+
+[node name="BackExtra" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2326.0
+offset_top = 40.0
+offset_right = 2426.0
+offset_bottom = 90.0
+focus_mode = 0
+text = "BACK"
+
 [node name="BackButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -347,11 +386,16 @@ vertical_alignment = 1
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_extra_levels_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/MenuProfileButton" to="." method="_on_profile_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_timer_timeout"]
+[connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
+[connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
+[connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BackExtra" to="." method="_on_back_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="disable_focus" from="LevelHub" to="." method="_on_level_hub_disable_focus"]
@@ -360,6 +404,7 @@ vertical_alignment = 1
 [connection signal="mouse_exited" from="DiscordButton" to="DiscordButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="DiscordButton" to="DiscordButton" method="_on_pressed"]
 
+[editable path="ExtraLevelHub"]
 [editable path="LevelHub"]
 [editable path="LevelHub/Sections/LevelSection1"]
 [editable path="LevelHub/Sections/LevelSection1/Levels/LevelButton1"]

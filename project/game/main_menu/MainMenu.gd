@@ -11,13 +11,14 @@ const CAM_POS = {
 	"mobile": {
 		"menu": Vector2(360, 640),
 		"level_hub": Vector2(360, -1136),
+		"extra_level_hub": Vector2(360 + 2283, 640),
 	},
 }
 const EPS = .001
 const ZOOM_LERP = 4.0
 const EXTRA_LEVEL_ZOOM = {
 	"desktop": 2.1,
-	"mobile": 1.8,
+	"mobile": 1.7,
 }
 const LEVEL_ZOOM = {
 	"desktop": 2.6,
@@ -43,7 +44,7 @@ var cur_state = STATES.MAIN_MENU
 
 func _ready():
 	# TODO: when we actually need extra levels, fix this
-	if not OS.is_debug_build() or ExtraLevelLister.count_all_game_sections() == 0 or Global.is_mobile:
+	if not OS.is_debug_build() or ExtraLevelLister.count_all_game_sections() == 0:
 		%ExtraLevelsButton.hide()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
@@ -189,4 +190,3 @@ func _on_credits_button_pressed() -> void:
 
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
-	
