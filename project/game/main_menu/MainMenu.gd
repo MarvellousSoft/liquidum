@@ -43,9 +43,9 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
-	# TODO: when we actually need extra levels, fix this
-	if not OS.is_debug_build() or ExtraLevelLister.count_all_game_sections() == 0:
+	if ExtraLevelLister.count_all_game_sections() == 0:
 		%ExtraLevelsButton.hide()
+	Global.dev_mode_toggled.connect(_dev_mode_toggled)
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	if not SteamManager.enabled and not Global.is_mobile:
@@ -190,3 +190,6 @@ func _on_credits_button_pressed() -> void:
 
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
+
+func _dev_mode_toggled(on: bool) -> void:
+	%ExtraLevelsButton.visible = ExtraLevelLister.count_all_game_sections() > 0

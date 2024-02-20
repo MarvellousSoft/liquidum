@@ -5,7 +5,9 @@ func level_name(section: int, level: int) -> String:
 	return "extra_level%02d_%02d" % [section, level]
 
 func has_section(section: int) -> int:
-	return FileManager.has_extra_level_data(section, 1)
+	if FileManager.has_extra_level_data(section, 1):
+		return Global.is_dev_mode() or not _config(section).get_value('section', 'hidden', false)
+	return false
 
 func count_all_game_sections() -> int:
 	var i := 1
