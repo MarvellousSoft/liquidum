@@ -87,7 +87,7 @@ func _input(event):
 		toggle_fullscreen()
 	if event.is_action_pressed(&"toggle_dev_mode") and OS.is_debug_build():
 		toggle_dev_mode()
-	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_0:
+	if event.is_action_pressed(&"dev_mode_screenshot") and OS.is_debug_build():
 		var view := get_viewport()
 		view.size = Vector2(3840, 2160)
 		await get_tree().process_frame

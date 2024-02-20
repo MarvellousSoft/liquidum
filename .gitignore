@@ -17,9 +17,9 @@ project/android/build/*
 data_*/
 mono_crash.*.json
 
-# Screenshos
+# Screenshots
 !project/screenshots/.gitkeep
-project/screenshots/*
+project/screenshots/*.png
 
 #Steam Stuff
 
