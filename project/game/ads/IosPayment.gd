@@ -6,7 +6,10 @@ var api = null
 
 func _init(api_) -> void:
 	api = api_
+
+func start() -> void:
 	api.restore_purchases()
+
 
 func _process(_dt: float) -> void:
 	while api.get_pending_event_count() > 0:

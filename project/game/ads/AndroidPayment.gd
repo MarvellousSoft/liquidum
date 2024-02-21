@@ -31,6 +31,8 @@ func _init(api_) -> void:
 	api.purchases_updated.connect(_on_purchases_updated)
 	api.purchase_error.connect(_on_purchase_error)
 	api.query_purchases_response.connect(_on_query_purchases_response)
+
+func start() -> void:
 	api.startConnection()
 
 static func setup() -> AndroidPayment:
@@ -52,7 +54,9 @@ func _on_connect_error(id, err):
 
 func _on_sku_details_query_completed(sku_details):
 	for available_product in sku_details:
-		print("Product: %s" % available_product.title)
+		print("Product: %s" % [available_product])
+	# First time query purchase
+	api.queryPurchases("inapp")
 
 func _on_sku_details_query_error(response_id, error_message, products_queried):
 	print("Query err id: %s err %s products %s" % [response_id, error_message, products_queried])
@@ -79,8 +83,9 @@ func _on_purchase_error(response_id, error_message):
 	print("Purchase error id: %s msg: %s" % [response_id, error_message])
 
 func _process_purchase(purchase):
-	print("Processing purchase: %s" % purchase)
-	if PURCHASE_NAME in purchase.products and purchase.purchase_state == PurchaseState.PURCHASED:
+	print("Processing purchase: %s" % [purchase])
+	if PURCHASE_NAME in purchase.skus and purchase.purchase_state == PurchaseState.PURCHASED:
+		print("Did purchase remove ads")
 		disable_ads.emit()
 		if not purchase.is_acknowledged:
 			api.acknowledgePurchase(purchase.purchase_token)

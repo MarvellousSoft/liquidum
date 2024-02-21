@@ -20,8 +20,9 @@ func _ready() -> void:
 	elif OS.get_name() == "iOS":
 		payment = IosPayment.setup()
 	if payment != null:
-		add_child(payment)
 		payment.disable_ads.connect(_on_disable_ads)
+		add_child(payment)
+		payment.start()
 	MobileAds.set_ios_app_pause_on_background(true)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete = _on_initialization_complete
@@ -32,6 +33,7 @@ func buy_ad_removal() -> void:
 		payment.do_purchase()
 
 func _on_disable_ads() -> void:
+	print("Ads are disabled")
 	disabled = true
 	ads_disabled.emit()
 

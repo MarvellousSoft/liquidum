@@ -3,5 +3,8 @@ extends Node
 
 signal disable_ads()
 
+func start() -> void:
+	GridModel.must_be_implemented()
+
 func do_purchase() -> void:
-	pass
+	GridModel.must_be_implemented()
