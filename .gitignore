@@ -20,6 +20,7 @@ mono_crash.*.json
 # Screenshots
 !project/screenshots/.gitkeep
 project/screenshots/*.png
+project/screenshots/*.import
 
 #Steam Stuff
 
