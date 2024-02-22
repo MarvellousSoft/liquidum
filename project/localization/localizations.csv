@@ -262,6 +262,7 @@ MARATHON_TOOLTIP,"Play multiple levels in a row, with shared time and mistakes."
 CONTINUE_MARATHON,Continue marathon (%d left),Continuar maratona (faltam %d),Continuar maratona (faltam %d)
 FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
 ABANDON_MARATHON,Abandon,Desistir,Desistir
+MARATHON_TEXT,Multiple levels in a row,Múltiplos níveis seguidos,Múltiplos níveis seguidos
 ASSETS_USED,Assets used,Recursos usados,Recursos usados
 MIRROR_LEVEL_DESC,All water and boats cells are horizontally mirrored in the grid.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.
 EXTRA_01_01,,,

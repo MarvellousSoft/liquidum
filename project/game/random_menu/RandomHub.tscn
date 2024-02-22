@@ -104,8 +104,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -50.0
-offset_bottom = -50.0
+offset_left = -3790.0
+offset_top = -109.0
+offset_right = -3379.0
+offset_bottom = -49.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
@@ -120,10 +122,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -335.0
-offset_top = -127.0
-offset_right = -50.0
-offset_bottom = -50.0
+offset_left = -3780.0
+offset_top = -126.0
+offset_right = -3495.0
+offset_bottom = -49.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 60
@@ -260,6 +262,18 @@ text = "999
 "
 horizontal_alignment = 2
 
+[node name="MarathonLabel" type="Label" parent="."]
+layout_mode = 2
+offset_left = 2746.0
+offset_top = 1850.0
+offset_right = 3804.0
+offset_bottom = 1982.0
+theme_override_font_sizes/font_size = 50
+text = "MARATHON_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 2
+autowrap_mode = 3
+
 [node name="Marathon" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -268,8 +282,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -50.0
-offset_bottom = -170.0
+offset_left = -435.0
+offset_top = -103.0
+offset_right = -53.0
+offset_bottom = -43.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -277,7 +293,7 @@ grow_vertical = 0
 layout_mode = 2
 tooltip_text = "MARATHON_TOOLTIP"
 focus_mode = 0
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 60
 text = "MARATHON_MODE"
 
 [node name="Slider" type="SpinBox" parent="Marathon"]
@@ -306,3 +322,4 @@ select_all_on_focus = true
 [connection signal="mouse_entered" from="CustomSeedButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="CustomSeedButton" to="." method="_on_custom_seed_button_pressed"]
 [connection signal="pressed" from="Marathon/Button" to="." method="_on_marathon_button_pressed"]
+[connection signal="value_changed" from="Marathon/Slider" to="." method="_on_marathon_value_changed"]

@@ -81,8 +81,16 @@ func _update() -> void:
 		var data := FileManager.load_random_level()
 		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]
 	for dif in Difficulty:
+		var but: Button = $Difficulties/VBox.get_node(dif)
+		if not but.disabled and has_node("%Marathon"):
+			var dif_tr := "%s_BUTTON" % [dif.to_upper()]
+			var val: int = int(%Marathon/Slider.value)
+			if val > 1:
+				but.text = _dif_name(Difficulty[dif], val, val)
+			else:
+				but.text = dif_tr
 		var cont: Node = Completed.get_node(dif)
-		cont.visible = not $Difficulties/VBox.get_node(dif).disabled
+		cont.visible = not but.disabled
 		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
 
 
@@ -320,5 +328,12 @@ func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
 func _on_marathon_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
 	%Marathon/Button.hide()
+	%Marathon/Slider.value = 5
 	%Marathon/Slider.show()
+	_update()
+
+
+func _on_marathon_value_changed(_value: float) -> void:
+	_update()

@@ -319,7 +319,7 @@ script = ExtResource("2_wvis2")
 
 [node name="Seed" type="Label" parent="."]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.427451)
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
