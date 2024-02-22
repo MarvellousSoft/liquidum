@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://hoqartr3bad1"]
+[gd_scene load_steps=3 format=3 uid="uid://hoqartr3bad1"]
 
+[ext_resource type="Script" path="res://game/ui/Quitting.gd" id="1_hethg"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="1_yv1l2"]
 
 [node name="QuittingMobile" type="Control"]
@@ -7,6 +8,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
+script = ExtResource("1_hethg")
 
 [node name="MobileBGHelp" parent="." instance=ExtResource("1_yv1l2")]
 layout_mode = 0

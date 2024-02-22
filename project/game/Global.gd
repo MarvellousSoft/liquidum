@@ -129,8 +129,6 @@ func _do_exit() -> void:
 	var node := Global.load_mobile_compat("res://game/ui/Quitting").instantiate()
 	get_tree().current_scene.hide()
 	get_tree().root.add_child(node)
-	await get_tree().process_frame
-	get_tree().quit()
 
 
 func is_dev_mode() -> bool:

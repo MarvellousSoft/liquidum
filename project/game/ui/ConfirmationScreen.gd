@@ -3,7 +3,7 @@ extends CanvasLayer
 signal pressed(status : bool)
 
 
-@onready var AnimPlayer = $AnimationPlayer
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 @onready var BG = $BG
 @onready var MainTitle = %MainTitle
 @onready var YesButton = %Yes
@@ -52,14 +52,14 @@ func start_confirmation(override_title := &"", override_yes := &"", override_no 
 	
 	return true
 
-func _on_yes_pressed():
+func _on_yes_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	active = false
 	AnimPlayer.play("disable")
 	pressed.emit(true)
 
 
-func _on_no_pressed():
+func _on_no_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	active = false
 	AnimPlayer.play("disable")

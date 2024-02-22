@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://82relvbdakoy"]
+[gd_scene load_steps=2 format=3 uid="uid://82relvbdakoy"]
+
+[ext_resource type="Script" path="res://game/ui/Quitting.gd" id="1_slv4p"]
 
 [node name="Quitting" type="Control"]
 top_level = true
@@ -8,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_slv4p")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
