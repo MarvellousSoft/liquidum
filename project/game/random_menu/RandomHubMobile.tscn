@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bcm66bfohg152"]
+[gd_scene load_steps=7 format=3 uid="uid://bcm66bfohg152"]
 
 [ext_resource type="PackedScene" uid="uid://fbn8fagd6qbm" path="res://game/settings/SettingsScreenMobile.tscn" id="1_04r1x"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_ealrb"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_y4iuk"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="3_sxuv2"]
 [ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="3_t071m"]
+[ext_resource type="Texture2D" uid="uid://yb7nehpgxv4m" path="res://assets/images/ui/spinbox_arrows.png" id="4_jmrvx"]
 
 [node name="RandomHubMobile" type="Control"]
 layout_mode = 3
@@ -47,10 +48,11 @@ size_flags_horizontal = 3
 
 [node name="VBox" type="VBoxContainer" parent="Difficulties"]
 layout_mode = 2
-theme_override_constants/separation = 75
+theme_override_constants/separation = 61
 alignment = 1
 
 [node name="InitialSep" type="HSeparator" parent="Difficulties/VBox"]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -114,6 +116,44 @@ theme_override_font_sizes/font_size = 30
 text = "UNLOCK_RANDOM_MOBILE"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="Marathon" type="MarginContainer" parent="Difficulties/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Difficulties/VBox/Marathon"]
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "MARATHON_TOOLTIP"
+focus_mode = 0
+theme_override_font_sizes/font_size = 33
+text = "MARATHON_MODE"
+
+[node name="MarathonLabel" type="Label" parent="Difficulties/VBox/Marathon/Button"]
+layout_mode = 2
+offset_left = -201.0
+offset_top = 73.0
+offset_right = 519.0
+offset_bottom = 112.0
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 30
+text = "MARATHON_TEXT"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 3
+
+[node name="Slider" type="SpinBox" parent="Difficulties/VBox/Marathon"]
+visible = false
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_icons/updown = ExtResource("4_jmrvx")
+min_value = 1.0
+value = 1.0
+alignment = 1
+update_on_text_changed = true
+select_all_on_focus = true
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 unique_name_in_owner = true
@@ -244,6 +284,7 @@ horizontal_alignment = 2
 
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 434.0
 offset_top = 1242.0
 offset_right = 716.0
@@ -267,3 +308,5 @@ vertical_alignment = 1
 [connection signal="pressed" from="Difficulties/VBox/Expert" to="." method="_on_dif_pressed" binds= [3]]
 [connection signal="mouse_entered" from="Difficulties/VBox/Insane" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Difficulties/VBox/Insane" to="." method="_on_dif_pressed" binds= [4]]
+[connection signal="pressed" from="Difficulties/VBox/Marathon/Button" to="." method="_on_marathon_button_pressed"]
+[connection signal="value_changed" from="Difficulties/VBox/Marathon/Slider" to="." method="_on_marathon_value_changed"]

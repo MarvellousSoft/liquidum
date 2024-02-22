@@ -480,7 +480,6 @@ func maybe_save(delete_solution := false) -> void:
 		else:
 			if delete_solution:
 				if level_name == RandomHub.RANDOM or level_name.begins_with("endless_"):
-					print("Removing %s" % level_name)
 					FileManager.clear_level(level_name)
 					return
 				grid.clear_content()

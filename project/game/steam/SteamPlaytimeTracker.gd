@@ -28,9 +28,7 @@ func flush() -> void:
 			SteamManager.steam.setStatInt(stat_tot_name, 1)
 	time_to_add = 0
 
-func _enter_tree() -> void:
-	print("Tracking playtime for %s" % [stats])
 
 func _exit_tree() -> void:
 	flush()
-	print("Stopped tracking playtime for %s" % [stats])
+
