@@ -305,6 +305,18 @@ alignment = 1
 update_on_text_changed = true
 select_all_on_focus = true
 
+[node name="Version" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 0)
+offset_left = 1623.0
+offset_top = 2048.0
+offset_right = 2223.0
+offset_bottom = 2125.0
+theme_override_font_sizes/font_size = 64
+text = "VERSION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
 [connection signal="mouse_entered" from="Difficulties/VBox/Easy" to="." method="_on_button_mouse_entered"]

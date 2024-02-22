@@ -37,7 +37,10 @@ func _ready() -> void:
 		else:
 			button.disabled = true
 			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
-
+	
+	%Version.text = "v" + Profile.VERSION
+	%Version.visible = Profile.SHOW_VERSION
+	
 func _back_logic() -> void:
 	if $SettingsScreen.active:
 		$SettingsScreen.toggle_pause()

@@ -92,6 +92,7 @@ focus_mode = 0
 text = "CREDITS_BUTTON"
 
 [node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="DailyButton" type="CenterContainer" parent="MainButtonsContainer/VBoxContainer"]

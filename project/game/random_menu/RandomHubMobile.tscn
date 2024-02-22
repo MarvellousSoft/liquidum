@@ -242,6 +242,17 @@ horizontal_alignment = 2
 
 [node name="SettingsScreen" parent="." instance=ExtResource("1_04r1x")]
 
+[node name="Version" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 434.0
+offset_top = 1242.0
+offset_right = 716.0
+offset_bottom = 1278.0
+theme_override_font_sizes/font_size = 28
+text = "VERSION"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
