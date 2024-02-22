@@ -946,7 +946,6 @@ func _on_share_button_pressed() -> void:
 		share.shareText("Liquidum", "subject", text)
 	else:
 		DisplayServer.clipboard_set(text)
-	if OS.get_name() != "Android":
 		%ShareButton.text = "COPIED_TO_CLIPBOARD"
 
 
