@@ -114,7 +114,9 @@ func save_profile() -> void:
 	var profile_data := Profile.get_save_data()
 	_save_json_data(_profile_dir(), PROFILE_FILE, profile_data)
 	var override := Profile.get_override()
-	override.save(ProjectSettings.get_setting_with_override(&"application/config/project_settings_override"))
+	var err := override.save(ProjectSettings.get_setting_with_override(&"application/config/project_settings_override"))
+	if err != OK:
+		push_error("Error while writing override: %s" % [err])
 
 
 func clear_profile(profile: String) -> void:
