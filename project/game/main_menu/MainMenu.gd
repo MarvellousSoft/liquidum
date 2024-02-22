@@ -59,6 +59,17 @@ func _ready():
 	
 	Version.text = "v" + Profile.VERSION
 	Version.visible = Profile.SHOW_VERSION
+	# Unlock and save all levels. To be used by devs.
+	#_force_unlock_all_levels()
+
+func _force_unlock_all_levels() -> void:
+	for section in range(1, 7):
+		for level in range(1, 9):
+			var data := FileManager.load_campaign_level_data(section, level)
+			var save := UserLevelSaveData.new(data.grid_data, true, 0, 0.0)
+			save.save_completion(10, 60.0)
+			FileManager.save_level(CampaignLevelLister.level_name(section, level), save)
+	update_level_hub()
 
 
 func _process(dt):
