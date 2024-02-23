@@ -33,7 +33,7 @@ func _ready() -> void:
 		return
 	SteamManager.steam.dlc_installed.connect(_on_dlc_installed)
 	SteamManager.steam.current_stats_received.connect(_stats_received)
-	Steam.overlay_toggled.connect(_on_overlay_toggled)
+	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
 	SteamManager.steam.requestCurrentStats()
 
 func _stats_received(game: int, result: int, user: int) -> void:
