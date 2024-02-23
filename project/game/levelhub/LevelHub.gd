@@ -70,7 +70,10 @@ func update_sections() -> void:
 			section.setup(self, idx, unlocked, extra_levels)
 			if extra_levels:
 				section.loaded_endless.connect(_on_loaded_endless)
-		section.setup_dlc_button()
+		if extra_levels:
+			section.setup_dlc_button()
+		else:
+			section.delete_dlc_button()
 		idx += 1
 
 func _on_loaded_endless(button: LevelButton) -> void:

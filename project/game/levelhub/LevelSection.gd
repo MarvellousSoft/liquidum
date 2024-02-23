@@ -121,13 +121,14 @@ func set_section_name(section_name: String) -> void:
 		SectionName.show()
 
 func setup_dlc_button() -> void:
-	if extra:
-		%BuyDLCButton.visible = MainButton.disabled
-		if ExtraLevelLister.is_free(my_section):
-			%BuyDLCButton.text = "DLC_FREE"
-		else:
-			%BuyDLCButton.text = "DLC_BUY"
-	elif has_node("%BuyDLCButton"):
+	%BuyDLCButton.visible = MainButton.disabled
+	if ExtraLevelLister.is_free(my_section):
+		%BuyDLCButton.text = "DLC_FREE"
+	else:
+		%BuyDLCButton.text = "DLC_BUY"
+
+func delete_dlc_button() -> void:
+	if has_node("%BuyDLCButton"):
 		%BuyDLCButton.queue_free()
 
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
