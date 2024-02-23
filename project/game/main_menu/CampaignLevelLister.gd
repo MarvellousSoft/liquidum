@@ -153,3 +153,6 @@ func section_name(_section: int) -> String:
 
 func section_disabled(_section: int) -> bool:
 	return false
+
+func is_hard(section: int, level: int) -> bool:
+	return level >= 7 or section == 6

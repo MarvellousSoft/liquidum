@@ -68,15 +68,14 @@ func setup(section : int, level: int, active : bool, extra: bool) -> void:
 	%AlternateText.queue_free()
 	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
+	my_level = level
 	if level == -1:
 		assert(extra)
 		MainButton.text = "∞"
 	else:
-		my_level = level
 		MainButton.text = str(my_level)
 	
-	# Maybe make this less hardcoded in the future
-	HardIcon.visible = my_level == -1 or my_level >= 7 or section == 6
+	HardIcon.visible = lister.is_hard(section, level)
 	if active:
 		enable()
 		if my_level == -1:

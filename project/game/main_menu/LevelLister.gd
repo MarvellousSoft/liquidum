@@ -41,3 +41,6 @@ func section_name(_section: int) -> String:
 
 func section_disabled(_section: int) -> bool:
 	return GridModel.must_be_implemented()
+
+func is_hard(_section: int, _level: int) -> bool:
+	return GridModel.must_be_implemented()

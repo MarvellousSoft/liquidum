@@ -104,3 +104,6 @@ func section_endless_flavor(section: int) -> int:
 		return -1
 	else:
 		return RandomFlavors.Flavor.get(flavor_name, -1)
+
+func is_hard(section: int, level: int) -> bool:
+	return level == -1 or level in _config(section).get_value("section", "hard_levels", [])
