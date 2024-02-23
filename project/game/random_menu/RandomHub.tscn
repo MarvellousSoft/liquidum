@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b1eaivgv5cofo"]
+[gd_scene load_steps=6 format=3 uid="uid://b1eaivgv5cofo"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
 [ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_1yoql"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
 [ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_jxjxy"]
+[ext_resource type="Texture2D" uid="uid://yb7nehpgxv4m" path="res://assets/images/ui/spinbox_arrows.png" id="5_xxff2"]
 
 [node name="RandomHub" type="Control"]
 layout_mode = 3
@@ -299,6 +300,7 @@ text = "MARATHON_MODE"
 [node name="Slider" type="SpinBox" parent="Marathon"]
 visible = false
 layout_mode = 2
+theme_override_icons/updown = ExtResource("5_xxff2")
 min_value = 1.0
 value = 1.0
 alignment = 1
@@ -308,6 +310,7 @@ select_all_on_focus = true
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 0)
+layout_mode = 0
 offset_left = 1623.0
 offset_top = 2048.0
 offset_right = 2223.0
