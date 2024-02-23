@@ -493,11 +493,15 @@ expand_mode = 2
 
 [node name="Equal" type="Label" parent="IconCaptions/HardLevels"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
-text = "="
+text = "= "
 
 [node name="Meaning" type="Label" parent="IconCaptions/HardLevels"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "HARD_LEVEL"
 
@@ -526,11 +530,15 @@ expand_mode = 2
 
 [node name="Equal" type="Label" parent="IconCaptions/Ongoing"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
-text = "="
+text = "= "
 
 [node name="Meaning" type="Label" parent="IconCaptions/Ongoing"]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "ONGOING"
 

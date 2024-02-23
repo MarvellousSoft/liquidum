@@ -19,11 +19,11 @@ const LEVELS_SCALE = {
 }
 const BACK_POSITION = {
 	"desktop": Vector2(-885, -500),
-	"mobile": Vector2(-350, -720),
+	"mobile": Vector2(-380, -720),
 }
 const CAPTIONS_POSITION = {
 	"desktop": Vector2(-900, 400),
-	"mobile": Vector2(-350, 1000),
+	"mobile": Vector2(-380, 640),
 }
 
 const STYLES = {
