@@ -131,10 +131,12 @@ text = "MARATHON_MODE"
 
 [node name="MarathonLabel" type="Label" parent="Difficulties/VBox/Marathon/Button"]
 layout_mode = 2
-offset_left = -201.0
-offset_top = 73.0
-offset_right = 519.0
-offset_bottom = 112.0
+anchor_left = 0.478
+anchor_right = 0.478
+offset_left = -353.004
+offset_top = 84.0
+offset_right = 366.996
+offset_bottom = 123.0
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
 theme_override_font_sizes/font_size = 30

@@ -79,7 +79,7 @@ func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> Stri
 func _update() -> void:
 	var has_random_level := (FileManager.load_level(RANDOM) != null and FileManager.load_random_level() != null)
 	Continue.visible = has_random_level
-	ContinueSeparator.visible = has_random_level
+	ContinueSeparator.visible = has_random_level and not Global.is_mobile
 	if has_random_level:
 		var data := FileManager.load_random_level()
 		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]

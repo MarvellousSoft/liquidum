@@ -163,7 +163,7 @@ func _store_window() -> void:
 	Profile.set_option("window_screen", window.current_screen)
 
 func toggle_fullscreen():
-	if is_mobile:
+	if is_mobile and not OS.is_debug_build():
 		return
 	var window = get_window()
 	if window.mode == Window.MODE_WINDOWED:
