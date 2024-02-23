@@ -133,7 +133,7 @@ func _ready():
 	else:
 		update_aquarium_button_icon()
 	%PlayAgainButton.hide()
-	if difficulty != -1 and marathon_left != 0:
+	if (difficulty != -1 and marathon_left != 0) or level_name.begins_with("endless_"):
 		%PlayAgainButton.show()
 		update_play_again_button_label()
 	if marathon_left == 0:
@@ -503,7 +503,12 @@ func add_playtime_tracking(stats: Array[String]) -> void:
 
 func update_play_again_button_label() -> void:
 	if marathon_left == -1:
-		%PlayAgainButton.text = tr("PLAY_AGAIN_NEW_LEVEL") % tr(DIFFICULTY_NAMES[difficulty]).to_lower()
+		var new_name: String
+		if difficulty != -1:
+			new_name = DIFFICULTY_NAMES[difficulty]
+		else:
+			new_name = "ENDLESS"
+		%PlayAgainButton.text = tr("PLAY_AGAIN_NEW_LEVEL") % tr(new_name).to_lower()
 	else:
 		%PlayAgainButton.text = "ABANDON_MARATHON"
 
@@ -1007,10 +1012,17 @@ func _on_cancel_uniq_check_mouse_entered():
 
 func _on_play_again_button_pressed() -> void:
 	if marathon_left == -1:
-		Global.play_new_dif_again = difficulty
+		if difficulty != -1:
+			Global.play_new_dif_again = difficulty
+		else:
+			Global.play_new_dif_again = 1
 	if _show_level_completed_ad():
 		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
 	elif marathon_left == -1:
-		TransitionManager.stack.back()._play_new_level_again()
+		var last_scene = TransitionManager.stack.back()
+		if last_scene is RandomHub:
+			last_scene._play_new_level_again()
+		else:
+			last_scene.get_node("%ExtraLevelHub")._play_new_endless()
 	else:
 		TransitionManager.pop_scene()

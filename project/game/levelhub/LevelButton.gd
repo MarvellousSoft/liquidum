@@ -30,6 +30,7 @@ const STYLES = {
 
 signal pressed
 signal had_first_win
+signal loaded_endless(button: LevelButton)
 
 @onready var MainButton = $Button
 @onready var ShaderEffect = $Button/ShaderEffect
@@ -148,9 +149,14 @@ func load_existing_endless() -> void:
 	var key := ExtraLevelLister.endless_level_name(my_section)
 	var level_node := Global.create_level(GridImpl.import_data(gdata.grid_data, GridModel.LoadMode.Solution), key, "", "", ["random", key])
 	level_node.extra_section = my_section
-	TransitionManager.push_scene(level_node)
+	if Global.play_new_dif_again == -1:
+		TransitionManager.push_scene(level_node)
+	else:
+		Global.play_new_dif_again = -1
+		TransitionManager.change_scene(level_node)
 
 func gen_and_load_endless() -> void:
+	loaded_endless.emit(self)
 	# There might be an existing save
 	FileManager.clear_level(ExtraLevelLister.endless_level_name(my_section))
 	var gen := RandomLevelGenerator.new()

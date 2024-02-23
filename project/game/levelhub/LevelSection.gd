@@ -56,6 +56,7 @@ const STYLES = {
 
 signal enable_focus(pos : Vector2, my_section : int)
 signal disable_focus()
+signal loaded_endless(button: LevelButton)
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var MainButton = $Button
@@ -151,11 +152,14 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		button.setup(my_section, -1, enabled, true)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
+		button.loaded_endless.connect(_on_loaded_endless)
 	
 	OngoingSolution.visible = level_lister.count_section_ongoing_solutions(my_section) > 0
 	update_level_count_label()
 	update_style_boxes(is_section_completed())
 
+func _on_loaded_endless(button: LevelButton) -> void:
+	loaded_endless.emit(button)
 
 func enable() -> void:
 	AnimPlayer.speed_scale = randf_range(.35, .55)
@@ -276,7 +280,7 @@ func _on_back_button_pressed():
 
 func _on_level_button_mouse_entered(level_number : int):
 	if level_number == -1:
-		show_level_info("Endless", false, -1, -1)
+		show_level_info("ENDLESS", false, -1, -1)
 		return
 	var save = FileManager.load_level(level_lister.level_name(my_section, level_number))
 	var data = FileManager.load_extra_level_data(my_section, level_number) if extra else FileManager.load_campaign_level_data(my_section, level_number)

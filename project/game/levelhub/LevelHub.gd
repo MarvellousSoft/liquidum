@@ -9,6 +9,7 @@ var level_focused := false
 var section_focused := -1
 var level_to_unlock = -1
 var section_to_unlock = -1
+var last_button_to_endless: LevelButton = null
 ## Load extra levels instead of regular campaign levels
 @export var extra_levels := false
 
@@ -62,8 +63,12 @@ func update_sections() -> void:
 		else:
 			section.enable()
 			section.setup(self, idx, unlocked, extra_levels)
+			if extra_levels:
+				section.loaded_endless.connect(_on_loaded_endless)
 		idx += 1
 
+func _on_loaded_endless(button: LevelButton) -> void:
+	last_button_to_endless = button
 
 func check_unlocks() -> void:
 	#Unlock a new level
@@ -111,3 +116,9 @@ func get_focused_section():
 	if not level_focused:
 		return null
 	return Sections.get_child(section_focused - 1)
+
+func _play_new_endless() -> void:
+	if last_button_to_endless == null:
+		TransitionManager.pop_scene()
+	else:
+		await last_button_to_endless.gen_and_load_endless()
