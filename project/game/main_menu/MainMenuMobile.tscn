@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=14 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="8_i0ntq"]
@@ -69,6 +70,18 @@ size_flags_horizontal = 4
 tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
+
+[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" instance=ExtResource("5_h8qaa")]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.009
+anchor_top = 0.11
+anchor_right = 1.009
+anchor_bottom = 0.11
+offset_left = 45.472
+offset_right = 136.472
+offset_bottom = 47.0
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2

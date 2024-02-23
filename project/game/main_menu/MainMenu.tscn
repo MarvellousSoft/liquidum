@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://ro0q1vkhf05x"]
+[gd_scene load_steps=13 format=3 uid="uid://ro0q1vkhf05x"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="3_nnq5w"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
@@ -51,6 +52,18 @@ size_flags_horizontal = 4
 tooltip_text = "EXTRA_LEVELS_TOOLTIP"
 focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
+
+[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" instance=ExtResource("3_twfmx")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.073
+anchor_right = 1.0
+anchor_bottom = 0.073
+offset_left = 69.0
+offset_top = 4.043
+offset_right = 264.0
+offset_bottom = 102.043
 
 [node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
 layout_mode = 2

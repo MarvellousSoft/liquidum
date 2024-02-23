@@ -284,6 +284,7 @@ const HARD_LEVEL = "HARD_LEVEL"
 const ONGOING = "ONGOING"
 const DLC_BUY = "DLC_BUY"
 const DLC_FREE = "DLC_FREE"
+const NEW = "NEW"
 
 const KEYS = [
  "TEST",
@@ -566,5 +567,6 @@ const KEYS = [
  "HARD_LEVEL",
  "ONGOING",
  "DLC_BUY",
- "DLC_FREE"
+ "DLC_FREE",
+ "NEW"
 ]
