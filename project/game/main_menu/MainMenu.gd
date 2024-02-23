@@ -118,6 +118,15 @@ func update_level_hub():
 	LevelHub.update_sections()
 	if has_node("%ExtraLevelHub"):
 		%ExtraLevelHub.update_sections()
+		check_for_new_dlc()
+
+
+func check_for_new_dlc():
+	%NewIndicator.hide()
+	for dlc in Profile.get_all_dlc_info().values():
+		if dlc.new:
+			%NewIndicator.show()
+			break
 
 
 func update_profile_button() -> void:
@@ -164,6 +173,7 @@ func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
 	Camera.position = cam_pos.menu
 	cur_state = STATES.MAIN_MENU
+	check_for_new_dlc()
 
 
 func _on_level_hub_enable_focus(pos, extra):

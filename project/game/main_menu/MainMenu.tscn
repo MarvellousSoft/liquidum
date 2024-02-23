@@ -54,6 +54,7 @@ focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
 
 [node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" instance=ExtResource("3_twfmx")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0

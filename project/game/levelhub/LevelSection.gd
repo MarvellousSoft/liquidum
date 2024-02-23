@@ -121,6 +121,7 @@ func set_section_name(section_name: String) -> void:
 		SectionName.show()
 
 func setup_dlc_button() -> void:
+	%NewDLC.visible = Profile.get_dlc_info(my_section).new
 	%BuyDLCButton.visible = MainButton.disabled
 	if ExtraLevelLister.is_free(my_section):
 		%BuyDLCButton.text = "DLC_FREE"
@@ -129,6 +130,7 @@ func setup_dlc_button() -> void:
 
 func delete_dlc_button() -> void:
 	if has_node("%BuyDLCButton"):
+		%NewDLC.queue_free()
 		%BuyDLCButton.queue_free()
 
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
@@ -280,6 +282,11 @@ func update_style_boxes(completed : bool):
 
 func _on_button_pressed():
 	AudioManager.play_sfx("zoom_in")
+	if extra:
+		var data = Profile.get_dlc_info(my_section)
+		data.new = false
+		Profile.set_dlc_info(my_section, data, true)
+		%NewDLC.hide()
 	focus()
 
 

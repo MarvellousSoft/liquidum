@@ -48,6 +48,16 @@ var options = {
 	"show_bubbles": true,
 	"bigger_hints_font": false,
 }
+var dlc_info = {
+	#Small & tricky
+	"1" = {
+		"new": true,
+	},
+	#Mirrors
+#	"2" = {
+#		"new": true,
+#	}
+}
 
 const STEAM_LANGUAGES := {
 	brazilian = "pt_BR",
@@ -78,8 +88,10 @@ func get_save_data() -> Dictionary:
 		"time": Time.get_datetime_dict_from_system(),
 		"version": VERSION,
 		"options": options,
+		"dlc_info": dlc_info,
 	}
 	return data
+
 
 func get_vec2i(key: String) -> Vector2i:
 	var val = get_option(key)
@@ -113,6 +125,7 @@ func set_save_data(data):
 		push_warning("Profile updated!")
 	
 	set_data(data, "options", options)
+	set_data(data, "dlc_info", dlc_info)
 	
 	if Global.is_mobile:
 		AudioManager.set_bus_volume(AudioManager.MASTER_BUS, MOBILE_MASTER_VOLUME)
@@ -170,6 +183,21 @@ func set_option(opt_name: String, value, should_save := false):
 	if should_save:
 		FileManager.save_profile()
 
+
+func get_all_dlc_info():
+	return dlc_info
+
+
+func get_dlc_info(dlc_id : int):
+	assert(dlc_info.has(str(dlc_id)),"Not a valid dlc id: " + str(dlc_id))
+	return dlc_info[str(dlc_id)]
+
+
+func set_dlc_info(dlc_id : int, new_data : Dictionary, should_save := false):
+	assert(dlc_info.has(str(dlc_id)),"Not a valid dlc id to set data: " + str(dlc_id))
+	dlc_info[str(dlc_id)] = new_data
+	if should_save:
+		FileManager.save_profile()
 
 func _on_dark_mode_toggled(is_dark):
 	ProjectSettings.set_setting("gui/theme/custom", Global.get_theme(is_dark))
