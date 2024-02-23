@@ -55,9 +55,9 @@ func get_max_unlocked_levels(_section: int) -> int:
 func count_completed_section_levels(section: int) -> int:
 	var count := 0
 	for level in range(1, 50):
-		if not FileManager.has_campaign_level(section, level):
+		if not FileManager.has_extra_level_data(section, level):
 			break
-		var save := FileManager.load_level(ExtraLevelLister.level_name(section, level), FileManager.get_current_profile())
+		var save := FileManager.load_level(ExtraLevelLister.level_name(section, level))
 		if save != null and save.is_completed():
 			count += 1
 	return count
@@ -65,7 +65,7 @@ func count_completed_section_levels(section: int) -> int:
 func count_section_ongoing_solutions(section: int) -> int:
 	var level := 1
 	var count := 0
-	while FileManager.has_campaign_level(section, level):
+	while FileManager.has_extra_level_data(section, level):
 		var save := FileManager.load_level(ExtraLevelLister.level_name(section, level))
 		if save != null and not save.is_solution_empty():
 			count += 1

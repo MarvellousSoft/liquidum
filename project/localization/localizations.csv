@@ -79,8 +79,6 @@ EXPERT_TOOLTIP_DISABLED,Unlock section 5 to access this difficulty,Desbloqueie a
 INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?,Tem certeza de que deseja tentar isso?
 INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para acessar essa dificuldade,Complete TODOS os níveis para acessar essa dificuldade
 GENERATING_LEVEL,Generating level,Gerando nível,Gerando nível
-HARD_LEVEL,Hard level,Nível difícil,Nível difícil
-ONGOING,In progress,Em progresso,Em progresso
 LEVEL_01_01,Dipping the Toes,Molhando os Pés,Mergulhando os dedos dos pés
 LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas,Profundidades desconhecidas
 LEVEL_01_03,Aquariums,Aquários,Aquários
@@ -267,13 +265,15 @@ ABANDON_MARATHON,Abandon,Desistir,Desistir
 MARATHON_TEXT,Multiple levels in a row,Múltiplos níveis seguidos,Múltiplos níveis seguidos
 ASSETS_USED,Assets used,Recursos usados,Recursos usados
 MIRROR_LEVEL_DESC,All water and boats cells are horizontally mirrored in the grid.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.
-EXTRA_01_01,,,
-EXTRA_01_02,,,
-EXTRA_01_03,Hot & Cold,Quente & Frio,Quente & Frio
-EXTRA_01_04,,,
-EXTRA_01_05,,,
-EXTRA_01_06,,,
-EXTRA_01_07,,,
-EXTRA_01_08,,,
-EXTRA_01_09,,,
-EXTRA_01_10,,,
+EXTRA_01_01,Twins & In Sync,Twins & In Sync,Twins & In Sync
+EXTRA_01_02,Same energy & Dead battery,Same energy & Dead battery,Same energy & Dead battery
+EXTRA_01_03,Hot & Cold,Hot & Cold,Hot & Cold
+EXTRA_01_04,Yes & No,Yes & No,Yes & No
+EXTRA_01_05,In & Out,In & Out,In & Out
+EXTRA_01_06,Up & Down,Up & Down,Up & Down
+EXTRA_01_07,Wrong & Right,Wrong & Right,Wrong & Right
+EXTRA_01_08,Black & White,Black & White,Black & White
+EXTRA_01_09,Fight & Break up,Fight & Break up,Fight & Break up
+EXTRA_01_10,Kiss & Make up,Kiss & Make up,Kiss & Make up
+HARD_LEVEL,Hard level,Nível difícil,Nível difícil
+ONGOING,In progress,Em progresso,Em progresso
