@@ -120,6 +120,16 @@ func set_section_name(section_name: String) -> void:
 		SectionName.text = section_name
 		SectionName.show()
 
+func setup_dlc_button() -> void:
+	if extra:
+		%BuyDLCButton.visible = MainButton.disabled
+		if ExtraLevelLister.is_free(my_section):
+			%BuyDLCButton.text = "DLC_FREE"
+		else:
+			%BuyDLCButton.text = "DLC_BUY"
+	elif has_node("%BuyDLCButton"):
+		%BuyDLCButton.queue_free()
+
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	extra = extra_
 	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
@@ -319,3 +329,15 @@ func _on_dark_mode_changed(_is_dark : bool):
 	else:
 		update_style_boxes(false)
 
+
+
+func _on_buy_dlc_button_mouse_entered():
+	AudioManager.play_sfx("button_hover")
+
+
+func _on_buy_dlc_button_pressed() -> void:
+	if Global.is_mobile:
+		# TODO: buy mobile DLC
+		pass
+	else:
+		SteamManager.overlay_or_browser("https://store.steampowered.com/app/2849100?utm_source=liquidum&utm_medium=menu")

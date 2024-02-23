@@ -282,6 +282,8 @@ const EXTRA_01_09 = "EXTRA_01_09"
 const EXTRA_01_10 = "EXTRA_01_10"
 const HARD_LEVEL = "HARD_LEVEL"
 const ONGOING = "ONGOING"
+const DLC_BUY = "DLC_BUY"
+const DLC_FREE = "DLC_FREE"
 
 const KEYS = [
  "TEST",
@@ -562,5 +564,7 @@ const KEYS = [
  "EXTRA_01_09",
  "EXTRA_01_10",
  "HARD_LEVEL",
- "ONGOING"
+ "ONGOING",
+ "DLC_BUY",
+ "DLC_FREE"
 ]

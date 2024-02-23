@@ -92,6 +92,9 @@ func level_stat(section: int, level: int) -> String:
 func section_name(section: int) -> String:
 	return _config(section).get_value("section", "name", "No name")
 
+func _android_payment(section: int) -> String:
+	return _config(section).get_value("section", "android_payment", "")
+
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
 		# TODO: Payments
@@ -111,3 +114,6 @@ func section_endless_flavor(section: int) -> int:
 
 func is_hard(section: int, level: int) -> bool:
 	return level == -1 or level in _config(section).get_value("section", "hard_levels", [])
+
+func is_free(section: int) -> bool:
+	return _android_payment(section) == ""

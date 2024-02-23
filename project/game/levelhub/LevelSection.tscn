@@ -414,6 +414,17 @@ one_shot = true
 speed_scale = 1.5
 explosiveness = 1.0
 
+[node name="BuyDLCButton" type="Button" parent="Button"]
+unique_name_in_owner = true
+layout_direction = 3
+layout_mode = 0
+offset_left = 204.0
+offset_top = -77.0
+offset_right = 591.0
+offset_bottom = 32.0
+focus_mode = 0
+text = "DLC_BUY"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "float"
 speed_scale = 0.7
@@ -544,6 +555,8 @@ text = "ONGOING"
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="Button/BuyDLCButton" to="." method="_on_buy_dlc_button_mouse_entered"]
+[connection signal="pressed" from="Button/BuyDLCButton" to="." method="_on_buy_dlc_button_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 
 [editable path="Levels/LevelButton1"]

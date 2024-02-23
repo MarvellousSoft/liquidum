@@ -29,17 +29,22 @@ func _process(dt):
 
 
 func _enter_tree() -> void:
+	SteamManager.overlay_toggled.connect(_on_overlay_toggled)
 	Global.dev_mode_toggled.connect(_on_dev_mode)
 	check_unlocks()
 
 
 func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_dev_mode)
+	SteamManager.overlay_toggled.disconnect(_on_overlay_toggled)
 
 
 func _on_dev_mode(_on: bool) -> void:
 	update_sections()
 
+func _on_overlay_toggled(on: bool) -> void:
+	if not on:
+		update_sections()
 
 func update_sections() -> void:
 	var level_lister: LevelLister = ExtraLevelLister as LevelLister if extra_levels else CampaignLevelLister as LevelLister
@@ -65,6 +70,7 @@ func update_sections() -> void:
 			section.setup(self, idx, unlocked, extra_levels)
 			if extra_levels:
 				section.loaded_endless.connect(_on_loaded_endless)
+		section.setup_dlc_button()
 		idx += 1
 
 func _on_loaded_endless(button: LevelButton) -> void:

@@ -1,5 +1,7 @@
 extends Node
 
+signal overlay_toggled(on: bool)
+
 var enabled := true
 const APP_ID := 2716690
 var steam = null
@@ -29,7 +31,9 @@ func _ready() -> void:
 		set_process(false)
 		set_process_input(false)
 		return
+	SteamManager.steam.dlc_installed.connect(_on_dlc_installed)
 	SteamManager.steam.current_stats_received.connect(_stats_received)
+	Steam.overlay_toggled.connect(_on_overlay_toggled)
 	SteamManager.steam.requestCurrentStats()
 
 func _stats_received(game: int, result: int, user: int) -> void:
@@ -126,3 +130,16 @@ func _upload_item(id: int, title: String, description: String, dir: String, prev
 		SteamManager.steam.activateGameOverlayToWebPage("steam://url/CommunityFilePage/%d" % id)
 	print("Successfuly updated item %d" % id)
 	return true
+
+func _on_dlc_installed(app_id: int) -> void:
+	print("Installed DLC %d" % [app_id])
+
+func _on_overlay_toggled(on: bool, _user_initiated: bool, _app_id: int) -> void:
+	overlay_toggled.emit(on)
+
+# Safe to call even if Steam is disabled
+func overlay_or_browser(url: String) -> void:
+	if not enabled or not steam.isOverlayEnabled():
+		OS.shell_open(url)
+	else:
+		steam.activateGameOverlayToWebPage(url)
