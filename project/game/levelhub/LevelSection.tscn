@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dc0n1i0v2jf7g"]
+[gd_scene load_steps=20 format=3 uid="uid://dc0n1i0v2jf7g"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
 [ext_resource type="StyleBox" uid="uid://cuaic14krl4js" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
+[ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="9_kuosf"]
+[ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="10_uf1wk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7tmt"]
 bg_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
@@ -467,8 +469,70 @@ offset_right = 129.0
 offset_bottom = -341.0
 scale = Vector2(0.5, 0.5)
 focus_mode = 0
-theme_override_font_sizes/font_size = 66
+theme_override_font_sizes/font_size = 70
 text = "BACK"
+
+[node name="IconCaptions" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -643.0
+offset_top = 404.0
+offset_right = -300.0
+offset_bottom = 506.0
+
+[node name="HardLevels" type="HBoxContainer" parent="IconCaptions"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/HardLevels"]
+modulate = Color(0.85098, 1, 0.886275, 1)
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("9_kuosf")
+expand_mode = 2
+
+[node name="Equal" type="Label" parent="IconCaptions/HardLevels"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "="
+
+[node name="Meaning" type="Label" parent="IconCaptions/HardLevels"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "HARD_LEVEL"
+
+[node name="Ongoing" type="HBoxContainer" parent="IconCaptions"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="IconCaptions/Ongoing"]
+layout_mode = 2
+theme_override_constants/separation = -14
+
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/Ongoing/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_uf1wk")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="IconCaptions/Ongoing/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_uf1wk")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="IconCaptions/Ongoing/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_uf1wk")
+expand_mode = 2
+
+[node name="Equal" type="Label" parent="IconCaptions/Ongoing"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "="
+
+[node name="Meaning" type="Label" parent="IconCaptions/Ongoing"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "ONGOING"
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

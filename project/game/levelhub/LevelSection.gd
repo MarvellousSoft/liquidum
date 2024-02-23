@@ -18,8 +18,12 @@ const LEVELS_SCALE = {
 	"mobile": Vector2(.4, .4),
 }
 const BACK_POSITION = {
-	"desktop": Vector2(-791, -447),
+	"desktop": Vector2(-885, -500),
 	"mobile": Vector2(-350, -720),
+}
+const CAPTIONS_POSITION = {
+	"desktop": Vector2(-900, 400),
+	"mobile": Vector2(-350, 1000),
 }
 
 const STYLES = {
@@ -83,15 +87,17 @@ func _ready():
 	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
 	LevelInfoContainer.modulate.a = 0.0
+	%IconCaptions.modulate.a = 0.0
 	SectionNumber.modulate.a = 1.0
 	Levels.hide()
 	MouseBlocker.hide()
 	AnimPlayer.seek(randf_range(0.0, AnimPlayer.current_animation_length))
 	BackButton.position = BACK_POSITION.mobile if Global.is_mobile else BACK_POSITION.desktop
+	%IconCaptions.position = CAPTIONS_POSITION.mobile if Global.is_mobile else CAPTIONS_POSITION.desktop
 
 
 func _process(dt):
-	for node in [Levels, BackButton]:
+	for node in [Levels, BackButton, %IconCaptions]:
 		Global.alpha_fade_node(dt, node, focused, ALPHA_SPEED, true)
 	for node in [OngoingSolution, LevelCount]:
 		Global.alpha_fade_node(dt, node, not focused, ALPHA_SPEED)

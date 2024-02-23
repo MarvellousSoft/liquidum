@@ -79,6 +79,8 @@ EXPERT_TOOLTIP_DISABLED,Unlock section 5 to access this difficulty,Desbloqueie a
 INSANE_TOOLTIP,Are you sure you want to try this?,Tem certeza que quer tentar isso?,Tem certeza de que deseja tentar isso?
 INSANE_TOOLTIP_DISABLED,Complete ALL levels to unlock this difficulty,Complete TODOS os níveis para acessar essa dificuldade,Complete TODOS os níveis para acessar essa dificuldade
 GENERATING_LEVEL,Generating level,Gerando nível,Gerando nível
+HARD_LEVEL,Hard level,Nível difícil,Nível difícil
+ONGOING,In progress,Em progresso,Em progresso
 LEVEL_01_01,Dipping the Toes,Molhando os Pés,Mergulhando os dedos dos pés
 LEVEL_01_02,Unknown Depths,Profundezas Desconhecidas,Profundidades desconhecidas
 LEVEL_01_03,Aquariums,Aquários,Aquários
