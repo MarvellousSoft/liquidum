@@ -48,6 +48,54 @@ class Strategy:
 	func description() -> String:
 		return "No description"
 
+
+class FullPropagateNoWater extends Strategy:
+	func description() -> String:
+		return "Propagate NoWater even through walls (in upper caves)."
+	func apply_any() -> bool:
+		var dfs := AddNoWaterThroughDips.new(grid)
+		var any := false
+		# Bottom up for correctness
+		for i in range(grid.rows() - 1, -1, -1):
+			for j in grid.cols():
+				var c := grid._pure_cell(i, j)
+				for corner in c.corners():
+					var cont := c._content_at(corner)
+					if cont == Content.NoWater or cont == Content.NoBoatWater:
+						# Reset last seen for this cell only, because we sometimes want to visit
+						# them again if they can go down again
+						c.set_last_seen(corner, 0)
+						dfs.reset(i)
+						dfs.flood(i, j, corner)
+						any = any or dfs.any
+		return any
+
+
+# This doesn't actually fully propagates NoWater, but it does if applied multiple times properly
+class AddNoWaterThroughDips extends GridImpl.Dfs:
+	# Can only go down when already at min_i
+	var min_i: int
+	var any: bool
+	func reset(min_i_: int) -> void:
+		min_i = min_i_
+		any = false
+	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+		var c := cell._content_at(corner)
+		match c:
+			Content.Nothing, Content.NoBoat:
+				if i <= min_i:
+					cell.put_nowater(corner, false)
+					any = true
+			Content.Block, Content.Boat, Content.NoWater, Content.NoBoatWater, Content.Water:
+				pass
+			_:
+				assert(false, "Unkown content %d" % c)
+		return true
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	func _can_go_down(i: int, _j: int) -> bool:
+		return i >= min_i
+
 # Strategy for a single row
 class RowStrategy extends Strategy:
 	# values is an array of component, that is, all triangles
@@ -1067,7 +1115,8 @@ static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
 	var c := grid.get_cell(pos.i, pos.j)
 	if not c.water_at(corner):
-		grid.get_cell(pos.i, pos.j).put_water(corner, false)
+		var added := grid.get_cell(pos.i, pos.j).put_water(corner, false)
+		assert(added > 0, "_put_water call but didn't succeed to put water")
 
 static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
@@ -1143,7 +1192,6 @@ class AquariumsStrategy extends Strategy:
 						dfs.flood(i, j, corner)
 						dfs.reset_for_pool_check()
 						dfs.flood(i, j, corner)
-						dfs.info.remove_m1()
 						all_aqs.append(dfs.info)
 		_infer_if_rest_is_0(hint, all_aqs)
 		var var_aqs: Array[GridImpl.AquariumInfo] = []
@@ -1230,6 +1278,7 @@ class AquariumsStrategy extends Strategy:
 static var STRATEGY_LIST := {
 	BasicRow = func(grid): return BasicRowStrategy.new(grid),
 	BasicCol = func(grid): return BasicColStrategy.new(grid),
+	FullPropagateNoWater = func(grid): return FullPropagateNoWater.new(grid),
 	BoatRow = func(grid): return BoatRowStrategy.new(grid),
 	BoatCol = func(grid): return BoatColStrategy.new(grid),
 	MediumRow = func(grid): return MediumRowStrategy.new(grid),
@@ -1315,6 +1364,7 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 					print("[%d] Applied %s" % [t, name])
 				any = true
 				# Earlier strategies are usually simpler, let's try to run them more
+				# Also, some strategies depend on others having run
 				break
 		if not any:
 			return t > 0

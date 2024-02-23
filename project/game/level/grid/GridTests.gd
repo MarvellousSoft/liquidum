@@ -973,3 +973,38 @@ func test_aquariums() -> void:
 	ww..
 	L.L.
 	""")
+
+func test_propagate_nowater() -> void:
+	assert_can_solve("""
+	x##.
+	|╲|/
+	wwww
+	L._.
+	""")
+	assert_cant_solve("""
+	+aqua=0.0:1
+	h....
+	.xxxx
+	.|...
+	1..xx
+	.L/L.
+	""")
+	assert_apply_strategies("""
+	..##......##..
+	|.L.|._...L.|.
+	..##xx##..##..
+	|.L.|.L.|.L.|.
+	..##..##..##..
+	|.L.|.L.|.L.|.
+	......##......
+	L._._.L.L._._.
+	""", """
+	xx##xxxxxx##xx
+	|.L.|._...L.|.
+	xx##xx##..##..
+	|.L.|.L.|.L.|.
+	..##..##..##..
+	|.L.|.L.|.L.|.
+	......##......
+	L._._.L.L._._.
+	""")
