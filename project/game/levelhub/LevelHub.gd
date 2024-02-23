@@ -54,6 +54,9 @@ func update_sections() -> void:
 		Sections.add_child(c)
 		c.enable_focus.connect(_on_level_section_enable_focus)
 		c.disable_focus.connect(_on_level_section_disable_focus)
+		if extra_levels:
+			if not c.is_connected("loaded_endless", _on_loaded_endless):
+					c.loaded_endless.connect(_on_loaded_endless)
 	var idx := 1
 	for section in Sections.get_children():
 		section.set_number(idx)
@@ -68,8 +71,6 @@ func update_sections() -> void:
 		else:
 			section.enable()
 			section.setup(self, idx, unlocked, extra_levels)
-			if extra_levels:
-				section.loaded_endless.connect(_on_loaded_endless)
 		if extra_levels:
 			section.setup_dlc_button()
 		else:
