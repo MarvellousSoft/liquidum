@@ -54,7 +54,6 @@ class FullPropagateNoWater extends Strategy:
 		return "Propagate NoWater even through walls (in upper caves)."
 	func apply_any() -> bool:
 		var dfs := AddNoWaterThroughDips.new(grid)
-		var any := false
 		# Bottom up for correctness
 		for i in range(grid.rows() - 1, -1, -1):
 			for j in grid.cols():
@@ -67,8 +66,8 @@ class FullPropagateNoWater extends Strategy:
 						c.set_last_seen(corner, 0)
 						dfs.reset(i)
 						dfs.flood(i, j, corner)
-						any = any or dfs.any
-		return any
+		grid._push_undo_changes(dfs.changes, false)
+		return not dfs.changes.is_empty()
 
 
 # This doesn't actually fully propagates NoWater, but it does if applied multiple times properly
