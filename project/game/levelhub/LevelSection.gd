@@ -121,7 +121,8 @@ func set_section_name(section_name: String) -> void:
 		SectionName.show()
 
 func setup_dlc_button() -> void:
-	%NewDLC.visible = Profile.get_dlc_info(my_section).new
+	var info = Profile.get_dlc_info(my_section)
+	%NewDLC.visible = info and info.new
 	%BuyDLCButton.visible = MainButton.disabled
 	if ExtraLevelLister.is_free(my_section):
 		%BuyDLCButton.text = "DLC_FREE"

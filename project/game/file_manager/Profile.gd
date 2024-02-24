@@ -189,8 +189,9 @@ func get_all_dlc_info():
 
 
 func get_dlc_info(dlc_id : int):
-	assert(dlc_info.has(str(dlc_id)),"Not a valid dlc id: " + str(dlc_id))
-	return dlc_info[str(dlc_id)]
+	if dlc_info.has(str(dlc_id)):
+		return dlc_info[str(dlc_id)]
+	return false
 
 
 func set_dlc_info(dlc_id : int, new_data : Dictionary, should_save := false):
