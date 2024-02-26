@@ -79,10 +79,10 @@ func _input(event: InputEvent) -> void:
 			if Global.is_mobile:
 				# Remove highlight
 				highlight_grid(-1, -1)
-	elif grid_logic and event.is_action_pressed(&"undo"):
+	elif not disabled and grid_logic and event.is_action_pressed(&"undo"):
 		grid_logic.undo()
 		update()
-	elif grid_logic and event.is_action_pressed(&"redo"):
+	elif not disabled and grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
 		update()
 	if current_brush_override == 0 and last_cell_entered != null and event is InputEventKey and event.is_pressed() and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
