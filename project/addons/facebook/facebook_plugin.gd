@@ -11,11 +11,6 @@ func _enter_tree():
 	add_custom_project_setting(CLIENT_TOKEN_PATH, "", TYPE_STRING)
 	ProjectSettings.save()
 	
-	add_autoload_singleton("GodotFacebook", "res://addons/facebook_plugin/godot_facebook.gd")
-
-func _exit_tree():
-	remove_autoload_singleton("GodotFacebook")
-	
 func _get_plugin_icon():
 	return get_editor_interface().get_base_control().get_theme_icon("Node", "EditorIcons")
 

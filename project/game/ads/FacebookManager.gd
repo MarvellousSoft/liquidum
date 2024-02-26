@@ -56,6 +56,11 @@ func _ready():
 	_fb.connect(REAUTHORIZE_RESPONSE, _on_reauthorize_response)
 	
 	_fb.initApplication(_app_id, _app_name, _client_token)
+	set_auto_log_app_events_enabled(true)
+	set_advertiser_id_collection_enabled(true)
+	await get_tree().create_timer(10).timeout
+	log_event({eventName = "fb_mobile_activate_app"})
+	print("Facebook SDK initialised")
 
 func _is_fb():
 	return _fb != null
@@ -129,12 +134,12 @@ func clear_user_data():
 		
 func log_event(data: Dictionary):
 	if _is_fb():
-		_fb.logEvent()
+		_fb.logEvent(data)
 		
 
 func log_purchase(data: Dictionary):
 	if _is_fb():
-		_fb.logPurchase()
+		_fb.logPurchase(data)
 		
 
 func check_has_correct_permissions(permissions: Array = []) -> bool:
