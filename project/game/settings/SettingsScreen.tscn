@@ -230,6 +230,7 @@ size_flags_vertical = 3
 tab_alignment = 1
 
 [node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 
@@ -684,7 +685,6 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(3000, 1013)
 layout_mode = 2
 theme_override_constants/margin_top = 20
@@ -751,6 +751,11 @@ horizontal_alignment = 2
 [node name="Label2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "RIGHT_MOUSE_CLICK"
+horizontal_alignment = 2
+
+[node name="Label15" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "MIDDLE_MOUSE_CLICK"
 horizontal_alignment = 2
 
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
@@ -824,6 +829,10 @@ text = "PLACE_BRUSH"
 [node name="Label2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "PLACE_X"
+
+[node name="Label15" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "PLACE_BOAT"
 
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2

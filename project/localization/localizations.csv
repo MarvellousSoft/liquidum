@@ -205,6 +205,7 @@ LEFT_MOUSE_CLICK,Left mouse button,Botão esquerdo do mouse,Botão esquerdo do m
 PLACE_BRUSH,Use the current brush,Usa o pincel atual,Usa o pincel atual
 RIGHT_MOUSE_CLICK,Right mouse button,Botão direito do mouse,Botão direito do mouse
 PLACE_X,"Use the ""no water"" or ""no boat"" marker","Usa o marcador ""sem água"" ou ""sem barco""","Usa o marcador ""sem água"" ou ""sem barco"""
+MIDDLE_MOUSE_CLICK,Middle mouse button,Botão do meio do mouse,Botão do meio do mouse
 MOUSE_DRAG,Mouse drag,Arrastar o mouse,Arrastar o mouse
 PLACE_DRAG,Use the selected brush on multiple cells,Usa o pincel atual em múltiplas células,Usa o pincel atual em múltiplas células
 NUMBER_KEYS,"1, 2, 3 or 4","1, 2, 3 ou 4","1, 2, 3 ou 4"
