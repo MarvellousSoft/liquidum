@@ -285,9 +285,10 @@ func _on_button_pressed():
 	AudioManager.play_sfx("zoom_in")
 	if extra:
 		var data = Profile.get_dlc_info(my_section)
-		data.new = false
-		Profile.set_dlc_info(my_section, data, true)
-		%NewDLC.hide()
+		if data:
+			data.new = false
+			Profile.set_dlc_info(my_section, data, true)
+			%NewDLC.hide()
 	focus()
 
 

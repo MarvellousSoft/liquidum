@@ -54,9 +54,9 @@ var dlc_info = {
 		"new": true,
 	},
 	#Mirrors
-#	"2" = {
-#		"new": true,
-#	}
+	"2" = {
+		"new": true,
+	}
 }
 
 const STEAM_LANGUAGES := {

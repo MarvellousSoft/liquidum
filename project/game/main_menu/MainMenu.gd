@@ -123,10 +123,15 @@ func update_level_hub():
 
 func check_for_new_dlc():
 	%NewIndicator.hide()
+	var idx = 1
 	for dlc in Profile.get_all_dlc_info().values():
-		if dlc.new:
-			%NewIndicator.show()
+		if ExtraLevelLister.has_section(idx):
+			if dlc.new:
+				%NewIndicator.show()
+				break
+		else:
 			break
+		idx += 1
 
 
 func update_profile_button() -> void:

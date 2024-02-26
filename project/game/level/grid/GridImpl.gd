@@ -1780,8 +1780,6 @@ func is_equal_solution() -> bool:
 		for j in m:
 			if not _is_content_equal_solution(_pure_cell(i, j).c_left, solution_c_left[i][j]) \
 			   or not _is_content_equal_solution(_pure_cell(i, j).c_right, solution_c_right[i][j]):
-				# If we ever allow "fake hints" (with additional rules), remove this
-				assert(not are_hints_satisfied())
 				return false
 	assert(are_hints_satisfied())
 	return true
