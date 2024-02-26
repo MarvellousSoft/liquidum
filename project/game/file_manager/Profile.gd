@@ -47,7 +47,7 @@ var options = {
 	"drag_content": true,
 	"invert_mouse": false,
 	"line_info": LineInfo.None,
-	"vsync": int(DisplayServer.VSYNC_ADAPTIVE),
+	"vsync": int(DisplayServer.VSYNC_ADAPTIVE) if not Global.is_mobile else int(DisplayServer.VSYNC_DISABLED),
 	"show_timer": true,
 	"allow_mistakes": false,
 	"highlight_finished_row_col": true,
@@ -123,12 +123,23 @@ func get_override() -> ConfigFile:
 	cfg.set_value("display", "window/vsync/vsync_mode", options.vsync)
 	return cfg
 
+func version_to_array(version: String) -> Array[int]:
+	var arr: Array[int] = []
+	for s in version.split(".", false, 3):
+		arr.append(int(s))
+	return arr
+
+func version_less(v1: String, v2: String) -> bool:
+	return version_to_array(v1) < version_to_array(v2)
 
 func set_save_data(data):
 	if data.version != VERSION:
 		#Handle version diff here.
 		push_warning("Different save version for profile. Its version: " + str(data.version) + " Current version: " + str(Profile.VERSION)) 
 		push_warning("Properly updating to new save version")
+		if version_less(data.version, "1.0.9"):
+			if Global.is_mobile:
+				data.options.vsync = int(DisplayServer.VSYNC_DISABLED)
 		#(●◡●)
 		push_warning("Profile updated!")
 	

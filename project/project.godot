@@ -21,7 +21,7 @@ boot_splash/image="res://assets/images/splash_image.PNG"
 config/icon="res://assets/images/icons/256_256.png"
 config/macos_native_icon="res://assets/images/icons/icon.icns"
 config/windows_native_icon="res://assets/images/icons/icon.ico"
-config/version="1.0.8"
+config/version="1.0.9"
 run/main_scene.mobile="res://game/splash/SplashMobile.tscn"
 boot_splash/image.mobile="res://assets/images/splash_mobile.png"
 
@@ -164,4 +164,5 @@ common/physics_ticks_per_second.mobile=30
 [rendering]
 
 textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
