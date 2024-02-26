@@ -21,7 +21,7 @@ boot_splash/image="res://assets/images/splash_image.PNG"
 config/icon="res://assets/images/icons/256_256.png"
 config/macos_native_icon="res://assets/images/icons/icon.icns"
 config/windows_native_icon="res://assets/images/icons/icon.ico"
-config/version="1.0.5"
+config/version="1.0.6"
 run/main_scene.mobile="res://game/splash/SplashMobile.tscn"
 boot_splash/image.mobile="res://assets/images/splash_mobile.png"
 
@@ -66,7 +66,13 @@ movie_writer/movie_file="C:/Users/yanco/Documents/Code/puzzle-aqua/project/video
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/localization_editor/plugin.cfg")
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/facebook/plugin.cfg", "res://addons/localization_editor/plugin.cfg")
+
+[facebook]
+
+app_id="1611328989638671"
+app_name="Liquidum"
+client_token="49c25905703ed460e1a219451b9ae383"
 
 [gui]
 

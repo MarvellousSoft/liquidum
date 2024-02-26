@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=15 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
 [ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
+[ext_resource type="Script" path="res://game/main_menu/CreditsButton.gd" id="6_pitk8"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="8_i0ntq"]
 [ext_resource type="PackedScene" uid="uid://fbn8fagd6qbm" path="res://game/settings/SettingsScreenMobile.tscn" id="9_7nw1q"]
@@ -104,6 +105,7 @@ size_flags_horizontal = 4
 tooltip_text = "CREDITS_TOOLTIP"
 focus_mode = 0
 text = "CREDITS_BUTTON"
+script = ExtResource("6_pitk8")
 
 [node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
 visible = false
@@ -404,7 +406,6 @@ vertical_alignment = 1
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_extra_levels_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/MenuProfileButton" to="." method="_on_profile_button_pressed"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_timer_timeout"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
