@@ -279,8 +279,9 @@ func create_cell(new_row : Node, cell_data : GridImpl.CellModel, n : int, m : in
 
 	cell.setup(self, cell_data, n, m, editor_mode, get_cell_delay(rows, columns), fast_startup)
 	
-	cell.pressed_main_button.connect(_on_cell_pressed_button.bind(true))
-	cell.pressed_second_button.connect(_on_cell_pressed_button.bind(false))
+	cell.pressed_main_button.connect(_on_cell_pressed_button.bind(MOUSE_BUTTON_LEFT))
+	cell.pressed_second_button.connect(_on_cell_pressed_button.bind(MOUSE_BUTTON_RIGHT))
+	cell.pressed_middle_button.connect(_on_cell_pressed_button.bind(MOUSE_BUTTON_MIDDLE))
 	cell.released_main_button.connect(_on_cell_released_main_button)
 	cell.override_mouse_entered.connect(_on_cell_mouse_entered)
 	cell.block_entered.connect(_on_block_mouse_entered)
@@ -669,13 +670,18 @@ func start_col_feedback(i, j):
 			break
 
 
-func _on_cell_pressed_button(i: int, j: int, which: E.Waters, main: bool) -> void:
+func _on_cell_pressed_button(i: int, j: int, which: E.Waters, button: MouseButton) -> void:
 	if not Global.is_mobile and Profile.get_option("invert_mouse"):
-		main = not main
-	if main:
+		if button == MOUSE_BUTTON_LEFT:
+			button = MOUSE_BUTTON_RIGHT
+		elif button == MOUSE_BUTTON_RIGHT:
+			button = MOUSE_BUTTON_LEFT
+	if button == MOUSE_BUTTON_LEFT:
 		cell_pressed_main_button(i, j, which, -1)
-	else:
+	elif button == MOUSE_BUTTON_RIGHT:
 		cell_pressed_second_button(i, j, which)
+	elif button == MOUSE_BUTTON_MIDDLE:
+		cell_pressed_main_button(i, j, which, E.BrushMode.Boat)
 
 
 func _on_cell_released_main_button(_i: int, _j: int, _which: E.Waters) -> void:

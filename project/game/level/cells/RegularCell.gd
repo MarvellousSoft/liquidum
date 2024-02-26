@@ -23,6 +23,7 @@ const IMAGES = {
 signal pressed_main_button(i: int, j: int, which: E.Waters)
 signal released_main_button(i: int, j: int, which: E.Waters)
 signal pressed_second_button(i: int, j: int, which: E.Waters)
+signal pressed_middle_button(i: int, j: int, which: E.Waters)
 signal block_entered
 signal override_mouse_entered(i: int, j: int, which: E.Waters)
 
@@ -396,6 +397,8 @@ func _on_button_gui_input(event: InputEvent, which: E.Waters) -> void:
 					pressed_main_button.emit(row, column, which)
 				MOUSE_BUTTON_RIGHT:
 					pressed_second_button.emit(row, column, which)
+				MOUSE_BUTTON_MIDDLE:
+					pressed_middle_button.emit(row, column, which)
 		elif event.button_index == MOUSE_BUTTON_LEFT:
 			released_main_button.emit(row, column, which)
 
