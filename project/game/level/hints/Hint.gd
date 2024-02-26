@@ -201,6 +201,7 @@ func enable_editor() -> void:
 	if is_boat:
 		ToggleVisibility.set_pressed(false)
 	ToggleHintType.set_pressed(false)
+	update_bigger_hint(Profile.get_option("bigger_hints_font"))
 
 
 func disable_editor() -> void:
