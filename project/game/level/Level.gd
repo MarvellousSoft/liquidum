@@ -284,7 +284,6 @@ func setup(try_load := true) -> void:
 		else:
 			var save := FileManager.load_level(level_name)
 			if save != null:
-				# Maybe make this validate with original level. Not for now.
 				grid = GridExporter.new().load_data(grid, save.grid_data, GridModel.LoadMode.ContentOnly)
 				Counters.mistake.set_count(save.mistakes)
 				running_time = save.timer_secs

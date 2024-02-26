@@ -106,12 +106,44 @@ func _convert_keys_to_int(data_: Variant) -> Variant:
 			data[key.to_int()] = tmp
 	return data
 
+func load_compatible_content(old_content: GridImpl.Content, new_content: GridImpl.Content) -> bool:
+	# Only non-compatible case is blocks since that's not really up to the user to change
+	if old_content == GridImpl.Content.Block:
+		return new_content == GridImpl.Content.Block
+	return true
+
+func load_compatible_cell(old_cell: GridImpl.PureCell, new_cell: GridImpl.PureCell) -> bool:
+	if new_cell.cell_type() == E.Single and new_cell.c_left != new_cell.c_right:
+		return false
+	return old_cell.cell_type() == new_cell.cell_type() and load_compatible_content(old_cell.c_left, old_cell.c_right) \
+	  and load_compatible_content(old_cell.c_right, new_cell.c_right)
+
+func load_compatible(old_grid: GridImpl, data: Dictionary, new_cells: Array[Array]) -> bool:
+	var old_cells := old_grid.pure_cells
+	if old_cells.size() != new_cells.size():
+		return false
+	for i in old_cells.size():
+		if old_cells[i].size() != new_cells[i].size():
+			return false
+		for j in old_cells[i].size():
+			if not (new_cells[i][j] is GridImpl.PureCell) or not load_compatible_cell(old_cells[i][j], new_cells[i][j]):
+				return false
+	if old_grid.wall_bottom != _load_grid(data[wall_bottom], _load_bool):
+		return false
+	if old_grid.wall_right != _load_grid(data[wall_right], _load_bool):
+		return false
+	return true
+
 func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
 	data = _convert_keys_to_int(data)
 	if SAVE_VERSION != data[version]:
 		push_warning("Invalid version")
 	var content_only := (load_mode == GridModel.LoadMode.ContentOnly)
-	grid.pure_cells = _load_grid(data[cells], _load_pure_cell)
+	var new_cells := _load_grid(data[cells], _load_pure_cell)
+	if content_only and not load_compatible(grid, data, new_cells):
+		push_warning("Invalid save. Ignoring it and defaulting to empty grid.")
+		return grid
+	grid.pure_cells = new_cells
 	var n := grid.pure_cells.size()
 	var m := 0 if n == 0 else grid.pure_cells[0].size()
 	if content_only:
