@@ -153,11 +153,17 @@ func load_existing_endless() -> void:
 	level_node.seed_str = gdata.seed_str
 	level_node.manually_seeded = gdata.manually_seeded
 	level_node.extra_section = my_section
+	level_node.won.connect(_completed_endless)
 	if Global.play_new_dif_again == -1:
 		TransitionManager.push_scene(level_node)
 	else:
 		Global.play_new_dif_again = -1
 		TransitionManager.change_scene(level_node)
+
+func _completed_endless(info: Level.WinInfo) -> void:
+	var data := UserData.current()
+	data.bump_endless_completed(my_section)
+	data.save()
 
 func gen_and_load_endless() -> void:
 	loaded_endless.emit(self)

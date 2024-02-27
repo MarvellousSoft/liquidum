@@ -211,6 +211,8 @@ func unfocus():
 func show_level_info(level_name: String, completed: bool, time: float, mistakes: int) -> void:
 	showing_level_info = true
 	%LevelName.text = level_name
+	%BestTime.show()
+	%BestMistakes.show()
 	if completed:
 		%Completed.text = tr("COMPLETED_LEVEL")
 	else:
@@ -224,6 +226,17 @@ func show_level_info(level_name: String, completed: bool, time: float, mistakes:
 	else:
 		%BestMistakes.text = tr("BEST_MISTAKES") % "-"
 
+func show_endless_info() -> void:
+	showing_level_info = true
+	%LevelName.text = "ENDLESS"
+	var data := UserData.current()
+	var completed := data.get_endless_completed(my_section)
+	if completed > 0:
+		%Completed.text = tr("TIMES_COMPLETED") % [completed]
+	else:
+		%Completed.text = tr("NOT_COMPLETED_LEVEL")
+	%BestTime.hide()
+	%BestMistakes.hide()
 
 func hide_level_info():
 	showing_level_info = false
@@ -300,7 +313,7 @@ func _on_back_button_pressed():
 
 func _on_level_button_mouse_entered(level_number : int):
 	if level_number == -1:
-		show_level_info("ENDLESS", false, -1, -1)
+		show_endless_info()
 		return
 	var save = FileManager.load_level(level_lister.level_name(my_section, level_number))
 	var data = FileManager.load_extra_level_data(my_section, level_number) if extra else FileManager.load_campaign_level_data(my_section, level_number)

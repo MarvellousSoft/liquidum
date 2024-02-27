@@ -4,14 +4,14 @@ extends LevelLister
 func level_name(section: int, level: int) -> String:
 	return "extra_level%02d_%02d" % [section, level]
 
-func has_section(section: int) -> int:
+func has_section(section: int, show_hidden := false) -> int:
 	if FileManager.has_extra_level_data(section, 1):
-		return Global.is_dev_mode() or not _config(section).get_value('section', 'hidden', false)
+		return show_hidden or Global.is_dev_mode() or not _config(section).get_value('section', 'hidden', false)
 	return false
 
-func count_all_game_sections() -> int:
+func count_all_game_sections(show_hidden := false) -> int:
 	var i := 1
-	while has_section(i):
+	while has_section(i, show_hidden):
 		i += 1
 	return i - 1
 

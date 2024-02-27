@@ -16,22 +16,22 @@ func _enter_tree() -> void:
 	call_deferred("reload_all_levels")
 
 func get_authors(ids: Array) -> Array[String]:
-	var query_id := Steam.createQueryUGCDetailsRequest(ids)
-	Steam.sendQueryUGCRequest(query_id)
-	var ret: Array = await Steam.ugc_query_completed
-	if ret[1] != Steam.RESULT_OK:
+	var query_id: int = SteamManager.steam.createQueryUGCDetailsRequest(ids)
+	SteamManager.steam.sendQueryUGCRequest(query_id)
+	var ret: Array = await SteamManager.steam.ugc_query_completed
+	if ret[1] != SteamManager.steam.RESULT_OK:
 		push_warning("Failed to query UGC")
-		Steam.releaseQueryUGCRequest(query_id)
+		SteamManager.steam.releaseQueryUGCRequest(query_id)
 		return []
 	var total: int = ret[2]
 	var ans: Array[String] = []
 	for i in total:
-		var res: Dictionary = Steam.getQueryUGCResult(query_id, i)
+		var res: Dictionary = SteamManager.steam.getQueryUGCResult(query_id, i)
 		if res.has("steam_id_owner"):
-			ans.append(Steam.getFriendPersonaName(res.steam_id_owner))
+			ans.append(SteamManager.steam.getFriendPersonaName(res.steam_id_owner))
 		else:
 			ans.append("")
-	Steam.releaseQueryUGCRequest(query_id)
+	SteamManager.steam.releaseQueryUGCRequest(query_id)
 	return ans
 
 func reload_all_levels() -> void:

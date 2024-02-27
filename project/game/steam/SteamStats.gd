@@ -32,6 +32,12 @@ static func set_random_levels(completed_count: Array[int]) -> void:
 	if any:
 		SteamStats.flushNewAchievements()
 
+static func set_endless_completed(completed_count: Array[int]) -> void:
+	for i in completed_count.size():
+		var stat_name := "endless_%02d_levels" % [i + 1]
+		SteamManager.steam.setStatInt(stat_name, completed_count[i])
+
+
 static func _find_leaderboard(name: String) -> int:
 	SteamManager.steam.findLeaderboard(name)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
