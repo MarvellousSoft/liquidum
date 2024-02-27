@@ -43,6 +43,7 @@ AdManager="*res://game/ads/AdManager.gd"
 CampaignLevelLister="*res://game/main_menu/CampaignLevelLister.gd"
 ExtraLevelLister="*res://game/levelhub/ExtraLevelLister.gd"
 BlueFilter="*res://game/ui/BlueFilter.tscn"
+FacebookManager="*res://game/ads/FacebookManager.gd"
 
 [debug]
 

@@ -160,10 +160,9 @@ func load_existing_endless() -> void:
 		Global.play_new_dif_again = -1
 		TransitionManager.change_scene(level_node)
 
-func _completed_endless(info: Level.WinInfo) -> void:
-	var data := UserData.current()
-	data.bump_endless_completed(my_section)
-	data.save()
+func _completed_endless(_info: Level.WinInfo) -> void:
+	UserData.current().bump_endless_completed(my_section)
+	UserData.save()
 
 func gen_and_load_endless() -> void:
 	loaded_endless.emit(self)

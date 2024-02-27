@@ -25,6 +25,7 @@ func _ready():
 	var os_name = OS.get_name()
 	if os_name != "Android":
 		return
+	print("Initialising Facebook SDK")
 	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -59,7 +60,7 @@ func _ready():
 	set_auto_log_app_events_enabled(true)
 	set_advertiser_id_collection_enabled(true)
 	await get_tree().create_timer(10).timeout
-	log_event({eventName = "fb_mobile_activate_app"})
+	log_event({eventName = "my_custom_event"})
 	print("Facebook SDK initialised")
 
 func _is_fb():
