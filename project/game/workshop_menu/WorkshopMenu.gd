@@ -15,14 +15,35 @@ func _enter_tree() -> void:
 		return
 	call_deferred("reload_all_levels")
 
+func get_authors(ids: Array) -> Array[String]:
+	var query_id := Steam.createQueryUGCDetailsRequest(ids)
+	Steam.sendQueryUGCRequest(query_id)
+	var ret: Array = await Steam.ugc_query_completed
+	if ret[1] != Steam.RESULT_OK:
+		push_warning("Failed to query UGC")
+		Steam.releaseQueryUGCRequest(query_id)
+		return []
+	var total: int = ret[2]
+	var ans: Array[String] = []
+	for i in total:
+		var res: Dictionary = Steam.getQueryUGCResult(query_id, i)
+		if res.has("steam_id_owner"):
+			ans.append(Steam.getFriendPersonaName(res.steam_id_owner))
+		else:
+			ans.append("")
+	Steam.releaseQueryUGCRequest(query_id)
+	return ans
+
 func reload_all_levels() -> void:
 	var ids: Array = SteamManager.steam.getSubscribedItems()
+	var authors: Array[String] = await get_authors(ids)
 	while Buttons.get_child_count() > 0:
 		Buttons.remove_child(Buttons.get_child(Buttons.get_child_count() - 1))
 	var button_class := preload("res://game/workshop_menu/WorkshopLevelButton.tscn")
-	for id in ids:
+	for i in ids.size():
 		var button := button_class.instantiate()
-		button.id = id
+		button.id = ids[i]
+		button.author = authors[i] if authors.size() > i else ""
 		Buttons.add_child(button)
 	for idx in Buttons.get_child_count():
 		await Buttons.get_child(idx).get_vote()

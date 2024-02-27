@@ -299,6 +299,7 @@ const ONGOING = "ONGOING"
 const DLC_BUY = "DLC_BUY"
 const DLC_FREE = "DLC_FREE"
 const NEW = "NEW"
+const BY_AUTHOR = "BY_AUTHOR"
 
 const KEYS = [
  "TEST",
@@ -596,5 +597,6 @@ const KEYS = [
  "ONGOING",
  "DLC_BUY",
  "DLC_FREE",
- "NEW"
+ "NEW",
+ "BY_AUTHOR"
 ]

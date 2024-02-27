@@ -1025,3 +1025,9 @@ func _on_play_again_button_pressed() -> void:
 			last_scene.get_node("%ExtraLevelHub")._play_new_endless()
 	else:
 		TransitionManager.pop_scene()
+
+func set_author(author: String) -> void:
+	if author.is_empty() or not has_node("%AuthorLabel"):
+		return
+	%AuthorLabel.text = tr("BY_AUTHOR") % [author]
+	%AuthorLabel.show()

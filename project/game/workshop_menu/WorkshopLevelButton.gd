@@ -2,6 +2,7 @@ class_name WorkshopLevelButton
 extends Control
 
 var id: int
+var author: String
 
 @onready var Open: LevelButton = %Open
 #@onready var OngoingSolution = %OngoingSolution
@@ -12,7 +13,7 @@ func _ready() -> void:
 		Open.disabled = true
 		return
 	var level := load_level()
-	Open.setup_workshop(level, id)
+	Open.setup_workshop(level, id, author)
 	if level == null:
 		SteamManager.steam.downloadItem(id, true)
 	#Open.text = "NOT_INSTALLED"

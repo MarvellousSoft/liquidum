@@ -41,6 +41,7 @@ signal loaded_endless(button: LevelButton)
 var my_section := -1
 var my_level := -1
 var workshop_id := -1
+var workshop_author := ""
 var data = false
 var lister: LevelLister = null
 
@@ -89,8 +90,9 @@ func setup(section : int, level: int, active : bool, extra: bool) -> void:
 		set_ongoing_solution(false)
 		disable()
 
-func setup_workshop(level_data: LevelData, id: int) -> void:
+func setup_workshop(level_data: LevelData, id: int, author: String) -> void:
 	workshop_id = id
+	workshop_author = author
 	MainButton.text = ""
 	HardIcon.hide()
 	%AlternateText.show()
@@ -148,6 +150,8 @@ func load_existing_endless() -> void:
 		return
 	var key := ExtraLevelLister.endless_level_name(my_section)
 	var level_node := Global.create_level(GridImpl.import_data(gdata.grid_data, GridModel.LoadMode.Solution), key, "", "", ["random", key])
+	level_node.seed_str = gdata.seed_str
+	level_node.manually_seeded = gdata.manually_seeded
 	level_node.extra_section = my_section
 	if Global.play_new_dif_again == -1:
 		TransitionManager.push_scene(level_node)
@@ -161,13 +165,17 @@ func gen_and_load_endless() -> void:
 	FileManager.clear_level(ExtraLevelLister.endless_level_name(my_section))
 	var gen := RandomLevelGenerator.new()
 	# TODO: Preprocess?
+	var seed_str := str(randi())
 	var rng := RandomNumberGenerator.new()
+	rng.seed = RandomHub.consistent_hash(seed_str)
 	GeneratingLevel.enable()
 	var grid := await RandomFlavors.gen(gen, rng, ExtraLevelLister.section_endless_flavor(my_section))
 	GeneratingLevel.disable()
 	if grid == null:
 		return
 	var gdata := LevelData.new("", "", grid.export_data(), "")
+	gdata.manually_seeded = false
+	gdata.seed_str = seed_str
 	FileManager.save_extra_endless_level(my_section, gdata)
 	load_existing_endless()
 
@@ -203,6 +211,7 @@ func _on_button_pressed():
 		if level_data == null:
 			return
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), str(workshop_id), level_data.full_name, level_data.description, ["workshop"])
+		level.set_author(workshop_author)
 		level.workshop_id = workshop_id
 		level.won.connect(WorkshopLevelButton._level_completed)
 		TransitionManager.push_scene(level)
