@@ -300,6 +300,7 @@ const DLC_BUY = "DLC_BUY"
 const DLC_FREE = "DLC_FREE"
 const NEW = "NEW"
 const BY_AUTHOR = "BY_AUTHOR"
+const PLAY_ON_ANDROID = "PLAY_ON_ANDROID"
 
 const KEYS = [
  "TEST",
@@ -598,5 +599,6 @@ const KEYS = [
  "DLC_BUY",
  "DLC_FREE",
  "NEW",
- "BY_AUTHOR"
+ "BY_AUTHOR",
+ "PLAY_ON_ANDROID"
 ]

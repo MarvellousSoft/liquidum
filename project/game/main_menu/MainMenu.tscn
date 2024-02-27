@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ro0q1vkhf05x"]
+[gd_scene load_steps=15 format=3 uid="uid://ro0q1vkhf05x"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
@@ -7,8 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
+[ext_resource type="Texture2D" uid="uid://dxwpe527fcy3m" path="res://assets/images/icons/android_robot.png" id="4_gygl5"]
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 [ext_resource type="Script" path="res://game/main_menu/DiscordButton.gd" id="4_r0s65"]
+[ext_resource type="Script" path="res://game/main_menu/AndroidButton.gd" id="5_jiuio"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
 
@@ -96,11 +98,16 @@ focus_mode = 0
 text = "EXIT_BUTTON"
 
 [node name="InfoVBox" type="VBoxContainer" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 3014.0
-offset_top = 1662.0
+offset_top = 1519.0
 offset_right = 3776.0
-offset_bottom = 2135.0
+offset_bottom = 2120.0
 theme_override_constants/separation = 45
 
 [node name="DiscordButton" type="TextureButton" parent="InfoVBox"]
@@ -113,6 +120,29 @@ texture_normal = SubResource("CanvasTexture_vktdt")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("4_r0s65")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InfoVBox"]
+modulate = Color(0.670588, 1, 0.819608, 1)
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 2
+script = ExtResource("5_jiuio")
+
+[node name="AndroidLabel" type="Label" parent="InfoVBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 61
+text = "PLAY_ON_ANDROID"
+vertical_alignment = 2
+
+[node name="AndroidButton" type="TextureButton" parent="InfoVBox/HBoxContainer"]
+custom_minimum_size = Vector2(160, 90)
+layout_mode = 2
+size_flags_horizontal = 8
+texture_normal = ExtResource("4_gygl5")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="CreditsButton" type="Button" parent="InfoVBox"]
 layout_mode = 2
@@ -220,7 +250,9 @@ position_smoothing_speed = 4.0
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 [connection signal="mouse_entered" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_exited"]
-[connection signal="pressed" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_mouse_pressed"]
 [connection signal="mouse_entered" from="InfoVBox/CreditsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]

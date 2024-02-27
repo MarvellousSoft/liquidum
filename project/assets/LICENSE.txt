@@ -48,3 +48,6 @@ by Juraj Sedlák, https://thenounproject.com/yumminky/, CC BY 3.0
 
 - audio/sfx/all_levels_completed.wav
 by qubodup, https://opengameart.org/users/qubodup, CC BY 3.0
+
+- images/ui/icons/android_robot.png
+The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License.
