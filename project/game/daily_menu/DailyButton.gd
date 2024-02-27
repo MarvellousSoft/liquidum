@@ -170,7 +170,7 @@ func _on_button_pressed() -> void:
 		if SteamManager.enabled:
 			var l_id := await get_leaderboard(date)
 			var l_data := await get_leaderboard_data(l_id)
-			if l_data.has_self:
+			if l_data[0].has_self:
 				already_uploaded_today = true
 			l_id = await get_leaderboard(yesterday)
 			var y_data := await get_leaderboard_data(l_id)
@@ -186,7 +186,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		if not already_uploaded_today:
 			await upload_leaderboard(l_id, info)
 		var l_data := await get_leaderboard_data(l_id)
-		display_leaderboard(l_data, null, level)
+		display_leaderboard(l_data, [], level)
 	if not info.first_win:
 		return
 	if SteamManager.stats_received:
@@ -275,45 +275,58 @@ class LeaderboardData:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
 
-func get_leaderboard_data(l_id: int) -> LeaderboardData:
-	var data := LeaderboardData.new()
+func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
+	var data_all := LeaderboardData.new()
+	var data_friends := LeaderboardData.new()
 	if not SteamManager.enabled:
-		return data
+		return [data_all, data_friends]
 	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
 	if total == 0:
-		return data
+		return [data_all, data_friends]
 	var list_has_rank := {}
 	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
 	for entry in ret[2]:
 		list_has_rank[entry.global_rank] = true
 		if entry.steam_id == SteamManager.steam.getSteamID():
-			data.has_self = true
-		data.list.append(await ListEntry.create(entry))
+			data_all.has_self = true
+			data_friends.has_self = true
+		var l_entry := await ListEntry.create(entry)
+		data_all.list.append(l_entry)
+		data_friends.list.append(l_entry)
 	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
 	ret = await SteamManager.steam.leaderboard_scores_downloaded
 	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
 	for entry in ret[2]:
+		var l_entry: ListEntry = null
+		# Tweak this if we get too many users
+		if not list_has_rank.has(entry.global_rank) and entry.global_rank < 100:
+			l_entry = await ListEntry.create(entry)
+			data_all.list.append(l_entry)
 		for dev_id in DEV_IDS:
 			if entry.steam_id == dev_id and not list_has_rank.has(entry.global_rank):
-				data.list.append(await ListEntry.create(entry))
+				if l_entry == null:
+					l_entry = await ListEntry.create(entry)
+				data_friends.list.append(l_entry)
 				list_has_rank[entry.global_rank] = true
 		for pct in percentiles:
 			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
-				data.list.append(await ListEntry.create(entry, tr(pct[1])))
+				# Create again because we're using a custom name for percentiles
+				data_friends.list.append(await ListEntry.create(entry, tr(pct[1])))
 				list_has_rank[entry.global_rank] = true
 		# Only on no mistakes
 		if entry.score < MAX_TIME:
-			data.top_no_mistakes.append(entry.score)
+			data_all.top_no_mistakes.append(entry.score)
 	for pct in percentiles:
 		if not list_has_rank.has(ceili(float(total) * pct[0])):
 			# If this happens, we can do extra requests. But are we really that popular?
 			push_warning("%.2f percentile not in top entries" % pct[0])
-	data.sort()
-	return data
+	data_all.sort()
+	data_friends.sort()
+	return [data_all, data_friends]
 
 
-func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData, level: Level) -> void:
+func display_leaderboard(today: Array[LeaderboardData], yesterday_data: Array[LeaderboardData], level: Level) -> void:
 	if not SteamManager.enabled:
 		return
 	var display: LeaderboardDisplay
@@ -325,7 +338,7 @@ func display_leaderboard(today: LeaderboardData, yesterday_data: LeaderboardData
 		level.create_tween().tween_property(display, "modulate:a", 1, 1)
 	display = level.get_node("LeaderboardDisplay")
 	display.display(today, date, yesterday_data, yesterday)
-	display.show_today()
+	display.show_today_all()
 
 
 func _on_dark_mode_changed(is_dark : bool):

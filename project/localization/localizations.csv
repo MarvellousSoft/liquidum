@@ -242,8 +242,10 @@ TUT_MOUSE2,Basics 2,Básicos 2,Básicos 2
 TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
 TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
-TODAY,Today,Hoje,Hoje
-YESTERDAY,Yesterday,Ontem,Ontem
+TODAY_ALL,Today (All),Hoje (Todos),Hoje (Todos)
+TODAY_FRIENDS,Today (Friends),Hoje (Amigos),Hoje (Amigos)
+YESTERDAY_ALL,Yesterday (All),Ontem (Todos),Ontem (Todos)
+YESTERDAY_FRIENDS,Yesterday (Friends),Ontem (Amigos),Ontem (Amigos)
 SHOW_TIMER,Show timer,Mostrar tempo,Mostrar tempo
 QUITTING,Quitting...,Fechando...,Fechando...
 ALLOW_MISTAKES,Allow mistakes,Permitir erros,Permitir erros

@@ -37,17 +37,18 @@ func _display_day(node: Node, data: DailyButton.LeaderboardData, date: String) -
 	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
 		Grid.get_node(c).hide()
 
-func display(today: DailyButton.LeaderboardData, today_date: String, yesterday: DailyButton.LeaderboardData, yesterday_date: String) -> void:
-	if today != null:
-		_display_day(%TODAY, today, today_date)
-	if yesterday != null:
-		_display_day(%YESTERDAY, yesterday, yesterday_date)
+func display(today: Array[DailyButton.LeaderboardData], today_date: String, yesterday: Array[DailyButton.LeaderboardData], yesterday_date: String) -> void:
+	if today.size() >= 1:
+		_display_day(%TODAY_ALL, today[0], today_date)
+	if today.size() >= 2:
+		_display_day(%TODAY_FRIENDS, today[1], today_date)
+	if yesterday.size() >= 1:
+		_display_day(%YESTERDAY_ALL, yesterday[0], yesterday_date)
+	if yesterday.size() >= 2:
+		_display_day(%YESTERDAY_FRIENDS, yesterday[1], yesterday_date)
 
-func show_today() -> void:
+func show_today_all() -> void:
 	%TabContainer.current_tab = 0
-
-func show_yesterday() -> void:
-	%TabContainer.current_tab = 1
 
 func _update_theme(dark_mode: bool) -> void:
 	theme = Global.get_font_theme(dark_mode)

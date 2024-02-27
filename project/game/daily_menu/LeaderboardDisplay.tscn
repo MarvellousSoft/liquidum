@@ -38,11 +38,21 @@ layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
 
-[node name="TODAY" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
+[node name="TODAY_ALL" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="YESTERDAY" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
+[node name="TODAY_FRIENDS" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="YESTERDAY_ALL" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="YESTERDAY_FRIENDS" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
