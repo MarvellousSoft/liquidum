@@ -367,23 +367,35 @@ func _inner_update_hint(hints: Array[GridModel.LineHint], bar: HintBar, get_stat
 				hint.set_status(get_status.call(i, hint_type))
 
 
-func _inner_row_status(i: int, content: E.HintContent) -> E.HintStatus:
+func _inner_row_status(i: int, content: E.HintContent, incomplete_info := false) -> E.HintStatus:
 	if editor_mode:
 		return E.HintStatus.Normal
+	# If the other side is ? we should never be green
+	if incomplete_info and not Profile.get_option("progress_on_unknown"):
+		var hints := grid_logic.row_hints()
+		var val := float(hints[i].boat_count) if content == E.HintContent.Boat else hints[i].water_count
+		if val == -1:
+			return E.HintStatus.Normal
 	return grid_logic.get_row_hint_status(i, content)
 
 
-func _inner_col_status(j: int, content: E.HintContent) -> E.HintStatus:
+func _inner_col_status(j: int, content: E.HintContent, incomplete_info := false) -> E.HintStatus:
 	if editor_mode:
 		return E.HintStatus.Normal
+	# If the other side is ? we should never be green
+	if incomplete_info and not Profile.get_option("progress_on_unknown"):
+		var hints := grid_logic.col_hints()
+		var val := float(hints[j].boat_count) if content == E.HintContent.Boat else hints[j].water_count
+		if val == -1:
+			return E.HintStatus.Normal
 	return grid_logic.get_col_hint_status(j, content)
 
 
 func update_hints() -> void:
-	_inner_update_hint(grid_logic.row_hints(), HintBars.left, _inner_row_status)
-	_inner_update_hint(grid_logic.col_hints(), HintBars.top, _inner_col_status)
-	_inner_update_hint(get_bottom_hints(), HintBars.bottom, _inner_col_status)
-	_inner_update_hint(get_right_hints(), HintBars.right, _inner_row_status)
+	_inner_update_hint(grid_logic.row_hints(), HintBars.left, _inner_row_status.bind(false))
+	_inner_update_hint(grid_logic.col_hints(), HintBars.top, _inner_col_status.bind(false))
+	_inner_update_hint(get_bottom_hints(), HintBars.bottom, _inner_col_status.bind(true))
+	_inner_update_hint(get_right_hints(), HintBars.right, _inner_row_status.bind(true))
 
 
 func set_counters_visibility(row: Array[int], col: Array[int]) -> void:
