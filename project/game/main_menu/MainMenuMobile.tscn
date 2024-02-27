@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=17 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://bqds1kdjck88j" path="res://assets/images/icons/steam_logo.png" id="11_emxsm"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="12_a1g2a"]
 [ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="13_epnyx"]
+[ext_resource type="Texture2D" uid="uid://cyn4cbxifv4xn" path="res://assets/images/icons/no_ads.png" id="15_odq8t"]
+[ext_resource type="Script" path="res://game/main_menu/NoAdsButton.gd" id="16_h6coi"]
 
 [node name="MainMenuMobile" type="Control"]
 layout_mode = 3
@@ -413,6 +415,18 @@ vertical_alignment = 1
 
 [node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
 
+[node name="NoAdsButton" type="TextureButton" parent="."]
+modulate = Color(0.670588, 1, 0.819608, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 122.0
+offset_bottom = 152.0
+texture_normal = ExtResource("15_odq8t")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("16_h6coi")
+
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_button_mouse_entered"]
@@ -436,6 +450,8 @@ vertical_alignment = 1
 [connection signal="mouse_entered" from="DiscordButton" to="DiscordButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="DiscordButton" to="DiscordButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="DiscordButton" to="DiscordButton" method="_on_button_pressed"]
+[connection signal="mouse_entered" from="NoAdsButton" to="NoAdsButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="NoAdsButton" to="NoAdsButton" method="_on_mouse_exited"]
 
 [editable path="ExtraLevelHub"]
 [editable path="LevelHub"]

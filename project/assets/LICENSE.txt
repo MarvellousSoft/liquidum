@@ -51,3 +51,6 @@ by qubodup, https://opengameart.org/users/qubodup, CC BY 3.0
 
 - images/ui/icons/android_robot.png
 The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License.
+
+- images/ui/icons/no_ads.png
+designed by Vectors Tank from Flaticon
