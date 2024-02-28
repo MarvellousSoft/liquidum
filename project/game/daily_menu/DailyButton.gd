@@ -38,6 +38,17 @@ func _process(_dt: float) -> void:
 
 func _update() -> void:
 	var unlocked := Global.is_dev_mode() or CampaignLevelLister.section_complete(4)
+	if unlocked and Profile.get_option("daily_notification") == Profile.DailyStatus.NotUnlocked:
+		if NotificationManager.enabled:
+			if NotificationManager.permission_granted():
+				Profile.set_option("daily_notification", Profile.DailyStatus.Enabled)
+				NotificationManager.do_add_daily_notif()
+			elif ConfirmationScreen.start_confirmation("CONFIRMATION_DAILY_NOTIF"):
+				if await ConfirmationScreen.pressed:
+					Profile.set_option("daily_notification", Profile.DailyStatus.Enabled)
+					Profile.daily_notification_changed.emit(true)
+				else:
+					Profile.set_option("daily_notification", Profile.DailyStatus.Disabled)
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
 	%StreakContainer.visible = unlocked

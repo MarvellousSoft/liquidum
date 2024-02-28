@@ -7,6 +7,7 @@ signal allow_mistakes_changed(status: bool)
 signal progress_on_unkown_changed(status: bool)
 signal show_bubbles_changed(on: bool)
 signal bigger_hints_changed(on: bool)
+signal daily_notification_changed(on: bool)
 
 const LANGUAGES = [
 	"",
@@ -23,6 +24,12 @@ const MOBILE_MASTER_VOLUME = 0.7
 
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
 const SHOW_VERSION := true
+
+enum DailyStatus {
+	NotUnlocked,
+	Disabled,
+	Enabled,
+}
 
 var options = {
 	"master_volume": 0.25,
@@ -47,6 +54,7 @@ var options = {
 	"progress_on_unknown": false,
 	"show_bubbles": true,
 	"bigger_hints_font": false,
+	"daily_notification": int(DailyStatus.NotUnlocked),
 }
 var dlc_info = {
 	#Small & tricky

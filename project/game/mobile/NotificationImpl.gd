@@ -74,6 +74,14 @@ func showDaily(title, message, at_hour, at_minute, tag):
 		ln.showRepeating(title, message,\
 			_generate_android_daily_notify_interval(at_hour, at_minute), 86400, tag)
 
+func showWeekly(title: String, message: String, weekday: Time.Weekday, at_hour: int, at_minute: int, tag: int) -> void:
+	if not ln:
+		not_found_plugin()
+		return
+	if OS.get_name() == "iOS":
+		print("TODO")
+	else:
+		ln.showRepeating(title, message, _generate_android_weekly_notify_interval(weekday, at_hour, at_minute), 60 * 60 * 24 * 7, tag)
 
 func cancel(tag):
 	if not ln:
@@ -86,6 +94,16 @@ func cancel(tag):
 func not_found_plugin():
 	print('[LocalNotification] Not found plugin. Please ensure that you checked LocalNotification plugin in the export template')
 
+func _generate_android_weekly_notify_interval(at_weekday: Time.Weekday, at_hour: int, at_minute: int) -> int:
+	var now := Time.get_datetime_dict_from_system()
+	var time_to_wait: int = -now.second
+	time_to_wait += (at_hour - now.hour) * 60 * 60
+	time_to_wait += (at_minute - now.minute) * 60
+	time_to_wait += (at_weekday - now.weekday) * 60 * 60 * 24
+	if time_to_wait < 0:
+		time_to_wait += 60 * 60 * 24 * 7
+		assert(time_to_wait >= 0)
+	return time_to_wait
 
 func _generate_android_daily_notify_interval(hour, minute):
 	var today_time = Time.get_datetime_dict_from_system()

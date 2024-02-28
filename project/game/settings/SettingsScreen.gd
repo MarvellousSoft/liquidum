@@ -25,6 +25,7 @@ func _ready():
 	TitleContainer.hide()
 	BG.hide()
 	if Global.is_mobile:
+		Profile.daily_notification_changed.connect(_on_daily_notif_changed)
 		update_remove_ads_button()
 		AdManager.ads_disabled.connect(update_remove_ads_button)
 
@@ -98,6 +99,13 @@ func setup_values() -> void:
 	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
 	%ProgressOnUnknownContainer/CheckBox.button_pressed = Profile.get_option("progress_on_unknown")
 	%ShowBubblesContainer/CheckBox.button_pressed = Profile.get_option("show_bubbles")
+	if Global.is_mobile:
+		var daily_notif = Profile.get_option("daily_notification")
+		if daily_notif == Profile.DailyStatus.NotUnlocked:
+			%DailyNotifContainer.hide()
+		else:
+			%DailyNotifContainer.show()
+			%DailyNotifContainer/CheckBox.button_pressed = daily_notif == Profile.DailyStatus.Enabled
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:
@@ -198,6 +206,7 @@ func _on_vsync_mode_selected(vsync_mode: int) -> void:
 
 
 func _on_remove_ads_button_pressed() -> void:
+	checkbox_sound(true)
 	AdManager.buy_ad_removal()
 
 
@@ -238,11 +247,13 @@ func _on_tab_container_tab_hovered(_tab):
 
 
 func _on_show_bubbles_toggled(on: bool) -> void:
+	checkbox_sound(on)
 	Profile.set_option("show_bubbles", on)
 	Profile.show_bubbles_changed.emit(on)
 
 
 func _on_highlight_hints_toggled(on : bool) -> void:
+	checkbox_sound(on)
 	Profile.set_option("highlight_finished_row_col", on)
 
 
@@ -252,5 +263,14 @@ func _on_blue_filter_slider_value_changed(value):
 
 
 func _on_bigger_hints_toggled(on : bool) -> void:
+	checkbox_sound(on)
 	Profile.set_option("bigger_hints_font", on)
 	Profile.bigger_hints_changed.emit(on)
+
+func _on_daily_notif_changed(on: bool) -> void:
+	%DailyNotifContainer/CheckBox.button_pressed = on
+
+func _on_daily_notif_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("daily_notification", Profile.DailyStatus.Enabled if on else Profile.DailyStatus.Disabled)
+	Profile.daily_notification_changed.emit(on)
