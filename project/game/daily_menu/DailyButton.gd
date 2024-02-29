@@ -173,7 +173,7 @@ func _on_button_pressed() -> void:
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily2"])
 		level.reset_text = &"CONFIRM_RESET_DAILY"
-		level.won.connect(level_completed.bind(level))
+		level.won.connect(level_completed.bind(level, today))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
@@ -189,29 +189,25 @@ func _on_button_pressed() -> void:
 
 	MainButton.disabled = false
 
-func maybe_update_monthly_challenge(info: Level.WinInfo) -> void:
+func maybe_update_monthly_challenge(info: Level.WinInfo, today: String) -> void:
 	if info.mistakes >= 3 or not info.first_win or not SteamManager.enabled:
 		return
-	var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [date.substr(0, date.length() - 3)], \
+	var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [today.substr(0, today.length() - 3)], \
 		SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
-	SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-	var score := 1
-	if ret[2].size() > 0:
-		score += ret[2][0].score
+	var score := UserData.current().bump_monthy_good_dailies(today)
 	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
-	ret = await SteamManager.steam.leaderboard_score_uploaded
+	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
-		push_warning("Failed to upload entry for monthly %s" % date)
+		push_warning("Failed to upload entry for monthly %s" % [today])
 
 
-func level_completed(info: Level.WinInfo, level: Level) -> void:
+func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 	level.get_node("%ShareButton").visible = true
 	if not info.first_win:
 		return
 	if SteamManager.enabled:
-		await maybe_update_monthly_challenge(info)
-		var l_id := await get_daily_leaderboard(date)
+		await maybe_update_monthly_challenge(info, today)
+		var l_id := await get_daily_leaderboard(today)
 		if not already_uploaded_today:
 			await upload_leaderboard(l_id, info)
 		var l_data := await get_leaderboard_data(l_id)
@@ -225,8 +221,8 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		if info.mistakes == 0 and SteamManager.stats_received:
 			SteamStats.unlock_daily_no_mistakes()
 		# It the streak was broken this would be handled in _update_streak
-		if date != data.last_day:
-			data.last_day = date
+		if today != data.last_day:
+			data.last_day = today
 			data.current_streak += 1
 			data.best_streak = max(data.best_streak, data.current_streak)
 			UserData.save()
