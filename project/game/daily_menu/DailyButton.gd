@@ -179,27 +179,43 @@ func _on_button_pressed() -> void:
 		TransitionManager.push_scene(level)
 		await level.ready
 		if SteamManager.enabled:
-			var l_id := await get_leaderboard(date)
+			var l_id := await get_daily_leaderboard(date)
 			var l_data := await get_leaderboard_data(l_id)
 			if l_data[0].has_self:
 				already_uploaded_today = true
-			l_id = await get_leaderboard(yesterday)
+			l_id = await get_daily_leaderboard(yesterday)
 			var y_data := await get_leaderboard_data(l_id)
 			display_leaderboard(l_data, y_data, level)
 
 	MainButton.disabled = false
 
+func maybe_update_monthly_challenge(info: Level.WinInfo) -> void:
+	if info.mistakes >= 3 or not info.first_win or not SteamManager.enabled:
+		return
+	var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [date.substr(0, date.length() - 3)], \
+		SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
+	SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
+	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
+	var score := 1
+	if ret[2].size() > 0:
+		score += ret[2][0].score
+	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
+	ret = await SteamManager.steam.leaderboard_score_uploaded
+	if not ret[0]:
+		push_warning("Failed to upload entry for monthly %s" % date)
+
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	level.get_node("%ShareButton").visible = true
+	if not info.first_win:
+		return
 	if SteamManager.enabled:
-		var l_id := await get_leaderboard(date)
+		await maybe_update_monthly_challenge(info)
+		var l_id := await get_daily_leaderboard(date)
 		if not already_uploaded_today:
 			await upload_leaderboard(l_id, info)
 		var l_data := await get_leaderboard_data(l_id)
 		display_leaderboard(l_data, [], level)
-	if not info.first_win:
-		return
 	if SteamManager.stats_received:
 		SteamStats.increment_daily_all()
 	var data := UserData.current()
@@ -219,17 +235,8 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			data.current_streak = 0
 			UserData.save()
 
-
-func get_leaderboard(for_date: String) -> int:
-	if not SteamManager.enabled:
-		return -1
-	SteamManager.steam.findOrCreateLeaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
-	var ret: Array = await SteamManager.steam.leaderboard_find_result
-	if not ret[1]:
-		push_warning("Leaderboard not found for daily %s" % for_date)
-		return -1
-	return ret[0]
-
+func get_daily_leaderboard(for_date: String) -> int:
+	return await SteamManager.get_or_create_leaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 
 func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	if not SteamManager.enabled:

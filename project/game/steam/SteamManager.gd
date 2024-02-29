@@ -143,3 +143,13 @@ func overlay_or_browser(url: String) -> void:
 		OS.shell_open(url)
 	else:
 		steam.activateGameOverlayToWebPage(url)
+
+func get_or_create_leaderboard(l_name: String, sort_method: int, display_method: int) -> int:
+	if not enabled:
+		return -1
+	steam.findOrCreateLeaderboard(l_name, sort_method, display_method)
+	var ret: Array = await steam.leaderboard_find_result
+	if not ret[1]:
+		push_warning("Leaderboard not found: %s" % [l_name])
+		return -1
+	return ret[0]
