@@ -19,7 +19,8 @@ func _ready() -> void:
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	assert(not profile_name.is_empty())
-	$ProfileInfo.text = "%d %s" % [CampaignLevelLister.count_completed_levels(profile_name), tr(&"LEVELS_COMPLETED")]
+	$ProfileInfo.text = "%d %s\n%d %s" % [CampaignLevelLister.count_completed_levels(profile_name), \
+		tr(&"LEVELS_COMPLETED"), ExtraLevelLister.count_completed_levels(profile_name), tr(&"EXTRA_LEVELS_COMPLETED")]
 	if FileManager.current_profile == profile_name:
 		Selected.show()
 	else:

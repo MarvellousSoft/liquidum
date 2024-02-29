@@ -117,3 +117,16 @@ func is_hard(section: int, level: int) -> bool:
 
 func is_free(section: int) -> bool:
 	return _android_payment(section) == ""
+
+func count_completed_levels(profile_name: String) -> int:
+	var count := 0
+	for i in range(1, 100):
+		if not ExtraLevelLister.has_section(i):
+			break
+		for j in range(1, 100):
+			if not FileManager.has_extra_level_data(i, j):
+				break
+			var save := FileManager.load_level(ExtraLevelLister.level_name(i, j), profile_name)
+			if save != null and save.is_completed():
+				count += 1
+	return count
