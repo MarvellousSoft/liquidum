@@ -98,6 +98,7 @@ func _ready() -> void:
 	android_plugin.imageStored.connect(_on_image_stored)
 
 	android_plugin.initialize()
+	print("Google play services lib initialized.")
 
 
 # Public methods
@@ -311,6 +312,7 @@ func _on_players_searched(player: String) -> void:
 
 # Sign In
 func _on_sign_in_user_authenticated(_is_authenticated: bool) -> void:
+	print("Is authenticated: %s" % [_is_authenticated])
 	sign_in_user_authenticated.emit(_is_authenticated)
 
 

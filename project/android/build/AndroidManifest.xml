@@ -53,6 +53,8 @@
 	<meta-data
     		android:name="com.google.android.gms.ads.APPLICATION_ID"
     		android:value="ca-app-pub-8067794432001522~2340589235"/>
+      <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="530621401925"/>
 
     </application>
     <uses-permission android:name="com.android.vending.BILLING"/>
