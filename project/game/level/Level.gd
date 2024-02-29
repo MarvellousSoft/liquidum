@@ -251,10 +251,12 @@ func _on_input_fallback_gui_input(event: InputEvent) -> void:
 		GridNode.remove_all_highlights()
 		GridNode.remove_all_preview()
 
+func is_random() -> bool:
+	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1)
 
 func setup(try_load := true) -> void:
 	if not grid.editor_mode():
-		grid.prettify_hints()
+		grid.prettify_hints(is_random())
 	if not Global.is_mobile:
 		%DevButtons.setup(grid.editor_mode())
 	else:

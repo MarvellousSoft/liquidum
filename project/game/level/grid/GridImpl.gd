@@ -1720,8 +1720,26 @@ func _any_sol_boats() -> bool:
 				return true
 	return false
 
-func prettify_hints() -> void:
+
+func prettify_hints(is_random: bool) -> void:
+	if not is_random:
+		return
 	assert(not editor_mode())
+	if not _any_sol_boats():
+		# This is still useful even on non-random levels
+		grid_hints().total_boats = 0
+		for hints in [row_hints(), col_hints()]:
+			for h in hints:
+				h.boat_count = -1
+				h.boat_count_type = E.HintType.Hidden
+	else:
+		# 0 hint but there's no boat possible, let's remove it to make it prettier
+		for i in n:
+			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return get_cell(i, j).boat_possible(true, true)):
+				_row_hints[i].boat_count = -1
+		for j in m:
+			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return get_cell(i, j).boat_possible(true, true)):
+				_col_hints[j].boat_count = -1
 	for i in n:
 		var diags := false
 		for j in m:
@@ -1749,20 +1767,6 @@ func prettify_hints() -> void:
 			_col_hints[j].water_count_type = E.HintType.Hidden
 		if _col_hints[j].water_count == n:
 			_col_hints[j].water_count_type = E.HintType.Hidden
-	if not _any_sol_boats():
-		grid_hints().total_boats = 0
-		for hints in [row_hints(), col_hints()]:
-			for h in hints:
-				h.boat_count = -1
-				h.boat_count_type = E.HintType.Hidden
-	else:
-		# 0 hint but there's no boat possible, let's remove it to make it prettier
-		for i in n:
-			if _row_hints[i].boat_count == 0 and not range(m).any(func(j): return get_cell(i, j).boat_possible(true, true)):
-				_row_hints[i].boat_count = -1
-		for j in m:
-			if _col_hints[j].boat_count == 0 and not range(n).any(func(i): return get_cell(i, j).boat_possible(true, true)):
-				_col_hints[j].boat_count = -1
 
 func any_schrodinger_boats() -> bool:
 	if _grid_hints.total_boats == -1:
