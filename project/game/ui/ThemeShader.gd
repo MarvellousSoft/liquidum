@@ -8,7 +8,6 @@ const THEMES = [
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	disable_theme()
-	enable_theme(1)
 
 
 func disable_theme():
