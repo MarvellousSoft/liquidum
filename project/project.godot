@@ -46,6 +46,7 @@ BlueFilter="*res://game/ui/BlueFilter.tscn"
 FacebookManager="*res://game/ads/FacebookManager.gd"
 NotificationManager="*res://game/mobile/NotificationManager.gd"
 GooglePlayGameServices="*res://game/mobile/GooglePlayGameServices.gd"
+ThemeShader="*res://game/ui/ThemeShader.tscn"
 
 [debug]
 
