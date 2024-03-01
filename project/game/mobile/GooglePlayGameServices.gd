@@ -50,6 +50,11 @@ enum Collection {
 
 # Variables
 var android_plugin: JNISingleton
+var enabled := false
+
+# Leaderboards
+const LEADERBOARD_MARCH_CHALLENGE = "CgkIxZaA3LgPEAIQBw"
+const LEADERBOARD_DAILY = "CgkIxZaA3LgPEAIQBQ"
 
 
 # Built-in overrides
@@ -64,6 +69,7 @@ func _ready() -> void:
 
 	if not android_plugin:
 		return
+	enabled = true
 
 	# Achievements
 	android_plugin.achievementsLoaded.connect(_on_achievements_loaded)
@@ -191,7 +197,7 @@ func leaderboards_load(leaderboard_id: String, force_reload: bool) -> void:
 
 
 # Players
-func players_compare_profile(other_player_id: String, other_player_in_game_name := "", current_player_in_game_name := "") -> void:
+func players_compare_profile(other_player_id: String, _other_player_in_game_name := "", _current_player_in_game_name := "") -> void:
 	if android_plugin:
 		android_plugin.playersCompareProfile(other_player_id)
 
@@ -261,7 +267,7 @@ func snapshots_show_saved_games(title: String, allow_add_button: bool, allow_del
 # Event handlers
 # Achievements
 func _on_achievements_loaded(achievements: String) -> void:
-	achievements_loaded.emit(JSON.parse_string(achievements).result)
+	achievements_loaded.emit(JSON.parse_string(achievements))
 
 
 func _on_achievements_revealed(revealed: bool, achievement_id: String) -> void:
@@ -273,11 +279,12 @@ func _on_achievements_unlocked(is_unlocked: bool, achievement_id: String) -> voi
 
 
 func _on_events_loaded(events: String) -> void:
-	events_loaded.emit(JSON.parse_string(events).result)
+	print("Events loaded: %s" % [events])
+	events_loaded.emit(JSON.parse_string(events))
 
 
 func _on_events_loaded_by_ids(events: String) -> void:
-	events_loaded_by_ids.emit(JSON.parse_string(events).result)
+	events_loaded_by_ids.emit(JSON.parse_string(events))
 
 
 # Leaderboards
@@ -286,28 +293,29 @@ func _on_leaderboards_score_submitted(submitted: bool, leaderboard_id: String) -
 
 
 func _on_leaderboards_score_loaded(leaderboard_id: String, score: String) -> void:
-	leaderboards_score_loaded.emit(leaderboard_id, JSON.parse_string(score).result)
+	leaderboards_score_loaded.emit(leaderboard_id, JSON.parse_string(score))
 
 
 func _on_leaderboards_all_loaded(leaderboards: String) -> void:
-	leaderboards_all_loaded.emit(JSON.parse_string(leaderboards).result)
+	print("Leaderboards loaded: %s" % [leaderboards])
+	leaderboards_all_loaded.emit(JSON.parse_string(leaderboards))
 
 
 func _on_leaderboards_loaded(leaderboard: String) -> void:
-	leaderboards_loaded.emit(JSON.parse_string(leaderboard).result)
+	leaderboards_loaded.emit(JSON.parse_string(leaderboard))
 
 
 # Players
 func _on_players_current_loaded(player: String) -> void:
-	players_current_loaded.emit(JSON.parse_string(player).result)
+	players_current_loaded.emit(JSON.parse_string(player))
 
 
 func _on_players_friends_loaded(friends: String) -> void:
-	players_friends_loaded.emit(JSON.parse_string(friends).result)
+	players_friends_loaded.emit(JSON.parse_string(friends))
 
 
 func _on_players_searched(player: String) -> void:
-	players_friends_loaded.emit(JSON.parse_string(player).result)
+	players_friends_loaded.emit(JSON.parse_string(player))
 
 
 # Sign In
@@ -326,7 +334,7 @@ func _on_snapshots_game_saved(saved: bool, file_name: String, description: Strin
 
 
 func _on_snapshots_game_loaded(snapshot: String) -> void:
-	var parsed_snapshot: Dictionary = JSON.parse_string(snapshot).result
+	var parsed_snapshot: Dictionary = JSON.parse_string(snapshot)
 	var content: Array = parsed_snapshot.get("content", [])
 
 	if typeof(content) == TYPE_ARRAY:
@@ -336,7 +344,7 @@ func _on_snapshots_game_loaded(snapshot: String) -> void:
 
 
 func _on_snapshots_conflict_emitted(conflict: String) -> void:
-	snapshots_conflict_emitted.emit(JSON.parse_string(conflict).result)
+	snapshots_conflict_emitted.emit(JSON.parse_string(conflict))
 
 
 func _on_image_stored(image: String) -> void:

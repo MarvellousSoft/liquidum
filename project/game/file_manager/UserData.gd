@@ -67,12 +67,13 @@ func get_endless_completed(section: int) -> int:
 func _monthly_idx(date: String) -> int:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(date, false)
 	# It started in February 2024
-	return (date_dict.year - 2024) * 12 + (date_dict.month - 2)
+	var idx: int = (date_dict.year - 2024) * 12 + (date_dict.month - 2)
+	while monthly_good_dailies.size() <= idx:
+		monthly_good_dailies.append(0)
+	return idx
 
 func bump_monthy_good_dailies(date: String) -> int:
 	var idx := _monthly_idx(date)
-	while monthly_good_dailies.size() <= idx:
-		monthly_good_dailies.append(0)
 	monthly_good_dailies[idx] += 1
 	return monthly_good_dailies[idx]
 

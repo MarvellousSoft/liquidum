@@ -189,29 +189,41 @@ func _on_button_pressed() -> void:
 
 	MainButton.disabled = false
 
-func maybe_update_monthly_challenge(info: Level.WinInfo, today: String) -> void:
-	if info.mistakes >= 3 or not info.first_win or not SteamManager.enabled:
-		return
-	var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [today.substr(0, today.length() - 3)], \
-		SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
+func bump_monthly_challenge(today: String) -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
-	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
-	if not ret[0]:
-		push_warning("Failed to upload entry for monthly %s" % [today])
+	
+	if SteamManager.enabled:
+		var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [today.substr(0, today.length() - 3)], \
+			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
+		SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
+		var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
+		if not ret[0]:
+			push_warning("Failed to upload entry for monthly %s" % [today])
+	elif GooglePlayGameServices.enabled:
+		if today.begins_with("2024-03-"):
+			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.LEADERBOARD_MARCH_CHALLENGE, score)
+			await GooglePlayGameServices.leaderboards_score_submitted
 
 
 func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 	level.get_node("%ShareButton").visible = true
 	if not info.first_win:
 		return
+	if info.mistakes < 3:
+		await bump_monthly_challenge(today)
 	if SteamManager.enabled:
-		await maybe_update_monthly_challenge(info, today)
 		var l_id := await get_daily_leaderboard(today)
 		if not already_uploaded_today:
 			await upload_leaderboard(l_id, info)
 		var l_data := await get_leaderboard_data(l_id)
 		display_leaderboard(l_data, [], level)
+	elif GooglePlayGameServices.enabled:
+		if not already_uploaded_today:
+			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
+			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.LEADERBOARD_DAILY, float(score))
+			await GooglePlayGameServices.leaderboards_score_submitted
+		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.LEADERBOARD_DAILY,\
+		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 	if SteamManager.stats_received:
 		SteamStats.increment_daily_all()
 	var data := UserData.current()
