@@ -76,6 +76,7 @@ var focused := false
 var showing_level_info := false
 var hub = null
 var level_lister: LevelLister = null
+var dlc_url : String
 var extra := false
 
 
@@ -128,7 +129,8 @@ func setup_dlc_button() -> void:
 		%BuyDLCButton.text = "DLC_FREE"
 	else:
 		%BuyDLCButton.text = "DLC_BUY"
-
+	dlc_url = ExtraLevelLister.get_steam_url(my_section)
+	
 func delete_dlc_button() -> void:
 	if has_node("%BuyDLCButton"):
 		%NewDLC.queue_free()
@@ -363,4 +365,4 @@ func _on_buy_dlc_button_pressed() -> void:
 		# TODO: buy mobile DLC
 		pass
 	else:
-		SteamManager.overlay_or_browser("https://store.steampowered.com/app/2849100?utm_source=liquidum&utm_medium=menu")
+		SteamManager.overlay_or_browser(dlc_url)

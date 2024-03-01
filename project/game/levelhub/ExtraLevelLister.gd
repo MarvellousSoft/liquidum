@@ -26,6 +26,10 @@ func _config(section: int) -> ConfigFile:
 		_section_config[section - 1] = c
 	return _section_config[section - 1]
 
+
+func get_steam_url(section: int) -> String:
+	return _config(section).get_value("section", "steam_url", "https://store.steampowered.com/dlc/2716690")
+
 func get_initial_unlocked_levels(section: int) -> int:
 	return _config(section).get_value("section", "initial_unlocked", CampaignLevelLister.INITIAL_UNLOCKED_LEVELS)
 
