@@ -49,7 +49,7 @@ func _stats_received(game: int, result: int, user: int) -> void:
 		return
 	print("Steam stats received! (result = %d, game = %d, user = %d)" % [result, game, user])
 	stats_received = true
-	SteamStats.update_campaign_stats()
+	StatsTracker.instance().update_campaign_stats()
 
 func store_stats() -> void:
 	if not SteamManager.enabled:

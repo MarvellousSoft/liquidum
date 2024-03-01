@@ -224,14 +224,13 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 			await GooglePlayGameServices.leaderboards_score_submitted
 		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.LEADERBOARD_DAILY,\
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
-	if SteamManager.stats_received:
-		SteamStats.increment_daily_all()
+	var stats := StatsTracker.instance()
+	stats.increment_daily_all()
 	var data := UserData.current()
 	if info.mistakes < 3:
-		if SteamManager.stats_received:
-			SteamStats.increment_daily_good()
-		if info.mistakes == 0 and SteamManager.stats_received:
-			SteamStats.unlock_daily_no_mistakes()
+		stats.increment_daily_good()
+		if info.mistakes == 0:
+			stats.unlock_daily_no_mistakes()
 		# It the streak was broken this would be handled in _update_streak
 		if today != data.last_day:
 			data.last_day = today

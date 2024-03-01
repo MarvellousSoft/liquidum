@@ -48,8 +48,8 @@ func get_vote() -> void:
 
 
 static func _level_completed(info: Level.WinInfo) -> void:
-	if info.first_win and SteamManager.enabled:
-		SteamStats.increment_workshop()
+	if info.first_win:
+		StatsTracker.instance().increment_workshop()
 
 
 func _on_button_mouse_entered():

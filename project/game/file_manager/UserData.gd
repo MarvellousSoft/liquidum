@@ -48,11 +48,10 @@ func get_data() -> Dictionary:
 	}
 
 func save_stats_to_steam() -> void:
-	if not SteamManager.enabled or not SteamManager.stats_received:
-		return
-	SteamStats.set_random_levels(random_levels_completed)
-	SteamStats.set_endless_completed(endless_completed)
-	SteamStats.set_current_streak(current_streak)
+	var stats := StatsTracker.instance()
+	stats.set_random_levels(random_levels_completed)
+	stats.set_endless_completed(endless_completed)
+	stats.set_current_streak(current_streak)
 
 func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:
