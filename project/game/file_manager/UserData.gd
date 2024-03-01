@@ -11,7 +11,7 @@ static func current() -> UserData:
 
 static func save() -> void:
 	var data := current()
-	data.save_stats_to_steam()
+	data.save_stats()
 	FileManager._save_user_data(data)
 
 
@@ -47,11 +47,11 @@ func get_data() -> Dictionary:
 		monthly_good_dailies = monthly_good_dailies,
 	}
 
-func save_stats_to_steam() -> void:
+func save_stats() -> void:
 	var stats := StatsTracker.instance()
 	stats.set_random_levels(random_levels_completed)
 	stats.set_endless_completed(endless_completed)
-	stats.set_current_streak(current_streak)
+	stats.set_streak(current_streak, best_streak)
 
 func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:

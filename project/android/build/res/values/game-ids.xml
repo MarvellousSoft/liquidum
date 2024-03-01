@@ -5,10 +5,12 @@
   <string name="app_id" translatable="false">530621401925</string>
   <!--package_name-->
   <string name="package_name" translatable="false">com.marvelloussoft.liquidum</string>
-  <!--event Test event-->
-  <string name="event_test_event" translatable="false">CgkIxZaA3LgPEAIQCA</string>
   <!--leaderboard Daily level (1 hour mistake penalty)-->
   <string name="leaderboard_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
   <!--leaderboard March Challenge-->
   <string name="leaderboard_march_challenge" translatable="false">CgkIxZaA3LgPEAIQBw</string>
+  <!--leaderboard Current Daily Streak-->
+  <string name="leaderboard_current_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCQ</string>
+  <!--leaderboard Max Daily Streak-->
+  <string name="leaderboard_max_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCg</string>
 </resources>

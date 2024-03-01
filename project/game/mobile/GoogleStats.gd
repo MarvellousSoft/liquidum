@@ -1,17 +1,5 @@
-class_name StatsTracker
-extends Node
-
-static var empty := StatsTracker.new()
-static var steam := SteamStats.new()
-static var google := GoogleStats.new()
-
-
-static func instance() -> StatsTracker:
-	if SteamManager.enabled and SteamManager.stats_received:
-		return steam
-	elif GooglePlayGameServices.enabled:
-		return google
-	return empty
+class_name GoogleStats
+extends StatsTracker
 
 func set_random_levels(_completed_count: Array[int]) -> void:
 	pass
@@ -19,8 +7,9 @@ func set_random_levels(_completed_count: Array[int]) -> void:
 func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
 
-func set_streak(_streak: int, _best_streak: int) -> void:
-	pass
+func set_streak(streak: int, best_streak: int) -> void:
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.CurrentStreak, float(streak))
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.MaxStreak, float(best_streak))
 
 func increment_daily_all() -> void:
 	pass

@@ -48,7 +48,7 @@ func _find_leaderboard(l_name: String) -> int:
 	else:
 		return ret[0]
 
-func set_current_streak(streak: int) -> void:
+func set_streak(streak: int, _best_streak: int) -> void:
 	const CUR := "daily_streak_current"
 	const MAX := "daily_streak_max"
 	var upload_current: bool = (streak != SteamManager.steam.getStatInt(CUR))

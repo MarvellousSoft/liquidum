@@ -201,7 +201,7 @@ func bump_monthly_challenge(today: String) -> void:
 			push_warning("Failed to upload entry for monthly %s" % [today])
 	elif GooglePlayGameServices.enabled:
 		if today.begins_with("2024-03-"):
-			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.LEADERBOARD_MARCH_CHALLENGE, score)
+			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.MarchChallenge, score)
 			await GooglePlayGameServices.leaderboards_score_submitted
 
 
@@ -220,9 +220,9 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 	elif GooglePlayGameServices.enabled:
 		if not already_uploaded_today:
 			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
-			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.LEADERBOARD_DAILY, float(score))
+			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.Daily, float(score))
 			await GooglePlayGameServices.leaderboards_score_submitted
-		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.LEADERBOARD_DAILY,\
+		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.Leaderboard.Daily,\
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 	var stats := StatsTracker.instance()
 	stats.increment_daily_all()

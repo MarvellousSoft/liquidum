@@ -53,8 +53,12 @@ var android_plugin: JNISingleton
 var enabled := false
 
 # Leaderboards
-const LEADERBOARD_MARCH_CHALLENGE = "CgkIxZaA3LgPEAIQBw"
-const LEADERBOARD_DAILY = "CgkIxZaA3LgPEAIQBQ"
+const Leaderboard := {
+	MarchChallenge = "CgkIxZaA3LgPEAIQBw",
+	Daily = "CgkIxZaA3LgPEAIQBQ",
+	CurrentStreak = "CgkIxZaA3LgPEAIQCQ",
+	MaxStreak = "CgkIxZaA3LgPEAIQCg",
+}
 
 
 # Built-in overrides
