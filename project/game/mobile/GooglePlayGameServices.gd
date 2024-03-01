@@ -52,14 +52,8 @@ enum Collection {
 var android_plugin: JNISingleton
 var enabled := false
 
-# Leaderboards
-const Leaderboard := {
-	MarchChallenge = "CgkIxZaA3LgPEAIQBw",
-	Daily = "CgkIxZaA3LgPEAIQBQ",
-	CurrentStreak = "CgkIxZaA3LgPEAIQCQ",
-	MaxStreak = "CgkIxZaA3LgPEAIQCg",
-}
-
+# Ids from game-ids.xml
+var ids := {}
 
 # Built-in overrides
 func _ready() -> void:
@@ -108,8 +102,13 @@ func _ready() -> void:
 	android_plugin.imageStored.connect(_on_image_stored)
 
 	android_plugin.initialize()
+	_read_ids()
 	print("Google play services lib initialized.")
 
+func _read_ids() -> void:
+	var root := XML.parse_file("res://game/mobile/game-ids.xml").root
+	for id in root.children:
+		ids[id.attributes.name] = id.content
 
 # Public methods
 # Achievements

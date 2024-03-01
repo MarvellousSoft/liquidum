@@ -8,8 +8,8 @@ func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
 
 func set_streak(streak: int, best_streak: int) -> void:
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.CurrentStreak, float(streak))
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.Leaderboard.MaxStreak, float(best_streak))
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_current_daily_streak, float(streak))
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_max_daily_streak, float(best_streak))
 
 func increment_daily_all() -> void:
 	pass
