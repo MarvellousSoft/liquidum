@@ -225,7 +225,7 @@ func _on_button_pressed():
 
 func _level_completed(info: Level.WinInfo) -> void:
 	if info.first_win and not extra_level():
-		StatsTracker.instance().update_campaign_stats()
+		await StatsTracker.instance().update_campaign_stats()
 
 
 func _on_level_had_first_win():

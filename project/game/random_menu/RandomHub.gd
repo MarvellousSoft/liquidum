@@ -198,8 +198,10 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: boo
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
+	var stats := StatsTracker.instance()
+	stats.increment_random_any()
 	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and not manually_seeded:
-		StatsTracker.instance().increment_insane_good()
+		stats.increment_insane_good()
 
 
 func _on_continue_pressed() -> void:

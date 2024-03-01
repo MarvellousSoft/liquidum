@@ -31,6 +31,9 @@ func increment_daily_good() -> void:
 func increment_insane_good() -> void:
 	pass
 
+func increment_random_any() -> void:
+	pass
+
 func increment_workshop() -> void:
 	pass
 

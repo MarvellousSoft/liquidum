@@ -103,6 +103,7 @@ func _ready() -> void:
 
 	android_plugin.initialize()
 	_read_ids()
+	StatsTracker.instance().update_campaign_stats()
 	print("Google play services lib initialized.")
 
 func _read_ids() -> void:
