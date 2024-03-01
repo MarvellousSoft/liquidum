@@ -270,6 +270,7 @@ FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
 ABANDON_MARATHON,Abandon,Desistir,Desistir
 MARATHON_TEXT,Multiple levels in a row,Múltiplos níveis seguidos,Múltiplos níveis seguidos
 ASSETS_USED,Assets used,Recursos usados,Recursos usados
+DLC1_NAME,Small & Tricky,Pequeno & Difícil,Pequeno & Difícil
 EXTRA_01_01,Twins & In Sync,Twins & In Sync,Twins & In Sync
 EXTRA_01_02,Same energy & Dead battery,Same energy & Dead battery,Same energy & Dead battery
 EXTRA_01_03,Hot & Cold,Hot & Cold,Hot & Cold
@@ -281,16 +282,15 @@ EXTRA_01_08,Black & White,Black & White,Black & White
 EXTRA_01_09,Fight & Break up,Fight & Break up,Fight & Break up
 EXTRA_01_10,Kiss & Make up,Kiss & Make up,Kiss & Make up
 MIRROR_LEVEL_DESC,All water and boats cells are horizontally mirrored in the grid.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.
-EXTRA_02_01,,,
-EXTRA_02_02,,,
-EXTRA_02_03,,,
-EXTRA_02_04,,,
-EXTRA_02_05,,,
-EXTRA_02_06,,,
-EXTRA_02_07,,,
-EXTRA_02_08,,,
-EXTRA_02_09,,,
-EXTRA_02_10,,,
+DLC2_NAME,Mirrors,Espelhos,Espelhos
+EXTRA_02_01,Mirrors,Espelhos,Espelhos
+EXTRA_02_02,Clones,Clones,Clones
+EXTRA_02_03,Duplicates,Duplicatas,Duplicatas
+EXTRA_02_04,Copies,Cópias,Cópias
+EXTRA_02_05,Repeats,Repetecos,Repetecos
+EXTRA_02_06,Twins,Gêmeos,Gêmeos
+EXTRA_02_07,Parallels,Paralelos,Paralelos
+EXTRA_02_08,Replicas,Replicas,Replicas
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,See in store,Veja na loja,Veja na loja
