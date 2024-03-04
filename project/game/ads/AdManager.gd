@@ -26,7 +26,7 @@ func _ready() -> void:
 	MobileAds.set_ios_app_pause_on_background(true)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete = _on_initialization_complete
-	MobileAds.initialize()
+	MobileAds.initialize(listener)
 
 func buy_ad_removal() -> void:
 	if payment != null:
@@ -145,4 +145,12 @@ func create_bottom_ad() -> AdView:
 	return _ad_view
 
 func _on_initialization_complete(initialization_status: InitializationStatus) -> void:
-	print("Ads initialization complete: %s" % initialization_status.adapter_status_map)
+	print("MobileAds initialization complete")
+	for key in initialization_status.adapter_status_map:
+		var adapterStatus : AdapterStatus = initialization_status.adapter_status_map[key]
+		prints(
+			"Key:", key, 
+			"Latency:", adapterStatus.latency, 
+			"Initialization Status:", adapterStatus.initialization_status, 
+			"Description:", adapterStatus.description
+		)
