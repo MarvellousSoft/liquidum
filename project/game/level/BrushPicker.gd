@@ -121,12 +121,12 @@ func pick_previous_brush() -> void:
 	var valid_buttons := get_valid_buttons()
 	assert(not valid_buttons.is_empty(), "No brush visible to pick next")
 	
-	var i = 0
+	var i = valid_buttons.size() - 1
 	for button_key in valid_buttons:
 		var button_node = Buttons[button_key]
-		i += 1
 		if button_node.button_pressed:
 			break
+		i += 1
 	i = i % valid_buttons.size()
 	_on_button_pressed(valid_buttons[i])
 

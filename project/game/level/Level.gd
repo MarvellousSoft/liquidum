@@ -247,9 +247,16 @@ func _unhandled_input(event):
 
 func _on_input_fallback_gui_input(event: InputEvent) -> void:
 	if Global.is_mobile and event.is_pressed() and event is InputEventMouseButton:
-		print("Huzza %s" % event)
 		GridNode.remove_all_highlights()
 		GridNode.remove_all_preview()
+
+func _gui_input(event: InputEvent) -> void:
+	if not Global.is_mobile and event is InputEventMouseButton and event.is_pressed():
+		var mouse := event as InputEventMouseButton
+		if mouse.button_index == MOUSE_BUTTON_WHEEL_UP:
+			pass
+		elif mouse.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			pass
 
 func is_random() -> bool:
 	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1)
