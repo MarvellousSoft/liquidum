@@ -114,7 +114,6 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-
 static func _unixtime_ok_timezone() -> int:
 	var tz := Time.get_time_zone_from_system()
 	return _unixtime() + int(tz.bias) * 60
