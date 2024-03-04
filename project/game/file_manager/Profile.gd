@@ -9,6 +9,7 @@ signal show_bubbles_changed(on: bool)
 signal bigger_hints_changed(on: bool)
 signal daily_notification_changed(on: bool)
 signal unlock_everything_changed(on: bool)
+signal thick_walls_mode_toggled(on: bool)
 
 const LANGUAGES = [
 	"",
@@ -57,6 +58,7 @@ var options = {
 	"bigger_hints_font": false,
 	"daily_notification": int(DailyStatus.NotUnlocked),
 	"unlock_everything": false,
+	"thicker_walls": false,
 }
 var dlc_info = {
 	#Small & tricky

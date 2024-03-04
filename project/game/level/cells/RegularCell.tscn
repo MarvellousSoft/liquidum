@@ -16,8 +16,8 @@
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/cell/diagonal_button_mask.png" id="19_sucjp"]
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="20_6vhtd"]
 [ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/cell/wall_hint_dec_diag.png" id="21_23xke"]
-[ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="22_43mpb"]
-[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/cell/wall_dec_diag.png" id="23_s1mmw"]
+[ext_resource type="Texture2D" uid="uid://thonmystatny" path="res://assets/images/ui/cell/wall_left_thick.png" id="22_ffvl2"]
+[ext_resource type="Texture2D" uid="uid://kfnuvlowqw0p" path="res://assets/images/ui/cell/wall_dec_diag_thick.png" id="23_mbu3t"]
 [ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/block_single.png" id="24_0kqeq"]
 [ext_resource type="Texture2D" uid="uid://bg0odel7l3b84" path="res://assets/images/ui/cell/block_topleft.png" id="25_00o68"]
 [ext_resource type="Texture2D" uid="uid://q0ol3s5ovu68" path="res://assets/images/ui/cell/block_topright.png" id="26_lb8de"]
@@ -792,7 +792,7 @@ offset_bottom = 487.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("22_43mpb")
+texture = ExtResource("22_ffvl2")
 
 [node name="Right" type="TextureRect" parent="Walls"]
 layout_mode = 0
@@ -801,7 +801,7 @@ offset_right = 513.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("22_43mpb")
+texture = ExtResource("22_ffvl2")
 flip_h = true
 
 [node name="Bottom" type="TextureRect" parent="Walls"]
@@ -812,7 +812,7 @@ offset_bottom = 513.0
 rotation = 1.5708
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("22_43mpb")
+texture = ExtResource("22_ffvl2")
 flip_h = true
 
 [node name="Left" type="TextureRect" parent="Walls"]
@@ -822,7 +822,7 @@ offset_right = 487.0
 offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("22_43mpb")
+texture = ExtResource("22_ffvl2")
 
 [node name="Dec" type="TextureRect" parent="Walls"]
 layout_mode = 0
@@ -830,7 +830,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("23_s1mmw")
+texture = ExtResource("23_mbu3t")
 
 [node name="Inc" type="TextureRect" parent="Walls"]
 layout_mode = 0
@@ -838,7 +838,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 mouse_filter = 2
-texture = ExtResource("23_s1mmw")
+texture = ExtResource("23_mbu3t")
 flip_h = true
 
 [node name="Boat" type="TextureRect" parent="."]

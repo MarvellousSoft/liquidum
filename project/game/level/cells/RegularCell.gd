@@ -18,6 +18,14 @@ const IMAGES = {
 	"dark": {
 		"no_boat": preload("res://assets/images/ui/cell/noboat_dark.png"),
 	},
+	"normal_walls": {
+		"left": preload("res://assets/images/ui/cell/wall_left.png"),
+		"diag": preload("res://assets/images/ui/cell/wall_dec_diag.png"),
+	},
+	"thick_walls": {
+		"left": preload("res://assets/images/ui/cell/wall_left_thick.png"),
+		"diag": preload("res://assets/images/ui/cell/wall_dec_diag_thick.png"),
+	}
 }
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
@@ -130,6 +138,7 @@ var editor_mode := false
 
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
+	Profile.thick_walls_mode_toggled.connect(update_thick_walls)
 	Highlight.modulate.a = 0.0
 	for water in Waters.values():
 		water.material = water.material.duplicate()
@@ -141,6 +150,7 @@ func _ready():
 	BoatAnim.speed_scale = randf_range(MIN_BOAT_ANIM_SPEED, MAX_BOAT_ANIM_SPEED)
 	
 	update_dark_mode(Profile.get_option("dark_mode"))
+	update_thick_walls(Profile.get_option("thicker_walls"))
 
 
 func _process(dt):
@@ -194,6 +204,14 @@ func update_dark_mode(is_dark : bool) -> void:
 		water.material.set_shader_parameter("ray_value", colors.ray_value)
 	for content in NoContent.values():
 		content.boat.texture = images.no_boat
+
+
+func update_thick_walls(is_thick : bool) -> void:
+	var images = IMAGES.thick_walls if is_thick else IMAGES.normal_walls
+	for side in [E.Walls.Top, E.Walls.Right, E.Walls.Bottom, E.Walls.Left]:
+		Walls[side].texture = images.left
+	for side in [E.Walls.DecDiag, E.Walls.IncDiag]:
+		Walls[side].texture = images.diag
 
 
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:
