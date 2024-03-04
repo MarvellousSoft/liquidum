@@ -41,12 +41,14 @@
   <string name="achievement_expert_explorer" translatable="false">CgkIxZaA3LgPEAIQGw</string>
   <!--achievement Ultimate explorer-->
   <string name="achievement_ultimate_explorer" translatable="false">CgkIxZaA3LgPEAIQHA</string>
-  <!--leaderboard Daily level (1 hour mistake penalty)-->
-  <string name="leaderboard_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
+  <!--leaderboard (OLD) Daily level (1 hour mistake penalty)-->
+  <string name="leaderboard_old_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
   <!--leaderboard March Challenge-->
   <string name="leaderboard_march_challenge" translatable="false">CgkIxZaA3LgPEAIQBw</string>
   <!--leaderboard Current Daily Streak-->
   <string name="leaderboard_current_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCQ</string>
   <!--leaderboard Max Daily Streak-->
   <string name="leaderboard_max_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCg</string>
+  <!--leaderboard Daily level (1h mistake penalty)-->
+  <string name="leaderboard_daily_level_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQHQ</string>
 </resources>

@@ -226,9 +226,9 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 	elif GooglePlayGameServices.enabled:
 		if not already_uploaded_today:
 			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
-			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_daily_level_1_hour_mistake_penalty, float(score))
+			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, float(score))
 			await GooglePlayGameServices.leaderboards_score_submitted
-		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1_hour_mistake_penalty,\
+		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,\
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 	var stats := StatsTracker.instance()
 	stats.increment_daily_all()
