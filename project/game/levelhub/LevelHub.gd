@@ -30,16 +30,20 @@ func _process(dt):
 
 func _enter_tree() -> void:
 	SteamManager.overlay_toggled.connect(_on_overlay_toggled)
-	Global.dev_mode_toggled.connect(_on_dev_mode)
+	Profile.unlock_everything_changed.connect(_on_unlock_changed)
+	Global.dev_mode_toggled.connect(_on_unlock_changed)
 	check_unlocks()
 
 
 func _exit_tree() -> void:
-	Global.dev_mode_toggled.disconnect(_on_dev_mode)
+	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
+	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	SteamManager.overlay_toggled.disconnect(_on_overlay_toggled)
 
 
-func _on_dev_mode(_on: bool) -> void:
+func _on_unlock_changed(on: bool) -> void:
+	if not on and get_focused_section() != null:
+		get_focused_section().unfocus()
 	update_sections()
 
 func _on_overlay_toggled(on: bool) -> void:
@@ -63,7 +67,7 @@ func update_sections() -> void:
 		var unlocked := level_lister.get_max_unlocked_level(idx)
 		if level_lister.section_disabled(idx):
 			unlocked = 0
-		elif Global.is_dev_mode():
+		elif Global.is_dev_mode() or Profile.get_option("unlock_everything"):
 			unlocked = level_lister.count_section_levels(idx)
 		section.set_section_name(level_lister.section_name(idx))
 		if unlocked == 0:

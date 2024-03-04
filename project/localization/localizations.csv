@@ -303,3 +303,5 @@ CONFIRMATION_DAILY_NOTIF,You have unlocked daily levels. Would you like a daily 
 DAILY_NOTIF,Daily level notification,Notificação do nível diário,Notificação do nível diário
 DAILY_NOTIF_TITLE,Liquidum: %s %s,Liquidum: %s %s,Liquidum: %s %s
 DAILY_NOTIF_DESC,Play the daily level to keep your streak!,Jogue o nível diário pra manter sua sequência!,Jogue o nível diário pra manter sua sequência!
+UNLOCK_EVERYTHING_BUTTON,Unlock everything,Desbloquear tudo,Desbloquear tudo
+UNLOCK_EVERYTHING_DESC,"Unlock all levels, daily level\nand Explorer Mode difficulties","Desbloqueia todos níveis, o nível diário,\ne dificuldades do Modo Explorador","Desbloqueia todos níveis, o nível diário,\ne dificuldades do Modo Explorador"

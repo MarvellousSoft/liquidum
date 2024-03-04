@@ -99,6 +99,7 @@ func setup_values() -> void:
 	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
 	%ProgressOnUnknownContainer/CheckBox.button_pressed = Profile.get_option("progress_on_unknown")
 	%ShowBubblesContainer/CheckBox.button_pressed = Profile.get_option("show_bubbles")
+	%UnlockContainer/CheckBox.button_pressed = Profile.get_option("unlock_everything")
 	if Global.is_mobile:
 		var daily_notif = Profile.get_option("daily_notification")
 		if daily_notif == Profile.DailyStatus.NotUnlocked:
@@ -274,3 +275,9 @@ func _on_daily_notif_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("daily_notification", Profile.DailyStatus.Enabled if on else Profile.DailyStatus.Disabled)
 	Profile.daily_notification_changed.emit(on)
+
+
+func _on_unlock_everything_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("unlock_everything", on)
+	Profile.unlock_everything_changed.emit(on)

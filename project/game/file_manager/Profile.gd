@@ -8,6 +8,7 @@ signal progress_on_unkown_changed(status: bool)
 signal show_bubbles_changed(on: bool)
 signal bigger_hints_changed(on: bool)
 signal daily_notification_changed(on: bool)
+signal unlock_everything_changed(on: bool)
 
 const LANGUAGES = [
 	"",
@@ -55,6 +56,7 @@ var options = {
 	"show_bubbles": true,
 	"bigger_hints_font": false,
 	"daily_notification": int(DailyStatus.NotUnlocked),
+	"unlock_everything": false,
 }
 var dlc_info = {
 	#Small & tricky

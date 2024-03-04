@@ -30,9 +30,10 @@ func _ready() -> void:
 		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
 		if dif == "insane":
 			open = open and CampaignLevelLister.all_campaign_levels_completed()
-			if Global.is_mobile:
-				%UnlockText.visible = not open
-		if open or Global.is_dev_mode():
+		open = open or Global.is_dev_mode() or Profile.get_option("unlock_everything")
+		if dif == "insane" and Global.is_mobile:
+			%UnlockText.visible = not open
+		if open:
 			button.tooltip_text = "%s_TOOLTIP" % dif_name.to_upper()
 		else:
 			button.disabled = true
@@ -56,18 +57,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"return"):
 		_back_logic()
 
-func _on_dev_mode(_on: bool) -> void:
+func _on_unlock_changed(_on: bool) -> void:
 	get_tree().reload_current_scene()
 
 
 func _enter_tree() -> void:
-	Global.dev_mode_toggled.connect(_on_dev_mode)
+	Global.dev_mode_toggled.connect(_on_unlock_changed)
+	Profile.unlock_everything_changed.connect(_on_unlock_changed)
+	
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update")
 
 
 func _exit_tree() -> void:
-	Global.dev_mode_toggled.disconnect(_on_dev_mode)
+	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
+	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 
 func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> String:

@@ -25,6 +25,7 @@ func _ready() -> void:
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	Global.dev_mode_toggled.connect(func(_on): _update())
+	Profile.unlock_everything_changed.connect(func(_on): _update())
 
 
 func _enter_tree() -> void:
@@ -37,7 +38,7 @@ func _process(_dt: float) -> void:
 
 
 func _update() -> void:
-	var unlocked := Global.is_dev_mode() or CampaignLevelLister.section_complete(4)
+	var unlocked: bool = Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
 	if unlocked and Profile.get_option("daily_notification") == Profile.DailyStatus.NotUnlocked:
 		if NotificationManager.enabled:
 			if NotificationManager.permission_granted():
@@ -69,7 +70,7 @@ func _update() -> void:
 	date = DailyButton._today()
 	yesterday = DailyButton._yesterday()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
-	deadline -= _timezone_bias_secs()
+	deadline -= DailyButton._timezone_bias_secs()
 	
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
