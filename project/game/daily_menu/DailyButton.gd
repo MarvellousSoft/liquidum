@@ -69,7 +69,7 @@ func _update() -> void:
 	date = DailyButton._today()
 	yesterday = DailyButton._yesterday()
 	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
-	deadline -= Time.get_time_zone_from_system().bias * 60
+	deadline -= _timezone_bias_secs()
 	
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
@@ -114,9 +114,16 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
+static func _timezone_bias_secs() -> int:
+	if OS.get_name() == "Android":
+		# UTC-7 because that's when google play leaderboards reset
+		# https://developers.google.com/games/services/common/concepts/leaderboards
+		return -7 * 60 * 60
+	else:
+		return int(Time.get_time_zone_from_system().bias) * 60
+
 static func _unixtime_ok_timezone() -> int:
-	var tz := Time.get_time_zone_from_system()
-	return _unixtime() + int(tz.bias) * 60
+	return _unixtime() + _timezone_bias_secs()
 
 
 static func _today(dt: int = 0) -> String:
