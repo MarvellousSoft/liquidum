@@ -101,6 +101,7 @@ func setup_values() -> void:
 	%ShowBubblesContainer/CheckBox.button_pressed = Profile.get_option("show_bubbles")
 	%ThickerWallsContainer/CheckBox.button_pressed = Profile.get_option("thicker_walls")
 	%UnlockContainer/CheckBox.button_pressed = Profile.get_option("unlock_everything")
+	%SkipAnimsContainer/CheckBox.button_pressed = Profile.get_option("skip_animations")
 	if Global.is_mobile:
 		var daily_notif = Profile.get_option("daily_notification")
 		if daily_notif == Profile.DailyStatus.NotUnlocked:
@@ -288,3 +289,8 @@ func _on_thicker_walls_box_toggled(on):
 	checkbox_sound(on)
 	Profile.set_option("thicker_walls", on)
 	Profile.thick_walls_mode_toggled.emit(on)
+
+
+func _on_skip_anims_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("skip_animations", on)

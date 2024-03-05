@@ -48,9 +48,12 @@ func set_should_be_visible(b: bool) -> void:
 	VisibilityButton.set_pressed_no_signal(b)
 
 
-func startup(delay : float) -> void:
-	await get_tree().create_timer(delay).timeout
+func startup(delay : float, fast_mode: bool) -> void:
+	if not fast_mode:
+		await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
+	if fast_mode:
+		AnimPlayer.advance(AnimPlayer.current_animation_length)
 
 
 func add_count() -> void:

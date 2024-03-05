@@ -59,7 +59,7 @@ func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
 		await get_tree().create_timer(delay).timeout
 		create_tween().tween_property(self, 'modulate:a', max_alpha, 1)
 	else:
-		modulate.a = 1.0
+		modulate.a = max_alpha
 
 
 func create_hint(container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType) -> Node:

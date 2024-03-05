@@ -60,7 +60,7 @@ class WinInfo:
 }
 @onready var BrushPicker = %BrushPicker
 @onready var AquariumHints: AquariumHintContainer = %AquariumHintContainer
-@onready var AnimPlayer = $AnimationPlayer
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 @onready var WaveEffect = %WaveEffect
 @onready var ResetButton: TextureButton = %ResetButton
 @onready var BackButton = %BackButton
@@ -298,9 +298,10 @@ func setup(try_load := true) -> void:
 				running_time = save.timer_secs
 				update_timer_label()
 				dummy_save = save
-	BrushPicker.setup(grid.editor_mode())
+	var skip_anims: bool = Profile.get_option("skip_animations")
+	BrushPicker.setup(grid.editor_mode(), skip_anims)
 	CursorManager.set_cursor(CursorManager.CursorMode.Water)
-	GridNode.setup(grid)
+	GridNode.setup(grid, skip_anims)
 	DescriptionScroll.visible = not editor_mode()
 	if not Global.is_mobile:
 		%PlaytestButton.visible = editor_mode()
@@ -349,7 +350,7 @@ func setup(try_load := true) -> void:
 	
 	var delay = COUNTER_DELAY_STARTUP
 	for counter in Counters.values():
-		counter.startup(delay)
+		counter.startup(delay, skip_anims)
 		delay += COUNTER_DELAY_STARTUP
 	var expected_aqs := grid.grid_hints().expected_aquariums
 	if editor_mode():
@@ -357,9 +358,12 @@ func setup(try_load := true) -> void:
 		for aq in visibility.expected_aquariums:
 			if not expected_aqs.has(aq):
 				expected_aqs[aq] = 0
-	AquariumHints.startup(delay, expected_aqs, grid.all_aquarium_counts(), GridNode.editor_mode)
+	AquariumHints.startup(delay, expected_aqs, grid.all_aquarium_counts(), GridNode.editor_mode, skip_anims)
 	
 	AnimPlayer.play("startup")
+	if skip_anims:
+		AnimPlayer.advance(AnimPlayer.current_animation_length)
+	
 	
 	_apply_visibility(visibility)
 
@@ -368,7 +372,8 @@ func setup(try_load := true) -> void:
 	
 	scale_grid()
 	
-	await get_tree().create_timer(GridNode.get_grid_delay(grid.rows(), grid.cols())).timeout
+	if not skip_anims:
+		await get_tree().create_timer(GridNode.get_grid_delay(grid.rows(), grid.cols())).timeout
 	
 	process_game = true
 	
@@ -527,7 +532,7 @@ func reset_level() -> void:
 		if not await ConfirmationScreen.pressed:
 			return
 	GridNode.grid_logic.clear_all()
-	GridNode.setup(GridNode.grid_logic)
+	GridNode.setup(GridNode.grid_logic, Profile.get_option("skip_animations"))
 	if reset_mistakes_on_reset:
 		running_time = 0
 		Counters.mistake.set_count(0)

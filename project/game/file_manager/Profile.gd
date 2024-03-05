@@ -59,6 +59,7 @@ var options = {
 	"daily_notification": int(DailyStatus.NotUnlocked),
 	"unlock_everything": false,
 	"thicker_walls": false,
+	"skip_animations": false,
 }
 var dlc_info = {
 	#Small & tricky

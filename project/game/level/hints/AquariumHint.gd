@@ -55,10 +55,12 @@ func update_dark_mode(is_dark : bool) -> void:
 	%Water.material.set_shader_parameter("ray_value", colors.ray_value)
 
 
-func startup(delay: float) -> void:
-	if delay > 0:
+func startup(delay: float, fast_mode: bool) -> void:
+	if delay > 0 and not fast_mode:
 		await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
+	if fast_mode:
+		AnimPlayer.advance(AnimPlayer.current_animation_length)
 
 
 func instant_startup() -> void:

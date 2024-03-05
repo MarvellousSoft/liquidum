@@ -16,7 +16,7 @@ const PANELS = {
 	"normal": preload("res://assets/ui/AquariumHintContainerMobilePanel.tres"),
 }
 
-@onready var AnimPlayer = $AnimationPlayer
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 @onready var HintContainer = $PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer
 @onready var Title = %Title
 
@@ -27,7 +27,7 @@ func _ready():
 	update_dark_mode(Profile.get_option("dark_mode"))
 
 
-func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool) -> void:
+func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mode: bool, fast_mode: bool) -> void:
 	if not editor_mode and expected.is_empty():
 		hide()
 		return
@@ -37,25 +37,28 @@ func startup(delay: float, expected: Dictionary, current: Dictionary, editor_mod
 	for child in HintContainer.get_children():
 		child.modulate.a = 0.0
 	update_values(expected, current, editor_mode, true)
-	await get_tree().create_timer(delay).timeout
+	if not fast_mode:
+		await get_tree().create_timer(delay).timeout
 	AnimPlayer.play("startup")
-	
+	if fast_mode:
+		AnimPlayer.advance(AnimPlayer.current_animation_length)
 	for child in HintContainer.get_children():
-		child.startup(delay)
+		child.startup(delay, fast_mode)
 		delay += HINT_DELAY
 	
-	# Start with some scroll so it's clear to users a scrollbar is there
-	var bar: ScrollBar = %ScrollContainer.get_v_scroll_bar()
-	var scroll_max: float = bar.max_value - %ScrollContainer.size.y
-	if not editor_mode and scroll_max > 0:
-		var tween := create_tween()
-		tween.tween_interval(delay)
-		tween.tween_property(bar, ^'value', scroll_max, 3)
-		tween.tween_property(bar, ^'value', 0, 3)
-		tween.tween_property(bar, ^'value', scroll_max / 3, 1)
-		var stop_tween := func(): tween.kill()
-		%ScrollContainer.scroll_started.connect(stop_tween, CONNECT_ONE_SHOT)
-		%ScrollContainer.get_v_scroll_bar().scrolling.connect(stop_tween, CONNECT_ONE_SHOT)
+	if not fast_mode:
+		# Start with some scroll so it's clear to users a scrollbar is there
+		var bar: ScrollBar = %ScrollContainer.get_v_scroll_bar()
+		var scroll_max: float = bar.max_value - %ScrollContainer.size.y
+		if not editor_mode and scroll_max > 0:
+			var tween := create_tween()
+			tween.tween_interval(delay)
+			tween.tween_property(bar, ^'value', scroll_max, 3)
+			tween.tween_property(bar, ^'value', 0, 3)
+			tween.tween_property(bar, ^'value', scroll_max / 3, 1)
+			var stop_tween := func(): tween.kill()
+			%ScrollContainer.scroll_started.connect(stop_tween, CONNECT_ONE_SHOT)
+			%ScrollContainer.get_v_scroll_bar().scrolling.connect(stop_tween, CONNECT_ONE_SHOT)
 
 	if editor_mode:
 		Title.text = tr("AQUARIUMS_COUNTER_EDITOR")

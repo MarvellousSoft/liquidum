@@ -36,12 +36,12 @@ var active := true
 	E.BrushMode.Wall: $CenterContainer/PanelContainer/Buttons/Wall,
 	E.BrushMode.Block: $CenterContainer/PanelContainer/Buttons/Block,
 }
-@onready var AnimPlayer = $AnimationPlayer
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	setup(editor_mode)
+	setup(editor_mode, false)
 	for button in E.BrushMode.values():
 		(Buttons[button] as TextureButton).pressed.connect(_on_button_pressed.bind(button))
 	AnimPlayer.play("startup")
@@ -71,7 +71,7 @@ func disable():
 	hide()
 
 
-func setup(editor_mode_: bool) -> void:
+func setup(editor_mode_: bool, fast_mode: bool) -> void:
 	editor_mode = editor_mode_
 	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
 		Images[editor_button].set_visible(editor_mode)
@@ -82,6 +82,8 @@ func setup(editor_mode_: bool) -> void:
 	for button in Buttons.keys():
 		Buttons[button].button_pressed = (button == E.BrushMode.Water)
 	custom_minimum_size = ButtonsContainer.size
+	if fast_mode:
+		AnimPlayer.advance(AnimPlayer.current_animation_length)
 
 
 func enable_brush(brush_type : E.BrushMode) -> void:
