@@ -12,6 +12,7 @@ layer = 5
 script = ExtResource("1_k1dxl")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_qcwxh")
 offset_right = 3840.0
 offset_bottom = 2160.0

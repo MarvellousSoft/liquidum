@@ -1066,6 +1066,7 @@ libraries = {
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer/CheckBox" to="." method="_on_dark_mode_toggled"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer/OptionButton" to="." method="_on_palette_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer/OptionButton" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer/HSlider" to="." method="_on_blue_filter_slider_value_changed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
