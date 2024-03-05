@@ -483,44 +483,28 @@ layout_mode = 2
 [node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 75
+theme_override_constants/separation = 70
 alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
-unique_name_in_owner = true
+[node name="PlaystyleLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 26
-alignment = 1
-
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
-custom_minimum_size = Vector2(66, 70)
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-texture_normal = ExtResource("4_d7qef")
-texture_pressed = ExtResource("5_olws7")
-texture_hover = ExtResource("6_gfgdl")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
-layout_mode = 2
-theme_override_constants/line_spacing = 47
-text = "HIGHLIGHT_LINES_MOBILE"
+theme_override_constants/line_spacing = 15
+theme_override_font_sizes/font_size = 45
+text = "PLAYSTYLE"
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 2
 
-[node name="HighlightHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="AllowMistakesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -531,82 +515,10 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
-text = "HIGHLIGHT_HINTS"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BiggerHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 26
-alignment = 1
-
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
-custom_minimum_size = Vector2(66, 70)
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-texture_normal = ExtResource("4_d7qef")
-texture_pressed = ExtResource("5_olws7")
-texture_hover = ExtResource("6_gfgdl")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
-layout_mode = 2
-theme_override_constants/line_spacing = 47
-text = "BIGGER_HINTS"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ThickerWallsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 26
-alignment = 1
-
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
-custom_minimum_size = Vector2(66, 70)
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-texture_normal = ExtResource("4_d7qef")
-texture_pressed = ExtResource("5_olws7")
-texture_hover = ExtResource("6_gfgdl")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
-layout_mode = 2
-theme_override_constants/line_spacing = 47
-text = "THICKER_WALLS"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 26
-alignment = 1
-
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
-custom_minimum_size = Vector2(66, 70)
-layout_mode = 2
-focus_mode = 0
-toggle_mode = true
-texture_normal = ExtResource("4_d7qef")
-texture_pressed = ExtResource("5_olws7")
-texture_hover = ExtResource("6_gfgdl")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
-layout_mode = 2
-theme_override_constants/line_spacing = 47
-text = "SHOW_PREVIEW"
+text = "ALLOW_MISTAKES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -634,13 +546,39 @@ text = "SHOW_TIMER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AllowMistakesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="IncompleteInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "INCOMPLETE_LINE_INFO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+item_count = 3
+selected = 0
+popup/item_0/text = "LINE_INFO_NONE"
+popup/item_0/id = 0
+popup/item_1/text = "LINE_INFO_MISSING"
+popup/item_1/id = 1
+popup/item_2/text = "LINE_INFO_CURRENT"
+popup/item_2/id = 2
+
+[node name="HighlightHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -651,10 +589,58 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
-text = "ALLOW_MISTAKES"
+text = "HIGHLIGHT_HINTS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "HIGHLIGHT_LINES_MOBILE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "SHOW_PREVIEW"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -706,31 +692,69 @@ text = "DRAG_BUTTON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="IncompleteInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="AccessibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+layout_mode = 2
+theme_override_constants/line_spacing = 15
+theme_override_font_sizes/font_size = 45
+text = "ACCESSIBILITY"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="BiggerHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 26
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
-text = "INCOMPLETE_LINE_INFO"
+text = "BIGGER_HINTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+[node name="ThickerWallsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
 focus_mode = 0
-item_count = 3
-selected = 0
-popup/item_0/text = "LINE_INFO_NONE"
-popup/item_0/id = 0
-popup/item_1/text = "LINE_INFO_MISSING"
-popup/item_1/id = 1
-popup/item_2/text = "LINE_INFO_CURRENT"
-popup/item_2/id = 2
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "THICKER_WALLS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MiscellaneousLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+layout_mode = 2
+theme_override_constants/line_spacing = 15
+theme_override_font_sizes/font_size = 45
+text = "MISCELLANEOUS"
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [node name="UnlockVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 layout_mode = 2
@@ -974,26 +998,26 @@ libraries = {
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer/HSlider" to="." method="_on_blue_filter_slider_value_changed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/SkipAnimsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/SkipAnimsContainer/CheckBox" to="." method="_on_skip_anims_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_highlight_lines_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer/CheckBox" to="." method="_on_highlight_hints_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_show_preview_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_show_timer_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_allow_mistakes_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_show_timer_toggled"]
+[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_line_info_item_selected"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer/CheckBox" to="." method="_on_highlight_hints_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer/CheckBox" to="." method="_on_highlight_lines_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer/CheckBox" to="." method="_on_show_preview_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer/CheckBox" to="." method="_on_progress_on_unknown_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer/CheckBox" to="." method="_on_drag_toggled"]
-[connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_line_info_item_selected"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_unlock_everything_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
