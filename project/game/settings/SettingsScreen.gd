@@ -285,7 +285,7 @@ func _on_unlock_everything_toggled(on: bool) -> void:
 	Profile.unlock_everything_changed.emit(on)
 
 
-func _on_thicker_walls_box_toggled(on):
+func _on_thicker_walls_box_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("thicker_walls", on)
 	Profile.thick_walls_mode_toggled.emit(on)
