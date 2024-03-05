@@ -56,14 +56,9 @@ gdscript/warnings/integer_division=0
 
 window/size/viewport_width=3840
 window/size/viewport_height=2160
-window/size/initial_position_type=0
-window/size/initial_position=Vector2i(1807, 157)
-window/size/initial_screen=0.0
-window/size/window_width_override=1220
-window/size/window_height_override=630
+window/size/mode=3
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
-window/vsync/vsync_mode=0.0
 mouse_cursor/custom_image="res://assets/images/cursors/arrow-simple.png"
 mouse_cursor/tooltip_position_offset=Vector2(16, 16)
 window/size/viewport_width.mobile=720
@@ -168,7 +163,6 @@ is_mobile.mobile=true
 
 [physics]
 
-common/physics_ticks_per_second=30
 common/physics_ticks_per_second.mobile=30
 
 [rendering]
