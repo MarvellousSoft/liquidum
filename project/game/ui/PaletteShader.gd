@@ -9,7 +9,9 @@ enum Palette {
 const PALETTES = [
 	["NONE", Color()],
 	["GRAY", Color(1.0, 1.0, 1.0)],
-	["ORANGE", Color(1.77, 1.19, 1.0)]
+	["ORANGE", Color(1.77, 1.19, 1.0)],
+	["GREEN", Color(1.0, 1.50, 1.0)],
+	["PINK", Color(1.7, 1.0, 1.9)],
 ]
 
 func _ready():

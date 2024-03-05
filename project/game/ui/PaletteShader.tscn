@@ -8,7 +8,7 @@ shader = ExtResource("2_fpyr6")
 shader_parameter/palette_color = Color(1, 1, 1, 1)
 
 [node name="PaletteShader" type="CanvasLayer"]
-layer = 6
+layer = 5
 script = ExtResource("1_k1dxl")
 
 [node name="ColorRect" type="ColorRect" parent="."]

@@ -314,5 +314,7 @@ GENERAL_DISPLAY,- General Display -,- Configurações Gerais -,- Configurações
 VISIBILITY,- Visibility -,- Visibilidade -,- Visibilidade -
 PALETTE,Palette,Paleta,Paleta
 PALETTE_NONE,None,Nenhuma,Nenhuma
-PALETTE_GRAY,Midnight Gray,Cinza sombrio,Cinza Sombrio
+PALETTE_GRAY,Newspaper Gray,Cinza jornal,Cinza jornal
 PALETTE_ORANGE,Tropical Orange,Laranja tropical,Laranja tropical
+PALETTE_GREEN,Cool Green,Verde Macio,Verde Macio
+PALETTE_PINK,Candy Pink,Rosa Doce,Rosa Doce
