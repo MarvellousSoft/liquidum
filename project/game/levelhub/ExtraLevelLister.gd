@@ -107,7 +107,9 @@ func set_purchased(section: int) -> void:
 
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
-		return purchased_sections.get(section, false)
+		var purchased: bool =  purchased_sections.get(section, false)
+		var is_free: bool = android_payment(section) == ""
+		return not is_free and not purchased
 	else:
 		var dlc: int = _config(section).get_value("section", "dlc", -1)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):

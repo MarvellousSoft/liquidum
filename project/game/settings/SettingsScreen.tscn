@@ -666,7 +666,7 @@ layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "INCOMPLETE_LINE_INFO"
 horizontal_alignment = 1
-vertical_alignment = 2
+vertical_alignment = 1
 
 [node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
 layout_mode = 2
