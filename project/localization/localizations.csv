@@ -310,3 +310,9 @@ THICKER_WALLS,Thicker walls,Paredes mais grossas,Paredes mais grossas
 PLAYSTYLE,- Playstyle -,- Estilo de jogo -,- Estilo de jogo -
 ACCESSIBILITY,- Accessibility -,- Acessibilidade -,- Acessibilidade -
 MISCELLANEOUS,- Miscellaneous -,- Outros -,- Outros -
+GENERAL_DISPLAY,- General Display -,- Configurações Gerais -,- Configurações Gerais -
+VISIBILITY,- Visibility -,- Visibilidade -,- Visibilidade -
+PALETTE,Palette,Paleta,Paleta
+PALETTE_NONE,None,Nenhuma,Nenhuma
+PALETTE_GRAY,Midnight Gray,Cinza sombrio,Cinza Sombrio
+PALETTE_ORANGE,Tropical Orange,Laranja tropical,Laranja tropical

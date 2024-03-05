@@ -94,6 +94,8 @@ func setup_values() -> void:
 	%DragContainer/CheckBox.button_pressed = Profile.get_option("drag_content")
 	%InvertMouseContainer/CheckBox.button_pressed = Profile.get_option("invert_mouse")
 	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
+	populate_palette()
+	%PaletteContainer/OptionButton.selected = Profile.get_option("palette")
 	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
 	%ShowTimerContainer/CheckBox.button_pressed = Profile.get_option("show_timer")
 	%AllowMistakesContainer/CheckBox.button_pressed = Profile.get_option("allow_mistakes")
@@ -122,6 +124,14 @@ func set_level_name(level_name: String, section := -1, level := -1) ->  void:
 			LevelID.hide()
 	else:
 		TitleContainer.hide()
+
+
+func populate_palette():
+	var option = %PaletteContainer.get_node("OptionButton")
+	var idx = 0
+	for palette in PaletteShader.get_palettes():
+		option.add_item("PALETTE_"+palette[0], idx)
+		idx += 1
 
 
 func _on_volume_slider_value_changed(value, bus : int):
@@ -294,3 +304,9 @@ func _on_thicker_walls_box_toggled(on: bool) -> void:
 func _on_skip_anims_toggled(on: bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("skip_animations", on)
+
+
+func _on_palette_item_selected(index):
+	checkbox_sound(true)
+	Profile.set_option("palette", index, true)
+	Profile.palette_changed.emit()

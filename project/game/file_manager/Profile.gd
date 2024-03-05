@@ -2,6 +2,7 @@ extends Node
 
 signal dark_mode_toggled(status: bool)
 signal line_info_changed()
+signal palette_changed()
 signal show_timer_changed(status: bool)
 signal allow_mistakes_changed(status: bool)
 signal progress_on_unkown_changed(status: bool)
@@ -60,6 +61,7 @@ var options = {
 	"unlock_everything": false,
 	"thicker_walls": false,
 	"skip_animations": false,
+	"palette": 0, #PaletteShader.Palette.None
 }
 var dlc_info = {
 	#Small & tricky

@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cc0rjxbayi6c3"]
+
+[ext_resource type="Script" path="res://game/ui/PaletteShader.gd" id="1_k1dxl"]
+[ext_resource type="Shader" path="res://game/ui/PaletteShader.gdshader" id="2_fpyr6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qcwxh"]
+shader = ExtResource("2_fpyr6")
+shader_parameter/palette_color = Color(1, 1, 1, 1)
+
+[node name="PaletteShader" type="CanvasLayer"]
+layer = 6
+script = ExtResource("1_k1dxl")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_qcwxh")
+offset_right = 3840.0
+offset_bottom = 2160.0
+mouse_filter = 2
