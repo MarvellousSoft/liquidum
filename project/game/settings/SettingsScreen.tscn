@@ -404,7 +404,6 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-selected = 0
 
 [node name="ShowBubblesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
 unique_name_in_owner = true

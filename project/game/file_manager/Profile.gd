@@ -175,6 +175,7 @@ func set_save_data(data):
 	update_translation()
 	dark_mode_toggled.emit(options.dark_mode)
 	show_bubbles_changed.emit(options.show_bubbles)
+	palette_changed.emit()
 	BlueFilter.set_value(float(options.blue_filter)/100.0)
 
 func set_data(data, idx, default_values, ignore_deprecated := false):

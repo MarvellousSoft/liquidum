@@ -129,6 +129,7 @@ func set_level_name(level_name: String, section := -1, level := -1) ->  void:
 func populate_palette():
 	var option = %PaletteContainer.get_node("OptionButton")
 	var idx = 0
+	option.clear()
 	for palette in PaletteShader.get_palettes():
 		option.add_item("PALETTE_"+palette[0], idx)
 		idx += 1
