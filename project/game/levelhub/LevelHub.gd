@@ -32,6 +32,8 @@ func _enter_tree() -> void:
 	SteamManager.overlay_toggled.connect(_on_overlay_toggled)
 	Profile.unlock_everything_changed.connect(_on_unlock_changed)
 	Global.dev_mode_toggled.connect(_on_unlock_changed)
+	if extra_levels and Global.is_mobile:
+		AdManager.payment.purchased_section.connect(_on_purchased_section)
 	check_unlocks()
 
 
@@ -39,7 +41,11 @@ func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	SteamManager.overlay_toggled.disconnect(_on_overlay_toggled)
+	if extra_levels and Global.is_mobile:
+		AdManager.payment.purchased_section.disconnect(_on_purchased_section)
 
+func _on_purchased_section(_section: int) -> void:
+	update_sections()
 
 func _on_unlock_changed(on: bool) -> void:
 	if not on and get_focused_section() != null:

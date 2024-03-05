@@ -96,13 +96,18 @@ func level_stat(section: int, level: int) -> String:
 func section_name(section: int) -> String:
 	return _config(section).get_value("section", "name", "No name")
 
-func _android_payment(section: int) -> String:
+func android_payment(section: int) -> String:
 	return _config(section).get_value("section", "android_payment", "")
+
+var purchased_sections := {}
+
+func set_purchased(section: int) -> void:
+	assert(Global.is_mobile)
+	purchased_sections[section] = true
 
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
-		# TODO: Payments
-		pass
+		return purchased_sections.get(section, false)
 	else:
 		var dlc: int = _config(section).get_value("section", "dlc", -1)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
@@ -120,7 +125,7 @@ func is_hard(section: int, level: int) -> bool:
 	return level == -1 or level in _config(section).get_value("section", "hard_levels", [])
 
 func is_free(section: int) -> bool:
-	return _android_payment(section) == ""
+	return android_payment(section) == ""
 
 func count_completed_levels(profile_name: String) -> int:
 	var count := 0

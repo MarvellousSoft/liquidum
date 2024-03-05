@@ -30,7 +30,7 @@ func _ready() -> void:
 
 func buy_ad_removal() -> void:
 	if payment != null:
-		payment.do_purchase()
+		payment.do_purchase_disable_ads()
 
 func _on_disable_ads() -> void:
 	print("Ads are disabled")

@@ -1,7 +1,9 @@
 class_name AndroidPayment
 extends PlatformPayment
 
-const PURCHASE_NAME := "disable_ads"
+const ADS_PURCHASE := "disable_ads"
+
+var purchase_to_section := {}
 
 var api
 
@@ -44,7 +46,13 @@ static func setup() -> AndroidPayment:
 
 func _on_connected() -> void:
 	print("Connected to Android Payments")
-	api.querySkuDetails([PURCHASE_NAME], "inapp")
+	var section := 1
+	while ExtraLevelLister.has_section(section):
+		var payment_name := ExtraLevelLister.android_payment(section)
+		if payment_name != "":
+			purchase_to_section[payment_name] = section
+		section += 1
+	api.querySkuDetails(purchase_to_section.keys() + [ADS_PURCHASE], "inapp")
 
 func _on_disconnected() -> void:
 	print("Disconnected Android payments")
@@ -65,8 +73,11 @@ func _on_billing_resume():
 	if api.getConnectionState() == ConnectionState.CONNECTED:
 		api.queryPurchases("inapp")
 
-func do_purchase() -> void:
-	api.purchase(PURCHASE_NAME)
+func do_purchase_disable_ads() -> void:
+	api.purchase(ADS_PURCHASE)
+
+func do_purchase_section(section: int) -> void:
+	api.purchase(purchase_to_section.find_key(section))
 
 func _on_query_purchases_response(query_result):
 	if query_result.status == OK:
@@ -84,8 +95,14 @@ func _on_purchase_error(response_id, error_message):
 
 func _process_purchase(purchase):
 	print("Processing purchase: %s" % [purchase])
-	if PURCHASE_NAME in purchase.skus and purchase.purchase_state == PurchaseState.PURCHASED:
+	if ADS_PURCHASE in purchase.skus and purchase.purchase_state == PurchaseState.PURCHASED:
 		print("Did purchase remove ads")
 		disable_ads.emit()
 		if not purchase.is_acknowledged:
 			api.acknowledgePurchase(purchase.purchase_token)
+	for sku in purchase.skus:
+		if purchase.purchase_state == PurchaseState.PURCHASED and purchase_to_section.has(sku):
+			ExtraLevelLister.set_purchased(purchase_to_section[sku])
+			purchased_section.emit(purchase_to_section[sku])
+			if not purchase.is_acknowledged:
+				api.acknowledgePurchase(purchase.purchase_token)

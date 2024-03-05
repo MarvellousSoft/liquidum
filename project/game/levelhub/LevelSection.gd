@@ -355,14 +355,12 @@ func _on_dark_mode_changed(_is_dark : bool):
 		update_style_boxes(false)
 
 
-
 func _on_buy_dlc_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
 
 func _on_buy_dlc_button_pressed() -> void:
 	if Global.is_mobile:
-		# TODO: buy mobile DLC
-		pass
+		AdManager.payment.do_purchase_section(my_section)
 	else:
 		SteamManager.overlay_or_browser(dlc_url)
