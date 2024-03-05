@@ -29,10 +29,6 @@ func _config(section: int) -> ConfigFile:
 		_section_config[section - 1] = c
 	return _section_config[section - 1]
 
-
-func get_steam_url(section: int) -> String:
-	return _config(section).get_value("section", "steam_url", "https://store.steampowered.com/dlc/2716690")
-
 func get_initial_unlocked_levels(section: int) -> int:
 	return _config(section).get_value("section", "initial_unlocked", CampaignLevelLister.INITIAL_UNLOCKED_LEVELS)
 
@@ -106,6 +102,9 @@ var dlc_purchases := {}
 func _on_dlc_purchased(payment_id: String) -> void:
 	dlc_purchases[payment_id] = true
 
+func steam_dlc(section: int) -> int:
+	return _config(section).get_value("section", "dlc", -1)
+
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
 		if OS.get_name() == "Android":
@@ -115,7 +114,7 @@ func section_disabled(section: int) -> bool:
 			# TODO: iOS
 			pass
 	else:
-		var dlc: int = _config(section).get_value("section", "dlc", -1)
+		var dlc := steam_dlc(section)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
 			return true
 	return false
