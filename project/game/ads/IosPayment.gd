@@ -29,7 +29,7 @@ func _process(_dt: float) -> void:
 func do_purchase_disable_ads() -> void:
 	api.purchase({product_id = PURCHASE_ID})
 
-func do_purchase_section(_section: int) -> void:
+func do_purchase_dlc(_id: String) -> void:
 	return GridModel.must_be_implemented()
 
 static func setup() -> IosPayment:

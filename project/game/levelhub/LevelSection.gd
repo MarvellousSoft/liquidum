@@ -361,6 +361,6 @@ func _on_buy_dlc_button_mouse_entered():
 
 func _on_buy_dlc_button_pressed() -> void:
 	if Global.is_mobile:
-		AdManager.payment.do_purchase_section(my_section)
+		ExtraLevelLister.purchase_section(my_section)
 	else:
 		SteamManager.overlay_or_browser(dlc_url)

@@ -1,5 +1,8 @@
 extends LevelLister
 
+func _ready() -> void:
+	if AdManager.payment != null:
+		AdManager.payment.dlc_purchased.connect(_on_dlc_purchased)
 
 func level_name(section: int, level: int) -> String:
 	return "extra_level%02d_%02d" % [section, level]
@@ -99,17 +102,18 @@ func section_name(section: int) -> String:
 func android_payment(section: int) -> String:
 	return _config(section).get_value("section", "android_payment", "")
 
-var purchased_sections := {}
-
-func set_purchased(section: int) -> void:
-	assert(Global.is_mobile)
-	purchased_sections[section] = true
+var dlc_purchases := {}
+func _on_dlc_purchased(payment_id: String) -> void:
+	dlc_purchases[payment_id] = true
 
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
-		var purchased: bool =  purchased_sections.get(section, false)
-		var is_free: bool = android_payment(section) == ""
-		return not is_free and not purchased
+		if OS.get_name() == "Android":
+			var purchase := android_payment(section)
+			return purchase != "" and not dlc_purchases.has(purchase)
+		elif OS.get_name() == "iOS":
+			# TODO: iOS
+			pass
 	else:
 		var dlc: int = _config(section).get_value("section", "dlc", -1)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
@@ -141,3 +145,12 @@ func count_completed_levels(profile_name: String) -> int:
 			if save != null and save.is_completed():
 				count += 1
 	return count
+
+func purchase_section(section: int) -> void:
+	var id: String
+	if OS.get_name() == "Android":
+		id = android_payment(section)
+	elif OS.get_name() == "iOS":
+		pass
+	if id != "" and AdManager.payment != null:
+		AdManager.payment.do_purchase_dlc(id)

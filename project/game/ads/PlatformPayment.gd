@@ -2,7 +2,7 @@ class_name PlatformPayment
 extends Node
 
 signal disable_ads()
-signal purchased_section(section: int)
+signal dlc_purchased(payment_id: String)
 
 func start() -> void:
 	GridModel.must_be_implemented()
@@ -10,5 +10,5 @@ func start() -> void:
 func do_purchase_disable_ads() -> void:
 	GridModel.must_be_implemented()
 
-func do_purchase_section(_section: int) -> void:
+func do_purchase_dlc(_payment_id: String) -> void:
 	GridModel.must_be_implemented()

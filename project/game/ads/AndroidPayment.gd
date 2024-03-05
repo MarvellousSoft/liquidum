@@ -3,7 +3,7 @@ extends PlatformPayment
 
 const ADS_PURCHASE := "disable_ads"
 
-var purchase_to_section := {}
+var dlc_purchases := {}
 
 var api
 
@@ -50,9 +50,9 @@ func _on_connected() -> void:
 	while ExtraLevelLister.has_section(section):
 		var payment_name := ExtraLevelLister.android_payment(section)
 		if payment_name != "":
-			purchase_to_section[payment_name] = section
+			dlc_purchases[payment_name] = true
 		section += 1
-	api.querySkuDetails(purchase_to_section.keys() + [ADS_PURCHASE], "inapp")
+	api.querySkuDetails(dlc_purchases.keys() + [ADS_PURCHASE], "inapp")
 
 func _on_disconnected() -> void:
 	print("Disconnected Android payments")
@@ -76,8 +76,8 @@ func _on_billing_resume():
 func do_purchase_disable_ads() -> void:
 	api.purchase(ADS_PURCHASE)
 
-func do_purchase_section(section: int) -> void:
-	api.purchase(purchase_to_section.find_key(section))
+func do_purchase_dlc(payment_id: String) -> void:
+	api.purchase(payment_id)
 
 func _on_query_purchases_response(query_result):
 	if query_result.status == OK:
@@ -101,8 +101,7 @@ func _process_purchase(purchase):
 		if not purchase.is_acknowledged:
 			api.acknowledgePurchase(purchase.purchase_token)
 	for sku in purchase.skus:
-		if purchase.purchase_state == PurchaseState.PURCHASED and purchase_to_section.has(sku):
-			ExtraLevelLister.set_purchased(purchase_to_section[sku])
-			purchased_section.emit(purchase_to_section[sku])
+		if purchase.purchase_state == PurchaseState.PURCHASED and dlc_purchases.has(sku):
+			dlc_purchased.emit(sku)
 			if not purchase.is_acknowledged:
 				api.acknowledgePurchase(purchase.purchase_token)
