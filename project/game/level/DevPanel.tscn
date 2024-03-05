@@ -77,6 +77,22 @@ layout_mode = 2
 focus_mode = 0
 text = "Interesting"
 
+[node name="KeepWalls" type="CheckButton" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Keep walls"
+
+[node name="KeepWater" type="CheckButton" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Keep water"
+
+[node name="KeepVis" type="CheckButton" parent="."]
+layout_mode = 2
+focus_mode = 0
+button_pressed = true
+text = "Keep visibility"
+
 [node name="Diags" type="CheckBox" parent="."]
 layout_mode = 2
 focus_mode = 0
@@ -91,16 +107,6 @@ text = "Boats"
 layout_mode = 2
 focus_mode = 0
 text = "Aquariums"
-
-[node name="RandomizeWater" type="Button" parent="."]
-layout_mode = 2
-focus_mode = 0
-text = "Randomize Water"
-
-[node name="RandomizeVisibility" type="Button" parent="."]
-layout_mode = 2
-focus_mode = 0
-text = "Randomize visibility"
 
 [node name="Paste" type="Button" parent="."]
 layout_mode = 2
@@ -130,12 +136,15 @@ text = "Copy to editor"
 [connection signal="mouse_entered" from="Generate" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Generate" to="." method="_on_generate_pressed"]
 [connection signal="mouse_entered" from="Interesting" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="KeepWalls" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="KeepWalls" to="." method="_on_keep_walls_toggled"]
+[connection signal="mouse_entered" from="KeepWater" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="KeepWater" to="." method="_on_keep_water_toggled"]
+[connection signal="mouse_entered" from="KeepVis" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="KeepVis" to="." method="_on_keep_vis_toggled"]
 [connection signal="mouse_entered" from="Diags" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Boats" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Aquariums" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="RandomizeWater" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="RandomizeWater" to="." method="_on_randomize_water_pressed"]
-[connection signal="pressed" from="RandomizeVisibility" to="." method="_on_randomize_visibility_pressed"]
 [connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
 [connection signal="mouse_entered" from="Save" to="." method="_on_button_mouse_entered"]

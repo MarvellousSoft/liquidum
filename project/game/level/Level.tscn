@@ -887,8 +887,6 @@ autostart = true
 [connection signal="full_solve" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_full_solve"]
 [connection signal="generate" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_generate"]
 [connection signal="load_grid" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_load_grid"]
-[connection signal="randomize_visibility" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_visibility"]
-[connection signal="randomize_water" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_randomize_water"]
 [connection signal="save" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_save"]
 [connection signal="use_strategies" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]

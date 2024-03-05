@@ -5,8 +5,6 @@ extends VBoxContainer
 signal use_strategies()
 signal full_solve()
 signal generate()
-signal randomize_water()
-signal randomize_visibility()
 signal load_grid(g: GridModel)
 signal save()
 signal copy_to_editor()
@@ -17,6 +15,10 @@ signal copy_to_editor()
 @onready var Guesses: SpinBox = $Guesses
 @onready var FlavorOptions: OptionButton = $FlavorOptions
 @onready var CancelSolve: Button = %CancelSolve
+@onready var KeepWalls: Button = $KeepWalls
+@onready var KeepWater: Button = $KeepWater
+@onready var KeepVis: Button = $KeepVis
+
 
 var l_gen := RandomLevelGenerator.new()
 var solve_thread: Thread = Thread.new()
@@ -47,7 +49,7 @@ func _toggled_item(index: int, button: MenuButton) -> void:
 	button.get_popup().toggle_item_checked(index)
 
 
-func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
+func _gen_puzzle(cur_grid: GridModel, cur_hints: Level.HintVisibility) -> GridModel:
 	var time := Time.get_unix_time_from_system()
 	var strategies := selected_strategies()
 	var forced_strategies := selected_forced_strategies()
@@ -64,7 +66,7 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 		if $Seed.text != "":
 			rseed = $Seed.text
 		else:
-			$Seed.placeholder_text = "Seed: %d" % rseed
+			$Seed.placeholder_text = "Seed: %s" % rseed
 		rng.seed = RandomHub.consistent_hash(rseed)
 		if flavor < 1000:
 			var g := await RandomFlavors.gen(l_gen, rng, flavor)
@@ -74,11 +76,23 @@ func _gen_puzzle(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel
 				return g
 		else:
 			# TODO: This can be refactored to use RandomLevelGenerator
+			var g: GridModel
 			var gen := Generator.builder().with_diags($Diags.button_pressed).with_boats($Boats.button_pressed).build(rng.randi())
-			var g := gen.generate(rows, cols)
-			hints.apply_to_grid(g)
-			if $Aquariums.button_pressed:
-				Generator.randomize_aquarium_hints(rng, g)
+			if KeepWalls.button_pressed:
+				g = GridImpl.import_data(cur_grid.export_data(), GridModel.LoadMode.Editor)
+				if not KeepWater.button_pressed:
+					g.clear_content()
+					if $Boats.button_pressed:
+						gen.randomize_boats(g)
+					gen.randomize_water(g)
+			else:
+				g = gen.generate(cur_grid.rows(), cur_grid.cols())
+			if KeepVis.button_pressed:
+				cur_hints.apply_to_grid(g)
+			else:
+				Level.random_visibility(g, g.count_boats() > 0).apply_to_grid(g)
+				if $Aquariums.button_pressed:
+					Generator.randomize_aquarium_hints(rng, g, randf())
 			if not forced_strategies.is_empty() or ($Interesting.button_pressed and $Seed.text == ""):
 				var retry := true
 				if forced_strategies.is_empty():
@@ -121,13 +135,17 @@ func selected_forced_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $RandomizeWater, $RandomizeVisibility, $Paste, FlavorOptions]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions]:
 		node.visible = editor_mode
+	if editor_mode:
+		_on_keep_walls_toggled(KeepWalls.button_pressed)
+		_on_keep_water_toggled(KeepWater.button_pressed)
+		_on_keep_vis_toggled(KeepVis.button_pressed)
 
 
-func gen_level(rows: int, cols: int, hints: Level.HintVisibility) -> GridModel:
+func gen_level(cur_grid: GridModel, cur_hints: Level.HintVisibility) -> GridModel:
 	$Generate.disabled = true
-	var g := await _gen_puzzle(rows, cols, hints)
+	var g := await _gen_puzzle(cur_grid, cur_hints)
 	if g != null:
 		$FullSolveType.text = ""
 	$Generate.disabled = false
@@ -174,11 +192,6 @@ func _on_god_mode_pressed():
 	use_strategies.emit()
 
 
-func _on_randomize_water_pressed():
-	AudioManager.play_sfx("button_pressed")
-	randomize_water.emit()
-
-
 func _on_paste_pressed():
 	var txt := DisplayServer.clipboard_get()
 	var g: GridModel
@@ -195,11 +208,6 @@ func _on_paste_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
-
-
-func _on_randomize_visibility_pressed():
-	AudioManager.play_sfx("button_pressed")
-	randomize_visibility.emit()
 
 
 func _on_save_pressed():
@@ -227,3 +235,16 @@ func do_copy_to_editor(grid: GridModel, hints: Level.HintVisibility) -> void:
 		hints.apply_to_grid(g)
 	assert(g.are_hints_satisfied())
 	EditorHub.save_to_editor("Copied from DevPanel", g)
+
+
+func _on_keep_walls_toggled(on: bool) -> void:
+	$Diags.visible = not on
+	KeepWater.visible = on
+
+func _on_keep_water_toggled(on: bool) -> void:
+	$Boats.visible = not on
+
+func _on_keep_vis_toggled(on: bool) -> void:
+	$Aquariums.visible = not on
+	if on:
+		$Aquariums.button_pressed = false

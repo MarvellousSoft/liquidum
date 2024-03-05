@@ -736,7 +736,7 @@ func _on_dev_buttons_generate() -> void:
 		return
 	if %DevButtons.should_reset_visible_aquariums():
 		AquariumHints.set_should_be_visible({})
-	var new_grid: GridModel = await %DevButtons.gen_level(GridNode.grid_logic.rows(), GridNode.grid_logic.cols(), _hint_visibility())
+	var new_grid: GridModel = await %DevButtons.gen_level(GridNode.grid_logic, _hint_visibility())
 	if new_grid != null:
 		assert(new_grid.editor_mode())
 		var vis := HintVisibility.from_grid(new_grid)
@@ -745,13 +745,6 @@ func _on_dev_buttons_generate() -> void:
 		grid.set_auto_update_hints(true)
 		GridNode.update(true, true)
 		_apply_visibility(vis)
-
-
-func _on_dev_buttons_randomize_water() -> void:
-	if editor_mode():
-		GridNode.grid_logic.clear_content()
-		Generator.builder().with_diags().build(randi()).randomize_water(GridNode.grid_logic)
-		GridNode.update()
 
 
 func _on_dev_buttons_load_grid(g: GridModel) -> void:
@@ -773,7 +766,7 @@ func _on_center_container_mouse_entered() -> void:
 	GridNode.remove_all_preview()
 
 
-func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:
+static func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int:
 	var val := 0
 	if randf() < w_co:
 		val |= HintBar.WATER_COUNT_VISIBLE
@@ -781,28 +774,27 @@ func _hint(w_co: float, w_ty: float, b_co: float, b_ty: float, col: bool) -> int
 		val |= HintBar.WATER_TYPE_VISIBLE
 	if randf() < b_co:
 		val |= HintBar.BOAT_COUNT_VISIBLE
-	if not col and randf() < b_ty:
+	if (not col or (val & HintBar.BOAT_COUNT_VISIBLE) == 0) and randf() < b_ty:
 		val |= HintBar.BOAT_TYPE_VISIBLE
 	return val
 
-
-func _on_dev_buttons_randomize_visibility() -> void:
-	var visibility := HintVisibility.default(grid.rows(), grid.cols())
+static func random_visibility(on_grid: GridModel, boats: bool) -> HintVisibility:
+	var visibility := HintVisibility.default(on_grid.rows(), on_grid.cols())
 	visibility.total_boats = randf() < .5
 	visibility.total_water = randf() < .5
 	var w_co := sqrt(randf())
 	var w_ty := randf()
 	var b_co := sqrt(randf())
 	var b_ty := randf()
-	for i in grid.rows():
-		visibility.row[i] = _hint(w_co, w_ty, b_co, b_ty, false)
-	for j in grid.cols():
-		visibility.col[j] = _hint(w_co, w_ty, b_co, b_ty, true)
-	var aq_pct := randf()
-	for aq in grid.all_aquarium_counts():
-		if randf() < aq_pct:
-			visibility.expected_aquariums.append(aq)
-	_apply_visibility(visibility)
+	if not boats:
+		b_co = 0
+		b_ty = 0
+	for i in on_grid.rows():
+		visibility.row[i] = Level._hint(w_co, w_ty, b_co, b_ty, false)
+	for j in on_grid.cols():
+		visibility.col[j] = Level._hint(w_co, w_ty, b_co, b_ty, true)
+	# Aquarium randomization is done elsewhere
+	return visibility
 
 
 func _on_dev_buttons_save():
