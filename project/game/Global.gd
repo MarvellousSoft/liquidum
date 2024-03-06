@@ -61,6 +61,9 @@ const TUTORIALS = {
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
 	"boats": preload("res://database/tutorials/Boats.tscn"),
 }
+const CUSTOM_PORTRAIT = {
+	"cckinnison": preload("res://assets/images/ui/icons/custom_portraits/cckinnison.png")
+}
 
 signal dev_mode_toggled(status : bool)
 
@@ -70,6 +73,7 @@ var _dev_mode := false
 var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
 var play_new_dif_again = -1
+var custom_portrait = null
 
 func _ready() -> void:
 	dev_mode_label = Label.new()
@@ -80,6 +84,7 @@ func _ready() -> void:
 	add_child(dev_mode_label)
 	if ProjectSettings.get_setting("liquidum/dev_mode"):
 		toggle_dev_mode()
+	check_cmdline_args()
 
 
 func _input(event):
@@ -99,6 +104,11 @@ func _input(event):
 		img.save_png("res://screenshots/%02d.png" % i)
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		Global.exit_game()
+
+
 func toggle_dev_mode():
 	_dev_mode = not _dev_mode
 	dev_mode_toggled.emit(_dev_mode)
@@ -106,9 +116,21 @@ func toggle_dev_mode():
 		dev_mode_label.visible = _dev_mode
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		Global.exit_game()
+func check_cmdline_args():
+	for arg in OS.get_cmdline_args():
+		if arg == "--is_dev":
+			if not _dev_mode:
+				toggle_dev_mode()
+		elif arg.find("=") > -1:
+			var key_value = arg.split("=")
+			var key = key_value[0]
+			var value = key_value[1]
+			if key == "--custom_portrait":
+				if not CUSTOM_PORTRAIT.has(value):
+					push_warning("Not a valid custom portrait: " + str(value))
+					custom_portrait = false
+				else:
+					custom_portrait = CUSTOM_PORTRAIT[value]
 
 
 func load_mobile_compat(scene: String) -> PackedScene:
@@ -153,14 +175,17 @@ func create_button(text: String) -> Button:
 	button.text = text
 	return button
 
+
 func is_fullscreen():
 	return get_window().mode == Window.MODE_FULLSCREEN
+
 
 func _store_window() -> void:
 	var window := get_window()
 	Profile.set_option("window_position", window.position)
 	Profile.set_option("window_size", window.size)
 	Profile.set_option("window_screen", window.current_screen)
+
 
 func toggle_fullscreen():
 	if is_mobile and not OS.is_debug_build():

@@ -27,6 +27,10 @@ func _ready() -> void:
 		Selected.hide()
 
 
+func set_button_icon(icon):
+	%SelectButton.icon = icon
+
+
 func _on_select_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	select.emit(profile_name)

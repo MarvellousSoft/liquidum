@@ -4,6 +4,8 @@ extends Control
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	if Global.custom_portrait:
+		%Fish.set_button_icon(Global.custom_portrait)
 
 
 func _unhandled_input(event: InputEvent) -> void:

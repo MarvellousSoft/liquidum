@@ -136,7 +136,10 @@ func check_for_new_dlc():
 
 func update_profile_button() -> void:
 	if not Global.is_mobile:
-		%ProfileButton.icon = ICONS[FileManager.current_profile]
+		if Global.custom_portrait and FileManager.current_profile == "fish":
+			%ProfileButton.icon = Global.custom_portrait
+		else:
+			%ProfileButton.icon = ICONS[FileManager.current_profile]
 
 
 func _on_editor_button_pressed():
