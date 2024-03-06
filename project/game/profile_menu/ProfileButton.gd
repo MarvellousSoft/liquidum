@@ -26,6 +26,9 @@ func _ready() -> void:
 	else:
 		Selected.hide()
 
+func set_selected(selected: bool) -> void:
+	Selected.visible = selected
+
 
 func set_button_icon(icon):
 	%SelectButton.icon = icon

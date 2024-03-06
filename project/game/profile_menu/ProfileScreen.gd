@@ -21,8 +21,9 @@ func _notification(what: int) -> void:
 
 
 func select_profile(profile: String) -> void:
+	for child in %Profiles.get_children():
+		child.set_selected(child.profile_name == profile)
 	FileManager.change_current_profile(profile)
-	get_tree().reload_current_scene()
 	_on_back_button_pressed()
 
 

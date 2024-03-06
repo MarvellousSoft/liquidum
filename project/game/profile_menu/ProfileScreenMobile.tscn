@@ -43,7 +43,8 @@ text = "CHANGE_PROFILE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Profiles" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.3
@@ -53,37 +54,37 @@ offset_top = -40.0
 theme_override_constants/separation = 60
 alignment = 1
 
-[node name="Fish" parent="VBoxContainer" instance=ExtResource("3_mfbmt")]
+[node name="Fish" parent="Profiles" instance=ExtResource("3_mfbmt")]
 unique_name_in_owner = true
 layout_mode = 2
 profile_name = "fish"
 
-[node name="SelectButton" parent="VBoxContainer/Fish/HBoxContainer" index="0"]
+[node name="SelectButton" parent="Profiles/Fish/HBoxContainer" index="0"]
 icon = ExtResource("4_qso1h")
 
-[node name="Turtle" parent="VBoxContainer" instance=ExtResource("3_mfbmt")]
+[node name="Turtle" parent="Profiles" instance=ExtResource("3_mfbmt")]
 layout_mode = 2
 profile_name = "turtle"
 
-[node name="SelectButton" parent="VBoxContainer/Turtle/HBoxContainer" index="0"]
+[node name="SelectButton" parent="Profiles/Turtle/HBoxContainer" index="0"]
 icon = ExtResource("5_o75oy")
 
-[node name="Shrimp" parent="VBoxContainer" instance=ExtResource("3_mfbmt")]
+[node name="Shrimp" parent="Profiles" instance=ExtResource("3_mfbmt")]
 layout_mode = 2
 profile_name = "shrimp"
 
-[node name="SelectButton" parent="VBoxContainer/Shrimp/HBoxContainer" index="0"]
+[node name="SelectButton" parent="Profiles/Shrimp/HBoxContainer" index="0"]
 icon = ExtResource("6_741er")
 
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="delete" from="VBoxContainer/Fish" to="." method="delete_profile"]
-[connection signal="select" from="VBoxContainer/Fish" to="." method="select_profile"]
-[connection signal="delete" from="VBoxContainer/Turtle" to="." method="delete_profile"]
-[connection signal="select" from="VBoxContainer/Turtle" to="." method="select_profile"]
-[connection signal="delete" from="VBoxContainer/Shrimp" to="." method="delete_profile"]
-[connection signal="select" from="VBoxContainer/Shrimp" to="." method="select_profile"]
+[connection signal="delete" from="Profiles/Fish" to="." method="delete_profile"]
+[connection signal="select" from="Profiles/Fish" to="." method="select_profile"]
+[connection signal="delete" from="Profiles/Turtle" to="." method="delete_profile"]
+[connection signal="select" from="Profiles/Turtle" to="." method="select_profile"]
+[connection signal="delete" from="Profiles/Shrimp" to="." method="delete_profile"]
+[connection signal="select" from="Profiles/Shrimp" to="." method="select_profile"]
 
-[editable path="VBoxContainer/Fish"]
-[editable path="VBoxContainer/Turtle"]
-[editable path="VBoxContainer/Shrimp"]
+[editable path="Profiles/Fish"]
+[editable path="Profiles/Turtle"]
+[editable path="Profiles/Shrimp"]

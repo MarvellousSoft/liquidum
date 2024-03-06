@@ -45,6 +45,7 @@ offset_right = 3860.0
 offset_bottom = 1840.0
 
 [node name="Profiles" type="HBoxContainer" parent="CenterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 250
 alignment = 1
