@@ -717,6 +717,7 @@ theme_override_constants/margin_bottom = 30
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
 placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
 wrap_mode = 1
 

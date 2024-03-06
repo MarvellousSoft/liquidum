@@ -55,6 +55,7 @@ modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(660, 730)
 layout_mode = 3
 anchors_preset = 0
+mouse_force_pass_scroll_events = false
 theme = ExtResource("1_wjtfv")
 script = ExtResource("1_5rypm")
 

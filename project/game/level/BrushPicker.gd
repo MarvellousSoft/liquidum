@@ -47,7 +47,7 @@ func _ready():
 	AnimPlayer.play("startup")
 
 
-func _input(event):
+func _unhandled_input(event):
 	if not active:
 		return
 	if event.is_action_pressed("pick_prev_brush"):

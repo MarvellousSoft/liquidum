@@ -15,6 +15,7 @@ offset_top = -500.0
 offset_right = 1170.0
 offset_bottom = 500.0
 grow_vertical = 2
+mouse_force_pass_scroll_events = false
 theme = ExtResource("1_nerce")
 script = ExtResource("1_nerdx")
 
