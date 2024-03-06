@@ -118,14 +118,14 @@ func toggle_dev_mode():
 
 func check_cmdline_args():
 	for arg in OS.get_cmdline_args():
-		if arg == "--is_dev":
+		if arg == "--is-dev":
 			if not _dev_mode:
 				toggle_dev_mode()
 		elif arg.find("=") > -1:
 			var key_value = arg.split("=")
 			var key = key_value[0]
 			var value = key_value[1]
-			if key == "--custom_portrait":
+			if key == "--custom-portrait":
 				if not CUSTOM_PORTRAIT.has(value):
 					push_warning("Not a valid custom portrait: " + str(value))
 					custom_portrait = false
