@@ -577,6 +577,8 @@ offset_top = 720.0
 offset_right = 1025.0
 offset_bottom = 1920.0
 scale = Vector2(0.8, 0.8)
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 

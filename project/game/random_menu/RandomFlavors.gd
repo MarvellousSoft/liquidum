@@ -25,7 +25,9 @@ enum Flavor {
 	# A single hint in the row.
 	OneHint,
 	# small grid, diagonals, basic rules + ?
-	TrickySmall, 
+	TrickySmall,
+	# No hints
+	AquariumTogether,
 }
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -123,12 +125,23 @@ static func _tricky_small(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	h.apply_to_grid(grid)
 	RandomHub.hide_too_easy_hints(grid)
 
+static func _aquarium_together(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.total_water = true
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-6, a.size()))
+	h.apply_to_grid(grid)
+	Generator.randomize_aquarium_hints(rng, grid, 0.7)
+
 static func _builder(options: Generator.Options) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Generator.Options:
 		return options
 
 static func _aquarium_builder(rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder().with_diags().with_aquariums(rng.randi_range(6, 10)).with_min_water(rng.randi_range(10, 14))
+
+static func _aquarium_together_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	return Generator.builder().with_aquariums(rng.randi_range(10, 20)).with_min_water(rng.randi_range(12, 18))
 
 static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor: Flavor) -> GridModel:
 	var strategies := SolverModel.STRATEGY_LIST.keys()
@@ -152,6 +165,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			var rows := rng.randi_range(3, 4)
 			var cols := rng.randi_range(3, 4)
 			return await l_gen.generate(rng, rows, cols, RandomFlavors._tricky_small, _builder(b.with_diags()), strategies, [])
+		Flavor.AquariumTogether:
+			return await l_gen.generate(rng, 6, 6, RandomFlavors._aquarium_together, RandomFlavors._aquarium_together_builder, strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null
