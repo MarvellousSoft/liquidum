@@ -9,7 +9,10 @@ const DESIRED_W := 780.0
 # and stuffs. But for now, this is enough.
 
 func _ready() -> void:
-	$BrushPicker.setup(true)
+	$BrushPicker.setup(true, true)
+	for section in range(1, ExtraLevelLister.count_all_game_sections(true) + 1):
+		if ExtraLevelLister.section_endless_flavor(section) != -1:
+			%EndlessOptions.add_item(ExtraLevelLister.section_name(section), section)
 
 func _on_run_pressed():
 	$Tests.run_all_tests()
@@ -148,6 +151,40 @@ func _on_dif_button_pressed():
 	%DifOptions.disabled = false
 	FileManager.save_preprocessed_difficulty(prep)
 
+func _on_endless_button_pressed() -> void:
+	var section: int = %EndlessOptions.get_selected_id()
+	var prep := FileManager.load_preprocessed_endless(section)
+	var gen := RandomLevelGenerator.new()
+	var flavor := ExtraLevelLister.section_endless_flavor(section) as RandomFlavors.Flavor
+	%EndlessProgress.value = 0
+	%EndlessProgress.visible = true
+	%EndlessOptions.disabled = true
+	%EndlessButton.visible = false
+	%EndlessCancel.visible = true
+	%EndlessCancel.button_pressed = false
+	var watch := Stopwatch.new()
+	var rng := RandomNumberGenerator.new()
+	for i in 1000:
+		if %EndlessCancel.button_pressed:
+			break
+		rng.seed = RandomHub.consistent_hash(str(i))
+		if prep.success_state(i) == 0:
+			await RandomFlavors.gen(gen, rng, flavor)
+			prep.set_success_state(i, gen.success_state)
+		elif $Buttons/PrepCheck.button_pressed:
+			# Check it is correct
+			rng.state = prep.success_state(i)
+			await RandomFlavors.gen(gen, rng, flavor)
+			assert(gen.success_state == prep.success_state(i))
+		if watch.elapsed() > 30.:
+			watch.elapsed_reset()
+			FileManager.save_preprocessed_endless(section, prep)
+		%EndlessProgress.value += 1
+	%EndlessCancel.visible = false
+	%EndlessProgress.visible = false
+	%EndlessButton.visible = true
+	%EndlessOptions.disabled = false
+	FileManager.save_preprocessed_endless(section, prep)
 
 func _on_reset_stats_pressed():
 	SteamManager.steam.resetAllStats(true)

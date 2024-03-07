@@ -177,6 +177,40 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
+[node name="EndlessHBox" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="EndlessOptions" type="OptionButton" parent="Buttons/EndlessHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+selected = 0
+
+[node name="EndlessButton" type="Button" parent="Buttons/EndlessHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+text = "Preprocess"
+
+[node name="EndlessProgress" type="ProgressBar" parent="Buttons/EndlessHBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1000.0
+step = 1.0
+
+[node name="EndlessCancel" type="Button" parent="Buttons/EndlessHBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Cancel"
+
 [node name="PrepCheck" type="CheckBox" parent="Buttons"]
 layout_mode = 2
 focus_mode = 0
@@ -194,3 +228,4 @@ text = "Check prep is correct"
 [connection signal="pressed" from="Buttons/ResetStats" to="." method="_on_reset_stats_pressed"]
 [connection signal="pressed" from="Buttons/DailiesHBox/DailiesButton" to="." method="_on_preprocess_dailies_pressed"]
 [connection signal="pressed" from="Buttons/DifHBox/DifButton" to="." method="_on_dif_button_pressed"]
+[connection signal="pressed" from="Buttons/EndlessHBox/EndlessButton" to="." method="_on_endless_button_pressed"]
