@@ -169,10 +169,14 @@ func gen_and_load_endless() -> void:
 	# There might be an existing save
 	FileManager.clear_level(ExtraLevelLister.endless_level_name(my_section))
 	var gen := RandomLevelGenerator.new()
-	# TODO: Preprocess?
-	var seed_str := str(randi())
+	var seed_int := UserData.current().bump_endless_created(my_section) - 1
+	UserData.save()
+	var seed_str := str(seed_int)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = RandomHub.consistent_hash(seed_str)
+	var prep := PreprocessedEndless.current(my_section)
+	if prep.success_state(seed_int) != 0:
+		rng.state = prep.success_state(seed_int)
 	GeneratingLevel.enable()
 	var grid := await RandomFlavors.gen(gen, rng, ExtraLevelLister.section_endless_flavor(my_section))
 	GeneratingLevel.disable()

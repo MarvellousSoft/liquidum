@@ -21,15 +21,17 @@ var random_levels_completed: Array[int]
 # Used to generate random levels in some order
 var random_levels_created: Array[int]
 var endless_completed: Array[int]
+var endless_created: Array[int]
 var best_streak: int
 var current_streak: int
 var last_day: String
 var monthly_good_dailies: Array[int]
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], best_streak_: int, current_streak_: int, last_day_: String, monthly_good_dailies_: Array[int]) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_created_: Array[int], best_streak_: int, current_streak_: int, last_day_: String, monthly_good_dailies_: Array[int]) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
+	endless_created = endless_created_
 	best_streak = best_streak_
 	current_streak = current_streak_
 	last_day = last_day_
@@ -41,6 +43,7 @@ func get_data() -> Dictionary:
 		random_levels_completed = random_levels_completed,
 		random_levels_created = random_levels_created,
 		endless_completed = endless_completed,
+		endless_created = endless_created,
 		best_streak = best_streak,
 		current_streak = current_streak,
 		last_day = last_day,
@@ -63,6 +66,17 @@ func get_endless_completed(section: int) -> int:
 		return 0
 	return endless_completed[section - 1]
 
+func bump_endless_created(section: int) -> int:
+	while endless_created.size() < section:
+		endless_created.append(0)
+	endless_created[section - 1] += 1
+	return endless_created[section - 1]
+
+func get_endless_created(section: int) -> int:
+	if endless_created.size() < section:
+		return 0
+	return endless_created[section - 1]
+
 func _monthly_idx(date: String) -> int:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(date, false)
 	# It started in February 2024
@@ -80,14 +94,16 @@ static func load_data(data_: Variant) -> UserData:
 	var completed: Array[int] = []
 	var created: Array[int] = []
 	var endless: Array[int] = []
+	var endless_c: Array[int] = []
 	var monthly: Array[int] = []
 	if data_ == null:
 		for i in RandomHub.Difficulty.size():
 			completed.append(0)
 			created.append(0)
-		for i in ExtraLevelLister.count_all_game_sections():
+		for i in ExtraLevelLister.count_all_game_sections(true):
 			endless.append(0)
-		return UserData.new(completed, created, endless, 0, 0, "", monthly)
+			endless_c.append(0)
+		return UserData.new(completed, created, endless, endless_c, 0, 0, "", monthly)
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -99,5 +115,6 @@ static func load_data(data_: Variant) -> UserData:
 	completed.assign(data.random_levels_completed)
 	created.assign(data.random_levels_created)
 	endless.assign(data.endless_completed)
+	endless_c.assign(data.get("endless_created", []))
 	monthly.assign(data.get("monthly_good_dailies", []))
-	return UserData.new(completed, created, endless, data.best_streak, data.current_streak, data.last_day, monthly)
+	return UserData.new(completed, created, endless, endless_c, data.best_streak, data.current_streak, data.last_day, monthly)

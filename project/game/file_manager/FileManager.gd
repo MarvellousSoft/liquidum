@@ -11,6 +11,7 @@ const METADATA := ".metadata"
 const JSON_EXT := ".json"
 const LEVEL_FILE := "level.json"
 const USER_DATA := "user.data"
+const PREPROCESSED_JSON := "preprocessed.json"
 
 var current_profile := DEFAULT_PROFILE
 
@@ -295,3 +296,10 @@ func load_preprocessed_difficulty(dif: RandomHub.Difficulty) -> PreprocessedDiff
 
 func save_preprocessed_difficulty(data: PreprocessedDifficulty) -> void:
 	_save_json_data(RANDOM_DIR, _dif_filename(data.difficulty), data.get_data())
+
+func load_preprocessed_endless(section: int) -> PreprocessedEndless:
+	return PreprocessedEndless.load_data(_load_json_data(_extra_level_data_dir(section), PREPROCESSED_JSON))
+
+func save_preprocessed_endless(section: int, data: PreprocessedEndless) -> void:
+	_save_json_data(_extra_level_data_dir(section), PREPROCESSED_JSON, data.get_data())
+	
