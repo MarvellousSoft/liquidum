@@ -144,6 +144,7 @@ static func _aquarium_together_builder(rng: RandomNumberGenerator) -> Generator.
 	return Generator.builder().with_aquariums(rng.randi_range(10, 20)).with_min_water(rng.randi_range(12, 18))
 
 static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor: Flavor) -> GridModel:
+	# WARNING: DO NOT use rng before calling l_gen.generate or preprocessing won't work
 	var strategies := SolverModel.STRATEGY_LIST.keys()
 	var b := Generator.builder()
 	match flavor:
@@ -162,9 +163,9 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 		Flavor.OneHint:
 			return await l_gen.generate(rng, 6, 6, RandomFlavors._one_hint, _builder(b), strategies, [])
 		Flavor.TrickySmall:
-			var rows := rng.randi_range(3, 4)
-			var cols := rng.randi_range(3, 4)
-			return await l_gen.generate(rng, rows, cols, RandomFlavors._tricky_small, _builder(b.with_diags()), strategies, [])
+			var size_gen := func(my_rng: RandomNumberGenerator):
+				return Vector2i(my_rng.randi_range(3, 4), my_rng.randi_range(3, 4))
+			return await l_gen.generate_with_size(rng, size_gen, RandomFlavors._tricky_small, _builder(b.with_diags()), strategies, [])
 		Flavor.AquariumTogether:
 			return await l_gen.generate(rng, 6, 6, RandomFlavors._aquarium_together, RandomFlavors._aquarium_together_builder, strategies, [], false)
 		_:
