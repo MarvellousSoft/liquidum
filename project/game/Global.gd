@@ -61,9 +61,6 @@ const TUTORIALS = {
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
 	"boats": preload("res://database/tutorials/Boats.tscn"),
 }
-const CUSTOM_PORTRAIT = {
-	"cckinnison": preload("res://assets/images/ui/icons/custom_portraits/cckinnison.png")
-}
 
 signal dev_mode_toggled(status : bool)
 
@@ -126,11 +123,12 @@ func check_cmdline_args():
 			var key = key_value[0]
 			var value = key_value[1]
 			if key == "--custom-portrait":
-				if not CUSTOM_PORTRAIT.has(value):
+				var custom := load("res://assets/images/ui/icons/custom_portraits/%s.png" % [value])
+				if custom == null:
 					push_warning("Not a valid custom portrait: " + str(value))
 					custom_portrait = false
 				else:
-					custom_portrait = CUSTOM_PORTRAIT[value]
+					custom_portrait = custom
 
 
 func load_mobile_compat(scene: String) -> PackedScene:
