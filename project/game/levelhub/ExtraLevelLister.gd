@@ -153,3 +153,12 @@ func purchase_section(section: int) -> void:
 		pass
 	if id != "" and AdManager.payment != null:
 		AdManager.payment.do_purchase_dlc(id)
+
+func clear_all_level_saves(profile_name: String) -> void:
+	var section := 1
+	while FileManager.has_extra_level_data(section, 1):
+		var level := 1
+		while FileManager.has_extra_level_data(section, level):
+			FileManager.clear_level(ExtraLevelLister.level_name(section, level), profile_name)
+			level += 1
+		section += 1

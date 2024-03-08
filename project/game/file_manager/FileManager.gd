@@ -60,6 +60,7 @@ func get_current_profile() -> String:
 func clear_whole_profile(profile: String) -> void:
 	clear_profile(profile)
 	CampaignLevelLister.clear_all_level_saves(profile)
+	ExtraLevelLister.clear_all_level_saves(profile)
 	clear_user_data(profile)
 	if profile == current_profile:
 		# Reload stuff if necessary

@@ -47,3 +47,6 @@ func is_hard(_section: int, _level: int) -> bool:
 
 func count_completed_levels(_profile_name: String) -> int:
 	return GridModel.must_be_implemented()
+
+func clear_all_level_saves(_profile_name: String) -> void:
+	return GridModel.must_be_implemented()
