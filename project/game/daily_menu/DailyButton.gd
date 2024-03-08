@@ -252,13 +252,20 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 func get_daily_leaderboard(for_date: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 
+func get_my_flair() -> Flair:
+	if DEV_IDS.has(Steam.getSteamID()):
+		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
+	return null
+
 func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	if not SteamManager.enabled:
 		return
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
-	SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
+	@warning_ignore("redundant_await")
+	var flair := await get_my_flair()
+	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload entry for daily %s" % date)

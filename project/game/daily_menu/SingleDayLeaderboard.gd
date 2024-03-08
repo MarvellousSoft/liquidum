@@ -22,11 +22,10 @@ func display_day(data: DailyButton.LeaderboardData, date: String) -> void:
 		var name_ := Grid.get_node("NameContainer1").duplicate()
 		name_.get_node("Name").text = item.text
 		var flair := name_.get_node("Flair")
-		flairs.append(flair)
+		flairs.append(item.flair)
 		flair.visible = item.flair != null
 		if item.flair != null:
 			flair.text = "[%s]" % [item.flair.name]
-			flair.modulate = item.flair.color if not Profile.get_option("dark_mode") else item.flair.dark_mode_color
 		var mistakes := Grid.get_node("Mistakes1").duplicate()
 		mistakes.text = str(item.mistakes)
 		var time := Grid.get_node("Time1").duplicate()
@@ -36,8 +35,10 @@ func display_day(data: DailyButton.LeaderboardData, date: String) -> void:
 			Grid.add_child(c)
 	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
 		Grid.get_node(c).hide()
+	update_theme(Profile.get_option("dark_mode"))
 
 func update_theme(dark_mode: bool) -> void:
 	for i in flairs.size():
 		if flairs[i] != null:
-			Grid.get_child(12 + 5 * i).get_node("Flair").modulate = flairs[i].color if not dark_mode else flairs[i].dark_mode_color
+			var flair: Label =  Grid.get_child(12 + 5 * i).get_node("Flair")
+			flair.add_theme_color_override("font_color", flairs[i].color if not dark_mode else flairs[i].dark_mode_color)
