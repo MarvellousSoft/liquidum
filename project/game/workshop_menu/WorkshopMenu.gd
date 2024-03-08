@@ -16,6 +16,8 @@ func _enter_tree() -> void:
 	call_deferred("reload_all_levels")
 
 func get_authors(ids: Array) -> Array[String]:
+	if ids.is_empty():
+		return []
 	var query_id: int = SteamManager.steam.createQueryUGCDetailsRequest(ids)
 	SteamManager.steam.sendQueryUGCRequest(query_id)
 	var ret: Array = await SteamManager.steam.ugc_query_completed
@@ -36,9 +38,11 @@ func get_authors(ids: Array) -> Array[String]:
 
 func reload_all_levels() -> void:
 	var ids: Array = SteamManager.steam.getSubscribedItems()
+	%Explanation.visible = ids.is_empty()
 	var authors: Array[String] = await get_authors(ids)
-	while Buttons.get_child_count() > 0:
-		Buttons.remove_child(Buttons.get_child(Buttons.get_child_count() - 1))
+	for c in Buttons.get_children():
+		Buttons.remove_child(c)
+		c.queue_free()
 	var button_class := preload("res://game/workshop_menu/WorkshopLevelButton.tscn")
 	for i in ids.size():
 		var button := button_class.instantiate()
@@ -75,8 +79,7 @@ func _on_back_pressed():
 
 func _on_open_workshop_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	if SteamManager.enabled:
-		SteamManager.steam.activateGameOverlayToWebPage("https://steamcommunity.com/app/2716690/workshop/")
+	SteamManager.overlay_or_browser("https://steamcommunity.com/app/2716690/workshop/")
 
 
 func _on_dark_mode_changed(is_dark : bool):
