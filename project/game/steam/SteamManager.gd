@@ -35,6 +35,7 @@ func _ready() -> void:
 	SteamManager.steam.current_stats_received.connect(_stats_received)
 	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
 	SteamManager.steam.requestCurrentStats()
+	SteamManager.steam.setLeaderboardDetailsMax(64)
 
 func _stats_received(game: int, result: int, user: int) -> void:
 	if stats_received:

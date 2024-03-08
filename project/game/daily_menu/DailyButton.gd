@@ -272,13 +272,15 @@ class ListEntry:
 	var image: Image
 	var mistakes: int
 	var secs: int
-	var is_dev: bool
+
+	var flair: Flair
 	static func create(data: Dictionary, override_name := "") -> ListEntry:
 		var entry := ListEntry.new()
 		entry.global_rank = data.global_rank
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
-		entry.is_dev = DEV_IDS.has(data.steam_id)
+		var details := LeaderboardDetails.from_arr(data.get("details", PackedInt32Array()))
+		entry.flair = details.flair
 		if override_name.is_empty():
 			if data.steam_id == SteamManager.steam.getSteamID():
 				entry.text = SteamManager.steam.getPersonaName()

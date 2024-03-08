@@ -1,0 +1,43 @@
+class_name SingleDayLeaderboard
+extends ScrollContainer
+
+@onready var Grid: GridContainer = %Grid
+
+var flairs: Array[Flair] = []
+
+func display_day(data: DailyButton.LeaderboardData, date: String) -> void:
+	# Leave the first five for copying so we don't need to programatically set stuff
+	while Grid.get_child_count() > 10:
+		var c := Grid.get_child(Grid.get_child_count() - 1)
+		Grid.remove_child(c)
+		c.queue_free()
+	Grid.get_node("Date").text = date
+	flairs.clear()
+	for item in data.list:
+		var icon := Grid.get_node("Icon1").duplicate()
+		if item.image != null:
+			icon.texture = ImageTexture.create_from_image(item.image)
+		var pos := Grid.get_node("Pos1").duplicate()
+		pos.text = "%d." % item.global_rank
+		var name_ := Grid.get_node("NameContainer1").duplicate()
+		name_.get_node("Name").text = item.text
+		var flair := name_.get_node("Flair")
+		flairs.append(flair)
+		flair.visible = item.flair != null
+		if item.flair != null:
+			flair.text = "[%s]" % [item.flair.name]
+			flair.modulate = item.flair.color if not Profile.get_option("dark_mode") else item.flair.dark_mode_color
+		var mistakes := Grid.get_node("Mistakes1").duplicate()
+		mistakes.text = str(item.mistakes)
+		var time := Grid.get_node("Time1").duplicate()
+		time.text = Level.time_str(item.secs)
+		for c in [icon, pos, name_, mistakes, time]:
+			c.show()
+			Grid.add_child(c)
+	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
+		Grid.get_node(c).hide()
+
+func update_theme(dark_mode: bool) -> void:
+	for i in flairs.size():
+		if flairs[i] != null:
+			Grid.get_child(12 + 5 * i).get_node("Flair").modulate = flairs[i].color if not dark_mode else flairs[i].dark_mode_color

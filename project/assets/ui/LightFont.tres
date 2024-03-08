@@ -1,6 +1,4 @@
 [gd_resource type="Theme" format=3 uid="uid://bs7nbxv53tvfn"]
 
 [resource]
-DevLabel/base_type = &"Label"
-DevLabel/colors/font_color = Color(0.270588, 0.803922, 0.698039, 1)
 Label/colors/font_color = Color(0.85098, 1, 0.886275, 1)
