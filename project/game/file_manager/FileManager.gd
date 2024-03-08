@@ -183,8 +183,11 @@ func load_editor_level_metadata(id: String) -> EditorLevelMetadata:
 
 
 func clear_editor_level(id: String, profile := "") -> void:
-	_delete_file(_editor_level_dir(id, profile), LEVEL_FILE)
+	var level_dir := _editor_level_dir(id, profile)
+	_delete_file(level_dir, LEVEL_FILE)
 	_delete_file(_editor_metadata_dir(profile), id + METADATA)
+	if DirAccess.dir_exists_absolute(level_dir):
+		DirAccess.remove_absolute(level_dir)
 
 func _no_tutorial(data: LevelData) -> void:
 	if data != null:
