@@ -383,9 +383,37 @@ class BoatRowStrategy extends RowStrategy:
 	func description() -> String:
 		return "If hint is all possible boat locations, then put the boats"
 	func _apply(i: int) -> bool:
-		var hint := SolverModel._row_hint(grid, i).boat_count
+		var full_hint := SolverModel._row_hint(grid, i)
+		var hint := full_hint.boat_count
+		if hint == -1:
+			if full_hint.boat_count_type == E.HintType.Together:
+				hint = 1
+				# If there are already multiple boats, let's make sure {} is satisfied.
+				var first_boat := -1
+				var last_boat := -1
+				for j in grid.cols():
+					if grid.get_cell(i, j).has_boat():
+						last_boat = j
+						if first_boat == -1:
+							first_boat = j
+				if first_boat != -1:
+					var any := false
+					for j in range(first_boat, last_boat + 1):
+						var c := grid.get_cell(i, j)
+						if not c.has_boat():
+							if c.boat_possible() and SolverModel._maybe_extra_boat_col(grid, j):
+								if c.put_boat(false, true):
+									any = true
+							else:
+								# Impossible
+								return false
+					if any:
+						return true
+			elif full_hint.boat_count_type == E.HintType.Separated:
+				hint = 2
 		if hint <= 0:
 			return false
+		# this row has >= hint boats
 		var count := 0
 		for j in grid.cols():
 			var c := grid.get_cell(i, j)

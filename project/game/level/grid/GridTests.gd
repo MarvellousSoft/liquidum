@@ -1008,3 +1008,49 @@ func test_propagate_nowater() -> void:
 	......##......
 	L._._.L.L._._.
 	""")
+
+func test_boat_unknown() -> void:
+	assert_can_solve("""
+	+boats=-1
+	B......
+	.bb..bb
+	}|.|.|.
+	.ww..ww
+	.L.L.L.
+	""")
+	assert_can_solve("""
+	+boats=-1
+	+waters=1
+	B....
+	.....
+	}|.|/
+	.....
+	.L.L.
+	""")
+	assert_cant_solve("""
+	+boats=-1
+	+waters=2
+	B....
+	.....
+	}|.|.
+	.....
+	.L.L.
+	""")
+	assert_can_solve("""
+	+boats=-1
+	+waters=2
+	B......
+	.......
+	-|.|/|.
+	.......
+	.L.L.L.
+	""")
+	assert_cant_solve("""
+	+boats=-1
+	+waters=2
+	B........
+	.........
+	-|.|/|.|.
+	.........
+	.L.L.L.L.
+	""")
