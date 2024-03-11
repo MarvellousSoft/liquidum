@@ -452,7 +452,7 @@ func _on_share_pressed() -> void:
 	if FileManager.has_daily_level(date):
 		var save := FileManager.load_level(FileManager._daily_basename(date))
 		if save and save.is_completed():
-			DailyButton.share(save.best_mistakes, save.best_time_secs)
+			DailyButton.share(save.best_mistakes, int(save.best_time_secs))
 			if not Global.is_mobile:
 				# Mobile already has enough feedback because it opens a dialog
 				if copied_tween != null:
