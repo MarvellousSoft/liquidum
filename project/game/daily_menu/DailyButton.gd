@@ -50,6 +50,9 @@ func _update() -> void:
 					Profile.daily_notification_changed.emit(true)
 				else:
 					Profile.set_option("daily_notification", Profile.DailyStatus.Disabled)
+	if Global.is_mobile:
+		%LeaderboardsButton.visible = unlocked
+		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
 	%StreakContainer.visible = unlocked
@@ -405,3 +408,13 @@ func _on_dark_mode_changed(is_dark : bool):
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_leaderboards_button_pressed() -> void:
+	assert(Global.is_mobile)
+	if not GooglePlayGameServices.enabled:
+		return
+	GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(
+	  GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,
+	  GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY,
+	  GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
