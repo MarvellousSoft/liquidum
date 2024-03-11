@@ -504,11 +504,18 @@ class BoatColStrategy extends ColumnStrategy:
 	func description() -> String:
 		return "If hint is all possible aquariums, put boats in the ones where it's clear"
 	func _apply(j: int) -> bool:
-		var boats_left := SolverModel._col_hint(grid, j).boat_count - grid.count_boat_col(j)
-		if boats_left <= 0:
+		var full_hint := SolverModel._col_hint(grid, j)
+		var hint := full_hint.boat_count
+		if hint == -1:
+			# This case should be handled by infer hint logic
+			assert(full_hint.boat_count_type != E.HintType.Together)
+			if full_hint.boat_count_type == E.HintType.Separated:
+				hint = 2
+		var boats_left_min := hint - grid.count_boat_col(j)
+		if boats_left_min <= 0:
 			return false
 		var possible_boats := SolverModel._list_possible_boats_on_col(grid, j)
-		if possible_boats.size() == boats_left:
+		if possible_boats.size() == boats_left_min:
 			# We can put boats if the places they should go are clear
 			var any := false
 			for lr in possible_boats:

@@ -1054,3 +1054,46 @@ func test_boat_unknown() -> void:
 	.........
 	.L.L.L.L.
 	""")
+	var vertical_boat := """
+	...
+	.|.
+	...
+	.L.
+	""".strip_edges()
+	var vertical_no_boat := """
+	...
+	.L/
+	...
+	.L.
+	""".strip_edges()
+	assert_can_solve("""
+	+boats=-1
+	+waters=1
+	B.}
+	%s
+	%s
+	""" % [vertical_boat, vertical_no_boat])
+	assert_cant_solve("""
+	+boats=-1
+	+waters=1
+	B.}
+	%s
+	%s
+	""" % [vertical_boat, vertical_boat])
+	assert_can_solve("""
+	+boats=-1
+	+waters=2
+	B.-
+	%s
+	%s
+	%s
+	""" % [vertical_boat, vertical_no_boat, vertical_boat])
+	assert_cant_solve("""
+	+boats=-1
+	+waters=2
+	B.-
+	%s
+	%s
+	%s
+	%s
+	""" % [vertical_boat, vertical_no_boat, vertical_boat, vertical_boat])
