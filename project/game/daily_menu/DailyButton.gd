@@ -196,12 +196,15 @@ func _on_button_pressed() -> void:
 
 	MainButton.disabled = false
 
+func get_monthly_leaderboard(month_str: String) -> int:
+	print("Monthly for %s" % [month_str])
+	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
+			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
+
 func bump_monthly_challenge(today: String) -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
-	
 	if SteamManager.enabled:
-		var l_id: int = await SteamManager.get_or_create_leaderboard("monthly_%s" % [today.substr(0, today.length() - 3)], \
-			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
+		var l_id := await get_monthly_leaderboard(today.substr(0, today.length() - 3))
 		SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
 		var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 		if not ret[0]:
@@ -221,7 +224,7 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 	if SteamManager.enabled:
 		var l_id := await get_daily_leaderboard(today)
 		if not already_uploaded_today:
-			await upload_leaderboard(l_id, info)
+			await upload_leaderboard(today, l_id, info)
 		var l_data := await get_leaderboard_data(l_id)
 		display_leaderboard(l_data, [], level)
 	elif GooglePlayGameServices.enabled:
@@ -252,19 +255,31 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 func get_daily_leaderboard(for_date: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 
-func get_my_flair() -> Flair:
-	if DEV_IDS.has(Steam.getSteamID()):
+func get_my_flair(today: String) -> Flair:
+	if DEV_IDS.has(SteamManager.steam.getSteamID()):
 		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
+	var last_month_dict := Time.get_datetime_dict_from_datetime_string(today, false)
+	if last_month_dict.month == 1:
+		last_month_dict.month = 12
+		last_month_dict.year -= 1
+	else:
+		last_month_dict.month -= 1
+
+	var l_id := await get_monthly_leaderboard("%04d-%02d" % [last_month_dict.year, last_month_dict.month])
+	SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
+	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
+	if not ret[2].is_empty() and ret[2][0].score >= 15:
+		return Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
 	return null
 
-func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
+func upload_leaderboard(today: String, l_id: int, info: Level.WinInfo) -> void:
 	if not SteamManager.enabled:
 		return
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
 	@warning_ignore("redundant_await")
-	var flair := await get_my_flair()
+	var flair := await get_my_flair(today)
 	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
@@ -324,6 +339,7 @@ func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
 	if total == 0:
 		return [data_all, data_friends]
+	SteamManager.steam.setLeaderboardDetailsMax(64)
 	var list_has_rank := {}
 	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
@@ -337,6 +353,7 @@ func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 		data_friends.list.append(l_entry)
 	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
 	ret = await SteamManager.steam.leaderboard_scores_downloaded
+	SteamManager.steam.setLeaderboardDetailsMax(0)
 	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
 	for entry in ret[2]:
 		var l_entry: ListEntry = null
