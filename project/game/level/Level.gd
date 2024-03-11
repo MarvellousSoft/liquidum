@@ -258,12 +258,12 @@ func _gui_input(event: InputEvent) -> void:
 		elif mouse.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			pass
 
-func is_random() -> bool:
-	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1)
+func is_procedurally_generated() -> bool:
+	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1) or level_name.begins_with("daily_")
 
 func setup(try_load := true) -> void:
 	if not grid.editor_mode():
-		grid.prettify_hints(is_random())
+		grid.prettify_hints(is_procedurally_generated())
 	if not Global.is_mobile:
 		%DevButtons.setup(grid.editor_mode())
 	else:

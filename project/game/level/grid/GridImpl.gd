@@ -1721,8 +1721,8 @@ func _any_sol_boats() -> bool:
 	return false
 
 
-func prettify_hints(is_random: bool) -> void:
-	if not is_random:
+func prettify_hints(is_procedurally_generated: bool) -> void:
+	if not is_procedurally_generated:
 		return
 	assert(not editor_mode())
 	if not _any_sol_boats():
