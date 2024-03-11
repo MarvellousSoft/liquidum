@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dtcuemu2b1rcx"]
+[gd_scene load_steps=5 format=3 uid="uid://dtcuemu2b1rcx"]
 
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
-[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_ghr64"]
+[ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="3_ngoi4"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_73s70"]
 
 [node name="DailyButton" type="Control"]
 layout_mode = 3
@@ -16,21 +17,26 @@ offset_right = 1087.0
 offset_bottom = 250.0
 size_flags_horizontal = 8
 mouse_filter = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 52
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBox"]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Button" type="Button" parent="HBox/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBox/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="Button" type="Button" parent="HBox/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_BUTTON"
 
-[node name="OngoingSolution" parent="HBox/VBoxContainer/Button" instance=ExtResource("3_jx7ca")]
+[node name="OngoingSolution" parent="HBox/VBoxContainer/MarginContainer/Button" instance=ExtResource("3_jx7ca")]
 unique_name_in_owner = true
+z_index = 1
 offset_left = -52.0
 offset_top = 101.0
 offset_right = 118.0
@@ -95,16 +101,18 @@ theme_override_font_sizes/font_size = 40
 text = "LESS_THREE_MISTAKES"
 horizontal_alignment = 1
 
-[node name="Completed" type="TextureRect" parent="HBox"]
+[node name="Completed" type="TextureButton" parent="HBox"]
 unique_name_in_owner = true
 visible = false
-modulate = Color(0.380392, 0.988235, 0.537255, 1)
+modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
-texture = ExtResource("4_ghr64")
-expand_mode = 1
+texture_normal = ExtResource("3_ngoi4")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_73s70")
 
 [node name="NotCompleted" type="Label" parent="HBox"]
 unique_name_in_owner = true
@@ -121,10 +129,22 @@ theme_override_font_sizes/font_size = 140
 text = " !"
 vertical_alignment = 1
 
+[node name="CopiedLabel" type="Label" parent="HBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_vertical = 0
+text = "COPIED"
+vertical_alignment = 2
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 30.0
 autostart = true
 
-[connection signal="mouse_entered" from="HBox/VBoxContainer/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="HBox/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="HBox/VBoxContainer/MarginContainer/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBox/VBoxContainer/MarginContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_exited"]
+[connection signal="pressed" from="HBox/Completed" to="." method="_on_share_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

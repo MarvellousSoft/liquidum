@@ -4,6 +4,7 @@ extends Control
 # 27 hours, enough
 const MAX_TIME := 100000
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
+const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
@@ -418,3 +419,47 @@ func _on_leaderboards_button_pressed() -> void:
 	  GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,
 	  GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY,
 	  GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
+
+static func share(mistakes: int, secs: int) -> void:
+	AudioManager.play_sfx("button_pressed")
+	var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
+	var mistake_str: String
+	if mistakes == 0:
+		mistake_str = "🏆 0 %s" % server.tr("MISTAKES")
+	else:
+		mistake_str = "❌ %d %s" % [
+			mistakes,
+			server.tr("MISTAKES" if mistakes > 1 else "MISTAKE")
+		]
+
+	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
+	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
+		server.tr("SHARE_TEXT"), DailyButton._today(),
+		WEEKDAY_EMOJI[weekday], server.tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
+		Level.time_str(secs),
+		mistake_str,
+	]
+	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):
+		var android_share = Engine.get_singleton("GodotAndroidShare")
+		android_share.shareText("Liquidum", "subject", text)
+	else:
+		DisplayServer.clipboard_set(text)
+
+var copied_tween: Tween = null
+
+func _on_share_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	if FileManager.has_daily_level(date):
+		var save := FileManager.load_level(FileManager._daily_basename(date))
+		if save and save.is_completed():
+			DailyButton.share(save.best_mistakes, save.best_time_secs)
+			if not Global.is_mobile:
+				# Mobile already has enough feedback because it opens a dialog
+				if copied_tween != null:
+					copied_tween.kill()
+				var label: Label = %CopiedLabel
+				label.show()
+				label.modulate.a = 1.0
+				copied_tween = create_tween()
+				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+				copied_tween.tween_callback(label.hide)

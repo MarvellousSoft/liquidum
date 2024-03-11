@@ -1,7 +1,6 @@
 class_name Level
 extends Control
 
-const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 const COUNTER_DELAY_STARTUP = .3
 const DESIRED_GRID_W = {
 	"desktop": 1300,
@@ -933,28 +932,9 @@ func _on_check_uniqueness_pressed() -> void:
 
 
 func _on_share_button_pressed() -> void:
-	AudioManager.play_sfx("button_pressed")
-	var mistake_str: String
-	if Counters.mistake.count == 0:
-		mistake_str = "🏆 0 %s" % tr("MISTAKES")
-	else:
-		mistake_str = "❌ %d %s" % [
-			int(Counters.mistake.count),
-			tr("MISTAKES" if Counters.mistake.count > 1 else "MISTAKE")
-		]
+	DailyButton.share(int(Counters.mistake.count), int(running_time))
 
-	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
-	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
-		tr("SHARE_TEXT"), DailyButton._today(),
-		WEEKDAY_EMOJI[weekday], tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
-		_timer_str(),
-		mistake_str,
-	]
-	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):
-		var share = Engine.get_singleton("GodotAndroidShare")
-		share.shareText("Liquidum", "subject", text)
-	else:
-		DisplayServer.clipboard_set(text)
+	if OS.get_name() != "Android" or not Engine.has_singleton("GodotAndroidShare"):
 		%ShareButton.text = "COPIED_TO_CLIPBOARD"
 
 
