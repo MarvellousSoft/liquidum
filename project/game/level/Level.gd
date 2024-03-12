@@ -1017,3 +1017,10 @@ func set_author(author: String) -> void:
 		return
 	%AuthorLabel.text = tr("BY_AUTHOR") % [author]
 	%AuthorLabel.show()
+
+
+func _on_last_saved_gui_input(event: InputEvent) -> void:
+	if event.is_pressed() and event is InputEventMouseButton:
+		if (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+			maybe_save()
+			accept_event()

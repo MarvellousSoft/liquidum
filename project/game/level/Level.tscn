@@ -898,6 +898,7 @@ autostart = true
 [connection signal="pressed" from="TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="mouse_entered" from="BackAndTimeSaved/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackAndTimeSaved/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="gui_input" from="BackAndTimeSaved/LastSaved" to="." method="_on_last_saved_gui_input"]
 [connection signal="text_changed" from="Description/Edit" to="." method="_on_description_edit_text_changed"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="tutorial_closed" from="TutorialDisplayContainer/TutorialDisplay" to="." method="_on_tutorial_display_tutorial_closed"]

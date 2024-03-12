@@ -60,8 +60,13 @@ var pending_long_touch := Vector3i(-1, -1, -1)
 var is_long_touching := false
 
 func _ready():
-	Profile.line_info_changed.connect(_on_line_info_changed)
 	reset()
+
+func _enter_tree() -> void:
+	Profile.line_info_changed.connect(_on_line_info_changed)
+
+func _exit_tree() -> void:
+	Profile.line_info_changed.disconnect(_on_line_info_changed)
 
 func _process(_dt):
 	update_drag_preview()
