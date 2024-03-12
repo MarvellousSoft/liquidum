@@ -474,12 +474,12 @@ explosiveness = 1.0
 
 [node name="BuyDLCButton" type="Button" parent="Button"]
 unique_name_in_owner = true
-layout_direction = 3
 layout_mode = 0
-offset_left = 204.0
-offset_top = -77.0
-offset_right = 591.0
-offset_bottom = 32.0
+offset_left = -190.0
+offset_top = -223.0
+offset_right = 410.0
+offset_bottom = -114.0
+pivot_offset = Vector2(300, 0)
 focus_mode = 0
 text = "DLC_BUY"
 
