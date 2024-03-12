@@ -10,7 +10,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	%TabContainer.add_theme_font_size_override("fake", 30)
 
-func display(today: Array[DailyButton.LeaderboardData], today_date: String, yesterday: Array[DailyButton.LeaderboardData], yesterday_date: String) -> void:
+func display(today: Array[RecurringMarathon.LeaderboardData], today_date: String, yesterday: Array[RecurringMarathon.LeaderboardData], yesterday_date: String) -> void:
 	if today.size() >= 1:
 		%TODAY_ALL.display_day(today[0], today_date)
 	if today.size() >= 2:

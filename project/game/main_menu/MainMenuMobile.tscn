@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
-[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
+[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="7_gx8im"]
@@ -162,7 +162,7 @@ theme_override_font_sizes/font_size = 75
 text = " !"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox"]
+[node name="MainButton" type="Button" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -170,7 +170,7 @@ tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_BUTTON"
 
-[node name="OngoingSolution" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" instance=ExtResource("10_4sssi")]
+[node name="OngoingSolution" parent="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/MainButton" instance=ExtResource("10_4sssi")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 70)
 offset_left = -52.0
@@ -451,7 +451,7 @@ script = ExtResource("16_h6coi")
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Completed" to="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Completed" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Completed" to="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Completed" method="_on_mouse_exited"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Completed" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_share_pressed"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/Button" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_button_pressed"]
+[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/MainButton" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_main_button_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/DailyButton/VBoxContainer/DailyHBox/LeaderboardsButton" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_leaderboards_button_pressed"]
 [connection signal="timeout" from="MainButtonsContainer/VBoxContainer/DailyButton/Timer" to="MainButtonsContainer/VBoxContainer/DailyButton" method="_on_timer_timeout"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]

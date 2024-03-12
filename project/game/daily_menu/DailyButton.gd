@@ -1,15 +1,10 @@
 class_name DailyButton
-extends Control
+extends RecurringMarathon
 
-# 27 hours, enough
-const MAX_TIME := 100000
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
-const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
-@onready var MainButton: Button = %Button
-@onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
 @onready var Completed = %Completed
 @onready var NotCompleted = %NotCompleted
@@ -17,29 +12,23 @@ const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 @onready var BestStreak = %BestStreak
 
 var date: String
-var yesterday: String
-var deadline: int
 var gen := RandomLevelGenerator.new()
-var already_uploaded_today := false
+
+func _init() -> void:
+	tr_name = "DAILY"
 
 func _ready() -> void:
+	super()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	Global.dev_mode_toggled.connect(func(_on): _update())
-	Profile.unlock_everything_changed.connect(func(_on): _update())
-
-
-func _enter_tree() -> void:
-	call_deferred("_update")
-
 
 func _process(_dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 
-
 func _update() -> void:
-	var unlocked: bool = Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
+	super()
+	var unlocked := RecurringMarathon.is_unlocked()
 	if unlocked and Profile.get_option("daily_notification") == Profile.DailyStatus.NotUnlocked:
 		if NotificationManager.enabled:
 			if NotificationManager.permission_granted():
@@ -54,8 +43,6 @@ func _update() -> void:
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
-	MainButton.disabled = not unlocked
-	TimeLeft.visible = unlocked
 	%StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
 	Completed.visible = false
@@ -64,45 +51,24 @@ func _update() -> void:
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
-	if unlocked:
-		MainButton.tooltip_text = "DAILY_TOOLTIP"
-	else:
-		MainButton.tooltip_text = "DAILY_TOOLTIP_DISABLED"
-		OngoingSolution.visible = false
-		return
 
 	date = DailyButton._today()
 	yesterday = DailyButton._yesterday()
-	deadline = int(Time.get_unix_time_from_datetime_string(date + "T23:59:59"))
-	deadline -= DailyButton._timezone_bias_secs()
+
+	if not unlocked:
+		OngoingSolution.hide()
+		return
 	
-	if FileManager.has_daily_level(date):
-		var save := FileManager.load_level(FileManager._daily_basename(date))
+	if has_level_save():
+		var save := load_level_save()
 		if save:
 			OngoingSolution.visible = not save.is_solution_empty()
 			Completed.visible = save.is_completed()
 			NotCompleted.visible = not save.is_completed()
-	_update_time_left()
 	_update_streak()
 
-
-func _update_time_left() -> void:
-	if MainButton.disabled:
-		return
-	var secs_left := deadline - DailyButton._unixtime()
-	if secs_left > 0:
-		var num: int
-		var txt: String
-		if secs_left >= 3600:
-			num = secs_left / 3600
-			txt = "HOURS_LEFT"
-		else:
-			num = secs_left / 60
-			txt = "MINUTES_LEFT"
-		txt = tr(txt).format({"s": "s" if num > 1 else ""})
-		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), txt]
-	else:
-		_update()
+func get_deadline() -> String:
+	return today + "T23:59:59"
 
 
 func _update_streak() -> void:
@@ -113,37 +79,6 @@ func _update_streak() -> void:
 	CurStreak.text = str(data.current_streak)
 	BestStreak.text = str(data.best_streak)
 
-
-static func _unixtime() -> int:
-	if SteamManager.enabled:
-		return SteamManager.steam.getServerRealTime()
-	return int(Time.get_unix_time_from_system())
-
-static func _timezone_bias_secs() -> int:
-	if OS.get_name() == "Android":
-		# UTC-7 because that's when google play leaderboards reset
-		# https://developers.google.com/games/services/common/concepts/leaderboards
-		return -7 * 60 * 60
-	else:
-		return int(Time.get_time_zone_from_system().bias) * 60
-
-static func _unixtime_ok_timezone() -> int:
-	return _unixtime() + _timezone_bias_secs()
-
-
-static func _today(dt: int = 0) -> String:
-	var today := Time.get_datetime_string_from_unix_time(_unixtime_ok_timezone() - dt)
-	return today.substr(0, today.find('T'))
-
-
-static func _yesterday() -> String:
-	return _today(24 * 60 * 60)
-
-
-func _on_timer_timeout():
-	_update_time_left()
-
-
 static func _level_name(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
 
@@ -152,11 +87,11 @@ static func _level_desc(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL_DESC" % DAY_STR[weekday]
 
 
-static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
-	var date_dict := Time.get_datetime_dict_from_datetime_string(today, true)
+static func gen_level(l_gen: RandomLevelGenerator, today_str: String) -> LevelData:
+	var date_dict := Time.get_datetime_dict_from_datetime_string(today_str, true)
 	var weekday: Time.Weekday = date_dict.weekday
 	var rng := RandomNumberGenerator.new()
-	rng.seed = RandomHub.consistent_hash(today)
+	rng.seed = RandomHub.consistent_hash(today_str)
 	var preprocessed_state := FileManager.load_dailies(date_dict.year).success_state(date_dict)
 	if preprocessed_state != 0:
 		rng.state = preprocessed_state
@@ -168,44 +103,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today: String) -> LevelData:
 	return null
 
 
-func _on_button_pressed() -> void:
-	# Update date if needed
-	_update_time_left()
-	MainButton.disabled = true
-	var today := DailyButton._today()
-	if not FileManager.has_daily_level(today):
-		GeneratingLevel.enable()
-		var level := await DailyButton.gen_level(gen, today)
-		GeneratingLevel.disable()
-		if level != null:
-			FileManager.save_daily_level(today, level)
-	var level_data := FileManager.load_daily_level(today)
-	already_uploaded_today = false
-	if level_data != null:
-		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily2"])
-		level.reset_text = &"CONFIRM_RESET_DAILY"
-		level.won.connect(level_completed.bind(level, today))
-		level.reset_mistakes_on_empty = false
-		level.reset_mistakes_on_reset = false
-		TransitionManager.push_scene(level)
-		await level.ready
-		if SteamManager.enabled:
-			var l_id := await get_daily_leaderboard(date)
-			var l_data := await get_leaderboard_data(l_id)
-			if l_data[0].has_self:
-				already_uploaded_today = true
-			l_id = await get_daily_leaderboard(yesterday)
-			var y_data := await get_leaderboard_data(l_id)
-			display_leaderboard(l_data, y_data, level)
-
-	MainButton.disabled = false
-
-func get_monthly_leaderboard(month_str: String) -> int:
-	print("Monthly for %s" % [month_str])
-	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
-			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
-
-func bump_monthly_challenge(today: String) -> void:
+func bump_monthly_challenge() -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
 	if SteamManager.enabled:
 		var l_id := await get_monthly_leaderboard(today.substr(0, today.length() - 3))
@@ -219,25 +117,12 @@ func bump_monthly_challenge(today: String) -> void:
 			await GooglePlayGameServices.leaderboards_score_submitted
 
 
-func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
-	level.get_node("%ShareButton").visible = true
+func level_completed(info: Level.WinInfo, level: Level) -> void:
+	super(info, level)
 	if not info.first_win:
 		return
 	if info.mistakes < 3:
-		await bump_monthly_challenge(today)
-	if SteamManager.enabled:
-		var l_id := await get_daily_leaderboard(today)
-		if not already_uploaded_today:
-			await upload_leaderboard(today, l_id, info)
-		var l_data := await get_leaderboard_data(l_id)
-		display_leaderboard(l_data, [], level)
-	elif GooglePlayGameServices.enabled:
-		if not already_uploaded_today:
-			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
-			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, float(score))
-			await GooglePlayGameServices.leaderboards_score_submitted
-		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,\
-		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
+		await bump_monthly_challenge()
 	var stats := StatsTracker.instance()
 	stats.increment_daily_all()
 	var data := UserData.current()
@@ -246,8 +131,8 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 		if info.mistakes == 0:
 			stats.unlock_daily_no_mistakes()
 		# It the streak was broken this would be handled in _update_streak
-		if today != data.last_day:
-			data.last_day = today
+		if date != data.last_day:
+			data.last_day = date
 			data.current_streak += 1
 			data.best_streak = max(data.best_streak, data.current_streak)
 			UserData.save()
@@ -256,155 +141,9 @@ func level_completed(info: Level.WinInfo, level: Level, today: String) -> void:
 			data.current_streak = 0
 			UserData.save()
 
-func get_daily_leaderboard(for_date: String) -> int:
-	return await SteamManager.get_or_create_leaderboard("daily_%s" % for_date, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
-
-func get_my_flair(today: String) -> Flair:
-	if DEV_IDS.has(SteamManager.steam.getSteamID()):
-		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	var last_month_dict := Time.get_datetime_dict_from_datetime_string(today, false)
-	if last_month_dict.month == 1:
-		last_month_dict.month = 12
-		last_month_dict.year -= 1
-	else:
-		last_month_dict.month -= 1
-
-	var l_id := await get_monthly_leaderboard("%04d-%02d" % [last_month_dict.year, last_month_dict.month])
-	SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-	if not ret[2].is_empty() and ret[2][0].score >= 15:
-		return Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	return null
-
-func upload_leaderboard(today: String, l_id: int, info: Level.WinInfo) -> void:
-	if not SteamManager.enabled:
-		return
-	# We need to store both mistakes and time in the same score.
-	# Mistakes take priority.
-	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
-	@warning_ignore("redundant_await")
-	var flair := await get_my_flair(today)
-	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
-	if not ret[0]:
-		push_warning("Failed to upload entry for daily %s" % date)
-
-
-class ListEntry:
-	var global_rank: int
-	# Name. Might be "10% percentile"
-	var text: String
-	# Might be null
-	var image: Image
-	var mistakes: int
-	var secs: int
-
-	var flair: Flair
-	static func create(data: Dictionary, override_name := "") -> ListEntry:
-		var entry := ListEntry.new()
-		entry.global_rank = data.global_rank
-		entry.mistakes = data.score / MAX_TIME
-		entry.secs = data.score % MAX_TIME
-		var details := LeaderboardDetails.from_arr(data.get("details", PackedInt32Array()))
-		entry.flair = details.flair
-		if override_name.is_empty():
-			if data.steam_id == SteamManager.steam.getSteamID():
-				entry.text = SteamManager.steam.getPersonaName()
-			else:
-				var nickname: String = SteamManager.steam.getPlayerNickname(data.steam_id)
-				entry.text = SteamManager.steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
-			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, data.steam_id)
-			var ret: Array = await SteamManager.steam.avatar_loaded
-			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-			entry.image.generate_mipmaps()
-		else:
-			entry.text = override_name
-		return entry
-
-class LeaderboardData:
-	# Is this user present on list?
-	var has_self: bool = false
-	# List of friends and percentiles
-	var list: Array[ListEntry]
-	# Only the secs of the top 1000 scores that have no mistakes
-	# Used to draw an histogram
-	var top_no_mistakes: Array[int]
-	func is_empty() -> bool:
-		return list.is_empty()
-	func sort() -> void:
-		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
-
-
-func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
-	var data_all := LeaderboardData.new()
-	var data_friends := LeaderboardData.new()
-	if not SteamManager.enabled:
-		return [data_all, data_friends]
-	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
-	if total == 0:
-		return [data_all, data_friends]
-	SteamManager.steam.setLeaderboardDetailsMax(64)
-	var list_has_rank := {}
-	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-	for entry in ret[2]:
-		list_has_rank[entry.global_rank] = true
-		if entry.steam_id == SteamManager.steam.getSteamID():
-			data_all.has_self = true
-			data_friends.has_self = true
-		var l_entry := await ListEntry.create(entry)
-		data_all.list.append(l_entry)
-		data_friends.list.append(l_entry)
-	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
-	ret = await SteamManager.steam.leaderboard_scores_downloaded
-	SteamManager.steam.setLeaderboardDetailsMax(0)
-	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
-	for entry in ret[2]:
-		var l_entry: ListEntry = null
-		# Tweak this if we get too many users
-		if not list_has_rank.has(entry.global_rank) and entry.global_rank < 100:
-			l_entry = await ListEntry.create(entry)
-			data_all.list.append(l_entry)
-		for dev_id in DEV_IDS:
-			if entry.steam_id == dev_id and not list_has_rank.has(entry.global_rank):
-				if l_entry == null:
-					l_entry = await ListEntry.create(entry)
-				data_friends.list.append(l_entry)
-				list_has_rank[entry.global_rank] = true
-		for pct in percentiles:
-			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
-				# Create again because we're using a custom name for percentiles
-				data_friends.list.append(await ListEntry.create(entry, tr(pct[1])))
-				list_has_rank[entry.global_rank] = true
-		# Only on no mistakes
-		if entry.score < MAX_TIME:
-			data_all.top_no_mistakes.append(entry.score)
-	for pct in percentiles:
-		if not list_has_rank.has(ceili(float(total) * pct[0])):
-			# If this happens, we can do extra requests. But are we really that popular?
-			push_warning("%.2f percentile not in top entries" % pct[0])
-	data_all.sort()
-	data_friends.sort()
-	return [data_all, data_friends]
-
-
-func display_leaderboard(today: Array[LeaderboardData], yesterday_data: Array[LeaderboardData], level: Level) -> void:
-	if not SteamManager.enabled:
-		return
-	var display: LeaderboardDisplay
-	if not level.has_node("LeaderboardDisplay"):
-		display = preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
-		display.modulate.a = 0
-		display.visible = not Global.is_dev_mode()
-		level.add_child(display)
-		level.create_tween().tween_property(display, "modulate:a", 1, 1)
-	display = level.get_node("LeaderboardDisplay")
-	display.display(today, date, yesterday_data, yesterday)
-	display.show_today_all()
-
 
 func _on_dark_mode_changed(is_dark : bool):
-	%Button.theme = Global.get_theme(is_dark)
+	MainButton.theme = Global.get_theme(is_dark)
 
 
 func _on_button_mouse_entered():
@@ -463,3 +202,29 @@ func _on_share_pressed() -> void:
 				copied_tween = create_tween()
 				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
 				copied_tween.tween_callback(label.hide)
+
+
+
+func has_level_data() -> bool:
+	return FileManager.has_daily_level(date)
+
+func load_level_data() -> LevelData:
+	return FileManager.load_daily_level(date)
+
+func save_level_data(data: LevelData) -> void:
+	FileManager.save_daily_level(date, data)
+
+func has_level_save() -> bool:
+	return FileManager.has_daily_level(date)
+
+func load_level_save() -> UserLevelSaveData:
+	return FileManager.load_level(FileManager._daily_basename(date))
+
+func generate_level() -> LevelData:
+	return await DailyButton.gen_level(gen, date)
+
+func steam_current_leaderboard() -> String:
+	return "daily_%s" % [date]
+
+func steam_previous_leaderboard() -> String:
+	return "daily_%s" % [yesterday]

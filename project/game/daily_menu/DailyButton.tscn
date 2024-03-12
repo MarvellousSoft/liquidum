@@ -27,14 +27,14 @@ theme_override_constants/separation = 50
 layout_mode = 2
 theme_override_constants/margin_top = 20
 
-[node name="Button" type="Button" parent="HBox/VBoxContainer/MarginContainer"]
+[node name="MainButton" type="Button" parent="HBox/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_BUTTON"
 
-[node name="OngoingSolution" parent="HBox/VBoxContainer/MarginContainer/Button" instance=ExtResource("3_jx7ca")]
+[node name="OngoingSolution" parent="HBox/VBoxContainer/MarginContainer/MainButton" instance=ExtResource("3_jx7ca")]
 unique_name_in_owner = true
 z_index = 1
 offset_left = -52.0
@@ -142,9 +142,9 @@ vertical_alignment = 2
 wait_time = 30.0
 autostart = true
 
-[connection signal="mouse_entered" from="HBox/VBoxContainer/MarginContainer/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="HBox/VBoxContainer/MarginContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="mouse_entered" from="HBox/VBoxContainer/MarginContainer/MainButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="HBox/VBoxContainer/MarginContainer/MainButton" to="." method="_on_main_button_pressed"]
 [connection signal="mouse_entered" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_exited"]
 [connection signal="pressed" from="HBox/Completed" to="." method="_on_share_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_update_time_left"]

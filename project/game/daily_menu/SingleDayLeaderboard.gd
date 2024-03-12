@@ -5,7 +5,7 @@ extends ScrollContainer
 
 var flairs: Array[Flair] = []
 
-func display_day(data: DailyButton.LeaderboardData, date: String) -> void:
+func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	# Leave the first five for copying so we don't need to programatically set stuff
 	while Grid.get_child_count() > 10:
 		var c := Grid.get_child(Grid.get_child_count() - 1)
