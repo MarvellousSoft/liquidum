@@ -1,7 +1,6 @@
 # Very hard levels generated with certain interesting pattern of hints
 class_name RandomFlavors
 
-
 # Basic Monday
 # Secret Boat Tuesday
 # Diagonal Wednesday
@@ -26,8 +25,10 @@ enum Flavor {
 	OneHint,
 	# small grid, diagonals, basic rules + ?
 	TrickySmall,
-	# No hints
+	# Aquariums and only {?} and -?-
 	AquariumTogether,
+	# Beautiful levels
+	FemmeFatale,
 }
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -60,7 +61,7 @@ static func _boats_hidden_water(rng: RandomNumberGenerator, grid: GridModel) -> 
 	for a in [h.row, h.col]:
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(1, a.size() + 3))
 		if a == h.row:
-			RandomHub._vis_array_or(rng, a, HintBar.BOAT_TYPE_VISIBLE, rng.randi_range(-2, a.size()))
+			RandomHub._vis_array_or(rng, a, HintBar.BOAT_TYPE_VISIBLE, rng.randi_range( - 2, a.size()))
 	h.apply_to_grid(grid)
 	for i in grid.rows():
 		if grid.count_water_row(i) == 0:
@@ -143,6 +144,27 @@ static func _aquarium_builder(rng: RandomNumberGenerator) -> Generator.Options:
 static func _aquarium_together_builder(rng: RandomNumberGenerator) -> Generator.Options:
 	return Generator.builder().with_aquariums(rng.randi_range(10, 20)).with_min_water(rng.randi_range(12, 18))
 
+static func _femme_fatale_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.total_boats = rng.randf() < 0.5
+	h.total_water = rng.randf() < 0.25
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(-2, a.size()))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-6, a.size() + 1))
+		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(-6, a.size()))
+		if a == h.row:
+			RandomHub._vis_array_or(rng, a, HintBar.BOAT_TYPE_VISIBLE, rng.randi_range(-10, a.size()))
+	h.apply_to_grid(grid)
+	if rng.randf() < 0.25:
+		Generator.randomize_aquarium_hints(rng, grid)
+	RandomHub.hide_too_easy_hints(grid)
+
+static func _femme_fatale_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	var opts := ExistingLevelGenerator.custom_builder("femme_fatale")
+	if rng.randf() < 0.3:
+		opts = opts.with_boats()
+	return opts
+
 static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor: Flavor) -> GridModel:
 	# WARNING: DO NOT use rng before calling l_gen.generate or preprocessing won't work
 	var strategies := SolverModel.STRATEGY_LIST.keys()
@@ -168,6 +190,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate_with_size(rng, size_gen, RandomFlavors._tricky_small, _builder(b.with_diags()), strategies, [])
 		Flavor.AquariumTogether:
 			return await l_gen.generate(rng, 6, 6, RandomFlavors._aquarium_together, RandomFlavors._aquarium_together_builder, strategies, [], false)
+		Flavor.FemmeFatale:
+			return await l_gen.generate(rng, -1, -1, RandomFlavors._femme_fatale_hints, RandomFlavors._femme_fatale_builder, strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null
