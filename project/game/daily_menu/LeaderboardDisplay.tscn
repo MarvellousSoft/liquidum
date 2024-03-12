@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfiruubugsdql"]
+[gd_scene load_steps=3 format=3 uid="uid://cfiruubugsdql"]
 
 [ext_resource type="Theme" uid="uid://dy3gs64tja5uk" path="res://assets/ui/GeneralDarkTheme.tres" id="1_nerce"]
 [ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
-[ext_resource type="PackedScene" uid="uid://di2bf2ormot60" path="res://game/daily_menu/SingleDayLeaderboard.tscn" id="3_xionw"]
 
 [node name="LeaderboardDisplay" type="Control"]
 custom_minimum_size = Vector2(1100, 1000)
@@ -38,22 +37,3 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
-
-[node name="TODAY_ALL" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="TODAY_FRIENDS" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="YESTERDAY_ALL" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="YESTERDAY_FRIENDS" parent="VBoxContainer/TabContainer" instance=ExtResource("3_xionw")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2

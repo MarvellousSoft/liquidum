@@ -4,18 +4,22 @@ extends RecurringMarathon
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
-
 @onready var OngoingSolution = %OngoingSolution
 @onready var Completed = %Completed
 @onready var NotCompleted = %NotCompleted
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
 
-var date: String
+var today: String
+var yesterday: String
 var gen := RandomLevelGenerator.new()
 
-func _init() -> void:
-	tr_name = "DAILY"
+static func _today(dt: int=0) -> String:
+	var today_str := Time.get_datetime_string_from_unix_time(RecurringMarathon._unixtime_ok_timezone() - dt)
+	return today_str.substr(0, today_str.find('T'))
+
+static func _yesterday() -> String:
+	return _today(24 * 60 * 60)
 
 func _ready() -> void:
 	super()
@@ -27,6 +31,8 @@ func _process(_dt: float) -> void:
 		size = MainButton.size
 
 func _update() -> void:
+	today = DailyButton._today()
+	yesterday = DailyButton._yesterday()
 	super()
 	var unlocked := RecurringMarathon.is_unlocked()
 	if unlocked and Profile.get_option("daily_notification") == Profile.DailyStatus.NotUnlocked:
@@ -52,9 +58,6 @@ func _update() -> void:
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 
-	date = DailyButton._today()
-	yesterday = DailyButton._yesterday()
-
 	if not unlocked:
 		OngoingSolution.hide()
 		return
@@ -70,7 +73,6 @@ func _update() -> void:
 func get_deadline() -> String:
 	return today + "T23:59:59"
 
-
 func _update_streak() -> void:
 	var data := UserData.current()
 	if data.current_streak > 0 and data.last_day < yesterday:
@@ -82,10 +84,8 @@ func _update_streak() -> void:
 static func _level_name(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
 
-
 static func _level_desc(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL_DESC" % DAY_STR[weekday]
-
 
 static func gen_level(l_gen: RandomLevelGenerator, today_str: String) -> LevelData:
 	var date_dict := Time.get_datetime_dict_from_datetime_string(today_str, true)
@@ -102,7 +102,6 @@ static func gen_level(l_gen: RandomLevelGenerator, today_str: String) -> LevelDa
 		return LevelData.new(_level_name(weekday), _level_desc(weekday), g.export_data(), "")
 	return null
 
-
 func bump_monthly_challenge() -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
 	if SteamManager.enabled:
@@ -115,7 +114,6 @@ func bump_monthly_challenge() -> void:
 		if today.begins_with("2024-03-"):
 			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_march_challenge, score)
 			await GooglePlayGameServices.leaderboards_score_submitted
-
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	super(info, level)
@@ -131,8 +129,8 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		if info.mistakes == 0:
 			stats.unlock_daily_no_mistakes()
 		# It the streak was broken this would be handled in _update_streak
-		if date != data.last_day:
-			data.last_day = date
+		if today != data.last_day:
+			data.last_day = today
 			data.current_streak += 1
 			data.best_streak = max(data.best_streak, data.current_streak)
 			UserData.save()
@@ -141,14 +139,11 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			data.current_streak = 0
 			UserData.save()
 
-
-func _on_dark_mode_changed(is_dark : bool):
+func _on_dark_mode_changed(is_dark: bool):
 	MainButton.theme = Global.get_theme(is_dark)
-
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
-
 
 func _on_leaderboards_button_pressed() -> void:
 	assert(Global.is_mobile)
@@ -174,7 +169,7 @@ static func share(mistakes: int, secs: int) -> void:
 	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
 	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
 		server.tr("SHARE_TEXT"), DailyButton._today(),
-		WEEKDAY_EMOJI[weekday], server.tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
+		WEEKDAY_EMOJI[weekday],server.tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
 		Level.time_str(secs),
 		mistake_str,
 	]
@@ -188,8 +183,8 @@ var copied_tween: Tween = null
 
 func _on_share_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	if FileManager.has_daily_level(date):
-		var save := FileManager.load_level(FileManager._daily_basename(date))
+	if FileManager.has_daily_level(today):
+		var save := FileManager.load_level(FileManager._daily_basename(today))
 		if save and save.is_completed():
 			DailyButton.share(save.best_mistakes, int(save.best_time_secs))
 			if not Global.is_mobile:
@@ -203,28 +198,38 @@ func _on_share_pressed() -> void:
 				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
 				copied_tween.tween_callback(label.hide)
 
-
-
 func has_level_data() -> bool:
-	return FileManager.has_daily_level(date)
+	return FileManager.has_daily_level(today)
 
 func load_level_data() -> LevelData:
-	return FileManager.load_daily_level(date)
+	return FileManager.load_daily_level(today)
 
 func save_level_data(data: LevelData) -> void:
-	FileManager.save_daily_level(date, data)
+	FileManager.save_daily_level(today, data)
 
 func has_level_save() -> bool:
-	return FileManager.has_daily_level(date)
+	return FileManager.has_daily_level(today)
 
 func load_level_save() -> UserLevelSaveData:
-	return FileManager.load_level(FileManager._daily_basename(date))
+	return FileManager.load_level(FileManager._daily_basename(today))
 
 func generate_level() -> LevelData:
-	return await DailyButton.gen_level(gen, date)
+	return await DailyButton.gen_level(gen, today)
 
 func steam_current_leaderboard() -> String:
-	return "daily_%s" % [date]
+	return "daily_%s" % [today]
 
 func steam_previous_leaderboard() -> String:
 	return "daily_%s" % [yesterday]
+
+func current_period() -> String:
+	return today
+
+func previous_period() -> String:
+	return yesterday
+
+func level_basename() -> String:
+	return FileManager._daily_basename(today)
+
+func steam_stats() -> Array[String]:
+	return ["daily2"]

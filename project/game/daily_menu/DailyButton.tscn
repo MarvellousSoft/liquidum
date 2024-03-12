@@ -10,6 +10,7 @@ layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 4
 script = ExtResource("2_u6wd6")
+tr_name = "DAILY"
 
 [node name="HBox" type="HBoxContainer" parent="."]
 layout_mode = 0

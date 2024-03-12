@@ -5,15 +5,11 @@ extends Control
 const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
-# Should be initialised on subclass constructor
-var tr_name: String = ""
+@export var tr_name: String = ""
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
 
-
-var today: String = ""
-var yesterday: String = ""
 var deadline: int = -1
 var already_uploaded := false
 
@@ -27,7 +23,7 @@ static func _timezone_bias_secs() -> int:
 	if OS.get_name() == "Android":
 		# UTC-7 because that's when google play leaderboards reset
 		# https://developers.google.com/games/services/common/concepts/leaderboards
-		return -7 * 60 * 60
+		return - 7 * 60 * 60
 	else:
 		return int(Time.get_time_zone_from_system().bias) * 60
 
@@ -36,14 +32,6 @@ static func _unixtime_ok_timezone() -> int:
 
 static func is_unlocked() -> bool:
 	return Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
-
-static func _today(dt: int = 0) -> String:
-	var today_str := Time.get_datetime_string_from_unix_time(_unixtime_ok_timezone() - dt)
-	return today_str.substr(0, today_str.find('T'))
-
-
-static func _yesterday() -> String:
-	return _today(24 * 60 * 60)
 
 func _ready() -> void:
 	Global.dev_mode_toggled.connect(func(_on): _update())
@@ -56,7 +44,6 @@ func _update() -> void:
 	var unlocked := RecurringMarathon.is_unlocked()
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
-	today = RecurringMarathon._today()
 	deadline = int(Time.get_unix_time_from_datetime_string(get_deadline())) - RecurringMarathon._timezone_bias_secs()
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
@@ -102,9 +89,9 @@ func _on_main_button_pressed() -> void:
 	var level_data := load_level_data()
 	already_uploaded = false
 	if level_data != null:
-		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), FileManager._daily_basename(today), level_data.full_name, level_data.description, ["daily2"])
+		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), level_basename(), level_data.full_name, level_data.description, steam_stats())
 		level.reset_text = &"CONFIRM_RESET_DAILY"
-		level.won.connect(level_completed.bind(level, today))
+		level.won.connect(level_completed.bind(level))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
@@ -139,7 +126,7 @@ func get_monthly_leaderboard(month_str: String) -> int:
 func get_my_flair() -> Flair:
 	if DEV_IDS.has(SteamManager.steam.getSteamID()):
 		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	var last_month_dict := Time.get_datetime_dict_from_datetime_string(today, false)
+	var last_month_dict := Time.get_datetime_dict_from_datetime_string(DailyButton._today(), false)
 	if last_month_dict.month == 1:
 		last_month_dict.month = 12
 		last_month_dict.year -= 1
@@ -163,7 +150,7 @@ func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
-		push_warning("Failed to upload entry for %s at %s" % [tr_name, today])
+		push_warning("Failed to upload entry for %s" % [tr_name])
 
 class ListEntry:
 	var global_rank: int
@@ -175,7 +162,7 @@ class ListEntry:
 	var secs: int
 
 	var flair: Flair
-	static func create(data: Dictionary, override_name := "") -> ListEntry:
+	static func create(data: Dictionary, override_name:="") -> ListEntry:
 		var entry := ListEntry.new()
 		entry.global_rank = data.global_rank
 		entry.mistakes = data.score / MAX_TIME
@@ -266,15 +253,15 @@ func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Ar
 		return
 	var display: LeaderboardDisplay
 	if not level.has_node("LeaderboardDisplay"):
-		display = preload("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
+		display = preload ("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
+		display.tr_name = tr_name
 		display.modulate.a = 0
 		display.visible = not Global.is_dev_mode()
 		level.add_child(display)
 		level.create_tween().tween_property(display, "modulate:a", 1, 1)
 	display = level.get_node("LeaderboardDisplay")
-	# TODO: Don't use today and yesterday here
-	display.display(current_data, today, previous_data, yesterday)
-	display.show_today_all()
+	display.display(current_data, current_period(), previous_data, previous_period())
+	display.show_current_all()
 
 func level_completed(info: Level.WinInfo, level: Level) -> void:
 	# TODO: handle marathon
@@ -293,7 +280,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
 			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, float(score))
 			await GooglePlayGameServices.leaderboards_score_submitted
-		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,\
+		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, \
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
 func has_level_data() -> bool:
@@ -322,4 +309,16 @@ func steam_current_leaderboard() -> String:
 	return GridModel.must_be_implemented()
 
 func steam_previous_leaderboard() -> String:
+	return GridModel.must_be_implemented()
+
+func current_period() -> String:
+	return GridModel.must_be_implemented()
+
+func previous_period() -> String:
+	return GridModel.must_be_implemented()
+	
+func level_basename() -> String:
+	return GridModel.must_be_implemented()
+
+func steam_stats() -> Array[String]:
 	return GridModel.must_be_implemented()
