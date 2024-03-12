@@ -1024,3 +1024,27 @@ func _on_last_saved_gui_input(event: InputEvent) -> void:
 		if (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 			maybe_save()
 			accept_event()
+
+
+func _on_dev_buttons_rotate_clock() -> void:
+	assert(editor_mode())
+	GridNode.grid_logic.set_auto_update_hints(false)
+	GridNode.grid_logic.rotate_clockwise()
+	GridNode.grid_logic.set_auto_update_hints(true)
+	GridNode.update(true, true)
+
+
+func _on_dev_buttons_mirror_horizontal():
+	assert(editor_mode())
+	GridNode.grid_logic.set_auto_update_hints(false)
+	GridNode.grid_logic.mirror_horizontal()
+	GridNode.grid_logic.set_auto_update_hints(true)
+	GridNode.update(true, true)
+
+
+func _on_dev_buttons_mirror_vertical():
+	assert(editor_mode())
+	GridNode.grid_logic.set_auto_update_hints(false)
+	GridNode.grid_logic.mirror_vertical()
+	GridNode.grid_logic.set_auto_update_hints(true)
+	GridNode.update(true, true)

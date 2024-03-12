@@ -351,3 +351,15 @@ func any_schrodinger_boats() -> bool:
 # Matches the stored solution
 func is_equal_solution() -> bool:
 	return GridModel.must_be_implemented()
+
+func mirror_horizontal() -> void:
+	return GridModel.must_be_implemented()
+
+func mirror_vertical() -> void:
+	return GridModel.must_be_implemented()
+
+func rotate_clockwise() -> void:
+	return GridModel.must_be_implemented()
+
+func rotate_counter() -> void:
+	return GridModel.must_be_implemented()

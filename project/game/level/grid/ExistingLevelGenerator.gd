@@ -28,6 +28,12 @@ func load_grid() -> GridModel:
         loaded_grids[i] = FileManager.load_flavor_seed(opts.dir_name, i + 1)
     var grid := GridImpl.import_data(loaded_grids[i].grid_data, GridModel.LoadMode.Editor)
     grid.set_auto_update_hints(false)
+    if rng.randf() < 0.5:
+        grid.mirror_horizontal()
+    if rng.randf() < 0.5:
+        grid.mirror_vertical()
+    for _i in rng.randi_range(0, 3):
+        grid.rotate_clockwise()
     return grid
 
 func generate(_n: int, _m: int) -> GridModel:

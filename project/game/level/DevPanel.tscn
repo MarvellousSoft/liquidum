@@ -123,6 +123,21 @@ layout_mode = 2
 focus_mode = 0
 text = "Copy to editor"
 
+[node name="RotateClock" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Rotate clock"
+
+[node name="MirrorH" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Mirror horizontal"
+
+[node name="MirrorV" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "Mirror vertical"
+
 [connection signal="mouse_entered" from="Strategies" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
@@ -150,3 +165,6 @@ text = "Copy to editor"
 [connection signal="mouse_entered" from="Save" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
 [connection signal="pressed" from="CopyToEditor" to="." method="_on_copy_to_editor_pressed"]
+[connection signal="pressed" from="RotateClock" to="." method="_on_rotate_clock_pressed"]
+[connection signal="pressed" from="MirrorH" to="." method="_on_mirror_horizontal"]
+[connection signal="pressed" from="MirrorV" to="." method="_on_mirror_vertical"]

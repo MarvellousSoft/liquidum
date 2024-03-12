@@ -302,6 +302,22 @@ class PureCell:
 				return [E.Corner.TopLeft, E.Corner.BottomRight]
 		push_error("Unknown type %d" % type)
 		return []
+	func mirror_horizontal() -> void:
+		var new_right := c_left
+		c_left = c_right
+		c_right = new_right
+		match type:
+			E.CellType.IncDiag:
+				type = E.CellType.DecDiag
+			E.CellType.DecDiag:
+				type = E.CellType.IncDiag
+	func rotate_clock() -> void:
+		match type:
+			E.CellType.IncDiag:
+				# Not really a mirror, but since contents don't really rotate, it works the same.
+				mirror_horizontal()
+			E.CellType.DecDiag:
+				type = E.CellType.IncDiag
 	func equal(other: PureCell) -> bool:
 		return eq(other)
 	func to_str() -> String:
@@ -1787,3 +1803,77 @@ func is_equal_solution() -> bool:
 				return false
 	assert(are_hints_satisfied())
 	return true
+
+# If this is the case, we don't need to care about hints
+# as they will auto update later.
+func _assert_testing() -> void:
+	assert(solution_c_left.is_empty())
+	assert(editor_mode())
+	assert(not auto_update_hints())
+
+func _mirror_arr(arr: Array, mirror_element: Callable) -> void:
+	var sz := arr.size()
+	for i in (sz / 2):
+		var tmp = arr[i]
+		arr[i] = mirror_element.call(arr[sz - 1 - i])
+		arr[sz - 1 - i] = mirror_element.call(tmp)
+	if (sz & 1) == 1:
+		arr[sz / 2] = mirror_element.call(arr[sz / 2])
+		
+
+func mirror_horizontal() -> void:
+	_assert_testing()
+	clear_content()
+	for row in pure_cells:
+		_mirror_arr(row, func(cell): cell.mirror_horizontal(); return cell)
+	for row in wall_bottom:
+		_mirror_arr(row, func(b): return b)
+	for row in wall_right:
+		_mirror_arr(row, func(b): return b)
+	validate()
+
+func mirror_vertical() -> void:
+	# I don't want extra work. Sue me.
+	rotate_clockwise()
+	mirror_horizontal()
+	rotate_counter()
+
+func _rotate_grid(old: Array[Array], rotate_element: Callable) -> Array[Array]:
+	var new: Array[Array] = []
+	if old.is_empty():
+		return new
+	var on := old.size()
+	var om := old[0].size()
+	new.resize(om)
+	for ni in om:
+		new[ni].resize(on)
+		for nj in on:
+			var oi := on - 1 - nj
+			var oj := ni
+			new[ni][nj] = rotate_element.call(old[oi][oj])
+	return new
+
+func _adjust_hints(arr: Array[GridModel.LineHint], new_size: int) -> void:
+	if arr.size() > new_size:
+		arr.resize(new_size)
+	while arr.size() < new_size:
+		arr.append(_empty_line_hint())
+
+func rotate_clockwise() -> void:
+	_assert_testing()
+	clear_content()
+	pure_cells = _rotate_grid(pure_cells, func(cell): cell.rotate_clock(); return cell)
+	var new_wall_bottom := _rotate_grid(wall_right, func(b): return b)
+	wall_right = _rotate_grid(wall_bottom, func(b): return b)
+	wall_bottom = new_wall_bottom
+	_adjust_hints(row_hints(), m)
+	_adjust_hints(col_hints(), n)
+	var new_m := n
+	n = m
+	m = new_m
+	validate()
+
+func rotate_counter() -> void:
+	# I don't want extra work. Sue me.
+	for _i in 3:
+		rotate_clockwise()

@@ -8,6 +8,9 @@ signal generate()
 signal load_grid(g: GridModel)
 signal save()
 signal copy_to_editor()
+signal rotate_clock()
+signal mirror_horizontal()
+signal mirror_vertical()
 
 
 @onready var StrategyList: MenuButton = $StrategyList
@@ -135,7 +138,7 @@ func selected_forced_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions, $RotateClock, $MirrorH, $MirrorV]:
 		node.visible = editor_mode
 	if editor_mode:
 		_on_keep_walls_toggled(KeepWalls.button_pressed)
@@ -248,3 +251,13 @@ func _on_keep_vis_toggled(on: bool) -> void:
 	$Aquariums.visible = not on
 	if on:
 		$Aquariums.button_pressed = false
+
+
+func _on_rotate_clock_pressed() -> void:
+	rotate_clock.emit()
+
+func _on_mirror_horizontal() -> void:
+	mirror_horizontal.emit()
+
+func _on_mirror_vertical() -> void:
+	mirror_vertical.emit()

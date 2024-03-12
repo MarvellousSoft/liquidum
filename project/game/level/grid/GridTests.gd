@@ -1097,3 +1097,46 @@ func test_boat_unknown() -> void:
 	%s
 	%s
 	""" % [vertical_boat, vertical_no_boat, vertical_boat, vertical_boat])
+
+func test_rotate_mirror() -> void:
+	var grid := str_grid("""
+	#.
+	L/
+	..
+	|.
+	#.
+	L╲
+	""")
+	grid.mirror_horizontal()
+	assert_grid_eq(grid.to_str(), """
+	.#
+	L╲
+	..
+	|.
+	.#
+	L/
+	""")
+	grid.mirror_vertical()
+	assert_grid_eq(grid.to_str(), """
+	.#
+	|╲
+	..
+	L.
+	.#
+	L/
+	""")
+	grid.rotate_clockwise()
+	assert_grid_eq(grid.to_str(), """
+	#....#
+	L╲L._/
+	""")
+	grid.mirror_horizontal()
+	assert_grid_eq(grid.to_str(), """
+	#....#
+	L╲_.L/
+	""")
+	grid.mirror_vertical()
+	assert_grid_eq(grid.to_str(), """
+	#....#
+	L/_.L╲
+	""")
