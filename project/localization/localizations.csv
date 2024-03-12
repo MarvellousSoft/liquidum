@@ -140,6 +140,7 @@ CUR_STREAK,Current win streak:,Sequência atual de vitórias:,Sequência atual d
 BEST_STREAK,Best win streak:,Maior sequência de vitórias:,Maior sequência de vitórias:
 STREAK_TOOLTIP,Consecutive daily levels with less than 3 mistakes,Níveis do dia consecutivos com menos de 3 erros,Níveis do dia consecutivos com menos de 3 erros
 HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
+DAYS_LEFT,day{s} left,dia{s} restante{s},dia{s} restante{s}
 MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda Simples,Segunda Simples
 MONDAY_LEVEL_DESC,No special rules.,Sem regras especiais.,Sem regras especiais.
@@ -244,10 +245,10 @@ TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
 TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
 WORKSHOP_EXPLANATION,"You can dowload user-created levels by subscribing to then in the Steam Workshop, click the ""Open Workshop"" button above!","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima.","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima."
-DAILY_CURR,Today,Hoje,Hoje
-DAILY_PREV,Yesterday,Ontem,Ontem
-ALL,All,Todos,Todos
-FRIENDS,Friends,Amigos,Amigos
+TODAY_ALL,Today (All),Hoje (Todos),Hoje (Todos)
+TODAY_FRIENDS,Today (Friends),Hoje (Amigos),Hoje (Amigos)
+YESTERDAY_ALL,Yesterday (All),Ontem (Todos),Ontem (Todos)
+YESTERDAY_FRIENDS,Yesterday (Friends),Ontem (Amigos),Ontem (Amigos)
 SHOW_TIMER,Show timer,Mostrar tempo,Mostrar tempo
 QUITTING,Quitting...,Fechando...,Fechando...
 ALLOW_MISTAKES,Allow mistakes,Permitir erros,Permitir erros
@@ -292,6 +293,18 @@ EXTRA_02_05,Repeats,Repetecos,Repetecos
 EXTRA_02_06,Twins,Gêmeos,Gêmeos
 EXTRA_02_07,Parallels,Paralelos,Paralelos
 EXTRA_02_08,Replicas,Replicas,Replicas
+DLC3_NAME,Femme Fatale,Femme Fatale,Femme Fatale
+EXTRA_03_01,,,
+EXTRA_03_02,,,
+EXTRA_03_03,,,
+EXTRA_03_04,,,
+EXTRA_03_05,Jill Valentine,Jill Valentine,Jill Valentine
+EXTRA_03_06,,,
+EXTRA_03_07,,,
+EXTRA_03_08,,,
+EXTRA_03_09,,,
+EXTRA_03_10,Lara Croft,Lara Croft,Lara Croft
+DLC4_NAME,Cryptic Caves,Grutas Ocultas,Grutas Ocultas
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,See in store,Veja na loja,Veja na loja
@@ -320,3 +333,4 @@ PALETTE_ORANGE,Tropical Orange,Laranja tropical,Laranja tropical
 PALETTE_GREEN,Cool Green,Verde Macio,Verde Macio
 PALETTE_PINK,Candy Pink,Rosa Doce,Rosa Doce
 COPIED,Copied!,Copiado!,Copiado!
+WEEKLY_BUTTON,Weekly marathon,Maratona semanal,Maratona semanal
