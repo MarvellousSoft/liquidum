@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cj1fgb8uptk1q"]
+
+[ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="1_ht1bt"]
+
+[node name="WeeklyButton" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ht1bt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 30
+
+[node name="MainButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "WEEKLY_BUTTON"
+
+[node name="TimeLeft" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+text = "X hours left"
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="VBoxContainer/MainButton" to="." method="_on_mouse_entered"]
+[connection signal="pressed" from="VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]
