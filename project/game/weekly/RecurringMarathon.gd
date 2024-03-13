@@ -5,7 +5,8 @@ extends Control
 const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
-@export var tr_name: String = ""
+@export var tr_name: String
+@export var marathon_size: int
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
@@ -40,6 +41,15 @@ func _ready() -> void:
 func _enter_tree() -> void:
 	call_deferred(&"_update")
 
+func _get_marathon_progress() -> int:
+	var last_level := 0
+	while last_level + 1 < marathon_size and has_level_data(last_level):
+		last_level += 1
+	if not has_level_save(last_level):
+		return last_level
+	var save := load_level_save(last_level)
+	return last_level + int(save != null and save.is_completed())
+
 func _update() -> void:
 	var unlocked := RecurringMarathon.is_unlocked()
 	MainButton.disabled = not unlocked
@@ -47,6 +57,8 @@ func _update() -> void:
 	deadline = int(Time.get_unix_time_from_datetime_string(get_deadline())) - RecurringMarathon._timezone_bias_secs()
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
+		if marathon_size > 1:
+			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), _get_marathon_progress(), marathon_size]
 	else:
 		MainButton.tooltip_text = "RECURRING_TOOLTIP_DISABLED"
 		return
@@ -80,13 +92,17 @@ func _on_main_button_pressed() -> void:
 	# Update date if needed
 	_update_time_left()
 	MainButton.disabled = true
-	if not has_level_data():
+	var marathon_i := _get_marathon_progress() % marathon_size
+	if not has_level_data(marathon_i):
 		GeneratingLevel.enable()
-		var level := await generate_level()
+		var level := await generate_level(marathon_i)
 		GeneratingLevel.disable()
 		if level != null:
-			save_level_data(level)
-	var level_data := load_level_data()
+			# TODO: put some marathon information in the level
+			save_level_data(marathon_i, level)
+		else:
+			return
+	var level_data := load_level_data(marathon_i)
 	already_uploaded = false
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), level_basename(), level_data.full_name, level_data.description, steam_stats())
@@ -283,22 +299,31 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, \
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
-func has_level_data() -> bool:
+func _level_name(marathon_i: int) -> String:
+	var base_name := level_save_name()
+	if marathon_size > 1:
+		base_name += "_%d" % [marathon_i]
+	return base_name
+
+func has_level_save(marathon_i: int) -> bool:
+	return FileManager.has_level(_level_name(marathon_i))
+
+func load_level_save(marathon_i: int) -> UserLevelSaveData:
+	return FileManager.load_level(_level_name(marathon_i))
+
+func has_level_data(marathon_i: int) -> bool:
+	return FileManager.has_recurring_level_data(_level_name(marathon_i))
+
+func load_level_data(marathon_i: int) -> LevelData:
+	return FileManager.load_recurring_level_data(_level_name(marathon_i))
+
+func save_level_data(marathon_i: int, data: LevelData) -> void:
+	return FileManager.save_recurring_level_data(_level_name(marathon_i), data)
+
+func level_save_name() -> String:
 	return GridModel.must_be_implemented()
 
-func load_level_data() -> LevelData:
-	return GridModel.must_be_implemented()
-
-func save_level_data(_data: LevelData) -> void:
-	return GridModel.must_be_implemented()
-
-func has_level_save() -> bool:
-	return GridModel.must_be_implemented()
-
-func load_level_save() -> UserLevelSaveData:
-	return GridModel.must_be_implemented()
-
-func generate_level() -> LevelData:
+func generate_level(_marathon_i: int) -> LevelData:
 	return await GridModel.must_be_implemented()
 
 # Returns the string representation of the time when this marathon ends

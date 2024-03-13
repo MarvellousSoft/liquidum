@@ -116,16 +116,20 @@ func clear_profile(profile: String) -> void:
 func _level_dir(profile := "") -> String:
 	return "%s/levels" % _profile_dir(profile)
 
+func _recurring_dir(profile := "") -> String:
+	return "%s/recurring" % [_profile_dir(profile)]
+
 func _level_file(level: String) -> String:
 	return "%s.save" % level
 
+func has_level(level_name: String) -> bool:
+	return FileAccess.file_exists("%s/%s%s" % [_level_dir(), level_name, JSON_EXT])
 
 func load_level(level_name: String, profile := "") -> UserLevelSaveData:
 	return UserLevelSaveData.load_data(_load_json_data(_level_dir(profile), _level_file(level_name), false))
 
 func save_level(level_name: String, data: UserLevelSaveData) -> void:
 	_save_json_data(_level_dir(), _level_file(level_name), data.get_data())
-
 
 func clear_level(level_name: String, profile := "") -> void:
 	_delete_file(_level_dir(profile), _level_file(level_name))
@@ -214,6 +218,18 @@ func save_extra_endless_level(section: int, data: LevelData) -> void:
 
 func _daily_basename(date: String) -> String:
 	return "daily_%s" % date
+
+func has_recurring_level_data(level_name: String) -> bool:
+	return FileAccess.file_exists("%s/%s%s" % [_recurring_dir(), level_name, JSON_EXT])
+
+func load_recurring_level_data(level_name: String) -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_recurring_dir(), level_name + JSON_EXT))
+	_no_tutorial(data)
+	return data
+
+func save_recurring_level_data(level_name: String, data: LevelData) -> void:
+	_no_tutorial(data)
+	_save_json_data(_recurring_dir(), level_name + JSON_EXT, data.get_data())
 
 func load_daily_level(date: String) -> LevelData:
 	var data := LevelData.load_data(_load_json_data(_level_dir(), _daily_basename(date) + JSON_EXT))

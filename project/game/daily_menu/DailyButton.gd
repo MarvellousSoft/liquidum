@@ -21,6 +21,10 @@ static func _today(dt: int=0) -> String:
 static func _yesterday() -> String:
 	return _today(24 * 60 * 60)
 
+func _init() -> void:
+	tr_name = "DAILY"
+	marathon_size = 1
+
 func _ready() -> void:
 	super()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
@@ -62,8 +66,8 @@ func _update() -> void:
 		OngoingSolution.hide()
 		return
 	
-	if has_level_save():
-		var save := load_level_save()
+	if has_level_save(0):
+		var save := load_level_save(0)
 		if save:
 			OngoingSolution.visible = not save.is_solution_empty()
 			Completed.visible = save.is_completed()
@@ -81,7 +85,7 @@ func _update_streak() -> void:
 	CurStreak.text = str(data.current_streak)
 	BestStreak.text = str(data.best_streak)
 
-static func _level_name(weekday: Time.Weekday) -> String:
+static func _level_name_tr(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
 
 static func _level_desc(weekday: Time.Weekday) -> String:
@@ -99,7 +103,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today_str: String) -> LevelDa
 	if preprocessed_state != 0:
 		assert(preprocessed_state == l_gen.success_state)
 	if g != null:
-		return LevelData.new(_level_name(weekday), _level_desc(weekday), g.export_data(), "")
+		return LevelData.new(_level_name_tr(weekday), _level_desc(weekday), g.export_data(), "")
 	return null
 
 func bump_monthly_challenge() -> void:
@@ -198,22 +202,23 @@ func _on_share_pressed() -> void:
 				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
 				copied_tween.tween_callback(label.hide)
 
-func has_level_data() -> bool:
+func has_level_data(marathon_i: int) -> bool:
+	assert(marathon_i == 0)
 	return FileManager.has_daily_level(today)
 
-func load_level_data() -> LevelData:
+func load_level_data(marathon_i: int) -> LevelData:
+	assert(marathon_i == 0)
 	return FileManager.load_daily_level(today)
 
-func save_level_data(data: LevelData) -> void:
+func save_level_data(marathon_i:int, data: LevelData) -> void:
+	assert(marathon_i == 0)
 	FileManager.save_daily_level(today, data)
 
-func has_level_save() -> bool:
-	return FileManager.has_daily_level(today)
+func level_save_name() -> String:
+	return FileManager._daily_basename(today)
 
-func load_level_save() -> UserLevelSaveData:
-	return FileManager.load_level(FileManager._daily_basename(today))
-
-func generate_level() -> LevelData:
+func generate_level(marathon_i: int) -> LevelData:
+	assert(marathon_i == 0)
 	return await DailyButton.gen_level(gen, today)
 
 func steam_current_leaderboard() -> String:
