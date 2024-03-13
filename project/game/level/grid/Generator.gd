@@ -176,7 +176,7 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 		grid.push_empty_undo()
 	var min_water := opts.min_water
 	if min_water == 0:
-		min_water = int(grid.rows() * grid.cols() * rng.randf_range(0.2, 0.75))
+		min_water = int((grid.rows() * grid.cols() - grid.count_blocks()) * rng.randf_range(0.2, 0.75))
 	var water_wanted: float = min_water - grid.count_waters()
 	if water_wanted < 0:
 		return

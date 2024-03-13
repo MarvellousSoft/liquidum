@@ -336,6 +336,9 @@ func count_waters() -> float:
 func count_boats() -> int:
 	return GridModel.must_be_implemented()
 
+func count_blocks() -> float:
+	return GridModel.must_be_implemented()
+
 # If there are not boats, hide all boat hints
 func prettify_hints(_is_procedurally_generated: bool) -> void:
 	return GridModel.must_be_implemented()

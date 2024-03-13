@@ -250,6 +250,8 @@ class PureCell:
 		return _content_count(Content.NoWater)
 	func nothing_count() -> float:
 		return _content_count(Content.Nothing)
+	func block_count() -> float:
+		return _content_count(Content.Block)
 	func eq(other: PureCell) -> bool:
 		return c_left == other.c_left and c_right == other.c_right and type == other.type
 	func clone() -> PureCell:
@@ -1411,13 +1413,19 @@ func count_waters() -> float:
 		count += count_water_row(i)
 	return count
 
-
 func count_nowaters() -> float:
 	var count := 0.0
 	for i in n:
 		count += count_nowater_row(i)
 	return count
 
+
+func count_blocks() -> float:
+	var count: float = 0.0
+	for i in n:
+		for j in m:
+			count += _pure_cell(i, j).block_count()
+	return count
 
 func _hint_statusf(count: float, hint: float) -> E.HintStatus:
 	if hint == -1 or count == hint:

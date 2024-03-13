@@ -160,7 +160,13 @@ static func _femme_fatale_hints(rng: RandomNumberGenerator, grid: GridModel) -> 
 	RandomHub.hide_too_easy_hints(grid)
 
 static func _femme_fatale_builder(rng: RandomNumberGenerator) -> Generator.Options:
-	var opts := ExistingLevelGenerator.custom_builder("femme_fatale")
+	# We don't want to be affected by the current state, but still depend on the RNG so we can
+	# preprocess. Otherwise this wouldn't matter because we would always choose a different mod_i
+	var new_rng := RandomNumberGenerator.new()
+	new_rng.seed = rng.seed
+	var opts := ExistingLevelGenerator.custom_builder("femme_fatale") \
+	  .with_mod_max(5) \
+	  .with_mod_i(new_rng.randi_range(0, 4))
 	if rng.randf() < 0.3:
 		opts = opts.with_boats()
 	return opts
