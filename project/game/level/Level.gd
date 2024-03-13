@@ -526,6 +526,7 @@ func update_play_again_button_label() -> void:
 
 
 func reset_level() -> void:
+	game_won = false
 	if ConfirmationScreen.start_confirmation(reset_text):
 		AudioManager.play_sfx("button_pressed")
 		if not await ConfirmationScreen.pressed:
@@ -535,6 +536,11 @@ func reset_level() -> void:
 	if reset_mistakes_on_reset:
 		running_time = 0
 		Counters.mistake.set_count(0)
+	process_game = true
+	GridNode.enable()
+	BackButton.disabled = false
+	%TutorialButton.disabled = false
+	%ContinueAnim.play("RESET")
 	maybe_save()
 
 
@@ -549,9 +555,6 @@ func win() -> void:
 	GridNode.remove_all_highlights()
 	GridNode.remove_all_preview()
 	GridNode.disable()
-	ResetButton.disabled = true
-	var tween := create_tween()
-	tween.tween_property(ResetButton, "modulate:a", 0.5, 1)
 	BackButton.disabled = true
 	%TutorialButton.disabled = true
 	Settings.disable_button()
