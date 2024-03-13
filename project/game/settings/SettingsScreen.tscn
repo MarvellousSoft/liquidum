@@ -192,6 +192,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_force_pass_scroll_events = false
 theme = ExtResource("2_5ky7v")
 
 [node name="CenterContainer" type="CenterContainer" parent="Settings"]
