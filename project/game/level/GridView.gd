@@ -844,6 +844,10 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 			AudioManager.play_sfx("nowater_put")
 		else:
 			highlight_error(i, j, which)
+	elif brush_mode == E.BrushMode.NoWater:
+		_process_click(i, j, which, E.BrushMode.NoWater)
+	elif brush_mode == E.BrushMode.NoBoat:
+		_process_click(i, j, which, E.BrushMode.NoBoat)
 	elif cell_data.nowater_at(corner):
 		mouse_hold_status = E.MouseDragState.RemoveNoWater
 		cell_data.remove_nowater(corner)
