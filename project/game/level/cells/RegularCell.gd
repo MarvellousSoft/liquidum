@@ -25,7 +25,11 @@ const IMAGES = {
 	"thick_walls": {
 		"left": preload("res://assets/images/ui/cell/wall_left_thick.png"),
 		"diag": preload("res://assets/images/ui/cell/wall_dec_diag_thick.png"),
-	}
+	},
+	"nowater": {
+		"normal": preload("res://assets/images/ui/cell/nowater.png"),
+		"dark": preload("res://assets/images/ui/cell/nowater_dark.png"),
+	},
 }
 
 signal pressed_main_button(i: int, j: int, which: E.Waters)
@@ -139,6 +143,7 @@ var editor_mode := false
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
 	Profile.thick_walls_mode_toggled.connect(update_thick_walls)
+	Profile.palette_changed.connect(update_nowater)
 	Highlight.modulate.a = 0.0
 	for water in Waters.values():
 		water.material = water.material.duplicate()
@@ -151,6 +156,7 @@ func _ready():
 	
 	update_dark_mode(Profile.get_option("dark_mode"))
 	update_thick_walls(Profile.get_option("thicker_walls"))
+	update_nowater()
 
 
 func _process(dt):
@@ -403,6 +409,16 @@ func decrease_water_level(corner : E.Waters, dt : float) -> void:
 		if level < EPS:
 			level = 0.0
 		water.material.set_shader_parameter("level", level)
+
+
+func update_nowater():
+	var image
+	if Profile.get_option("palette") > 0:
+		image = IMAGES.nowater.dark
+	else:
+		image = IMAGES.nowater.normal
+	for node in %NoContent.get_children():
+		node.get_node("Water").texture = image
 
 
 func _on_button_gui_input(event: InputEvent, which: E.Waters) -> void:
