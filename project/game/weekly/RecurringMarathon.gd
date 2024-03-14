@@ -43,12 +43,10 @@ func _enter_tree() -> void:
 
 func _get_marathon_completed() -> int:
 	var last_level := 0
-	while last_level + 1 < marathon_size and has_level_data(last_level):
+	while last_level + 1 <= marathon_size and has_level_data(last_level + 1):
 		last_level += 1
 	if last_level == 0:
 		return 0
-	if not has_level_save(last_level):
-		return last_level - 1
 	var save := load_level_save(last_level)
 	return last_level - 1 + int(save != null and save.is_completed())
 
@@ -60,7 +58,7 @@ func _update() -> void:
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:
-			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), _get_marathon_completed(), marathon_size]
+			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), mini(_get_marathon_completed() + 1, marathon_size), marathon_size]
 	else:
 		MainButton.tooltip_text = "RECURRING_TOOLTIP_DISABLED"
 		return
@@ -91,6 +89,9 @@ func _on_mouse_entered() -> void:
 	AudioManager.play_sfx("button_hover")
 
 func _on_main_button_pressed() -> void:
+	await gen_and_play(true)
+
+func gen_and_play(push_scene: bool) -> void:
 	# Update date if needed
 	_update_time_left()
 	MainButton.disabled = true
@@ -113,12 +114,13 @@ func _on_main_button_pressed() -> void:
 		level.share.connect(share.bind(marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
+		level.recurring_marathon_left = marathon_size - marathon_i
 		if marathon_i > 1:
 			var prev_save := load_level_save(marathon_i - 1)
 			if prev_save != null and prev_save.is_completed():
 				level.initial_mistakes = prev_save.best_mistakes
 				level.running_time = prev_save.best_time_secs
-		TransitionManager.push_scene(level)
+		TransitionManager.change_scene(level, push_scene)
 		await level.ready
 		if SteamManager.enabled:
 			var l_id := await load_current_leaderboard()
@@ -318,10 +320,7 @@ func share(mistakes: int, secs: int, marathon_i: int) -> void:
 	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))
 
 func _level_name(marathon_i: int) -> String:
-	var base_name := level_basename()
-	if marathon_size > 1:
-		base_name += "_%d" % [marathon_i]
-	return base_name
+	return "%s_%d" % [level_basename(), marathon_i]
 
 func has_level_save(marathon_i: int) -> bool:
 	return FileManager.has_level(_level_name(marathon_i))

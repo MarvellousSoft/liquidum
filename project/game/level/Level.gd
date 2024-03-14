@@ -103,6 +103,7 @@ var manually_seeded := false
 var fully_setup := false
 var extra_section := -1
 var extra_level_number := -1
+var recurring_marathon_left := -1
 
 
 func _ready():
@@ -133,13 +134,13 @@ func _ready():
 	else:
 		update_aquarium_button_icon()
 	%PlayAgainButton.hide()
-	if (difficulty != -1 and marathon_left != 0) or level_name.begins_with("endless_"):
+	if (difficulty != -1 and marathon_left != 0) or level_name.begins_with("endless_") or is_weekly():
 		%PlayAgainButton.show()
 		update_play_again_button_label()
-	if marathon_left == 0:
+	if marathon_left == 0 or recurring_marathon_left == 0:
 		%ContinueButton.text = "FINISH_MARATHON"
-	elif marathon_left > 0:
-		%ContinueButton.text = tr("CONTINUE_MARATHON") % [marathon_left]
+	elif marathon_left > 0 or recurring_marathon_left > 0:
+		%ContinueButton.text = tr("CONTINUE_MARATHON") % [marathon_left if marathon_left > 0 else recurring_marathon_left]
 	if is_campaign_level():
 		if not Global.is_mobile:
 			$SteamRichPresence.set_group("campaign")
@@ -163,7 +164,7 @@ func _ready():
 				$SteamRichPresence.set_group("workshop")
 				$SteamRichPresence.set_display("#Workshop")
 				$SteamRichPresence.set_key_value("level", full_name)
-			elif level_name.begins_with("daily_"):
+			elif is_daily():
 				$SteamRichPresence.set_group("daily")
 				$SteamRichPresence.set_display("#Daily")
 			elif difficulty != -1:
@@ -258,8 +259,14 @@ func _gui_input(event: InputEvent) -> void:
 		elif mouse.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			pass
 
+func is_daily() -> bool:
+	return level_name.begins_with("daily_")
+
+func is_weekly() -> bool:
+	return level_name.begins_with("weekly_")
+
 func is_procedurally_generated() -> bool:
-	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1) or level_name.begins_with("daily_")
+	return difficulty != -1 or (extra_section != -1 and extra_level_number == -1) or is_daily() or is_weekly()
 
 func setup(try_load := true) -> void:
 	if not grid.editor_mode():
@@ -515,7 +522,9 @@ func add_playtime_tracking(stats: Array[String]) -> void:
 
 
 func update_play_again_button_label() -> void:
-	if marathon_left == -1:
+	if is_weekly():
+		%PlayAgainButton.text = "PAUSE_MARATHON"
+	elif marathon_left == -1:
 		var new_name: String
 		if difficulty != -1:
 			new_name = DIFFICULTY_NAMES[difficulty]
@@ -835,7 +844,11 @@ func _on_continue_button_pressed() -> void:
 		show_big_ad.manually_seeded = manually_seeded
 		show_big_ad.marathon_time = running_time
 		show_big_ad.marathon_mistakes = int(Counters.mistake.count)
+		show_big_ad.is_weekly = is_weekly()
 		TransitionManager.change_scene(show_big_ad)
+	elif is_weekly():
+		var main_menu: Node = TransitionManager.stack.back()
+		await main_menu.get_node("%WeeklyButton").gen_and_play(false)
 	elif marathon_left == -1:
 		TransitionManager.pop_scene()
 	else:
@@ -1001,14 +1014,14 @@ func _on_cancel_uniq_check_mouse_entered():
 
 
 func _on_play_again_button_pressed() -> void:
-	if marathon_left == -1:
+	if marathon_left == -1 and not is_weekly():
 		if difficulty != -1:
 			Global.play_new_dif_again = difficulty
 		else:
 			Global.play_new_dif_again = 1
 	if _show_level_completed_ad():
 		TransitionManager.change_scene(preload("res://game/ads/ShowBigAd.tscn").instantiate())
-	elif marathon_left == -1:
+	elif marathon_left == -1 and not is_weekly():
 		var last_scene = TransitionManager.stack.back()
 		if last_scene is RandomHub:
 			last_scene._play_new_level_again()

@@ -123,7 +123,7 @@ func _level_file(level: String) -> String:
 	return "%s.save" % level
 
 func has_level(level_name: String) -> bool:
-	return FileAccess.file_exists("%s/%s%s" % [_level_dir(), level_name, JSON_EXT])
+	return FileAccess.file_exists("%s/%s" % [_level_dir(), _level_file(level_name)])
 
 func load_level(level_name: String, profile := "") -> UserLevelSaveData:
 	return UserLevelSaveData.load_data(_load_json_data(_level_dir(profile), _level_file(level_name), false))

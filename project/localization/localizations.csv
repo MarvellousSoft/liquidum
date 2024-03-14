@@ -271,6 +271,7 @@ CONTINUE_MARATHON,Continue marathon (%d left),Continuar maratona (faltam %d),Con
 FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
 ABANDON_MARATHON,Abandon,Desistir,Desistir
 MARATHON_TEXT,Multiple levels in a row,Múltiplos níveis seguidos,Múltiplos níveis seguidos
+PAUSE_MARATHON,Stop for now,Parar temporariamente,Parar temporariamente
 ASSETS_USED,Assets used,Recursos usados,Recursos usados
 DLC1_NAME,Small & Tricky,Pequeno & Difícil,Pequeno & Difícil
 EXTRA_01_01,Twins & In Sync,Twins & In Sync,Twins & In Sync
