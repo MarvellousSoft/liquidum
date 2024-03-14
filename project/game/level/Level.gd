@@ -39,6 +39,7 @@ const DIFFICULTY_NAMES = [
 
 signal won(info: WinInfo)
 signal had_first_win
+signal share(mistakes: int, secs: int)
 
 class WinInfo:
 	var first_win: bool
@@ -935,7 +936,8 @@ func _on_check_uniqueness_pressed() -> void:
 
 
 func _on_share_button_pressed() -> void:
-	DailyButton.share(int(Counters.mistake.count), int(running_time))
+	AudioManager.play_sfx("button_pressed")
+	share.emit(int(Counters.mistake.count), int(running_time))
 
 	if OS.get_name() != "Android" or not Engine.has_singleton("GodotAndroidShare"):
 		%ShareButton.text = "COPIED_TO_CLIPBOARD"

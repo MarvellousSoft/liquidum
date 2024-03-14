@@ -158,30 +158,28 @@ func _on_leaderboards_button_pressed() -> void:
 	  GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY,
 	  GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
-static func share(mistakes: int, secs: int) -> void:
-	AudioManager.play_sfx("button_pressed")
+static func _mistakes_str(mistakes: int) -> String:
 	var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
-	var mistake_str: String
 	if mistakes == 0:
-		mistake_str = "🏆 0 %s" % server.tr("MISTAKES")
+		return "🏆 0 %s" % server.tr("MISTAKES")
 	else:
-		mistake_str = "❌ %d %s" % [
+		return "❌ %d %s" % [
 			mistakes,
 			server.tr("MISTAKES" if mistakes > 1 else "MISTAKE")
 		]
 
+
+func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
+	assert(marathon_i == 0)
+	var mistake_str: String = DailyButton._mistakes_str(mistakes)
+
 	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
-	var text := "%s %s\n\n%s %s\n🕑 %s\n%s" % [
-		server.tr("SHARE_TEXT"), DailyButton._today(),
-		WEEKDAY_EMOJI[weekday],server.tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
+	return "%s %s\n\n%s %s\n🕑 %s\n%s" % [
+		tr("SHARE_TEXT"), DailyButton._today(),
+		WEEKDAY_EMOJI[weekday], tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
 		Level.time_str(secs),
 		mistake_str,
 	]
-	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):
-		var android_share = Engine.get_singleton("GodotAndroidShare")
-		android_share.shareText("Liquidum", "subject", text)
-	else:
-		DisplayServer.clipboard_set(text)
 
 var copied_tween: Tween = null
 
@@ -190,7 +188,7 @@ func _on_share_pressed() -> void:
 	if FileManager.has_daily_level(today):
 		var save := FileManager.load_level(FileManager._daily_basename(today))
 		if save and save.is_completed():
-			DailyButton.share(save.best_mistakes, int(save.best_time_secs))
+			RecurringMarathon.do_share(share_text(save.best_mistakes, int(save.best_time_secs), 0))
 			if not Global.is_mobile:
 				# Mobile already has enough feedback because it opens a dialog
 				if copied_tween != null:

@@ -45,6 +45,21 @@ func generate_level(marathon_i: int) -> LevelData:
 		return LevelData.new("BLAAAA", "BLADESC", g.export_data(), "")
 	return null
 
+func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
+	var mistakes_str: String = DailyButton._mistakes_str(mistakes)
+	var text: String
+	if marathon_i == marathon_size - 1:
+		text = tr(&"WEEKLY_SHARE_COMPLETE")
+	else:
+		text = tr(&"WEEKLY_SHARE_PARTIAL") % [marathon_i + 1, marathon_size]
+	return "{text} {today}\n\n🕑 {time} ({total})\n{mistakes} ({total})".format({
+		text = text,
+		today = DailyButton._today(),
+		time = Level.time_str(secs),
+		mistakes = mistakes_str,
+		total = tr(&"TOTAL"),
+	})
+
 # Returns the string representation of the time when this marathon ends
 func get_deadline() -> String:
 	return deadline_str

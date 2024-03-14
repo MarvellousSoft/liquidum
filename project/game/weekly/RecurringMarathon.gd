@@ -108,6 +108,7 @@ func _on_main_button_pressed() -> void:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), _level_name(marathon_i), level_data.full_name, level_data.description, steam_stats())
 		level.reset_text = &"CONFIRM_RESET_DAILY"
 		level.won.connect(level_completed.bind(level, marathon_i))
+		level.share.connect(share.bind(marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
@@ -299,6 +300,16 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, \
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
+static func do_share(text: String) -> void:
+	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):
+		var android_share = Engine.get_singleton("GodotAndroidShare")
+		android_share.shareText("Liquidum", "subject", text)
+	else:
+		DisplayServer.clipboard_set(text)
+
+func share(mistakes: int, secs: int, marathon_i: int) -> void:
+	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))
+
 func _level_name(marathon_i: int) -> String:
 	var base_name := level_basename()
 	if marathon_size > 1:
@@ -343,4 +354,7 @@ func level_basename() -> String:
 	return GridModel.must_be_implemented()
 
 func steam_stats() -> Array[String]:
+	return GridModel.must_be_implemented()
+
+func share_text(_mistakes: int, _secs: int, _marathon_i: int) -> String:
 	return GridModel.must_be_implemented()
