@@ -271,7 +271,7 @@ CONTINUE_MARATHON,Continue marathon (%d left),Continuar maratona (faltam %d),Con
 FINISH_MARATHON,Finish marathon,Terminar maratona,Terminar maratona
 ABANDON_MARATHON,Abandon,Desistir,Desistir
 MARATHON_TEXT,Multiple levels in a row,Múltiplos níveis seguidos,Múltiplos níveis seguidos
-PAUSE_MARATHON,Stop for now,Parar temporariamente,Parar temporariamente
+PAUSE_MARATHON,Resume later,Voltar depois,Voltar depois
 ASSETS_USED,Assets used,Recursos usados,Recursos usados
 DLC1_NAME,Small & Tricky,Pequeno & Difícil,Pequeno & Difícil
 EXTRA_01_01,Twins & In Sync,Twins & In Sync,Twins & In Sync
@@ -337,8 +337,9 @@ COPIED,Copied!,Copiado!,Copiado!
 WEEKLY_BUTTON,Weekly marathon,Maratona semanal,Maratona semanal
 WEEKLY_CURR,This week,Essa semana,Essa semana
 WEEKLY_PREV,Last week,Semana passada,Semana passada
-WEEKLY_SHARE_PARTIAL,I'm doing #liquidum weekly (%d⁄%d) on,Estou fazendo o #liquidum semanal (%d⁄%d) em,Estou fazendo o #liquidum semanal (%d⁄%d) em
-WEEKLY_SHARE_COMPLETE,I won #liquidum weekly on,Ganhei o #liquidum semanal em,Ganhei o #liquidum semanal em
+WEEKLY_SHARE_PARTIAL,I'm doing #liquidum weekly %s (%d⁄%d),Estou fazendo o #liquidum semanal %s (%d⁄%d),Estou fazendo o #liquidum semanal %s (%d⁄%d)
+WEEKLY_SHARE_COMPLETE,I won #liquidum weekly,Ganhei o #liquidum semanal,Ganhei o #liquidum semanal
 TOTAL,total,total,total
+SO_FAR,so far,até agora,até agora
 WEEKLY_LEVEL,Weekly marathon,Maratona semanal,Maratona semanal
 WEEKLY_TOOLTIP,10 hard levels that change weekly,10 níveis difíceis que mudam semanalmente,10 níveis difíceis que mudam semanalmente

@@ -4,7 +4,6 @@ extends RecurringMarathon
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
-@onready var NotCompleted = %NotCompleted
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
 
@@ -52,7 +51,6 @@ func _update() -> void:
 		%LeaderboardsButton.visible = unlocked
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
 	%StreakContainer.visible = unlocked
-	NotCompleted.visible = unlocked
 	if Global.is_mobile:
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
@@ -61,10 +59,6 @@ func _update() -> void:
 	if not unlocked:
 		return
 	
-	if has_level_save(1):
-		var save := load_level_save(0)
-		if save:
-			NotCompleted.visible = not save.is_completed()
 	_update_streak()
 
 func get_deadline() -> String:

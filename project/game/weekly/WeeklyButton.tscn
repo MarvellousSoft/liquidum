@@ -67,7 +67,23 @@ custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_vertical = 0
 text = "COPIED"
-vertical_alignment = 2
+vertical_alignment = 1
+
+[node name="NotCompleted" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_vertical = 0
+localize_numeral_system = false
+tooltip_text = "DAILY_LEVEL_NOT_PLAYED_TOOLTIP"
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 0.894118, 0.415686, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 75
+theme_override_font_sizes/font_size = 140
+text = " !"
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="HBoxContainer/VBoxContainer/MainButton" to="." method="_on_mouse_entered"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]

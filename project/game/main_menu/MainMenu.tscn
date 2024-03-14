@@ -219,7 +219,6 @@ text = "BACK"
 
 [node name="WeeklyButton" parent="." instance=ExtResource("10_kkfou")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 offset_left = 116.0
 offset_top = 1317.0

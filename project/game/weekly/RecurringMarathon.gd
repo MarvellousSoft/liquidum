@@ -12,6 +12,7 @@ const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 @onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
 @onready var Completed = %Completed
+@onready var NotCompleted = %NotCompleted
 
 var deadline: int = -1
 var already_uploaded := false
@@ -61,6 +62,7 @@ func _update() -> void:
 	var save := load_level_save(marathon_completed + 1) if marathon_completed < marathon_size else null
 	OngoingSolution.visible = save != null and not save.is_solution_empty()
 	Completed.visible = marathon_completed == marathon_size 
+	NotCompleted.visible = not Completed.visible
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:
