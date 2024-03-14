@@ -48,25 +48,32 @@ func _find_leaderboard(l_name: String) -> int:
 	else:
 		return ret[0]
 
-func set_streak(streak: int, _best_streak: int) -> void:
-	const CUR := "daily_streak_current"
-	const MAX := "daily_streak_max"
+func _set_streak_impl(type: String, streak: int, _best_streak: int, streak_ach: int) -> void:
+	var CUR := "%s_streak_current" % type
+	var MAX := "%s_streak_max" % type
 	var upload_current: bool = (streak != SteamManager.steam.getStatInt(CUR))
 	var cur_max_streak: int = SteamManager.steam.getStatInt(MAX)
 	var upload_max := (streak != cur_max_streak)
 	SteamManager.steam.setStatInt(MAX, maxi(cur_max_streak, streak))
-	if _set_stat_with_goal(CUR, streak, 7, "daily_streak_7", 2):
+	if _set_stat_with_goal(CUR, streak, streak_ach, "%s_streak_%d" % [type, streak_ach], 2):
 		flushNewAchievements()
+	var ld_prefix := "" if type == "daily" else "%s_" % type
 	if upload_current:
 		if current_streak_id == 0:
-			current_streak_id = await _find_leaderboard("current_streak")
+			current_streak_id = await _find_leaderboard("%scurrent_streak" % [ld_prefix])
 		if current_streak_id != 0:
 			SteamManager.steam.uploadLeaderboardScore(streak, false, PackedInt32Array(), current_streak_id)
 	if upload_max:
 		if max_streak_id == 0:
-			max_streak_id = await _find_leaderboard("max_streak")
+			max_streak_id = await _find_leaderboard("%smax_streak" % [ld_prefix])
 		if max_streak_id != 0:
 			SteamManager.steam.uploadLeaderboardScore(streak, true, PackedInt32Array(), max_streak_id)
+
+func set_daily_streak(streak: int, best_streak: int) -> void:
+	await _set_streak_impl("daily", streak, best_streak, 7)
+
+func set_weekly_streak(streak: int, best_streak: int) -> void:
+	await _set_streak_impl("weekly", streak, best_streak, 4)
 
 func _increment(stat: String) -> void:
 	var val: int = SteamManager.steam.getStatInt(stat)
@@ -104,6 +111,9 @@ func _achieve(achievement: String, flush := true) -> bool:
 
 func unlock_daily_no_mistakes() -> void:
 	_achieve("daily_no_mistakes")
+
+func unlock_weekly_no_mistakes() -> void:
+	_achieve("weekly_no_mistakes")
 
 # Returns whether the goal was just reached
 # Indicates progress every checkpoint values

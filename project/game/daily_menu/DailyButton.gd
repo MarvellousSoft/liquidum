@@ -123,7 +123,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		if today != data.last_day:
 			data.last_day = today
 			data.current_streak += 1
-			data.best_streak = max(data.best_streak, data.current_streak)
+			data.best_streak = maxi(data.best_streak, data.current_streak)
 			UserData.save()
 	else:
 		if data.current_streak > 0:
@@ -205,3 +205,9 @@ func level_basename() -> String:
 
 func steam_stats() -> Array[String]:
 	return ["daily2"]
+
+func google_leaderboard() -> String:
+	return GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty
+
+func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
+	return GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY

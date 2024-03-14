@@ -19,7 +19,10 @@ func set_random_levels(_completed_count: Array[int]) -> void:
 func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
 
-func set_streak(_streak: int, _best_streak: int) -> void:
+func set_daily_streak(_streak: int, _best_streak: int) -> void:
+	pass
+
+func set_weekly_streak(_streak: int, _best_streak: int) -> void:
 	pass
 
 func increment_daily_all() -> void:
@@ -38,6 +41,9 @@ func increment_workshop() -> void:
 	pass
 
 func unlock_daily_no_mistakes() -> void:
+	pass
+
+func unlock_weekly_no_mistakes() -> void:
 	pass
 
 func update_campaign_stats() -> void:

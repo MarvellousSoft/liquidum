@@ -62,6 +62,11 @@ func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 		total = tr(&"TOTAL" if marathon_i == marathon_size else &"SO_FAR"),
 	})
 
+func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
+	if marathon_i == marathon_size and info.mistakes == 0:
+		StatsTracker.instance().unlock_weekly_no_mistakes()
+	await super(info, level, marathon_i)
+
 # Returns the string representation of the time when this marathon ends
 func get_deadline() -> String:
 	return deadline_str
@@ -83,3 +88,9 @@ func level_basename() -> String:
 
 func steam_stats() -> Array[String]:
 	return ["weekly"]
+
+func google_leaderboard() -> String:
+	return GooglePlayGameServices.ids.leaderboard_weekly_level_1h_mistake_penalty
+
+func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
+	return GooglePlayGameServices.TimeSpan.TIME_SPAN_WEEKLY

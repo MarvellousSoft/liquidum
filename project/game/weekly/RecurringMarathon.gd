@@ -300,22 +300,23 @@ func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Ar
 func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
 	# TODO: handle marathon
 	level.get_node("%ShareButton").visible = true
-	if not info.first_win:
+	if not info.first_win or marathon_i < marathon_size:
 		return
-	if SteamManager.enabled:
+	if SteamManager.enabled and not already_uploaded:
 		var l_id := await load_current_leaderboard()
 		if l_id != 0:
-			if not already_uploaded and marathon_i == marathon_size:
-				await upload_leaderboard(l_id, info)
+			await upload_leaderboard(l_id, info)
 			var l_data := await get_leaderboard_data(l_id)
 			display_leaderboard(l_data, [], level)
 	elif GooglePlayGameServices.enabled:
-		if not already_uploaded:
-			var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
-			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, float(score))
-			await GooglePlayGameServices.leaderboards_score_submitted
-		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, \
-		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
+		var ld_id := google_leaderboard()
+		if ld_id != "":
+			if not already_uploaded:
+				var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
+				GooglePlayGameServices.leaderboards_submit_score(ld_id, float(score))
+				await GooglePlayGameServices.leaderboards_score_submitted
+			GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \
+			google_leaderboard_span(), GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
 var copied_tween: Tween = null
 
@@ -386,6 +387,12 @@ func level_basename() -> String:
 	return GridModel.must_be_implemented()
 
 func steam_stats() -> Array[String]:
+	return GridModel.must_be_implemented()
+
+func google_leaderboard() -> String:
+	return GridModel.must_be_implemented()
+
+func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GridModel.must_be_implemented()
 
 func share_text(_mistakes: int, _secs: int, _marathon_i: int) -> String:

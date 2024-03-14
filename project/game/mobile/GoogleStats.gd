@@ -20,11 +20,17 @@ func increment_random_any() -> void:
 func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
 
-func set_streak(streak: int, best_streak: int) -> void:
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_current_daily_streak, float(streak))
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_max_daily_streak, float(best_streak))
-	if streak >= 7:
-		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_1_week_streak)
+func _set_streak_impl(type: String, streak: int, best_streak: int, streak_ach: int) -> void:
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_current_%s_streak" % type], float(streak))
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_max_%s_streak" % type], float(best_streak))
+	if streak >= streak_ach:
+		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_%d_%s_streak" % [streak_ach, type]])
+
+func set_daily_streak(streak: int, best_streak: int) -> void:
+	_set_streak_impl("daily", streak, best_streak, 7)
+
+func set_weekly_streak(streak: int, best_streak: int) -> void:
+	_set_streak_impl("weekly", streak, best_streak, 4)
 
 func increment_daily_all() -> void:
 	pass
@@ -40,6 +46,9 @@ func increment_workshop() -> void:
 
 func unlock_daily_no_mistakes() -> void:
 	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_flawless_daily)
+
+func unlock_weekly_no_mistakes() -> void:
+	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_flawless_weekly)
 
 func update_campaign_stats() -> void:
 	GooglePlayGameServices.achievements_load()
