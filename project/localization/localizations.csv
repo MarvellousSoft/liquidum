@@ -339,3 +339,5 @@ WEEKLY_PREV,Last week,Semana passada,Semana passada
 WEEKLY_SHARE_PARTIAL,I'm doing #liquidum weekly (%d⁄%d) on,Estou fazendo o #liquidum semanal (%d⁄%d) em,Estou fazendo o #liquidum semanal (%d⁄%d) em
 WEEKLY_SHARE_COMPLETE,I won #liquidum weekly on,Ganhei o #liquidum semanal em,Ganhei o #liquidum semanal em
 TOTAL,total,total,total
+WEEKLY_LEVEL,Weekly marathon,Maratona semanal,Maratona semanal
+WEEKLY_TOOLTIP,10 hard levels that change weekly,10 níveis difíceis que mudam semanalmente,10 níveis difíceis que mudam semanalmente

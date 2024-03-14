@@ -170,7 +170,7 @@ static func _mistakes_str(mistakes: int) -> String:
 
 
 func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
-	assert(marathon_i == 0)
+	assert(marathon_i == 1)
 	var mistake_str: String = DailyButton._mistakes_str(mistakes)
 
 	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
@@ -188,7 +188,7 @@ func _on_share_pressed() -> void:
 	if FileManager.has_daily_level(today):
 		var save := FileManager.load_level(FileManager._daily_basename(today))
 		if save and save.is_completed():
-			RecurringMarathon.do_share(share_text(save.best_mistakes, int(save.best_time_secs), 0))
+			RecurringMarathon.do_share(share_text(save.best_mistakes, int(save.best_time_secs), 1))
 			if not Global.is_mobile:
 				# Mobile already has enough feedback because it opens a dialog
 				if copied_tween != null:
@@ -200,20 +200,23 @@ func _on_share_pressed() -> void:
 				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
 				copied_tween.tween_callback(label.hide)
 
+# We override these functions to keep compatible with our previous daily level location.
+# To remove these overrides, we would need some small migration code so that people don't double-solve a daily
+# on the day this change is pushed.
 func has_level_data(marathon_i: int) -> bool:
-	assert(marathon_i == 0)
+	assert(marathon_i == 1)
 	return FileManager.has_daily_level(today)
 
 func load_level_data(marathon_i: int) -> LevelData:
-	assert(marathon_i == 0)
+	assert(marathon_i == 1)
 	return FileManager.load_daily_level(today)
 
 func save_level_data(marathon_i:int, data: LevelData) -> void:
-	assert(marathon_i == 0)
+	assert(marathon_i == 1)
 	FileManager.save_daily_level(today, data)
 
 func generate_level(marathon_i: int) -> LevelData:
-	assert(marathon_i == 0)
+	assert(marathon_i == 1)
 	return await DailyButton.gen_level(gen, today)
 
 func steam_current_leaderboard() -> String:

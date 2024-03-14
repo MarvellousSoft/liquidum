@@ -41,14 +41,16 @@ func _ready() -> void:
 func _enter_tree() -> void:
 	call_deferred(&"_update")
 
-func _get_marathon_progress() -> int:
+func _get_marathon_completed() -> int:
 	var last_level := 0
 	while last_level + 1 < marathon_size and has_level_data(last_level):
 		last_level += 1
+	if last_level == 0:
+		return 0
 	if not has_level_save(last_level):
-		return last_level
+		return last_level - 1
 	var save := load_level_save(last_level)
-	return last_level + int(save != null and save.is_completed())
+	return last_level - 1 + int(save != null and save.is_completed())
 
 func _update() -> void:
 	var unlocked := RecurringMarathon.is_unlocked()
@@ -58,7 +60,7 @@ func _update() -> void:
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:
-			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), _get_marathon_progress(), marathon_size]
+			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), _get_marathon_completed(), marathon_size]
 	else:
 		MainButton.tooltip_text = "RECURRING_TOOLTIP_DISABLED"
 		return
@@ -92,7 +94,7 @@ func _on_main_button_pressed() -> void:
 	# Update date if needed
 	_update_time_left()
 	MainButton.disabled = true
-	var marathon_i := _get_marathon_progress() % marathon_size
+	var marathon_i := (_get_marathon_completed() % marathon_size) + 1
 	if not has_level_data(marathon_i):
 		GeneratingLevel.enable()
 		var level := await generate_level(marathon_i)
@@ -111,7 +113,7 @@ func _on_main_button_pressed() -> void:
 		level.share.connect(share.bind(marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
-		if marathon_i > 0:
+		if marathon_i > 1:
 			var prev_save := load_level_save(marathon_i - 1)
 			if prev_save != null and prev_save.is_completed():
 				level.initial_mistakes = prev_save.best_mistakes
@@ -293,7 +295,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 	if SteamManager.enabled:
 		var l_id := await load_current_leaderboard()
 		if l_id != 0:
-			if not already_uploaded and marathon_i == marathon_size - 1:
+			if not already_uploaded and marathon_i == marathon_size:
 				await upload_leaderboard(l_id, info)
 			var l_data := await get_leaderboard_data(l_id)
 			display_leaderboard(l_data, [], level)

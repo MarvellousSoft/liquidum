@@ -1,24 +1,19 @@
 class_name WeeklyButton
 extends RecurringMarathon
 
-const FLAVORS: Array[RandomFlavors.Flavor] = [
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-	RandomFlavors.Flavor.Basic,
-]
-
 var l_gen := RandomLevelGenerator.new()
 
 var curr_monday: String
 var prev_monday: String
 var deadline_str: String
+
+func possible_flavors() -> Array[RandomFlavors.Flavor]:
+	var arr: Array[RandomFlavors.Flavor] = []
+	for i in 7:
+		arr.append(i as RandomFlavors.Flavor)
+	arr.append_array([RandomFlavors.Flavor.Basic, RandomFlavors.Flavor.Diagonals, RandomFlavors.Flavor.Everything])
+	assert(arr.size() == marathon_size)
+	return arr
 
 func _init() -> void:
 	tr_name = "WEEKLY"
@@ -40,18 +35,25 @@ func _update() -> void:
 
 func generate_level(marathon_i: int) -> LevelData:
 	var rng := RandomNumberGenerator.new()
-	var g := await RandomFlavors.gen(l_gen, rng, FLAVORS[marathon_i])
+	rng.seed = RandomHub.consistent_hash(curr_monday)
+	# Here, use rng for stuff that only changes weekly
+	var flavors := possible_flavors()
+	Global.shuffle(flavors, rng)
+	# And now, rng for this specific level
+	rng.seed = RandomHub.consistent_hash("%s_%02d" % [curr_monday, marathon_i])
+	var g := await RandomFlavors.gen(l_gen, rng, flavors[marathon_i - 1])
 	if g != null:
-		return LevelData.new("BLAAAA", "BLADESC", g.export_data(), "")
+		var full_name := "%s (%d⁄%d)" % [tr("WEEKLY_LEVEL"), marathon_i, marathon_size]
+		return LevelData.new(full_name, "", g.export_data(), "")
 	return null
 
 func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 	var mistakes_str: String = DailyButton._mistakes_str(mistakes)
 	var text: String
-	if marathon_i == marathon_size - 1:
+	if marathon_i == marathon_size:
 		text = tr(&"WEEKLY_SHARE_COMPLETE")
 	else:
-		text = tr(&"WEEKLY_SHARE_PARTIAL") % [marathon_i + 1, marathon_size]
+		text = tr(&"WEEKLY_SHARE_PARTIAL") % [marathon_i, marathon_size]
 	return "{text} {today}\n\n🕑 {time} ({total})\n{mistakes} ({total})".format({
 		text = text,
 		today = DailyButton._today(),
