@@ -38,9 +38,6 @@ func _update() -> void:
 	deadline_str += "T23:59:59"
 	super()
 
-func level_save_name() -> String:
-	return level_basename()
-
 func generate_level(marathon_i: int) -> LevelData:
 	var rng := RandomNumberGenerator.new()
 	var g := await RandomFlavors.gen(l_gen, rng, FLAVORS[marathon_i])

@@ -119,8 +119,8 @@ func bump_monthly_challenge() -> void:
 			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_march_challenge, score)
 			await GooglePlayGameServices.leaderboards_score_submitted
 
-func level_completed(info: Level.WinInfo, level: Level) -> void:
-	super(info, level)
+func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
+	super(info, level, marathon_i)
 	if not info.first_win:
 		return
 	if info.mistakes < 3:
@@ -213,9 +213,6 @@ func load_level_data(marathon_i: int) -> LevelData:
 func save_level_data(marathon_i:int, data: LevelData) -> void:
 	assert(marathon_i == 0)
 	FileManager.save_daily_level(today, data)
-
-func level_save_name() -> String:
-	return FileManager._daily_basename(today)
 
 func generate_level(marathon_i: int) -> LevelData:
 	assert(marathon_i == 0)

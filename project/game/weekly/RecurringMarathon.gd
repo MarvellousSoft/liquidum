@@ -105,9 +105,9 @@ func _on_main_button_pressed() -> void:
 	var level_data := load_level_data(marathon_i)
 	already_uploaded = false
 	if level_data != null:
-		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), level_basename(), level_data.full_name, level_data.description, steam_stats())
+		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), _level_name(marathon_i), level_data.full_name, level_data.description, steam_stats())
 		level.reset_text = &"CONFIRM_RESET_DAILY"
-		level.won.connect(level_completed.bind(level))
+		level.won.connect(level_completed.bind(level, marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
 		TransitionManager.push_scene(level)
@@ -279,7 +279,7 @@ func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Ar
 	display.display(current_data, current_period(), previous_data, previous_period())
 	display.show_current_all()
 
-func level_completed(info: Level.WinInfo, level: Level) -> void:
+func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
 	# TODO: handle marathon
 	level.get_node("%ShareButton").visible = true
 	if not info.first_win:
@@ -287,7 +287,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 	if SteamManager.enabled:
 		var l_id := await load_current_leaderboard()
 		if l_id != 0:
-			if not already_uploaded:
+			if not already_uploaded and marathon_i == marathon_size - 1:
 				await upload_leaderboard(l_id, info)
 			var l_data := await get_leaderboard_data(l_id)
 			display_leaderboard(l_data, [], level)
@@ -300,7 +300,7 @@ func level_completed(info: Level.WinInfo, level: Level) -> void:
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
 func _level_name(marathon_i: int) -> String:
-	var base_name := level_save_name()
+	var base_name := level_basename()
 	if marathon_size > 1:
 		base_name += "_%d" % [marathon_i]
 	return base_name
@@ -319,9 +319,6 @@ func load_level_data(marathon_i: int) -> LevelData:
 
 func save_level_data(marathon_i: int, data: LevelData) -> void:
 	return FileManager.save_recurring_level_data(_level_name(marathon_i), data)
-
-func level_save_name() -> String:
-	return GridModel.must_be_implemented()
 
 func generate_level(_marathon_i: int) -> LevelData:
 	return await GridModel.must_be_implemented()
