@@ -37,8 +37,8 @@ YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
-CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza de que deseja redefinir o nível?
-CONFIRM_RESET_DAILY,Are you sure? Resetting a daily does not reset the timer or mistakes.,Tem certeza? Resetar o nível do dia não reseta o tempo corrido ou contador de erros.,Tem certeza? Resetar o nível do dia não reseta o tempo corrido ou contador de erros.
+CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza que quer resetar este nível?
+CONFIRM_RESET_RECURRING,Are you sure? It will not reset the timer or mistakes.,Tem certeza? O tempo corrido e contador de erros não vão resetar.,Tem certeza? O tempo corrido e contador de erros não vão resetar.
 LEVELS_COMPLETED,levels completed,níveis completados,níveis completados
 EXTRA_LEVELS_COMPLETED,extra levels completed,níveis extra completados,níveis extras completados
 WORKSHOP_BUTTON,Workshop levels,Níveis da Oficina,Níveis de oficina

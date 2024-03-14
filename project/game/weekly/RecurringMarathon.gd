@@ -106,11 +106,16 @@ func _on_main_button_pressed() -> void:
 	already_uploaded = false
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), _level_name(marathon_i), level_data.full_name, level_data.description, steam_stats())
-		level.reset_text = &"CONFIRM_RESET_DAILY"
+		level.reset_text = &"CONFIRM_RESET_RECURRING"
 		level.won.connect(level_completed.bind(level, marathon_i))
 		level.share.connect(share.bind(marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
+		if marathon_i > 0:
+			var prev_save := load_level_save(marathon_i - 1)
+			if prev_save != null and prev_save.is_completed():
+				level.initial_mistakes = prev_save.best_mistakes
+				level.running_time = prev_save.best_time_secs
 		TransitionManager.push_scene(level)
 		await level.ready
 		if SteamManager.enabled:
