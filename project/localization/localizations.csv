@@ -245,10 +245,10 @@ TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
 TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
 WORKSHOP_EXPLANATION,"You can dowload user-created levels by subscribing to then in the Steam Workshop, click the ""Open Workshop"" button above!","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima.","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima."
-TODAY_ALL,Today (All),Hoje (Todos),Hoje (Todos)
-TODAY_FRIENDS,Today (Friends),Hoje (Amigos),Hoje (Amigos)
-YESTERDAY_ALL,Yesterday (All),Ontem (Todos),Ontem (Todos)
-YESTERDAY_FRIENDS,Yesterday (Friends),Ontem (Amigos),Ontem (Amigos)
+DAILY_CURR,Today,Hoje,Hoje
+DAILY_PREV,Yesterday,Ontem,Ontem
+ALL,All,Todos,Todos
+FRIENDS,Friends,Amigos,Amigos
 SHOW_TIMER,Show timer,Mostrar tempo,Mostrar tempo
 QUITTING,Quitting...,Fechando...,Fechando...
 ALLOW_MISTAKES,Allow mistakes,Permitir erros,Permitir erros
@@ -334,3 +334,5 @@ PALETTE_GREEN,Cool Green,Verde Macio,Verde Macio
 PALETTE_PINK,Candy Pink,Rosa Doce,Rosa Doce
 COPIED,Copied!,Copiado!,Copiado!
 WEEKLY_BUTTON,Weekly marathon,Maratona semanal,Maratona semanal
+WEEKLY_CURR,This week,Essa semana,Essa semana
+WEEKLY_PREV,Last week,Semana passada,Semana passada
