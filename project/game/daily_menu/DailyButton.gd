@@ -4,8 +4,6 @@ extends RecurringMarathon
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
 
-@onready var OngoingSolution = %OngoingSolution
-@onready var Completed = %Completed
 @onready var NotCompleted = %NotCompleted
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
@@ -55,22 +53,17 @@ func _update() -> void:
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
 	%StreakContainer.visible = unlocked
 	NotCompleted.visible = unlocked
-	Completed.visible = false
-	OngoingSolution.visible = false
 	if Global.is_mobile:
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 
 	if not unlocked:
-		OngoingSolution.hide()
 		return
 	
-	if has_level_save(0):
+	if has_level_save(1):
 		var save := load_level_save(0)
 		if save:
-			OngoingSolution.visible = not save.is_solution_empty()
-			Completed.visible = save.is_completed()
 			NotCompleted.visible = not save.is_completed()
 	_update_streak()
 
@@ -181,24 +174,6 @@ func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 		mistake_str,
 	]
 
-var copied_tween: Tween = null
-
-func _on_share_pressed() -> void:
-	AudioManager.play_sfx("button_pressed")
-	if FileManager.has_daily_level(today):
-		var save := FileManager.load_level(FileManager._daily_basename(today))
-		if save and save.is_completed():
-			RecurringMarathon.do_share(share_text(save.best_mistakes, int(save.best_time_secs), 1))
-			if not Global.is_mobile:
-				# Mobile already has enough feedback because it opens a dialog
-				if copied_tween != null:
-					copied_tween.kill()
-				var label: Label = %CopiedLabel
-				label.show()
-				label.modulate.a = 1.0
-				copied_tween = create_tween()
-				copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
-				copied_tween.tween_callback(label.hide)
 
 # We override these functions to keep compatible with our previous daily level location.
 # To remove these overrides, we would need some small migration code so that people don't double-solve a daily

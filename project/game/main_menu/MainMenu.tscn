@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="3_nnq5w"]
-[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="Texture2D" uid="uid://dxwpe527fcy3m" path="res://assets/images/icons/android_robot.png" id="4_gygl5"]
@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="5_ixgbd"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
-[ext_resource type="PackedScene" uid="uid://cj1fgb8uptk1q" path="res://game/weekly/WeeklyButton.tscn" id="10_kkfou"]
+[ext_resource type="PackedScene" uid="uid://drtp5pcfag6ly" path="res://game/weekly/WeeklyButton.tscn" id="10_kkfou"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_vktdt"]
 diffuse_texture = ExtResource("3_nnq5w")
@@ -221,10 +221,10 @@ text = "BACK"
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-offset_left = 118.0
-offset_top = 1339.0
-offset_right = 118.0
-offset_bottom = 1339.0
+offset_left = 116.0
+offset_top = 1317.0
+offset_right = 116.0
+offset_bottom = 1317.0
 
 [node name="DailyButton" parent="." instance=ExtResource("4_o512o")]
 layout_mode = 2

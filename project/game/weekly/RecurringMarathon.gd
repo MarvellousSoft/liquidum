@@ -10,6 +10,8 @@ const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
+@onready var OngoingSolution = %OngoingSolution
+@onready var Completed = %Completed
 
 var deadline: int = -1
 var already_uploaded := false
@@ -55,10 +57,14 @@ func _update() -> void:
 	MainButton.disabled = not unlocked
 	TimeLeft.visible = unlocked
 	deadline = int(Time.get_unix_time_from_datetime_string(get_deadline())) - RecurringMarathon._timezone_bias_secs()
+	var marathon_completed := _get_marathon_completed()
+	var save := load_level_save(marathon_completed + 1) if marathon_completed < marathon_size else null
+	OngoingSolution.visible = save != null and not save.is_solution_empty()
+	Completed.visible = marathon_completed == marathon_size 
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:
-			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), mini(_get_marathon_completed() + 1, marathon_size), marathon_size]
+			MainButton.text = "%s (%d⁄%d)" % [tr("%s_BUTTON" % tr_name), mini(marathon_completed + 1, marathon_size), marathon_size]
 	else:
 		MainButton.tooltip_text = "RECURRING_TOOLTIP_DISABLED"
 		return
@@ -308,6 +314,24 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 			await GooglePlayGameServices.leaderboards_score_submitted
 		GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty, \
 		   GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY, GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
+
+var copied_tween: Tween = null
+
+func _on_share_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	var save := load_level_save(marathon_size)
+	if save != null and save.is_completed():
+		share(save.best_mistakes, int(save.best_time_secs), marathon_size)
+		if not Global.is_mobile:
+			# Mobile already has enough feedback because it opens a dialog
+			if copied_tween != null:
+				copied_tween.kill()
+			var label: Label = %CopiedLabel
+			label.show()
+			label.modulate.a = 1.0
+			copied_tween = create_tween()
+			copied_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+			copied_tween.tween_callback(label.hide)
 
 static func do_share(text: String) -> void:
 	if OS.get_name() == "Android" and Engine.has_singleton("GodotAndroidShare"):

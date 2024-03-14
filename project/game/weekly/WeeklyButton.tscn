@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cj1fgb8uptk1q"]
+[gd_scene load_steps=5 format=3 uid="uid://drtp5pcfag6ly"]
 
 [ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="1_ht1bt"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="2_edjcw"]
+[ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="3_rsb71"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_0hfha"]
 
 [node name="WeeklyButton" type="Control"]
 layout_mode = 3
@@ -11,19 +14,31 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ht1bt")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/separation = 30
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+offset_right = 724.0
+offset_bottom = 109.0
+theme_override_constants/separation = 52
 
-[node name="MainButton" type="Button" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="MainButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "WEEKLY_BUTTON"
 
-[node name="TimeLeft" type="Label" parent="VBoxContainer"]
+[node name="OngoingSolution" parent="HBoxContainer/VBoxContainer/MainButton" instance=ExtResource("2_edjcw")]
+unique_name_in_owner = true
+visible = false
+offset_left = -39.0
+offset_top = 89.0
+offset_right = 131.0
+offset_bottom = 159.0
+
+[node name="TimeLeft" type="Label" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 auto_translate = false
@@ -33,5 +48,29 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[connection signal="mouse_entered" from="VBoxContainer/MainButton" to="." method="_on_mouse_entered"]
-[connection signal="pressed" from="VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]
+[node name="Completed" type="TextureButton" parent="HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
+texture_normal = ExtResource("3_rsb71")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_0hfha")
+
+[node name="CopiedLabel" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_vertical = 0
+text = "COPIED"
+vertical_alignment = 2
+
+[connection signal="mouse_entered" from="HBoxContainer/VBoxContainer/MainButton" to="." method="_on_mouse_entered"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/Completed" to="HBoxContainer/Completed" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HBoxContainer/Completed" to="HBoxContainer/Completed" method="_on_mouse_exited"]
+[connection signal="pressed" from="HBoxContainer/Completed" to="." method="_on_share_pressed"]

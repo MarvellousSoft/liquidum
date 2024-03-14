@@ -137,7 +137,7 @@ func _ready():
 	if (difficulty != -1 and marathon_left != 0) or level_name.begins_with("endless_") or is_weekly():
 		%PlayAgainButton.show()
 		update_play_again_button_label()
-	if marathon_left == 0 or recurring_marathon_left == 0:
+	if marathon_left == 0 or recurring_marathon_left == 0 and not is_daily():
 		%ContinueButton.text = "FINISH_MARATHON"
 	elif marathon_left > 0 or recurring_marathon_left > 0:
 		%ContinueButton.text = tr("CONTINUE_MARATHON") % [marathon_left if marathon_left > 0 else recurring_marathon_left]
@@ -524,6 +524,8 @@ func add_playtime_tracking(stats: Array[String]) -> void:
 func update_play_again_button_label() -> void:
 	if is_weekly():
 		%PlayAgainButton.text = "PAUSE_MARATHON"
+		if recurring_marathon_left == 0:
+			%PlayAgainButton.hide()
 	elif marathon_left == -1:
 		var new_name: String
 		if difficulty != -1:
