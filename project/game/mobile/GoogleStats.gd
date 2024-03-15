@@ -76,3 +76,18 @@ func update_campaign_stats() -> void:
 	var completed: String = GooglePlayGameServices.ids.achievement_campaign_completed
 	if id_to_cur_steps.has(completed) and total_completed > id_to_cur_steps[completed]:
 		GooglePlayGameServices.achievements_increment(completed, total_completed - id_to_cur_steps[completed])
+	const ACH_NAMES := {
+		1: "achievement_done__solved",
+		2: "achievement_reflected",
+	}
+	var extra_section := 1
+	while ExtraLevelLister.has_section(extra_section):
+		var completed_levels := ExtraLevelLister.count_completed_section_levels(extra_section)
+		if ACH_NAMES.has(extra_section):
+			completed = GooglePlayGameServices.ids[ACH_NAMES[extra_section]]
+			if ExtraLevelLister.is_free(extra_section):
+				if id_to_cur_steps.has(completed) and completed_levels > id_to_cur_steps[completed]:
+					GooglePlayGameServices.achievements_increment(completed, completed_levels - id_to_cur_steps[completed])
+			else:
+				pass
+		extra_section += 1
