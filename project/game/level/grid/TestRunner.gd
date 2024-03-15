@@ -192,9 +192,13 @@ func _on_reset_stats_pressed():
 
 
 func _on_preprocess_weeklies_pressed() -> void:
-	var year := int(%WeekliesYear.text)
+	var year := int(%WeekliesYear.value)
 	var prep := FileManager.load_preprocessed_weeklies(year)
-	var unixtime := Time.get_unix_time_from_datetime_string(PreprocessedWeeklies.first_monday_of_the_year(year))
+	var first_monday: String = PreprocessedWeeklies.first_monday_of_the_year(year)
+	if year == 2024:
+		# We didn't have weeklies before this.
+		first_monday = "2024-03-11"
+	var unixtime := Time.get_unix_time_from_datetime_string(first_monday)
 	var gen := RandomLevelGenerator.new()
 	%WeekliesProgress.value = 0
 	%WeekliesProgress.visible = true
