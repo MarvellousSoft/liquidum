@@ -167,11 +167,10 @@ func update_campaign_stats() -> void:
 		var section_levels := ExtraLevelLister.count_section_levels(extra_section)
 		var s_name := "extra_%02d_levels" % [extra_section]
 		if ExtraLevelLister.is_free(extra_section):
-			print("Setting %d/%d for %s" % [completed, section_levels, s_name])
 			if _set_stat_with_goal(s_name, completed, section_levels, "extra_%02d_complete", section_levels / 2):
 				any = true
 		else:
-			SteamManager.steam.SetStatInt(s_name, completed)
+			SteamManager.steam.setStatInt(s_name, completed)
 		extra_section += 1
 	if any:
 		flushNewAchievements()
