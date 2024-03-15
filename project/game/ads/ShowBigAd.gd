@@ -8,7 +8,7 @@ var seed_str := ""
 var manually_seeded := false
 var marathon_time := -1.0
 var marathon_mistakes := -1
-var is_weekly := false
+var jump_to_next_weekly := false
 
 func _ready() -> void:
 	if not Global.is_mobile:
@@ -19,7 +19,7 @@ func _ready() -> void:
 func exit_ad() -> void:
 	if is_inside_tree():
 		AdManager.destroy_big_ad()
-		if is_weekly:
+		if jump_to_next_weekly:
 			var main_menu: Node = TransitionManager.stack.back()
 			await main_menu.get_node("%WeeklyButton").gen_and_play(false)
 		elif marathon_dif != -1:

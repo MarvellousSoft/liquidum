@@ -846,7 +846,7 @@ func _on_continue_button_pressed() -> void:
 		show_big_ad.manually_seeded = manually_seeded
 		show_big_ad.marathon_time = running_time
 		show_big_ad.marathon_mistakes = int(Counters.mistake.count)
-		show_big_ad.is_weekly = is_weekly()
+		show_big_ad.jump_to_next_weekly = is_weekly() and recurring_marathon_left > 0
 		TransitionManager.change_scene(show_big_ad)
 	elif is_weekly() and recurring_marathon_left > 0:
 		var main_menu: Node = TransitionManager.stack.back()

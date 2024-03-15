@@ -346,7 +346,7 @@ func _on_button_mouse_entered():
 func _on_marathon_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	%Marathon/Button.hide()
-	%Marathon/Slider.value = 5
+	%Marathon/Slider.value = 10
 	%Marathon/Slider.show()
 	_update()
 
