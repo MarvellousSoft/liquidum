@@ -25,14 +25,14 @@ func _ready() -> void:
 	super()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	if has_node("$HBox"):
+	if has_node("HBox"):
 		custom_minimum_size = $HBox.size
 
 func _process(dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 	var factor = clamp(LERP_F*dt, 0.0, 1.0)
-	if has_node("$HBox"):
+	if has_node("HBox"):
 		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
 	
 
@@ -56,6 +56,7 @@ func _update() -> void:
 		%LeaderboardsButton.visible = unlocked
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
 	if Global.is_mobile:
+		%StreakContainer.visible = unlocked
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
