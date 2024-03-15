@@ -176,7 +176,7 @@ func update_campaign_stats() -> void:
 		flushNewAchievements()
 
 func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
-		_achieve("marathon_%s_10_no_mistakes" % RandomHub.Difficulty.find_key(dif).to_lower())
+	_achieve("marathon_%s_10_no_mistakes" % RandomHub.Difficulty.find_key(dif).to_lower())
 
 func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
-		_achieve("marathon_%s_10_speedrun" % RandomHub.Difficulty.find_key(dif).to_lower())
+	_achieve("marathon_%s_10_speedrun" % RandomHub.Difficulty.find_key(dif).to_lower())

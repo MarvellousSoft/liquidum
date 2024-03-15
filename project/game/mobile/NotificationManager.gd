@@ -46,16 +46,10 @@ func _on_permission_completed() -> void:
 			impl.openAppSetting()
 
 func _notif_title(weekday: Time.Weekday) -> String:
-	var txt := tr("DAILY_NOTIF_TITLE") % [tr(DailyButton._level_name_tr(weekday)), DailyButton.WEEKDAY_EMOJI[weekday]]
-	if weekday == Time.WEEKDAY_MONDAY:
-		txt += " + %s" % tr("WEEKLY_LEVEL")
-	return txt
+	return tr("DAILY_NOTIF_TITLE") % [tr(DailyButton._level_name_tr(weekday)), DailyButton.WEEKDAY_EMOJI[weekday]]
 
-func _notif_desc(weekday: Time.Weekday) -> String:
-	if weekday == Time.WEEKDAY_MONDAY:
-		return tr("DAILY_NOTIF_DESC_MONDAY")
-	else:
-		return tr("DAILY_NOTIF_DESC")
+func _notif_desc(_weekday: Time.Weekday) -> String:
+	return tr("DAILY_NOTIF_DESC")
 
 func do_add_daily_notif() -> void:
 	for day in 7:

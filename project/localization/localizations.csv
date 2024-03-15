@@ -319,11 +319,10 @@ NEW,New!,Novo!,Novo!
 BY_AUTHOR,by %s,por %s,por %s
 PLAY_ON_ANDROID,Play on Android,Jogue no Android,Jogue no Android
 TIMES_COMPLETED,Completed: %s,Completados: %s,Completados: %s
-CONFIRMATION_DAILY_NOTIF,You have unlocked daily and weekly levels. Would you like a daily notification to complete the level? This can be changed at any time in settings.,Você desbloqueou níveis diários e semanais. Gostaria de uma notificação diária pra completar o nível? Isso pode ser mudado nas configurações a qualquer momento.,Você desbloqueou níveis diários. Gostaria de uma notificação diária pra completar o nível? Isso pode ser mudado nas configurações a qualquer momento.
+CONFIRMATION_DAILY_NOTIF,You have unlocked daily levels. Would you like a daily notification to complete the level? This can be changed at any time in settings.,Você desbloqueou níveis diários. Gostaria de uma notificação diária pra completar o nível? Isso pode ser mudado nas configurações a qualquer momento.,Você desbloqueou níveis diários. Gostaria de uma notificação diária pra completar o nível? Isso pode ser mudado nas configurações a qualquer momento.
 DAILY_NOTIF,Daily level notification,Notificação do nível diário,Notificação do nível diário
 DAILY_NOTIF_TITLE,Liquidum: %s %s,Liquidum: %s %s,Liquidum: %s %s
 DAILY_NOTIF_DESC,Play the daily level to keep your streak!,Jogue o nível diário pra manter sua sequência!,Jogue o nível diário pra manter sua sequência!
-DAILY_NOTIF_DESC_MONDAY,Play the daily and weekly levels to keep your streak!,Jogue os níveis diário e semanal pra manter sua sequência!,Jogue os níveis diário e semanal pra manter sua sequência!
 UNLOCK_EVERYTHING_BUTTON,Unlock everything,Desbloquear tudo,Desbloquear tudo
 UNLOCK_EVERYTHING_DESC,"Unlock all levels, daily level\nand Explorer Mode difficulties","Desbloqueia todos níveis, o nível diário,\ne dificuldades do Modo Explorador","Desbloqueia todos níveis, o nível diário,\ne dificuldades do Modo Explorador"
 SKIP_ANIMS,Skip animations,Pular animações,Pular animações
