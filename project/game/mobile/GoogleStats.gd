@@ -91,3 +91,9 @@ func update_campaign_stats() -> void:
 			else:
 				pass
 		extra_section += 1
+
+func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
+	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_flawless_10marathon__%s" % RandomHub.Difficulty.find_key(dif).to_lower()])
+
+func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
+	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_fast_10marathon__%s" % RandomHub.Difficulty.find_key(dif).to_lower()])

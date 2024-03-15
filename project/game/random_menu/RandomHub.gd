@@ -184,7 +184,7 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		level.reset_mistakes_on_reset = false
 		level.running_time = marathon_time
 		level.initial_mistakes = marathon_mistakes
-	level.won.connect(_level_completed.bind(data.difficulty, data.manually_seeded))
+	level.won.connect(_level_completed.bind(data.difficulty, data.manually_seeded, data.marathon_left, data.marathon_total))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
 	else:
@@ -198,7 +198,7 @@ func _confirm_new_level() -> bool:
 	return true
 
 
-func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: bool) -> void:
+func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
@@ -206,6 +206,13 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: boo
 	stats.increment_random_any()
 	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and not manually_seeded:
 		stats.increment_insane_good()
+	if marathon_total == 10 and marathon_left == 0:
+		if info.mistakes == 0:
+			stats.unlock_flawless_marathon(dif)
+		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
+		if info.mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
+			stats.unlock_fast_marathon(dif)
+			
 
 
 func _on_continue_pressed() -> void:

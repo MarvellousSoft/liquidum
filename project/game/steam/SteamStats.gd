@@ -175,3 +175,9 @@ func update_campaign_stats() -> void:
 		extra_section += 1
 	if any:
 		flushNewAchievements()
+
+func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
+	_achieve("marathon_%s_10_no_mistakes" % RandomHub.Difficulty.find_key(dif).to_lower())
+
+func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
+	_achieve("marathon_%s_10_speedrun" % RandomHub.Difficulty.find_key(dif).to_lower())

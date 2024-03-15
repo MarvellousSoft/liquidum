@@ -48,3 +48,9 @@ func unlock_recurring_no_mistakes(_type: RecurringMarathon.Type) -> void:
 
 func update_campaign_stats() -> void:
 	pass
+
+func unlock_flawless_marathon(_dif: RandomHub.Difficulty) -> void:
+	pass
+
+func unlock_fast_marathon(_dif: RandomHub.Difficulty) -> void:
+	pass
