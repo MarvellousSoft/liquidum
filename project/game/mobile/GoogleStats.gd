@@ -42,6 +42,9 @@ func increment_recurring_started(_type: RecurringMarathon.Type) -> void:
 func increment_insane_good() -> void:
 	GooglePlayGameServices.achievements_increment(GooglePlayGameServices.ids.achievement_ultimate_explorer, 1)
 
+func increment_endless_good() -> void:
+	GooglePlayGameServices.achievements_increment(GooglePlayGameServices.ids.achievement_100__levels, 1)
+
 func increment_workshop() -> void:
 	push_error("No workshop in mobile build")
 

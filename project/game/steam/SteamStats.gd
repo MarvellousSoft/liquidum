@@ -34,9 +34,18 @@ func set_random_levels(completed_count: Array[int]) -> void:
 		flushNewAchievements()
 
 func set_endless_completed(completed_count: Array[int]) -> void:
+	var any := false
+	var total := 0
 	for i in completed_count.size():
 		var stat_name := "endless_%02d_levels" % [i + 1]
 		SteamManager.steam.setStatInt(stat_name, completed_count[i])
+		total += completed_count[i]
+	if total >= 1 and _achieve("endless_1", false):
+		any = true
+	if _set_stat_with_goal("endless_levels", total, 10, "endless_10", 5):
+		any = true
+	if any:
+		flushNewAchievements()
 
 
 func _find_leaderboard(l_name: String) -> int:
@@ -85,6 +94,11 @@ func increment_recurring_good(type: RecurringMarathon.Type) -> void:
 func increment_recurring_started(type: RecurringMarathon.Type) -> void:
 	_increment("%s_started" % RecurringMarathon.type_name(type))
 
+func increment_endless_good() -> void:
+	var l_name := "endless_good_levels"
+	var prev: int = SteamManager.steam.getStatInt(l_name)
+	if _set_stat_with_goal(l_name, prev + 1, 100, "endless_100", 10):
+		flushNewAchievements()
 
 func increment_insane_good() -> void:
 	const l_name := "random_insane_good_levels"

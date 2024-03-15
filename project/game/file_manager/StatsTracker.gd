@@ -40,6 +40,9 @@ func increment_random_any() -> void:
 func increment_workshop() -> void:
 	pass
 
+func increment_endless_good() -> void:
+	pass
+
 func unlock_recurring_no_mistakes(_type: RecurringMarathon.Type) -> void:
 	pass
 
