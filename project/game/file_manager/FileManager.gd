@@ -4,6 +4,7 @@ const CURRENT_PROFILE := "user://cur_profile.txt"
 const DATA_DIR := "res://database/levels"
 const EXTRA_DIR := "res://database/extra_levels"
 const DAILIES_DIR := "res://database/dailies"
+const WEEKLIES_DIR := "res://database/weeklies"
 const RANDOM_DIR := "res://database/random"
 const DEFAULT_PROFILE := "fish"
 const PROFILE_FILE := "profile.save"
@@ -298,6 +299,12 @@ func load_preprocessed_endless(section: int) -> PreprocessedEndless:
 
 func save_preprocessed_endless(section: int, data: PreprocessedEndless) -> void:
 	_save_json_data(_extra_level_data_dir(section), PREPROCESSED_JSON, data.get_data())
+
+func load_preprocessed_weeklies(year: int) -> PreprocessedWeeklies:
+	return PreprocessedWeeklies.load_data(_load_json_data(WEEKLIES_DIR, str(year) + JSON_EXT))
+
+func save_preprocessed_weeklies(year: int, data: PreprocessedWeeklies) -> void:
+	_save_json_data(WEEKLIES_DIR, str(year) + JSON_EXT, data.get_data())
 
 func _flavor_dir(s_name: String) -> String:
 	return "res://database/flavors/%s" % [s_name]

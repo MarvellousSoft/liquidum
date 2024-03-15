@@ -40,28 +40,35 @@ func _update() -> void:
 	super()
 
 
-func possible_flavors() -> Array[RandomFlavors.Flavor]:
+static func possible_flavors() -> Array[RandomFlavors.Flavor]:
 	var arr: Array[RandomFlavors.Flavor] = []
 	for i in 7:
 		arr.append(i as RandomFlavors.Flavor)
 	arr.append_array([RandomFlavors.Flavor.Basic, RandomFlavors.Flavor.Diagonals, RandomFlavors.Flavor.Everything])
-	assert(arr.size() == marathon_size)
 	return arr
 
-
-func generate_level(marathon_i: int) -> LevelData:
+static func gen_level(gen: RandomLevelGenerator, monday: String, marathon_i: int, m_size: int) -> LevelData:
 	var rng := RandomNumberGenerator.new()
-	rng.seed = RandomHub.consistent_hash(curr_monday)
+	rng.seed = RandomHub.consistent_hash(monday)
 	# Here, use rng for stuff that only changes weekly
 	var flavors := possible_flavors()
 	Global.shuffle(flavors, rng)
 	# And now, rng for this specific level
-	rng.seed = RandomHub.consistent_hash("%s_%02d" % [curr_monday, marathon_i])
-	var g := await RandomFlavors.gen(l_gen, rng, flavors[marathon_i - 1])
+	rng.seed = RandomHub.consistent_hash("%s_%02d" % [monday, marathon_i])
+	var preprocessed: int = FileManager.load_preprocessed_weeklies(int(monday.substr(0, 4))).success_state(monday, marathon_i - 1)
+	if preprocessed != 0:
+		rng.state = preprocessed
+	var g := await RandomFlavors.gen(gen, rng, flavors[marathon_i - 1])
+	if preprocessed != 0:
+		assert(gen.success_state == preprocessed)
 	if g != null:
-		var full_name := "%s (%d⁄%d)" % [tr("WEEKLY_LEVEL"), marathon_i, marathon_size]
+		var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
+		var full_name := "%s (%d⁄%d)" % [server.tr("WEEKLY_LEVEL"), marathon_i, m_size]
 		return LevelData.new(full_name, "", g.export_data(), "")
 	return null
+
+func generate_level(marathon_i: int) -> LevelData:
+	return await WeeklyButton.gen_level(l_gen, curr_monday, marathon_i, marathon_size)
 
 func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 	var mistakes_str: String = DailyButton._mistakes_str(mistakes)

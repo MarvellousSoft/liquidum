@@ -189,3 +189,39 @@ func _on_endless_button_pressed() -> void:
 func _on_reset_stats_pressed():
 	SteamManager.steam.resetAllStats(true)
 	SteamManager.steam.requestCurrentStats()
+
+
+func _on_preprocess_weeklies_pressed() -> void:
+	var year := int(%WeekliesYear.text)
+	var prep := FileManager.load_preprocessed_weeklies(year)
+	var unixtime := Time.get_unix_time_from_datetime_string(PreprocessedWeeklies.first_monday_of_the_year(year))
+	var gen := RandomLevelGenerator.new()
+	%WeekliesProgress.value = 0
+	%WeekliesProgress.visible = true
+	%WeekliesButton.visible = false
+	%WeekliesYear.visible = false
+	%WeekliesCancel.visible = true
+	%WeekliesCancel.button_pressed = false
+	var watch := Stopwatch.new()
+	while true:
+		var monday := Time.get_datetime_string_from_unix_time(unixtime)
+		monday = monday.substr(0, monday.find("T"))
+		for i in 10:
+			if not monday.begins_with(str(year)) or %WeekliesCancel.button_pressed:
+				break
+			if prep.success_state(monday, i) == 0:
+				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
+				prep.set_success_state(monday, i, gen.success_state)
+			elif $Buttons/PrepCheck.button_pressed:
+				# Check it is correct
+				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
+			if watch.elapsed() > 30.:
+				watch.elapsed_reset()
+				FileManager.save_preprocessed_weeklies(2024, prep)
+		%WeekliesProgress.value += 1
+		unixtime += 7 * 24 * 60 * 60
+	%WeekliesProgress.visible = false
+	%WeekliesYear.visible = true
+	%WeekliesButton.visible = true
+	%WeekliesCancel.visible = false
+	FileManager.save_preprocessed_weeklies(2024, prep)
