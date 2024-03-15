@@ -24,8 +24,8 @@ expand_margin_top = 20.0
 expand_margin_right = 30.0
 expand_margin_bottom = 20.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rnspo"]
-bg_color = Color(0.133333, 0.513726, 0.6, 0.294118)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yfwws"]
+bg_color = Color(0.133333, 0.513726, 0.6, 0.678431)
 border_width_left = 7
 border_width_top = 7
 border_width_right = 7
@@ -146,17 +146,17 @@ theme_override_colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_focus_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_colors/icon_normal_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_pressed_color = Color(1, 0.541176, 0.309804, 1)
-theme_override_colors/icon_hover_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_hover_pressed_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_focus_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_colors/icon_normal_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.64, 0.213333, 0, 1)
+theme_override_colors/icon_hover_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_focus_color = Color(0.85098, 0.282353, 0, 1)
 theme_override_constants/outline_size = 40
 theme_override_constants/h_separation = 19
 theme_override_constants/icon_max_width = 65
 theme_override_font_sizes/font_size = 90
 theme_override_styles/normal = SubResource("StyleBoxFlat_u6r2a")
-theme_override_styles/hover = SubResource("StyleBoxFlat_rnspo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yfwws")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_xoe33")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_nwpt1")
 toggle_mode = true

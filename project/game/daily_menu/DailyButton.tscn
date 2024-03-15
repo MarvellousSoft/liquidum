@@ -25,7 +25,7 @@ expand_margin_right = 30.0
 expand_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51k42"]
-bg_color = Color(0.133333, 0.513726, 0.6, 0.294118)
+bg_color = Color(0.133333, 0.513726, 0.6, 0.678431)
 border_width_left = 7
 border_width_top = 7
 border_width_right = 7
@@ -149,11 +149,11 @@ theme_override_colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_focus_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_colors/icon_normal_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_pressed_color = Color(1, 0.541176, 0.309804, 1)
-theme_override_colors/icon_hover_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_hover_pressed_color = Color(1, 0.611765, 0.415686, 1)
-theme_override_colors/icon_focus_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_colors/icon_normal_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.639216, 0.211765, 0, 1)
+theme_override_colors/icon_hover_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_focus_color = Color(0.85098, 0.282353, 0, 1)
 theme_override_constants/outline_size = 40
 theme_override_constants/h_separation = 19
 theme_override_constants/icon_max_width = 65
