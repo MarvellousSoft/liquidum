@@ -18,6 +18,7 @@ func possible_flavors() -> Array[RandomFlavors.Flavor]:
 func _init() -> void:
 	tr_name = "WEEKLY"
 	marathon_size = 10
+	streak_max_mistakes = 5
 
 func _day_strip_time(unixtime: int) -> String:
 	var day_with_time := Time.get_date_string_from_unix_time(unixtime)
@@ -62,11 +63,6 @@ func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 		total = tr(&"TOTAL" if marathon_i == marathon_size else &"SO_FAR"),
 	})
 
-func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
-	if marathon_i == marathon_size and info.mistakes == 0:
-		StatsTracker.instance().unlock_weekly_no_mistakes()
-	await super(info, level, marathon_i)
-
 # Returns the string representation of the time when this marathon ends
 func get_deadline() -> String:
 	return deadline_str
@@ -94,3 +90,6 @@ func google_leaderboard() -> String:
 
 func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GooglePlayGameServices.TimeSpan.TIME_SPAN_WEEKLY
+
+func type() -> RecurringMarathon.Type:
+	return RecurringMarathon.Type.Weekly

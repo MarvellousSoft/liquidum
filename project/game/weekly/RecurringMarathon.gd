@@ -5,8 +5,12 @@ extends Control
 const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
-@export var tr_name: String
-@export var marathon_size: int
+enum Type { Daily = 0, Weekly = 1 }
+
+# Initialise these on the constructor
+var tr_name: String
+var marathon_size: int
+var streak_max_mistakes: int
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
@@ -16,6 +20,9 @@ const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
 var deadline: int = -1
 var already_uploaded := false
+
+static func type_name(t: Type) -> String:
+	return Type.find_key(t).to_lower()
 
 # UTC unix time
 static func _unixtime() -> int:
@@ -71,6 +78,7 @@ func _update() -> void:
 		MainButton.tooltip_text = "RECURRING_TOOLTIP_DISABLED"
 		return
 	_update_time_left()
+	_update_streak()
 
 func _update_time_left() -> void:
 	if MainButton.disabled:
@@ -92,6 +100,13 @@ func _update_time_left() -> void:
 		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), txt]
 	else:
 		_update()
+
+func _update_streak() -> void:
+	var data := UserData.current()
+	var id := type()
+	if data.current_streak[id] > 0 and not data.last_day[id] in [current_period(), previous_period()]:
+		data.current_streak[id] = 0
+		UserData.save()
 
 func _on_mouse_entered() -> void:
 	AudioManager.play_sfx("button_hover")
@@ -300,8 +315,28 @@ func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Ar
 func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
 	# TODO: handle marathon
 	level.get_node("%ShareButton").visible = true
+	var stats := StatsTracker.instance()
+	var id := type()
+	if info.first_win and marathon_i == 1 and marathon_size > 1:
+		stats.increment_recurring_started(id)
 	if not info.first_win or marathon_i < marathon_size:
 		return
+	stats.increment_recurring_all(id)
+	var data := UserData.current()
+	if info.mistakes <= streak_max_mistakes:
+		stats.increment_recurring_good(id)
+		if info.mistakes == 0:
+			stats.unlock_recurring_no_mistakes(id)
+		# It the streak was broken this would be handled in _update_streak
+		if current_period() != data.last_day[id]:
+			data.last_day[id] = current_period()
+			data.current_streak[id] += 1
+			data.best_streak[id] = maxi(data.best_streak[id], data.current_streak[id])
+			UserData.save()
+	else:
+		if data.current_streak[id] > 0:
+			data.current_streak[id] = 0
+			UserData.save()
 	if SteamManager.enabled and not already_uploaded:
 		var l_id := await load_current_leaderboard()
 		if l_id != 0:
@@ -396,4 +431,7 @@ func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GridModel.must_be_implemented()
 
 func share_text(_mistakes: int, _secs: int, _marathon_i: int) -> String:
+	return GridModel.must_be_implemented()
+
+func type() -> Type:
 	return GridModel.must_be_implemented()

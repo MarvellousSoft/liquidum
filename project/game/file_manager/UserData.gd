@@ -23,10 +23,10 @@ var random_levels_created: Array[int]
 var endless_completed: Array[int]
 var endless_created: Array[int]
 var monthly_good_dailies: Array[int]
-enum { DAILY, WEEKLY }
 # [daily, weekly]
 var best_streak: Array[int]
 var current_streak: Array[int]
+# Last "day" you won the daily/weekly
 var last_day: Array[String]
 
 func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int]) -> void:
@@ -38,8 +38,6 @@ func _init(random_levels_completed_: Array[int], random_levels_created_: Array[i
 	current_streak = current_streak_
 	last_day = last_day_
 	monthly_good_dailies = monthly_good_dailies_
-	print(best_streak)
-	print(current_streak)
 
 func get_data() -> Dictionary:
 	return {
@@ -58,8 +56,8 @@ func save_stats() -> void:
 	var stats := StatsTracker.instance()
 	stats.set_random_levels(random_levels_completed)
 	stats.set_endless_completed(endless_completed)
-	stats.set_daily_streak(current_streak[DAILY], best_streak[WEEKLY])
-	stats.set_weekly_streak(current_streak[DAILY], best_streak[WEEKLY])
+	for type in RecurringMarathon.Type.values():
+		stats.set_recurring_streak(type, current_streak[type], best_streak[type])
 
 func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:

@@ -21,6 +21,7 @@ static func _yesterday() -> String:
 func _init() -> void:
 	tr_name = "DAILY"
 	marathon_size = 1
+	streak_max_mistakes = 2
 
 func _ready() -> void:
 	super()
@@ -65,12 +66,10 @@ func get_deadline() -> String:
 	return today + "T23:59:59"
 
 func _update_streak() -> void:
+	super()
 	var data := UserData.current()
-	if data.current_streak > 0 and data.last_day < yesterday:
-		data.current_streak = 0
-		UserData.save()
-	CurStreak.text = str(data.current_streak)
-	BestStreak.text = str(data.best_streak)
+	CurStreak.text = str(data.current_streak[type()])
+	BestStreak.text = str(data.best_streak[type()])
 
 static func _level_name_tr(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
@@ -112,23 +111,6 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		return
 	if info.mistakes < 3:
 		await bump_monthly_challenge()
-	var stats := StatsTracker.instance()
-	stats.increment_daily_all()
-	var data := UserData.current()
-	if info.mistakes < 3:
-		stats.increment_daily_good()
-		if info.mistakes == 0:
-			stats.unlock_daily_no_mistakes()
-		# It the streak was broken this would be handled in _update_streak
-		if today != data.last_day:
-			data.last_day = today
-			data.current_streak += 1
-			data.best_streak = maxi(data.best_streak, data.current_streak)
-			UserData.save()
-	else:
-		if data.current_streak > 0:
-			data.current_streak = 0
-			UserData.save()
 
 func _on_dark_mode_changed(is_dark: bool):
 	MainButton.theme = Global.get_theme(is_dark)
@@ -211,3 +193,6 @@ func google_leaderboard() -> String:
 
 func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY
+
+func type() -> RecurringMarathon.Type:
+	return RecurringMarathon.Type.Daily

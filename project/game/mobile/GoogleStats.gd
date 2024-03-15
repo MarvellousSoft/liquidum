@@ -19,23 +19,24 @@ func increment_random_any() -> void:
 
 func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
+	
+const STREAK_ACH: Array[int] = [7, 4]
 
-func _set_streak_impl(type: String, streak: int, best_streak: int, streak_ach: int) -> void:
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_current_%s_streak" % type], float(streak))
-	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_max_%s_streak" % type], float(best_streak))
-	if streak >= streak_ach:
-		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_%d_%s_streak" % [streak_ach, type]])
+func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
+	var type_name := RecurringMarathon.type_name(type)
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_current_%s_streak" % type_name], float(streak))
+	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_max_%s_streak" % type_name], float(best_streak))
+	var ach := STREAK_ACH[type]
+	if streak >= ach:
+		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_%d_%s_streak" % [ach, type_name]])
 
-func set_daily_streak(streak: int, best_streak: int) -> void:
-	_set_streak_impl("daily", streak, best_streak, 7)
-
-func set_weekly_streak(streak: int, best_streak: int) -> void:
-	_set_streak_impl("weekly", streak, best_streak, 4)
-
-func increment_daily_all() -> void:
+func increment_recurring_all(_type: RecurringMarathon.Type) -> void:
 	pass
 
-func increment_daily_good() -> void:
+func increment_recurring_good(_type: RecurringMarathon.Type) -> void:
+	pass
+
+func increment_recurring_started(_type: RecurringMarathon.Type) -> void:
 	pass
 
 func increment_insane_good() -> void:
@@ -44,11 +45,8 @@ func increment_insane_good() -> void:
 func increment_workshop() -> void:
 	push_error("No workshop in mobile build")
 
-func unlock_daily_no_mistakes() -> void:
-	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_flawless_daily)
-
-func unlock_weekly_no_mistakes() -> void:
-	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_flawless_weekly)
+func unlock_recurring_no_mistakes(type: RecurringMarathon.Type) -> void:
+	GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_flawless_%s" % RecurringMarathon.type_name(type)])
 
 func update_campaign_stats() -> void:
 	GooglePlayGameServices.achievements_load()
