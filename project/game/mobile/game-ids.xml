@@ -31,8 +31,8 @@
   <string name="achievement_campaign_completed" translatable="false">CgkIxZaA3LgPEAIQFg</string>
   <!--achievement Flawless daily-->
   <string name="achievement_flawless_daily" translatable="false">CgkIxZaA3LgPEAIQFw</string>
-  <!--achievement 1 week streak-->
-  <string name="achievement_1_week_streak" translatable="false">CgkIxZaA3LgPEAIQGA</string>
+  <!--achievement 7 daily streak-->
+  <string name="achievement_7_daily_streak" translatable="false">CgkIxZaA3LgPEAIQGA</string>
   <!--achievement Initiate explorer-->
   <string name="achievement_initiate_explorer" translatable="false">CgkIxZaA3LgPEAIQGQ</string>
   <!--achievement Intermediate explorer-->
@@ -41,14 +41,44 @@
   <string name="achievement_expert_explorer" translatable="false">CgkIxZaA3LgPEAIQGw</string>
   <!--achievement Ultimate explorer-->
   <string name="achievement_ultimate_explorer" translatable="false">CgkIxZaA3LgPEAIQHA</string>
-  <!--leaderboard (OLD) Daily level (1 hour mistake penalty)-->
-  <string name="leaderboard_old_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
+  <!--achievement Flawless 10-marathon - Easy-->
+  <string name="achievement_flawless_10marathon__easy" translatable="false">CgkIxZaA3LgPEAIQHg</string>
+  <!--achievement Fast 10-marathon - Easy-->
+  <string name="achievement_fast_10marathon__easy" translatable="false">CgkIxZaA3LgPEAIQHw</string>
+  <!--achievement Flawless 10-marathon - Medium-->
+  <string name="achievement_flawless_10marathon__medium" translatable="false">CgkIxZaA3LgPEAIQIA</string>
+  <!--achievement Fast 10-marathon - Medium-->
+  <string name="achievement_fast_10marathon__medium" translatable="false">CgkIxZaA3LgPEAIQIQ</string>
+  <!--achievement Flawless 10-marathon - Hard-->
+  <string name="achievement_flawless_10marathon__hard" translatable="false">CgkIxZaA3LgPEAIQIg</string>
+  <!--achievement Fast 10-marathon - Hard-->
+  <string name="achievement_fast_10marathon__hard" translatable="false">CgkIxZaA3LgPEAIQIw</string>
+  <!--achievement Flawless 10-marathon - Expert-->
+  <string name="achievement_flawless_10marathon__expert" translatable="false">CgkIxZaA3LgPEAIQJA</string>
+  <!--achievement Fast 10-marathon - Expert-->
+  <string name="achievement_fast_10marathon__expert" translatable="false">CgkIxZaA3LgPEAIQJQ</string>
+  <!--achievement Flawless 10-marathon - Insane-->
+  <string name="achievement_flawless_10marathon__insane" translatable="false">CgkIxZaA3LgPEAIQJg</string>
+  <!--achievement Fast 10-marathon - Insane-->
+  <string name="achievement_fast_10marathon__insane" translatable="false">CgkIxZaA3LgPEAIQJw</string>
+  <!--achievement 1 ∞ level-->
+  <string name="achievement_1__level" translatable="false">CgkIxZaA3LgPEAIQKA</string>
+  <!--achievement 10 ∞ levels-->
+  <string name="achievement_10__levels" translatable="false">CgkIxZaA3LgPEAIQKQ</string>
+  <!--achievement 100 ∞ levels-->
+  <string name="achievement_100__levels" translatable="false">CgkIxZaA3LgPEAIQKg</string>
+  <!--achievement Done & Solved-->
+  <string name="achievement_done__solved" translatable="false">CgkIxZaA3LgPEAIQKw</string>
+  <!--achievement Reflected-->
+  <string name="achievement_reflected" translatable="false">CgkIxZaA3LgPEAIQLA</string>
+  <!--leaderboard Daily level (1h mistake penalty)-->
+  <string name="leaderboard_daily_level_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQHQ</string>
   <!--leaderboard March Challenge-->
   <string name="leaderboard_march_challenge" translatable="false">CgkIxZaA3LgPEAIQBw</string>
   <!--leaderboard Current Daily Streak-->
   <string name="leaderboard_current_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCQ</string>
   <!--leaderboard Max Daily Streak-->
   <string name="leaderboard_max_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCg</string>
-  <!--leaderboard Daily level (1h mistake penalty)-->
-  <string name="leaderboard_daily_level_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQHQ</string>
+  <!--leaderboard (OLD) Daily level (1 hour mistake penalty)-->
+  <string name="leaderboard_old_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
 </resources>
