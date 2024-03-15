@@ -33,7 +33,7 @@ func _enter_tree() -> void:
 	Profile.unlock_everything_changed.connect(_on_unlock_changed)
 	Global.dev_mode_toggled.connect(_on_unlock_changed)
 	if extra_levels and Global.is_mobile and AdManager.payment != null:
-		AdManager.payment.purchased_section.connect(_on_purchased_section)
+		AdManager.payment.dlc_purchased.connect(_on_dlc_purchased)
 	check_unlocks()
 
 
@@ -42,9 +42,9 @@ func _exit_tree() -> void:
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	SteamManager.overlay_toggled.disconnect(_on_overlay_toggled)
 	if extra_levels and Global.is_mobile and AdManager.payment != null:
-		AdManager.payment.purchased_section.disconnect(_on_purchased_section)
+		AdManager.payment.dlc_purchased.disconnect(_on_dlc_purchased)
 
-func _on_purchased_section(_section: int) -> void:
+func _on_dlc_purchased(_id: String) -> void:
 	update_sections()
 
 func _on_unlock_changed(on: bool) -> void:
