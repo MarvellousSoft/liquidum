@@ -74,7 +74,9 @@ func _update() -> void:
 	var save := load_level_save(marathon_completed + 1) if marathon_completed < marathon_size else null
 	OngoingSolution.visible = save != null and not save.is_solution_empty()
 	Completed.visible = marathon_completed == marathon_size 
-	NotCompleted.visible = not Completed.visible
+	NotCompleted.visible = not Completed.visible and unlocked
+	if has_node("%TimeBox"):
+		%TimeBox.visible = unlocked
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:

@@ -54,6 +54,7 @@ func _ready():
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
 	Camera.position = cam_pos.menu
 	AudioManager.play_bgm("main")
+	UserData.current().save_stats()
 	
 	await get_tree().process_frame
 	

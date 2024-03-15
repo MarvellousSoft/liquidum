@@ -53,7 +53,6 @@ func _update() -> void:
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
-	%TimeBox.visible = unlocked
 	if Global.is_mobile:
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
