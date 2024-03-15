@@ -197,6 +197,12 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
+# Let's just upload for now, we'll display later
+func upload_marathon_result(info: Level.WinInfo, marathon_size: int, dif: Difficulty) -> void:
+	if not SteamManager.enabled:
+		return
+	var l_id: int = await SteamManager.get_or_create_leaderboard("%s_marathon_%d" % [Difficulty.find_key(dif).to_lower(), marathon_size], SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+	await RecurringMarathon.upload_leaderboard(l_id, info, true)
 
 func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
 	# Save was already deleted
@@ -212,7 +218,8 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: boo
 		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
 		if info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
 			stats.unlock_fast_marathon(dif)
-			
+	if marathon_left == 0 and marathon_total >= 5 and marathon_total <= 100 and (marathon_total % 5) == 0 and not manually_seeded:
+		await upload_marathon_result(info, marathon_total, dif)
 
 
 func _on_continue_pressed() -> void:

@@ -188,11 +188,11 @@ func load_current_leaderboard() -> int:
 func load_previous_leaderboard() -> int:
 	return await _load_leaderboard(steam_previous_leaderboard())
 
-func get_monthly_leaderboard(month_str: String) -> int:
+static func get_monthly_leaderboard(month_str: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
 			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
 
-func get_my_flair() -> Flair:
+static func get_my_flair() -> Flair:
 	if DEV_IDS.has(SteamManager.steam.getSteamID()):
 		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
 	var last_month_dict := Time.get_datetime_dict_from_datetime_string(DailyButton._today(), false)
@@ -209,17 +209,17 @@ func get_my_flair() -> Flair:
 		return Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
 	return null
 
-func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
-	if not SteamManager.enabled:
+static func upload_leaderboard(l_id: int, info: Level.WinInfo, keep_best: bool) -> void:
+	if not SteamManager.enabled or l_id == -1:
 		return
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	var score: int = mini(info.total_marathon_mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
 	var flair := await get_my_flair()
-	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
+	SteamManager.steam.uploadLeaderboardScore(score, keep_best, LeaderboardDetails.new(flair).to_arr(), l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 	if not ret[0]:
-		push_warning("Failed to upload entry for %s" % [tr_name])
+		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
 
 class ListEntry:
 	var global_rank: int
@@ -360,7 +360,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 	if SteamManager.enabled and not already_uploaded:
 		var l_id := await load_current_leaderboard()
 		if l_id != 0:
-			await upload_leaderboard(l_id, info)
+			await RecurringMarathon.upload_leaderboard(l_id, info, false)
 			var l_data := await get_leaderboard_data(l_id)
 			display_leaderboard(l_data, [], level)
 	elif GooglePlayGameServices.enabled:
