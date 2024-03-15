@@ -1,9 +1,82 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtcuemu2b1rcx"]
+[gd_scene load_steps=10 format=3 uid="uid://dtcuemu2b1rcx"]
 
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="2_u6wd6"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="3_jx7ca"]
+[ext_resource type="Texture2D" uid="uid://2on37y0kql6h" path="res://assets/images/ui/icons/streak_fire.png" id="3_km1cv"]
 [ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="3_ngoi4"]
 [ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_73s70"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ewhx4"]
+bg_color = Color(0.113725, 0.454902, 0.529412, 0.156863)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51k42"]
+bg_color = Color(0.133333, 0.513726, 0.6, 0.294118)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w0r21"]
+bg_color = Color(0.0352941, 0.211765, 0.34902, 0)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2hwv"]
+bg_color = Color(0.223529, 0.254902, 0.258824, 0.113725)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.117647, 0.12549, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 20.0
 
 [node name="DailyButton" type="Control"]
 layout_mode = 3
@@ -42,7 +115,12 @@ offset_top = 101.0
 offset_right = 118.0
 offset_bottom = 171.0
 
-[node name="TimeLeft" type="Label" parent="HBox/VBoxContainer"]
+[node name="TimeBox" type="HBoxContainer" parent="HBox/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="TimeLeft" type="Label" parent="HBox/VBoxContainer/TimeBox"]
 unique_name_in_owner = true
 layout_mode = 2
 auto_translate = false
@@ -52,10 +130,49 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[node name="StreakContainer" type="GridContainer" parent="HBox/VBoxContainer"]
+[node name="-" type="Label" parent="HBox/VBoxContainer/TimeBox"]
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+text = "-"
+vertical_alignment = 1
+
+[node name="StreakButton" type="Button" parent="HBox/VBoxContainer/TimeBox"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "STREAK_TOOLTIP"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_pressed_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_focus_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_colors/icon_normal_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_colors/icon_pressed_color = Color(1, 0.541176, 0.309804, 1)
+theme_override_colors/icon_hover_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_colors/icon_focus_color = Color(1, 0.611765, 0.415686, 1)
+theme_override_constants/outline_size = 40
+theme_override_constants/h_separation = 19
+theme_override_constants/icon_max_width = 65
+theme_override_font_sizes/font_size = 90
+theme_override_styles/normal = SubResource("StyleBoxFlat_ewhx4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_51k42")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_w0r21")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_w2hwv")
+toggle_mode = true
+text = "6"
+icon = ExtResource("3_km1cv")
+alignment = 0
+icon_alignment = 2
+
+[node name="StreakContainer" type="GridContainer" parent="HBox/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+tooltip_text = "DAILY_STREAK_TOOLTIP"
 theme_override_constants/h_separation = 25
 columns = 2
 
@@ -144,6 +261,7 @@ autostart = true
 
 [connection signal="mouse_entered" from="HBox/VBoxContainer/MarginContainer/MainButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="HBox/VBoxContainer/MarginContainer/MainButton" to="." method="_on_main_button_pressed"]
+[connection signal="toggled" from="HBox/VBoxContainer/TimeBox/StreakButton" to="." method="_on_streak_button_toggled"]
 [connection signal="mouse_entered" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_exited"]
 [connection signal="pressed" from="HBox/Completed" to="." method="_on_share_pressed"]

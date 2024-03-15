@@ -100,6 +100,7 @@ theme_override_constants/separation = 50
 [node name="MainButton" type="Button" parent="HBox/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "WEEKLY_TOOLTIP"
 focus_mode = 0
 text = "WEEKLY_BUTTON"
 
@@ -168,7 +169,7 @@ icon_alignment = 2
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-tooltip_text = "STREAK_TOOLTIP"
+tooltip_text = "WEEKLY_STREAK_TOOLTIP"
 theme_override_constants/h_separation = 25
 columns = 2
 
