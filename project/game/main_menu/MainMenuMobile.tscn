@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
-[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="7_gx8im"]
@@ -120,8 +120,6 @@ custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("8_i0ntq")
-tr_name = null
-marathon_size = null
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer/VBoxContainer/DailyButton"]
 layout_mode = 2
