@@ -3,9 +3,7 @@ extends RecurringMarathon
 
 const DAY_STR := ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 const WEEKDAY_EMOJI := ["🐟", "💧", "⛵", "〽️", "❓", "💦", "1️⃣"]
-
-@onready var CurStreak = %CurStreak
-@onready var BestStreak = %BestStreak
+const LERP_F = 4.0
 
 var today: String
 var yesterday: String
@@ -27,10 +25,14 @@ func _ready() -> void:
 	super()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	custom_minimum_size = $HBox.size
 
-func _process(_dt: float) -> void:
+func _process(dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
+	var factor = clamp(LERP_F*dt, 0.0, 1.0)
+	custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+	
 
 func _update() -> void:
 	today = DailyButton._today()
@@ -51,7 +53,7 @@ func _update() -> void:
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
 		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
-	%StreakContainer.visible = unlocked
+	%TimeBox.visible = unlocked
 	if Global.is_mobile:
 		%DailyUnlockText.visible = not unlocked
 		# Looks better
@@ -59,17 +61,10 @@ func _update() -> void:
 
 	if not unlocked:
 		return
-	
-	_update_streak()
 
 func get_deadline() -> String:
 	return today + "T23:59:59"
 
-func _update_streak() -> void:
-	super()
-	var data := UserData.current()
-	CurStreak.text = str(data.current_streak[type()])
-	BestStreak.text = str(data.best_streak[type()])
 
 static func _level_name_tr(weekday: Time.Weekday) -> String:
 	return "%s_LEVEL" % DAY_STR[weekday]
@@ -196,3 +191,9 @@ func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 
 func type() -> RecurringMarathon.Type:
 	return RecurringMarathon.Type.Daily
+
+
+func _on_streak_button_toggled(button_pressed):
+	%StreakContainer.visible = button_pressed
+	if button_pressed:
+		streak_opened.emit()

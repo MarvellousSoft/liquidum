@@ -5,6 +5,8 @@ extends Control
 const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 
+signal streak_opened
+
 enum Type { Daily = 0, Weekly = 1 }
 
 # Initialise these on the constructor
@@ -17,6 +19,9 @@ var streak_max_mistakes: int
 @onready var OngoingSolution = %OngoingSolution
 @onready var Completed = %Completed
 @onready var NotCompleted = %NotCompleted
+@onready var CurStreak = %CurStreak
+@onready var BestStreak = %BestStreak
+@onready var StreakButton = %StreakButton
 
 var deadline: int = -1
 var already_uploaded := false
@@ -112,6 +117,9 @@ func _update_streak() -> void:
 	if data.current_streak[id] > 0 and not data.last_day[id] in [current_period(), previous_period()]:
 		data.current_streak[id] = 0
 		UserData.save()
+	StreakButton.text = str(data.current_streak[type()])
+	CurStreak.text = str(data.current_streak[type()])
+	BestStreak.text = str(data.best_streak[type()])
 
 func _on_mouse_entered() -> void:
 	AudioManager.play_sfx("button_hover")
@@ -166,6 +174,11 @@ func _load_leaderboard(ld_name: String) -> int:
 		return 0
 	else:
 		return await SteamManager.get_or_create_leaderboard(ld_name, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+
+
+func close_streak():
+	%StreakButton.button_pressed = false
+
 
 func load_current_leaderboard() -> int:
 	return await _load_leaderboard(steam_current_leaderboard())

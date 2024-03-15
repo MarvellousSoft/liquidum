@@ -217,20 +217,22 @@ offset_bottom = 152.0
 focus_mode = 0
 text = "BACK"
 
-[node name="WeeklyButton" parent="." instance=ExtResource("10_kkfou")]
-unique_name_in_owner = true
-layout_mode = 1
-offset_left = 116.0
-offset_top = 1317.0
-offset_right = 116.0
-offset_bottom = 1317.0
+[node name="RecurringEvents" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 1120.0
+offset_right = 130.0
+offset_bottom = 2120.0
+theme_override_constants/separation = 50
+alignment = 2
 
-[node name="DailyButton" parent="." instance=ExtResource("4_o512o")]
+[node name="WeeklyButton" parent="RecurringEvents" instance=ExtResource("10_kkfou")]
+unique_name_in_owner = true
 layout_mode = 2
-offset_left = 118.0
-offset_top = 1620.0
-offset_right = 118.0
-offset_bottom = 1620.0
+
+[node name="DailyButton" parent="RecurringEvents" instance=ExtResource("4_o512o")]
+unique_name_in_owner = true
+layout_mode = 2
 theme = ExtResource("6_nf8ou")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -270,5 +272,7 @@ position_smoothing_speed = 4.0
 [connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
 [connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackExtra" to="." method="_on_back_button_pressed"]
+[connection signal="streak_opened" from="RecurringEvents/WeeklyButton" to="." method="_on_weekly_button_streak_opened"]
+[connection signal="streak_opened" from="RecurringEvents/DailyButton" to="." method="_on_daily_button_streak_opened"]
 
-[editable path="DailyButton"]
+[editable path="RecurringEvents/DailyButton"]

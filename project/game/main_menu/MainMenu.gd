@@ -224,3 +224,11 @@ func _dev_mode_toggled(on: bool) -> void:
 	%ExtraLevelsButton.visible = ExtraLevelLister.count_all_game_sections() > 0
 	if has_node("%WeeklyButton"):
 		%WeeklyButton.visible = on
+
+
+func _on_weekly_button_streak_opened():
+	%DailyButton.close_streak()
+
+
+func _on_daily_button_streak_opened():
+	%WeeklyButton.close_streak()

@@ -4,7 +4,7 @@
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonHoverStyle.tres" id="2_hda1e"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonNormalStyle.tres" id="3_7bdy7"]
-[ext_resource type="StyleBox" path="res://assets/ui/ButtonPressedStyle.tres" id="4_7wtpn"]
+[ext_resource type="StyleBox" uid="uid://ebm3wdl0cees" path="res://assets/ui/ButtonPressedStyle.tres" id="4_7wtpn"]
 [ext_resource type="StyleBox" uid="uid://cs152l3r72fun" path="res://assets/ui/Panel.tres" id="6_px5lc"]
 [ext_resource type="Texture2D" uid="uid://cuwqwtfciylbs" path="res://assets/images/ui/decrement.png" id="7_1dscl"]
 [ext_resource type="Texture2D" uid="uid://j17mu32g03pg" path="res://assets/images/ui/decrement_highlight.png" id="8_2i7sx"]

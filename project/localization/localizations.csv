@@ -131,8 +131,11 @@ LEVEL_06_07,Megalodon,Megalodon,Megalodonte
 LEVEL_06_08,Cthulhu,Cthulhu,Cthulhu
 DAILY_BUTTON,Daily Level,Nivel do Dia,Nivel do Dia
 DAILY_LEVEL_NOT_PLAYED_TOOLTIP,Daily level not completed,Nivel do dia não feito,Nivel do dia não feito
+WEEKLY_LEVEL_NOT_PLAYED_TOOLTIP,Weekly level not completed,Maratona semanal não feita,Maratona semanal não feita
 DAILY_LEVEL_PLAYED_TOOLTIP,Daily level completed!,Nível do dia feito!,Nível do dia feito!
+WEEKLY_LEVEL_PLAYED_TOOLTIP,Weekly level completed!,Maratona semanal feita!,Maratona semanal feita!
 DAILY_TOOLTIP,A hard level that changes daily,Um nível dificil que muda diariamente,Um nível dificil que muda diariamente
+WEEKLY_TOOLTIP,10 hard levels that changes weekly,10 níveis dificeis que mudam semanalmente,10 níveis dificeis que mudam semanalmente
 RECURRING_TOOLTIP_DISABLED,Unlock section 5 to access this,Desbloqueie a seção 5 para acessar isso,Desbloqueie a seção 5 para acessar isso
 UNLOCK_RANDOM_MOBILE,Complete more campaign levels to unlock extra difficulties,Complete mais níveis da campanha para desbloquear dificuldades adicionais,Complete mais níveis da campanha para desbloquear dificuldades adicionais
 DAILY_UNLOCK_MOBILE,(unlock section 5),(desbloqueie a seção 5),(desbloqueie a seção 5)
@@ -255,6 +258,7 @@ ALLOW_MISTAKES,Allow mistakes,Permitir erros,Permitir erros
 PROGRESS_ON_UNKNOWN,"Color ""?"" hints","Colorir dicas ""?""","Colorir dicas ""?"""
 BIGGER_HINTS,Increase hints' font size,Aumentar fonte de dicas,Aumentar fonte de dicas
 LESS_THREE_MISTAKES,(at most 2 mistakes),(até 2 erros),(até 2 erros)
+LESS_SIX_MISTAKES,(at most 5 mistakes),(até 5 erros),(até 5 erros)
 PREVIEW_TUT,Preview,Simular,Simular
 TUT_PREVIEW,Water preview,Simular água,Simular água
 HOVER,Hover,Passar,Passar
@@ -343,4 +347,3 @@ WEEKLY_SHARE_COMPLETE,I won #liquidum weekly,Ganhei o #liquidum semanal,Ganhei o
 TOTAL,total,total,total
 SO_FAR,so far,até agora,até agora
 WEEKLY_LEVEL,Weekly marathon,Maratona semanal,Maratona semanal
-WEEKLY_TOOLTIP,10 hard levels that change weekly,10 níveis difíceis que mudam semanalmente,10 níveis difíceis que mudam semanalmente

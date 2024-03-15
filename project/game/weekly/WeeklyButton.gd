@@ -1,19 +1,18 @@
 class_name WeeklyButton
 extends RecurringMarathon
 
+const LERP_F = 4.0
+
 var l_gen := RandomLevelGenerator.new()
 
 var curr_monday: String
 var prev_monday: String
 var deadline_str: String
 
-func possible_flavors() -> Array[RandomFlavors.Flavor]:
-	var arr: Array[RandomFlavors.Flavor] = []
-	for i in 7:
-		arr.append(i as RandomFlavors.Flavor)
-	arr.append_array([RandomFlavors.Flavor.Basic, RandomFlavors.Flavor.Diagonals, RandomFlavors.Flavor.Everything])
-	assert(arr.size() == marathon_size)
-	return arr
+
+func _ready():
+	custom_minimum_size = $HBox.size
+
 
 func _init() -> void:
 	tr_name = "WEEKLY"
@@ -24,6 +23,12 @@ func _day_strip_time(unixtime: int) -> String:
 	var day_with_time := Time.get_date_string_from_unix_time(unixtime)
 	return day_with_time.substr(0, day_with_time.find('T'))
 
+
+func _process(dt):
+	var factor = clamp(LERP_F*dt, 0.0, 1.0)
+	custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+
+
 func _update() -> void:
 	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
 	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
@@ -33,6 +38,16 @@ func _update() -> void:
 	deadline_str = _day_strip_time(now_unix_ok_tz + (-days_back_till_monday + 6) * 24 * 60 * 60)
 	deadline_str += "T23:59:59"
 	super()
+
+
+func possible_flavors() -> Array[RandomFlavors.Flavor]:
+	var arr: Array[RandomFlavors.Flavor] = []
+	for i in 7:
+		arr.append(i as RandomFlavors.Flavor)
+	arr.append_array([RandomFlavors.Flavor.Basic, RandomFlavors.Flavor.Diagonals, RandomFlavors.Flavor.Everything])
+	assert(arr.size() == marathon_size)
+	return arr
+
 
 func generate_level(marathon_i: int) -> LevelData:
 	var rng := RandomNumberGenerator.new()
@@ -93,3 +108,9 @@ func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 
 func type() -> RecurringMarathon.Type:
 	return RecurringMarathon.Type.Weekly
+
+
+func _on_streak_button_toggled(button_pressed):
+	%StreakContainer.visible = button_pressed
+	if button_pressed:
+		streak_opened.emit()
