@@ -21,7 +21,7 @@ var streak_max_mistakes: int
 @onready var NotCompleted = %NotCompleted
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
-@onready var StreakButton = %StreakButton
+
 
 var deadline: int = -1
 var already_uploaded := false
@@ -119,7 +119,8 @@ func _update_streak() -> void:
 	if data.current_streak[id] > 0 and not data.last_day[id] in [current_period(), previous_period()]:
 		data.current_streak[id] = 0
 		UserData.save()
-	StreakButton.text = str(data.current_streak[type()])
+	if has_node("%StreakButton"):
+		%StreakButton.text = str(data.current_streak[type()])
 	CurStreak.text = str(data.current_streak[type()])
 	BestStreak.text = str(data.best_streak[type()])
 

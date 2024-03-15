@@ -23,6 +23,8 @@ func set_endless_completed(_completed_count: Array[int]) -> void:
 const STREAK_ACH: Array[int] = [7, 4]
 
 func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
+	if type == RecurringMarathon.Type.Weekly:
+		return
 	var type_name := RecurringMarathon.type_name(type)
 	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_current_%s_streak" % type_name], float(streak))
 	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_max_%s_streak" % type_name], float(best_streak))

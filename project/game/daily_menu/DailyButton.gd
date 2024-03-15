@@ -25,13 +25,15 @@ func _ready() -> void:
 	super()
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	custom_minimum_size = $HBox.size
+	if has_node("$HBox"):
+		custom_minimum_size = $HBox.size
 
 func _process(dt: float) -> void:
 	if size != MainButton.size:
 		size = MainButton.size
 	var factor = clamp(LERP_F*dt, 0.0, 1.0)
-	custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+	if has_node("$HBox"):
+		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
 	
 
 func _update() -> void:
@@ -89,7 +91,7 @@ static func gen_level(l_gen: RandomLevelGenerator, today_str: String) -> LevelDa
 func bump_monthly_challenge() -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
 	if SteamManager.enabled:
-		var l_id := await get_monthly_leaderboard(today.substr(0, today.length() - 3))
+		var l_id := await RecurringMarathon.get_monthly_leaderboard(today.substr(0, today.length() - 3))
 		SteamManager.steam.uploadLeaderboardScore(score, true, PackedInt32Array(), l_id)
 		var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
 		if not ret[0]:
