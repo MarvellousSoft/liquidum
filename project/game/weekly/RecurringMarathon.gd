@@ -214,7 +214,7 @@ func upload_leaderboard(l_id: int, info: Level.WinInfo) -> void:
 		return
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
-	var score: int = mini(info.mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
+	var score: int = mini(info.total_marathon_mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
 	var flair := await get_my_flair()
 	SteamManager.steam.uploadLeaderboardScore(score, false, LeaderboardDetails.new(flair).to_arr(), l_id)
 	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
@@ -343,9 +343,9 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		return
 	stats.increment_recurring_all(id)
 	var data := UserData.current()
-	if info.mistakes <= streak_max_mistakes:
+	if info.total_marathon_mistakes <= streak_max_mistakes:
 		stats.increment_recurring_good(id)
-		if info.mistakes == 0:
+		if info.total_marathon_mistakes == 0:
 			stats.unlock_recurring_no_mistakes(id)
 		# It the streak was broken this would be handled in _update_streak
 		if current_period() != data.last_day[id]:
@@ -367,7 +367,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		var ld_id := google_leaderboard()
 		if ld_id != "":
 			if not already_uploaded:
-				var score: int = int(info.time_secs * 1000) + 60 * 60 * info.mistakes
+				var score: int = int(info.time_secs * 1000) + 60 * 60 * info.total_marathon_mistakes
 				GooglePlayGameServices.leaderboards_submit_score(ld_id, float(score))
 				await GooglePlayGameServices.leaderboards_score_submitted
 			GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \

@@ -207,10 +207,10 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: boo
 	if dif == Difficulty.Insane and info.first_win and info.mistakes < 3 and not manually_seeded:
 		stats.increment_insane_good()
 	if marathon_total == 10 and marathon_left == 0:
-		if info.mistakes == 0:
+		if info.total_marathon_mistakes == 0:
 			stats.unlock_flawless_marathon(dif)
 		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
-		if info.mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
+		if info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
 			stats.unlock_fast_marathon(dif)
 			
 

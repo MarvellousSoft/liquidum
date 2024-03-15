@@ -44,10 +44,12 @@ signal share(mistakes: int, secs: int)
 class WinInfo:
 	var first_win: bool
 	var mistakes: int
+	var total_marathon_mistakes: int
 	var time_secs: float
-	func _init(first_win_: bool, mistakes_: int, time_secs_: float) -> void:
+	func _init(first_win_: bool, mistakes_: int, total_marathon_mistakes_: int, time_secs_: float) -> void:
 		first_win = first_win_
 		mistakes = mistakes_
+		total_marathon_mistakes = total_marathon_mistakes_
 		time_secs = time_secs_
 
 @onready var GridNode: GridView = %GridView
@@ -577,7 +579,7 @@ func win() -> void:
 	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)
 	maybe_save(true)
-	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count) - initial_mistakes, running_time))
+	won.emit(WinInfo.new(not won_before, int(Counters.mistake.count) - initial_mistakes, int(Counters.mistake.count), running_time))
 
 	if _show_level_completed_ad():
 		AdManager.preload_big_ad()
