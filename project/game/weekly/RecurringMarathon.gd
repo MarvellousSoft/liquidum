@@ -87,17 +87,22 @@ func _update_time_left() -> void:
 	if secs_left > 0:
 		var num: int
 		var txt: String
+		var repl := {}
 		if secs_left >= 24 * 60 * 60:
 			num = secs_left / (24 * 60 * 60)
 			txt = "DAYS_LEFT"
+			var hours := (secs_left % (24 * 60 * 60)) / (60 * 60)
+			repl["s2"] = "s" if hours != 1 else ""
+			repl["m"] = hours
 		elif secs_left >= 60 * 60:
 			num = secs_left / (60 * 60)
 			txt = "HOURS_LEFT"
 		else:
 			num = secs_left / 60
 			txt = "MINUTES_LEFT"
-		txt = tr(txt).format({"s": "s" if num > 1 else ""})
-		TimeLeft.text = "%s %s" % [TextServerManager.get_primary_interface().format_number(str(num)), txt]
+		repl["s"] = "s" if num != 1 else ""
+		repl["n"] = num
+		TimeLeft.text = tr(txt).format(repl)
 	else:
 		_update()
 

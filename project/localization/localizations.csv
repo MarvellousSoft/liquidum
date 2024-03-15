@@ -139,9 +139,9 @@ DAILY_UNLOCK_MOBILE,(unlock section 5),(desbloqueie a seção 5),(desbloqueie a 
 CUR_STREAK,Current win streak:,Sequência atual de vitórias:,Sequência atual de vitórias:
 BEST_STREAK,Best win streak:,Maior sequência de vitórias:,Maior sequência de vitórias:
 STREAK_TOOLTIP,Consecutive daily levels with less than 3 mistakes,Níveis do dia consecutivos com menos de 3 erros,Níveis do dia consecutivos com menos de 3 erros
-HOURS_LEFT,hour{s} left,hora{s} restante{s},hora{s} restante{s}
-DAYS_LEFT,day{s} left,dia{s} restante{s},dia{s} restante{s}
-MINUTES_LEFT,minute{s} left,minuto{s} restante{s},minuto{s} restante{s}
+HOURS_LEFT,{n} hour{s} left,{n} hora{s} restante{s},{n} hora{s} restante{s}
+DAYS_LEFT,"{n} day{s}, {m} hour{s2} left","{n} dia{s}, {m} hora{s2} restantes","{n} dia{s}, {m} hora{s2} restantes"
+MINUTES_LEFT,{n} minute{s} left,{n} minuto{s} restante{s},{n} minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda Simples,Segunda Simples
 MONDAY_LEVEL_DESC,No special rules.,Sem regras especiais.,Sem regras especiais.
 TUESDAY_LEVEL,Secret Boat Tuesday,Terça Naval Secreta,Terça do Barco Escondido
