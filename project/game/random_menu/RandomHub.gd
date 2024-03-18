@@ -168,6 +168,14 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, seed_str: String,
 	FileManager.save_random_level(data)
 	load_existing(marathon_time, marathon_mistakes)
 
+func _speedrun_key(marathon_total: int, dif: Difficulty) -> String:
+	const M_10 := ["n2ylrv1d-p85ykw3l.qyzxwj21", "n2ylrv1d-p85ykw3l.ln8yozjl", "n2ylrv1d-p85ykw3l.10v5dw2l", "n2ylrv1d-p85ykw3l.qj7z8x3q", "n2ylrv1d-p85ykw3l.q654ezjl"]
+	const M_100 := ["5dw3qq52-p85ykw3l.qyzxwj21", "5dw3qq52-p85ykw3l.ln8yozjl", "5dw3qq52-p85ykw3l.10v5dw2l", "5dw3qq52-p85ykw3l.qj7z8x3q", "5dw3qq52-p85ykw3l.q654ezjl"]
+	if marathon_total == 10:
+		return M_10[dif]
+	elif marathon_total == 100:
+		return M_100[dif]
+	return ""
 
 func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 	var data := FileManager.load_random_level()
@@ -197,7 +205,7 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		var l_id: int = await SteamManager.get_or_create_leaderboard(marathon_leaderboard(data.marathon_total, data.difficulty), SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 		if not l_data.is_empty():
-			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
+			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
 			var dif_name := tr("%s_BUTTON" % [Difficulty.find_key(data.difficulty).to_upper()]).to_lower()
 			display.display(l_data, "%d %s" % [data.marathon_total, dif_name], [], "")
 		

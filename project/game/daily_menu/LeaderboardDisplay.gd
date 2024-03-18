@@ -4,14 +4,17 @@ extends Control
 # Ex. DAILY
 @export var tr_name: String
 @export var has_prev: bool = true
+# Link to specific speed run to be used as speedrun.com/Liquidum?x=KEY
+@export var speedrun_key: String = ""
 
 @onready var Leaderboards: TabContainer = %TabContainer
 
-static func get_or_create(level: Level, tr_name_: String, has_prev_: bool) -> LeaderboardDisplay:
+static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speedrun_key_ := "") -> LeaderboardDisplay:
 	if not level.has_node("LeaderboardDisplay"):
 		var d: LeaderboardDisplay = load("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
 		d.tr_name = tr_name_
 		d.has_prev = has_prev_
+		d.speedrun_key = speedrun_key_
 		d.modulate.a = 0
 		d.visible = not Global.is_dev_mode()
 		level.add_child(d)
@@ -27,6 +30,7 @@ func _ready() -> void:
 	Profile.dark_mode_toggled.connect(_update_theme)
 	_update_theme(Profile.get_option("dark_mode"))
 	assert(tr_name != "")
+	%SpeedrunButton.visible = speedrun_key != ""
 	var curr := tr("%s_CURR" % [tr_name])
 	Leaderboards.add_child(_single("%s (%s)" % [curr, tr("ALL")]))
 	Leaderboards.add_child(_single("%s (%s)" % [curr, tr("FRIENDS")]))
@@ -55,3 +59,10 @@ func _update_theme(dark_mode: bool) -> void:
 	theme = Global.get_font_theme(dark_mode)
 	for tab in Leaderboards.get_children():
 		tab.update_theme(dark_mode)
+
+func _on_button_mouse_entered() -> void:
+	AudioManager.play_sfx("button_hover")
+
+func _on_speedrun_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	SteamManager.overlay_or_browser("https://www.speedrun.com/Liquidum?x=%s" % [speedrun_key])
