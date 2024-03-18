@@ -13,32 +13,6 @@ var gen := RandomLevelGenerator.new()
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
 func _ready() -> void:
-	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
-	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
-	# Unlock difficulty after unlocking this section
-	var difs := {
-		medium = 2,
-		hard = 3,
-		expert = 5,
-		# Additionally, all campaign levels must be completed
-		insane = 7,
-	}
-	for dif in difs:
-		var dif_name: String = dif
-		var button: Button = $Difficulties/VBox.get_node(dif_name.capitalize())
-		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
-		if dif == "insane":
-			open = open and CampaignLevelLister.all_campaign_levels_completed()
-		open = open or Global.is_dev_mode() or Profile.get_option("unlock_everything")
-		if dif == "insane" and Global.is_mobile:
-			%UnlockText.visible = not open
-		if open:
-			button.tooltip_text = "%s_TOOLTIP" % dif_name.to_upper()
-		else:
-			button.disabled = true
-			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
-	
 	%Version.text = "v" + Profile.VERSION
 	%Version.visible = Profile.SHOW_VERSION
 	
@@ -58,21 +32,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		_back_logic()
 
 func _on_unlock_changed(_on: bool) -> void:
-	get_tree().reload_current_scene()
+	_update_unlocked()
 
 
 func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_unlock_changed)
 	Profile.unlock_everything_changed.connect(_on_unlock_changed)
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	
 	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
-	call_deferred(&"_update")
+	call_deferred(&"_update_unlocked")
 
 
 func _exit_tree() -> void:
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
+	Profile.dark_mode_toggled.disconnect(_on_dark_mode_changed)
 
 func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> String:
 	var dif_name := tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())
@@ -80,7 +56,34 @@ func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> Stri
 		dif_name += " (%d⁄%d)" % [marathon_total - marathon_left, marathon_total]
 	return dif_name
 
-func _update() -> void:
+func _update_unlocked() -> void:
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
+	# Unlock difficulty after unlocking this section
+	var difs := {
+		medium = 2,
+		hard = 3,
+		expert = 5,
+		# Additionally, all campaign levels must be completed
+		insane = 7,
+	}
+	for dif in difs:
+		var dif_name: String = dif
+		var button: Button = $Difficulties/VBox.get_node(dif_name.capitalize())
+		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
+		if dif == "insane":
+			open = open and CampaignLevelLister.all_campaign_levels_completed()
+		open = open or Global.is_dev_mode() or Profile.get_option("unlock_everything")
+		if dif == "insane" and Global.is_mobile:
+			%UnlockText.visible = not open
+		button.disabled = not open
+		if open:
+			button.tooltip_text = "%s_TOOLTIP" % dif_name.to_upper()
+		else:
+			button.tooltip_text = "%s_TOOLTIP_DISABLED" % dif_name.to_upper()
+	_update_contents()
+
+func _update_contents() -> void:
 	var has_random_level := (FileManager.load_level(RANDOM) != null and FileManager.load_random_level() != null)
 	Continue.visible = has_random_level
 	ContinueSeparator.visible = has_random_level and not Global.is_mobile
@@ -89,13 +92,13 @@ func _update() -> void:
 		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]
 	for dif in Difficulty:
 		var but: Button = $Difficulties/VBox.get_node(dif)
+		var dif_tr := "%s_BUTTON" % [dif.to_upper()]
+		but.text = dif_tr
 		if not but.disabled and has_node("%Marathon"):
-			var dif_tr := "%s_BUTTON" % [dif.to_upper()]
 			var val: int = int(%Marathon/Slider.value)
 			if val > 1:
 				but.text = _dif_name(Difficulty[dif], val, val)
-			else:
-				but.text = dif_tr
+			
 		var cont: Node = Completed.get_node(dif)
 		cont.visible = not but.disabled
 		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
@@ -374,8 +377,8 @@ func _on_marathon_button_pressed() -> void:
 	%Marathon/Button.hide()
 	%Marathon/Slider.value = 10
 	%Marathon/Slider.show()
-	_update()
+	_update_contents()
 
 
 func _on_marathon_value_changed(_value: float) -> void:
-	_update()
+	_update_contents()
