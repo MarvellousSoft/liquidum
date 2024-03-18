@@ -137,6 +137,7 @@ func delete_dlc_button() -> void:
 func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	extra = extra_
 	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
+	var any_hard := false
 	hub = hub_ref
 	set_number(section)
 	for button in Levels.get_children():
@@ -156,6 +157,7 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
+		any_hard = any_hard or (not button.disabled and button.HardIcon.visible)
 	
 	if flavor != -1:
 		assert(extra)
@@ -167,8 +169,11 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
 		button.loaded_endless.connect(_on_loaded_endless)
+		any_hard = any_hard or (not button.disabled and button.HardIcon.visible)
 	
 	OngoingSolution.visible = level_lister.count_section_ongoing_solutions(my_section) > 0
+	%OngoingDesc.visible = OngoingSolution.visible
+	%HardLevelsDesc.visible = any_hard
 	update_level_count_label()
 	update_style_boxes(is_section_completed())
 

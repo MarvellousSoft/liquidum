@@ -47,9 +47,8 @@ var lister: LevelLister = null
 
 var disabled: bool :
 	get:
-		return disabled
+		return MainButton.disabled
 	set(x):
-		disabled = x
 		if x:
 			disable()
 		else:

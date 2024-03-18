@@ -167,3 +167,5 @@ func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: L
 	var ret: Array = await steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
+	else:
+		print("Did upload to leaderboard %d" % [l_id])
