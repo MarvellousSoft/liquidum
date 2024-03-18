@@ -143,8 +143,8 @@ DAILY_UNLOCK_MOBILE,(unlock section 5),(desbloqueie a seção 5),(desbloqueie a 
 CUR_STREAK,Current win streak:,Sequência atual de vitórias:,Sequência atual de vitórias:
 BEST_STREAK,Best win streak:,Maior sequência de vitórias:,Maior sequência de vitórias:
 DAILY_STREAK_TOOLTIP,Consecutive daily levels with at most 2 mistakes,Níveis do dia consecutivos com até 2 erros,Níveis do dia consecutivos com até 2 erros
-HOURS_LEFT,{n} hour{s} left,{n} hora{s} restante{s},{n} hora{s} restante{s}
-DAYS_LEFT,"{n} day{s}, {m} hour{s2} left","{n} dia{s}, {m} hora{s2} restantes","{n} dia{s}, {m} hora{s2} restantes"
+HOURS_LEFT,{n}h left,{n}h restante{s},{n}h restante{s}
+DAYS_LEFT,{n}d {m}h left,{n}d {m}h restantes,{n}d {m}h restantes
 MINUTES_LEFT,{n} minute{s} left,{n} minuto{s} restante{s},{n} minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda Simples,Segunda Simples
 MONDAY_LEVEL_DESC,No special rules.,Sem regras especiais.,Sem regras especiais.
@@ -344,6 +344,7 @@ WEEKLY_CURR,This week,Essa semana,Essa semana
 WEEKLY_PREV,Last week,Semana passada,Semana passada
 WEEKLY_SHARE_PARTIAL,I'm doing #liquidum weekly %s (%d⁄%d),Estou fazendo o #liquidum semanal %s (%d⁄%d),Estou fazendo o #liquidum semanal %s (%d⁄%d)
 WEEKLY_SHARE_COMPLETE,I won #liquidum weekly,Ganhei o #liquidum semanal,Ganhei o #liquidum semanal
+SHARE_RESULTS_TOOLTIP,Share results,Compartilhar resultados,Compartilhar resultados
 TOTAL,total,total,total
 SO_FAR,so far,até agora,até agora
 WEEKLY_LEVEL,Weekly marathon,Maratona semanal,Maratona semanal

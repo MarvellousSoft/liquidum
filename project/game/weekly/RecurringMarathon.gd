@@ -17,6 +17,7 @@ var streak_max_mistakes: int
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
 @onready var OngoingSolution = %OngoingSolution
+@onready var Share = %Share
 @onready var Completed = %Completed
 @onready var NotCompleted = %NotCompleted
 @onready var CurStreak = %CurStreak
@@ -73,7 +74,8 @@ func _update() -> void:
 	var marathon_completed := _get_marathon_completed()
 	var save := load_level_save(marathon_completed + 1) if marathon_completed < marathon_size else null
 	OngoingSolution.visible = save != null and not save.is_solution_empty()
-	Completed.visible = marathon_completed == marathon_size 
+	Completed.visible = marathon_completed == marathon_size
+	Share.visible = Completed.visible
 	NotCompleted.visible = not Completed.visible and unlocked
 	if has_node("%TimeBox"):
 		%TimeBox.visible = unlocked
@@ -99,7 +101,6 @@ func _update_time_left() -> void:
 			num = secs_left / (24 * 60 * 60)
 			txt = "DAYS_LEFT"
 			var hours := (secs_left % (24 * 60 * 60)) / (60 * 60)
-			repl["s2"] = "s" if hours != 1 else ""
 			repl["m"] = hours
 		elif secs_left >= 60 * 60:
 			num = secs_left / (60 * 60)

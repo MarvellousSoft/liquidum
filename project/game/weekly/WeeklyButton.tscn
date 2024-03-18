@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://drtp5pcfag6ly"]
+[gd_scene load_steps=11 format=3 uid="uid://drtp5pcfag6ly"]
 
 [ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="1_ht1bt"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="2_edjcw"]
 [ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="3_rsb71"]
 [ext_resource type="Texture2D" uid="uid://2on37y0kql6h" path="res://assets/images/ui/icons/streak_fire.png" id="3_subpv"]
 [ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_0hfha"]
+[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="4_f7q74"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u6r2a"]
 bg_color = Color(0.113725, 0.454902, 0.529412, 0.156863)
@@ -91,7 +92,7 @@ script = ExtResource("1_ht1bt")
 layout_mode = 2
 offset_right = 724.0
 offset_bottom = 109.0
-theme_override_constants/separation = 52
+theme_override_constants/separation = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBox"]
 layout_mode = 2
@@ -139,6 +140,7 @@ vertical_alignment = 1
 [node name="StreakButton" type="Button" parent="HBox/VBoxContainer/TimeBox"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "WEEKLY_STREAK_TOOLTIP"
 focus_mode = 0
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_pressed_color = Color(0.670588, 1, 0.819608, 1)
@@ -215,13 +217,29 @@ theme_override_font_sizes/font_size = 40
 text = "LESS_SIX_MISTAKES"
 horizontal_alignment = 1
 
-[node name="Completed" type="TextureButton" parent="HBox"]
+[node name="Separator" type="Control" parent="HBox"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Completed" type="TextureRect" parent="HBox"]
 unique_name_in_owner = true
-modulate = Color(0.670588, 1, 0.819608, 1)
-custom_minimum_size = Vector2(125, 125)
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_vertical = 0
+localize_numeral_system = false
 tooltip_text = "WEEKLY_LEVEL_PLAYED_TOOLTIP"
+texture = ExtResource("4_f7q74")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Share" type="TextureButton" parent="HBox"]
+unique_name_in_owner = true
+modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "SHARE_RESULTS_TOOLTIP"
 texture_normal = ExtResource("3_rsb71")
 ignore_texture_size = true
 stretch_mode = 5
@@ -238,7 +256,6 @@ vertical_alignment = 1
 
 [node name="NotCompleted" type="Label" parent="HBox"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_vertical = 0
@@ -255,6 +272,6 @@ vertical_alignment = 1
 [connection signal="mouse_entered" from="HBox/VBoxContainer/MainButton" to="." method="_on_mouse_entered"]
 [connection signal="pressed" from="HBox/VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]
 [connection signal="toggled" from="HBox/VBoxContainer/TimeBox/StreakButton" to="." method="_on_streak_button_toggled"]
-[connection signal="mouse_entered" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="HBox/Completed" to="HBox/Completed" method="_on_mouse_exited"]
-[connection signal="pressed" from="HBox/Completed" to="." method="_on_share_pressed"]
+[connection signal="mouse_entered" from="HBox/Share" to="HBox/Share" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HBox/Share" to="HBox/Share" method="_on_mouse_exited"]
+[connection signal="pressed" from="HBox/Share" to="." method="_on_share_pressed"]
