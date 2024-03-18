@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bucqkxlqs0hd1"]
+
+[ext_resource type="AudioStream" uid="uid://bs2awyqj6ubrd" path="res://assets/audio/bgm/HoliznaCC0-Quiet-Village-3.ogg" id="1_vuexv"]
+[ext_resource type="Script" path="res://database/audio/BGM.gd" id="2_f6icl"]
+
+[resource]
+script = ExtResource("2_f6icl")
+asset = ExtResource("1_vuexv")
+base_db = 0.0

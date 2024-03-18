@@ -13,4 +13,9 @@ bus = &"BGM"
 
 [node name="SFXS" type="Node" parent="."]
 
+[node name="BGMTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+
 [connection signal="finished" from="BGMPlayer" to="." method="_on_bgm_player_finished"]
+[connection signal="timeout" from="BGMTimer" to="." method="play_random_bgm"]

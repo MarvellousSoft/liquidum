@@ -10,6 +10,8 @@ const FADEOUT_SPEED = 20
 const FADEIN_SPEED = 60
 #BGM
 const BGM_PATH = "res://database/audio/bgm/"
+const MIN_BGM_TIME = 300.0
+const MAX_BGM_TIME = 3000.0
 #SFX
 const MAX_SFX_NODES = 2000
 const MAX_POS_SFX_NODES = 2000
@@ -149,6 +151,22 @@ func get_bgm_last_pos(bgm_name):
 
 func set_bgm_last_pos(bgm_name, pos):
 	bgms_last_pos[bgm_name] = pos
+
+
+func start_bgm_loop():
+	if cur_bgm:
+		return
+	play_random_bgm(true)
+
+
+func play_random_bgm(start_from_beginning := false):
+	var new_track = BGMS.keys().pick_random()
+	if cur_bgm:
+		while cur_bgm == new_track:
+			new_track = BGMS.keys().pick_random()
+	play_bgm(new_track, start_from_beginning)
+	%BGMTimer.wait_time = randf_range(MIN_BGM_TIME, MAX_BGM_TIME)
+	%BGMTimer.start()
 
 #SFX methods
 

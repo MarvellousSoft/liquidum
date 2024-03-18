@@ -195,7 +195,7 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		level.reset_mistakes_on_reset = false
 		level.running_time = marathon_time
 		level.initial_mistakes = marathon_mistakes
-	level.won.connect(_level_completed.bind(data.difficulty, level, data.manually_seeded, data.marathon_left, data.marathon_total))
+	level.won.connect(_level_completed.bind(level, data.difficulty, data.manually_seeded, data.marathon_left, data.marathon_total))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
 	else:

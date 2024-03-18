@@ -53,7 +53,7 @@ func _ready():
 	cam_target_zoom = NORMAL_ZOOM.mobile if Global.is_mobile else NORMAL_ZOOM.desktop
 	var cam_pos = CAM_POS.mobile if Global.is_mobile else CAM_POS.desktop
 	Camera.position = cam_pos.menu
-	AudioManager.play_bgm("main")
+	AudioManager.start_bgm_loop()
 	UserData.current().save_stats()
 	
 	await get_tree().process_frame
