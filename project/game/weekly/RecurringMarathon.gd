@@ -164,11 +164,11 @@ func gen_and_play(push_scene: bool) -> void:
 		await level.ready
 		if SteamManager.enabled:
 			var l_id := await load_current_leaderboard()
-			var l_data := await get_leaderboard_data(l_id)
+			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if l_data[0].has_self:
 				already_uploaded = true
 			l_id = await load_previous_leaderboard()
-			var y_data := await get_leaderboard_data(l_id)
+			var y_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			display_leaderboard(l_data, y_data, level)
 
 	MainButton.disabled = false
@@ -267,9 +267,10 @@ class LeaderboardData:
 	func sort() -> void:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
-func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
+static func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 	if l_id <= 0 or not SteamManager.enabled:
 		return []
+	var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
 	var data_all := LeaderboardData.new()
 	var data_friends := LeaderboardData.new()
 	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
@@ -306,7 +307,7 @@ func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 		for pct in percentiles:
 			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
 				# Create again because we're using a custom name for percentiles
-				data_friends.list.append(await ListEntry.create(entry, tr(pct[1])))
+				data_friends.list.append(await ListEntry.create(entry, server.tr(pct[1])))
 				list_has_rank[entry.global_rank] = true
 		# Only on no mistakes
 		if entry.score < MAX_TIME:
@@ -322,15 +323,7 @@ func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
 	if current_data.is_empty() and previous_data.is_empty():
 		return
-	var display: LeaderboardDisplay
-	if not level.has_node("LeaderboardDisplay"):
-		display = preload ("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
-		display.tr_name = tr_name
-		display.modulate.a = 0
-		display.visible = not Global.is_dev_mode()
-		level.add_child(display)
-		level.create_tween().tween_property(display, "modulate:a", 1, 1)
-	display = level.get_node("LeaderboardDisplay")
+	var display := LeaderboardDisplay.get_or_create(level, tr_name, true)
 	display.display(current_data, current_period(), previous_data, previous_period())
 	display.show_current_all()
 
@@ -362,7 +355,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 	if SteamManager.enabled and not already_uploaded:
 		var l_id := await load_current_leaderboard()
 		await RecurringMarathon.upload_leaderboard(l_id, info, false)
-		var l_data := await get_leaderboard_data(l_id)
+		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 		display_leaderboard(l_data, [], level)
 	elif GooglePlayGameServices.enabled:
 		var ld_id := google_leaderboard()

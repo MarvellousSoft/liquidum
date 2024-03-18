@@ -184,11 +184,20 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		level.reset_mistakes_on_reset = false
 		level.running_time = marathon_time
 		level.initial_mistakes = marathon_mistakes
-	level.won.connect(_level_completed.bind(data.difficulty, data.manually_seeded, data.marathon_left, data.marathon_total))
+	level.won.connect(_level_completed.bind(data.difficulty, level, data.manually_seeded, data.marathon_left, data.marathon_total))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
 	else:
 		TransitionManager.push_scene(level)
+	await level.ready
+	if SteamManager.enabled and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
+		var l_id: int = await SteamManager.get_or_create_leaderboard(marathon_leaderboard(data.marathon_total, data.difficulty), SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
+		if not l_data.is_empty():
+			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
+			var dif_name := tr("%s_BUTTON" % [Difficulty.find_key(data.difficulty).to_upper()]).to_lower()
+			display.display(l_data, "%d %s" % [data.marathon_total, dif_name], [], "")
+		
 
 
 func _confirm_new_level() -> bool:
@@ -197,14 +206,17 @@ func _confirm_new_level() -> bool:
 		return await ConfirmationScreen.pressed
 	return true
 
+func marathon_leaderboard(marathon_size: int, dif: Difficulty) -> String:
+	return "%s_marathon_%d" % [Difficulty.find_key(dif).to_lower(), marathon_size]
+
 # Let's just upload for now, we'll display later
-func upload_marathon_result(info: Level.WinInfo, marathon_size: int, dif: Difficulty) -> void:
-	if not SteamManager.enabled:
-		return
-	var l_id: int = await SteamManager.get_or_create_leaderboard("%s_marathon_%d" % [Difficulty.find_key(dif).to_lower(), marathon_size], SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+func upload_marathon_result(l_id: int, info: Level.WinInfo) -> void:
 	await RecurringMarathon.upload_leaderboard(l_id, info, true)
 
-func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
+func shows_marathon_leaderboards(marathon_total: int, manually_seeded: bool) -> bool:
+	return not manually_seeded and marathon_total >= 5 and marathon_total <= 100 and (marathon_total % 5) == 0
+
+func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
@@ -218,8 +230,15 @@ func _level_completed(info: Level.WinInfo, dif: Difficulty, manually_seeded: boo
 		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
 		if info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
 			stats.unlock_fast_marathon(dif)
-	if marathon_left == 0 and marathon_total >= 5 and marathon_total <= 100 and (marathon_total % 5) == 0 and not manually_seeded:
-		await upload_marathon_result(info, marathon_total, dif)
+	if marathon_left == 0 and shows_marathon_leaderboards(marathon_total, manually_seeded) and SteamManager.enabled:
+		var l_id: int = await SteamManager.get_or_create_leaderboard(marathon_leaderboard(marathon_total, dif), SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+		await upload_marathon_result(l_id, info)
+		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
+		if not l_data.is_empty():
+			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
+			var dif_name :=  tr("%s_BUTTON" % [Difficulty.find_key(dif).to_upper()]).to_lower()
+			display.display(l_data, "%d %s" % [marathon_total, dif_name], [], "")
+		
 
 
 func _on_continue_pressed() -> void:
