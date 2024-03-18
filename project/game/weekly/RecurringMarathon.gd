@@ -51,11 +51,19 @@ static func is_unlocked() -> bool:
 	return Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
 
 func _ready() -> void:
-	Global.dev_mode_toggled.connect(func(_on): _update())
-	Profile.unlock_everything_changed.connect(func(_on): _update())
+	pass
 
 func _enter_tree() -> void:
+	Global.dev_mode_toggled.connect(_on_something_changed)
+	Profile.unlock_everything_changed.connect(_on_something_changed)
 	call_deferred(&"_update")
+
+func _exit_tree() -> void:
+	Global.dev_mode_toggled.disconnect(_on_something_changed)
+	Profile.unlock_everything_changed.disconnect(_on_something_changed)
+
+func _on_something_changed(_on: bool) -> void:
+	_update()
 
 func _get_marathon_completed() -> int:
 	var last_level := 0
@@ -79,6 +87,7 @@ func _update() -> void:
 	NotCompleted.visible = not Completed.visible and unlocked
 	if has_node("%TimeBox"):
 		%TimeBox.visible = unlocked
+	MainButton.text = tr("%s_BUTTON" % tr_name)
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]
 		if marathon_size > 1:
