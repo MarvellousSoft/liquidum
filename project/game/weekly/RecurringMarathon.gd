@@ -173,10 +173,7 @@ func gen_and_play(push_scene: bool) -> void:
 	MainButton.disabled = false
 
 func _load_leaderboard(ld_name: String) -> int:
-	if ld_name.is_empty():
-		return 0
-	else:
-		return await SteamManager.get_or_create_leaderboard(ld_name, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+	return await SteamManager.get_or_create_leaderboard(ld_name, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 
 
 func close_streak():
@@ -193,22 +190,28 @@ static func get_monthly_leaderboard(month_str: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
 			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
 
-static func get_my_flair() -> Flair:
-	if DEV_IDS.has(SteamManager.steam.getSteamID()):
-		return Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	var last_month_dict := Time.get_datetime_dict_from_datetime_string(DailyButton._today(), false)
-	if last_month_dict.month == 1:
-		last_month_dict.month = 12
-		last_month_dict.year -= 1
-	else:
-		last_month_dict.month -= 1
+static var _flair: Flair = null
 
-	var l_id := await get_monthly_leaderboard("%04d-%02d" % [last_month_dict.year, last_month_dict.month])
-	SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-	if not ret[2].is_empty() and ret[2][0].score >= 15:
-		return Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	return null
+static func get_my_flair() -> Flair:
+	if _flair == null and DEV_IDS.has(SteamManager.steam.getSteamID()):
+			_flair = Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
+	if _flair == null:
+		var last_month_dict := Time.get_datetime_dict_from_datetime_string(DailyButton._today(), false)
+		if last_month_dict.month == 1:
+			last_month_dict.month = 12
+			last_month_dict.year -= 1
+		else:
+			last_month_dict.month -= 1
+
+		var l_id := await get_monthly_leaderboard("%04d-%02d" % [last_month_dict.year, last_month_dict.month])
+		if l_id > 0:
+			SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
+			var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
+			if not ret[2].is_empty() and ret[2][0].score >= 15:
+				_flair = Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
+	if _flair == null:
+		_flair = Flair.new("", Color.BLACK, Color.BLACK)
+	return _flair
 
 static func upload_leaderboard(l_id: int, info: Level.WinInfo, keep_best: bool) -> void:
 	if not SteamManager.enabled or l_id == -1:
@@ -217,10 +220,7 @@ static func upload_leaderboard(l_id: int, info: Level.WinInfo, keep_best: bool) 
 	# Mistakes take priority.
 	var score: int = mini(info.total_marathon_mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
 	var flair := await get_my_flair()
-	SteamManager.steam.uploadLeaderboardScore(score, keep_best, LeaderboardDetails.new(flair).to_arr(), l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_score_uploaded
-	if not ret[0]:
-		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
+	await SteamManager.upload_leaderboard_score(l_id, score, keep_best, LeaderboardDetails.new(flair))
 
 class ListEntry:
 	var global_rank: int
@@ -267,10 +267,10 @@ class LeaderboardData:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
 func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
+	if l_id <= 0 or not SteamManager.enabled:
+		return []
 	var data_all := LeaderboardData.new()
 	var data_friends := LeaderboardData.new()
-	if not SteamManager.enabled:
-		return [data_all, data_friends]
 	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
 	if total == 0:
 		return [data_all, data_friends]
@@ -319,7 +319,7 @@ func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
 	return [data_all, data_friends]
 
 func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
-	if not SteamManager.enabled:
+	if current_data.is_empty() and previous_data.is_empty():
 		return
 	var display: LeaderboardDisplay
 	if not level.has_node("LeaderboardDisplay"):
@@ -360,10 +360,9 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 			UserData.save()
 	if SteamManager.enabled and not already_uploaded:
 		var l_id := await load_current_leaderboard()
-		if l_id != 0:
-			await RecurringMarathon.upload_leaderboard(l_id, info, false)
-			var l_data := await get_leaderboard_data(l_id)
-			display_leaderboard(l_data, [], level)
+		await RecurringMarathon.upload_leaderboard(l_id, info, false)
+		var l_data := await get_leaderboard_data(l_id)
+		display_leaderboard(l_data, [], level)
 	elif GooglePlayGameServices.enabled:
 		var ld_id := google_leaderboard()
 		if ld_id != "":

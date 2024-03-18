@@ -6,8 +6,8 @@ extends StatsTracker
 # Achievements
 
 # Leaderboards
-var current_streak_id: int = 0
-var max_streak_id: int = 0
+var current_streak_id: int = -1
+var max_streak_id: int = -1
 
 
 func flushNewAchievements() -> void:
@@ -53,7 +53,7 @@ func _find_leaderboard(l_name: String) -> int:
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
 	if not ret[1]:
 		push_warning("Leaderboard %s not found" % l_name)
-		return 0
+		return -1
 	else:
 		return ret[0]
 
@@ -75,15 +75,15 @@ func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak
 		flushNewAchievements()
 	var ld_prefix := "" if type == RecurringMarathon.Type.Daily else "%s_" % type_name
 	if upload_current:
-		if current_streak_id == 0:
+		if current_streak_id <= 0:
 			current_streak_id = await _find_leaderboard("%scurrent_streak" % [ld_prefix])
-		if current_streak_id != 0:
-			SteamManager.steam.uploadLeaderboardScore(streak, false, PackedInt32Array(), current_streak_id)
+		if current_streak_id > 0:
+			await SteamManager.upload_leaderboard_score(current_streak_id, streak, false, null)
 	if upload_max:
-		if max_streak_id == 0:
+		if max_streak_id <= 0:
 			max_streak_id = await _find_leaderboard("%smax_streak" % [ld_prefix])
-		if max_streak_id != 0:
-			SteamManager.steam.uploadLeaderboardScore(streak, true, PackedInt32Array(), max_streak_id)
+		if max_streak_id > 0:
+			await SteamManager.upload_leaderboard_score(max_streak_id, streak, true, null)
 
 func _increment(stat: String) -> void:
 	var val: int = SteamManager.steam.getStatInt(stat)

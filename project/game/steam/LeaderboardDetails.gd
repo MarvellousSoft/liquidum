@@ -9,10 +9,12 @@ var flair: Flair
 func _init(flair_: Flair) -> void:
 	flair = flair_
 
-func to_arr() -> PackedInt32Array:
+static func to_arr(details: LeaderboardDetails) -> PackedInt32Array:
+	if details == null:
+		return PackedInt32Array()
 	var arr := PackedByteArray()
 	arr.append(VERSION)
-	arr.append_array(Flair.encode(flair))
+	arr.append_array(Flair.encode(details.flair))
 	while arr.size() % 4 != 0:
 		arr.append(0)
 	return arr.to_int32_array()
