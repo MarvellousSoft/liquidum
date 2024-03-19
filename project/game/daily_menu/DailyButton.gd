@@ -53,13 +53,8 @@ func _update() -> void:
 				else:
 					Profile.set_option("daily_notification", Profile.DailyStatus.Disabled)
 	if Global.is_mobile:
-		%LeaderboardsButton.visible = unlocked
-		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
 		%StreakContainer.visible = unlocked
 		%DailyUnlockText.visible = not unlocked
-		# Looks better
-		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
-		%DailyHBox/Offset.visible = unlocked
 
 	if not unlocked:
 		return

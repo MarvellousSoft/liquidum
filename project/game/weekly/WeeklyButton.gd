@@ -11,7 +11,8 @@ var deadline_str: String
 
 
 func _ready():
-	custom_minimum_size = $HBox.size
+	if has_node("HBox"):
+		custom_minimum_size = $HBox.size
 
 
 func _init() -> void:
@@ -25,8 +26,9 @@ func _day_strip_time(unixtime: int) -> String:
 
 
 func _process(dt):
-	var factor = clamp(LERP_F*dt, 0.0, 1.0)
-	custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+	if has_node("HBox"):
+		var factor = clamp(LERP_F*dt, 0.0, 1.0)
+		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
 
 
 func _update() -> void:

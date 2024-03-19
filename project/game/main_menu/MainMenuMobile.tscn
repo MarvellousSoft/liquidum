@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=16 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://cpiojpbtpveaj" path="res://game/daily_menu/DailyButtonMobile.tscn" id="6_j41ip"]
+[ext_resource type="PackedScene" uid="uid://dxeyb8lqhqk0h" path="res://game/weekly/WeeklyButtonMobile.tscn" id="6_pd0dy"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="7_bx73v"]
 [ext_resource type="PackedScene" uid="uid://fbn8fagd6qbm" path="res://game/settings/SettingsScreenMobile.tscn" id="9_7nw1q"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="10_avytv"]
@@ -108,6 +109,9 @@ text = "CREDITS_BUTTON"
 
 [node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
 visible = false
+layout_mode = 2
+
+[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_pd0dy")]
 layout_mode = 2
 
 [node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_j41ip")]

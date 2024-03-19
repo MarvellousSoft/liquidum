@@ -87,6 +87,12 @@ func _update() -> void:
 	NotCompleted.visible = not Completed.visible and unlocked
 	if has_node("%TimeBox"):
 		%TimeBox.visible = unlocked
+	if Global.is_mobile:
+		%LeaderboardsButton.visible = unlocked
+		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
+		# Looks better
+		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
+		%DailyHBox/OffsetRight.visible = unlocked and Completed.visible
 	MainButton.text = tr("%s_BUTTON" % tr_name)
 	if unlocked:
 		MainButton.tooltip_text = "%s_TOOLTIP" % [tr_name]

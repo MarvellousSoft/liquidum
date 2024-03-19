@@ -101,7 +101,8 @@ theme_override_font_sizes/font_size = 75
 text = " !"
 horizontal_alignment = 1
 
-[node name="Offset" type="Control" parent="VBoxContainer/DailyHBox"]
+[node name="OffsetRight" type="Control" parent="VBoxContainer/DailyHBox"]
+visible = false
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 
