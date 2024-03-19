@@ -3,7 +3,7 @@ extends Cell
 
 const DIAGONAL_BUTTON_MASK = preload("res://assets/images/ui/cell/diagonal_button_mask.png")
 const SURFACE_THRESHOLD = 0.7
-const BOAT_ALPHA_SPEED = 1.0
+const BOAT_ALPHA_SPEED = 2.8
 const WATER_SPEED_RATIO = 7.0
 const MIN_BOAT_ANIM_SPEED = .7
 const MAX_BOAT_ANIM_SPEED = .9
@@ -177,9 +177,8 @@ func _process(dt):
 			else:
 				cur_alpha = maxf(cur_alpha - dt*PREVIEW_ALPHA_SPEED, 0.0)
 			Previews[corner].modulate.a = cur_alpha
-			Global.alpha_fade_node(dt, Boat, boat_flag)
-			Global.alpha_fade_node(dt, BoatPreview, preview_boat_flag, PREVIEW_ALPHA_SPEED, false, PREVIEW_MAX_ALPHA)
-
+		Global.alpha_fade_node(dt, Boat, boat_flag, BOAT_ALPHA_SPEED)
+		Global.alpha_fade_node(dt, BoatPreview, preview_boat_flag, PREVIEW_ALPHA_SPEED, false, PREVIEW_MAX_ALPHA)
 		Global.alpha_fade_node(dt, Highlight, highlight)
 
 
