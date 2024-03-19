@@ -67,6 +67,7 @@ signal loaded_endless(button: LevelButton)
 @onready var OngoingSolution = %OngoingSolution
 @onready var LevelCount = %LevelCount
 @onready var SectionNumber = %SectionNumber
+@onready var SelectALevel = %SelectALevel
 @onready var LevelInfoContainer = %LevelInfoContainer
 @onready var SectionName = %SectionName
 
@@ -103,8 +104,9 @@ func _process(dt):
 	for node in [OngoingSolution, LevelCount]:
 		Global.alpha_fade_node(dt, node, not focused, ALPHA_SPEED)
 	Global.alpha_fade_node(dt, LevelInfoContainer, showing_level_info and focused, ALPHA_SPEED)
-	Global.alpha_fade_node(dt, SectionNumber, not focused or not showing_level_info, ALPHA_SPEED)
-	Global.alpha_fade_node(dt, SectionName, not focused or not showing_level_info, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, SelectALevel, focused and not showing_level_info, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, SectionNumber, not focused, ALPHA_SPEED)
+	Global.alpha_fade_node(dt, SectionName, not focused, ALPHA_SPEED)
 	var central = CENTRAL_POS.mobile if Global.is_mobile else CENTRAL_POS.desktop
 	if focused:
 		if MainButton.position != central:
