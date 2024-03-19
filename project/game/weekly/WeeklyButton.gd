@@ -10,11 +10,6 @@ var prev_monday: String
 var deadline_str: String
 
 
-func _ready():
-	if has_node("HBox"):
-		custom_minimum_size = $HBox.size
-
-
 func _init() -> void:
 	tr_name = "WEEKLY"
 	marathon_size = 10

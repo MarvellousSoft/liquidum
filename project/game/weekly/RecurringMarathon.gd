@@ -13,6 +13,9 @@ enum Type { Daily = 0, Weekly = 1 }
 var tr_name: String
 var marathon_size: int
 var streak_max_mistakes: int
+var copied_tween: Tween = null
+
+
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft
@@ -51,7 +54,10 @@ static func is_unlocked() -> bool:
 	return Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
 
 func _ready() -> void:
-	pass
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	if has_node("HBox"):
+		custom_minimum_size = $HBox.size
 
 func _enter_tree() -> void:
 	Global.dev_mode_toggled.connect(_on_something_changed)
@@ -382,7 +388,10 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 			GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \
 			google_leaderboard_span(), GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
-var copied_tween: Tween = null
+
+func _on_dark_mode_changed(is_dark: bool):
+	MainButton.theme = Global.get_theme(is_dark)
+
 
 func _on_share_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")

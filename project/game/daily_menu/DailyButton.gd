@@ -21,12 +21,6 @@ func _init() -> void:
 	marathon_size = 1
 	streak_max_mistakes = 2
 
-func _ready() -> void:
-	super()
-	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
-	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	if has_node("HBox"):
-		custom_minimum_size = $HBox.size
 
 func _process(dt: float) -> void:
 	var factor = clamp(LERP_F*dt, 0.0, 1.0)
@@ -101,8 +95,6 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 	if info.mistakes < 3:
 		await bump_monthly_challenge()
 
-func _on_dark_mode_changed(is_dark: bool):
-	MainButton.theme = Global.get_theme(is_dark)
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
