@@ -1,0 +1,205 @@
+[gd_scene load_steps=8 format=3 uid="uid://cpiojpbtpveaj"]
+
+[ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="1_8hrak"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_gmsfo"]
+[ext_resource type="Texture2D" uid="uid://c2ktoab6plfuo" path="res://assets/images/icons/share.png" id="2_6lo7j"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="3_o6f01"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_fe3xj"]
+[ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_1irsr"]
+[ext_resource type="Texture2D" uid="uid://bjmde3uep55q3" path="res://assets/images/icons/leaderboards.png" id="5_yp6m4"]
+
+[node name="DailyButton" type="CenterContainer"]
+custom_minimum_size = Vector2(720, 0)
+size_flags_vertical = 3
+theme = ExtResource("1_gmsfo")
+script = ExtResource("1_8hrak")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 17
+alignment = 1
+
+[node name="DailyHBox" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="LeaderboardsButton" type="TextureButton" parent="VBoxContainer/DailyHBox"]
+unique_name_in_owner = true
+modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+texture_normal = ExtResource("5_yp6m4")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Share" type="TextureButton" parent="VBoxContainer/DailyHBox"]
+unique_name_in_owner = true
+modulate = Color(0.670588, 1, 0.819608, 1)
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
+texture_normal = ExtResource("2_6lo7j")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("3_o6f01")
+
+[node name="BeforeButton" type="Control" parent="VBoxContainer/DailyHBox"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+
+[node name="MainButton" type="Button" parent="VBoxContainer/DailyHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "DAILY_TOOLTIP"
+focus_mode = 0
+text = "DAILY_BUTTON"
+
+[node name="OngoingSolution" parent="VBoxContainer/DailyHBox/MainButton" instance=ExtResource("4_fe3xj")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 70)
+offset_left = -52.0
+offset_top = 54.0
+offset_right = 118.0
+offset_bottom = 124.0
+scale = Vector2(0.7, 0.7)
+
+[node name="AfterButton" type="Control" parent="VBoxContainer/DailyHBox"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+
+[node name="Completed" type="TextureRect" parent="VBoxContainer/DailyHBox"]
+unique_name_in_owner = true
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_vertical = 0
+localize_numeral_system = false
+tooltip_text = "DAILY_LEVEL_PLAYED_TOOLTIP"
+texture = ExtResource("5_1irsr")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NotCompleted" type="Label" parent="VBoxContainer/DailyHBox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+localize_numeral_system = false
+tooltip_text = "DAILY_LEVEL_NOT_PLAYED_TOOLTIP"
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 0.894118, 0.415686, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 37
+theme_override_font_sizes/font_size = 75
+text = " !"
+horizontal_alignment = 1
+
+[node name="Offset" type="Control" parent="VBoxContainer/DailyHBox"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 23
+alignment = 1
+
+[node name="Spacer" type="Control" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="StreakContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "STREAK_TOOLTIP"
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="TimeLeft" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+auto_translate = false
+localize_numeral_system = false
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+text = "X hours left"
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="CurStreakName" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
+text = "CUR_STREAK"
+vertical_alignment = 1
+
+[node name="CurStreak" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
+text = "0"
+vertical_alignment = 1
+
+[node name="BestStreakName" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
+text = "BEST_STREAK"
+vertical_alignment = 1
+
+[node name="BestStreak" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 26
+text = "0"
+vertical_alignment = 1
+
+[node name="3Mistakes" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "LESS_THREE_MISTAKES"
+horizontal_alignment = 1
+
+[node name="DailyUnlockText" type="Label" parent="VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 30
+text = "DAILY_UNLOCK_MOBILE"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
+[connection signal="pressed" from="VBoxContainer/DailyHBox/LeaderboardsButton" to="." method="_on_leaderboards_button_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/DailyHBox/Share" to="VBoxContainer/DailyHBox/Share" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/DailyHBox/Share" to="VBoxContainer/DailyHBox/Share" method="_on_mouse_exited"]
+[connection signal="pressed" from="VBoxContainer/DailyHBox/Share" to="." method="_on_share_pressed"]
+[connection signal="pressed" from="VBoxContainer/DailyHBox/MainButton" to="." method="_on_main_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
