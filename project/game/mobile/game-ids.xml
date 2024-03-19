@@ -71,14 +71,22 @@
   <string name="achievement_done__solved" translatable="false">CgkIxZaA3LgPEAIQKw</string>
   <!--achievement Reflected-->
   <string name="achievement_reflected" translatable="false">CgkIxZaA3LgPEAIQLA</string>
+  <!--achievement Flawless weekly-->
+  <string name="achievement_flawless_weekly" translatable="false">CgkIxZaA3LgPEAIQLQ</string>
+  <!--achievement 4 weekly streak-->
+  <string name="achievement_4_weekly_streak" translatable="false">CgkIxZaA3LgPEAIQLg</string>
   <!--leaderboard Daily level (1h mistake penalty)-->
   <string name="leaderboard_daily_level_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQHQ</string>
+  <!--leaderboard Weekly marathon (1h mistake penalty)-->
+  <string name="leaderboard_weekly_marathon_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQLw</string>
+  <!--leaderboard Current daily streak-->
+  <string name="leaderboard_current_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCQ</string>
+  <!--leaderboard Current weekly streak-->
+  <string name="leaderboard_current_weekly_streak" translatable="false">CgkIxZaA3LgPEAIQMA</string>
+  <!--leaderboard Max daily streak-->
+  <string name="leaderboard_max_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCg</string>
+  <!--leaderboard Max weekly streak-->
+  <string name="leaderboard_max_weekly_streak" translatable="false">CgkIxZaA3LgPEAIQMQ</string>
   <!--leaderboard March Challenge-->
   <string name="leaderboard_march_challenge" translatable="false">CgkIxZaA3LgPEAIQBw</string>
-  <!--leaderboard Current Daily Streak-->
-  <string name="leaderboard_current_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCQ</string>
-  <!--leaderboard Max Daily Streak-->
-  <string name="leaderboard_max_daily_streak" translatable="false">CgkIxZaA3LgPEAIQCg</string>
-  <!--leaderboard (OLD) Daily level (1 hour mistake penalty)-->
-  <string name="leaderboard_old_daily_level_1_hour_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQBQ</string>
 </resources>
