@@ -39,8 +39,11 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
+static func use_fixed_google_tz() -> bool:
+	return OS.get_name() == "Android"
+
 static func _timezone_bias_secs() -> int:
-	if OS.get_name() == "Android":
+	if use_fixed_google_tz():
 		# UTC-7 because that's when google play leaderboards reset
 		# https://developers.google.com/games/services/common/concepts/leaderboards
 		return - 7 * 60 * 60

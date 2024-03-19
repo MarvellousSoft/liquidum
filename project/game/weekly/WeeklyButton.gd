@@ -5,8 +5,8 @@ const LERP_F = 4.0
 
 var l_gen := RandomLevelGenerator.new()
 
-var curr_monday: String
-var prev_monday: String
+var curr_fst_day: String
+var prev_fst_day: String
 var deadline_str: String
 
 
@@ -15,7 +15,7 @@ func _init() -> void:
 	marathon_size = 10
 	streak_max_mistakes = 5
 
-func _day_strip_time(unixtime: int) -> String:
+static func _day_strip_time(unixtime: int) -> String:
 	var day_with_time := Time.get_date_string_from_unix_time(unixtime)
 	return day_with_time.substr(0, day_with_time.find('T'))
 
@@ -32,10 +32,11 @@ func _process(dt):
 func _update() -> void:
 	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
 	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
-	var days_back_till_monday: int = (now_dict.weekday - Time.WEEKDAY_MONDAY + 7) % 7
-	curr_monday = _day_strip_time(now_unix_ok_tz - days_back_till_monday * 24 * 60 * 60)
-	prev_monday = _day_strip_time(now_unix_ok_tz - (days_back_till_monday + 7) * 24 * 60 * 60)
-	deadline_str = _day_strip_time(now_unix_ok_tz + (-days_back_till_monday + 6) * 24 * 60 * 60)
+	var weekday_reset := Time.WEEKDAY_SUNDAY if RecurringMarathon.use_fixed_google_tz() else Time.WEEKDAY_MONDAY
+	var days_back_till_fst_day: int = (now_dict.weekday - weekday_reset + 7) % 7
+	curr_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - days_back_till_fst_day * 24 * 60 * 60)
+	prev_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - (days_back_till_fst_day + 7) * 24 * 60 * 60)
+	deadline_str = WeeklyButton._day_strip_time(now_unix_ok_tz + (-days_back_till_fst_day + 6) * 24 * 60 * 60)
 	deadline_str += "T23:59:59"
 	super()
 
@@ -47,15 +48,19 @@ static func possible_flavors() -> Array[RandomFlavors.Flavor]:
 	arr.append_array([RandomFlavors.Flavor.Basic, RandomFlavors.Flavor.Diagonals, RandomFlavors.Flavor.Everything])
 	return arr
 
-static func gen_level(gen: RandomLevelGenerator, monday: String, marathon_i: int, m_size: int) -> LevelData:
+static func gen_level(gen: RandomLevelGenerator, fst_day: String, marathon_i: int, m_size: int) -> LevelData:
+	var seed_str := fst_day
+	# Android resets on sunday, but we actually use the seed as monday for consistency with desktop and preprocessing
+	if RecurringMarathon.use_fixed_google_tz():
+		seed_str = _day_strip_time(Time.get_unix_time_from_datetime_string(fst_day) + 24 * 60 * 60)
 	var rng := RandomNumberGenerator.new()
-	rng.seed = RandomHub.consistent_hash(monday)
+	rng.seed = RandomHub.consistent_hash(seed_str)
 	# Here, use rng for stuff that only changes weekly
 	var flavors := possible_flavors()
 	Global.shuffle(flavors, rng)
 	# And now, rng for this specific level
-	rng.seed = RandomHub.consistent_hash("%s_%02d" % [monday, marathon_i])
-	var preprocessed: int = FileManager.load_preprocessed_weeklies(int(monday.substr(0, 4))).success_state(monday, marathon_i - 1)
+	rng.seed = RandomHub.consistent_hash("%s_%02d" % [seed_str, marathon_i])
+	var preprocessed: int = FileManager.load_preprocessed_weeklies(int(seed_str.substr(0, 4))).success_state(seed_str, marathon_i - 1)
 	if preprocessed != 0:
 		rng.state = preprocessed
 	var g := await RandomFlavors.gen(gen, rng, flavors[marathon_i - 1])
@@ -68,7 +73,7 @@ static func gen_level(gen: RandomLevelGenerator, monday: String, marathon_i: int
 	return null
 
 func generate_level(marathon_i: int) -> LevelData:
-	return await WeeklyButton.gen_level(l_gen, curr_monday, marathon_i, marathon_size)
+	return await WeeklyButton.gen_level(l_gen, curr_fst_day, marathon_i, marathon_size)
 
 func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 	var mistakes_str: String = DailyButton._mistakes_str(mistakes)
@@ -93,16 +98,16 @@ func steam_current_leaderboard() -> String:
 	return level_basename()
 
 func steam_previous_leaderboard() -> String:
-	return "weekly_%s" % [prev_monday]
+	return "weekly_%s" % [prev_fst_day]
 
 func current_period() -> String:
-	return curr_monday
+	return curr_fst_day
 
 func previous_period() -> String:
-	return prev_monday
+	return prev_fst_day
 	
 func level_basename() -> String:
-	return "weekly_%s" % [curr_monday]
+	return "weekly_%s" % [curr_fst_day]
 
 func steam_stats() -> Array[String]:
 	return ["weekly"]
