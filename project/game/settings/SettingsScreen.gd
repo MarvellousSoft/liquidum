@@ -311,3 +311,14 @@ func _on_palette_item_selected(index):
 	checkbox_sound(true)
 	Profile.set_option("palette", index, true)
 	Profile.palette_changed.emit()
+
+
+func _on_change_profile_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	var profile := Global.load_mobile_compat("res://game/profile_menu/ProfileScreen").instantiate()
+	TransitionManager.push_scene(profile)
+
+
+func _on_credits_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	TransitionManager.push_scene(Global.load_mobile_compat("res://game/credits/CreditsScreen").instantiate())

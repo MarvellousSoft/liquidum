@@ -452,6 +452,13 @@ text = "SHOW_BUBBLES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "CREDITS_BUTTON"
+
 [node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -824,6 +831,13 @@ theme_override_font_sizes/font_size = 20
 text = "UNLOCK_EVERYTHING_DESC"
 horizontal_alignment = 1
 
+[node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "CHANGE_PROFILE_BUTTON"
+
 [node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -1030,6 +1044,7 @@ libraries = {
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer/HSlider" to="." method="_on_blue_filter_slider_value_changed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_show_bubbles_toggled"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/CreditsButton" to="." method="_on_credits_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_allow_mistakes_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_button_mouse_entered"]
@@ -1056,6 +1071,7 @@ libraries = {
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer/CheckBox" to="." method="_on_daily_notif_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_unlock_everything_toggled"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProfileButton" to="." method="_on_change_profile_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]

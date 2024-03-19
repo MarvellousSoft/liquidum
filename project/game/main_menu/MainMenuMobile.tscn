@@ -93,24 +93,6 @@ tooltip_text = "RANDOM_TOOLTIP"
 focus_mode = 0
 text = "RANDOM_BUTTON"
 
-[node name="MenuProfileButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-tooltip_text = "PROFILE_TOOLTIP"
-focus_mode = 0
-text = "CHANGE_PROFILE_BUTTON"
-
-[node name="CreditsButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-tooltip_text = "CREDITS_TOOLTIP"
-focus_mode = 0
-text = "CREDITS_BUTTON"
-
-[node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-
 [node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_pd0dy")]
 layout_mode = 2
 
@@ -285,8 +267,6 @@ script = ExtResource("16_h6coi")
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_extra_levels_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/MenuProfileButton" to="." method="_on_profile_button_pressed"]
-[connection signal="pressed" from="MainButtonsContainer/VBoxContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
 [connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
 [connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]
