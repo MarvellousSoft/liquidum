@@ -980,7 +980,7 @@ columns = 2
 [node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 5
 focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "REMOVE_ADS"
@@ -988,7 +988,7 @@ text = "REMOVE_ADS"
 [node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 5
 focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "CREDITS_BUTTON"
@@ -997,7 +997,7 @@ text = "CREDITS_BUTTON"
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 5
 focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "SAVE_AND_BACK"
@@ -1005,7 +1005,7 @@ text = "SAVE_AND_BACK"
 [node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 5
 focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "CHANGE_PROFILE_BUTTON"
@@ -1013,7 +1013,7 @@ text = "CHANGE_PROFILE_BUTTON"
 [node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 5
 focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "SAVE_AND_EXIT"
