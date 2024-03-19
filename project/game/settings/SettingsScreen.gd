@@ -3,6 +3,8 @@ extends CanvasLayer
 
 signal pause_toggled(active : bool)
 
+@export var is_main_menu := false
+
 @onready var AnimPlayer = $AnimationPlayer
 @onready var SoundSettings = {
 	"master": %MasterSoundContainer/HSlider,
@@ -28,6 +30,14 @@ func _ready():
 		Profile.daily_notification_changed.connect(_on_daily_notif_changed)
 		update_remove_ads_button()
 		AdManager.ads_disabled.connect(update_remove_ads_button)
+		if not is_main_menu:
+			%BottomButtonGrid.columns = 2
+			%ProfileButton.hide()
+			%CreditsButton.hide()
+		else:
+			%BottomButtonGrid.columns = 2
+			%ProfileButton.show()
+			%CreditsButton.show()
 
 
 func update_remove_ads_button() -> void:
@@ -245,7 +255,7 @@ func _on_progress_on_unknown_toggled(on: bool) -> void:
 func _on_dark_mode_changed(is_dark : bool):
 	%Settings.theme = Global.get_settings_theme(is_dark)
 	if Global.is_mobile:
-		for node in [%RemoveAdsButton, %BackButton, %QuitButton]:
+		for node in [%RemoveAdsButton, %BackButton, %QuitButton, %CreditsButton, %ProfileButton]:
 			node.theme = Global.get_theme(is_dark)
 	else:
 		for node in [%BackButton, %QuitButton]:

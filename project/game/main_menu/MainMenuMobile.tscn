@@ -249,6 +249,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
+is_main_menu = true
 
 [node name="NoAdsButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)

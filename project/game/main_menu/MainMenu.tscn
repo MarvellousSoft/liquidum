@@ -241,6 +241,7 @@ position_smoothing_enabled = true
 position_smoothing_speed = 4.0
 
 [node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
+is_main_menu = true
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

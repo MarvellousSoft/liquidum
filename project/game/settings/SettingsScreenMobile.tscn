@@ -452,13 +452,6 @@ text = "SHOW_BUBBLES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme = ExtResource("4_s1c65")
-text = "CREDITS_BUTTON"
-
 [node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -831,13 +824,6 @@ theme_override_font_sizes/font_size = 20
 text = "UNLOCK_EVERYTHING_DESC"
 horizontal_alignment = 1
 
-[node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-focus_mode = 0
-theme = ExtResource("4_s1c65")
-text = "CHANGE_PROFILE_BUTTON"
-
 [node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -983,7 +969,15 @@ layout_mode = 2
 text = "PLACE_DRAG"
 autowrap_mode = 3
 
-[node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="BottomButtonGrid" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 65
+theme_override_constants/v_separation = 51
+columns = 2
+
+[node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -991,7 +985,15 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "REMOVE_ADS"
 
-[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "CREDITS_BUTTON"
+
+[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -1000,7 +1002,15 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "SAVE_AND_BACK"
 
-[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "CHANGE_PROFILE_BUTTON"
+
+[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1044,7 +1054,6 @@ libraries = {
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer/HSlider" to="." method="_on_blue_filter_slider_value_changed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer/CheckBox" to="." method="_on_show_bubbles_toggled"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/CreditsButton" to="." method="_on_credits_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer/CheckBox" to="." method="_on_allow_mistakes_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer/CheckBox" to="." method="_on_button_mouse_entered"]
@@ -1071,7 +1080,6 @@ libraries = {
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer/CheckBox" to="." method="_on_daily_notif_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_unlock_everything_toggled"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProfileButton" to="." method="_on_change_profile_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [0]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer/HSlider" to="." method="_on_button_mouse_entered"]
@@ -1080,11 +1088,13 @@ libraries = {
 [connection signal="value_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer/HSlider" to="." method="_on_volume_slider_value_changed" binds= [2]]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/RemoveAdsButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/RemoveAdsButton" to="." method="_on_remove_ads_button_pressed"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_save_n_quit_button_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RemoveAdsButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RemoveAdsButton" to="." method="_on_remove_ads_button_pressed"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/CreditsButton" to="." method="_on_credits_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/BackButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/ProfileButton" to="." method="_on_change_profile_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/QuitButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/QuitButton" to="." method="_on_save_n_quit_button_pressed"]
 [connection signal="mouse_entered" from="PauseButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]
