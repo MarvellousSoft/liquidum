@@ -29,11 +29,11 @@ func _ready() -> void:
 		custom_minimum_size = $HBox.size
 
 func _process(dt: float) -> void:
-	if size != MainButton.size:
-		size = MainButton.size
 	var factor = clamp(LERP_F*dt, 0.0, 1.0)
 	if has_node("HBox"):
-		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor)
+	elif has_node("CenterContainer/VBox"):
+		custom_minimum_size = lerp(custom_minimum_size, $CenterContainer/VBox.size, factor)
 	
 
 func _update() -> void:
@@ -53,8 +53,8 @@ func _update() -> void:
 				else:
 					Profile.set_option("daily_notification", Profile.DailyStatus.Disabled)
 	if Global.is_mobile:
-		%StreakContainer.visible = unlocked
 		%DailyUnlockText.visible = not unlocked
+		%DailyHBox.size_flags_horizontal = SIZE_FILL
 
 	if not unlocked:
 		return

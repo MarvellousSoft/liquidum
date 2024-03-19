@@ -6,8 +6,8 @@
 [node name="WeeklyButton" instance=ExtResource("1_g3lim")]
 script = ExtResource("2_vilvt")
 
-[node name="MainButton" parent="VBoxContainer/DailyHBox" index="3"]
-text = "WEEKLY_BUTTON"
+[node name="3Mistakes" parent="CenterContainer/VBox/VBoxContainer/StreakContainer" index="1"]
+text = "LESS_SIX_MISTAKES"
 
-[node name="DailyUnlockText" parent="VBoxContainer/VBoxContainer" index="2"]
+[node name="DailyUnlockText" parent="CenterContainer/VBox/VBoxContainer" index="2"]
 visible = false

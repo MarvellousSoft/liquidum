@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cpiojpbtpveaj"]
+[gd_scene load_steps=13 format=3 uid="uid://cpiojpbtpveaj"]
 
 [ext_resource type="Script" path="res://game/daily_menu/DailyButton.gd" id="1_8hrak"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_gmsfo"]
@@ -7,27 +7,107 @@
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_fe3xj"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_1irsr"]
 [ext_resource type="Texture2D" uid="uid://bjmde3uep55q3" path="res://assets/images/icons/leaderboards.png" id="5_yp6m4"]
+[ext_resource type="Texture2D" uid="uid://2on37y0kql6h" path="res://assets/images/ui/icons/streak_fire.png" id="8_hme64"]
 
-[node name="DailyButton" type="CenterContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfx6p"]
+bg_color = Color(0.113725, 0.454902, 0.529412, 0.156863)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 5.0
+expand_margin_right = 20.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_an42u"]
+bg_color = Color(0.133333, 0.513726, 0.6, 0.678431)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 5.0
+expand_margin_right = 20.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q5j38"]
+bg_color = Color(0.0352941, 0.211765, 0.34902, 0)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 5.0
+expand_margin_right = 20.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6ymf"]
+bg_color = Color(0.223529, 0.254902, 0.258824, 0.113725)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.117647, 0.12549, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 5.0
+expand_margin_right = 20.0
+expand_margin_bottom = 5.0
+
+[node name="DailyButton" type="Control"]
 custom_minimum_size = Vector2(720, 0)
+layout_mode = 3
+anchors_preset = 0
 size_flags_vertical = 3
 theme = ExtResource("1_gmsfo")
 script = ExtResource("1_8hrak")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 17
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="DailyHBox" type="HBoxContainer" parent="VBoxContainer"]
+[node name="DailyHBox" type="HBoxContainer" parent="CenterContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
-alignment = 2
+alignment = 1
 
-[node name="LeaderboardsButton" type="TextureButton" parent="VBoxContainer/DailyHBox"]
+[node name="LeaderboardsButton" type="TextureButton" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(75, 0)
@@ -36,7 +116,7 @@ texture_normal = ExtResource("5_yp6m4")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Share" type="TextureButton" parent="VBoxContainer/DailyHBox"]
+[node name="Share" type="TextureButton" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -48,19 +128,20 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("3_o6f01")
 
-[node name="BeforeButton" type="Control" parent="VBoxContainer/DailyHBox"]
+[node name="BeforeButton" type="Control" parent="CenterContainer/VBox/DailyHBox"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
-[node name="MainButton" type="Button" parent="VBoxContainer/DailyHBox"]
+[node name="MainButton" type="Button" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 size_flags_vertical = 4
 tooltip_text = "DAILY_TOOLTIP"
 focus_mode = 0
 text = "DAILY_BUTTON"
 
-[node name="OngoingSolution" parent="VBoxContainer/DailyHBox/MainButton" instance=ExtResource("4_fe3xj")]
+[node name="OngoingSolution" parent="CenterContainer/VBox/DailyHBox/MainButton" instance=ExtResource("4_fe3xj")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 70)
 offset_left = -52.0
@@ -69,11 +150,11 @@ offset_right = 118.0
 offset_bottom = 124.0
 scale = Vector2(0.7, 0.7)
 
-[node name="AfterButton" type="Control" parent="VBoxContainer/DailyHBox"]
+[node name="AfterButton" type="Control" parent="CenterContainer/VBox/DailyHBox"]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
-[node name="Completed" type="TextureRect" parent="VBoxContainer/DailyHBox"]
+[node name="Completed" type="TextureRect" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -85,7 +166,7 @@ texture = ExtResource("5_1irsr")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NotCompleted" type="Label" parent="VBoxContainer/DailyHBox"]
+[node name="NotCompleted" type="Label" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(75, 0)
@@ -101,32 +182,22 @@ theme_override_font_sizes/font_size = 75
 text = " !"
 horizontal_alignment = 1
 
-[node name="OffsetRight" type="Control" parent="VBoxContainer/DailyHBox"]
+[node name="OffsetRight" type="Control" parent="CenterContainer/VBox/DailyHBox"]
 visible = false
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 23
-alignment = 1
-
-[node name="Spacer" type="Control" parent="VBoxContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="CenterContainer/VBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="StreakContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="TimeBox" type="HBoxContainer" parent="CenterContainer/VBox"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-tooltip_text = "STREAK_TOOLTIP"
-theme_override_constants/separation = 15
+theme_override_constants/separation = 60
 alignment = 1
 
-[node name="TimeLeft" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+[node name="TimeLeft" type="Label" parent="CenterContainer/VBox/TimeBox"]
 unique_name_in_owner = true
 layout_mode = 2
 auto_translate = false
@@ -136,12 +207,63 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+[node name="StreakButton" type="Button" parent="CenterContainer/VBox/TimeBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "WEEKLY_STREAK_TOOLTIP"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_pressed_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_colors/font_hover_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_focus_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.85098, 1, 0.886275, 1)
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_colors/icon_normal_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.64, 0.213333, 0, 1)
+theme_override_colors/icon_hover_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_colors/icon_focus_color = Color(0.85098, 0.282353, 0, 1)
+theme_override_constants/outline_size = 30
+theme_override_constants/h_separation = 16
+theme_override_constants/icon_max_width = 38
+theme_override_font_sizes/font_size = 43
+theme_override_styles/normal = SubResource("StyleBoxFlat_rfx6p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_an42u")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_q5j38")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_q6ymf")
+toggle_mode = true
+text = "6"
+icon = ExtResource("8_hme64")
+alignment = 0
+icon_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 9
+alignment = 1
+
+[node name="Spacer2" type="Control" parent="CenterContainer/VBox/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="StreakContainer" type="VBoxContainer" parent="CenterContainer/VBox/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "STREAK_TOOLTIP"
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/VBox/VBoxContainer/StreakContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="CurStreakName" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+[node name="CurStreakName" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -149,7 +271,7 @@ theme_override_font_sizes/font_size = 26
 text = "CUR_STREAK"
 vertical_alignment = 1
 
-[node name="CurStreak" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+[node name="CurStreak" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -158,7 +280,7 @@ theme_override_font_sizes/font_size = 26
 text = "0"
 vertical_alignment = 1
 
-[node name="BestStreakName" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+[node name="BestStreakName" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -166,7 +288,7 @@ theme_override_font_sizes/font_size = 26
 text = "BEST_STREAK"
 vertical_alignment = 1
 
-[node name="BestStreak" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer/GridContainer"]
+[node name="BestStreak" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -175,7 +297,7 @@ theme_override_font_sizes/font_size = 26
 text = "0"
 vertical_alignment = 1
 
-[node name="3Mistakes" type="Label" parent="VBoxContainer/VBoxContainer/StreakContainer"]
+[node name="3Mistakes" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 10
@@ -183,24 +305,21 @@ theme_override_font_sizes/font_size = 20
 text = "LESS_THREE_MISTAKES"
 horizontal_alignment = 1
 
-[node name="DailyUnlockText" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="DailyUnlockText" type="Label" parent="CenterContainer/VBox/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 30
 text = "DAILY_UNLOCK_MOBILE"
-horizontal_alignment = 1
-autowrap_mode = 2
+horizontal_alignment = 2
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 30.0
 autostart = true
 
-[connection signal="pressed" from="VBoxContainer/DailyHBox/LeaderboardsButton" to="." method="_on_leaderboards_button_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/DailyHBox/Share" to="VBoxContainer/DailyHBox/Share" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="VBoxContainer/DailyHBox/Share" to="VBoxContainer/DailyHBox/Share" method="_on_mouse_exited"]
-[connection signal="pressed" from="VBoxContainer/DailyHBox/Share" to="." method="_on_share_pressed"]
-[connection signal="pressed" from="VBoxContainer/DailyHBox/MainButton" to="." method="_on_main_button_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="mouse_entered" from="CenterContainer/VBox/DailyHBox/Share" to="CenterContainer/VBox/DailyHBox/Share" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBox/DailyHBox/Share" to="CenterContainer/VBox/DailyHBox/Share" method="_on_mouse_exited"]
+[connection signal="toggled" from="CenterContainer/VBox/TimeBox/StreakButton" to="." method="_on_streak_button_toggled"]

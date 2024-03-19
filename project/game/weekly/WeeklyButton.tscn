@@ -128,15 +128,6 @@ theme_override_constants/outline_size = 40
 text = "X hours left"
 vertical_alignment = 1
 
-[node name="-" type="Label" parent="HBox/VBoxContainer/TimeBox"]
-layout_mode = 2
-auto_translate = false
-localize_numeral_system = false
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 40
-text = "-"
-vertical_alignment = 1
-
 [node name="StreakButton" type="Button" parent="HBox/VBoxContainer/TimeBox"]
 unique_name_in_owner = true
 layout_mode = 2

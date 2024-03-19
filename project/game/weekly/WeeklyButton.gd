@@ -28,7 +28,10 @@ func _day_strip_time(unixtime: int) -> String:
 func _process(dt):
 	if has_node("HBox"):
 		var factor = clamp(LERP_F*dt, 0.0, 1.0)
-		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor) 
+		custom_minimum_size = lerp(custom_minimum_size, $HBox.size, factor)
+	elif has_node("CenterContainer/VBox"):
+		var factor = clamp(LERP_F*dt, 0.0, 1.0)
+		custom_minimum_size = lerp(custom_minimum_size, $CenterContainer/VBox.size, factor) 
 
 
 func _update() -> void:
