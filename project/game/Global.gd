@@ -33,6 +33,7 @@ const WATER_COLORS = {
 	"normal": {
 		"dark": Color(0, 0.035, 0.141),
 		"bg": Color(0.851, 1, 0.886),
+		"preview": Color(0.078, 0.365, 0.529),
 		"water_color": Color(0.671, 1, 0.82),
 		"depth_color": Color(0.078, 0.365, 0.529),
 		"ray_value": 0.3,
@@ -40,6 +41,7 @@ const WATER_COLORS = {
 	"dark": {
 		"dark": Color(0.671, 1, 0.82),
 		"bg": Color(0.035, 0.212, 0.349),
+		"preview": Color(0.275, 0.812, 0.702),
 		"water_color": Color(0.671, 1, 0.82),
 		"depth_color": Color(0.275, 0.812, 0.702),
 		"ray_value": 1.0,
@@ -61,6 +63,8 @@ const TUTORIALS = {
 	"unknown_hints": preload("res://database/tutorials/UnknownHints.tscn"),
 	"boats": preload("res://database/tutorials/Boats.tscn"),
 }
+const WATER_MATERIAL = preload("res://assets/shaders/WaterMaterial.tres")
+const GRANULAR = 0.01 #Should divide 1.0 evenly
 
 signal dev_mode_toggled(status : bool)
 
@@ -71,6 +75,7 @@ var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
 var play_new_dif_again = -1
 var custom_portrait = null
+var shader_materials = {}
 
 func _ready() -> void:
 	dev_mode_label = Label.new()
@@ -82,6 +87,9 @@ func _ready() -> void:
 	if ProjectSettings.get_setting("liquidum/dev_mode"):
 		toggle_dev_mode()
 	check_cmdline_args()
+	setup_shader_materials()
+	Profile.dark_mode_toggled.connect(update_dark_mode)
+	update_dark_mode(Profile.get_option("dark_mode"))
 
 
 func _input(event):
@@ -129,6 +137,20 @@ func check_cmdline_args():
 					custom_portrait = false
 				else:
 					custom_portrait = custom
+
+
+func setup_shader_materials():
+	var v = 0.0 
+	while v <= 1.0 + GRANULAR/2.0:
+		shader_materials[v] = WATER_MATERIAL.duplicate()
+		shader_materials[v].set_shader_parameter(&"level", v)
+		v += GRANULAR
+		v = snapped(v, GRANULAR)
+
+
+func get_water_shader(level : float):
+	assert(shader_materials.has(level),"Not a valid water shader level: " + str(level))
+	return shader_materials[level]
 
 
 func load_mobile_compat(scene: String) -> PackedScene:
@@ -297,3 +319,11 @@ func get_color(is_dark : bool):
 		return WATER_COLORS.dark
 	else:
 		return WATER_COLORS.normal
+
+
+func update_dark_mode(is_dark : bool) -> void:
+	var colors = get_color(is_dark)
+	for water in shader_materials.values():
+		water.set_shader_parameter(&"water_color", colors.water_color)
+		water.set_shader_parameter(&"depth_color", colors.depth_color)
+		water.set_shader_parameter(&"ray_value", colors.ray_value)

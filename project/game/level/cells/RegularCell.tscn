@@ -1,7 +1,6 @@
-[gd_scene load_steps=52 format=3 uid="uid://dg36xpbgk5g24"]
+[gd_scene load_steps=51 format=3 uid="uid://dg36xpbgk5g24"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
-[ext_resource type="Material" uid="uid://owbt514048nc" path="res://assets/shaders/WaterMaterial.tres" id="2_oggd4"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
 [ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/cell/water_topleft.png" id="4_lwpcm"]
 [ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/water_topright.png" id="5_l8l5q"]
@@ -381,60 +380,49 @@ color = Color(0.0352941, 0.211765, 0.34902, 1)
 [node name="Preview" type="Control" parent="."]
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="Preview"]
-material = ExtResource("2_oggd4")
+[node name="Single" type="ColorRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
-texture = ExtResource("3_7aqdv")
 
-[node name="TopLeft" type="TextureRect" parent="Preview"]
-material = ExtResource("2_oggd4")
+[node name="TopLeft" type="ColorRect" parent="Preview"]
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("4_lwpcm")
 
-[node name="TopRight" type="TextureRect" parent="Preview"]
-material = ExtResource("2_oggd4")
+[node name="TopRight" type="ColorRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("5_l8l5q")
 
-[node name="BottomRight" type="TextureRect" parent="Preview"]
-material = ExtResource("2_oggd4")
+[node name="BottomRight" type="ColorRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("6_k26rs")
 
-[node name="BottomLeft" type="TextureRect" parent="Preview"]
-material = ExtResource("2_oggd4")
+[node name="BottomLeft" type="ColorRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
-texture = ExtResource("7_v8ssd")
 
 [node name="Waters" type="Control" parent="."]
 anchors_preset = 0
 
 [node name="Single" type="TextureRect" parent="Waters"]
-material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -443,7 +431,6 @@ mouse_filter = 2
 texture = ExtResource("3_7aqdv")
 
 [node name="TopLeft" type="TextureRect" parent="Waters"]
-material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
@@ -453,7 +440,6 @@ mouse_filter = 2
 texture = ExtResource("4_lwpcm")
 
 [node name="TopRight" type="TextureRect" parent="Waters"]
-material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -463,7 +449,6 @@ mouse_filter = 2
 texture = ExtResource("5_l8l5q")
 
 [node name="BottomRight" type="TextureRect" parent="Waters"]
-material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -473,7 +458,6 @@ mouse_filter = 2
 texture = ExtResource("6_k26rs")
 
 [node name="BottomLeft" type="TextureRect" parent="Waters"]
-material = ExtResource("2_oggd4")
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
