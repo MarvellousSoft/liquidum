@@ -15,12 +15,13 @@ static func save() -> void:
 	FileManager._save_user_data(data)
 
 
-const VERSION := 3
+const VERSION := 4
 
 var random_levels_completed: Array[int]
 # Used to generate random levels in some order
 var random_levels_created: Array[int]
 var endless_completed: Array[int]
+var endless_good: Array[int]
 var endless_created: Array[int]
 var monthly_good_dailies: Array[int]
 # [daily, weekly]
@@ -29,10 +30,11 @@ var current_streak: Array[int]
 # Last "day" you won the daily/weekly
 var last_day: Array[String]
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int]) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int]) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
+	endless_good = endless_good_
 	endless_created = endless_created_
 	best_streak = best_streak_
 	current_streak = current_streak_
@@ -45,6 +47,7 @@ func get_data() -> Dictionary:
 		random_levels_completed = random_levels_completed,
 		random_levels_created = random_levels_created,
 		endless_completed = endless_completed,
+		endless_good = endless_good,
 		endless_created = endless_created,
 		best_streak = best_streak,
 		current_streak = current_streak,
@@ -56,6 +59,10 @@ func save_stats() -> void:
 	var stats := StatsTracker.instance()
 	stats.set_random_levels(random_levels_completed)
 	stats.set_endless_completed(endless_completed)
+	var all_endless_good: int = 0
+	for g in endless_good:
+		all_endless_good += g
+	stats.set_endless_good(all_endless_good)
 	for type in RecurringMarathon.Type.values():
 		stats.set_recurring_streak(type, current_streak[type], best_streak[type])
 
@@ -63,6 +70,11 @@ func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:
 		endless_completed.append(0)
 	endless_completed[section - 1] += 1
+
+func bump_endless_good(section: int) -> void:
+	while endless_good.size() < section:
+		endless_good.append(0)
+	endless_good[section - 1] += 1
 
 func get_endless_completed(section: int) -> int:
 	if endless_completed.size() < section:
@@ -97,6 +109,7 @@ static func load_data(data_: Variant) -> UserData:
 	var completed: Array[int] = []
 	var created: Array[int] = []
 	var endless: Array[int] = []
+	var endless_g: Array[int] = []
 	var endless_c: Array[int] = []
 	var monthly: Array[int] = []
 	var best_streak_a: Array[int] = [0, 0]
@@ -108,8 +121,9 @@ static func load_data(data_: Variant) -> UserData:
 			created.append(0)
 		for i in ExtraLevelLister.count_all_game_sections(true):
 			endless.append(0)
+			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -121,14 +135,18 @@ static func load_data(data_: Variant) -> UserData:
 		data.best_streak = [data.best_streak, 0]
 		data.current_streak = [data.current_streak, 0]
 		data.last_day = [data.last_day, ""]
+	if data.version < 4:
+		data.version = 4
+		data.endless_good = data.endless_completed.duplicate()
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
 	created.assign(data.random_levels_created)
 	endless.assign(data.endless_completed)
+	endless_g.assign(data.endless_good)
 	endless_c.assign(data.get("endless_created", []))
 	monthly.assign(data.get("monthly_good_dailies", []))
 	best_streak_a.assign(data.best_streak)
 	cur_streak_a.assign(data.current_streak)
 	last_day_a.assign(data.last_day)
-	return UserData.new(completed, created, endless, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)

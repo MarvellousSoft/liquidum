@@ -98,10 +98,9 @@ func increment_recurring_good(type: RecurringMarathon.Type) -> void:
 func increment_recurring_started(type: RecurringMarathon.Type) -> void:
 	_increment("%s_started" % RecurringMarathon.type_name(type))
 
-func increment_endless_good() -> void:
+func set_endless_good(count: int) -> void:
 	var l_name := "endless_good_levels"
-	var prev: int = SteamManager.steam.getStatInt(l_name)
-	if _set_stat_with_goal(l_name, prev + 1, 100, "endless_100", 10):
+	if _set_stat_with_goal(l_name, count, 100, "endless_100", 10):
 		flushNewAchievements()
 
 func increment_insane_good() -> void:

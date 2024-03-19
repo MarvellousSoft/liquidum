@@ -19,6 +19,9 @@ func set_random_levels(_completed_count: Array[int]) -> void:
 func set_endless_completed(_completed_count: Array[int]) -> void:
 	pass
 
+func set_endless_good(_count: int) -> void:
+	pass
+
 func set_recurring_streak(_type: RecurringMarathon.Type, _streak: int, _best_streak: int) -> void:
 	pass
 
@@ -38,9 +41,6 @@ func increment_random_any() -> void:
 	pass
 
 func increment_workshop() -> void:
-	pass
-
-func increment_endless_good() -> void:
 	pass
 
 func unlock_recurring_no_mistakes(_type: RecurringMarathon.Type) -> void:
