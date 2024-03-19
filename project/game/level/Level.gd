@@ -475,7 +475,7 @@ static func time_str(secs: int) -> String:
 	var minutes = secs % 3600 / 60
 	var seconds = secs % 60
 	if hours > 0:
-		return "%02d:%02d:%02d" % [hours, minutes, seconds]
+		return "%01d:%02d:%02d" % [hours, minutes, seconds]
 	else:
 		return "%02d:%02d" % [minutes, seconds]
 
