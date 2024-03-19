@@ -64,7 +64,7 @@ const TUTORIALS = {
 	"boats": preload("res://database/tutorials/Boats.tscn"),
 }
 const WATER_MATERIAL = preload("res://assets/shaders/WaterMaterial.tres")
-const GRANULAR = 0.01 #Should divide 1.0 evenly
+const GRANULAR = 0.01
 
 signal dev_mode_toggled(status : bool)
 
