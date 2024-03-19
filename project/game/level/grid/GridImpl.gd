@@ -304,6 +304,16 @@ class PureCell:
 				return [E.Corner.TopLeft, E.Corner.BottomRight]
 		push_error("Unknown type %d" % type)
 		return []
+	func waters() -> Array[E.Waters]:
+		match type:
+			E.CellType.Single:
+				return [E.Waters.Single]
+			E.CellType.DecDiag:
+				return [E.Waters.BottomLeft, E.Waters.TopRight]
+			E.CellType.IncDiag:
+				return [E.Waters.TopLeft, E.Waters.BottomRight]
+		push_error("Unknown type %d" % type)
+		return []
 	func mirror_horizontal() -> void:
 		var new_right := c_left
 		c_left = c_right
@@ -614,7 +624,8 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.added_nowater
-		
+	func waters() -> Array[E.Waters]:
+		return pure().waters()
 	func _has_boat_invalid_pos() -> bool:
 		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
 

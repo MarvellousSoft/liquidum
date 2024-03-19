@@ -7,4 +7,4 @@ func _ready():
 
 #Expects a value between 0 and 1
 func set_value(new_value: float) -> void:
-	%BG.material.set_shader_parameter("strength", new_value)
+	%BG.material.set_shader_parameter(&"strength", new_value)

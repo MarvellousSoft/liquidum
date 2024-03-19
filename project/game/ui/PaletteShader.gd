@@ -33,7 +33,7 @@ func enable_palette(idx):
 		return
 	$ColorRect.show()
 	if PALETTES.size() > idx:
-		$ColorRect.material.set_shader_parameter("palette_color", PALETTES[idx][1])
+		$ColorRect.material.set_shader_parameter(&"palette_color", PALETTES[idx][1])
 
 
 func _on_palette_changed():

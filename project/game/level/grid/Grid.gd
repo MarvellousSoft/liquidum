@@ -102,6 +102,8 @@ class CellModel:
 	# Left then right
 	func corners() -> Array[E.Corner]:
 		return GridModel.must_be_implemented()
+	func waters() -> Array[E.Waters]:
+		return GridModel.must_be_implemented()
 	func water_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()
 	func water_would_flood_which(_corner: E.Corner) -> Array[WaterPosition]:

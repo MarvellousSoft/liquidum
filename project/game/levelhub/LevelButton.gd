@@ -60,7 +60,7 @@ func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	ShaderEffect.material = ShaderEffect.material.duplicate()
-	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
+	ShaderEffect.material.set_shader_parameter(&"rippleRate", randf_range(1.6, 3.5))
 
 func extra_level() -> bool:
 	return lister == ExtraLevelLister
@@ -129,7 +129,7 @@ func change_style_boxes(completed : bool) -> void:
 
 
 func set_effect_alpha(value : float) -> void:
-	ShaderEffect.material.set_shader_parameter("alpha", value)
+	ShaderEffect.material.set_shader_parameter(&"alpha", value)
 
 
 func enable() -> void:

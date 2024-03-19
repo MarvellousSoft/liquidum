@@ -22,7 +22,7 @@ var stack: Array[Node] = []
 
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
-	Effect.material.set_shader_parameter("cutoff", 1.0)
+	Effect.material.set_shader_parameter(&"cutoff", 1.0)
 	visible = false
 
 func pop_scene() -> void:
@@ -68,5 +68,5 @@ func change_scene(scene: Node, add_to_stack := false) -> void:
 
 func _on_dark_mode_toggled(dark_mode):
 	var colors = COLORS.dark_mode if dark_mode else COLORS.light_mode
-	Effect.material.set_shader_parameter("water_color", colors.water_color)
-	Effect.material.set_shader_parameter("foam_color", colors.foam_color)
+	Effect.material.set_shader_parameter(&"water_color", colors.water_color)
+	Effect.material.set_shader_parameter(&"foam_color", colors.foam_color)

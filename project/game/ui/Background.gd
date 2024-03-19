@@ -32,8 +32,8 @@ var target_bottom_color
 func _ready():
 	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
 	Profile.show_bubbles_changed.connect(_on_show_bubbles_changed)
-	target_top_color = BG.material.get_shader_parameter("top_color")
-	target_bottom_color = BG.material.get_shader_parameter("bottom_color")
+	target_top_color = BG.material.get_shader_parameter(&"top_color")
+	target_bottom_color = BG.material.get_shader_parameter(&"bottom_color")
 	var data = CONSTS.desktop if not Global.is_mobile else CONSTS.mobile
 	var ws = data.window_size
 	BG.size = ws
@@ -45,19 +45,19 @@ func _ready():
 	material.emission_box_extents.x = ws.x/2
 
 func _process(dt):
-	var top_color = BG.material.get_shader_parameter("top_color")
-	var bottom_color = BG.material.get_shader_parameter("bottom_color")
+	var top_color = BG.material.get_shader_parameter(&"top_color")
+	var bottom_color = BG.material.get_shader_parameter(&"bottom_color")
 	var lerp_ = clamp(LERP_FACTOR*dt, 0.0, 1.0)
 	if top_color != target_top_color:
 		top_color = top_color.lerp(target_top_color, lerp_)
 		if top_color.is_equal_approx(target_top_color):
 			top_color = target_top_color
-		BG.material.set_shader_parameter("top_color", top_color)
+		BG.material.set_shader_parameter(&"top_color", top_color)
 	if bottom_color != target_bottom_color:
 		bottom_color = bottom_color.lerp(target_bottom_color, lerp_)
 		if bottom_color.is_equal_approx(target_bottom_color):
 			bottom_color = target_bottom_color
-		BG.material.set_shader_parameter("bottom_color", bottom_color)
+		BG.material.set_shader_parameter(&"bottom_color", bottom_color)
 
 
 func _on_dark_mode_toggled(dark_mode):

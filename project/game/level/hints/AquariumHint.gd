@@ -38,7 +38,7 @@ var aquarium_size: float
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
 	Water.material = Water.material.duplicate()
-	Water.material.set_shader_parameter("level", 0.0)
+	Water.material.set_shader_parameter(&"level", 0.0)
 	modulate.a = 0.0
 	update_dark_mode(Profile.get_option("dark_mode"))
 
@@ -54,9 +54,9 @@ func _process(dt):
 func update_dark_mode(is_dark : bool) -> void:
 	var colors = COLORS.dark if is_dark else COLORS.normal
 	%Water.modulate = colors.dark
-	%Water.material.set_shader_parameter("water_color", colors.water_color)
-	%Water.material.set_shader_parameter("depth_color", colors.depth_color)
-	%Water.material.set_shader_parameter("ray_value", colors.ray_value)
+	%Water.material.set_shader_parameter(&"water_color", colors.water_color)
+	%Water.material.set_shader_parameter(&"depth_color", colors.depth_color)
+	%Water.material.set_shader_parameter(&"ray_value", colors.ray_value)
 
 
 func startup(delay: float, fast_mode: bool) -> void:
@@ -69,7 +69,7 @@ func startup(delay: float, fast_mode: bool) -> void:
 
 func instant_startup() -> void:
 	modulate.a = 1.0
-	Water.material.set_shader_parameter("level", 0.5)
+	Water.material.set_shader_parameter(&"level", 0.5)
 
 
 func should_be_visible() -> bool:

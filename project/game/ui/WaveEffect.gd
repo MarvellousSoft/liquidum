@@ -13,4 +13,4 @@ func play():
 
 
 func set_pos(pos : Vector2) -> void:
-	material.set_shader_parameter("center", pos)
+	material.set_shader_parameter(&"center", pos)

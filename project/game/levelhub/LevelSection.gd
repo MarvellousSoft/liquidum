@@ -86,7 +86,7 @@ func _ready():
 	AnimPlayer.play("float")
 	OngoingSolution.hide()
 	ShaderEffect.material = ShaderEffect.material.duplicate()
-	ShaderEffect.material.set_shader_parameter("rippleRate", randf_range(1.6, 3.5))
+	ShaderEffect.material.set_shader_parameter(&"rippleRate", randf_range(1.6, 3.5))
 	Levels.modulate.a = 0.0
 	LevelInfoContainer.modulate.a = 0.0
 	%IconCaptions.modulate.a = 0.0
