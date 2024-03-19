@@ -17,8 +17,13 @@ func set_random_levels(completed_count: Array[int]) -> void:
 func increment_random_any() -> void:
 	GooglePlayGameServices.achievements_increment(GooglePlayGameServices.ids.achievement_intermediate_explorer, 1)
 
-func set_endless_completed(_completed_count: Array[int]) -> void:
-	pass
+func set_endless_completed(completed_count: Array[int]) -> void:
+	var total := 0
+	for c in completed_count:
+		total += c
+	if total >= 1:
+		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_1__level)
+		GooglePlayGameServices.achievements_set_steps(GooglePlayGameServices.ids.achievement_10__level, mini(total, 10))
 	
 const STREAK_ACH: Array[int] = [7, 4]
 
