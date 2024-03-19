@@ -87,8 +87,11 @@ horizontal_alignment = 1
 [node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 150
-alignment = 2
+theme_override_constants/separation = 170
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="PanelContainer/MarginContainer/VBox/Header"]
+layout_mode = 2
 
 [node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
 unique_name_in_owner = true
@@ -97,6 +100,9 @@ theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
 theme_override_fonts/font = SubResource("FontVariation_st5oh")
 theme_override_font_sizes/font_size = 52
 text = "SIZE"
+
+[node name="Spacer2" type="Control" parent="PanelContainer/MarginContainer/VBox/Header"]
+layout_mode = 2
 
 [node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
 unique_name_in_owner = true
@@ -119,9 +125,6 @@ theme_override_constants/separation = 30
 
 [node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("3_6cjw2")]
 layout_mode = 2
-
-[node name="Size" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3/LeftContainer" index="0"]
-text = "3"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

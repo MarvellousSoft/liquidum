@@ -18,6 +18,10 @@ const COLORS = {
 		"ray_value": 1.0,
 	}
 }
+const TEXTURES = {
+	"half": preload("res://assets/images/ui/cell/water_bottomleft.png"),
+	"single": preload("res://assets/images/ui/cell/water_single.png"),
+}
 
 @onready var AnimPlayer = $AnimationPlayer
 @onready var VisibilityButton: TextureButton = %VisibilityButton
@@ -80,6 +84,22 @@ func set_values(aq_size: float, amount: int, current: int, editor_mode: bool) ->
 	VisibilityButton.visible = editor_mode
 	aquarium_size = aq_size
 	Size.text = str(aq_size)
+	if aq_size <= 0:
+		%Water.texture = null
+		%WallDiag.hide()
+		%WallTop.show()
+		%WallRight.show()
+	elif aq_size == 0.5:
+		%Water.texture = TEXTURES.half
+		%WallDiag.show()
+		%WallTop.hide()
+		%WallRight.hide()
+	else:
+		%Water.texture = TEXTURES.single
+		%WallDiag.hide()
+		%WallTop.show()
+		%WallRight.show()
+	%Plus.visible = aq_size > 1
 	ExpectedAmount.text = "x%d" % amount
 	if editor_mode:
 		MiddleSeparator.hide()

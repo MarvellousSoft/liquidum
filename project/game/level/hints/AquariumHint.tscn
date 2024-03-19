@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bhn03aekm8wud"]
+[gd_scene load_steps=15 format=3 uid="uid://bhn03aekm8wud"]
 
 [ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
 [ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="2_lgxd6"]
@@ -6,9 +6,7 @@
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_bqvbu"]
 [ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="4_4kw1v"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="5_g4jsa"]
-
-[sub_resource type="FontVariation" id="FontVariation_aaqvh"]
-base_font = ExtResource("3_bqvbu")
+[ext_resource type="Texture2D" uid="uid://jfry4mjfhxrm" path="res://assets/images/ui/cell/wall_dec_diag.png" id="6_v313m"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
 noise_type = 2
@@ -35,6 +33,9 @@ shader_parameter/depth_color = Color(0.0784314, 0.364706, 0.529412, 1)
 shader_parameter/ray_value = 0.3
 shader_parameter/noise_sampler = SubResource("NoiseTexture2D_bi3kj")
 
+[sub_resource type="FontVariation" id="FontVariation_aaqvh"]
+base_font = ExtResource("3_bqvbu")
+
 [sub_resource type="Animation" id="Animation_2wtmy"]
 length = 0.001
 tracks/0/type = "value"
@@ -52,7 +53,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("LeftContainer/CenterContainer/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -79,7 +80,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("LeftContainer/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("LeftContainer/CenterContainer/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -120,10 +121,66 @@ custom_minimum_size = Vector2(50, 50)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(267, 0)
 layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 2
+theme_override_constants/separation = 5
 
-[node name="Size" type="Label" parent="LeftContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="LeftContainer"]
+layout_mode = 2
+
+[node name="Water" type="TextureRect" parent="LeftContainer/CenterContainer"]
+unique_name_in_owner = true
+modulate = Color(0, 0.0352941, 0.141176, 1)
+material = SubResource("ShaderMaterial_qre3a")
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+texture = ExtResource("5_g4jsa")
+expand_mode = 1
+
+[node name="WallLeft" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 150.0
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+
+[node name="WallRight" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 150.0
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+flip_h = true
+
+[node name="WallBottom" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 150.0
+rotation = -1.5708
+pivot_offset = Vector2(75, 75)
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+
+[node name="WallTop" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 150.0
+rotation = -1.5708
+pivot_offset = Vector2(75, 75)
+texture = ExtResource("4_4kw1v")
+expand_mode = 1
+flip_h = true
+
+[node name="WallDiag" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 150.0
+texture = ExtResource("6_v313m")
+expand_mode = 1
+
+[node name="Size" type="Label" parent="LeftContainer/CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -134,48 +191,12 @@ theme_override_font_sizes/font_size = 70
 text = "3.5"
 vertical_alignment = 2
 
-[node name="Water" type="TextureRect" parent="LeftContainer"]
+[node name="Plus" type="Label" parent="LeftContainer"]
 unique_name_in_owner = true
-modulate = Color(0, 0.0352941, 0.141176, 1)
-material = SubResource("ShaderMaterial_qre3a")
-custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
-texture = ExtResource("5_g4jsa")
-expand_mode = 1
-
-[node name="WallLeft" type="TextureRect" parent="LeftContainer/Water"]
-layout_mode = 0
-offset_right = 150.0
-offset_bottom = 150.0
-texture = ExtResource("4_4kw1v")
-expand_mode = 1
-
-[node name="WallRight" type="TextureRect" parent="LeftContainer/Water"]
-layout_mode = 0
-offset_right = 150.0
-offset_bottom = 150.0
-texture = ExtResource("4_4kw1v")
-expand_mode = 1
-flip_h = true
-
-[node name="WallBottom" type="TextureRect" parent="LeftContainer/Water"]
-layout_mode = 0
-offset_right = 150.0
-offset_bottom = 150.0
-rotation = -1.5708
-pivot_offset = Vector2(75, 75)
-texture = ExtResource("4_4kw1v")
-expand_mode = 1
-
-[node name="WallTop" type="TextureRect" parent="LeftContainer/Water"]
-layout_mode = 0
-offset_right = 150.0
-offset_bottom = 150.0
-rotation = -1.5708
-pivot_offset = Vector2(75, 75)
-texture = ExtResource("4_4kw1v")
-expand_mode = 1
-flip_h = true
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 38
+text = "+"
 
 [node name="MiddleSeparator" type="Panel" parent="."]
 unique_name_in_owner = true
