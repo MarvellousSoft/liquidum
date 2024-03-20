@@ -1,13 +1,13 @@
 class_name GridExporter
 
 # Change when there's breaking changes
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 
 # Use ints to save serialization space
 # We're not human-editing this anyway
 enum {version, c_left, c_right, cell_type, water_count, water_count_type, boat_count, boat_count_type,
 total_water, total_boats, expected_aquariums, row_hints, col_hints, cells, wall_bottom, wall_right,
-grid_hints}
+grid_hints, cell_hints, adj_water_count, adj_water_count_type}
 
 func _export_pure_cell(pure: GridImpl.PureCell) -> Dictionary:
 	return {
@@ -41,6 +41,44 @@ func _load_grid(data: Array, inner_load: Callable) -> Array[Array]:
 			new_row.append(cell)
 		grid.append(new_row)
 	return grid
+
+func _export_single_cell_hints(hints: GridModel.CellHints) -> Dictionary:
+	if hints == null:
+		return {}
+	return {
+		adj_water_count: hints.adj_water_count,
+		adj_water_count_type: hints.adj_water_count_type,
+	}
+
+func _load_single_cell_hints(data: Dictionary) -> GridModel.CellHints:
+	if data.is_empty():
+		return null
+	var c := GridModel.CellHints.new()
+	c.adj_water_count = float(data[adj_water_count])
+	c.adj_water_count_type = data[adj_water_count_type]
+	return c
+
+# Let's be a little smarter here than storing a full grid because it is very sparse
+func _export_all_cell_hints(hints: Array[Array]) -> Array:
+	var data := []
+	for i in hints.size():
+		for j in hints[i].size():
+			if hints[i][j] != null:
+				data.append([i, j, _export_single_cell_hints(hints[i][j])])
+	return data
+
+func _load_all_cell_hints(data: Array, n: int, m: int) -> Array[Array]:
+	var hints: Array[Array] = []
+	for i in n:
+		var row: Array[GridModel.CellHints] = []
+		row.resize(m)
+		hints.append(row)
+	for s_data in data:
+		var i: int = s_data[0]
+		var j: int = s_data[1]
+		var hint_data: Dictionary = s_data[2]
+		hints[i][j] = _load_single_cell_hints(hint_data)
+	return hints
 
 func _export_line_hint(line: GridModel.LineHint) -> Dictionary:
 	return {
@@ -81,9 +119,10 @@ func _load_grid_hints(data: Dictionary) -> GridModel.GridHints:
 	return hints
 
 func export_data(grid: GridImpl) -> Dictionary:
-	return {
+	var data := {
 		version: SAVE_VERSION,
 		cells: _export_grid(grid.pure_cells, _export_pure_cell),
+		cell_hints: _export_all_cell_hints(grid.cell_hints),
 		row_hints: grid._row_hints.map(_export_line_hint),
 		col_hints: grid._col_hints.map(_export_line_hint),
 
@@ -91,6 +130,7 @@ func export_data(grid: GridImpl) -> Dictionary:
 		wall_right: _export_grid(grid.wall_right, _export_bool),
 		grid_hints: _export_grid_hints(grid._grid_hints),
 	}
+	return data
 
 func _convert_keys_to_int(data_: Variant) -> Variant:
 	if data_ is Array:
@@ -136,6 +176,9 @@ func load_compatible(old_grid: GridImpl, data: Dictionary, new_cells: Array[Arra
 
 func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
 	data = _convert_keys_to_int(data)
+	if data[version] < 2:
+		data[version] = 2
+		data[cell_hints] = []
 	if SAVE_VERSION != data[version]:
 		push_warning("Invalid version")
 	var content_only := (load_mode == GridModel.LoadMode.ContentOnly)
@@ -152,6 +195,7 @@ func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) 
 	else:
 		grid.n = n
 		grid.m = m
+		grid.cell_hints = _load_all_cell_hints(data[cell_hints], n, m)
 		grid._row_hints.assign(data[row_hints].map(_load_line_hint))
 		grid._col_hints.assign(data[col_hints].map(_load_line_hint))
 		grid.wall_bottom = _load_grid(data[wall_bottom], _load_bool)

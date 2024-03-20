@@ -42,6 +42,10 @@ class WaterPosition:
 	func to_vec3() -> Vector3i:
 		return Vector3i(i, j, loc)
 
+class CellHints:
+	var adj_water_count: float
+	var adj_water_count_type: E.HintType
+
 class CellModel:
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
@@ -115,6 +119,13 @@ class CellModel:
 	func boat_would_flood_which() -> Array[WaterPosition]:
 		return GridModel.must_be_implemented()
 	func nowater_would_flood_how_many(_corner: E.Corner) -> float:
+		return GridModel.must_be_implemented()
+	# Returns if something changed
+	func add_cell_hints(_flush_undo := true) -> bool:
+		return GridModel.must_be_implemented()
+	func rem_cell_hints(_flush_undo := true) -> bool:
+		return GridModel.must_be_implemented()
+	func hints() -> CellHints:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:

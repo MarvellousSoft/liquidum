@@ -1140,3 +1140,39 @@ func test_rotate_mirror() -> void:
 	#....#
 	L/_.L╲
 	""")
+
+func test_cell_hints() -> void:
+	var g := str_grid("""
+	+cellhint=2:2:3.5
+	wwwwwwwwww
+	|._._._...
+	www....www
+	|.L/L.L/|.
+	ww......ww
+	|.L.L.L.|.
+	ww..ww..ww
+	|.L.L.L.|.
+	wwwwwwwwww
+	L._._._._.
+	""") as GridImpl
+	assert(g.get_cell(2, 2).hints().adj_water_count == 3.5)
+	assert(g.get_cell(2, 2).hints().adj_water_count_type == E.HintType.Hidden)
+	assert(not g.are_hints_satisfied())
+	assert(g.count_waters_adj(2, 2) == 2.0)
+	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
+	assert(g.count_waters_adj(0, 1) == 4.5)
+	g.get_cell(1, 1).put_water(E.Corner.BottomRight)
+	assert(not g.are_hints_satisfied())
+	g.get_cell(1, 2).put_water(E.Corner.BottomRight)
+	assert(g.count_waters_adj(2, 2) == 3.5)
+	assert(g.are_hints_satisfied())
+	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
+	g.get_cell(1, 3).put_water(E.Corner.TopLeft)
+	# TODO: Deal with together for these hints
+	#assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Together)
+	assert(not g.are_hints_satisfied())
+	g.undo()
+	g.get_cell(2, 1).put_water(E.Corner.TopLeft)
+	assert(not g.are_hints_satisfied())
+	g.get_cell(2, 1).remove_content(E.Corner.TopLeft)
+	assert(g.are_hints_satisfied())

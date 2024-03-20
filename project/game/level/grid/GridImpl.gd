@@ -41,6 +41,8 @@ var n: int
 var m: int
 # NxM Array[Array[PureCell]] but GDscript doesn't support it
 var pure_cells: Array[Array]
+# NxM Array[Array[CellHints]]
+var cell_hints: Array[Array]
 var _row_hints: Array[LineHint]
 var _col_hints: Array[LineHint]
 var _grid_hints: GridHints
@@ -70,10 +72,19 @@ func _empty_line_hint() -> LineHint:
 	hint.boat_count_type = E.HintType.Hidden
 	return hint
 
+func reset_cell_hints() -> void:
+	cell_hints = []
+	for i in n:
+		var hints: Array[CellHints] = []
+		hints.resize(m)
+		cell_hints.append(hints)
+	
+
 func setup(n_: int, m_: int) -> void:
 	self.n = n_
 	self.m = m_
 	pure_cells = []
+	reset_cell_hints()
 	wall_right = []
 	wall_bottom = []
 	_row_hints = []
@@ -355,6 +366,19 @@ class CellChange extends Change:
 		prev_cell = new_cell
 		return self
 
+class CellHintsChange extends Change:
+	var i: int
+	var j: int
+	var was_present: bool
+	func _init(i_: int, j_: int, was_present_: bool) -> void:
+		i = i_
+		j = j_
+		was_present = was_present_
+	func undo(grid: GridImpl) -> Change:
+		grid.get_cell(i, j)._set_cell_hints(was_present)
+		was_present = not was_present
+		return self
+
 class WallChange extends Change:
 	var i: int
 	var j: int
@@ -377,16 +401,18 @@ class AddRowChange extends Change:
 
 class RemRowChange extends Change:
 	var prev_row: Array[PureCell]
+	var prev_hints: Array[CellHints]
 	var prev_wall_bottom: Array[bool]
 	var prev_wall_right: Array[bool]
 	var prev_hint: LineHint
-	func _init(prev_row_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
+	func _init(prev_row_: Array[PureCell], prev_hints_: Array[CellHints], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
 		prev_row = prev_row_
+		prev_hints = prev_hints_
 		prev_wall_bottom = prev_wall_bottom_
 		prev_wall_right = prev_wall_right_
 		prev_hint = prev_hint_
 	func undo(grid: GridImpl) -> Change:
-		return grid._do_add_row(prev_row, prev_wall_bottom, prev_wall_right, prev_hint)
+		return grid._do_add_row(prev_row, prev_hints, prev_wall_bottom, prev_wall_right, prev_hint)
 
 class AddColChange extends Change:
 	func undo(grid: GridImpl) -> Change:
@@ -394,16 +420,18 @@ class AddColChange extends Change:
 
 class RemColChange extends Change:
 	var prev_col: Array[PureCell]
+	var prev_hints: Array[CellHints]
 	var prev_wall_bottom: Array[bool]
 	var prev_wall_right: Array[bool]
 	var prev_hint: LineHint
-	func _init(prev_col_: Array[PureCell], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
+	func _init(prev_col_: Array[PureCell], prev_hints_: Array[CellHints], prev_wall_bottom_: Array[bool], prev_wall_right_: Array[bool], prev_hint_: LineHint) -> void:
 		prev_col = prev_col_
+		prev_hints = prev_hints_
 		prev_wall_bottom = prev_wall_bottom_
 		prev_wall_right = prev_wall_right_
 		prev_hint = prev_hint_
 	func undo(grid: GridImpl) -> Change:
-		return grid._do_add_col(prev_col, prev_wall_bottom, prev_wall_right, prev_hint)
+		return grid._do_add_col(prev_col, prev_hints, prev_wall_bottom, prev_wall_right, prev_hint)
 
 class Changes:
 	var changes: Array[Change]
@@ -628,6 +656,24 @@ class CellWithLoc extends GridModel.CellModel:
 		return pure().waters()
 	func _has_boat_invalid_pos() -> bool:
 		return has_boat() and (wall_at(E.Walls.Bottom) or cell_type() != E.Single or grid.get_cell(i + 1, j).pure()._content_top() != Content.Water)
+	func _set_cell_hints(on: bool) -> void:
+		assert(grid.editor_mode())
+		grid.cell_hints[i][j] = GridModel.CellHints.new() if on else null
+		grid._update_cell_hints(i, j)
+	func add_cell_hints(flush_undo := true) -> bool:
+		if hints() != null:
+			return false
+		_set_cell_hints(true)
+		grid._push_undo_changes([CellHintsChange.new(i, j, false)], flush_undo)
+		return true
+	func rem_cell_hints(flush_undo := true) -> bool:
+		if hints() == null:
+			return false
+		_set_cell_hints(false)
+		grid._push_undo_changes([CellHintsChange.new(i, j, true)], flush_undo)
+		return true
+	func hints() -> CellHints:
+		return grid.cell_hints[i][j]
 
 func rows() -> int:
 	return n
@@ -641,17 +687,21 @@ func _pure_cell(i: int, j: int) -> PureCell:
 func get_cell(i: int, j: int) -> CellModel:
 	return CellWithLoc.new(i, j, self)
 
-func _do_add_row(row: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddRowChange:
+func _do_add_row(row: Array[PureCell], hints: Array[CellHints], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddRowChange:
 	assert(editor_mode())
 	if row.is_empty():
 		for _j in m:
 			row.append(PureCell.empty())
+	if hints.is_empty():
+		for _j in m:
+			hints.append(null)
 	if new_wall_bottom.is_empty():
 		new_wall_bottom.resize(m)
 	if new_wall_right.is_empty():
 		new_wall_right.resize(m - 1)
 	n += 1
 	pure_cells.append(row)
+	cell_hints.append(hints)
 	wall_bottom.append(new_wall_bottom)
 	wall_right.append(new_wall_right)
 	_row_hints.append(new_line_hint)
@@ -663,20 +713,22 @@ func _do_rem_row() -> RemRowChange:
 	assert(editor_mode())
 	n -= 1
 	var prev_row: Array[PureCell] = []
+	var prev_hints: Array[CellHints] = []
 	var prev_wall_bottom: Array[bool] = []
 	var prev_wall_right: Array[bool] = []
 	# Why is this sometimes Array and not Array[PureCell]?
 	prev_row.assign(pure_cells.pop_back())
+	prev_hints.assign(cell_hints.pop_back())
 	prev_wall_bottom.assign(wall_bottom.pop_back())
 	prev_wall_right.assign(wall_right.pop_back())
 	var hint: LineHint = _row_hints.pop_back()
 	fix_invalid_boats(false)
 	maybe_update_hints()
 	validate()
-	return RemRowChange.new(prev_row, prev_wall_bottom, prev_wall_right, hint)
+	return RemRowChange.new(prev_row, prev_hints, prev_wall_bottom, prev_wall_right, hint)
 
 func add_row(flush_undo := true) -> void:
-	var change := _do_add_row([], [], [], _empty_line_hint())
+	var change := _do_add_row([], [], [], [], _empty_line_hint())
 	_push_undo_changes([change], flush_undo)
 	flood_all(false)
 	maybe_update_hints()
@@ -690,11 +742,14 @@ func rem_row(flush_undo := true) -> void:
 	var change := _do_rem_row()
 	_push_undo_changes([change], false)
 
-func _do_add_col(col: Array[PureCell], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddColChange:
+func _do_add_col(col: Array[PureCell], hints: Array[CellHints], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddColChange:
 	assert(editor_mode())
 	if col.is_empty():
 		for _i in n:
 			col.append(PureCell.empty())
+	if hints.is_empty():
+		for _i in n:
+			hints.append(null)
 	if new_wall_bottom.is_empty():
 		new_wall_bottom.resize(n - 1)
 	if new_wall_right.is_empty():
@@ -702,6 +757,7 @@ func _do_add_col(col: Array[PureCell], new_wall_bottom: Array[bool], new_wall_ri
 	m += 1
 	for i in n:
 		pure_cells[i].append(col[i])
+		cell_hints[i].append(hints[i])
 		if i != n - 1:
 			wall_bottom[i].append(new_wall_bottom[i])
 		wall_right[i].append(new_wall_right[i])
@@ -714,20 +770,22 @@ func _do_rem_col() -> RemColChange:
 	assert(editor_mode())
 	m -= 1
 	var prev_col: Array[PureCell] = []
+	var prev_hints: Array[CellHints] = []
 	var prev_wall_bottom: Array[bool] = []
 	var prev_wall_right: Array[bool] = []
 	for i in n:
 		prev_col.append(pure_cells[i].pop_back().clone())
+		prev_hints.append(cell_hints[i].pop_back())
 		if i != n - 1:
 			prev_wall_bottom.append(wall_bottom[i].pop_back())
 		prev_wall_right.append(wall_right[i].pop_back())
 	var hint: LineHint = _col_hints.pop_back()
 	maybe_update_hints()
 	validate()
-	return RemColChange.new(prev_col, prev_wall_bottom, prev_wall_right, hint)
+	return RemColChange.new(prev_col, prev_hints, prev_wall_bottom, prev_wall_right, hint)
 
 func add_col(flush_undo := true) -> void:
-	var change := _do_add_col([], [], [], _empty_line_hint())
+	var change := _do_add_col([], [], [], [], _empty_line_hint())
 	_push_undo_changes([change], flush_undo)
 	flood_all(false)
 	maybe_update_hints()
@@ -794,9 +852,31 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 func editor_mode() -> bool:
 	return _force_editor_mode or solution_c_left.is_empty()
 
+func count_waters_adj(i: int, j: int) -> float:
+	var water_count := 0.0
+	for di in [-1, 0, 1]:
+		for dj in [-1, 0, 1]:
+			if i + di >= 0 and i + di < n and j + dj >= 0 and j + dj < m:
+				water_count += _pure_cell(i + di, j + dj).water_count()
+	return water_count
+
+func together_waters_adj(water: float, _i: int, _j: int) -> E.HintType:
+	# TODO: Do this correctly
+	return E.HintType.Zero if water == 0 else E.HintType.Separated
+
+func _update_cell_hint(i: int, j: int) -> void:
+	var c: CellHints = cell_hints[i][j]
+	if c == null:
+		return
+	c.adj_water_count = count_waters_adj(i, j)
+	c.adj_water_count_type = together_waters_adj(c.adj_water_count, i, j)
+
 func maybe_update_hints() -> void:
 	if not editor_mode() or not auto_update_hints():
 		return
+	for i in n:
+		for j in m:
+			_update_cell_hint(i, j)
 	_grid_hints.total_boats = count_boats()
 	_grid_hints.total_water = count_waters()
 	_grid_hints.expected_aquariums = all_aquarium_counts()
@@ -895,6 +975,12 @@ func _parse_extra_data(line: String) -> void:
 		"+aqua":
 			var sv := kv[1].split(":", false, 2)
 			_grid_hints.expected_aquariums[float(sv[0])] = int(sv[1])
+		"+cellhint":
+			var sv := kv[1].split(":", false, 3)
+			var c := CellHints.new()
+			c.adj_water_count_type = E.HintType.Hidden
+			c.adj_water_count = float(sv[2])
+			cell_hints[int(sv[0])][int(sv[1])] = c
 		_:
 			push_error("Invalid data %s" % line)
 
@@ -1455,6 +1541,16 @@ func all_boats_hint_status() -> E.HintStatus:
 func all_waters_hint_status() -> E.HintStatus:
 	return _hint_statusf(count_waters(), get_expected_waters())
 
+func cell_hint_status(i: int, j: int) -> E.HintStatus:
+	var c: CellHints = cell_hints[i][j]
+	if c == null:
+		return E.HintStatus.Satisfied
+	var water := count_waters_adj(i, j)
+	var status := _hint_statusf(water, c.adj_water_count)
+	var ok_type: bool = c.adj_water_count_type == E.HintType.Hidden or (together_waters_adj(water, i, j) == c.adj_water_count_type)
+	return _status_and_then(status, ok_type, c.adj_water_count == -1)
+	
+
 func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
 	if status1 == E.HintStatus.Wrong or status2 == E.HintStatus.Wrong:
 		return E.HintStatus.Wrong
@@ -1466,19 +1562,40 @@ func all_hints_status() -> E.HintStatus:
 	var s := E.HintStatus.Satisfied
 	#print("bef ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_boats_hint_status())
+	if s == E.HintStatus.Wrong:
+		return s
 	#print("boats ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_waters_hint_status())
+	if s == E.HintStatus.Wrong:
+		return s
 	#print("waters ", E.HintStatus.find_key(s))
 	s = merge_status(s, aquarium_hints_status())
+	if s == E.HintStatus.Wrong:
+		return s
 	#print("aquariums ", E.HintStatus.find_key(s))
 	for i in n:
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Water))
+		if s == E.HintStatus.Wrong:
+			return s
 		s = merge_status(s, get_row_hint_status(i, E.HintContent.Boat))
+		if s == E.HintStatus.Wrong:
+			return s
 		#print("row %d " % i, E.HintStatus.find_key(s))
 	for j in m:
 		s = merge_status(s, get_col_hint_status(j, E.HintContent.Water))
+		if s == E.HintStatus.Wrong:
+			return s
 		s = merge_status(s, get_col_hint_status(j, E.HintContent.Boat))
+		if s == E.HintStatus.Wrong:
+			return s
 		#print("col %d " % j, E.HintStatus.find_key(s))
+	for i in n:
+		for j in m:
+			s = merge_status(s, cell_hint_status(i, j))
+			#if get_cell(i, j).hints() != null:
+			#	print("cell %s %s" % [Vector2i(i, j), E.HintStatus.find_key(s)])
+			if s == E.HintStatus.Wrong:
+				return s
 	return s
 
 func check_complete() -> bool:
@@ -1619,6 +1736,12 @@ func validate() -> void:
 				assert(_pure_cell(i - 1, j)._content_bottom() == Content.Block)
 			if !_has_wall_bottom(i, j) and cell._content_bottom() == Content.Block:
 				assert(_pure_cell(i + 1, j)._content_top() == Content.Block)
+	# Cell hints make sense
+	for i in n:
+		for j in m:
+			var h := get_cell(i, j).hints()
+			if h != null:
+				validate_hint(h.adj_water_count, h.adj_water_count_type)
 	# Boats make sense
 	for i in n:
 		for j in m:
@@ -1687,6 +1810,7 @@ func clear_all() -> void:
 		return clear_content()
 	for i in n:
 		for j in m:
+			cell_hints[i][j] = null
 			pure_cells[i][j] = PureCell.empty()
 			if i < n - 1:
 				wall_bottom[i][j] = false
@@ -1843,8 +1967,9 @@ func _mirror_arr(arr: Array, mirror_element: Callable) -> void:
 func mirror_horizontal() -> void:
 	_assert_testing()
 	clear_content()
-	for row in pure_cells:
-		_mirror_arr(row, func(cell): cell.mirror_horizontal(); return cell)
+	for i in rows():
+		_mirror_arr(pure_cells[i], func(cell): cell.mirror_horizontal(); return cell)
+		_mirror_arr(cell_hints[i], func(c): return c)
 	for row in wall_bottom:
 		_mirror_arr(row, func(b): return b)
 	for row in wall_right:
@@ -1882,6 +2007,7 @@ func rotate_clockwise() -> void:
 	_assert_testing()
 	clear_content()
 	pure_cells = _rotate_grid(pure_cells, func(cell): cell.rotate_clock(); return cell)
+	cell_hints = _rotate_grid(cell_hints, func(x): return x)
 	var new_wall_bottom := _rotate_grid(wall_right, func(b): return b)
 	wall_right = _rotate_grid(wall_bottom, func(b): return b)
 	wall_bottom = new_wall_bottom

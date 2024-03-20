@@ -615,8 +615,11 @@ class HintVisibility:
 	var expected_aquariums: Array[float] = []
 	var row: Array[int]
 	var col: Array[int]
+	var cells: Dictionary = {} # Vector2i -> flags
+	var default_cell_flag: int = HintBar.WATER_COUNT_VISIBLE
 	static func default(n: int, m: int, start := HintBar.WATER_COUNT_VISIBLE) -> HintVisibility:
 		var h := HintVisibility.new()
+		h.default_cell_flag = start
 		for i in n:
 			h.row.append(start)
 		for j in m:
@@ -631,7 +634,19 @@ class HintVisibility:
 		h.expected_aquariums.assign(grid.grid_hints().expected_aquariums.keys())
 		h.row.assign(grid.row_hints().map(HintVisibility._hint_to_flag))
 		h.col.assign(grid.col_hints().map(HintVisibility._hint_to_flag))
+		for i in grid.rows():
+			for j in grid.cols():
+				var c := grid.get_cell(i, j).hints()
+				if c != null:
+					h.cells[Vector2i(i, j)] = _cell_hint_to_flag(c)
 		return h
+	static func _cell_hint_to_flag(hint: GridModel.CellHints) -> int:
+		var val := 0
+		if hint.adj_water_count != -1.:
+			val |= HintBar.WATER_COUNT_VISIBLE
+		if hint.adj_water_count_type != E.HintType.Hidden:
+			val |= HintBar.WATER_TYPE_VISIBLE
+		return val
 	static func _hint_to_flag(hint: GridModel.LineHint) -> int:
 		var val := 0
 		if hint.water_count != -1.:
@@ -652,6 +667,11 @@ class HintVisibility:
 			line_hint.water_count = -1.0
 		if not (flags & HintBar.WATER_TYPE_VISIBLE) or line_hint.water_count_type == E.HintType.Zero:
 			line_hint.water_count_type = E.HintType.Hidden
+	func _update_cell_hint(hint: GridModel.CellHints, flags: int) -> void:
+		if not (flags & HintBar.WATER_COUNT_VISIBLE):
+			hint.adj_water_count = -1.0
+		if not (flags & HintBar.WATER_TYPE_VISIBLE) or hint.adj_water_count_type == E.HintType.Zero:
+			hint.adj_water_count_type = E.HintType.Hidden
 	func apply_to_grid(grid: GridModel) -> void:
 		var ghints := grid.grid_hints()
 		var prev_boats := ghints.total_boats
@@ -667,6 +687,11 @@ class HintVisibility:
 			_update_line_hint(grid.row_hints()[i], row[i])
 		for j in grid.cols():
 			_update_line_hint(grid.col_hints()[j], col[j])
+		for i in grid.rows():
+			for j in grid.cols():
+				var h := grid.get_cell(i, j).hints()
+				if h != null:
+					_update_cell_hint(h, cells.get(Vector2i(i, j), default_cell_flag))
 		# Let's force boat amount if it would create schrodinger boats
 		if grid.any_schrodinger_boats():
 			ghints.total_boats = prev_boats
@@ -683,7 +708,7 @@ func _apply_visibility(h: HintVisibility) -> void:
 		aqs[aq] = true
 	AquariumHints.set_should_be_visible(aqs)
 	GridNode.set_counters_visibility(h.row, h.col)
-
+	# TODO: #402
 
 func _hint_visibility() -> HintVisibility:
 	var h := HintVisibility.new()
@@ -692,6 +717,7 @@ func _hint_visibility() -> HintVisibility:
 	h.expected_aquariums = AquariumHints.visible_sizes()
 	h.row = GridNode.row_hints_should_be_visible()
 	h.col = GridNode.col_hints_should_be_visible()
+	# TODO: #402
 	return h
 
 
