@@ -157,8 +157,9 @@ flip_h = true
 
 [node name="WallBottom" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
 layout_mode = 0
+offset_top = 1.0
 offset_right = 75.0
-offset_bottom = 75.0
+offset_bottom = 76.0
 rotation = -1.5708
 pivot_offset = Vector2(37, 37)
 texture = ExtResource("6_crc6u")
@@ -199,6 +200,7 @@ vertical_alignment = 2
 
 [node name="Plus" type="Label" parent="LeftContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)

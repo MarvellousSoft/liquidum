@@ -96,10 +96,11 @@ func set_values(aq_size: float, amount: int, current: int, editor_mode: bool) ->
 		%WallRight.hide()
 	else:
 		%Water.texture = TEXTURES.single
+		%Water.material.set_shader_parameter("level", 1.0)
 		%WallDiag.hide()
 		%WallTop.show()
 		%WallRight.show()
-	%Plus.visible = aq_size > 1
+#	%Plus.visible = aq_size > 1
 	ExpectedAmount.text = "x%d" % amount
 	if editor_mode:
 		MiddleSeparator.hide()
