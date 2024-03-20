@@ -380,44 +380,49 @@ color = Color(0.0352941, 0.211765, 0.34902, 1)
 [node name="Preview" type="Control" parent="."]
 anchors_preset = 0
 
-[node name="Single" type="ColorRect" parent="Preview"]
+[node name="Single" type="TextureRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 mouse_filter = 2
+texture = ExtResource("24_0kqeq")
 
-[node name="TopLeft" type="ColorRect" parent="Preview"]
-custom_minimum_size = Vector2(100, 90)
-layout_mode = 0
-offset_right = 100.0
-offset_bottom = 100.0
-pivot_offset = Vector2(50, 50)
-mouse_filter = 2
-
-[node name="TopRight" type="ColorRect" parent="Preview"]
+[node name="TopLeft" type="TextureRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
+texture = ExtResource("25_00o68")
 
-[node name="BottomRight" type="ColorRect" parent="Preview"]
+[node name="TopRight" type="TextureRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
+texture = ExtResource("26_lb8de")
 
-[node name="BottomLeft" type="ColorRect" parent="Preview"]
+[node name="BottomRight" type="TextureRect" parent="Preview"]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 pivot_offset = Vector2(50, 50)
 mouse_filter = 2
+texture = ExtResource("27_fulr6")
+
+[node name="BottomLeft" type="TextureRect" parent="Preview"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset = Vector2(50, 50)
+mouse_filter = 2
+texture = ExtResource("28_6ngov")
 
 [node name="Waters" type="Control" parent="."]
 anchors_preset = 0

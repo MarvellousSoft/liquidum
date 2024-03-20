@@ -205,7 +205,7 @@ func update_dark_mode(is_dark : bool) -> void:
 	%BoatPreview.modulate = colors.dark
 	%BG.color = colors.bg
 	for preview in Previews.values():
-		preview.color = colors.preview
+		preview.self_modulate = colors.preview
 	for content in NoContent.values():
 		content.boat.texture = images.no_boat
 
