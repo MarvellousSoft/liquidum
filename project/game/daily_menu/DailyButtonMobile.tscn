@@ -82,7 +82,7 @@ expand_margin_right = 20.0
 expand_margin_bottom = 5.0
 
 [node name="DailyButton" type="Control"]
-custom_minimum_size = Vector2(720, 0)
+custom_minimum_size = Vector2(720, 100)
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 4
@@ -97,7 +97,7 @@ offset_bottom = 40.0
 
 [node name="VBox" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="DailyHBox" type="HBoxContainer" parent="CenterContainer/VBox"]
@@ -187,11 +187,6 @@ visible = false
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="CenterContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-
 [node name="TimeBox" type="HBoxContainer" parent="CenterContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -239,17 +234,7 @@ icon = ExtResource("8_hme64")
 alignment = 0
 icon_alignment = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 9
-alignment = 1
-
-[node name="Spacer2" type="Control" parent="CenterContainer/VBox/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="StreakContainer" type="VBoxContainer" parent="CenterContainer/VBox/VBoxContainer"]
+[node name="StreakContainer" type="VBoxContainer" parent="CenterContainer/VBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -259,12 +244,12 @@ tooltip_text = "STREAK_TOOLTIP"
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="CenterContainer/VBox/VBoxContainer/StreakContainer"]
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/VBox/StreakContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="CurStreakName" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
+[node name="CurStreakName" type="Label" parent="CenterContainer/VBox/StreakContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -272,7 +257,7 @@ theme_override_font_sizes/font_size = 26
 text = "CUR_STREAK"
 vertical_alignment = 1
 
-[node name="CurStreak" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
+[node name="CurStreak" type="Label" parent="CenterContainer/VBox/StreakContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -281,7 +266,7 @@ theme_override_font_sizes/font_size = 26
 text = "0"
 vertical_alignment = 1
 
-[node name="BestStreakName" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
+[node name="BestStreakName" type="Label" parent="CenterContainer/VBox/StreakContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
@@ -289,7 +274,7 @@ theme_override_font_sizes/font_size = 26
 text = "BEST_STREAK"
 vertical_alignment = 1
 
-[node name="BestStreak" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer/GridContainer"]
+[node name="BestStreak" type="Label" parent="CenterContainer/VBox/StreakContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -298,24 +283,13 @@ theme_override_font_sizes/font_size = 26
 text = "0"
 vertical_alignment = 1
 
-[node name="3Mistakes" type="Label" parent="CenterContainer/VBox/VBoxContainer/StreakContainer"]
+[node name="3Mistakes" type="Label" parent="CenterContainer/VBox/StreakContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 20
 text = "LESS_THREE_MISTAKES"
 horizontal_alignment = 1
-
-[node name="DailyUnlockText" type="Label" parent="CenterContainer/VBox/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 20
-theme_override_font_sizes/font_size = 30
-text = "DAILY_UNLOCK_MOBILE"
-horizontal_alignment = 2
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 30.0

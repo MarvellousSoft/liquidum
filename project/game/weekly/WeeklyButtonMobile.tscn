@@ -4,10 +4,8 @@
 [ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="2_vilvt"]
 
 [node name="WeeklyButton" instance=ExtResource("1_g3lim")]
+custom_minimum_size = Vector2(720, 150)
 script = ExtResource("2_vilvt")
 
-[node name="3Mistakes" parent="CenterContainer/VBox/VBoxContainer/StreakContainer" index="1"]
+[node name="3Mistakes" parent="CenterContainer/VBox/StreakContainer" index="1"]
 text = "LESS_SIX_MISTAKES"
-
-[node name="DailyUnlockText" parent="CenterContainer/VBox/VBoxContainer" index="2"]
-visible = false

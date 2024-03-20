@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
-[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
+[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://cpiojpbtpveaj" path="res://game/daily_menu/DailyButtonMobile.tscn" id="6_j41ip"]
 [ext_resource type="PackedScene" uid="uid://dxeyb8lqhqk0h" path="res://game/weekly/WeeklyButtonMobile.tscn" id="6_pd0dy"]
@@ -49,7 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 378.0
 offset_right = 720.0
-offset_bottom = 1280.0
+offset_bottom = 1238.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -97,20 +97,26 @@ text = "RANDOM_BUTTON"
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="RecurringEvents" type="VBoxContainer" parent="MainButtonsContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 2
-theme_override_constants/separation = 15
-alignment = 2
-
-[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer/RecurringEvents" instance=ExtResource("6_pd0dy")]
+[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_pd0dy")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_horizontal = 1
 
-[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer/RecurringEvents" instance=ExtResource("6_j41ip")]
+[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_j41ip")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="DailyUnlockText" type="Label" parent="MainButtonsContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 30
+text = "DAILY_UNLOCK_MOBILE"
+horizontal_alignment = 1
 
 [node name="InfoVBox" type="VBoxContainer" parent="."]
 visible = false
@@ -280,8 +286,8 @@ script = ExtResource("16_h6coi")
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_extra_levels_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
-[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurringEvents/WeeklyButton" to="." method="_on_weekly_button_streak_opened"]
-[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurringEvents/DailyButton" to="." method="_on_daily_button_streak_opened"]
+[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/WeeklyButton" to="." method="_on_weekly_button_streak_opened"]
+[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/DailyButton" to="." method="_on_daily_button_streak_opened"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
 [connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
 [connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]

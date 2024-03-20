@@ -91,6 +91,8 @@ func _unhandled_input(event):
 
 
 func _enter_tree() -> void:
+	if Global.is_mobile:
+		%DailyUnlockText.visible = not RecurringMarathon.is_unlocked()
 	call_deferred("update_level_hub")
 	call_deferred("update_profile_button")
 

@@ -47,9 +47,7 @@ func _update() -> void:
 				else:
 					Profile.set_option("daily_notification", Profile.DailyStatus.Disabled)
 	if Global.is_mobile:
-		%DailyUnlockText.visible = not unlocked
 		%DailyHBox.size_flags_horizontal = SIZE_FILL
-		%Spacer.visible = unlocked
 
 	if not unlocked:
 		return
