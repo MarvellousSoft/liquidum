@@ -1,6 +1,7 @@
 extends HBoxContainer
 
 const ALPHA_SPEED = 4.0
+const LEVEL_SPEED = 1.0
 const HIDE_ALPHA = 0.5
 const COLORS = {
 	"normal": {
@@ -49,7 +50,11 @@ func _process(dt):
 				node.modulate.a = min(node.modulate.a + ALPHA_SPEED*dt, 1.0)
 			else:
 				node.modulate.a = max(node.modulate.a - ALPHA_SPEED*dt, HIDE_ALPHA)
-
+	if modulate.a >= 1.0:
+		var level = %Water.material.get_shader_parameter(&"level")
+		if aquarium_size > 1.0 and level < 1.0:
+			level = min(level + LEVEL_SPEED*dt, 1.0)
+			%Water.material.set_shader_parameter(&"level", level)
 
 func update_dark_mode(is_dark : bool) -> void:
 	var colors = COLORS.dark if is_dark else COLORS.normal
