@@ -32,17 +32,27 @@ func _enter_tree() -> void:
 	SteamManager.overlay_toggled.connect(_on_overlay_toggled)
 	Profile.unlock_everything_changed.connect(_on_unlock_changed)
 	Global.dev_mode_toggled.connect(_on_unlock_changed)
+	Profile.dark_mode_toggled.connect(_on_dark_mode_toggled)
+	_on_dark_mode_toggled(Profile.get_option("dark_mode"))
 	if extra_levels and Global.is_mobile and AdManager.payment != null:
 		AdManager.payment.dlc_purchased.connect(_on_dlc_purchased)
 	check_unlocks()
 
 
 func _exit_tree() -> void:
+	Profile.dark_mode_toggled.disconnect(_on_dark_mode_toggled)
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	SteamManager.overlay_toggled.disconnect(_on_overlay_toggled)
 	if extra_levels and Global.is_mobile and AdManager.payment != null:
 		AdManager.payment.dlc_purchased.disconnect(_on_dlc_purchased)
+
+func _on_dark_mode_toggled(on: bool) -> void:
+	# Always desktop theme because we scale these in mobile
+	if on:
+		theme = Global.THEME.desktop.dark
+	else:
+		theme = Global.THEME.desktop.normal
 
 func _on_dlc_purchased(_id: String) -> void:
 	update_sections()
