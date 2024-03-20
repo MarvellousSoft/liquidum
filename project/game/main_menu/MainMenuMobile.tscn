@@ -97,17 +97,18 @@ text = "RANDOM_BUTTON"
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="RecurrentEvents" type="VBoxContainer" parent="MainButtonsContainer/VBoxContainer"]
+[node name="RecurringEvents" type="VBoxContainer" parent="MainButtonsContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 2
 
-[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer/RecurrentEvents" instance=ExtResource("6_pd0dy")]
+[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer/RecurringEvents" instance=ExtResource("6_pd0dy")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 1
 
-[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer/RecurrentEvents" instance=ExtResource("6_j41ip")]
+[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer/RecurringEvents" instance=ExtResource("6_j41ip")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -279,8 +280,8 @@ script = ExtResource("16_h6coi")
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" to="." method="_on_extra_levels_pressed"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
-[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurrentEvents/WeeklyButton" to="." method="_on_weekly_button_streak_opened"]
-[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurrentEvents/DailyButton" to="." method="_on_daily_button_streak_opened"]
+[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurringEvents/WeeklyButton" to="." method="_on_weekly_button_streak_opened"]
+[connection signal="streak_opened" from="MainButtonsContainer/VBoxContainer/RecurringEvents/DailyButton" to="." method="_on_daily_button_streak_opened"]
 [connection signal="disable_focus" from="ExtraLevelHub" to="." method="_to_extra_levels"]
 [connection signal="enable_focus" from="ExtraLevelHub" to="." method="_on_level_hub_enable_focus"]
 [connection signal="mouse_entered" from="BackExtra" to="." method="_on_button_mouse_entered"]

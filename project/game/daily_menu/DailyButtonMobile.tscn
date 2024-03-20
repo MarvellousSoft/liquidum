@@ -85,6 +85,7 @@ expand_margin_bottom = 5.0
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 3
 anchors_preset = 0
+size_flags_horizontal = 4
 size_flags_vertical = 3
 theme = ExtResource("1_gmsfo")
 script = ExtResource("1_8hrak")
@@ -102,7 +103,6 @@ alignment = 1
 [node name="DailyHBox" type="HBoxContainer" parent="CenterContainer/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
 alignment = 1
@@ -188,6 +188,7 @@ custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 
 [node name="Spacer" type="Control" parent="CenterContainer/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -320,10 +321,10 @@ horizontal_alignment = 2
 wait_time = 30.0
 autostart = true
 
+[connection signal="pressed" from="CenterContainer/VBox/DailyHBox/LeaderboardsButton" to="." method="_on_leaderboards_button_pressed"]
 [connection signal="mouse_entered" from="CenterContainer/VBox/DailyHBox/Share" to="CenterContainer/VBox/DailyHBox/Share" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="CenterContainer/VBox/DailyHBox/Share" to="CenterContainer/VBox/DailyHBox/Share" method="_on_mouse_exited"]
-[connection signal="toggled" from="CenterContainer/VBox/TimeBox/StreakButton" to="." method="_on_streak_button_toggled"]
-[connection signal="pressed" from="CenterContainer/VBox/DailyHBox/LeaderboardsButton" to="." method="_on_leaderboards_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBox/DailyHBox/Share" to="." method="_on_share_pressed"]
 [connection signal="pressed" from="CenterContainer/VBox/DailyHBox/MainButton" to="." method="_on_main_button_pressed"]
+[connection signal="toggled" from="CenterContainer/VBox/TimeBox/StreakButton" to="." method="_on_streak_button_toggled"]
 [connection signal="timeout" from="Timer" to="." method="_update_time_left"]

@@ -49,6 +49,7 @@ func _update() -> void:
 	if Global.is_mobile:
 		%DailyUnlockText.visible = not unlocked
 		%DailyHBox.size_flags_horizontal = SIZE_FILL
+		%Spacer.visible = unlocked
 
 	if not unlocked:
 		return
