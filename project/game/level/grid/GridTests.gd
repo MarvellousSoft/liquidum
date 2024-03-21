@@ -1158,13 +1158,13 @@ func test_cell_hints() -> void:
 	assert(g.get_cell(2, 2).hints().adj_water_count == 3.5)
 	assert(g.get_cell(2, 2).hints().adj_water_count_type == E.HintType.Hidden)
 	assert(not g.are_hints_satisfied())
-	assert(g.count_waters_adj(2, 2) == 2.0)
+	assert(g.count_water_adj(2, 2) == 2.0)
 	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
-	assert(g.count_waters_adj(0, 1) == 4.5)
+	assert(g.count_water_adj(0, 1) == 4.5)
 	g.get_cell(1, 1).put_water(E.Corner.BottomRight)
 	assert(not g.are_hints_satisfied())
 	g.get_cell(1, 2).put_water(E.Corner.BottomRight)
-	assert(g.count_waters_adj(2, 2) == 3.5)
+	assert(g.count_water_adj(2, 2) == 3.5)
 	assert(g.are_hints_satisfied())
 	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
 	g.get_cell(1, 3).put_water(E.Corner.TopLeft)
@@ -1176,3 +1176,18 @@ func test_cell_hints() -> void:
 	assert(not g.are_hints_satisfied())
 	g.get_cell(2, 1).remove_content(E.Corner.TopLeft)
 	assert(g.are_hints_satisfied())
+	
+	assert_can_solve("""
+	+cellhint=1:1:2
+	##..
+	L.L.
+	..##
+	L.L.
+	""")
+	assert_cant_solve("""
+	+cellhint=1:1:2
+	##..
+	L.L.
+	....
+	L.L.
+	""")

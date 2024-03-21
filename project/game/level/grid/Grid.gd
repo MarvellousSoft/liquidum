@@ -216,6 +216,12 @@ func count_boat_row(_i: int) -> int:
 func count_boat_col(_j: int) -> int:
 	return GridModel.must_be_implemented()
 
+func count_water_adj(_i: int, _j: int) -> float:
+	return GridModel.must_be_implemented()
+
+func count_nothing_adj(_i: int, _j: int) -> float:
+	return GridModel.must_be_implemented()
+
 func grid_hints() -> GridHints:
 	return GridModel.must_be_implemented()
 

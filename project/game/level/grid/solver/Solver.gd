@@ -1307,6 +1307,51 @@ class AquariumsStrategy extends Strategy:
 					break
 		return any
 
+class CellHintsStrategy extends Strategy:
+	func apply_any() -> bool:
+		var any := false
+		for i in grid.rows():
+			for j in grid.cols():
+				var c := grid.get_cell(i, j).hints()
+				if c != null and _apply(i, j, c):
+					any = true
+		return any
+	func _apply(_i: int, _j: int, _hint: GridModel.CellHints) -> bool:
+		return GridModel.must_be_implemented()
+
+class CellHintsBasic extends CellHintsStrategy:
+	func description() -> String:
+		return "If the hint are must have ALL waters, or can't have ANY, fill it accordingly"
+	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
+		var nothing_adj := grid.count_nothing_adj(i, j)
+		if nothing_adj == 0:
+			return false
+		var water_adj := grid.count_water_adj(i, j)
+		var fill_with: GridImpl.Content
+		if water_adj == hint.adj_water_count:
+			fill_with = GridImpl.Content.NoWater
+		elif water_adj + nothing_adj == hint.adj_water_count:
+			fill_with = GridImpl.Content.Water
+		else:
+			return false
+		for di in [-1, 0, 1]:
+			for dj in [-1, 0, 1]:
+				if i + di >= 0 and i + di < grid.rows() and j + dj >= 0 and j + dj < grid.cols():
+					var c := grid.get_cell(i + di, j + dj)
+					for corner in c.corners():
+						if fill_with == GridImpl.Content.Water:
+							if not c.water_at(corner):
+								c.put_water(corner, false)
+						elif c.nothing_at(corner) or c.noboat_at(corner):
+							c.put_nowater(corner, false, true)
+		return true
+
+class CellHintsMedium extends CellHintsStrategy:
+	func description() -> String:
+		return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
+	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
+		return false
+
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
@@ -1332,6 +1377,7 @@ static var STRATEGY_LIST := {
 	AllBoats = func(grid): return AllBoatsStrategy.new(grid),
 	AquariumsBasic = func(grid): return AquariumsStrategy.new(grid, true),
 	AquariumsAdvanced = func(grid): return AquariumsStrategy.new(grid, false),
+	CellBasic = func(grid): return CellHintsBasic.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

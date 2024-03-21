@@ -852,13 +852,20 @@ func _change_wall(i: int, j: int, side: E.Side, new: bool) -> void:
 func editor_mode() -> bool:
 	return _force_editor_mode or solution_c_left.is_empty()
 
-func count_waters_adj(i: int, j: int) -> float:
-	var water_count := 0.0
+func _count_content_adj(i: int, j: int, c: Content) -> float:
+	var count := 0.0
 	for di in [-1, 0, 1]:
 		for dj in [-1, 0, 1]:
 			if i + di >= 0 and i + di < n and j + dj >= 0 and j + dj < m:
-				water_count += _pure_cell(i + di, j + dj).water_count()
-	return water_count
+				count += _pure_cell(i + di, j + dj)._content_count(c)
+	return count
+
+func count_water_adj(i: int, j: int) -> float:
+	return _count_content_adj(i, j, Content.Water)
+
+func count_nothing_adj(i: int, j: int) -> float:
+	return _count_content_adj(i, j, Content.Nothing) + _count_content_adj(i, j, Content.NoBoat)
+
 
 func together_waters_adj(water: float, _i: int, _j: int) -> E.HintType:
 	# TODO: Do this correctly
@@ -868,7 +875,7 @@ func _update_cell_hint(i: int, j: int) -> void:
 	var c: CellHints = cell_hints[i][j]
 	if c == null:
 		return
-	c.adj_water_count = count_waters_adj(i, j)
+	c.adj_water_count = count_water_adj(i, j)
 	c.adj_water_count_type = together_waters_adj(c.adj_water_count, i, j)
 
 func maybe_update_hints() -> void:
@@ -1545,7 +1552,7 @@ func cell_hint_status(i: int, j: int) -> E.HintStatus:
 	var c: CellHints = cell_hints[i][j]
 	if c == null:
 		return E.HintStatus.Satisfied
-	var water := count_waters_adj(i, j)
+	var water := count_water_adj(i, j)
 	var status := _hint_statusf(water, c.adj_water_count)
 	var ok_type: bool = c.adj_water_count_type == E.HintType.Hidden or (together_waters_adj(water, i, j) == c.adj_water_count_type)
 	return _status_and_then(status, ok_type, c.adj_water_count == -1)
