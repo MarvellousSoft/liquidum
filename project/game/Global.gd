@@ -201,6 +201,8 @@ func is_fullscreen():
 
 
 func _store_window() -> void:
+	if SteamManager.is_steam_deck():
+		return
 	var window := get_window()
 	Profile.set_option("window_position", window.position)
 	Profile.set_option("window_size", window.size)
@@ -208,7 +210,7 @@ func _store_window() -> void:
 
 
 func toggle_fullscreen():
-	if is_mobile and not OS.is_debug_build():
+	if (is_mobile and not OS.is_debug_build()) or SteamManager.is_steam_deck():
 		return
 	var window = get_window()
 	if window.mode == Window.MODE_WINDOWED:

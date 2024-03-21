@@ -169,3 +169,6 @@ func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: L
 		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
 	else:
 		print("Did upload to leaderboard %d" % [l_id])
+
+func is_steam_deck() -> bool:
+	return enabled and steam.isSteamRunningOnSteamDeck()

@@ -162,16 +162,23 @@ func set_save_data(data):
 	
 	DisplayServer.window_set_vsync_mode(options.vsync)
 	var window := get_window()
-	window.current_screen = options.window_screen
-	if Global.is_fullscreen() != options.fullscreen:
-		Global.toggle_fullscreen()
-	if not options.fullscreen:
-		var wpos := get_vec2i("window_position")
-		if wpos != Vector2i(-1, -1):
-			window.position = wpos
-		var wsize := get_vec2i("window_size")
-		if wsize != Vector2i(-1, -1):
-			window.size = wsize
+	if not SteamManager.is_steam_deck():
+		window.current_screen = options.window_screen
+		if Global.is_fullscreen() != options.fullscreen:
+			Global.toggle_fullscreen()
+		if not options.fullscreen:
+			var wpos := get_vec2i("window_position")
+			if wpos != Vector2i(-1, -1):
+				window.position = wpos
+			var wsize := get_vec2i("window_size")
+			if wsize != Vector2i(-1, -1):
+				window.size = wsize
+	else:
+		window.mode = Window.MODE_WINDOWED
+		window.current_screen = 0
+		window.size = Vector2i(1280, 800)
+		window.position = Vector2i(0, 0)
+
 	update_translation()
 	dark_mode_toggled.emit(options.dark_mode)
 	show_bubbles_changed.emit(options.show_bubbles)
