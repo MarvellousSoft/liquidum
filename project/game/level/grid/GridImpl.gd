@@ -1424,7 +1424,13 @@ class AquariumInfo:
 class CrawlAquarium extends Dfs:
 	var info: AquariumInfo
 	var pool_check: bool
-	func _init(grid_: GridImpl) -> void:
+	var check_area: Rect2i
+	# If true, split aquariums with pools if they have nowater on top. They functionally work
+	# as two aquariums when filling up, but for the Aquarium rules that doesn't work.
+	var split_aquariums_by_nowater: bool
+	func _init(grid_: GridImpl, check_area_ := Rect2i(0, 0, 100, 100), split := false) -> void:
+		check_area = check_area_
+		split_aquariums_by_nowater = split
 		super(grid_)
 	func check_for_pools() -> bool:
 		return pool_check
@@ -1439,9 +1445,16 @@ class CrawlAquarium extends Dfs:
 		if check_for_pools():
 			info.add(WaterPosition.new(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner))
 		return true
-	func _can_go_up(_i: int, _j: int) -> bool:
+	func _can_go_up(i: int, j: int) -> bool:
+		if not check_area.has_point(Vector2i(i - 1, j)):
+			return false
+		var bottom_content := grid._pure_cell(i - 1, j)._content_bottom()
+		if split_aquariums_by_nowater and (bottom_content == Content.NoWater or bottom_content == Content.NoBoatWater):
+			return false
 		return true
 	func _can_go_down(i: int, j: int) -> bool:
+		if not check_area.has_point(Vector2i(i + 1, j)):
+			return false
 		var c := grid._pure_cell(i + 1, j)
 		if c._content_top() == Content.Water:
 			return true

@@ -1176,7 +1176,7 @@ func test_cell_hints() -> void:
 	assert(not g.are_hints_satisfied())
 	g.get_cell(2, 1).remove_content(E.Corner.TopLeft)
 	assert(g.are_hints_satisfied())
-	
+
 	assert_can_solve("""
 	+cellhint=1:1:2
 	##..
@@ -1184,10 +1184,33 @@ func test_cell_hints() -> void:
 	..##
 	L.L.
 	""")
+	assert_can_solve("""
+	+cellhint=1:1:3
+	##..
+	L.L.
+	....
+	L._.
+	""")
 	assert_cant_solve("""
 	+cellhint=1:1:2
 	##..
 	L.L.
 	....
 	L.L.
+	""")
+	assert_can_solve("""
+	+cellhint=1:1:2
+	h....
+	.##..
+	.L.|.
+	2....
+	.L.L.
+	""")
+	assert_can_solve("""
+	+cellhint=1:1:1
+	h....
+	2....
+	.L.|.
+	.##..
+	.L.L.
 	""")

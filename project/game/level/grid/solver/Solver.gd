@@ -1323,6 +1323,8 @@ class CellHintsBasic extends CellHintsStrategy:
 	func description() -> String:
 		return "If the hint are must have ALL waters, or can't have ANY, fill it accordingly"
 	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
+		if hint.adj_water_count < 0:
+			return false
 		var nothing_adj := grid.count_nothing_adj(i, j)
 		if nothing_adj == 0:
 			return false
@@ -1339,18 +1341,89 @@ class CellHintsBasic extends CellHintsStrategy:
 				if i + di >= 0 and i + di < grid.rows() and j + dj >= 0 and j + dj < grid.cols():
 					var c := grid.get_cell(i + di, j + dj)
 					for corner in c.corners():
-						if fill_with == GridImpl.Content.Water:
-							if not c.water_at(corner):
+						var cont: GridImpl.Content = c.pure()._content_at(corner)
+						if cont == GridImpl.Content.Nothing or cont == GridImpl.Content.NoBoat:
+							if fill_with == GridImpl.Content.Water:
 								c.put_water(corner, false)
-						elif c.nothing_at(corner) or c.noboat_at(corner):
-							c.put_nowater(corner, false, true)
+							else:
+								c.put_nowater(corner, false, true)
 		return true
 
-class CellHintsMedium extends CellHintsStrategy:
+class CellHintsMore extends CellHintsStrategy:
+	var advanced: bool
 	func description() -> String:
 		return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
+	func _init(grid_: GridImpl, advanced_: bool) -> void:
+		super(grid_)
+		advanced = advanced_
+		assert(not advanced) # TODO: Advanced
 	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
-		return false
+		if hint.adj_water_count < 0.0:
+			return false
+		# These are not necessarily full aquariums and MAY be in the same aquarium if
+		# we consider the whole grid, but we only consider the 3x3 part
+		var rect_aqs: Array[GridImpl.AquariumInfo] = []
+		var dfs := GridImpl.CrawlAquarium.new(grid, Rect2i(i - 1, j - 1, 3, 3), true)
+		# This will change, let's store it
+		var last_seen := grid.last_seen
+		var any_pools := false
+		var total_empty := 0.0
+		var total_water := 0.0
+		# Bottom up for correctness
+		for i2 in [i + 1, i, i - 1]:
+			for j2 in [j - 1, j, j + 1]:
+				if not Rect2i(0, 0, grid.rows(), grid.cols()).has_point(Vector2i(i2, j2)):
+					continue
+				for corner in grid.get_cell(i2, j2).corners():
+					var c := grid._pure_cell(i2, j2)
+					# We also don't do the dfs on NoWater because of split_aquariums_by_nowater
+					if c.last_seen(corner) < last_seen and not c.block_at(corner) and not c.nowater_at(corner):
+						dfs.reset()
+						dfs.flood(i2, j2, corner)
+						dfs.reset_for_pool_check()
+						dfs.flood(i2, j2, corner)
+						rect_aqs.append(dfs.info)
+						total_empty += dfs.info.total_empty
+						total_water += dfs.info.total_water
+						any_pools = any_pools or dfs.info.has_pool
+		assert(total_empty == grid.count_nothing_adj(i, j))
+		assert(total_water == grid.count_water_adj(i, j))
+		var any := false
+		if not advanced:
+			for aq in rect_aqs:
+				# Fill from bottom to top with water if we NEED that much water
+				if not aq.has_pool:
+					for di in aq.empty_at_height.size():
+						if aq.empty_at_height[di] == 0:
+							continue
+						if total_empty - aq.total_empty < hint.adj_water_count - total_water:
+							any = true
+							for pos in aq.cells_at_height[di]:
+								SolverModel._put_water(grid, pos)
+							total_water += aq.empty_at_height[di]
+							aq.total_water += aq.empty_at_height[di]
+							total_empty -= aq.empty_at_height[di]
+							aq.total_empty -= aq.empty_at_height[di]
+							aq.empty_at_height[di] = 0.0
+						else:
+							break
+				# Fill from top to bottom with nowater if we CAN'T HAVE that much water
+				for di in range(aq.empty_at_height.size() - 1, -1, -1):
+					if aq.empty_at_height[di] == 0:
+						continue
+					if aq.total_empty > hint.adj_water_count - total_water:
+						any = true
+						for pos in aq.cells_at_height[di]:
+							SolverModel._put_nowater(grid, pos)
+						total_empty -= aq.empty_at_height[di]
+						aq.total_empty -= aq.empty_at_height[di]
+						aq.empty_at_height[di] = 0.0
+					else:
+						break
+		return any
+		
+
+		
 
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
@@ -1378,6 +1451,7 @@ static var STRATEGY_LIST := {
 	AquariumsBasic = func(grid): return AquariumsStrategy.new(grid, true),
 	AquariumsAdvanced = func(grid): return AquariumsStrategy.new(grid, false),
 	CellBasic = func(grid): return CellHintsBasic.new(grid),
+	CellMedium = func(grid): return CellHintsMore.new(grid, false),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

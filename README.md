@@ -1,5 +1,12 @@
 # Liquidum
 
+Steam page: https://store.steampowered.com/app/2716690/Liquidum?utm_source=github
+Play Store page: https://play.google.com/store/apps/details?id=com.marvelloussoft.liquidum&utm_source=github
+
+## Godot specifics
+
+We're locked on Godot version 4.1.3 because of this issue: https://github.com/godotengine/godot/issues/85695
+
 ### Android Plugins
 
 - Facebook SDK: https://github.com/quocsinh/godot-plugin-facebook
