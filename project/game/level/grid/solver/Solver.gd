@@ -1352,11 +1352,13 @@ class CellHintsBasic extends CellHintsStrategy:
 class CellHintsMore extends CellHintsStrategy:
 	var advanced: bool
 	func description() -> String:
-		return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
+		if advanced:
+			return ""
+		else:
+			return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
 	func _init(grid_: GridImpl, advanced_: bool) -> void:
 		super(grid_)
 		advanced = advanced_
-		assert(not advanced) # TODO: Advanced
 	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
 		if hint.adj_water_count < 0.0:
 			return false
@@ -1420,6 +1422,40 @@ class CellHintsMore extends CellHintsStrategy:
 						aq.empty_at_height[di] = 0.0
 					else:
 						break
+		else:
+			if not any_pools:
+				var options: Array[Array] = []
+				var opt_to_aq := {}
+				for aq in rect_aqs:
+					if aq.total_empty == 0:
+						continue
+					var opt := [0.]
+					for x in aq.empty_at_height:
+						if x == 0:
+							continue
+						opt.append(opt[-1] + x)
+					opt_to_aq[opt] = aq
+					options.append(opt)
+				options.sort()
+				var water_needed := hint.adj_water_count - total_water
+				assert(OptionsSum.can_be_solved(water_needed, options))
+				for idx in options.size():
+					for jdx in options[idx].size():
+						var new := options.duplicate()
+						# Try to not use this value and check it is still possible
+						new[idx] = options[idx].duplicate()
+						new[idx].remove_at(jdx)
+						if not OptionsSum.can_be_solved(water_needed, new):
+							# TODO: Use water up to this point
+							pass
+						elif jdx == 0 or jdx == options[idx].size() - 1:
+							# Checking if new[idx][jdx] is NEVER in the solution is only useful
+							# for the top/bottom of the aquarium. (We don't have a marker for "water
+							# doesn't end here")
+							new.remove_at(idx)
+							if not OptionsSum.can_be_solved(water_needed - options[idx][jdx], new):
+								# TODO: Add water to bottom of aquarium or NoWater to top
+								pass
 		return any
 		
 
@@ -1452,6 +1488,7 @@ static var STRATEGY_LIST := {
 	AquariumsAdvanced = func(grid): return AquariumsStrategy.new(grid, false),
 	CellBasic = func(grid): return CellHintsBasic.new(grid),
 	CellMedium = func(grid): return CellHintsMore.new(grid, false),
+	CellAdvanced = func(grid): return CellHintsMore.new(grid, true),
 }
 
 # Get a place in the solution that must have nowater and put a block on it
