@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dc0n1i0v2jf7g"]
+[gd_scene load_steps=24 format=3 uid="uid://dc0n1i0v2jf7g"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
 [ext_resource type="StyleBox" uid="uid://cuaic14krl4js" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
@@ -7,6 +7,7 @@
 [ext_resource type="StyleBox" uid="uid://gpptqi1sbtas" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
 [ext_resource type="StyleBox" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
+[ext_resource type="Texture2D" uid="uid://ns8gxu1xv3ej" path="res://assets/images/icons/lock.png" id="8_py7ud"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="9_kuosf"]
 [ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="10_uf1wk"]
@@ -494,13 +495,17 @@ explosiveness = 1.0
 
 [node name="BuyDLCButton" type="Button" parent="Button"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = -190.0
-offset_top = -223.0
-offset_right = 410.0
-offset_bottom = -114.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 20.0
+grow_horizontal = 2
 pivot_offset = Vector2(300, 0)
 focus_mode = 0
+theme_override_font_sizes/font_size = 30
 text = "DLC_BUY"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -568,6 +573,7 @@ offset_left = -643.0
 offset_top = 404.0
 offset_right = -300.0
 offset_bottom = 506.0
+alignment = 2
 
 [node name="HardLevelsDesc" type="HBoxContainer" parent="IconCaptions"]
 unique_name_in_owner = true
@@ -632,6 +638,31 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "ONGOING"
+
+[node name="LockDesc" type="HBoxContainer" parent="IconCaptions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/LockDesc"]
+layout_mode = 2
+texture = ExtResource("8_py7ud")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Equal" type="Label" parent="IconCaptions/LockDesc"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 40
+text = "= "
+
+[node name="Meaning" type="Label" parent="IconCaptions/LockDesc"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 40
+text = "LOCKED_DLC"
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

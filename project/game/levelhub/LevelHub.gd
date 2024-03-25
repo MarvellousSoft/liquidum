@@ -94,7 +94,7 @@ func update_sections() -> void:
 		else:
 			section.enable()
 			section.setup(self, idx, unlocked, extra_levels)
-		if extra_levels:
+		if extra_levels and level_lister.section_disabled(idx):
 			section.setup_dlc_button()
 		else:
 			section.delete_dlc_button()

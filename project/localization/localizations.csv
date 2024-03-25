@@ -315,6 +315,7 @@ HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,See in store,Veja na loja,Veja na loja
 DLC_FREE,Download for free,Baixe de graça,Baixe de graça
+LOCKED_DLC,Locked until level pack download,Bloqueado até baixar o pack de níveis,Bloqueado até baixar o pack de níveis
 NEW,New!,Novo!,Novo!
 BY_AUTHOR,by %s,por %s,por %s
 PLAY_ON_ANDROID,Play on Android,Jogue no Android,Jogue no Android

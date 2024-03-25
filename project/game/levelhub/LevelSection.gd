@@ -22,8 +22,8 @@ const BACK_POSITION = {
 	"mobile": Vector2(-380, -720),
 }
 const CAPTIONS_POSITION = {
-	"desktop": Vector2(-900, 400),
-	"mobile": Vector2(-380, 640),
+	"desktop": Vector2(-900, 350),
+	"mobile": Vector2(-400, 590),
 }
 
 const STYLES = {
@@ -125,7 +125,7 @@ func set_section_name(section_name: String) -> void:
 func setup_dlc_button() -> void:
 	var info = Profile.get_dlc_info(my_section)
 	%NewDLC.visible = info and info.new
-	%BuyDLCButton.visible = MainButton.disabled
+	%BuyDLCButton.visible = focused
 	if ExtraLevelLister.is_free(my_section):
 		%BuyDLCButton.text = "DLC_FREE"
 	else:
@@ -149,6 +149,7 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	if extra and ExtraLevelLister.section_disabled(section):
 		for level in ExtraLevelLister.get_disabled_section_free_trial(section):
 			force_unlocked[level] = true
+	%LockDesc.visible = not force_unlocked.is_empty()
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
@@ -206,6 +207,8 @@ func set_number(section: int) -> void:
 
 
 func focus():
+	if has_node("%BuyDLCButton"):
+		%BuyDLCButton.show()
 	AnimPlayer.pause()
 	focused = true
 	MouseBlocker.show()
@@ -213,6 +216,8 @@ func focus():
 
 
 func unfocus():
+	if has_node("%BuyDLCButton"):
+		%BuyDLCButton.hide()
 	AnimPlayer.play("float")
 	focused = false
 	MouseBlocker.hide()
@@ -312,7 +317,8 @@ func _on_button_pressed():
 		if data:
 			data.new = false
 			Profile.set_dlc_info(my_section, data, true)
-			%NewDLC.hide()
+			if has_node("%NewDLC"):
+				%NewDLC.queue_free()
 	focus()
 
 

@@ -147,7 +147,7 @@ func count_completed_levels(profile_name: String) -> int:
 
 # Number of levels that can be always played
 func get_disabled_section_free_trial(section: int) -> Array:
-	return _config(section).get_value("section", "trial_levels", [])
+	return _config(section).get_value("section", "trial_levels", [1])
 
 func purchase_section(section: int) -> void:
 	var id: String
