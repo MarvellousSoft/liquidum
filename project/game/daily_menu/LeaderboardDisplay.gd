@@ -17,7 +17,7 @@ static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speed
 		d.speedrun_key = speedrun_key_
 		d.modulate.a = 0
 		d.visible = not Global.is_dev_mode()
-		level.add_child(d)
+		level.add_leaderboard_display(d)
 		level.create_tween().tween_property(d, "modulate:a", 1, 1)
 	return level.get_node("LeaderboardDisplay")
 

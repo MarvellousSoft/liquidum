@@ -117,6 +117,8 @@ func _ready():
 	Profile.progress_on_unkown_changed.connect(_on_progress_on_unkown_changed)
 	TimerContainer.visible = not grid.editor_mode() and Profile.get_option("show_timer")
 	Counters.mistake.visible = not grid.editor_mode() and not Profile.get_option("allow_mistakes")
+	if not Global.is_mobile:
+		%MistakesAreCounted.visible = not grid.editor_mode() and Profile.get_option("allow_mistakes") and has_node("LeaderboardDisplay")
 	var seed_label := get_node_or_null("%Seed")
 	if seed_label != null:
 		if seed_str.is_empty():
@@ -900,7 +902,6 @@ func _on_edit_text_changed(new_text: String) -> void:
 		return
 	full_name = new_text
 
-
 func _on_dev_mode_toggled(status):
 	if not Global.is_mobile:
 		%DevContainer.visible = status
@@ -996,8 +997,14 @@ func _on_show_timer_changed(status: bool) -> void:
 	TimerContainer.visible = status and not editor_mode()
 
 
-func _on_allow_mistakes_changed(status: bool) -> void:
-	Counters.mistake.visible = not status and not editor_mode()
+func _on_allow_mistakes_changed(on: bool) -> void:
+	Counters.mistake.visible = not on and not editor_mode()
+	if not Global.is_mobile:
+		%MistakesAreCounted.visible = on and not editor_mode() and has_node("LeaderboardDisplay")
+
+func add_leaderboard_display(ld: LeaderboardDisplay) -> void:
+	add_child(ld)
+	_on_allow_mistakes_changed(Profile.get_option("allow_mistakes"))
 
 
 func _on_progress_on_unkown_changed(_status: bool) -> void:

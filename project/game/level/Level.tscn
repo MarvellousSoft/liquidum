@@ -442,6 +442,19 @@ autowrap_mode = 0
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
+[node name="MistakesAreCounted" type="MarginContainer" parent="TopInfo/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="Label" type="Label" parent="TopInfo/VBoxContainer/MistakesAreCounted"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 50
+text = "MISTAKES_LEADERBOARDS"
+autowrap_mode = 3
+
 [node name="HintsContainer" type="VBoxContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
