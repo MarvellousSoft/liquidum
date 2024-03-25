@@ -37,6 +37,7 @@ signal loaded_endless(button: LevelButton)
 @onready var OngoingSolution = %OngoingSolution
 @onready var AnimPlayer = $AnimationPlayer
 @onready var HardIcon: TextureRect = $HardIcon
+@onready var LockIcon: TextureRect = $LockIcon
 
 var my_section := -1
 var my_level := -1
@@ -65,7 +66,7 @@ func _ready():
 func extra_level() -> bool:
 	return lister == ExtraLevelLister
 
-func setup(section : int, level: int, active : bool, extra: bool) -> void:
+func setup(section : int, level: int, active : bool, is_disabled_section: bool, extra: bool) -> void:
 	%AlternateText.queue_free()
 	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
@@ -75,6 +76,11 @@ func setup(section : int, level: int, active : bool, extra: bool) -> void:
 		MainButton.text = "∞"
 	else:
 		MainButton.text = str(my_level)
+	
+	if is_disabled_section and not active:
+		LockIcon.show()
+	else:
+		LockIcon.queue_free()
 	
 	HardIcon.visible = lister.is_hard(section, level)
 	if active:

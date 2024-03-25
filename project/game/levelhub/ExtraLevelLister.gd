@@ -35,8 +35,6 @@ func get_initial_unlocked_levels(section: int) -> int:
 # Levels 1-return are unlocked in this section. If 0, none is unlocked.
 # For now, extra level sections are always unlocked (no dependencies), but that's not too hard to change
 func get_max_unlocked_level(section: int) -> int:
-	if section_disabled(section):
-		return get_disabled_section_free_trial(section)
 	var count_completed := 0
 	var i := 1
 	var initial_unlock := get_initial_unlocked_levels(section)
@@ -148,8 +146,8 @@ func count_completed_levels(profile_name: String) -> int:
 	return count
 
 # Number of levels that can be always played
-func get_disabled_section_free_trial(section: int) -> int:
-	return _config(section).get_value("section", "trial_levels", 0)
+func get_disabled_section_free_trial(section: int) -> Array:
+	return _config(section).get_value("section", "trial_levels", [])
 
 func purchase_section(section: int) -> void:
 	var id: String

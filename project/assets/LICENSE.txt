@@ -54,3 +54,6 @@ The Android robot is reproduced or modified from work created and shared by Goog
 
 - images/ui/icons/no_ads.png
 designed by Vectors Tank from Flaticon
+
+- images/ui/icons/lock.png
+by Adrien Coquet from thenounproject.com, CC BY 3.0

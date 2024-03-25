@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dl1moq1i2jjs"]
+[gd_scene load_steps=20 format=3 uid="uid://dl1moq1i2jjs"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
@@ -10,6 +10,7 @@
 [ext_resource type="StyleBox" path="res://assets/ui/LevelButton/CompletedPressedStyle.tres" id="5_q1joq"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="10_5jj0t"]
+[ext_resource type="Texture2D" uid="uid://ns8gxu1xv3ej" path="res://assets/images/icons/lock.png" id="11_ywtcx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyxri"]
 shader = ExtResource("3_d8olh")
@@ -295,6 +296,19 @@ offset_bottom = -74.0
 tooltip_text = "HARD_LEVEL_TOOLTIP"
 texture = ExtResource("10_5jj0t")
 expand_mode = 1
+
+[node name="LockIcon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0.847059, 0.996078, 0.882353, 1)
+layout_mode = 0
+offset_left = 106.0
+offset_top = -224.0
+offset_right = 226.0
+offset_bottom = -76.0
+texture = ExtResource("11_ywtcx")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]

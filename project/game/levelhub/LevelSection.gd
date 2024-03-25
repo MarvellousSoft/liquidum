@@ -145,6 +145,10 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 	for button in Levels.get_children():
 		Levels.remove_child(button)
 		button.queue_free()
+	var force_unlocked := {}
+	if extra and ExtraLevelLister.section_disabled(section):
+		for level in ExtraLevelLister.get_disabled_section_free_trial(section):
+			force_unlocked[level] = true
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
@@ -155,7 +159,7 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels + int(flavor != -1), i)
 		var has_unlock_anim = (my_section == hub.section_to_unlock and i == hub.level_to_unlock)
-		button.setup(my_section, i, i <= unlocked_levels and not has_unlock_anim, extra)
+		button.setup(my_section, i, force_unlocked.has(i) or (i <= unlocked_levels and not has_unlock_anim), not force_unlocked.is_empty(), extra)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(i))
 		button.had_first_win.connect(_on_level_first_win)
@@ -167,7 +171,7 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		Levels.add_child(button)
 		position_level_button(button, total_levels + 1, total_levels + 1)
 		var enabled: bool = ExtraLevelLister.count_completed_section_levels(section) == total_levels or Global.is_dev_mode() or Profile.get_option("unlock_everything")
-		button.setup(my_section, -1, enabled, true)
+		button.setup(my_section, -1, enabled, not force_unlocked.is_empty(), true)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
 		button.loaded_endless.connect(_on_loaded_endless)
