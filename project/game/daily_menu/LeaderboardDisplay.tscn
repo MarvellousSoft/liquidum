@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
 
 [node name="LeaderboardDisplay" type="Control"]
-custom_minimum_size = Vector2(1100, 1000)
+custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 3
 anchors_preset = 4
 anchor_top = 0.5
