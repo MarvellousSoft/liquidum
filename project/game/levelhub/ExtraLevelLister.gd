@@ -33,8 +33,10 @@ func get_initial_unlocked_levels(section: int) -> int:
 	return _config(section).get_value("section", "initial_unlocked", CampaignLevelLister.INITIAL_UNLOCKED_LEVELS)
 
 # Levels 1-return are unlocked in this section. If 0, none is unlocked.
-# For now, extra level sections are always unlocked, but that's not too hard to change
+# For now, extra level sections are always unlocked (no dependencies), but that's not too hard to change
 func get_max_unlocked_level(section: int) -> int:
+	if section_disabled(section):
+		return get_disabled_section_free_trial(section)
 	var count_completed := 0
 	var i := 1
 	var initial_unlock := get_initial_unlocked_levels(section)
@@ -144,6 +146,10 @@ func count_completed_levels(profile_name: String) -> int:
 			if save != null and save.is_completed():
 				count += 1
 	return count
+
+# Number of levels that can be always played
+func get_disabled_section_free_trial(section: int) -> int:
+	return _config(section).get_value("section", "trial_levels", 0)
 
 func purchase_section(section: int) -> void:
 	var id: String

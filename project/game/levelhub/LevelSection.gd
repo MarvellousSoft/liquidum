@@ -336,6 +336,8 @@ func _on_level_button_mouse_exited():
 
 func _on_level_first_win(button):
 	var section = button.my_section
+	if level_lister.section_disabled(section):
+		return
 	var completed_levels := level_lister.count_completed_section_levels(section)
 	var section_levels := level_lister.count_section_levels(section)
 	if extra:
