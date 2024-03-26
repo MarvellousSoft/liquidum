@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://l8ufnptne6b4"]
+
+[ext_resource type="Script" path="res://game/level/PaintManager.gd" id="1_r4g8g"]
+
+[node name="PaintManager" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_r4g8g")
+
+[node name="Lines" type="Node2D" parent="."]
+unique_name_in_owner = true

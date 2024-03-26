@@ -230,6 +230,8 @@ func _input(event: InputEvent) -> void:
 	if Global.is_mobile and event is InputEventMouseMotion and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		# We don't have these in real mobiles so let's hide them in desktop
 		accept_event()
+	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
+		%PaintManager.active = not %PaintManager.active 
 
 func _back_logic() -> void:
 	if Settings.active:
@@ -747,6 +749,7 @@ func _on_back_button_pressed() -> void:
 
 func _on_settings_screen_pause_toggled(paused: bool) -> void:
 	if paused:
+		%BrushPicker.unpress_marker_button()
 		CursorManager.reset_cursor()
 	else:
 		_set_brush_cursor()
@@ -915,6 +918,8 @@ func _on_dev_buttons_copy_to_editor():
 
 
 func _on_tutorial_button_pressed():
+	%PaintManager.visible = false
+	%BrushPicker.unpress_marker_button()
 	CursorManager.reset_cursor()
 	AudioManager.play_sfx("button_pressed")
 	process_game = false
@@ -988,6 +993,7 @@ func _on_share_button_pressed() -> void:
 
 
 func _on_tutorial_display_tutorial_closed():
+	%PaintManager.visible = true
 	process_game = true
 	%SettingsScreen.show_button()
 	_set_brush_cursor()
@@ -1103,3 +1109,19 @@ func _on_dev_buttons_mirror_vertical():
 	GridNode.grid_logic.mirror_vertical()
 	GridNode.grid_logic.set_auto_update_hints(true)
 	GridNode.update(true, true)
+
+
+func _on_brush_picker_marker_button_toggled(on):
+	if on:
+		GridNode.disable()
+	else:
+		GridNode.enable()
+	%PaintManager.active = on
+
+
+func _on_brush_picker_clear_markers():
+	%PaintManager.clear()
+
+
+func _on_brush_picker_toggle_marker_visibility(off : bool):
+	%PaintManager.set_visibility(not off)

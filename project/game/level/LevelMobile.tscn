@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cj1y1oo2ma3bk"]
+[gd_scene load_steps=40 format=3 uid="uid://cj1y1oo2ma3bk"]
 
 [ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://cpoyo7yv1jpj6" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
 [ext_resource type="Script" path="res://game/ads/BottomAdShower.gd" id="20_ff4mn"]
 [ext_resource type="PackedScene" uid="uid://d1mr4677loeoa" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
+[ext_resource type="PackedScene" uid="uid://l8ufnptne6b4" path="res://game/level/PaintManager.tscn" id="23_1d80d"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("6_gng55")
@@ -701,49 +702,6 @@ offset_top = 1110.0
 offset_right = 720.0
 offset_bottom = 1280.0
 
-[node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="0"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="1"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="FingerAnim" parent="BrushPicker/CenterContainer/PanelContainer/Images/NoWater" index="0"]
-offset_left = 20.0
-offset_top = 14.0
-offset_right = 113.0
-offset_bottom = 123.0
-rotation = -0.261799
-
-[node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="2"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="3"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="4"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Images" index="5"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Water" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="0"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="NoWater" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="1"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Boat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="2"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="NoBoat" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="3"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Wall" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="4"]
-custom_minimum_size = Vector2(75, 75)
-
-[node name="Block" parent="BrushPicker/CenterContainer/PanelContainer/Buttons" index="5"]
-custom_minimum_size = Vector2(75, 75)
-
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
@@ -873,7 +831,7 @@ libraries = {
 [node name="TutorialDisplayBG" type="ColorRect" parent="."]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
-z_index = 2
+z_index = 3
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 offset_right = 720.0
@@ -938,6 +896,9 @@ autostart = true
 [node name="BottomAdShower" type="Node" parent="."]
 script = ExtResource("20_ff4mn")
 
+[node name="PaintManager" parent="." instance=ExtResource("23_1d80d")]
+unique_name_in_owner = true
+
 [connection signal="theme_changed" from="." to="." method="_on_theme_changed"]
 [connection signal="gui_input" from="InputFallback" to="." method="_on_input_fallback_gui_input"]
 [connection signal="mouse_entered" from="CenterContainer" to="." method="_on_center_container_mouse_entered"]
@@ -951,6 +912,9 @@ script = ExtResource("20_ff4mn")
 [connection signal="pressed" from="TopButtons/ResetButton" to="." method="reset_level"]
 [connection signal="toggled" from="HintsMarginContainer/HintsContainer/AquariumButton" to="." method="_on_aquarium_buttons_toggled"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="clear_markers" from="BrushPicker" to="." method="_on_brush_picker_clear_markers"]
+[connection signal="marker_button_toggled" from="BrushPicker" to="." method="_on_brush_picker_marker_button_toggled"]
+[connection signal="toggle_marker_visibility" from="BrushPicker" to="." method="_on_brush_picker_toggle_marker_visibility"]
 [connection signal="text_changed" from="Title/Edit" to="." method="_on_edit_text_changed"]
 [connection signal="pressed" from="ContinueContainer/ShareButton" to="." method="_on_share_button_pressed"]
 [connection signal="mouse_entered" from="ContinueContainer/ContinueButton" to="." method="_on_button_mouse_entered"]

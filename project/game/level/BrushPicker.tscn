@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b66jv6csdnca5"]
+[gd_scene load_steps=29 format=3 uid="uid://b66jv6csdnca5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
@@ -12,6 +12,12 @@
 [ext_resource type="Texture2D" uid="uid://7y5mpv0mw60" path="res://assets/images/ui/brush/brish_picker_noboat.png" id="7_ymcdx"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
+[ext_resource type="Texture2D" uid="uid://o0hkmxbq8my4" path="res://assets/images/ui/hint/button_visibility.png" id="13_mpfxo"]
+[ext_resource type="StyleBox" uid="uid://djabbhow534io" path="res://assets/ui/IconButton/IconButtonNormal.tres" id="13_x5oya"]
+[ext_resource type="StyleBox" uid="uid://ceeji0k82b52d" path="res://assets/ui/IconButton/IconButtonHover.tres" id="14_kn3y7"]
+[ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="14_rsycl"]
+[ext_resource type="StyleBox" uid="uid://cbyxau7ghvn5b" path="res://assets/ui/IconButton/IconButtonDisabled.tres" id="16_s57r0"]
+[ext_resource type="Texture2D" uid="uid://csjhcsr1ox2w3" path="res://assets/images/ui/icons/brush.png" id="17_d56e5"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_t7cfv"]
 noise_type = 2
@@ -89,6 +95,24 @@ _data = {
 "idle": SubResource("Animation_krvyy")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1s5v7"]
+bg_color = Color(0.0352941, 0.211765, 0.34902, 0.811765)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
 [sub_resource type="Animation" id="Animation_no0ke"]
 length = 0.001
 tracks/0/type = "value"
@@ -106,7 +130,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CenterContainer/PanelContainer/Images/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("CenterContainer/HBoxContainer/PanelContainer/Images/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -146,7 +170,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CenterContainer/PanelContainer/Images/Water:material:shader_parameter/level")
+tracks/1/path = NodePath("CenterContainer/HBoxContainer/PanelContainer/Images/Water:material:shader_parameter/level")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -188,17 +212,23 @@ offset_right = 3840.0
 offset_bottom = 400.0
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Images" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
+[node name="Images" type="HBoxContainer" parent="CenterContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="Water" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_swcqc")
 custom_minimum_size = Vector2(250, 250)
@@ -206,14 +236,14 @@ layout_mode = 2
 texture = ExtResource("3_puwdh")
 expand_mode = 1
 
-[node name="NoWater" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="NoWater" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("5_1bwir")
 expand_mode = 1
 
-[node name="FingerAnim" type="TextureRect" parent="CenterContainer/PanelContainer/Images/NoWater"]
+[node name="FingerAnim" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images/NoWater"]
 visible = false
 modulate = Color(0.0352941, 0.211765, 0.34902, 1)
 layout_mode = 0
@@ -226,13 +256,13 @@ texture = ExtResource("5_yi21a")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CenterContainer/PanelContainer/Images/NoWater/FingerAnim"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CenterContainer/HBoxContainer/PanelContainer/Images/NoWater/FingerAnim"]
 autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_myebw")
 }
 
-[node name="Boat" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="Boat" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(250, 250)
@@ -240,33 +270,33 @@ layout_mode = 2
 texture = ExtResource("4_83tnc")
 expand_mode = 1
 
-[node name="NoBoat" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="NoBoat" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("7_ymcdx")
 expand_mode = 1
 
-[node name="Wall" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="Wall" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("5_lkn2k")
 expand_mode = 1
 
-[node name="Block" type="TextureRect" parent="CenterContainer/PanelContainer/Images"]
+[node name="Block" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("6_ksqdr")
 expand_mode = 1
 
-[node name="Buttons" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Water" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="Water" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -278,7 +308,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NoWater" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="NoWater" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -290,7 +320,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Boat" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="Boat" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -302,7 +332,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NoBoat" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="NoBoat" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -314,7 +344,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Wall" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="Wall" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -326,7 +356,7 @@ texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Block" type="TextureButton" parent="CenterContainer/PanelContainer/Buttons"]
+[node name="Block" type="TextureButton" parent="CenterContainer/HBoxContainer/PanelContainer/Buttons"]
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 focus_mode = 0
@@ -337,15 +367,75 @@ texture_pressed = ExtResource("8_pcm1q")
 texture_hover = ExtResource("9_aiaqv")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="MarkerContainer" type="PanelContainer" parent="CenterContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/HBoxContainer/MarkerContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Visibility" type="Button" parent="CenterContainer/HBoxContainer/MarkerContainer/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(0.847059, 0.996078, 0.882353, 1)
+theme_override_colors/icon_pressed_color = Color(0.45098, 0.937255, 0.772549, 1)
+theme_override_colors/icon_hover_color = Color(0.666667, 0.996078, 0.815686, 1)
+toggle_mode = true
+action_mode = 0
+icon = ExtResource("13_mpfxo")
+flat = true
+expand_icon = true
+
+[node name="Clear" type="Button" parent="CenterContainer/HBoxContainer/MarkerContainer/Buttons"]
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(0.847059, 0.996078, 0.882353, 1)
+theme_override_colors/icon_pressed_color = Color(0.45098, 0.937255, 0.772549, 1)
+theme_override_colors/icon_hover_color = Color(0.666667, 0.996078, 0.815686, 1)
+action_mode = 0
+icon = ExtResource("14_rsycl")
+flat = true
+expand_icon = true
+
+[node name="MarkerButton" type="Button" parent="CenterContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 8
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(0.666667, 0.996078, 0.815686, 1)
+theme_override_colors/icon_pressed_color = Color(0.666667, 0.996078, 0.815686, 1)
+theme_override_colors/icon_hover_color = Color(0.45098, 0.937255, 0.772549, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.45098, 0.937255, 0.772549, 1)
+theme_override_styles/normal = ExtResource("13_x5oya")
+theme_override_styles/hover = ExtResource("14_kn3y7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1s5v7")
+theme_override_styles/disabled = ExtResource("16_s57r0")
+toggle_mode = true
+action_mode = 0
+icon = ExtResource("17_d56e5")
+expand_icon = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_qwnij")
 }
 
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Water" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/NoWater" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Boat" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/NoBoat" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Wall" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_entered" from="CenterContainer/PanelContainer/Buttons/Block" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Water" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/NoWater" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Boat" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/NoBoat" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Wall" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Block" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Visibility" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Visibility" to="." method="_on_visibility_toggled"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Clear" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Clear" to="." method="_on_clear_pressed"]
+[connection signal="toggled" from="CenterContainer/HBoxContainer/MarkerButton" to="." method="_on_marker_button_toggled"]
