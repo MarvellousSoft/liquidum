@@ -1448,26 +1448,41 @@ class CellHintsMore extends CellHintsStrategy:
 						new[idx] = new_inner
 						new.sort()
 						if not OptionsSum.can_be_solved(water_needed, new):
+							var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
 							var water: float = options[idx][jdx]
-							for kdx in opt_to_aq[options[idx]].empty_at_height.size():
-								if opt_to_aq[options[idx]].empty_at_height[kdx] == 0:
+							for kdx in aq.empty_at_height.size():
+								if aq.empty_at_height[kdx] == 0:
 									continue
 								if water > 0:
-									water -= opt_to_aq[options[idx]].empty_at_height[kdx]
-									for pos in opt_to_aq[options[idx]].cells_at_height[kdx]:
+									water -= aq.empty_at_height[kdx]
+									for pos in aq.cells_at_height[kdx]:
 										SolverModel._put_water(grid, pos)
 								else:
-									for pos in opt_to_aq[options[idx]].cells_at_height[kdx]:
+									for pos in aq.cells_at_height[kdx]:
 										SolverModel._put_nowater(grid, pos)
 							return true
-						elif jdx == 0 or jdx == options[idx].size() - 1:
+						elif options[idx].size() > 2 and (jdx == 0 or jdx == options[idx].size() - 1):
+							new = options.duplicate()
 							# Checking if new[idx][jdx] is NEVER in the solution is only useful
 							# for the top/bottom of the aquarium. (We don't have a marker for "water
 							# doesn't end here")
 							new.remove_at(idx)
 							if not OptionsSum.can_be_solved(water_needed - options[idx][jdx], new):
-								# TODO: Add water to bottom of aquarium or NoWater to top
-								pass
+								var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
+								if jdx == 0:
+									assert(options[idx][jdx] == 0)
+									for kdx in aq.empty_at_height.size():
+										if aq.empty_at_height[kdx] > 0:
+											for pos in aq.cells_at_height[kdx]:
+												SolverModel._put_water(grid, pos)
+											break
+								else:
+									for kdx in range(aq.empty_at_height.size() - 1, -1, -1):
+										if aq.empty_at_height[kdx] > 0:
+											for pos in aq.cells_at_height[kdx]:
+												SolverModel._put_nowater(grid, pos)
+											break
+								return true
 		return any
 		
 

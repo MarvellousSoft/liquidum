@@ -1214,6 +1214,14 @@ func test_cell_hints() -> void:
 	.##..
 	.L.L.
 	""")
+	assert_can_solve("""
+	+cellhint=1:1:2
+	h....
+	..#..
+	}|╲|.
+	.....
+	.L.L.
+	""")
 	# Advanced
 	assert_can_solve("""
 	+cellhint=1:1:3
@@ -1222,6 +1230,37 @@ func test_cell_hints() -> void:
 	.L.L._.
 	.....##
 	.L._.L.
+	""")
+	assert_can_solve("""
+	+cellhint=1:1:1.5
+	.#..
+	|╲|.
+	....
+	L.L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:1.5
+	....
+	|.L.
+	.#..
+	L/L.
+	""","""
+	....
+	|.L.
+	w#..
+	L/L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:2
+	#...
+	|/L.
+	....
+	L.L.
+	""","""
+	#x..
+	|/L.
+	....
+	L.L.
 	""")
 
 func test_options_sum() -> void:
