@@ -35,3 +35,5 @@ project/*.json
 build/*
 project/override.cfg
 .vscode/settings.json
+*.DS_Store
+project/addons/admob/downloads
