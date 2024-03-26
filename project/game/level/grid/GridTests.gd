@@ -1233,3 +1233,4 @@ func test_options_sum() -> void:
 	assert(not OptionsSum.can_be_solved(12., [[1., 9.], [2., 9.]]))
 	assert(not OptionsSum.can_be_solved(4., [[1., 9.], [2., 9.]]))
 	assert(not OptionsSum.can_be_solved(0., [[1., 9.], [2., 9.]]))
+	assert(OptionsSum.can_be_solved(2.0, [[0.], [0., 1.], [0., 1.]]))

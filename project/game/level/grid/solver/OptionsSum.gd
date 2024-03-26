@@ -6,8 +6,8 @@ static var memo := {}
 
 # options is Array[Array[float]]
 static func _dp(goal: float, options: Array[Array]) -> bool:
-	if goal == 0:
-		return options.is_empty()
+	if goal == 0 and options.is_empty():
+		return true
 	if goal < 0 or options.is_empty():
 		return false
 	if memo.has([goal, options]):

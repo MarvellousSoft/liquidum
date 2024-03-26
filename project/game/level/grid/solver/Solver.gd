@@ -1443,11 +1443,25 @@ class CellHintsMore extends CellHintsStrategy:
 					for jdx in options[idx].size():
 						var new := options.duplicate()
 						# Try to not use this value and check it is still possible
-						new[idx] = options[idx].duplicate()
-						new[idx].remove_at(jdx)
+						var new_inner := options[idx].duplicate()
+						new_inner.remove_at(jdx)
+						new[idx] = new_inner
+						new.sort()
 						if not OptionsSum.can_be_solved(water_needed, new):
-							# TODO: Use water up to this point
-							pass
+							water_needed -= options[idx][jdx]
+							any = true
+							var water: float = options[idx][jdx]
+							for kdx in opt_to_aq[options[idx]].empty_at_height.size():
+								if opt_to_aq[options[idx]].empty_at_height[kdx] == 0:
+									continue
+								if water > 0:
+									water -= opt_to_aq[options[idx]].empty_at_height.size()
+									for pos in opt_to_aq[options[idx]].cells_at_height[kdx]:
+										SolverModel._put_water(grid, pos)
+								else:
+									for pos in opt_to_aq[options[idx]].cells_at_height[kdx]:
+										SolverModel._put_nowater(grid, pos)
+							break
 						elif jdx == 0 or jdx == options[idx].size() - 1:
 							# Checking if new[idx][jdx] is NEVER in the solution is only useful
 							# for the top/bottom of the aquarium. (We don't have a marker for "water
