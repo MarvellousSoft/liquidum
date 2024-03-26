@@ -1116,8 +1116,10 @@ func _on_dev_buttons_mirror_vertical():
 
 func _on_brush_picker_marker_button_toggled(on):
 	if on:
+		CursorManager.set_cursor(CursorManager.CursorMode.Brush)
 		GridNode.disable()
 	else:
+		_set_brush_cursor()
 		GridNode.enable()
 	%PaintManager.active = on
 	%PaintManager.apply_cooldown()
@@ -1136,3 +1138,7 @@ func _on_brush_picker_toggle_marker_visibility(off : bool):
 func _on_brush_picker_toggle_marker_eraser(on : bool):
 	%PaintManager.set_eraser_mode(on)
 	%PaintManager.apply_cooldown()
+	if on:
+		CursorManager.set_cursor(CursorManager.CursorMode.Eraser)
+	else:
+		CursorManager.set_cursor(CursorManager.CursorMode.Brush)
