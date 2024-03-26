@@ -17,6 +17,7 @@ signal brushed_picked(mode : E.BrushMode)
 signal marker_button_toggled(on : bool)
 signal clear_markers
 signal toggle_marker_visibility(off : bool)
+signal toggle_marker_eraser(on : bool)
 
 var editor_mode := false
 var active := true
@@ -141,7 +142,10 @@ func pick_previous_brush() -> void:
 func unpress_marker_button():
 	if %MarkerButton.button_pressed:
 		%MarkerButton.button_pressed = false
-	
+
+
+func switch_eraser_mode():
+	%Eraser.button_pressed = not %Eraser.button_pressed 
 
 
 func _on_button_pressed(mode: E.BrushMode):
@@ -176,18 +180,27 @@ func _on_button_mouse_entered():
 
 
 func _on_marker_button_toggled(button_pressed):
+	AudioManager.play_sfx("change_brush")
 	%PanelContainer.visible = not button_pressed
 	%MarkerContainer.visible = button_pressed
 	marker_button_toggled.emit(button_pressed)
 
 
 func _on_clear_pressed():
+	AudioManager.play_sfx("button_pressed")
 	clear_markers.emit()
 
 
 func _on_visibility_toggled(button_pressed):
 	if button_pressed:
+		AudioManager.play_sfx("button_back")
 		%Visibility.modulate.a = 0.5
 	else:
+		AudioManager.play_sfx("button_pressed")
 		%Visibility.modulate.a = 1.0
 	toggle_marker_visibility.emit(button_pressed)
+
+
+func _on_eraser_toggled(button_pressed):
+	AudioManager.play_sfx("button_pressed")
+	toggle_marker_eraser.emit(button_pressed)

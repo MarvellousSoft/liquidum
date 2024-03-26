@@ -232,6 +232,9 @@ func _input(event: InputEvent) -> void:
 		accept_event()
 	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
 		%PaintManager.active = not %PaintManager.active 
+	if %PaintManager.active and event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			%BrushPicker.switch_eraser_mode()
 
 func _back_logic() -> void:
 	if Settings.active:
@@ -1117,11 +1120,19 @@ func _on_brush_picker_marker_button_toggled(on):
 	else:
 		GridNode.enable()
 	%PaintManager.active = on
+	%PaintManager.apply_cooldown()
 
 
 func _on_brush_picker_clear_markers():
 	%PaintManager.clear()
+	%PaintManager.apply_cooldown()
 
 
 func _on_brush_picker_toggle_marker_visibility(off : bool):
 	%PaintManager.set_visibility(not off)
+	%PaintManager.apply_cooldown()
+
+
+func _on_brush_picker_toggle_marker_eraser(on : bool):
+	%PaintManager.set_eraser_mode(on)
+	%PaintManager.apply_cooldown()

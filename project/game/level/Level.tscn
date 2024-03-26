@@ -899,6 +899,7 @@ unique_name_in_owner = true
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
 [connection signal="clear_markers" from="BrushPicker" to="." method="_on_brush_picker_clear_markers"]
 [connection signal="marker_button_toggled" from="BrushPicker" to="." method="_on_brush_picker_marker_button_toggled"]
+[connection signal="toggle_marker_eraser" from="BrushPicker" to="." method="_on_brush_picker_toggle_marker_eraser"]
 [connection signal="toggle_marker_visibility" from="BrushPicker" to="." method="_on_brush_picker_toggle_marker_visibility"]
 [connection signal="mouse_entered" from="ResetButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ResetButton" to="." method="reset_level"]
