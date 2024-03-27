@@ -956,7 +956,7 @@ horizontal_alignment = 2
 
 [node name="Label16" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "Ctrl"
+text = "SPACE"
 horizontal_alignment = 2
 
 [node name="Label10" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]

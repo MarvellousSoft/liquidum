@@ -228,6 +228,7 @@ PLACE_BOAT,Use the boat brush,Usa o pincel de barco,Usa o pincel de barco
 PLACE_NOBOAT,"Use the ""no boat"" marker","Usa o marcador ""sem barco""","Usa o marcador ""sem barco"""
 UNDO,Undo,Desfazer,Desfazer
 REDO,Redo,Refazer,Refazer
+SPACE,Space,Espaço,Espaço
 TOGGLE_MARKER_MODE,Toggle marker mode,Troca modo de marcação,Troca modo de marcação
 TAP,Tap,Apertar,Apertar
 HOLD,Hold,Segurar,Segurar
