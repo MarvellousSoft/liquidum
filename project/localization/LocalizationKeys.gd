@@ -232,6 +232,7 @@ const PLACE_BOAT = "PLACE_BOAT"
 const PLACE_NOBOAT = "PLACE_NOBOAT"
 const UNDO = "UNDO"
 const REDO = "REDO"
+const TOGGLE_MARKER_MODE = "TOGGLE_MARKER_MODE"
 const TAP = "TAP"
 const HOLD = "HOLD"
 const DRAG_TOUCH = "DRAG_TOUCH"
@@ -598,6 +599,7 @@ const KEYS = [
  "PLACE_NOBOAT",
  "UNDO",
  "REDO",
+ "TOGGLE_MARKER_MODE",
  "TAP",
  "HOLD",
  "DRAG_TOUCH",

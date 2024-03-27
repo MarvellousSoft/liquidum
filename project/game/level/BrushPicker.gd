@@ -86,6 +86,8 @@ func _unhandled_input(event):
 			pick_next_brush()
 		else:
 			pick_next_marker_color()
+	elif event.is_action_pressed("toggle_marker_mode"):
+		_on_marker_button_toggled(not marker_mode_active)
 	if event is InputEventKey:
 		if event.pressed and event.keycode >= KEY_1 and event.keycode <= KEY_9:
 			var valid := get_valid_buttons()
