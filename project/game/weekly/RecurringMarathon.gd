@@ -388,8 +388,9 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 				var score: int = int(info.time_secs * 1000) + 60 * 60 * info.total_marathon_mistakes
 				GooglePlayGameServices.leaderboards_submit_score(ld_id, float(score))
 				await GooglePlayGameServices.leaderboards_score_submitted
-			GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \
-			google_leaderboard_span(), GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
+			if not AndroidRequestReview.just_requested_review:
+				GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \
+				google_leaderboard_span(), GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
 
 
 func _on_dark_mode_changed(is_dark: bool):

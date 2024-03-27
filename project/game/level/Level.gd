@@ -582,6 +582,7 @@ func win() -> void:
 	
 	AudioManager.play_sfx("win_level")
 	WaveEffect.play()
+	AndroidRequestReview.maybe_request_review()
 	
 	won_before = dummy_save.is_completed()
 	dummy_save.save_completion(Counters.mistake.count, running_time)

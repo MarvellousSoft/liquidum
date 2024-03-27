@@ -186,8 +186,6 @@ func set_save_data(data):
 	show_bubbles_changed.emit(options.show_bubbles)
 	palette_changed.emit()
 	BlueFilter.set_value(float(options.blue_filter)/100.0)
-	if AndroidRequestReview.enabled():
-		get_tree().create_timer(maxf(0., options.deadline_for_next_review_request - Time.get_unix_time_from_system())).timeout.connect(AndroidRequestReview.request_review)
 
 func set_data(data, idx, default_values, ignore_deprecated := false):
 	if not data.has(idx):
