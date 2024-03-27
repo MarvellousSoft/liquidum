@@ -22,7 +22,6 @@ static func maybe_request_review() -> void:
 	# Regardless of success or failure, let's reschedule the next review request
 	Profile.set_option(OPTION_NAME, Time.get_unix_time_from_system() + randf_range(10., 20.) * 24 * 60 * 60, true)
 	just_requested_review = true
-	var in_app_review = Engine.get_singleton(SINGLETON_NAME)
 	in_app_review.requestReviewInfo()
 	await in_app_review.on_request_review_success
 	# Then do the actual review
