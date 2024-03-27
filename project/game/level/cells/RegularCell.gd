@@ -376,9 +376,9 @@ func get_corner_water_level(corner : E.Waters) -> float:
 
 func set_water_level(corner: E.Waters, value: float, dont_compare := false) -> void:
 	var s_value = snapped(value, Global.GRANULAR)
-	if dont_compare or s_value != levels[corner]:
-		levels[corner] = s_value
+	if dont_compare or s_value != snapped(levels[corner], Global.GRANULAR):
 		Waters[corner].material = Global.get_water_shader(s_value)
+	levels[corner] = value
 
 
 func increase_water_level(corner : E.Waters, dt : float) -> void:
