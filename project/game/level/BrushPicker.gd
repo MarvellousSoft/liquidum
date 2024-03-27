@@ -14,31 +14,37 @@ const IMAGES = {
 }
 
 signal brushed_picked(mode : E.BrushMode)
+signal marker_button_toggled(on : bool)
+signal clear_markers
+signal toggle_marker_visibility(off : bool)
+signal toggle_marker_eraser(on : bool)
 
 var editor_mode := false
 var active := true
 
 @onready var Images = {
-	"self": $CenterContainer/PanelContainer/Images,
-	E.BrushMode.Water: $CenterContainer/PanelContainer/Images/Water,
-	E.BrushMode.NoWater: $CenterContainer/PanelContainer/Images/NoWater,
-	E.BrushMode.Boat: $CenterContainer/PanelContainer/Images/Boat,
-	E.BrushMode.NoBoat: $CenterContainer/PanelContainer/Images/NoBoat,
-	E.BrushMode.Wall: $CenterContainer/PanelContainer/Images/Wall,
-	E.BrushMode.Block: $CenterContainer/PanelContainer/Images/Block,
+	"self": $CenterContainer/HBoxContainer/PanelContainer/Images,
+	E.BrushMode.Water: $CenterContainer/HBoxContainer/PanelContainer/Images/Water,
+	E.BrushMode.NoWater: $CenterContainer/HBoxContainer/PanelContainer/Images/NoWater,
+	E.BrushMode.Boat: $CenterContainer/HBoxContainer/PanelContainer/Images/Boat,
+	E.BrushMode.NoBoat: $CenterContainer/HBoxContainer/PanelContainer/Images/NoBoat,
+	E.BrushMode.Wall: $CenterContainer/HBoxContainer/PanelContainer/Images/Wall,
+	E.BrushMode.Block: $CenterContainer/HBoxContainer/PanelContainer/Images/Block,
 }
-@onready var ButtonsContainer = $CenterContainer/PanelContainer/Buttons
+@onready var ButtonsContainer = $CenterContainer/HBoxContainer/PanelContainer/Buttons
 @onready var Buttons = {
-	E.BrushMode.Water: $CenterContainer/PanelContainer/Buttons/Water,
-	E.BrushMode.NoWater: $CenterContainer/PanelContainer/Buttons/NoWater,
-	E.BrushMode.Boat: $CenterContainer/PanelContainer/Buttons/Boat,
-	E.BrushMode.NoBoat: $CenterContainer/PanelContainer/Buttons/NoBoat,
-	E.BrushMode.Wall: $CenterContainer/PanelContainer/Buttons/Wall,
-	E.BrushMode.Block: $CenterContainer/PanelContainer/Buttons/Block,
+	E.BrushMode.Water: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Water,
+	E.BrushMode.NoWater: $CenterContainer/HBoxContainer/PanelContainer/Buttons/NoWater,
+	E.BrushMode.Boat: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Boat,
+	E.BrushMode.NoBoat: $CenterContainer/HBoxContainer/PanelContainer/Buttons/NoBoat,
+	E.BrushMode.Wall: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Wall,
+	E.BrushMode.Block: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Block,
 }
 @onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 
 func _ready():
+	%PanelContainer.visible = true
+	%MarkerContainer.visible = false
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	setup(editor_mode, false)
@@ -133,6 +139,15 @@ func pick_previous_brush() -> void:
 	_on_button_pressed(valid_buttons[i])
 
 
+func unpress_marker_button():
+	if %MarkerButton.button_pressed:
+		%MarkerButton.button_pressed = false
+
+
+func switch_eraser_mode():
+	%Eraser.button_pressed = not %Eraser.button_pressed 
+
+
 func _on_button_pressed(mode: E.BrushMode):
 	AudioManager.play_sfx("change_brush")
 	if mode == E.BrushMode.NoWater and %NoWater.has_node("FingerAnim"):
@@ -162,3 +177,30 @@ func _on_dark_mode_changed(is_dark):
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_marker_button_toggled(button_pressed):
+	AudioManager.play_sfx("change_brush")
+	%PanelContainer.visible = not button_pressed
+	%MarkerContainer.visible = button_pressed
+	marker_button_toggled.emit(button_pressed)
+
+
+func _on_clear_pressed():
+	AudioManager.play_sfx("button_pressed")
+	clear_markers.emit()
+
+
+func _on_visibility_toggled(button_pressed):
+	if button_pressed:
+		AudioManager.play_sfx("button_back")
+		%Visibility.modulate.a = 0.5
+	else:
+		AudioManager.play_sfx("button_pressed")
+		%Visibility.modulate.a = 1.0
+	toggle_marker_visibility.emit(button_pressed)
+
+
+func _on_eraser_toggled(button_pressed):
+	AudioManager.play_sfx("button_pressed")
+	toggle_marker_eraser.emit(button_pressed)

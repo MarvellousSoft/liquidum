@@ -1214,3 +1214,62 @@ func test_cell_hints() -> void:
 	.##..
 	.L.L.
 	""")
+	assert_can_solve("""
+	+cellhint=1:1:2
+	h....
+	..#..
+	}|╲|.
+	.....
+	.L.L.
+	""")
+	# Advanced
+	assert_can_solve("""
+	+cellhint=1:1:3
+	h2.....
+	.......
+	.L.L._.
+	.....##
+	.L._.L.
+	""")
+	assert_can_solve("""
+	+cellhint=1:1:1.5
+	.#..
+	|╲|.
+	....
+	L.L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:1.5
+	....
+	|.L.
+	.#..
+	L/L.
+	""","""
+	....
+	|.L.
+	w#..
+	L/L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:2
+	#...
+	|/L.
+	....
+	L.L.
+	""","""
+	#x..
+	|/L.
+	....
+	L.L.
+	""")
+
+func test_options_sum() -> void:
+	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))
+	assert(OptionsSum.can_be_solved(3., [[1., 9.], [2., 9.]]))
+	assert(OptionsSum.can_be_solved(11., [[1., 9.], [2., 9.]]))
+	assert(OptionsSum.can_be_solved(18., [[1., 9.], [2., 9.]]))
+	assert(not OptionsSum.can_be_solved(2., [[1., 9.], [2., 9.]]))
+	assert(not OptionsSum.can_be_solved(12., [[1., 9.], [2., 9.]]))
+	assert(not OptionsSum.can_be_solved(4., [[1., 9.], [2., 9.]]))
+	assert(not OptionsSum.can_be_solved(0., [[1., 9.], [2., 9.]]))
+	assert(OptionsSum.can_be_solved(2.0, [[0.], [0., 1.], [0., 1.]]))

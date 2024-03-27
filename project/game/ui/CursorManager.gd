@@ -10,6 +10,8 @@ enum CursorMode {
 	NoBoat,
 	Wall,
 	Block,
+	Brush,
+	Eraser,
 }
 
 const IMAGES := [
@@ -20,6 +22,8 @@ const IMAGES := [
 	preload("res://assets/images/cursors/arrow-noboat.png"),
 	preload("res://assets/images/cursors/arrow-wall.png"),
 	preload("res://assets/images/cursors/arrow-block.png"),
+	preload("res://assets/images/cursors/arrow-brush.png"),
+	preload("res://assets/images/cursors/arrow-eraser.png"),
 ]
 
 const DARK_IMAGES := [
@@ -30,6 +34,8 @@ const DARK_IMAGES := [
 	preload("res://assets/images/cursors/dark-arrow-noboat.png"),
 	preload("res://assets/images/cursors/dark-arrow-wall.png"),
 	preload("res://assets/images/cursors/dark-arrow-block.png"),
+	preload("res://assets/images/cursors/dark-arrow-brush.png"),
+	preload("res://assets/images/cursors/dark-arrow-eraser.png"),
 ]
 
 static var cur_mode := CursorMode.Normal
