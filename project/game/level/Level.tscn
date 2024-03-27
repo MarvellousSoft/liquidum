@@ -370,7 +370,7 @@ text = "0 - 0"
 
 [node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(720, 0)
+custom_minimum_size = Vector2(680, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 54
@@ -897,6 +897,8 @@ unique_name_in_owner = true
 [connection signal="updated" from="CenterContainer/GridView" to="." method="_on_grid_updated"]
 [connection signal="updated_size" from="CenterContainer/GridView" to="." method="_on_grid_view_updated_size"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="change_marker_color" from="BrushPicker" to="." method="_on_brush_picker_change_marker_color"]
+[connection signal="change_marker_width" from="BrushPicker" to="." method="_on_brush_picker_change_marker_width"]
 [connection signal="clear_markers" from="BrushPicker" to="." method="_on_brush_picker_clear_markers"]
 [connection signal="marker_button_toggled" from="BrushPicker" to="." method="_on_brush_picker_marker_button_toggled"]
 [connection signal="toggle_marker_eraser" from="BrushPicker" to="." method="_on_brush_picker_toggle_marker_eraser"]

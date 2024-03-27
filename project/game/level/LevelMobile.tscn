@@ -912,6 +912,8 @@ unique_name_in_owner = true
 [connection signal="pressed" from="TopButtons/ResetButton" to="." method="reset_level"]
 [connection signal="toggled" from="HintsMarginContainer/HintsContainer/AquariumButton" to="." method="_on_aquarium_buttons_toggled"]
 [connection signal="brushed_picked" from="BrushPicker" to="." method="_on_brush_picker_brushed_picked"]
+[connection signal="change_marker_color" from="BrushPicker" to="." method="_on_brush_picker_change_marker_color"]
+[connection signal="change_marker_width" from="BrushPicker" to="." method="_on_brush_picker_change_marker_width"]
 [connection signal="clear_markers" from="BrushPicker" to="." method="_on_brush_picker_clear_markers"]
 [connection signal="marker_button_toggled" from="BrushPicker" to="." method="_on_brush_picker_marker_button_toggled"]
 [connection signal="toggle_marker_eraser" from="BrushPicker" to="." method="_on_brush_picker_toggle_marker_eraser"]

@@ -1143,3 +1143,13 @@ func _on_brush_picker_toggle_marker_eraser(on : bool):
 		CursorManager.set_cursor(CursorManager.CursorMode.Eraser)
 	else:
 		CursorManager.set_cursor(CursorManager.CursorMode.Brush)
+
+
+func _on_brush_picker_change_marker_color(color):
+	%PaintManager.set_default_color(color)
+	%PaintManager.apply_cooldown()
+
+
+func _on_brush_picker_change_marker_width(width):
+	%PaintManager.set_default_width(width)
+	%PaintManager.apply_cooldown()

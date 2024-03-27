@@ -12,15 +12,35 @@ const IMAGES = {
 		"picker_hover": preload("res://assets/images/ui/brush/brush_picker_hover.png"),
 	}
 }
+const MARKER_SIZES = [
+	{
+		"width": 15,
+		"icon": preload("res://assets/images/ui/icons/small_brush.png"),
+	},
+	{
+		"width": 20,
+		"icon": preload("res://assets/images/ui/icons/medium_brush.png"),
+	},
+	{
+		"width": 30,
+		"icon": preload("res://assets/images/ui/icons/large_brush.png"),
+	},
+]
+const MARKER_COLORS = [Color(1.0,0.416,0.416), Color(0.1,0.2,1.0), Color(1.0,0.95,0.45)]
 
 signal brushed_picked(mode : E.BrushMode)
 signal marker_button_toggled(on : bool)
 signal clear_markers
 signal toggle_marker_visibility(off : bool)
 signal toggle_marker_eraser(on : bool)
+signal change_marker_width(width : float)
+signal change_marker_color(color : Color)
 
 var editor_mode := false
 var active := true
+var marker_color_idx = 0
+var marker_size_idx = 0
+var marker_mode_active = false
 
 @onready var Images = {
 	"self": $CenterContainer/HBoxContainer/PanelContainer/Images,
@@ -57,9 +77,15 @@ func _unhandled_input(event):
 	if not active:
 		return
 	if event.is_action_pressed("pick_prev_brush"):
-		pick_previous_brush()
+		if not marker_mode_active:
+			pick_previous_brush()
+		else:
+			pick_previous_marker_color()
 	elif event.is_action_pressed("pick_next_brush"):
-		pick_next_brush()
+		if not marker_mode_active:
+			pick_next_brush()
+		else:
+			pick_next_marker_color()
 	if event is InputEventKey:
 		if event.pressed and event.keycode >= KEY_1 and event.keycode <= KEY_9:
 			var valid := get_valid_buttons()
@@ -148,6 +174,20 @@ func switch_eraser_mode():
 	%Eraser.button_pressed = not %Eraser.button_pressed 
 
 
+func pick_next_marker_color():
+	marker_color_idx = (marker_color_idx + 1)%MARKER_COLORS.size()
+	var color = MARKER_COLORS[marker_color_idx]
+	%MarkerColor.modulate = color
+	change_marker_color.emit(color)
+
+
+func pick_previous_marker_color():
+	marker_color_idx = (marker_color_idx - 1)%MARKER_COLORS.size()
+	var color = MARKER_COLORS[marker_color_idx]
+	%MarkerColor.modulate = color
+	change_marker_color.emit(color)
+
+
 func _on_button_pressed(mode: E.BrushMode):
 	AudioManager.play_sfx("change_brush")
 	if mode == E.BrushMode.NoWater and %NoWater.has_node("FingerAnim"):
@@ -181,6 +221,7 @@ func _on_button_mouse_entered():
 
 func _on_marker_button_toggled(button_pressed):
 	AudioManager.play_sfx("change_brush")
+	marker_mode_active = button_pressed
 	%PanelContainer.visible = not button_pressed
 	%MarkerContainer.visible = button_pressed
 	marker_button_toggled.emit(button_pressed)
@@ -204,3 +245,14 @@ func _on_visibility_toggled(button_pressed):
 func _on_eraser_toggled(button_pressed):
 	AudioManager.play_sfx("button_pressed")
 	toggle_marker_eraser.emit(button_pressed)
+
+
+func _on_brush_color_pressed():
+	pick_next_marker_color()
+
+
+func _on_brush_size_pressed():
+	marker_size_idx = (marker_size_idx + 1)%MARKER_SIZES.size()
+	var data = MARKER_SIZES[marker_size_idx]
+	%MarkerSize.icon = data.icon
+	change_marker_width.emit(data.width)

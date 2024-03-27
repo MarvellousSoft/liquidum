@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b66jv6csdnca5"]
+[gd_scene load_steps=32 format=3 uid="uid://b66jv6csdnca5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
@@ -12,9 +12,11 @@
 [ext_resource type="Texture2D" uid="uid://7y5mpv0mw60" path="res://assets/images/ui/brush/brish_picker_noboat.png" id="7_ymcdx"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
+[ext_resource type="Texture2D" uid="uid://cnuh4btolonoa" path="res://assets/images/ui/icons/color_circle.png" id="13_jhyj3"]
 [ext_resource type="Texture2D" uid="uid://bvbgmtve6g7ww" path="res://assets/images/ui/icons/eraser.png" id="13_jkevr"]
 [ext_resource type="Texture2D" uid="uid://o0hkmxbq8my4" path="res://assets/images/ui/hint/button_visibility.png" id="13_mpfxo"]
 [ext_resource type="StyleBox" uid="uid://djabbhow534io" path="res://assets/ui/IconButton/IconButtonNormal.tres" id="13_x5oya"]
+[ext_resource type="Texture2D" uid="uid://dyrj07gfycj7g" path="res://assets/images/ui/icons/small_brush.png" id="14_gaqlo"]
 [ext_resource type="StyleBox" uid="uid://ceeji0k82b52d" path="res://assets/ui/IconButton/IconButtonHover.tres" id="14_kn3y7"]
 [ext_resource type="Texture2D" uid="uid://b8fcul43klssx" path="res://assets/images/ui/icons/clear.png" id="15_ie2qa"]
 [ext_resource type="StyleBox" uid="uid://cbyxau7ghvn5b" path="res://assets/ui/IconButton/IconButtonDisabled.tres" id="16_s57r0"]
@@ -379,6 +381,34 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
+[node name="MarkerColor" type="Button" parent="CenterContainer/HBoxContainer/MarkerContainer/Buttons"]
+unique_name_in_owner = true
+modulate = Color(1, 0.42, 0.42, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(0.941176, 0.941176, 0.941176, 1)
+theme_override_colors/icon_hover_color = Color(0.870588, 0.870588, 0.870588, 1)
+icon = ExtResource("13_jhyj3")
+flat = true
+expand_icon = true
+
+[node name="MarkerSize" type="Button" parent="CenterContainer/HBoxContainer/MarkerContainer/Buttons"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0, 0.0352941, 0.141176, 1)
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(0.811765, 0.811765, 0.811765, 1)
+theme_override_colors/icon_hover_color = Color(0.54902, 0.54902, 0.54902, 1)
+action_mode = 0
+icon = ExtResource("14_gaqlo")
+flat = true
+expand_icon = true
+
 [node name="Eraser" type="Button" parent="CenterContainer/HBoxContainer/MarkerContainer/Buttons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
@@ -449,6 +479,10 @@ libraries = {
 [connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/NoBoat" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Wall" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="CenterContainer/HBoxContainer/PanelContainer/Buttons/Block" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/MarkerColor" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/MarkerColor" to="." method="_on_brush_color_pressed"]
+[connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/MarkerSize" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/MarkerSize" to="." method="_on_brush_size_pressed"]
 [connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Eraser" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Eraser" to="." method="_on_eraser_toggled"]
 [connection signal="mouse_entered" from="CenterContainer/HBoxContainer/MarkerContainer/Buttons/Visibility" to="." method="_on_button_mouse_entered"]

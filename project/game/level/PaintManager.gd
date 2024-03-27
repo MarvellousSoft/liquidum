@@ -1,9 +1,9 @@
 extends CanvasLayer
 
-const COOLDOWN = 0.2
+const COOLDOWN = 0.15
 
-var default_color = Color(1.0,0.0,0.0)
-var default_width = 10
+var default_color = Color(1.0,0.416,0.416)
+var default_width = 15
 var current_line
 var active := false
 var eraser_mode := false
@@ -40,6 +40,14 @@ func apply_cooldown():
 	erasing = false
 	_stop_line()
 	cooldown += COOLDOWN
+
+
+func set_default_width(width : Color):
+	default_width = width
+
+
+func set_default_color(color : Color):
+	default_color = color
 
 
 func set_eraser_mode(value : bool):
