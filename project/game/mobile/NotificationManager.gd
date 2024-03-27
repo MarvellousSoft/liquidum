@@ -1,7 +1,8 @@
 extends Node
 
 var impl: NotificationImpl
-var enabled := false
+var enabled: bool:
+	get: return impl.ln != null
 
 var go_to_settings_if_failed := false
 
@@ -11,10 +12,8 @@ func _ready() -> void:
 	impl = NotificationImpl.new()
 	add_child(impl)
 	if impl.ln == null:
-		enabled = false
 		print("Notification lib is disabled.")
 	else:
-		enabled = true
 		print("Notification lib is enabled. Permission grated = %s" % [permission_granted()])
 		Profile.daily_notification_changed.connect(_on_daily_notif_changed)
 		impl.on_permission_request_completed.connect(_on_permission_completed)

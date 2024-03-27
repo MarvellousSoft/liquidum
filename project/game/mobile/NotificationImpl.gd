@@ -78,10 +78,7 @@ func showWeekly(title: String, message: String, weekday: Time.Weekday, at_hour: 
 	if not ln:
 		not_found_plugin()
 		return
-	if OS.get_name() == "iOS":
-		print("TODO")
-	else:
-		ln.showRepeating(title, message, _generate_android_weekly_notify_interval(weekday, at_hour, at_minute), 60 * 60 * 24 * 7, tag)
+	ln.showRepeating(title, message, _generate_weekly_notify_interval(weekday, at_hour, at_minute), 60 * 60 * 24 * 7, tag)
 
 func cancel(tag):
 	if not ln:
@@ -94,7 +91,7 @@ func cancel(tag):
 func not_found_plugin():
 	print('[LocalNotification] Not found plugin. Please ensure that you checked LocalNotification plugin in the export template')
 
-func _generate_android_weekly_notify_interval(at_weekday: Time.Weekday, at_hour: int, at_minute: int) -> int:
+func _generate_weekly_notify_interval(at_weekday: Time.Weekday, at_hour: int, at_minute: int) -> int:
 	var now := Time.get_datetime_dict_from_system()
 	var time_to_wait: int = -now.second
 	time_to_wait += (at_hour - now.hour) * 60 * 60
