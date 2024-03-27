@@ -33,6 +33,10 @@
   <string name="achievement_flawless_daily" translatable="false">CgkIxZaA3LgPEAIQFw</string>
   <!--achievement 7 daily streak-->
   <string name="achievement_7_daily_streak" translatable="false">CgkIxZaA3LgPEAIQGA</string>
+  <!--achievement Flawless weekly-->
+  <string name="achievement_flawless_weekly" translatable="false">CgkIxZaA3LgPEAIQLQ</string>
+  <!--achievement 4 weekly streak-->
+  <string name="achievement_4_weekly_streak" translatable="false">CgkIxZaA3LgPEAIQLg</string>
   <!--achievement Initiate explorer-->
   <string name="achievement_initiate_explorer" translatable="false">CgkIxZaA3LgPEAIQGQ</string>
   <!--achievement Intermediate explorer-->
@@ -71,10 +75,8 @@
   <string name="achievement_done__solved" translatable="false">CgkIxZaA3LgPEAIQKw</string>
   <!--achievement Reflected-->
   <string name="achievement_reflected" translatable="false">CgkIxZaA3LgPEAIQLA</string>
-  <!--achievement Flawless weekly-->
-  <string name="achievement_flawless_weekly" translatable="false">CgkIxZaA3LgPEAIQLQ</string>
-  <!--achievement 4 weekly streak-->
-  <string name="achievement_4_weekly_streak" translatable="false">CgkIxZaA3LgPEAIQLg</string>
+  <!--achievement Spelunking-->
+  <string name="achievement_spelunking" translatable="false">CgkIxZaA3LgPEAIQMg</string>
   <!--leaderboard Daily level (1h mistake penalty)-->
   <string name="leaderboard_daily_level_1h_mistake_penalty" translatable="false">CgkIxZaA3LgPEAIQHQ</string>
   <!--leaderboard Weekly marathon (1h mistake penalty)-->

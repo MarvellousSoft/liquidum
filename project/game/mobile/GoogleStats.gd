@@ -86,6 +86,7 @@ func update_campaign_stats() -> void:
 	const ACH_NAMES := {
 		1: "achievement_done__solved",
 		2: "achievement_reflected",
+		4: "achievement_spelunking",
 	}
 	var extra_section := 1
 	while ExtraLevelLister.has_section(extra_section):
