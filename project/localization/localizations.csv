@@ -210,32 +210,34 @@ SHARE_TEXT,I won #liquidum daily on,Ganhei o #liquidum diário de,Ganhei o #liqu
 LEFT_MOUSE_CLICK,Left mouse button,Botão esquerdo do mouse,Botão esquerdo do mouse
 PLACE_BRUSH,Use the current brush,Usa o pincel atual,Usa o pincel atual
 RIGHT_MOUSE_CLICK,Right mouse button,Botão direito do mouse,Botão direito do mouse
-PLACE_X,"Use the ""no water"" or ""no boat"" marker","Usa o marcador ""sem água"" ou ""sem barco""","Usa o marcador ""sem água"" ou ""sem barco"""
+PLACE_X_TOGGLE_ERASER,Use secondary brush/Toggles eraser mode,Usa o pincel secundário/Troca modo borracha,Usa o pincel secundário/Troca modo borracha
 MIDDLE_MOUSE_CLICK,Middle mouse button,Botão do meio do mouse,Botão do meio do mouse
 MOUSE_DRAG,Mouse drag,Arrastar o mouse,Arrastar o mouse
+MOUSE_WHEEL,Mouse wheel,Rodinha do mouse,Rodinha do mouse
+CHANGE_BRUSH,Change current brush/color,Troca pincel/cor atual,Troca pincel/cor atual
 PLACE_DRAG,Use the selected brush on multiple cells,Usa o pincel atual em múltiplas células,Usa o pincel atual em múltiplas células
 NUMBER_KEYS,"1, 2, 3 or 4","1, 2, 3 ou 4","1, 2, 3 ou 4"
 NUMBER_CONTROLS,"Select the brush in position 1, 2, 3 or 4","Seleciona o pincel na posição 1, 2, 3 ou 4","Seleciona o pincel na posição 1, 2, 3 ou 4"
 TAB,Tab,Tab,Tab
-NEXT_BRUSH,Select the next brush,Seleciona o próximo pincel,Seleciona o próximo pincel
+NEXT_BRUSH,Select the next brush/color,Seleciona o próximo pincel/cor,Seleciona o próximo pincel/cor
 SHIFT_TAB,Shift + Tab,Shift + Tab,Shift + Tab
-PREV_BRUSH,Select the previous brush,Seleciona o pincel anterior,Seleciona o pincel anterior
+PREV_BRUSH,Select the previous brush/color,Seleciona o pincel/cor anterior,Seleciona o pincel/cor anterior
 ESC,Esc,Esc,Esc
 SETTINGS_CONTROL,Pause and open settings,Pausa e abre as configurações,Pausa e abre as configurações
 PLACE_WATER,Use the water brush,Usa o pincel de água,Usa o pincel de água
-PLACE_NOWATER,"Use the ""no water"" marker","Usa o marcador ""sem água""","Usa o marcador ""sem água"""
+PLACE_NOWATER,"Use the ""no water"" brush","Usa o pincel ""sem água""","Usa o pincel ""sem água"""
 PLACE_BOAT,Use the boat brush,Usa o pincel de barco,Usa o pincel de barco
-PLACE_NOBOAT,"Use the ""no boat"" marker","Usa o marcador ""sem barco""","Usa o marcador ""sem barco"""
+PLACE_NOBOAT,"Use the ""no boat"" brush","Usa o pincel ""sem barco""","Usa o pincel ""sem barco"""
 UNDO,Undo,Desfazer,Desfazer
 REDO,Redo,Refazer,Refazer
 SPACE,Space,Espaço,Espaço
-TOGGLE_MARKER_MODE,Toggle marker mode,Troca modo de marcação,Troca modo de marcação
+TOGGLE_MARKER_MODE,Toggle paint mode,Troca modo de pintura,Troca modo de pintura
 TAP,Tap,Apertar,Apertar
 HOLD,Hold,Segurar,Segurar
 DRAG_TOUCH,Drag,Arrastar,Arrastar
 CONTROL_LIST,Control list:,Lista de controles:,Lista de controles:
 PREVIEW,Preview placing water or boat,Simula colocar água ou barco,Simula colocar água ou barco
-MOUSE_HOVER,Hover mouse,Colocar mouse em cima,Colocar mouse em cima
+MOUSE_HOVER,Hover mouse,Sobrevoar o mouse,Sobrevoar o mouse
 LEADERBOARDS,Leaderboards,Ranking,Ranking
 MISTAKE,mistake,erro,erro
 MISTAKES,mistakes,erros,erros

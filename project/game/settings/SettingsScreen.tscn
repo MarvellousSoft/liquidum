@@ -899,6 +899,11 @@ layout_mode = 2
 text = "MIDDLE_MOUSE_CLICK"
 horizontal_alignment = 2
 
+[node name="Label17" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "MOUSE_WHEEL"
+horizontal_alignment = 2
+
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "MOUSE_DRAG"
@@ -974,11 +979,15 @@ text = "PLACE_BRUSH"
 
 [node name="Label2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-text = "PLACE_X"
+text = "PLACE_X_TOGGLE_ERASER"
 
 [node name="Label15" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "PLACE_BOAT"
+
+[node name="Label17" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "CHANGE_BRUSH"
 
 [node name="Label3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
