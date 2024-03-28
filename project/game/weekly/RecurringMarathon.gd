@@ -97,7 +97,7 @@ func _update() -> void:
 		%TimeBox.visible = unlocked
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
-		%LeaderboardsButton.modulate.a = 1.0 if GooglePlayGameServices.enabled else 0.0
+		%LeaderboardsButton.modulate.a = 1.0 if StoreIntegrations.authenticated() else 0.0
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 		%DailyHBox/OffsetRight.visible = unlocked and Completed.visible
@@ -415,6 +415,10 @@ static func do_share(text: String) -> void:
 		android_share.shareText("Liquidum", "subject", text)
 	else:
 		DisplayServer.clipboard_set(text)
+
+func _on_leaderboards_button_pressed() -> void:
+	assert(Global.is_mobile)
+	await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
 
 func share(mistakes: int, secs: int, marathon_i: int) -> void:
 	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))

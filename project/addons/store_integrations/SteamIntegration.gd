@@ -15,6 +15,9 @@ func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) 
 func _init() -> void:
 	steam = Engine.get_singleton(&"Steam")
 
+func authenticated() -> bool:
+	return steam.loggedOn()
+
 func _store_ld_find_result(steam_name: String) -> void:
 	var ret: Array = await steam.leaderboard_find_result
 	if not ret[1]:

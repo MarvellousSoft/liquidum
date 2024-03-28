@@ -27,6 +27,12 @@ func _process(dt: float) -> void:
 	for impl in impls:
 		impl.process(dt)
 
+func authenticated() -> bool:
+	for impl in impls:
+		if impl.authenticated():
+			return true
+	return false
+
 func load_leaderboards_mapping(lds: Array[LeaderboardMapping]) -> void:
 	for impl in impls:
 		impl.add_leaderboard_mappings(lds)

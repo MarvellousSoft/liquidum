@@ -98,15 +98,6 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
-func _on_leaderboards_button_pressed() -> void:
-	assert(Global.is_mobile)
-	if not GooglePlayGameServices.enabled:
-		return
-	GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(
-	  GooglePlayGameServices.ids.leaderboard_daily_level_1h_mistake_penalty,
-	  GooglePlayGameServices.TimeSpan.TIME_SPAN_DAILY,
-	  GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
-
 static func _mistakes_str(mistakes: int) -> String:
 	var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
 	if mistakes == 0:

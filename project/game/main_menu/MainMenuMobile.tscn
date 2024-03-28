@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
-[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="5_sgldn"]
 [ext_resource type="PackedScene" uid="uid://cpiojpbtpveaj" path="res://game/daily_menu/DailyButtonMobile.tscn" id="6_j41ip"]
 [ext_resource type="PackedScene" uid="uid://dxeyb8lqhqk0h" path="res://game/weekly/WeeklyButtonMobile.tscn" id="6_pd0dy"]

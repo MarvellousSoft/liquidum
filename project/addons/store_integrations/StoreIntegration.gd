@@ -2,19 +2,22 @@ class_name StoreIntegration
 extends Node
 
 static func available() -> bool:
-    return false
+	return false
 
 func process(_dt: float) -> void:
-    pass
+	pass
+
+func authenticated() -> bool:
+	return false
 
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:
-    pass
+	pass
 
 func leaderboard_create_if_not_exists(_leaderboard_id: String, _sort_method: StoreIntegrations.SortMethod) -> void:
-    await null
+	await null
 
 func leaderboard_upload_score(_leaderboard_id: String, _score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
-    await null
+	await null
 
 func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
-    await null
+	await null

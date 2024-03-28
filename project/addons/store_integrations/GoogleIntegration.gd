@@ -9,6 +9,10 @@ var ld_id_to_google_id := {}
 func _init() -> void:
 	google = Engine.get_singleton(&"GodotGooglePlayGameServices")
 
+func authenticated() -> bool:
+	# TODO
+	return true
+
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:
 	for ld in lds:
 		if ld.google_id != "":
