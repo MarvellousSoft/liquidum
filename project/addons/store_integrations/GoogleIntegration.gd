@@ -1,4 +1,4 @@
-class_name AndroidIntegration extends StoreIntegration
+class_name GoogleIntegration extends StoreIntegration
 
 static func available() -> bool:
 	return Engine.has_singleton(&"GodotGooglePlayGameServices")

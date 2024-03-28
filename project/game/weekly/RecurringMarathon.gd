@@ -245,8 +245,11 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 		# Mistakes take priority.
 		score = minf(info.total_marathon_mistakes, 1000) * MAX_TIME + minf(info.time_secs, MAX_TIME - 1)
 		details = LeaderboardDetails.new(await get_my_flair())
-	else:
+	elif GoogleIntegration.available():
+		# Google uses milliseconds
 		score = (info.time_secs + 60 * 60 * info.total_marathon_mistakes) * 1000
+	else:
+		score = info.time_secs + 60 * 60 * info.total_marathon_mistakes
 
 	await StoreIntegrations.leaderboard_upload_score(l_id, score, keep_best, LeaderboardDetails.to_arr(details))
 

@@ -18,8 +18,14 @@ class LeaderboardMapping:
 func _ready() -> void:
 	if SteamIntegration.available():
 		impls.append(SteamIntegration.new())
-	if AndroidIntegration.available():
-		impls.append(AndroidIntegration.new())
+	if GoogleIntegration.available():
+		impls.append(GoogleIntegration.new())
+	if AppleIntegration.available():
+		impls.append(await AppleIntegration.new())
+
+func _process(dt: float) -> void:
+	for impl in impls:
+		impl.process(dt)
 
 func load_leaderboards_mapping(lds: Array[LeaderboardMapping]) -> void:
 	for impl in impls:
@@ -59,4 +65,4 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, keep_best :=
 
 func leaderboard_show(leaderboard_id: String, google_timespan := 2, google_collection := 0) -> void:
 	for impl in impls:
-		impl.leaderboard_show(leaderboard_id, google_timespan, google_collection)
+		await impl.leaderboard_show(leaderboard_id, google_timespan, google_collection)

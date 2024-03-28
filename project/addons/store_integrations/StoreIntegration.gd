@@ -1,7 +1,11 @@
 class_name StoreIntegration
+extends Node
 
 static func available() -> bool:
     return false
+
+func process(_dt: float) -> void:
+    pass
 
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:
     pass
@@ -13,4 +17,4 @@ func leaderboard_upload_score(_leaderboard_id: String, _score: float, _keep_best
     await null
 
 func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
-    pass
+    await null
