@@ -559,6 +559,7 @@ func reset_level() -> void:
 		Counters.mistake.set_count(0)
 	process_game = true
 	GridNode.enable()
+	Settings.enable_button()
 	BackButton.disabled = false
 	%TutorialButton.disabled = false
 	%ContinueAnim.play("RESET")

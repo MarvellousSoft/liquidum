@@ -49,12 +49,13 @@ func update_remove_ads_button() -> void:
 
 func disable_button():
 	is_disabled = true
-	create_tween().tween_property(PauseButton, "modulate:a", 0.5, 1)
+	create_tween().tween_property(PauseButton, "modulate:a", 0.5, .5)
 	PauseButton.disabled = true
 
 
 func enable_button():
 	is_disabled = false
+	create_tween().tween_property(PauseButton, "modulate:a", 1.0, .5)
 	PauseButton.disabled = false
 
 
