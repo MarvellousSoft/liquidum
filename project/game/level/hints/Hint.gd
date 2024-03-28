@@ -12,6 +12,7 @@ const COLORS = {
 const ALPHA_SPEED = 4.0
 const HIDE_ALPHA = 0.5
 const HIGHLIGHT_SPEED = 5.0
+const FADE_SPEED = 2.0
 
 @onready var Hints = {
 	E.Walls.Top: $Hints/Top,
@@ -37,6 +38,7 @@ var hint_alpha := 1.0
 var is_dummy := false
 var highlight := false
 var cur_status : E.HintStatus = E.HintStatus.Normal
+var fade_out := false
 
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
@@ -56,6 +58,8 @@ func _ready():
 
 func _process(dt):
 	Global.alpha_fade_node(dt, Highlight, highlight, HIGHLIGHT_SPEED)
+	Global.alpha_fade_node(dt, self, not fade_out, FADE_SPEED, false, 1.0, .3)
+	
 	
 	if is_dummy:
 		return
@@ -207,3 +211,13 @@ func enable_editor() -> void:
 func disable_editor() -> void:
 	editor_mode = false
 	EditorButtons.hide()
+
+
+func toggle_fade():
+	fade_out = not fade_out
+
+
+func _on_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			toggle_fade()

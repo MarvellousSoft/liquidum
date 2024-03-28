@@ -163,4 +163,6 @@ offset_bottom = 500.0
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 0.313726)
 
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+
 [editable path="VBoxContainer/EditorButtons/ToggleHintType"]
