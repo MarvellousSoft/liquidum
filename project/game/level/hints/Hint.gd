@@ -1,6 +1,8 @@
 class_name Hint
 extends Control
 
+signal left_clicked
+
 const COLORS = {
 	"normal": {
 		"dark": Color("#000924ff"),
@@ -221,3 +223,5 @@ func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			toggle_fade()
+		elif hint_value != -1:
+			left_clicked.emit()

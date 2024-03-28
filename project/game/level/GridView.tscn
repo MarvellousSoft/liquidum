@@ -335,8 +335,10 @@ wait_time = 0.5
 one_shot = true
 
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/TLPanel" to="." method="_on_left_grid"]
+[connection signal="left_clicked_hint" from="CenterContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_left_clicked_hint"]
 [connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/HintBarTop" to="." method="_on_hint_bar_top_mouse_entered_hint"]
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/TRPanel" to="." method="_on_left_grid"]
+[connection signal="left_clicked_hint" from="CenterContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_left_clicked_hint"]
 [connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/HintBarLeft" to="." method="_on_hint_bar_left_mouse_entered_hint"]
 [connection signal="mouse_entered_hint" from="CenterContainer/GridContainer/RightVBox/HintBarRight" to="." method="_on_hint_bar_right_mouse_entered_hint"]
 [connection signal="mouse_entered" from="CenterContainer/GridContainer/RightVBox/HintBarRight/BLPanel" to="." method="_on_left_grid"]

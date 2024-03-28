@@ -8,6 +8,7 @@ const BOAT_COUNT_VISIBLE := 4
 const BOAT_TYPE_VISIBLE := 8
 
 signal mouse_entered_hint(idx : int)
+signal left_clicked_hint(idx : int)
 
 @export var is_horizontal := false
 @export_range(0.0, 1.0) var max_alpha: float = 1.0
@@ -44,6 +45,8 @@ func setup(hints : Array, editor_mode : bool, swap_water_boat := false) -> void:
 		var water_hint = create_hint(container, editor_mode, false, hints[i].water_count, hints[i].water_count_type)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
+		boat_hint.left_clicked.connect(_on_hint_left_clicked.bind(i))
+		water_hint.left_clicked.connect(_on_hint_left_clicked.bind(i))
 		if swap_water_boat:
 			boat_hint.move_to_front()
 			container.alignment = BoxContainer.ALIGNMENT_BEGIN
@@ -141,3 +144,6 @@ func get_hint(idx : int, is_boat : bool) -> Node:
 
 func _on_hint_mouse_entered(idx : int) -> void:
 	mouse_entered_hint.emit(idx)
+
+func _on_hint_left_clicked(idx : int) -> void:
+	left_clicked_hint.emit(idx)

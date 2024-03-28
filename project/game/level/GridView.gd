@@ -733,11 +733,13 @@ func cell_pressed_main_button(i: int, j: int, which: E.Waters, override_brush: i
 	else:
 		_process_click(i, j, which, used_brush)
 
+
 class PreviousStatus:
 	var row_waters: Array[E.HintStatus]
 	var col_waters: Array[E.HintStatus]
 	var row_boats: Array[E.HintStatus]
 	var col_boats: Array[E.HintStatus]
+
 
 func get_prev_status() -> PreviousStatus:
 	var p := PreviousStatus.new()
@@ -748,6 +750,26 @@ func get_prev_status() -> PreviousStatus:
 		p.col_waters.append(_inner_col_status(j, E.HintContent.Water))
 		p.col_boats.append(_inner_col_status(j, E.HintContent.Boat))
 	return p
+
+
+func try_to_fill_column_with_air(col : int) -> void:
+	if grid_logic and grid_logic.get_col_hint_status(col, E.HintContent.Water) == E.HintStatus.Satisfied:
+		for i in rows:
+			var cell_data = grid_logic.get_cell(i, col)
+			for corner in E.Corner.values():
+				if cell_data.nothing_at(corner):
+					cell_data.put_nowater(corner, false)
+		update()
+
+
+func try_to_fill_row_with_air(row : int) -> void:
+	if grid_logic and grid_logic.get_row_hint_status(row, E.HintContent.Water) == E.HintStatus.Satisfied:
+		for j in columns:
+			var cell_data = grid_logic.get_cell(row, j)
+			for corner in E.Corner.values():
+				if cell_data.nothing_at(corner):
+					cell_data.put_nowater(corner, false)
+		update()
 
 
 func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
@@ -1090,6 +1112,20 @@ func _on_hint_bar_bottom_mouse_entered_hint(idx: int) -> void:
 	highlight_column(idx)
 	remove_all_preview()
 
+
 func _on_line_info_changed() -> void:
 	setup_hints(true)
 	update_hints()
+
+
+func _on_hint_bar_top_left_clicked_hint(idx):
+	if disabled:
+		return
+	try_to_fill_column_with_air(idx)
+
+
+func _on_hint_bar_left_left_clicked_hint(idx):
+	if disabled:
+		return
+	try_to_fill_row_with_air(idx)
+
