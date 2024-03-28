@@ -1,6 +1,16 @@
 extends CanvasLayer
 
 const COOLDOWN = 0.15
+const THRESHOLDS = {
+	"desktop": {
+		"top": 350,
+		"bottom": 180,
+	},
+	"mobile": {
+		"top": 0,
+		"bottom": 00,
+	}
+}
 
 var default_color = Color(1.0,0.416,0.416)
 var default_width = 15
@@ -83,9 +93,13 @@ func export():
 
 
 func _start_new_line():
+	var m_pos = %Lines.get_local_mouse_position()
+	var threshold = THRESHOLDS.desktop if not Global.is_mobile else THRESHOLDS.mobile
+	if m_pos.y < threshold.top or m_pos.y > 2160 - threshold.bottom:
+		return
 	current_line = _create_line(default_color, default_width)
 	%Lines.add_child(current_line)
-	current_line.add_point(%Lines.get_local_mouse_position())
+	current_line.add_point(m_pos)
 
 
 func _stop_line():
@@ -93,9 +107,11 @@ func _stop_line():
 
 
 func _increase_line():
-	if not current_line:
+	var m_pos = %Lines.get_local_mouse_position()
+	var threshold = THRESHOLDS.desktop if not Global.is_mobile else THRESHOLDS.mobile
+	if not current_line or m_pos.y < threshold.top or m_pos.y > 2160 - threshold.bottom:
 		return
-	current_line.add_point(%Lines.get_local_mouse_position())
+	current_line.add_point(m_pos)
 
 
 func _try_to_erase(from, to):
