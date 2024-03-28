@@ -48,6 +48,7 @@ FacebookManager="*res://game/ads/FacebookManager.gd"
 NotificationManager="*res://game/mobile/NotificationManager.gd"
 GooglePlayGameServices="*res://game/mobile/GooglePlayGameServices.gd"
 PaletteShader="*res://game/ui/PaletteShader.tscn"
+StoreIntegrations="*res://addons/store_integrations/StoreIntegrationsAPI.gd"
 
 [debug]
 
@@ -76,7 +77,7 @@ movie_writer/movie_file="C:/Users/yanco/Documents/Code/puzzle-aqua/project/video
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/facebook/plugin.cfg", "res://addons/localization_editor/plugin.cfg")
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/facebook/plugin.cfg", "res://addons/localization_editor/plugin.cfg", "res://addons/store_integrations/plugin.cfg")
 
 [facebook]
 

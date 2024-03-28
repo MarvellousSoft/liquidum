@@ -2,7 +2,7 @@ extends Node
 
 var impl: NotificationImpl
 var enabled: bool:
-	get: return impl.ln != null
+	get: return impl != null and impl.ln != null
 
 var go_to_settings_if_failed := false
 

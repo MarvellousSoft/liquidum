@@ -112,9 +112,6 @@ func level_basename() -> String:
 func steam_stats() -> Array[String]:
 	return ["weekly"]
 
-func google_leaderboard() -> String:
-	return GooglePlayGameServices.ids.leaderboard_weekly_level_1h_mistake_penalty
-
 func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GooglePlayGameServices.TimeSpan.TIME_SPAN_WEEKLY
 

@@ -26,7 +26,6 @@ var copied_tween: Tween = null
 @onready var CurStreak = %CurStreak
 @onready var BestStreak = %BestStreak
 
-
 var deadline: int = -1
 var already_uploaded := false
 
@@ -200,10 +199,8 @@ func gen_and_play(push_scene: bool) -> void:
 func _load_leaderboard(ld_name: String) -> int:
 	return await SteamManager.get_or_create_leaderboard(ld_name, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
 
-
 func close_streak():
 	%StreakButton.button_pressed = false
-
 
 func load_current_leaderboard() -> int:
 	return await _load_leaderboard(steam_current_leaderboard())
@@ -238,14 +235,20 @@ static func get_my_flair() -> Flair:
 		_flair = Flair.new("", Color.BLACK, Color.BLACK)
 	return _flair
 
-static func upload_leaderboard(l_id: int, info: Level.WinInfo, keep_best: bool) -> void:
-	if not SteamManager.enabled or l_id == -1:
-		return
-	# We need to store both mistakes and time in the same score.
-	# Mistakes take priority.
-	var score: int = mini(info.total_marathon_mistakes, 1000) * MAX_TIME + mini(floori(info.time_secs), MAX_TIME - 1)
-	var flair := await get_my_flair()
-	await SteamManager.upload_leaderboard_score(l_id, score, keep_best, LeaderboardDetails.new(flair))
+static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: bool) -> void:
+	# Steam needs to create the leaderboards dinamically
+	await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
+	var score: float
+	var details: LeaderboardDetails = null
+	if SteamIntegration.available():
+		# We need to store both mistakes and time in the same score.
+		# Mistakes take priority.
+		score = minf(info.total_marathon_mistakes, 1000) * MAX_TIME + minf(info.time_secs, MAX_TIME - 1)
+		details = LeaderboardDetails.new(await get_my_flair())
+	else:
+		score = (info.time_secs + 60 * 60 * info.total_marathon_mistakes) * 1000
+
+	await StoreIntegrations.leaderboard_upload_score(l_id, score, keep_best, LeaderboardDetails.to_arr(details))
 
 class ListEntry:
 	var global_rank: int
@@ -376,26 +379,16 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		if data.current_streak[id] > 0:
 			data.current_streak[id] = 0
 			UserData.save()
-	if SteamManager.enabled and not already_uploaded:
-		var l_id := await load_current_leaderboard()
-		await RecurringMarathon.upload_leaderboard(l_id, info, false)
-		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
-		display_leaderboard(l_data, [], level)
-	elif GooglePlayGameServices.enabled:
-		var ld_id := google_leaderboard()
-		if ld_id != "":
-			if not already_uploaded:
-				var score: int = int(info.time_secs * 1000) + 60 * 60 * info.total_marathon_mistakes
-				GooglePlayGameServices.leaderboards_submit_score(ld_id, float(score))
-				await GooglePlayGameServices.leaderboards_score_submitted
-			if not AndroidRequestReview.just_requested_review:
-				GooglePlayGameServices.leaderboards_show_for_time_span_and_collection(ld_id, \
-				google_leaderboard_span(), GooglePlayGameServices.Collection.COLLECTION_PUBLIC)
-
+	if not already_uploaded:
+		await RecurringMarathon.upload_leaderboard(current_leaderboard(), info, false)
+		if SteamManager.enabled:
+			var l_data := await RecurringMarathon.get_leaderboard_data(await load_current_leaderboard())
+			display_leaderboard(l_data, [], level)
+	if not AndroidRequestReview.just_requested_review:
+		StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
 
 func _on_dark_mode_changed(is_dark: bool):
 	MainButton.theme = Global.get_theme(is_dark)
-
 
 func _on_share_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
@@ -466,9 +459,6 @@ func level_basename() -> String:
 func steam_stats() -> Array[String]:
 	return GridModel.must_be_implemented()
 
-func google_leaderboard() -> String:
-	return GridModel.must_be_implemented()
-
 func google_leaderboard_span() -> GooglePlayGameServices.TimeSpan:
 	return GridModel.must_be_implemented()
 
@@ -477,3 +467,10 @@ func share_text(_mistakes: int, _secs: int, _marathon_i: int) -> String:
 
 func type() -> Type:
 	return GridModel.must_be_implemented()
+
+func current_leaderboard() -> String:
+	if SteamIntegration.available():
+		# Steam uses a different leaderboard each day
+		return steam_current_leaderboard()
+	else:
+		return RecurringMarathon.type_name(type())
