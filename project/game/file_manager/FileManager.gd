@@ -25,6 +25,7 @@ func save_game() -> void:
 	save_profile()
 
 func load_game() -> void:
+	StoreIntegrations.load_leaderboards_mapping_from_json("res://database/mappings/leaderboards.json")
 	load_current_profile()
 	load_profile()
 
