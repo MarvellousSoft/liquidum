@@ -41,6 +41,7 @@ var is_dummy := false
 var highlight := false
 var cur_status : E.HintStatus = E.HintStatus.Normal
 var fade_out := false
+var grid
 
 func _ready():
 	Profile.dark_mode_toggled.connect(update_dark_mode)
@@ -216,6 +217,8 @@ func disable_editor() -> void:
 
 
 func toggle_fade():
+	if not grid or grid.disabled:
+		return
 	fade_out = not fade_out
 
 

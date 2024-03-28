@@ -173,10 +173,10 @@ func get_right_hints() -> Array[GridModel.LineHint]:
 #Assumes grid_logic is already setup
 func setup_hints(fast_startup: bool) -> void:
 	assert(grid_logic, "Grid Logic not properly set to setup grid hints")
-	HintBars.top.setup(grid_logic.col_hints(), editor_mode)
-	HintBars.left.setup(grid_logic.row_hints(), editor_mode)
-	HintBars.bottom.setup(get_bottom_hints(), false, true)
-	HintBars.right.setup(get_right_hints(), false, true)
+	HintBars.top.setup(self, grid_logic.col_hints(), editor_mode)
+	HintBars.left.setup(self, grid_logic.row_hints(), editor_mode)
+	HintBars.bottom.setup(self, get_bottom_hints(), false, true)
+	HintBars.right.setup(self, get_right_hints(), false, true)
 	var delay = get_grid_delay(rows, columns)
 	HintBars.left.startup(editor_mode, delay + STARTUP_MAX_DELAY, fast_startup)
 	HintBars.top.startup(editor_mode, delay + STARTUP_MAX_DELAY*2, fast_startup)
