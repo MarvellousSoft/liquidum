@@ -935,6 +935,7 @@ unique_name_in_owner = true
 [connection signal="mouse_entered" from="ContinueContainer/PlayAgainButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ContinueContainer/PlayAgainButton" to="." method="_on_play_again_button_pressed"]
 [connection signal="pause_toggled" from="SettingsScreen" to="." method="_on_settings_screen_pause_toggled"]
+[connection signal="quitting" from="SettingsScreen" to="." method="_on_settings_screen_quitting"]
 [connection signal="timeout" from="Autosaver" to="." method="_on_autosaver_timeout"]
 
 [editable path="TopInfo/VBoxContainer/MistakeCounter"]

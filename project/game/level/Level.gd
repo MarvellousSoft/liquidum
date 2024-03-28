@@ -1153,3 +1153,7 @@ func _on_brush_picker_change_marker_color(color):
 func _on_brush_picker_change_marker_width(width):
 	%PaintManager.set_default_width(width)
 	%PaintManager.apply_cooldown()
+
+
+func _on_settings_screen_quitting():
+	%PaintManager.visible = false

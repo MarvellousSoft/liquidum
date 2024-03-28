@@ -2,6 +2,7 @@ class_name SettingsScreen
 extends CanvasLayer
 
 signal pause_toggled(active : bool)
+signal quitting
 
 @export var is_main_menu := false
 
@@ -172,6 +173,7 @@ func _on_save_n_quit_button_pressed():
 			save_values(false)
 			if active:
 				toggle_pause()
+			quitting.emit()
 			Global.exit_game()
 
 
