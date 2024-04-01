@@ -237,6 +237,7 @@ static func get_my_flair() -> Flair:
 
 static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: bool) -> void:
 	# Steam needs to create the leaderboards dinamically
+	await SteamManager.ld_mutex.lock()
 	await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
 	var score: float
 	var details: LeaderboardDetails = null
@@ -252,6 +253,7 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 		score = info.time_secs + 60 * 60 * info.total_marathon_mistakes
 
 	await StoreIntegrations.leaderboard_upload_score(l_id, score, keep_best, LeaderboardDetails.to_arr(details))
+	SteamManager.ld_mutex.unlock()
 
 class ListEntry:
 	var global_rank: int

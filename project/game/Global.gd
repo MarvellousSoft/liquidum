@@ -244,6 +244,9 @@ func wait_for_thread(t: Thread) -> Variant:
 		await get_tree().create_timer(0.5).timeout
 	return t.wait_to_finish()
 
+func wait(secs: float) -> void:
+	await get_tree().create_timer(secs).timeout
+
 #Checks if a certain tutorial exists in the current mode
 func has_tutorial(tutorial_name):
 	assert(TUTORIALS.has(tutorial_name), "Not a valid tutorial name: " + str(tutorial_name))

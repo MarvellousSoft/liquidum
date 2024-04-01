@@ -11,6 +11,8 @@ const STATS_VERSION := 1
 var stats_received := false
 var cached_lds := {}
 
+var ld_mutex := DumbMutex.new()
+
 func _init() -> void:
 	if not Global.is_mobile and Engine.has_singleton("Steam"):
 		steam = Engine.get_singleton("Steam")
@@ -149,6 +151,7 @@ func get_or_create_leaderboard(l_name: String, sort_method: int, display_method:
 	if not enabled or l_name.is_empty():
 		return -1
 	if not cached_lds.has(l_name):
+		await ld_mutex.lock()
 		print("find or create: %s asc %s" % [l_name, sort_method == steam.LEADERBOARD_SORT_METHOD_ASCENDING])
 		steam.findOrCreateLeaderboard(l_name, sort_method, display_method)
 		var ret: Array = await steam.leaderboard_find_result
@@ -157,18 +160,21 @@ func get_or_create_leaderboard(l_name: String, sort_method: int, display_method:
 			return -1
 		print("Found: %d" % [ret[0]])
 		cached_lds[l_name] = ret[0]
+		ld_mutex.unlock()
 	return cached_lds[l_name]
 
 func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: LeaderboardDetails) -> void:
 	# ALWAYS need to specify ld
 	if l_id <= 0 or not enabled:
 		return
+	await ld_mutex.lock()
 	steam.uploadLeaderboardScore(score, keep_best, LeaderboardDetails.to_arr(details), l_id)
 	var ret: Array = await steam.leaderboard_score_uploaded
 	if not ret[0]:
 		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
 	else:
 		print("Did upload to leaderboard %d" % [l_id])
+	ld_mutex.unlock()
 
 func is_steam_deck() -> bool:
 	return enabled and steam.isSteamRunningOnSteamDeck()

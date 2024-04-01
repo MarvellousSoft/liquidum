@@ -45,8 +45,10 @@ func set_endless_completed(completed_count: Array[int]) -> void:
 
 
 func _find_leaderboard(l_name: String) -> int:
+	await SteamManager.ld_mutex.lock()
 	SteamManager.steam.findLeaderboard(l_name)
 	var ret: Array = await SteamManager.steam.leaderboard_find_result
+	SteamManager.ld_mutex.unock()
 	if not ret[1]:
 		push_warning("Leaderboard %s not found" % l_name)
 		return -1
@@ -67,12 +69,14 @@ func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak
 			flushNewAchievements()
 	if _set_stat_with_goal(CUR, streak, STREAK_ACH[type], "%s_streak_%d" % [type_name, STREAK_ACH[type]], 2):
 		flushNewAchievements()
+	await SteamManager.ld_mutex.lock()
 	if upload_current:
 		SteamManager.steam.setStatInt(CUR, streak)
-		StoreIntegrations.leaderboard_upload_score("%s_current_streak" % [type_name], float(streak), false)
+		await StoreIntegrations.leaderboard_upload_score("%s_current_streak" % [type_name], float(streak), false)
 	if upload_max:
 		SteamManager.steam.setStatInt(MAX, streak)
-		StoreIntegrations.leaderboard_upload_score("%s_max_streak" % [type_name], float(streak), true)
+		await StoreIntegrations.leaderboard_upload_score("%s_max_streak" % [type_name], float(streak), true)
+	SteamManager.ld_mutex.unlock()
 
 func _increment(stat: String) -> void:
 	var val: int = SteamManager.steam.getStatInt(stat)
