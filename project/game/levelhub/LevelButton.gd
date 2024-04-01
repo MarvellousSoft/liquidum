@@ -236,7 +236,7 @@ func _on_button_pressed():
 
 
 func _level_completed(info: Level.WinInfo) -> void:
-	if info.first_win and not extra_level():
+	if info.first_win:
 		# The overiders may be coroutines
 		@warning_ignore("redundant_await")
 		await StatsTracker.instance().update_campaign_stats()
