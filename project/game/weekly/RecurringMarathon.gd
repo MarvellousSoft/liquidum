@@ -212,28 +212,12 @@ static func get_monthly_leaderboard(month_str: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
 			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
 
-static var _flair: Flair = null
-
 static func get_my_flair() -> Flair:
-	if _flair == null and DEV_IDS.has(SteamManager.steam.getSteamID()):
-			_flair = Flair.new("dev", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	if _flair == null:
-		var last_month_dict := Time.get_datetime_dict_from_datetime_string(DailyButton._today(), false)
-		if last_month_dict.month == 1:
-			last_month_dict.month = 12
-			last_month_dict.year -= 1
-		else:
-			last_month_dict.month -= 1
-
-		var l_id := await get_monthly_leaderboard("%04d-%02d" % [last_month_dict.year, last_month_dict.month])
-		if l_id > 0:
-			SteamManager.steam.downloadLeaderboardEntriesForUsers([SteamManager.steam.getSteamID()], l_id)
-			var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-			if not ret[2].is_empty() and ret[2][0].score >= 15:
-				_flair = Flair.new("pro", Color(0.0784314, 0.364706, 0.529412, 1), Color(0.270588, 0.803922, 0.698039, 1))
-	if _flair == null:
-		_flair = Flair.new("", Color.BLACK, Color.BLACK)
-	return _flair
+	var flairs := FlairManager.get_flair_list()
+	if flairs.is_empty():
+		return Flair.new("", Color.BLACK, Color.BLACK)
+	else:
+		return flairs[FlairManager.get_selected_flair_idx()].to_steam_flair()
 
 static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: bool) -> void:
 	# Steam needs to create the leaderboards dinamically
@@ -245,7 +229,7 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 		# We need to store both mistakes and time in the same score.
 		# Mistakes take priority.
 		score = minf(info.total_marathon_mistakes, 1000) * MAX_TIME + minf(info.time_secs, MAX_TIME - 1)
-		details = LeaderboardDetails.new(await get_my_flair())
+		details = LeaderboardDetails.new(get_my_flair())
 	elif GoogleIntegration.available():
 		# Google uses milliseconds
 		score = (info.time_secs + 60 * 60 * info.total_marathon_mistakes) * 1000

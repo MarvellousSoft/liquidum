@@ -15,7 +15,7 @@ static func save() -> void:
 	FileManager._save_user_data(data)
 
 
-const VERSION := 4
+const VERSION := 5
 
 var random_levels_completed: Array[int]
 # Used to generate random levels in some order
@@ -29,8 +29,9 @@ var best_streak: Array[int]
 var current_streak: Array[int]
 # Last "day" you won the daily/weekly
 var last_day: Array[String]
+var selected_flair: int
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int]) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
@@ -40,6 +41,7 @@ func _init(random_levels_completed_: Array[int], random_levels_created_: Array[i
 	current_streak = current_streak_
 	last_day = last_day_
 	monthly_good_dailies = monthly_good_dailies_
+	selected_flair = selected_flair_
 
 func get_data() -> Dictionary:
 	return {
@@ -53,6 +55,7 @@ func get_data() -> Dictionary:
 		current_streak = current_streak,
 		last_day = last_day,
 		monthly_good_dailies = monthly_good_dailies,
+		selected_flair = selected_flair,
 	}
 
 func save_stats() -> void:
@@ -123,7 +126,7 @@ static func load_data(data_: Variant) -> UserData:
 			endless.append(0)
 			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, 0)
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -138,6 +141,9 @@ static func load_data(data_: Variant) -> UserData:
 	if data.version < 4:
 		data.version = 4
 		data.endless_good = data.endless_completed.duplicate()
+	if data.version < 5:
+		data.version = 5
+		data.selected_flair = 0
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
@@ -149,4 +155,4 @@ static func load_data(data_: Variant) -> UserData:
 	best_streak_a.assign(data.best_streak)
 	cur_streak_a.assign(data.current_streak)
 	last_day_a.assign(data.last_day)
-	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly)
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, data.selected_flair)

@@ -367,3 +367,16 @@ MARATHON_CURR,Marathon,Maratona,Maratona
 SPEEDRUN_BUTTON,Consider submitting to speedrun.com,Considere submeter em speedrun.com,Considere submeter em speedrun.com
 SELECT_A_LEVEL,Select a level,Escolha um nível,Escolha um nível
 MISTAKES_LEADERBOARDS,Mistakes still count in leaderboards.,Erros ainda contam nos rankings.,Erros ainda contam nos rankings.
+MONTHLY_FLAIR_DESC,Completed more than 15 dailies on {month} {year},Completou mais de 15 níveis diários em {month} de {year},Completou mais de 15 níveis diários em {month} de {year}
+MONTH_01,January,Janeiro,Janeiro
+MONTH_02,February,Fevereiro,Fevereiro
+MONTH_03,March,Março,Março
+MONTH_04,April,Abril,Abril
+MONTH_05,May,Maio,Maio
+MONTH_06,June,Junho,Junho
+MONTH_07,July,Julho,Julho
+MONTH_08,August,Agosto,Agosto
+MONTH_09,September,Setembro,Setembro
+MONTH_10,October,Outubro,Outubro
+MONTH_11,November,Novembro,Novembro
+MONTH_12,December,Dezembro,Dezembro

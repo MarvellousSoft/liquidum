@@ -81,7 +81,7 @@ func bump_monthly_challenge() -> void:
 	var score := UserData.current().bump_monthy_good_dailies(today)
 	if SteamManager.enabled:
 		var l_id := await RecurringMarathon.get_monthly_leaderboard(today.substr(0, today.length() - 3))
-		await SteamManager.upload_leaderboard_score(l_id, score, false, LeaderboardDetails.new(await RecurringMarathon.get_my_flair()))
+		await SteamManager.upload_leaderboard_score(l_id, score, false, LeaderboardDetails.new(RecurringMarathon.get_my_flair()))
 	elif GooglePlayGameServices.enabled:
 		if today.begins_with("2024-03-"):
 			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_march_challenge, score)
