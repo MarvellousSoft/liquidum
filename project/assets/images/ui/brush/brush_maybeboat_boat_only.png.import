@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmu6vy4bk0k2e"
-path="res://.godot/imported/noboat_single.png-e7eb4afa65c1c63eda28eb71a77a52c1.ctex"
+uid="uid://cfqyxv2qi18jm"
+path="res://.godot/imported/brush_maybeboat_boat_only.png-ad72aa2964b5126aa612f7c19f6fd692.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/cell/noboat_single.png"
-dest_files=["res://.godot/imported/noboat_single.png-e7eb4afa65c1c63eda28eb71a77a52c1.ctex"]
+source_file="res://assets/images/ui/brush/brush_maybeboat_boat_only.png"
+dest_files=["res://.godot/imported/brush_maybeboat_boat_only.png-ad72aa2964b5126aa612f7c19f6fd692.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

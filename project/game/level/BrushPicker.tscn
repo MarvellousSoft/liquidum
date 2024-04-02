@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b66jv6csdnca5"]
+[gd_scene load_steps=33 format=3 uid="uid://b66jv6csdnca5"]
 
 [ext_resource type="Script" path="res://game/level/BrushPicker.gd" id="1_5hp8l"]
 [ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_v77ft"]
@@ -9,7 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://d0s2k5bifvwxk" path="res://assets/images/ui/icons/finger_touch.png" id="5_yi21a"]
 [ext_resource type="Texture2D" uid="uid://bngcg8vy5gjtq" path="res://assets/images/ui/brush/brish_picker_block.png" id="6_ksqdr"]
 [ext_resource type="Texture2D" uid="uid://bt8n5wh745hss" path="res://assets/images/ui/brush/brush_picker_unpressed.png" id="7_0ebh5"]
-[ext_resource type="Texture2D" uid="uid://7y5mpv0mw60" path="res://assets/images/ui/brush/brish_picker_noboat.png" id="7_ymcdx"]
+[ext_resource type="Texture2D" uid="uid://b6qrhb2hcsc5m" path="res://assets/images/ui/brush/brush_question.png" id="7_8g0qq"]
+[ext_resource type="Texture2D" uid="uid://cfqyxv2qi18jm" path="res://assets/images/ui/brush/brush_maybeboat_boat_only.png" id="7_seqbe"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
 [ext_resource type="Texture2D" uid="uid://cnuh4btolonoa" path="res://assets/images/ui/icons/color_circle.png" id="13_jhyj3"]
@@ -202,7 +203,6 @@ _data = {
 }
 
 [node name="BrushPicker" type="Control"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 3840.0
@@ -221,7 +221,6 @@ theme_override_constants/separation = 50
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -275,10 +274,23 @@ expand_mode = 1
 
 [node name="NoBoat" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
+self_modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
-texture = ExtResource("7_ymcdx")
+texture = ExtResource("7_seqbe")
 expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images/NoBoat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_8g0qq")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Wall" type="TextureRect" parent="CenterContainer/HBoxContainer/PanelContainer/Images"]
 unique_name_in_owner = true
@@ -373,6 +385,7 @@ stretch_mode = 0
 
 [node name="MarkerContainer" type="PanelContainer" parent="CenterContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 mouse_filter = 2
 

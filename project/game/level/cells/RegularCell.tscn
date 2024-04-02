@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dg36xpbgk5g24"]
+[gd_scene load_steps=52 format=3 uid="uid://dg36xpbgk5g24"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://c0gt3ni02eqol" path="res://assets/images/ui/cell/water_bottomright.png" id="6_k26rs"]
 [ext_resource type="Texture2D" uid="uid://chgjyudh56rir" path="res://assets/images/ui/cell/water_bottomleft.png" id="7_v8ssd"]
 [ext_resource type="Texture2D" uid="uid://va1cg7wpj46n" path="res://assets/images/ui/cell/nowater.png" id="8_k2l07"]
-[ext_resource type="Texture2D" uid="uid://13rkxestm2" path="res://assets/images/ui/cell/noboat.png" id="9_po7i3"]
 [ext_resource type="Texture2D" uid="uid://nf8qbqlxlkwm" path="res://assets/images/ui/cell/single_button_pressed.png" id="12_8pxsf"]
 [ext_resource type="Texture2D" uid="uid://3383tn6k31b5" path="res://assets/images/ui/cell/single_button_hover.png" id="13_0ph6y"]
+[ext_resource type="Texture2D" uid="uid://cbjbdkx765yek" path="res://assets/images/ui/cell/boat_small.png" id="13_bxk1v"]
+[ext_resource type="Texture2D" uid="uid://b784pbdsydvxp" path="res://assets/images/ui/cell/question_mark.png" id="14_oyl5j"]
 [ext_resource type="Texture2D" uid="uid://bvtmlrpdwbpdn" path="res://assets/images/ui/cell/diagonal_button_pressed.png" id="16_g5nkk"]
 [ext_resource type="Texture2D" uid="uid://bbdvj5y7m1ror" path="res://assets/images/ui/cell/diagonal_button_hover.png" id="17_g3cup"]
 [ext_resource type="BitMap" uid="uid://cxqums75vits1" path="res://assets/images/ui/cell/diagonal_button_mask.png" id="19_sucjp"]
@@ -493,12 +494,25 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Boat" type="TextureRect" parent="NoContent/Single"]
+modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("9_po7i3")
+texture = ExtResource("13_bxk1v")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestionMark" type="TextureRect" parent="NoContent/Single/Boat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
@@ -520,12 +534,24 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Boat" type="TextureRect" parent="NoContent/TopLeft"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("9_po7i3")
+texture = ExtResource("13_bxk1v")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestionMark" type="TextureRect" parent="NoContent/TopLeft/Boat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
@@ -548,12 +574,24 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Boat" type="TextureRect" parent="NoContent/TopRight"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("9_po7i3")
+texture = ExtResource("13_bxk1v")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestionMark" type="TextureRect" parent="NoContent/TopRight/Boat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
@@ -576,12 +614,24 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Boat" type="TextureRect" parent="NoContent/BottomLeft"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("9_po7i3")
+texture = ExtResource("13_bxk1v")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomLeft/Boat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
@@ -605,12 +655,24 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Boat" type="TextureRect" parent="NoContent/BottomRight"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = ExtResource("9_po7i3")
+texture = ExtResource("13_bxk1v")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomRight/Boat"]
+modulate = Color(0.380392, 0.988235, 0.537255, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 

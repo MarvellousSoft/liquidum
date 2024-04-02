@@ -2,12 +2,10 @@ extends Control
 
 const IMAGES = {
 	"dark": {
-		"no_boat": preload("res://assets/images/ui/brush/brish_picker_noboat_dark.png"),
 		"picker_pressed": preload("res://assets/images/ui/brush/brush_picker_pressed_dark.png"),
 		"picker_hover": preload("res://assets/images/ui/brush/brush_picker_hover_dark.png"),
 	},
 	"normal": {
-		"no_boat": preload("res://assets/images/ui/brush/brish_picker_noboat.png"),
 		"picker_pressed": preload("res://assets/images/ui/brush/brush_picker_pressed.png"),
 		"picker_hover": preload("res://assets/images/ui/brush/brush_picker_hover.png"),
 	}
@@ -211,7 +209,7 @@ func _on_dark_mode_changed(is_dark):
 	%Water.material.set_shader_parameter(&"water_color", color.water_color)
 	%Water.material.set_shader_parameter(&"depth_color", color.depth_color)
 	%Water.material.set_shader_parameter(&"ray_value", color.ray_value)
-	%NoBoat.texture = images.no_boat
+	%NoBoat.self_modulate = color.dark
 	for button in Buttons.values():
 		button.texture_pressed = images.picker_pressed
 		button.texture_hover = images.picker_hover

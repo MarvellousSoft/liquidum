@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7y5mpv0mw60"
-path="res://.godot/imported/brish_picker_noboat.png-31c4a3e1843723ddd2114399bedc99e6.ctex"
+uid="uid://b784pbdsydvxp"
+path="res://.godot/imported/question_mark.png-f54eebdebdcaf55702126f09919f2217.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/brush/brish_picker_noboat.png"
-dest_files=["res://.godot/imported/brish_picker_noboat.png-31c4a3e1843723ddd2114399bedc99e6.ctex"]
+source_file="res://assets/images/ui/cell/question_mark.png"
+dest_files=["res://.godot/imported/question_mark.png-f54eebdebdcaf55702126f09919f2217.ctex"]
 
 [params]
 

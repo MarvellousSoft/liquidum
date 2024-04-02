@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfef0ywi1fimw"
-path="res://.godot/imported/noboat_single_dark.png-04240221e9eae7b9eb0e313b82160d48.ctex"
+uid="uid://cbjbdkx765yek"
+path="res://.godot/imported/boat_small.png-d28306a824144f68efc783263bc666de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/cell/noboat_single_dark.png"
-dest_files=["res://.godot/imported/noboat_single_dark.png-04240221e9eae7b9eb0e313b82160d48.ctex"]
+source_file="res://assets/images/ui/cell/boat_small.png"
+dest_files=["res://.godot/imported/boat_small.png-d28306a824144f68efc783263bc666de.ctex"]
 
 [params]
 

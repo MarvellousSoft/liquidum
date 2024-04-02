@@ -12,12 +12,6 @@ const HIGHLIGHT_SPEED = 5.0
 const PREVIEW_MAX_ALPHA = 0.4
 const PREVIEW_ALPHA_SPEED = 1.6
 const IMAGES = {
-	"normal": {
-		"no_boat": preload("res://assets/images/ui/cell/noboat.png"),
-	},
-	"dark": {
-		"no_boat": preload("res://assets/images/ui/cell/noboat_dark.png"),
-	},
 	"normal_walls": {
 		"left": preload("res://assets/images/ui/cell/wall_left.png"),
 		"diag": preload("res://assets/images/ui/cell/wall_dec_diag.png"),
@@ -197,7 +191,6 @@ func disable():
 
 func update_dark_mode(is_dark : bool) -> void:
 	var colors = Global.get_color(is_dark)
-	var images = IMAGES.dark if is_dark else IMAGES.normal
 	%Hints.modulate = colors.dark
 	%Walls.modulate = colors.dark
 	%Blocks.modulate = colors.dark
@@ -207,7 +200,7 @@ func update_dark_mode(is_dark : bool) -> void:
 	for preview in Previews.values():
 		preview.self_modulate = colors.preview
 	for content in NoContent.values():
-		content.boat.texture = images.no_boat
+		content.boat.self_modulate = colors.dark
 
 
 func update_thick_walls(is_thick : bool) -> void:
