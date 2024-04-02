@@ -1,7 +1,7 @@
-[gd_resource type="StyleBoxFlat" format=3]
+[gd_resource type="StyleBoxFlat" format=3 uid="uid://dkia27mmagm5x"]
 
 [resource]
-bg_color = Color(0.133333, 0.513726, 0.6, 0.513726)
+bg_color = Color(0.0154, 0.05999, 0.07, 0.513726)
 border_width_left = 7
 border_width_top = 7
 border_width_right = 7

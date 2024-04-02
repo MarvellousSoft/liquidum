@@ -1,0 +1,131 @@
+[gd_scene load_steps=6 format=3 uid="uid://oir1c3787ivq"]
+
+[ext_resource type="Script" path="res://game/main_menu/PlayerDisplayButton.gd" id="1_1twrw"]
+[ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="1_vgnx5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtr2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6diy6"]
+bg_color = Color(0.0235294, 0.0862745, 0.101961, 0.329412)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7jolc"]
+bg_color = Color(0.0235294, 0.0862745, 0.101961, 0.45098)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[node name="PlayerDisplayButton" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2840.0
+offset_bottom = -1710.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1twrw")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="LeaderboardExampleContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 30
+
+[node name="Image" type="TextureRect" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_vgnx5")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="FlairContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Flair" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "[dev]"
+vertical_alignment = 1
+
+[node name="Plus" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "+2"
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 60
+text = "Person name"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="ClickLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 40
+text = "CLICK_TO_CUSTOMIZE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_djtr2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6diy6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7jolc")

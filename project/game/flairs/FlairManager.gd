@@ -1,5 +1,16 @@
 class_name FlairManager
 
+static func get_current_flair():
+	var list = get_flair_list()
+	if list.size() > 0:
+		return list[get_selected_flair_idx()]
+	return null
+
+
+static func get_flair_amount():
+	return get_flair_list().size()
+
+
 static func _monthly_flairs() -> Array[SelectableFlair]:
 	var S := TranslationServer.get_translation_object(TranslationServer.get_locale())
 	var arr: Array[SelectableFlair] = []
@@ -23,7 +34,7 @@ static func _monthly_flairs() -> Array[SelectableFlair]:
 				})
 			))
 	return arr
-	
+
 
 static func get_flair_list() -> Array[SelectableFlair]:
 	var arr: Array[SelectableFlair] = []
@@ -36,8 +47,10 @@ static func get_flair_list() -> Array[SelectableFlair]:
 	arr.append_array(_monthly_flairs())
 	return arr
 
+
 static func get_selected_flair_idx() -> int:
 	return UserData.current().selected_flair
+
 
 static func set_selected_flair_idx(idx: int) -> void:
 	UserData.current().selected_flair = idx
