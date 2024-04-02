@@ -155,12 +155,12 @@ func get_or_create_leaderboard(l_name: String, sort_method: int, display_method:
 		print("find or create: %s asc %s" % [l_name, sort_method == steam.LEADERBOARD_SORT_METHOD_ASCENDING])
 		steam.findOrCreateLeaderboard(l_name, sort_method, display_method)
 		var ret: Array = await steam.leaderboard_find_result
+		ld_mutex.unlock()
 		if not ret[1]:
 			push_warning("Leaderboard not found: %s" % [l_name])
 			return -1
 		print("Found: %d" % [ret[0]])
 		cached_lds[l_name] = ret[0]
-		ld_mutex.unlock()
 	return cached_lds[l_name]
 
 func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: LeaderboardDetails) -> void:
@@ -170,11 +170,11 @@ func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: L
 	await ld_mutex.lock()
 	steam.uploadLeaderboardScore(score, keep_best, LeaderboardDetails.to_arr(details), l_id)
 	var ret: Array = await steam.leaderboard_score_uploaded
+	ld_mutex.unlock()
 	if not ret[0]:
 		push_warning("Failed to upload leaderboard entry for %d" % [l_id])
 	else:
 		print("Did upload to leaderboard %d" % [l_id])
-	ld_mutex.unlock()
 
 func is_steam_deck() -> bool:
 	return enabled and steam.isSteamRunningOnSteamDeck()

@@ -60,6 +60,7 @@ func load_leaderboards_mapping_from_json(file_name: String) -> void:
 				data[id].get("google_id", ""),
 				data[id].get("apple_id", ""),
 			))
+		load_leaderboards_mapping(arr)
 
 func leaderboard_create_if_not_exists(leaderboard_id: String, sort_method: SortMethod) -> void:
 	for impl in impls:
