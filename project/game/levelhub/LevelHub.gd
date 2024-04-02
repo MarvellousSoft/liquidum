@@ -89,6 +89,8 @@ func update_sections() -> void:
 		elif Global.is_dev_mode() or Profile.get_option("unlock_everything"):
 			unlocked = level_lister.count_section_levels(idx)
 		section.set_section_name(level_lister.section_name(idx))
+		if not extra_levels and unlocked == 0:
+			is_disabled = true
 		if is_disabled:
 			section.disable()
 		else:
