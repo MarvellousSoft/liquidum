@@ -92,11 +92,18 @@ func _unhandled_input(event):
 			if event.keycode - KEY_1 < valid.size():
 				_on_button_pressed(valid[event.keycode - KEY_1])
 
+
+func set_paint_mode_visible(status : bool):
+	%MarkerButton.visible = status
+
+
 func nowater_finger_anim(should_show: bool) -> void:
 	if should_show:
 		%NoWater/FingerAnim.show()
 	else:
 		%NoWater/FingerAnim.queue_free()
+
+
 
 func disable():
 	active = false

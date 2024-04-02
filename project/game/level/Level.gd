@@ -288,6 +288,7 @@ func setup(try_load := true) -> void:
 		else:
 			%AquariumButton/FingerAnim.queue_free()
 	BrushPicker.nowater_finger_anim(Global.is_mobile and section_number == 1 and level_number == 2)
+	BrushPicker.set_paint_mode_visible(section_number != 1 or level_number >= 7)
 	game_won = false
 	last_saved = Time.get_ticks_msec()
 	Counters.mistake.set_count(initial_mistakes)
