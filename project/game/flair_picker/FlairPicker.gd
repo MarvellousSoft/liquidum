@@ -1,6 +1,7 @@
 extends Control
 
 const DEFAULT_IMAGE = preload("res://assets/images/icons/icon.png")
+const FLAIR_BUTTON = preload("res://game/flair_picker/FlairButton.tscn")
 
 func _ready():
 	populate_flairs()
@@ -8,8 +9,20 @@ func _ready():
 	update_flair()
 
 
+func reset_flairs():
+	for flair in %FlairList.get_children():
+		flair.queue_free()
+
+
 func populate_flairs():
-	pass
+	reset_flairs()
+	var cur_flair = FlairManager.get_current_flair()
+	var idx = 0
+	for flair_data in FlairManager.get_flair_list():
+		var new_flair = FLAIR_BUTTON.instantiate()
+		new_flair.setup(flair_data, idx)
+		%FlairList.add_child(new_flair)
+		idx += 1
 
 
 func update_steam_info():

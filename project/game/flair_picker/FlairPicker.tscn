@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhvs33ket0l57"]
+[gd_scene load_steps=5 format=3 uid="uid://bhvs33ket0l57"]
 
 [ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="1_tq2nb"]
 [ext_resource type="Script" path="res://game/flair_picker/FlairPicker.gd" id="1_ym761"]
+[ext_resource type="PackedScene" uid="uid://dv1u5f265dm05" path="res://game/flair_picker/FlairButton.tscn" id="3_fcunh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpiaw"]
 bg_color = Color(1, 1, 1, 1)
@@ -117,13 +118,36 @@ offset_bottom = 40.0
 
 [node name="Flairs" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 235.0
+offset_top = 1000.0
+offset_right = 3035.0
+offset_bottom = 2049.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Flairs"]
 layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_constants/margin_left = 600
+theme_override_constants/margin_right = 600
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Flairs/MarginContainer"]
+[node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+layout_mode = 2
+
+[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+layout_mode = 2
+
+[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+layout_mode = 2
+
+[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+layout_mode = 2
+
+[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="."]
