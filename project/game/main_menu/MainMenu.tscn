@@ -179,9 +179,9 @@ expand_icon = true
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 330.0
-offset_top = 41.0
+offset_top = 35.0
 offset_right = 1130.0
-offset_bottom = 291.0
+offset_bottom = 285.0
 
 [node name="BackButton" type="Button" parent="."]
 unique_name_in_owner = true
@@ -275,6 +275,7 @@ is_main_menu = true
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="ProfileButton" to="." method="_on_profile_button_pressed"]
+[connection signal="pressed" from="PlayerDisplayButton" to="." method="_on_player_display_button_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="disable_focus" from="LevelHub" to="." method="_on_level_hub_disable_focus"]

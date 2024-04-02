@@ -1,7 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://oir1c3787ivq"]
+[gd_scene load_steps=7 format=3 uid="uid://oir1c3787ivq"]
 
 [ext_resource type="Script" path="res://game/main_menu/PlayerDisplayButton.gd" id="1_1twrw"]
 [ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="1_vgnx5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p5evu"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtr2"]
 
@@ -74,17 +81,31 @@ stretch_mode = 5
 [node name="FlairContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/separation = 6
 
 [node name="Flair" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "[dev]"
+text = "  dev  "
 vertical_alignment = 1
+
+[node name="BG" type="Panel" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer/Flair"]
+modulate = Color(0, 0.0352941, 0.141176, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p5evu")
 
 [node name="Plus" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
 theme_override_font_sizes/font_size = 60
 text = "+2"
 vertical_alignment = 1
@@ -95,6 +116,8 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 1
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
 theme_override_font_sizes/font_size = 60
 text = "Person name"
 vertical_alignment = 1
@@ -113,8 +136,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 40
-text = "CLICK_TO_CUSTOMIZE"
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 25
+theme_override_font_sizes/font_size = 45
+text = "CLICK_TO_CUSTOMIZE_FLAIR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -129,3 +154,6 @@ focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_djtr2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_6diy6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7jolc")
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -36,7 +36,9 @@ CREATE_NEW_LEVEL,Create new level,Criar nível novo,Criar novo nível
 YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
-CLICK_TO_CUSTOMIZE,Click to customize,Clique para customizar,Clique para customizar
+CLICK_TO_CUSTOMIZE_FLAIR,Click to customize flair,Clique para customizar emblema,Clique para customizar emblema
+FLAIR_PICKER_TITLE,Choose your flair,Escolha seu emblema,Escolha seu emblema
+FLAIR_EXPLANATION,Flairs appear next to your name in leaderboards.\nComplete challenges to earn more flairs!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
 CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza que quer resetar este nível?
 CONFIRM_RESET_RECURRING,Are you sure? It will not reset the timer or mistakes.,Tem certeza? O tempo corrido e contador de erros não vão resetar.,Tem certeza? O tempo corrido e contador de erros não vão resetar.

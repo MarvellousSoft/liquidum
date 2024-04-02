@@ -215,7 +215,7 @@ static func get_monthly_leaderboard(month_str: String) -> int:
 static func get_my_flair() -> Flair:
 	var flairs := FlairManager.get_flair_list()
 	if flairs.is_empty():
-		return Flair.new("", Color.BLACK, Color.BLACK)
+		return Flair.new("", Color.BLACK)
 	else:
 		return flairs[FlairManager.get_selected_flair_idx()].to_steam_flair()
 

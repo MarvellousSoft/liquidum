@@ -2,15 +2,14 @@ extends Control
 
 const DEFAULT_IMAGE = preload("res://assets/images/icons/icon.png")
 
-signal pressed
-
 func _ready():
-	if not SteamManager.enabled:
-		hide()
-	else:
-		show()
-		update_steam_info()
-		update_flair()
+	populate_flairs()
+	update_steam_info()
+	update_flair()
+
+
+func populate_flairs():
+	pass
 
 
 func update_steam_info():
@@ -43,8 +42,9 @@ func update_flair():
 		%FlairContainer.hide()
 
 
-func _on_button_pressed():
-	pressed.emit()
+func _on_back_button_pressed():
+	AudioManager.play_sfx("button_back")
+	TransitionManager.pop_scene()
 
 
 func _on_button_mouse_entered():

@@ -332,3 +332,20 @@ func update_dark_mode(is_dark : bool) -> void:
 		water.set_shader_parameter(&"water_color", colors.water_color)
 		water.set_shader_parameter(&"depth_color", colors.depth_color)
 		water.set_shader_parameter(&"ray_value", colors.ray_value)
+
+#Return 1 if best constrast is white, 0 if black
+func get_best_contrast(color):
+	var l_rgb = []
+	for c in [color.r, color.g, color.b]:
+		c = c/12.92 if c <= 0.04045 else pow(((c+0.055)/1.055), 2.4)
+		l_rgb.append(c)
+	var luminance = 0.2126 * l_rgb[0] + 0.7152 * l_rgb[1] + 0.0722 * l_rgb[2]
+	return luminance < .179
+
+func get_contrast_outline(color):
+	var colors = WATER_COLORS.normal
+	var c = colors.bg if get_best_contrast(color) else colors.dark
+	return c
+#	var mult = 1.3 if get_best_contrast(color) else 0.5 
+#
+#	return Color(clamp(color.r * mult, 0.0, 1.0), clamp(color.g * mult, 0.0, 1.0), clamp(color.b * mult, 0.0, 1.0))

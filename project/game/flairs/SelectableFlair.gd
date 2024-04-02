@@ -14,7 +14,4 @@ func to_steam_flair() -> Flair:
 	return Flair.new(
 		text,
 		color,
-		# TODO: Remove this when we don't need custom dark mode
-		# color for flairs anymore
-		Color(0.270588, 0.803922, 0.698039, 1),
 	)

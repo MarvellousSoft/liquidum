@@ -25,7 +25,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		flairs.append(item.flair)
 		flair.visible = item.flair != null
 		if item.flair != null:
-			flair.text = "[%s]" % [item.flair.name]
+			flair.text = "  %s  " % [item.flair.name]
 		var mistakes := Grid.get_node("Mistakes1").duplicate()
 		mistakes.text = str(item.mistakes)
 		var time := Grid.get_node("Time1").duplicate()
@@ -41,4 +41,7 @@ func update_theme(dark_mode: bool) -> void:
 	for i in flairs.size():
 		if flairs[i] != null:
 			var flair: Label =  Grid.get_child(12 + 5 * i).get_node("Flair")
-			flair.add_theme_color_override("font_color", flairs[i].color if not dark_mode else flairs[i].dark_mode_color)
+			flair.add_theme_color_override("font_color", flairs[i].color)
+			var bg_color = Global.get_contrast_outline(flairs[i].color)
+			bg_color.a = 0.7
+			flair.get_node("BG").modulate = bg_color
