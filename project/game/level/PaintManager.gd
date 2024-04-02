@@ -7,8 +7,8 @@ const THRESHOLDS = {
 		"bottom": 180,
 	},
 	"mobile": {
-		"top": 0,
-		"bottom": 00,
+		"top": 230,
+		"bottom": 1150,
 	}
 }
 

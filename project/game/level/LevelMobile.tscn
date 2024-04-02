@@ -672,7 +672,7 @@ libraries = {
 
 [node name="FingerAnim" type="TextureRect" parent="HintsMarginContainer/HintsContainer/AquariumButton"]
 unique_name_in_owner = true
-modulate = Color(0.0352941, 0.211765, 0.34902, 1)
+modulate = Color(0.0352941, 0.211765, 0.34902, 0)
 layout_mode = 0
 offset_left = 25.0
 offset_top = 46.0
@@ -692,15 +692,29 @@ libraries = {
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 0.0
 offset_bottom = 0.0
+scale = Vector2(0.42, 0.42)
 mouse_filter = 2
 
 [node name="CenterContainer" parent="BrushPicker" index="0"]
-offset_top = 1110.0
-offset_right = 720.0
-offset_bottom = 1280.0
+offset_top = 2720.0
+offset_right = 1714.29
+offset_bottom = 2990.0
+
+[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" index="4"]
+visible = false
+
+[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" index="5"]
+visible = false
+
+[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" index="4"]
+visible = false
+
+[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" index="5"]
+visible = false
 
 [node name="Description" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)

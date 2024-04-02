@@ -127,6 +127,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="."]
+layout_mode = 0
 offset_left = 115.0
 offset_top = 95.0
 offset_right = 373.0
