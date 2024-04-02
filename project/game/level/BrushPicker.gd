@@ -174,7 +174,19 @@ func switch_eraser_mode():
 	%Eraser.button_pressed = not %Eraser.button_pressed 
 
 
+func switch_marker_visibility_mode():
+	%Visibility.button_pressed = not %Visibility.button_pressed 
+
+
+func return_marker_buttons_state():
+	if %Eraser.button_pressed:
+		switch_eraser_mode()
+	if %Visibility.button_pressed:
+		switch_marker_visibility_mode()
+
+
 func pick_next_marker_color():
+	return_marker_buttons_state()
 	marker_color_idx = (marker_color_idx + 1)%MARKER_COLORS.size()
 	var color = MARKER_COLORS[marker_color_idx]
 	%MarkerColor.modulate = color
@@ -182,6 +194,7 @@ func pick_next_marker_color():
 
 
 func pick_previous_marker_color():
+	return_marker_buttons_state()
 	marker_color_idx = (marker_color_idx - 1)%MARKER_COLORS.size()
 	var color = MARKER_COLORS[marker_color_idx]
 	%MarkerColor.modulate = color
@@ -224,10 +237,13 @@ func _on_marker_button_toggled(button_pressed):
 	marker_mode_active = button_pressed
 	%PanelContainer.visible = not button_pressed
 	%MarkerContainer.visible = button_pressed
+	if marker_mode_active:
+		return_marker_buttons_state()
 	marker_button_toggled.emit(button_pressed)
 
 
 func _on_clear_pressed():
+	return_marker_buttons_state()
 	AudioManager.play_sfx("button_pressed")
 	clear_markers.emit()
 
@@ -252,6 +268,7 @@ func _on_brush_color_pressed():
 
 
 func _on_brush_size_pressed():
+	return_marker_buttons_state()
 	marker_size_idx = (marker_size_idx + 1)%MARKER_SIZES.size()
 	var data = MARKER_SIZES[marker_size_idx]
 	%MarkerSize.icon = data.icon
