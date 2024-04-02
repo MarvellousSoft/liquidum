@@ -894,6 +894,7 @@ grow_vertical = 1
 
 [node name="SettingsScreen" parent="." instance=ExtResource("4_dk1gs")]
 unique_name_in_owner = true
+layer = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
