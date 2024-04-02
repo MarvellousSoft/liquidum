@@ -54,7 +54,8 @@ func increment_recurring_started(_type: RecurringMarathon.Type) -> void:
 	pass
 
 func increment_insane_good() -> void:
-	pass
+	var new_val := UserData.current().bump_insane_good()
+	await StoreIntegrations.achievement_set("random_100", new_val, 100)
 
 func increment_random_any() -> void:
 	pass

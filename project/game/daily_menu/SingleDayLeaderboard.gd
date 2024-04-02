@@ -37,7 +37,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		Grid.get_node(c).hide()
 	update_theme(Profile.get_option("dark_mode"))
 
-func update_theme(dark_mode: bool) -> void:
+func update_theme(_dark_mode: bool) -> void:
 	for i in flairs.size():
 		if flairs[i] != null:
 			var flair: Label =  Grid.get_child(12 + 5 * i).get_node("Flair")
