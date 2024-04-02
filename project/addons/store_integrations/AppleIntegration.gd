@@ -9,11 +9,17 @@ var apple = null
 var ld_id_to_apple_id := {}
 var _authenticated := false
 
-func _init() -> void:
-	apple = Engine.get_singleton("GameCenter")
+func _try_authenticate() -> bool:
+	if _authenticated:
+		return true
 	apple.authenticate()
 	var resp = await event
 	_authenticated = resp.result == "ok"
+	return _authenticated
+
+func _init() -> void:
+	apple = Engine.get_singleton("GameCenter")
+	await _try_authenticate()
 
 func authenticated() -> bool:
 	return _authenticated
@@ -37,8 +43,19 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 		await event
 
 func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
+	if not await _try_authenticate():
+		return
 	if ld_id_to_apple_id.has(leaderboard_id):
 		apple.show_game_center({"view": "leaderboards", "leaderboard_name": ld_id_to_apple_id[leaderboard_id]})
 	else:
 		apple.show_game_center({})
 	await event
+
+func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
+	apple.award_achievement({
+		name = ach_id,
+		progress = 100.0 * float(steps) / float(total_steps),
+	})
+	var resp: Dictionary = await event
+	if resp.result != "ok":
+		push_warning("Error setting achievement: %s" % [resp.error_code])

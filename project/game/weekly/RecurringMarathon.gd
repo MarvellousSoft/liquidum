@@ -97,7 +97,7 @@ func _update() -> void:
 		%TimeBox.visible = unlocked
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
-		%LeaderboardsButton.modulate.a = 1.0 if StoreIntegrations.authenticated() else 0.0
+		%LeaderboardsButton.modulate.a = 1.0 if GoogleIntegration.available() or AppleIntegration.available() else 0.0
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 		%DailyHBox/OffsetRight.visible = unlocked and Completed.visible
@@ -357,7 +357,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 	if info.total_marathon_mistakes <= streak_max_mistakes:
 		stats.increment_recurring_good(id)
 		if info.total_marathon_mistakes == 0:
-			stats.unlock_recurring_no_mistakes(id)
+			await stats.unlock_recurring_no_mistakes(id)
 		# It the streak was broken this would be handled in _update_streak
 		if current_period() != data.last_day[id]:
 			data.last_day[id] = current_period()

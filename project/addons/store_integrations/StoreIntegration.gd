@@ -21,3 +21,6 @@ func leaderboard_upload_score(_leaderboard_id: String, _score: float, _keep_best
 
 func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	await null
+
+func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
+	await null

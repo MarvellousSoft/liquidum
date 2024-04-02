@@ -233,10 +233,10 @@ func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manual
 		stats.increment_insane_good()
 	if marathon_total == 10 and marathon_left == 0:
 		if info.total_marathon_mistakes == 0:
-			stats.unlock_flawless_marathon(dif)
+			await stats.unlock_flawless_marathon(dif)
 		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
 		if info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
-			stats.unlock_fast_marathon(dif)
+			await stats.unlock_fast_marathon(dif)
 	if marathon_left == 0 and shows_marathon_leaderboards(marathon_total, manually_seeded):
 		await RecurringMarathon.upload_leaderboard(marathon_leaderboard(marathon_total, dif), info, true)
 		if SteamManager.enabled:

@@ -4,6 +4,7 @@ extends Node
 static var empty := StatsTracker.new()
 static var steam := SteamStats.new()
 static var google := GoogleStats.new()
+static var apple := AppleStats.new()
 
 
 static func instance() -> StatsTracker:
@@ -11,16 +12,34 @@ static func instance() -> StatsTracker:
 		return steam
 	elif GooglePlayGameServices.enabled:
 		return google
+	elif AppleIntegration.available():
+		return apple
 	return empty
 
-func set_random_levels(_completed_count: Array[int]) -> void:
-	pass
+func set_random_levels(completed_count: Array[int]) -> void:
+	var tot := 0
+	var each := true
+	for dif in RandomHub.Difficulty:
+		var dif_val: int = RandomHub.Difficulty[dif]
+		if completed_count[dif_val] < 5:
+			each = false
+		tot += completed_count[dif_val]
+	await StoreIntegrations.achievement_set("random_all_levels", tot, 25)
+	if tot > 0:
+		await StoreIntegrations.achievement_set("random_1")
+	if each:
+		await StoreIntegrations.achievement_set("random_each")
 
-func set_endless_completed(_completed_count: Array[int]) -> void:
-	pass
+func set_endless_completed(completed_count: Array[int]) -> void:
+	var total := 0
+	for i in completed_count.size():
+		total += completed_count[i]
+	if total >= 1:
+		await StoreIntegrations.achievement_set("endless_1")
+	await StoreIntegrations.achievement_set("endless_10", total, 10)
 
-func set_endless_good(_count: int) -> void:
-	pass
+func set_endless_good(count: int) -> void:
+	await StoreIntegrations.achievement_set("endless_100", count, 100)
 
 func set_recurring_streak(_type: RecurringMarathon.Type, _streak: int, _best_streak: int) -> void:
 	pass
@@ -43,14 +62,37 @@ func increment_random_any() -> void:
 func increment_workshop() -> void:
 	pass
 
-func unlock_recurring_no_mistakes(_type: RecurringMarathon.Type) -> void:
-	pass
+func unlock_recurring_no_mistakes(type: RecurringMarathon.Type) -> void:
+	await StoreIntegrations.achievement_set("%s_no_mistakes" % RecurringMarathon.type_name(type))
 
 func update_campaign_stats() -> void:
-	pass
+	var section := 1
+	var total_completed := 0
+	while CampaignLevelLister.has_section(section):
+		var completed_levels := CampaignLevelLister.count_completed_section_levels(section)
+		total_completed += completed_levels
+		var section_levels := CampaignLevelLister.count_section_levels(section)
+		if section > 1:
+			await StoreIntegrations.achievement_set("section_%d_unlocked" % [section])
+		await StoreIntegrations.achievement_set("section_%d_completed" % [section], completed_levels, section_levels)
+		if section_levels - completed_levels > CampaignLevelLister.MAX_UNSOLVED_LEVELS:
+			break
+		section += 1
+	while CampaignLevelLister.has_section(section):
+		section += 1
+	await StoreIntegrations.achievement_set("campaign_levels_completed", total_completed, 48)
+	var extra_section := 1
+	while ExtraLevelLister.has_section(extra_section):
+		var completed_levels := ExtraLevelLister.count_completed_section_levels(extra_section)
+		var section_levels := ExtraLevelLister.count_section_levels(extra_section)
+		if ExtraLevelLister.is_free(extra_section):
+			await StoreIntegrations.achievement_set("extra_%02d_complete" % [section], completed_levels, section_levels)
+		else:
+			pass
+		extra_section += 1
 
-func unlock_flawless_marathon(_dif: RandomHub.Difficulty) -> void:
-	pass
+func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
+	await StoreIntegrations.achievement_set("marathon_%s_10_no_mistakes" % RandomHub.Difficulty.find_key(dif).to_lower())
 
-func unlock_fast_marathon(_dif: RandomHub.Difficulty) -> void:
-	pass
+func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
+	await StoreIntegrations.achievement_set("marathon_%s_10_speedrun" % RandomHub.Difficulty.find_key(dif).to_lower())

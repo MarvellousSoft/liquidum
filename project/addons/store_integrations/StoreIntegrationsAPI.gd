@@ -73,3 +73,7 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, keep_best :=
 func leaderboard_show(leaderboard_id: String, google_timespan := 2, google_collection := 0) -> void:
 	for impl in impls:
 		await impl.leaderboard_show(leaderboard_id, google_timespan, google_collection)
+
+func achievement_set(ach_id: String, steps: int = 1, total_steps: int = 1) -> void:
+	for impl in impls:
+		await impl.achievement_set(ach_id, clampi(steps, 0, total_steps), total_steps)
