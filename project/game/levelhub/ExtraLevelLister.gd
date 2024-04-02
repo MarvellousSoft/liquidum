@@ -98,6 +98,9 @@ func section_name(section: int) -> String:
 func android_payment(section: int) -> String:
 	return _config(section).get_value("section", "android_payment", "")
 
+func ios_payment(section: int) -> String:
+	return _config(section).get_value("section", "ios_payment", "")
+
 var dlc_purchases := {}
 func _on_dlc_purchased(payment_id: String) -> void:
 	dlc_purchases[payment_id] = true
@@ -111,8 +114,8 @@ func section_disabled(section: int) -> bool:
 			var purchase := android_payment(section)
 			return purchase != "" and not dlc_purchases.has(purchase)
 		elif OS.get_name() == "iOS":
-			# TODO: iOS
-			pass
+			var purchase := ios_payment(section)
+			return purchase != "" and not dlc_purchases.has(purchase)
 	else:
 		var dlc := steam_dlc(section)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):
@@ -154,7 +157,7 @@ func purchase_section(section: int) -> void:
 	if OS.get_name() == "Android":
 		id = android_payment(section)
 	elif OS.get_name() == "iOS":
-		pass
+		id = ios_payment(section)
 	if id != "" and AdManager.payment != null:
 		AdManager.payment.do_purchase_dlc(id)
 
