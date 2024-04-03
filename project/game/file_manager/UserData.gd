@@ -14,7 +14,6 @@ static func save() -> void:
 	data.save_stats()
 	FileManager._save_user_data(data)
 
-
 const VERSION := 6
 
 var random_levels_completed: Array[int]
