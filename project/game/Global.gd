@@ -342,10 +342,7 @@ func get_best_contrast(color):
 	var luminance = 0.2126 * l_rgb[0] + 0.7152 * l_rgb[1] + 0.0722 * l_rgb[2]
 	return luminance < .179
 
-func get_contrast_outline(color):
+func get_contrast_background(color):
 	var colors = WATER_COLORS.normal
 	var c = colors.bg if get_best_contrast(color) else colors.dark
 	return c
-#	var mult = 1.3 if get_best_contrast(color) else 0.5 
-#
-#	return Color(clamp(color.r * mult, 0.0, 1.0), clamp(color.g * mult, 0.0, 1.0), clamp(color.b * mult, 0.0, 1.0))

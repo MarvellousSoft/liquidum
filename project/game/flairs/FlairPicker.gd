@@ -1,7 +1,7 @@
 extends Control
 
 const DEFAULT_IMAGE = preload("res://assets/images/icons/icon.png")
-const FLAIR_BUTTON = preload("res://game/flair_picker/FlairButton.tscn")
+const FLAIR_BUTTON = preload("res://game/flairs/FlairButton.tscn")
 
 func _ready():
 	populate_flairs()
@@ -21,7 +21,10 @@ func populate_flairs():
 	for flair_data in FlairManager.get_flair_list():
 		var new_flair = FLAIR_BUTTON.instantiate()
 		new_flair.setup(flair_data, idx)
+		new_flair.pressed.connect(_on_flair_button_pressed)
 		%FlairList.add_child(new_flair)
+		if flair_data.text == cur_flair.text:
+			new_flair.press()
 		idx += 1
 
 
@@ -43,16 +46,23 @@ func update_flair():
 		%FlairContainer.show()
 		%Flair.text = "  %s  " % cur_flair.text
 		%Flair.add_theme_color_override("font_color", cur_flair.color)
-		var outline_color = Global.get_contrast_outline(cur_flair.color)
-		%Flair.get_node("BG").modulate = outline_color
+		var contrast_color = Global.get_contrast_background(cur_flair.color)
+		%Flair.get_node("BG").modulate = contrast_color
 		var amount = FlairManager.get_flair_amount() 
 		if amount > 1:
 			%Plus.show()
-			%Plus.text = "+%d" % amount
+			%Plus.text = "+%d" % (amount-1)
 		else:
 			%Plus.hide()
 	else:
 		%FlairContainer.hide()
+
+
+func _on_flair_button_pressed(flair_node):
+	for node in %FlairList.get_children():
+		if node != flair_node:
+			node.unpress()
+	
 
 
 func _on_back_button_pressed():

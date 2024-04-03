@@ -11,6 +11,8 @@ corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
+expand_margin_top = 8.0
+expand_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djtr2"]
 
@@ -59,7 +61,7 @@ stretch_mode = 5
 [node name="FlairContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 12
 
 [node name="Flair" type="Label" parent="MarginContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
 unique_name_in_owner = true

@@ -46,7 +46,7 @@ static func get_flair_list() -> Array[SelectableFlair]:
 		arr.append(SelectableFlair.new(
 			"dev",
 			Color(0.0784314, 0.364706, 0.529412, 1),
-			"Vc é um desenvolvedor pô",
+			"DEVELOPER_FLAIR_DESCRIPTION",
 		))
 	arr.append_array(_monthly_flairs())
 	if data.best_streak[RecurringMarathon.Type.Daily] >= 30:
@@ -71,8 +71,8 @@ static func get_flair_list() -> Array[SelectableFlair]:
 	while ExtraLevelLister.has_section(extra_section):
 		if not ExtraLevelLister.is_free(extra_section) and not ExtraLevelLister.section_disabled(extra_section):
 			arr.append(SelectableFlair.new(
-				"dlc",
-				Color.AZURE,
+				"❤",
+				Color.HOT_PINK,
 				"FLAIR_DLC_DESC",
 			))
 			break

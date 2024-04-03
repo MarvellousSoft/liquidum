@@ -1,15 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://bhvs33ket0l57"]
 
-[ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="1_tq2nb"]
-[ext_resource type="Script" path="res://game/flair_picker/FlairPicker.gd" id="1_ym761"]
-[ext_resource type="PackedScene" uid="uid://dv1u5f265dm05" path="res://game/flair_picker/FlairButton.tscn" id="3_fcunh"]
+[ext_resource type="Script" path="res://game/flairs/FlairPicker.gd" id="1_cr2h3"]
+[ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="2_ljy7n"]
+[ext_resource type="PackedScene" uid="uid://dv1u5f265dm05" path="res://game/flairs/FlairButton.tscn" id="3_jn8da"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpiaw"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+corner_detail = 20
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
 
 [node name="FlairPicker" type="Control"]
 layout_mode = 3
@@ -18,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ym761")
+script = ExtResource("1_cr2h3")
 
 [node name="TopContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -62,7 +65,7 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("1_tq2nb")
+texture = ExtResource("2_ljy7n")
 expand_mode = 2
 stretch_mode = 5
 
@@ -133,21 +136,21 @@ theme_override_constants/margin_right = 600
 [node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 55
 
-[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_fcunh")]
+[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="."]

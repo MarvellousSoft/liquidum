@@ -42,6 +42,6 @@ func update_theme(_dark_mode: bool) -> void:
 		if flairs[i] != null:
 			var flair: Label =  Grid.get_child(12 + 5 * i).get_node("Flair")
 			flair.add_theme_color_override("font_color", flairs[i].color)
-			var bg_color = Global.get_contrast_outline(flairs[i].color)
-			bg_color.a = 0.7
-			flair.get_node("BG").modulate = bg_color
+			var contrast_color = Global.get_contrast_background(flairs[i].color)
+			contrast_color.a = 0.75
+			flair.get_node("BG").modulate = contrast_color

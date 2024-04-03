@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://dv1u5f265dm05"]
 
-[ext_resource type="Script" path="res://game/flair_picker/FlairButton.gd" id="1_f7p4e"]
-[ext_resource type="StyleBox" uid="uid://d13epprvp6n7f" path="res://assets/ui/InvisibleButton/InvisibleButtonHover.tres" id="1_ldcoy"]
-[ext_resource type="StyleBox" uid="uid://dlk0d25ppdw36" path="res://assets/ui/InvisibleButton/InvisibleButtonPressed.tres" id="2_a6kuq"]
-[ext_resource type="ButtonGroup" uid="uid://b78vn2d22cyg0" path="res://assets/ui/FlairButtonGroup.tres" id="3_i4226"]
+[ext_resource type="Script" path="res://game/flairs/FlairButton.gd" id="1_0ug31"]
+[ext_resource type="StyleBox" uid="uid://d13epprvp6n7f" path="res://assets/ui/InvisibleButton/InvisibleButtonHover.tres" id="2_cc6ns"]
+[ext_resource type="StyleBox" uid="uid://dlk0d25ppdw36" path="res://assets/ui/InvisibleButton/InvisibleButtonPressed.tres" id="3_0ecfn"]
+[ext_resource type="ButtonGroup" uid="uid://b78vn2d22cyg0" path="res://assets/ui/FlairButtonGroup.tres" id="4_alao2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnex5"]
 bg_color = Color(1, 1, 1, 1)
@@ -11,6 +11,8 @@ corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iw5xt"]
 
@@ -20,7 +22,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 2000.0
 offset_bottom = 300.0
-script = ExtResource("1_f7p4e")
+script = ExtResource("1_0ug31")
 
 [node name="FlairContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -62,6 +64,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Button" type="Button" parent="."]
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -70,8 +73,9 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_iw5xt")
-theme_override_styles/hover = ExtResource("1_ldcoy")
-theme_override_styles/pressed = ExtResource("2_a6kuq")
+theme_override_styles/hover = ExtResource("2_cc6ns")
+theme_override_styles/pressed = ExtResource("3_0ecfn")
 toggle_mode = true
-button_group = ExtResource("3_i4226")
-flat = true
+button_group = ExtResource("4_alao2")
+
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

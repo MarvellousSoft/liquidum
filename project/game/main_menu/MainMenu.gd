@@ -239,4 +239,4 @@ func _on_daily_button_streak_opened():
 
 func _on_player_display_button_pressed():
 	AudioManager.play_sfx("button_pressed")
-	TransitionManager.push_scene(Global.load_mobile_compat("res://game/flair_picker/FlairPicker").instantiate())
+	TransitionManager.push_scene(Global.load_mobile_compat("res://game/flairs/FlairPicker").instantiate())
