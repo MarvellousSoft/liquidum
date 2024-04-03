@@ -373,7 +373,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void
 		if SteamManager.enabled:
 			var l_data := await RecurringMarathon.get_leaderboard_data(await load_current_leaderboard())
 			display_leaderboard(l_data, [], level)
-	if not AndroidRequestReview.just_requested_review:
+	if not MobileRequestReview.just_requested_review:
 		StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
 
 func _on_dark_mode_changed(is_dark: bool):
