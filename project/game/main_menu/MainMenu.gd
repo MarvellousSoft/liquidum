@@ -95,6 +95,7 @@ func _enter_tree() -> void:
 		%DailyUnlockText.visible = not RecurringMarathon.is_unlocked()
 	call_deferred("update_level_hub")
 	call_deferred("update_profile_button")
+	call_deferred("update_player_display_button")
 
 func _back_logic() -> void:
 	if Settings.active:
@@ -143,6 +144,11 @@ func update_profile_button() -> void:
 			%ProfileButton.icon = Global.custom_portrait
 		else:
 			%ProfileButton.icon = ICONS[FileManager.current_profile]
+
+
+func update_player_display_button() -> void:
+	if not Global.is_mobile and SteamManager.enabled:
+		%PlayerDisplayButton.update_flair()
 
 
 func _on_editor_button_pressed():

@@ -62,6 +62,8 @@ func _on_flair_button_pressed(flair_node):
 	for node in %FlairList.get_children():
 		if node != flair_node:
 			node.unpress()
+	FlairManager.set_selected_flair_idx(flair_node.idx)
+	update_flair()
 	
 
 
