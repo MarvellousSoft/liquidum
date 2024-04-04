@@ -1,0 +1,17 @@
+[config]
+name="RequestReview"
+binary="request_review/request_review.a"
+
+initialization="godot_plugin_init"
+deinitialization="godot_plugin_deinit"
+
+[dependencies]
+linked=[]
+embedded=[]
+system=[]
+
+capabilities=[]
+
+files=[]
+
+[plist]
