@@ -49,6 +49,7 @@ NotificationManager="*res://game/mobile/NotificationManager.gd"
 GooglePlayGameServices="*res://game/mobile/GooglePlayGameServices.gd"
 PaletteShader="*res://game/ui/PaletteShader.tscn"
 StoreIntegrations="*res://addons/store_integrations/StoreIntegrationsAPI.gd"
+IosFacebookManager="*res://game/ads/IosFacebookManager.gd"
 
 [debug]
 
