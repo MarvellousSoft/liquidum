@@ -12,6 +12,7 @@ var _authenticated := false
 func _try_authenticate() -> bool:
 	if _authenticated:
 		return true
+	print("Authenticating with apple")
 	apple.authenticate()
 	var resp = await event
 	_authenticated = resp.result == "ok"

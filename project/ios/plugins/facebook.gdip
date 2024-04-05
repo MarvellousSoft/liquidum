@@ -15,3 +15,5 @@ capabilities=[]
 files=[]
 
 [plist]
+FacebookClientToken:string_input="49c25905703ed460e1a219451b9ae383"
+FacebookAdvertiserIDCollectionEnabled:string_input="TRUE"

@@ -126,9 +126,9 @@ static func get_flair_list() -> Array[SelectableFlair]:
 			arr.append(create_flair(FlairId.Dlc))
 			break
 		extra_section += 1
-	if SteamManager.enabled and Steam.isSubscribedApp(827940):
+	if SteamManager.enabled and SteamManager.steam.isSubscribedApp(827940):
 		arr.append(create_flair(FlairId.MarvInc))
-	if SteamManager.enabled and Steam.isSubscribedApp(1636730):
+	if SteamManager.enabled and SteamManager.steam.isSubscribedApp(1636730):
 		arr.append(create_flair(FlairId.Functional))
 	_list = arr
 	return _list
