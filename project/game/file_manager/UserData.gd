@@ -32,9 +32,9 @@ var best_streak: Array[int]
 var current_streak: Array[int]
 # Last "day" you won the daily/weekly
 var last_day: Array[String]
-var selected_flair: int
+var selected_flair: String
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: String, insane_good_levels_: int) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
@@ -135,7 +135,7 @@ static func load_data(data_: Variant) -> UserData:
 			endless.append(0)
 			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, 0, 0)
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, "none", 0)
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -152,7 +152,7 @@ static func load_data(data_: Variant) -> UserData:
 		data.endless_good = data.endless_completed.duplicate()
 	if data.version < 5:
 		data.version = 5
-		data.selected_flair = 0
+		data.selected_flair = "none"
 	if data.version < 6:
 		data.version = 6
 		data.insane_good_levels = 0
@@ -167,4 +167,4 @@ static func load_data(data_: Variant) -> UserData:
 	best_streak_a.assign(data.best_streak)
 	cur_streak_a.assign(data.current_streak)
 	last_day_a.assign(data.last_day)
-	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, data.selected_flair, data.insane_good_levels)
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, str(data.selected_flair), data.insane_good_levels)

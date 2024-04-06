@@ -2,10 +2,10 @@ extends Control
 
 signal pressed(s : Node)
 
-var idx
+var id
 
-func setup(flair_data, new_idx):
-	idx = new_idx
+func setup(flair_data):
+	id = flair_data.id
 	%Flair.text = "  %s  " % flair_data.text
 	%Flair.add_theme_color_override("font_color", flair_data.color)
 	var contrast_color = Global.get_contrast_background(flair_data.color)

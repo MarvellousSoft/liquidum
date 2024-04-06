@@ -213,11 +213,11 @@ static func get_monthly_leaderboard(month_str: String) -> int:
 			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
 
 static func get_my_flair() -> Flair:
-	var flairs := FlairManager.get_flair_list()
-	if flairs.is_empty():
-		return Flair.new("", Color.BLACK)
+	var flair = FlairManager.get_current_flair()
+	if flair == null:
+		return Flair.new("","", Color.BLACK)
 	else:
-		return flairs[FlairManager.get_selected_flair_idx()].to_steam_flair()
+		return flair.to_steam_flair()
 
 static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: bool) -> void:
 	# Steam needs to create the leaderboards dinamically

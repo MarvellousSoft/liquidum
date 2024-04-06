@@ -17,16 +17,15 @@ func reset_flairs():
 func populate_flairs():
 	reset_flairs()
 	var cur_flair = FlairManager.get_current_flair()
-	var idx = 0
 	for flair_data in FlairManager.get_flair_list():
 		var new_flair = FLAIR_BUTTON.instantiate()
-		new_flair.setup(flair_data, idx)
+		new_flair.setup(flair_data)
 		new_flair.pressed.connect(_on_flair_button_pressed)
 		%FlairList.add_child(new_flair)
-		if flair_data.text == cur_flair.text:
+		if cur_flair and flair_data.id == cur_flair.id:
 			new_flair.press()
-		idx += 1
-
+	if not cur_flair:
+		%FlairList.get_child(0).press()
 
 func update_steam_info():
 	%Name.text = SteamManager.steam.getPersonaName()
@@ -62,7 +61,7 @@ func _on_flair_button_pressed(flair_node):
 	for node in %FlairList.get_children():
 		if node != flair_node:
 			node.unpress()
-	FlairManager.set_selected_flair_idx(flair_node.idx)
+	FlairManager.set_selected_flair_id(flair_node.id)
 	update_flair()
 	
 
