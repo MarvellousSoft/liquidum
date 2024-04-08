@@ -243,7 +243,7 @@ class ListEntry:
 	var image: Image
 	var mistakes: int
 	var secs: int
-	var flair: SelectableFlair
+	var flair: SteamFlair
 
 	static func create(data: Dictionary, override_name:="") -> ListEntry:
 		var entry := ListEntry.new()
@@ -251,8 +251,7 @@ class ListEntry:
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
 		var details := LeaderboardDetails.from_arr(data.get("details", PackedInt32Array()))
-		if details.flair != null:
-			entry.flair = FlairManager.create_flair(details.flair.id)
+		entry.flair = details.flair
 		if override_name.is_empty():
 			if data.steam_id == SteamManager.steam.getSteamID():
 				entry.text = SteamManager.steam.getPersonaName()

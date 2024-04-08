@@ -1,19 +1,27 @@
 class_name SteamFlair
 
 var id: int
+var extra_flairs: int
 
-func _init(id_: int) -> void:
+func _init(id_: int, extra_flairs_: int) -> void:
 	id = id_
+	extra_flairs = extra_flairs_
 
 static func encode(flair: SteamFlair) -> PackedByteArray:
-	var fid: int = flair.id if flair != null else -1
+	if flair == null:
+		flair = SteamFlair.new(-1, 0)
 	var arr := PackedByteArray()
-	arr.encode_s32(0, fid)
+	arr.resize(6)
+	arr.encode_s32(0, flair.id)
+	arr.encode_u16(4, flair.extra_flairs)
 	return arr
 
 static func decode(offset: int, arr: PackedByteArray) -> SteamFlair:
 	var id_: int = arr.decode_s32(offset)
-	return SteamFlair.new(id_)
+	if id_ == -1:
+		return null
+	var extra_: int = arr.decode_u16(offset + 4)
+	return SteamFlair.new(id_, extra_)
 
 static func old_flair_decode_text(offset: int, arr: PackedByteArray) -> String:
 	var sz := arr[offset]

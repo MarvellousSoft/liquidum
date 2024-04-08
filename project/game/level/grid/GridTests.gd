@@ -24,9 +24,10 @@ func run_all_tests() -> void:
 	for method in get_method_list():
 		var t_name: String = method["name"]
 		if t_name.begins_with("test_"):
-			print("Running %s" % t_name)
+			var watch := Stopwatch.new()
 			var prev_fail := fail
 			call(t_name)
+			print("[%.1fms] Ran %s" % [watch.elapsed() * 1000., t_name])
 			if fail > prev_fail:
 				print("FAILED!")
 
@@ -1273,3 +1274,19 @@ func test_options_sum() -> void:
 	assert(not OptionsSum.can_be_solved(4., [[1., 9.], [2., 9.]]))
 	assert(not OptionsSum.can_be_solved(0., [[1., 9.], [2., 9.]]))
 	assert(OptionsSum.can_be_solved(2.0, [[0.], [0., 1.], [0., 1.]]))
+
+func test_steam_details_encode_decode() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 12
+	for i in 30:
+		var f := SteamFlair.new(rng.randi_range(0, 1000), rng.randi_range(0, 12))
+		if i == 0:
+			f = null
+		var det := LeaderboardDetails.new(f)
+		var arr := LeaderboardDetails.to_arr(det)
+		var new_det := LeaderboardDetails.from_arr(arr)
+		if f == null:
+			assert(new_det.flair == null)
+		else:
+			assert(new_det.flair.id == f.id)
+			assert(new_det.flair.extra_flairs == f.extra_flairs)

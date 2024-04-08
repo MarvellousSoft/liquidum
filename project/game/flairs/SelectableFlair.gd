@@ -13,4 +13,4 @@ func _init(id_: int, text_: String, color_: Color, description_: String) -> void
 	description = description_
 
 func to_steam_flair() -> SteamFlair:
-	return SteamFlair.new(id)
+	return SteamFlair.new(id, FlairManager.get_flair_amount() - 1)

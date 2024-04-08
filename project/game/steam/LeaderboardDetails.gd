@@ -35,8 +35,9 @@ static func from_arr(arr_32: PackedInt32Array) -> LeaderboardDetails:
 			id = FlairManager.FlairId.ProStart + 2
 		elif old_text != "":
 			id = FlairManager.FlairId.Dev
-		arr.resize(5)
+		arr.resize(9)
 		arr.encode_s32(1, id)
+		arr.encode_u16(5, 0)
 	if version < VERSION:
 		push_error("Incompatible version of leaderboard details, let's hope for the best.")
 	var flair_ := SteamFlair.decode(1, arr)
