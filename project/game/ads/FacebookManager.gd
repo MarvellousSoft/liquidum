@@ -41,7 +41,7 @@ func _ready():
 		return
 	if _client_token.is_empty():
 		printerr("[Facebook] - Client token not found! Please set it in Project Setting/Facebook/Client token")
-		return	
+		return
 	
 	if not Engine.has_singleton(FACEBOOK_PLUGIN_NAME):
 		printerr("Facebook plugin is not activated yet")
