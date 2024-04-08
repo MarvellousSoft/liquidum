@@ -2,11 +2,11 @@
 class_name LeaderboardDetails
 
 # Versioning so we can more easily change this stuff later. MAX 256
-const VERSION := 1
+const VERSION := 2
 
-var flair: Flair
+var flair: SteamFlair
 
-func _init(flair_: Flair) -> void:
+func _init(flair_: SteamFlair) -> void:
 	flair = flair_
 
 static func to_arr(details: LeaderboardDetails) -> PackedInt32Array:
@@ -14,7 +14,7 @@ static func to_arr(details: LeaderboardDetails) -> PackedInt32Array:
 		return PackedInt32Array()
 	var arr := PackedByteArray()
 	arr.append(VERSION)
-	arr.append_array(Flair.encode(details.flair))
+	arr.append_array(SteamFlair.encode(details.flair))
 	while arr.size() % 4 != 0:
 		arr.append(0)
 	return arr.to_int32_array()
@@ -27,12 +27,17 @@ static func from_arr(arr_32: PackedInt32Array) -> LeaderboardDetails:
 	# No version, basically
 	if version < 1:
 		return LeaderboardDetails.new(null)
-	# Example version migration
-	#if version < 2:
-	#	version = 2
-	#	# Migrate to version 2
+	if version < 2:
+		version = 2
+		var old_text := SteamFlair.old_flair_decode_text(1, arr)
+		var id := -1
+		if old_text == "pro":
+			id = FlairManager.FlairId.ProStart + 2
+		elif old_text != "":
+			id = FlairManager.FlairId.Dev
+		arr.resize(5)
+		arr.encode_s32(1, id)
 	if version < VERSION:
 		push_error("Incompatible version of leaderboard details, let's hope for the best.")
-	var flair_ := Flair.decode(1, arr)
-	# For more stuff, we need to know the offset of the Flair
+	var flair_ := SteamFlair.decode(1, arr)
 	return LeaderboardDetails.new(flair_)

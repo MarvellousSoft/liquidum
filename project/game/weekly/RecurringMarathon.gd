@@ -212,12 +212,8 @@ static func get_monthly_leaderboard(month_str: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
 			SteamManager.steam.LEADERBOARD_SORT_METHOD_DESCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_NUMERIC)
 
-static func get_my_flair() -> Flair:
-	var flair = FlairManager.get_current_flair()
-	if flair == null:
-		return Flair.new("","", Color.BLACK)
-	else:
-		return flair.to_steam_flair()
+static func get_my_flair() -> SteamFlair:
+	return FlairManager.get_current_flair().to_steam_flair()
 
 static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: bool) -> void:
 	# Steam needs to create the leaderboards dinamically
@@ -247,15 +243,16 @@ class ListEntry:
 	var image: Image
 	var mistakes: int
 	var secs: int
+	var flair: SelectableFlair
 
-	var flair: Flair
 	static func create(data: Dictionary, override_name:="") -> ListEntry:
 		var entry := ListEntry.new()
 		entry.global_rank = data.global_rank
 		entry.mistakes = data.score / MAX_TIME
 		entry.secs = data.score % MAX_TIME
 		var details := LeaderboardDetails.from_arr(data.get("details", PackedInt32Array()))
-		entry.flair = details.flair
+		if details.flair != null:
+			entry.flair = FlairManager.create_flair(details.flair.id)
 		if override_name.is_empty():
 			if data.steam_id == SteamManager.steam.getSteamID():
 				entry.text = SteamManager.steam.getPersonaName()

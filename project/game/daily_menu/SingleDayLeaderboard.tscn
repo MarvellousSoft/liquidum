@@ -84,11 +84,11 @@ theme_override_constants/separation = 12
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_font_sizes/font_size = 60
-text = "[dev]"
+text = "  dev  "
 vertical_alignment = 1
 
 [node name="BG" type="Panel" parent="MarginContainer/Grid/NameContainer1/Flair"]
-modulate = Color(0, 0.0352941, 0.141176, 1)
+modulate = Color(0, 0.04, 0.14, 0.75)
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
