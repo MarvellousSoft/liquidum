@@ -16,10 +16,12 @@ func _try_authenticate() -> bool:
 	apple.authenticate()
 	var resp = await event
 	_authenticated = resp.result == "ok"
+	assert(apple.is_authenticated() == _authenticated)
 	return _authenticated
 
 func _init() -> void:
 	apple = Engine.get_singleton("GameCenter")
+	_authenticated = apple.is_authenticated()
 	await _try_authenticate()
 
 func authenticated() -> bool:
