@@ -8,12 +8,12 @@ class LeaderboardMapping:
 	var id: String
 	var steam_id: String
 	var google_id: String
-	var ios_id: String
-	func _init(id_: String, steam_id_: String, google_id_: String, ios_id_: String) -> void:
+	var apple_id: String
+	func _init(id_: String, steam_id_: String, google_id_: String, apple_id_: String) -> void:
 		id = id_
 		steam_id = steam_id_
 		google_id = google_id_
-		ios_id = ios_id_
+		apple_id = apple_id_
 
 func _ready() -> void:
 	if SteamIntegration.available():

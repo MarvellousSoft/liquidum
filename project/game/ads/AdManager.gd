@@ -18,10 +18,9 @@ func _ready() -> void:
 	if OS.get_name() == "Android":
 		payment = AndroidPayment.setup()
 	elif OS.get_name() == "iOS":
+		payment = IosPayment.setup()
 		# Ads are disabled on iOS for now
-		payment = null
 		_on_disable_ads()
-		#payment = IosPayment.setup()
 	if payment != null:
 		payment.disable_ads.connect(_on_disable_ads)
 		add_child(payment)
