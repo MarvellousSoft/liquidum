@@ -14,31 +14,36 @@ enum CursorMode {
 	Eraser,
 }
 
-const IMAGES := [
-	preload("res://assets/images/cursors/arrow-simple.png"),
-	preload("res://assets/images/cursors/arrow-water.png"),
-	preload("res://assets/images/cursors/arrow-nowater.png"),
-	preload("res://assets/images/cursors/arrow-boat.png"),
-	preload("res://assets/images/cursors/arrow-noboat.png"),
-	preload("res://assets/images/cursors/arrow-wall.png"),
-	preload("res://assets/images/cursors/arrow-block.png"),
-	preload("res://assets/images/cursors/arrow-brush.png"),
-	preload("res://assets/images/cursors/arrow-eraser.png"),
-]
-
-const DARK_IMAGES := [
-	preload("res://assets/images/cursors/dark-arrow-simple.png"),
-	preload("res://assets/images/cursors/dark-arrow-water.png"),
-	preload("res://assets/images/cursors/dark-arrow-nowater.png"),
-	preload("res://assets/images/cursors/dark-arrow-boat.png"),
-	preload("res://assets/images/cursors/dark-arrow-noboat.png"),
-	preload("res://assets/images/cursors/dark-arrow-wall.png"),
-	preload("res://assets/images/cursors/dark-arrow-block.png"),
-	preload("res://assets/images/cursors/dark-arrow-brush.png"),
-	preload("res://assets/images/cursors/dark-arrow-eraser.png"),
-]
+static var IMAGES: Array
+static var DARK_IMAGES: Array
 
 static var cur_mode := CursorMode.Normal
+
+static func _static_init() -> void:
+	if ProjectSettings.get_setting("liquidum/is_mobile"):
+		return
+	IMAGES = [
+		load("res://assets/images/cursors/arrow-simple.png"),
+		load("res://assets/images/cursors/arrow-water.png"),
+		load("res://assets/images/cursors/arrow-nowater.png"),
+		load("res://assets/images/cursors/arrow-boat.png"),
+		load("res://assets/images/cursors/arrow-noboat.png"),
+		load("res://assets/images/cursors/arrow-wall.png"),
+		load("res://assets/images/cursors/arrow-block.png"),
+		load("res://assets/images/cursors/arrow-brush.png"),
+		load("res://assets/images/cursors/arrow-eraser.png"),
+	]
+	DARK_IMAGES = [
+		load("res://assets/images/cursors/dark-arrow-simple.png"),
+		load("res://assets/images/cursors/dark-arrow-water.png"),
+		load("res://assets/images/cursors/dark-arrow-nowater.png"),
+		load("res://assets/images/cursors/dark-arrow-boat.png"),
+		load("res://assets/images/cursors/dark-arrow-noboat.png"),
+		load("res://assets/images/cursors/dark-arrow-wall.png"),
+		load("res://assets/images/cursors/dark-arrow-block.png"),
+		load("res://assets/images/cursors/dark-arrow-brush.png"),
+		load("res://assets/images/cursors/dark-arrow-eraser.png"),
+	]
 
 static func _dark_mode_toggled(_on: bool) -> void:
 	set_cursor(cur_mode)
