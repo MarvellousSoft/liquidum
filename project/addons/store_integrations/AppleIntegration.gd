@@ -35,7 +35,7 @@ func process(_dt: float) -> void:
 
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:
 	for ld in lds:
-		ld_id_to_apple_id[ld.leaderboard_id] = ld.apple_id
+		ld_id_to_apple_id[ld.id] = ld.apple_id
 
 func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
 	if ld_id_to_apple_id.has(leaderboard_id):
@@ -55,6 +55,7 @@ func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_col
 	await event
 
 func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
+	print("Setting achievement: %s (%d/%d)" % [ach_id, steps, total_steps])
 	apple.award_achievement({
 		name = ach_id,
 		progress = 100.0 * float(steps) / float(total_steps),
