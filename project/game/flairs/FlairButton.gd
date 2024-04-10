@@ -1,3 +1,4 @@
+class_name FlairButton
 extends Control
 
 signal pressed(s : Node)

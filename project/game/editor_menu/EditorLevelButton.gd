@@ -1,3 +1,4 @@
+class_name EditorLevelButton
 extends Control
 
 const IMG_FILE := "user://level_preview.png"
@@ -48,7 +49,7 @@ func _create_grid_image(grid_logic: GridModel) -> void:
 	v.size = bg.size
 	bg.z_index = -10
 	v.add_child(bg)
-	var view: GridView = preload("res://game/level/GridView.tscn").instantiate()
+	var view: GridView = load("res://game/level/GridView.tscn").instantiate()
 	v.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	v.add_child(view)
 	add_child(v)

@@ -153,7 +153,7 @@ func update_player_display_button() -> void:
 
 func _on_editor_button_pressed():
 	AudioManager.play_sfx("button_pressed")
-	var editor_hub = preload("res://game/editor_menu/EditorHub.tscn").instantiate()
+	var editor_hub = load("res://game/editor_menu/EditorHub.tscn").instantiate()
 	TransitionManager.push_scene(editor_hub)
 
 
@@ -164,7 +164,7 @@ func _on_profile_button_pressed():
 
 func _on_workshop_pressed():
 	AudioManager.play_sfx("button_pressed")
-	var workshop := preload("res://game/workshop_menu/WorkshopMenu.tscn").instantiate()
+	var workshop: Node = load("res://game/workshop_menu/WorkshopMenu.tscn").instantiate()
 	TransitionManager.push_scene(workshop)
 
 

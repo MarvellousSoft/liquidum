@@ -1,8 +1,5 @@
 extends Control
 
-const DEFAULT_IMAGE = preload("res://assets/images/icons/icon.png")
-const FLAIR_BUTTON = preload("res://game/flairs/FlairButton.tscn")
-
 func _ready():
 	populate_flairs()
 	update_steam_info()
@@ -17,8 +14,9 @@ func reset_flairs():
 func populate_flairs():
 	reset_flairs()
 	var cur_flair = FlairManager.get_current_flair()
+	var flair_cls: PackedScene = load("res://game/flairs/FlairButton.tscn")
 	for flair_data in FlairManager.get_flair_list():
-		var new_flair = FLAIR_BUTTON.instantiate()
+		var new_flair: FlairButton = flair_cls.instantiate()
 		new_flair.setup(flair_data)
 		new_flair.pressed.connect(_on_flair_button_pressed)
 		%FlairList.add_child(new_flair)
@@ -36,7 +34,7 @@ func update_steam_info():
 		image.generate_mipmaps()
 		%Image.texture = ImageTexture.create_from_image(image)
 	else:
-		%Image.texture = DEFAULT_IMAGE
+		%Image.texture = load("res://assets/images/icons/icon.png")
 
 
 func update_flair():

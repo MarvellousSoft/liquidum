@@ -23,7 +23,7 @@ func load_all_levels() -> void:
 		level_names[id] = FileManager.load_editor_level(id).full_name
 	ids.sort_custom(func(a, b): return level_names[a] < level_names[b])
 	for id in ids:
-		var button := preload("res://game/editor_menu/EditorLevelButton.tscn").instantiate()
+		var button: EditorLevelButton = load("res://game/editor_menu/EditorLevelButton.tscn").instantiate()
 		button.setup(id, level_names[id])
 		button.edit.connect(load_level)
 		button.play.connect(play_level)

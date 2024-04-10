@@ -1,7 +1,5 @@
 extends Control
 
-const DEFAULT_IMAGE = preload("res://assets/images/icons/icon.png")
-
 signal pressed
 
 func _ready():
@@ -22,7 +20,7 @@ func update_steam_info():
 		image.generate_mipmaps()
 		%Image.texture = ImageTexture.create_from_image(image)
 	else:
-		%Image.texture = DEFAULT_IMAGE
+		%Image.texture = load("res://assets/images/icons/icon.png")
 
 
 func update_flair():

@@ -43,7 +43,7 @@ func reload_all_levels() -> void:
 	for c in Buttons.get_children():
 		Buttons.remove_child(c)
 		c.queue_free()
-	var button_class := preload("res://game/workshop_menu/WorkshopLevelButton.tscn")
+	var button_class: PackedScene = load("res://game/workshop_menu/WorkshopLevelButton.tscn")
 	for i in ids.size():
 		var button := button_class.instantiate()
 		button.id = ids[i]
