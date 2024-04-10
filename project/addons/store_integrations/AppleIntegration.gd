@@ -55,7 +55,6 @@ func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_col
 	await event
 
 func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
-	print("Setting achievement: %s (%d/%d)" % [ach_id, steps, total_steps])
 	apple.award_achievement({
 		name = ach_id,
 		progress = 100.0 * float(steps) / float(total_steps),

@@ -16,6 +16,7 @@ class LeaderboardMapping:
 		apple_id = apple_id_
 
 func _ready() -> void:
+	impls.append(LogIntegration.new())
 	if SteamIntegration.available():
 		impls.append(SteamIntegration.new())
 	if GoogleIntegration.available():
