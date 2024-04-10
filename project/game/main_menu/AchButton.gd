@@ -5,4 +5,4 @@ func _ready() -> void:
 		queue_free()
 
 func _on_pressed() -> void:
-	await StoreIntegrations.show_achievements()
+	await StoreIntegrations.achievement_show_all()
