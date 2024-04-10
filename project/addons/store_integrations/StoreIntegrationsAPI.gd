@@ -77,3 +77,7 @@ func leaderboard_show(leaderboard_id: String, google_timespan := 2, google_colle
 func achievement_set(ach_id: String, steps: int = 1, total_steps: int = 1) -> void:
 	for impl in impls:
 		await impl.achievement_set(ach_id, clampi(steps, 0, total_steps), total_steps)
+
+func achievement_show_all() -> void:
+	for impl in impls:
+		await impl.achievement_show_all()

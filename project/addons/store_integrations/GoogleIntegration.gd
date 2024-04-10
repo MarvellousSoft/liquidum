@@ -28,3 +28,6 @@ func leaderboard_show(leaderboard_id: String, timespan: int, collection: int) ->
 	var id : String = ld_id_to_google_id.get(leaderboard_id, "")
 	if not id.is_empty():
 		google.leaderboardsShowForTimeSpanAndCollection(timespan, collection)
+
+func achievement_show_all() -> void:
+	google.achievementsShow()

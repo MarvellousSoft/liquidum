@@ -63,3 +63,6 @@ func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
 	var resp: Dictionary = await event
 	if resp.result != "ok":
 		push_warning("Error setting achievement: %s" % [resp.error_code])
+
+func achievement_show_all() -> void:
+	await leaderboard_show("", 0, 0)

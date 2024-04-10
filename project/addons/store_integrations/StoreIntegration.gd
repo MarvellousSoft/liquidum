@@ -24,3 +24,6 @@ func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_co
 
 func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
 	await null
+
+func achievement_show_all() -> void:
+	await null
