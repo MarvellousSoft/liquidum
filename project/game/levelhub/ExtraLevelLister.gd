@@ -159,7 +159,10 @@ func purchase_section(section: int) -> void:
 	elif OS.get_name() == "iOS":
 		id = ios_payment(section)
 	if id != "" and AdManager.payment != null:
-		AdManager.payment.do_purchase_dlc(id)
+		print("Purchasing DLC from section %d with id %s" % [section, id])
+		await AdManager.payment.do_purchase_dlc(id)
+	else:
+		print("Purchase for section %d doesn't exist" % [section])
 
 func clear_all_level_saves(profile_name: String) -> void:
 	var section := 1

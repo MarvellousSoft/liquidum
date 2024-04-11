@@ -11,4 +11,4 @@ func do_purchase_disable_ads() -> void:
 	GridModel.must_be_implemented()
 
 func do_purchase_dlc(_payment_id: String) -> void:
-	GridModel.must_be_implemented()
+	await GridModel.must_be_implemented()

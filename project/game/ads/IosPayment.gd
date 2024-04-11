@@ -15,17 +15,26 @@ func _init(api_) -> void:
 		extra_section += 1
 
 func start() -> void:
-	api.restore_purchases()
+	print("Restoring iOS in app purchases")
+	var result = api.request_product_info({product_ids = dlc_ids + [DISABLE_ADS_ID]})
+	if result != OK:
+		print("Error requesting details: %s" % [result])
+	result = api.restore_purchases()
+	if result != OK:
+		print("Error restoring purchases: %s" % [result])
 
 
 func _process(_dt: float) -> void:
 	while api.get_pending_event_count() > 0:
 		var event = api.pop_pending_event()
+		print("Apple IAP event: %s" % [event])
 		if event.type == "purchase":
 			if event.result == "ok" and event.product_id == DISABLE_ADS_ID:
+				print("Finished purchasing disable ads" % [event.product_id])
 				disable_ads.emit()
 				api.finish_transaction(DISABLE_ADS_ID)
 			elif event.result == "ok" and event.product_id in dlc_ids:
+				print("Finished purchasing DLC with id %s" % [event.product_id])
 				api.finish_transaction(event.product_id)
 				dlc_purchased.emit(event.product_id)
 			else:
@@ -33,14 +42,19 @@ func _process(_dt: float) -> void:
 		if event.type == "restore":
 			if event.result == "ok" and event.product_id == DISABLE_ADS_ID:
 				disable_ads.emit()
+			elif event.result == "ok" and event.product_id in dlc_ids:
+				dlc_purchased.emit(event.product_id)
 			else:
 				print("Unknown restore: %s" % event)
 
 func do_purchase_disable_ads() -> void:
-	api.purchase({product_id = DISABLE_ADS_ID})
+	do_purchase_dlc(DISABLE_ADS_ID)
 
 func do_purchase_dlc(id: String) -> void:
-	api.purchase({product_id = id})
+	var result = api.purchase({product_id = id})
+	if result != OK:
+		print("Error purchasing %s: %s" % [id, result])
+
 
 static func setup() -> IosPayment:
 	if Engine.has_singleton("InAppStore"):
