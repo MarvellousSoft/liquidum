@@ -24,14 +24,12 @@ func set_endless_completed(completed_count: Array[int]) -> void:
 	if total >= 1:
 		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids.achievement_1__level)
 		GooglePlayGameServices.achievements_set_steps(GooglePlayGameServices.ids.achievement_10__level, mini(total, 10))
-	
-const STREAK_ACH: Array[int] = [7, 4]
 
 func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
 	var type_name := RecurringMarathon.type_name(type)
 	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_current_%s_streak" % type_name], float(streak))
 	GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids["leaderboard_max_%s_streak" % type_name], float(best_streak))
-	var ach := STREAK_ACH[type]
+	var ach := StatsTracker.STREAK_ACH[type]
 	if streak >= ach:
 		GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_%d_%s_streak" % [ach, type_name]])
 

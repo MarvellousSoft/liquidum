@@ -55,8 +55,6 @@ func _find_leaderboard(l_name: String) -> int:
 	else:
 		return ret[0]
 
-const STREAK_ACH: Array[int] = [7, 4]
-
 func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
 	var type_name := RecurringMarathon.type_name(type)
 	var CUR := "%s_streak_current" % type_name
@@ -67,7 +65,7 @@ func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak
 		if SteamManager.steam.getAchievement("weekly_streak_4").achieved:
 			SteamManager.steam.clearAchievement("weekly_streak_4")
 			flushNewAchievements()
-	if _set_stat_with_goal(CUR, streak, STREAK_ACH[type], "%s_streak_%d" % [type_name, STREAK_ACH[type]], 2):
+	if _set_stat_with_goal(CUR, streak, StatsTracker.STREAK_ACH[type], "%s_streak_%d" % [type_name, STREAK_ACH[type]], 2):
 		flushNewAchievements()
 	await SteamManager.ld_mutex.lock()
 	if upload_current:
