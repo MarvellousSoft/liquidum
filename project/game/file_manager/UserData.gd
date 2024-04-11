@@ -65,14 +65,14 @@ func get_data() -> Dictionary:
 
 func save_stats() -> void:
 	var stats := StatsTracker.instance()
-	stats.set_random_levels(random_levels_completed)
-	stats.set_endless_completed(endless_completed)
+	await stats.set_random_levels(random_levels_completed)
+	await stats.set_endless_completed(endless_completed)
 	var all_endless_good: int = 0
 	for g in endless_good:
 		all_endless_good += g
-	stats.set_endless_good(all_endless_good)
+	await stats.set_endless_good(all_endless_good)
 	for type in RecurringMarathon.Type.values():
-		stats.set_recurring_streak(type, current_streak[type], best_streak[type])
+		await stats.set_recurring_streak(type, current_streak[type], best_streak[type])
 
 func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:

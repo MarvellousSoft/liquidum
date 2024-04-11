@@ -23,6 +23,7 @@ func _init() -> void:
 	apple = Engine.get_singleton("GameCenter")
 	_authenticated = apple.is_authenticated()
 	await _try_authenticate()
+	await StatsTracker.instance().update_campaign_stats()
 
 func authenticated() -> bool:
 	return _authenticated

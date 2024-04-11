@@ -42,7 +42,7 @@ func set_endless_good(count: int) -> void:
 	await StoreIntegrations.achievement_set("endless_100", count, 100)
 
 func set_recurring_streak(_type: RecurringMarathon.Type, _streak: int, _best_streak: int) -> void:
-	pass
+	await null
 
 func increment_recurring_all(_type: RecurringMarathon.Type) -> void:
 	pass
