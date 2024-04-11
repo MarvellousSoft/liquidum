@@ -41,8 +41,15 @@ func set_endless_completed(completed_count: Array[int]) -> void:
 func set_endless_good(count: int) -> void:
 	await StoreIntegrations.achievement_set("endless_100", count, 100)
 
-func set_recurring_streak(_type: RecurringMarathon.Type, _streak: int, _best_streak: int) -> void:
-	await null
+const STREAK_ACH: Array[int] = [7, 4]
+
+func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
+	var type_name := RecurringMarathon.type_name(type)
+	await StoreIntegrations.leaderboard_upload_score("%s_current_streak" % type_name, float(streak), false)
+	await StoreIntegrations.leaderboard_upload_score("%s_max_streak" % type_name, float(best_streak), true)
+	var ach := STREAK_ACH[type]
+	if streak >= ach:
+		await StoreIntegrations.achievement_set("%s_streak_%d" % [type_name, ach])
 
 func increment_recurring_all(_type: RecurringMarathon.Type) -> void:
 	pass
