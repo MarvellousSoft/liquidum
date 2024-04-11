@@ -1169,9 +1169,12 @@ func test_cell_hints() -> void:
 	assert(g.are_hints_satisfied())
 	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
 	g.get_cell(1, 3).put_water(E.Corner.TopLeft)
-	# TODO: Deal with together for these hints
-	#assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Together)
+	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Separated)
 	assert(not g.are_hints_satisfied())
+	g.get_cell(2, 2).put_water(E.Corner.TopLeft)
+	assert(g.together_waters_adj(2.0, 2, 2) == E.HintType.Together)
+	assert(not g.are_hints_satisfied())
+	g.undo()
 	g.undo()
 	g.get_cell(2, 1).put_water(E.Corner.TopLeft)
 	assert(not g.are_hints_satisfied())
@@ -1261,6 +1264,51 @@ func test_cell_hints() -> void:
 	#x..
 	|/L.
 	....
+	L.L.
+	""")
+
+func assert_cell_hints_together(s: String, type := E.HintType.Together) -> void:
+	var g := str_grid(s)
+	assert(g.together_waters_adj(1.0, 1, 1) == type)
+
+func assert_cell_hints_separated(s: String) -> void:
+	assert_cell_hints_together(s, E.HintType.Separated)
+
+func test_cell_hints_together() -> void:
+	assert_cell_hints_separated("""
+	ww..
+	L.L.
+	..ww
+	L.L.
+	""")
+	assert_cell_hints_together("""
+	wwww
+	L.L.
+	..ww
+	L.L.
+	""")
+	assert_cell_hints_separated("""
+	ww.w
+	L.L/
+	..ww
+	L.L.
+	""")
+	assert_cell_hints_together("""
+	wwww
+	L.L/
+	..ww
+	L.L.
+	""")
+	assert_cell_hints_separated("""
+	ww.w
+	L.L╲
+	wwww
+	L.L.
+	""")
+	assert_cell_hints_together("""
+	ww.w
+	L.L/
+	wwww
 	L.L.
 	""")
 

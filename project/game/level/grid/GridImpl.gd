@@ -866,10 +866,66 @@ func count_water_adj(i: int, j: int) -> float:
 func count_nothing_adj(i: int, j: int) -> float:
 	return _count_content_adj(i, j, Content.Nothing) + _count_content_adj(i, j, Content.NoBoat)
 
+class AdjDfs:
+	var grid: GridImpl
+	var rect: Rect2i
+	func _init(grid_: GridImpl, ci: int, cj: int) -> void:
+		grid = grid_
+		grid.last_seen += 1
+		rect = Rect2i(ci - 1, 2 * cj - 2, 3, 6).intersection(Rect2i(0, 0, grid.n, 2 * grid.m))
+	func has_point(i: int, j2: int) -> bool:
+		return rect.has_point(Vector2i(i, j2))
+	func has_water(i: int, j2: int) -> bool:
+		if not has_point(i, j2):
+			return false
+		var c := grid._pure_cell(i, j2 / 2)
+		if j2 & 1 == 0:
+			return c.c_left == Content.Water
+		else:
+			return c.c_right == Content.Water
+	func _maybe_go(stack: Array[Vector2i], i: int, j2: int) -> void:
+		if has_water(i, j2):
+			var c := grid._pure_cell(i, j2 / 2)
+			if j2 & 1 == 0:
+				if c.last_seen_left < grid.last_seen:
+					c.last_seen_left = grid.last_seen
+					stack.push_back(Vector2i(i, j2))
+			elif c.last_seen_right < grid.last_seen:
+				c.last_seen_right = grid.last_seen
+				stack.push_back(Vector2i(i, j2))
+	func flood(i: int, j2: int) -> bool:
+		var stack: Array[Vector2i] = []
+		_maybe_go(stack, i, j2)
+		if stack.is_empty():
+			return false
+		while not stack.is_empty():
+			var v: Vector2i = stack.pop_back()
+			_maybe_go(stack, v.x, v.y - 1)
+			_maybe_go(stack, v.x, v.y + 1)
+			# Goes up
+			var nj2 := v.y & ~1
+			if (grid._pure_cell(v.x, v.y / 2).type == E.CellType.IncDiag) == ((v.y & 1) == 0):
+				if v.x > 0:
+					_maybe_go(stack, v.x - 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag))
+			else:
+				if v.x < grid.n - 1:
+					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.DecDiag))
+		return true
 
-func together_waters_adj(water: float, _i: int, _j: int) -> E.HintType:
-	# TODO: Do this correctly
-	return E.HintType.Zero if water == 0 else E.HintType.Separated
+
+func together_waters_adj(water: float, ci: int, cj: int) -> E.HintType:
+	if water == 0:
+		return E.HintType.Zero
+	last_seen += 1
+	var dfs := AdjDfs.new(self, ci, cj)
+	var any := false
+	for i in range(ci - 1, ci + 2):
+		for j2 in range(2 * cj - 2, 2 * cj + 4):
+			if dfs.flood(i, j2):
+				if any:
+					return E.HintType.Separated
+				any = true
+	return E.HintType.Together
 
 func _update_cell_hint(i: int, j: int) -> void:
 	var c: CellHints = cell_hints[i][j]
