@@ -8,6 +8,8 @@ enum FlairId {
 	Dlc,
 	MarvInc,
 	Functional,
+	# Dlc starts at 9001, and increment by 1 per DLC
+	ExtraIslandStart = 9000,
 	# Pro ids start at 10000, on 2024-01, and increment 1 by month
 	ProStart = 10000,
 }
@@ -30,7 +32,7 @@ static func create_flair(id: int) -> SelectableFlair:
 		FlairId.Streak30:
 			return SelectableFlair.new(
 				FlairId.Streak30,
-				"30🔥",
+				"30✓",
 				Color.ORANGE_RED,
 				"FLAIR_30_STREAK_DESC",
 			)
@@ -69,12 +71,12 @@ static func create_flair(id: int) -> SelectableFlair:
 				Color.GRAY,
 				"FLAIR_FUNCTIONAL_DESC",
 			)
+	var S := TranslationServer.get_translation_object(TranslationServer.get_locale())
 	if id >= FlairId.ProStart:
 		var year: int = ((id - FlairId.ProStart) / 12) + 2024
 		var month: int = ((id - FlairId.ProStart) % 12) + 1
 		var rng := RandomNumberGenerator.new()
 		rng.seed = RandomHub.consistent_hash("%d-%d" % [month, year])
-		var S := TranslationServer.get_translation_object(TranslationServer.get_locale())
 		return SelectableFlair.new(
 			id,
 			"pro",
@@ -84,6 +86,26 @@ static func create_flair(id: int) -> SelectableFlair:
 				year=year,
 			})
 		)
+	if id > FlairId.ExtraIslandStart:
+		var section: int = id - FlairId.ExtraIslandStart
+		var text := ExtraLevelLister.flair_text(section)
+		if text != "":
+			var color_rgba := ExtraLevelLister.flair_color(section)
+			var color: Color
+			if color_rgba == 0:
+				var rng := RandomNumberGenerator.new()
+				rng.seed = RandomHub.consistent_hash("extra-%d" % [section])
+				color = Color.from_hsv(rng.randf(), 0.663, 0.804, 1)
+			else:
+				color = Color.hex(color_rgba)
+			return SelectableFlair.new(
+				id,
+				text,
+				color,
+				S.tr("EXTRA_ISLAND_FLAIR_DESC") % [S.tr(ExtraLevelLister.section_name(section))],
+			)
+		else:
+			return null
 	push_warning("Unknown flair: %d" % [id])
 	return null
 
@@ -121,10 +143,13 @@ static func get_flair_list() -> Array[SelectableFlair]:
 	if CampaignLevelLister.all_campaign_levels_completed():
 		arr.append(create_flair(FlairId.MainCampaign))
 	var extra_section := 1
+	var dlc_flair := false
 	while ExtraLevelLister.has_section(extra_section):
-		if not ExtraLevelLister.is_free(extra_section) and not ExtraLevelLister.section_disabled(extra_section):
+		if ExtraLevelLister.count_completed_section_levels(extra_section) == ExtraLevelLister.count_section_levels(extra_section):
+			arr.append(create_flair(FlairId.ExtraIslandStart + extra_section))
+		if not dlc_flair and not ExtraLevelLister.is_free(extra_section) and not ExtraLevelLister.section_disabled(extra_section):
+			dlc_flair = true
 			arr.append(create_flair(FlairId.Dlc))
-			break
 		extra_section += 1
 	if SteamManager.enabled and SteamManager.steam.isSubscribedApp(827940):
 		arr.append(create_flair(FlairId.MarvInc))

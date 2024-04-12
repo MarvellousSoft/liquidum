@@ -172,3 +172,9 @@ func clear_all_level_saves(profile_name: String) -> void:
 			FileManager.clear_level(ExtraLevelLister.level_name(section, level), profile_name)
 			level += 1
 		section += 1
+
+func flair_text(section: int) -> String:
+	return _config(section).get_value("flair", "text", "")
+
+func flair_color(section: int) -> int:
+	return _config(section).get_value("flair", "color", 0)
