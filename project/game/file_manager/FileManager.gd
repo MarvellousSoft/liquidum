@@ -23,6 +23,7 @@ func _notification(what: int) -> void:
 func save_game() -> void:
 	save_current_profile()
 	save_profile()
+	UserData.save()
 
 func load_game() -> void:
 	StoreIntegrations.load_leaderboards_mapping_from_json("res://database/mappings/leaderboards.json")

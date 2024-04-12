@@ -87,8 +87,8 @@ func bump_monthly_challenge() -> void:
 			GooglePlayGameServices.leaderboards_submit_score(GooglePlayGameServices.ids.leaderboard_march_challenge, score)
 			await GooglePlayGameServices.leaderboards_score_submitted
 
-func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
-	super(info, level, marathon_i)
+func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_replay: bool) -> void:
+	super(info, level, marathon_i, is_replay)
 	if not info.first_win:
 		return
 	if info.mistakes < 3:

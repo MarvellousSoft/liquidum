@@ -82,6 +82,16 @@ func _get_marathon_completed() -> int:
 	var save := load_level_save(last_level)
 	return last_level - 1 + int(save != null and save.is_completed())
 
+func _next_level_to_play() -> int:
+	if marathon_size == 1:
+		return 1
+	var completed := _get_marathon_completed()
+	if completed == marathon_size:
+		var replay_completed: int = UserData.current().replay_completed[type()]
+		return (replay_completed % marathon_size) + 1
+	else:
+		return completed + 1
+
 func _update() -> void:
 	var unlocked := RecurringMarathon.is_unlocked()
 	MainButton.disabled = not unlocked
@@ -158,7 +168,10 @@ func gen_and_play(push_scene: bool) -> void:
 	# Update date if needed
 	_update_time_left()
 	MainButton.disabled = true
-	var marathon_i := (_get_marathon_completed() % marathon_size) + 1
+	var is_replay: bool = _get_marathon_completed() == marathon_size
+	if not is_replay:
+		UserData.current().replay_completed[type()] = 0
+	var marathon_i := _next_level_to_play()
 	if not has_level_data(marathon_i):
 		GeneratingLevel.enable()
 		var level := await generate_level(marathon_i)
@@ -173,7 +186,7 @@ func gen_and_play(push_scene: bool) -> void:
 	if level_data != null:
 		var level := Global.create_level(GridImpl.import_data(level_data.grid_data, GridModel.LoadMode.Solution), _level_name(marathon_i), level_data.full_name, level_data.description, steam_stats())
 		level.reset_text = &"CONFIRM_RESET_RECURRING"
-		level.won.connect(level_completed.bind(level, marathon_i))
+		level.won.connect(level_completed.bind(level, marathon_i, is_replay))
 		level.share.connect(share.bind(marathon_i))
 		level.reset_mistakes_on_empty = false
 		level.reset_mistakes_on_reset = false
@@ -181,8 +194,16 @@ func gen_and_play(push_scene: bool) -> void:
 		if marathon_i > 1:
 			var prev_save := load_level_save(marathon_i - 1)
 			if prev_save != null and prev_save.is_completed():
-				level.initial_mistakes = prev_save.best_mistakes
-				level.running_time = prev_save.best_time_secs
+				level.initial_mistakes = prev_save.mistakes
+				level.running_time = prev_save.timer_secs
+		elif is_replay:
+			# Manually reset the save, since we have reset_mistakes_on_empty
+			var save := load_level_save(1)
+			assert(save.is_completed())
+			if save.is_completed() and save.is_solution_empty():
+				save.mistakes = 0
+				save.timer_secs = 0.0
+				FileManager.save_level(_level_name(1), save)
 		TransitionManager.change_scene(level, push_scene)
 		await level.ready
 		if SteamManager.enabled:
@@ -343,17 +364,18 @@ func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Ar
 	display.display(current_data, current_period(), previous_data, previous_period())
 	display.show_current_all()
 
-func level_completed(info: Level.WinInfo, level: Level, marathon_i: int) -> void:
-	# TODO: handle marathon
+func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_replay: bool) -> void:
+	var data := UserData.current()
+	var id := type()
+	if is_replay:
+		data.replay_completed[id] = marathon_i
 	level.get_node("%ShareButton").visible = true
 	var stats := StatsTracker.instance()
-	var id := type()
 	if info.first_win and marathon_i == 1 and marathon_size > 1:
 		stats.increment_recurring_started(id)
 	if not info.first_win or marathon_i < marathon_size:
 		return
 	stats.increment_recurring_all(id)
-	var data := UserData.current()
 	if info.total_marathon_mistakes <= streak_max_mistakes:
 		stats.increment_recurring_good(id)
 		if info.total_marathon_mistakes == 0:
