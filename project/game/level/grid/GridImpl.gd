@@ -659,7 +659,7 @@ class CellWithLoc extends GridModel.CellModel:
 	func _set_cell_hints(on: bool) -> void:
 		assert(grid.editor_mode())
 		grid.cell_hints[i][j] = GridModel.CellHints.new() if on else null
-		grid._update_cell_hints(i, j)
+		grid._update_cell_hint(i, j)
 	func add_cell_hints(flush_undo := true) -> bool:
 		if hints() != null:
 			return false

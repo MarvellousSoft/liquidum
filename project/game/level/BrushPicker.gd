@@ -48,6 +48,7 @@ var marker_mode_active = false
 	E.BrushMode.NoBoat: $CenterContainer/HBoxContainer/PanelContainer/Images/NoBoat,
 	E.BrushMode.Wall: $CenterContainer/HBoxContainer/PanelContainer/Images/Wall,
 	E.BrushMode.Block: $CenterContainer/HBoxContainer/PanelContainer/Images/Block,
+	E.BrushMode.CellHints: $CenterContainer/HBoxContainer/PanelContainer/Images/CellHints,
 }
 @onready var ButtonsContainer = $CenterContainer/HBoxContainer/PanelContainer/Buttons
 @onready var Buttons = {
@@ -57,6 +58,7 @@ var marker_mode_active = false
 	E.BrushMode.NoBoat: $CenterContainer/HBoxContainer/PanelContainer/Buttons/NoBoat,
 	E.BrushMode.Wall: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Wall,
 	E.BrushMode.Block: $CenterContainer/HBoxContainer/PanelContainer/Buttons/Block,
+	E.BrushMode.CellHints: $CenterContainer/HBoxContainer/PanelContainer/Buttons/CellHints,
 }
 @onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 

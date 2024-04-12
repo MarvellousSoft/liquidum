@@ -17,7 +17,7 @@ enum Waters { TopLeft = 5, TopRight, BottomRight, BottomLeft, Single = 11 }
 
 enum MouseDragState { None, Water, NoWater, Boat, NoBoat, Wall, Block, RemoveWater, RemoveNoWater, RemoveBoat, RemoveNoBoat, RemoveWall, RemoveBlock }
 
-enum BrushMode { Water, NoWater, Boat, NoBoat, Wall, Block }
+enum BrushMode { Water, NoWater, Boat, NoBoat, Wall, Block, CellHints }
 
 enum HintContent { Water, Boat }
 enum HintType { Hidden, Together, Separated, Zero }

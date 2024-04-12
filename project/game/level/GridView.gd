@@ -840,6 +840,14 @@ func _process_click(i: int, j: int, which: E.Waters, used_brush: int) -> void:
 				else:
 					AudioManager.play_sfx("block_put")
 			get_cell(i, j).update_blocks(cell_data)
+		E.BrushMode.CellHints:
+			grid_logic.push_empty_undo()
+			if cell_data.hints() != null:
+				cell_data.rem_cell_hints(true)
+				AudioManager.play_sfx("block_remove")
+			else:
+				cell_data.add_cell_hints(true)
+				AudioManager.play_sfx("block_put")
 	update()
 
 
@@ -849,8 +857,15 @@ func cell_pressed_second_button(i: int, j: int, which: E.Waters) -> void:
 	var cell_data := grid_logic.get_cell(i, j)
 	var corner = E.Corner.BottomLeft if which == E.Single else (which as E.Corner)
 	
+	# On cellhints brush, just remove cellhints
+	if brush_mode == E.BrushMode.CellHints:
+		if cell_data.hints() != null:
+			cell_data.rem_cell_hints(true)
+			AudioManager.play_sfx("block_remove")
+		else:
+			highlight_error(i, j, which)
 	# Prioritize removing noboats if boat-related brush is on
-	if (brush_mode == E.BrushMode.Boat or brush_mode == E.BrushMode.NoBoat) and cell_data.noboat_at(corner):
+	elif (brush_mode == E.BrushMode.Boat or brush_mode == E.BrushMode.NoBoat) and cell_data.noboat_at(corner):
 		mouse_hold_status = E.MouseDragState.RemoveNoBoat
 		cell_data.remove_noboat(corner)
 		AudioManager.play_sfx("nowater_remove")

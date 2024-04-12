@@ -299,6 +299,10 @@ func update_hints(data: GridModel.CellModel) -> void:
 		hint.set_value(h_data.adj_water_count)
 		hint.set_hint_type(h_data.adj_water_count_type)
 		hint.set_status(data.hints_status())
+		if editor_mode:
+			hint.enable_editor()
+		else:
+			hint.disable_editor()
 
 
 func update_blocks(data: GridModel.CellModel) -> void:
