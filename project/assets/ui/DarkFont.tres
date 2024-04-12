@@ -2,3 +2,4 @@
 
 [resource]
 Label/colors/font_color = Color(0, 0.0352941, 0.141176, 1)
+TooltipLabel/colors/font_color = Color(0.847059, 0.996078, 0.882353, 1)

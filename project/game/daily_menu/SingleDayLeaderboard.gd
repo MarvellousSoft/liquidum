@@ -19,10 +19,11 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		pos.text = "%d." % item.global_rank
 		var name_ := Grid.get_node("NameContainer1").duplicate()
 		name_.get_node("Name").text = item.text
-		var flair := name_.get_node("Flair")
+		var flair: Label = name_.get_node("Flair")
 		flair.visible = item.flair != null
 		if item.flair != null:
 			var sflair := FlairManager.create_flair(item.flair.id)
+			flair.tooltip_text = sflair.description
 			flair.text = " %s " % [sflair.text]
 			flair.add_theme_color_override("font_color", sflair.color)
 			var contrast_color := Global.get_contrast_background(sflair.color)
