@@ -109,6 +109,7 @@ signal override_mouse_entered(i: int, j: int, which: E.Waters)
 @onready var BoatAnim = $Boat/AnimationPlayer
 @onready var AnimPlayer = $AnimationPlayer
 @onready var Highlight = %Highlight
+@onready var CellHints: Control = $CellHints
 
 var disabled := false
 var row : int
@@ -288,6 +289,16 @@ func copy_data(data: GridModel.CellModel) -> void:
 		_:
 			push_error("Not a valid type of cell:" + str(type))
 	update_blocks(data)
+	update_hints(data)
+
+func update_hints(data: GridModel.CellModel) -> void:
+	var h_data := data.hints()
+	CellHints.visible = h_data != null
+	if h_data != null:
+		var hint: Hint = CellHints.get_node("Hint")
+		hint.set_value(h_data.adj_water_count)
+		hint.set_hint_type(h_data.adj_water_count_type)
+		hint.set_status(data.hints_status())
 
 
 func update_blocks(data: GridModel.CellModel) -> void:

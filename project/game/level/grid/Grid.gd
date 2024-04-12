@@ -127,6 +127,8 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func hints() -> CellHints:
 		return GridModel.must_be_implemented()
+	func hints_status() -> E.HintStatus:
+		return GridModel.must_be_implemented()
 
 func rows() -> int:
 	return GridModel.must_be_implemented()

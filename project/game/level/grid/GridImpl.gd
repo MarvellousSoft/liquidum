@@ -674,6 +674,8 @@ class CellWithLoc extends GridModel.CellModel:
 		return true
 	func hints() -> CellHints:
 		return grid.cell_hints[i][j]
+	func hints_status() -> E.HintStatus:
+		return grid.cell_hint_status(i, j)
 
 func rows() -> int:
 	return n
