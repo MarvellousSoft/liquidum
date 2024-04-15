@@ -114,7 +114,7 @@ func disable():
 
 func setup(editor_mode_: bool, fast_mode: bool) -> void:
 	editor_mode = editor_mode_
-	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block]:
+	for editor_button in [E.BrushMode.Wall, E.BrushMode.Block, E.BrushMode.CellHints]:
 		Images[editor_button].set_visible(editor_mode)
 		Buttons[editor_button].set_visible(editor_mode)
 	for editor_button in [E.BrushMode.NoWater, E.BrushMode.NoBoat]:
