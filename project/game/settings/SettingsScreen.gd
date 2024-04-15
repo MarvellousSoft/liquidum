@@ -45,6 +45,7 @@ func update_remove_ads_button() -> void:
 	if Global.is_mobile:
 		%RemoveAdsButton.visible = not AdManager.disabled
 		%RemoveAdsButton.disabled = (AdManager.payment == null)
+		%RestorePurchasesButton.visible = OS.get_name() == "iOS"
 
 
 func disable_button():
@@ -335,3 +336,10 @@ func _on_change_profile_pressed() -> void:
 func _on_credits_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.push_scene(Global.load_mobile_compat("res://game/credits/CreditsScreen").instantiate())
+
+
+func _on_restore_purchases_button_pressed() -> void:
+	if AdManager.payment != null and OS.get_name() == "iOS":
+		AdManager.payment.start()
+	%RestorePurchasesButton.text = "PURCHASES_RESTORED"
+	%RestorePurchasesButton.disabled = true

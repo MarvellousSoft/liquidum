@@ -985,6 +985,15 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "REMOVE_ADS"
 
+[node name="RestorePurchasesButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 5
+focus_mode = 0
+theme = ExtResource("4_s1c65")
+text = "RESTORE_PURCHASES"
+
 [node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -1090,6 +1099,8 @@ libraries = {
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer/CheckBox" to="." method="_on_invert_mouse_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RemoveAdsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RemoveAdsButton" to="." method="_on_remove_ads_button_pressed"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RestorePurchasesButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/RestorePurchasesButton" to="." method="_on_restore_purchases_button_pressed"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/CreditsButton" to="." method="_on_credits_pressed"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Settings/CenterContainer/VBoxContainer/BottomButtonGrid/BackButton" to="." method="_on_back_button_pressed"]

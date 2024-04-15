@@ -392,3 +392,5 @@ FLAIR_INC_DESC,Purchased Marvellous Inc.,Comprou Marvellous Inc,Comprou Marvello
 FLAIR_FUNCTIONAL_DESC,Purchased functional,Comprou functional,Comprou functional
 DEVELOPER_FLAIR_DESCRIPTION,Developer of Liquidum,Desenvolvedor de Liquidum,Desenvolvedor de Liquidum
 EXTRA_ISLAND_FLAIR_DESC,Completed island %s,Completou a ilha %s,Completou a ilha %s
+RESTORE_PURCHASES,Restore purchases,Restaurar compras,Restaurar compras
+PURCHASES_RESTORED,Restored!,Restauradas!,Restauradas!
