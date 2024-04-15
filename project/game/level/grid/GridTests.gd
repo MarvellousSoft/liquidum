@@ -1311,6 +1311,14 @@ func test_cell_hints_together() -> void:
 	wwww
 	L.L.
 	""")
+	assert_cell_hints_together("""
+	ww....
+	L.L.L.
+	.www..
+	L╲L.L.
+	......
+	L.L.L.
+	""")
 
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))

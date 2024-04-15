@@ -873,7 +873,6 @@ class AdjDfs:
 	var rect: Rect2i
 	func _init(grid_: GridImpl, ci: int, cj: int) -> void:
 		grid = grid_
-		grid.last_seen += 1
 		rect = Rect2i(ci - 1, 2 * cj - 2, 3, 6).intersection(Rect2i(0, 0, grid.n, 2 * grid.m))
 	func has_point(i: int, j2: int) -> bool:
 		return rect.has_point(Vector2i(i, j2))
@@ -911,7 +910,7 @@ class AdjDfs:
 					_maybe_go(stack, v.x - 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag))
 			else:
 				if v.x < grid.n - 1:
-					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.DecDiag))
+					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x + 1, v.y / 2).type == E.CellType.DecDiag))
 		return true
 
 
