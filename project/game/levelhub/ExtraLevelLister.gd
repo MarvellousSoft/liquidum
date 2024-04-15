@@ -1,9 +1,5 @@
 extends LevelLister
 
-func _ready() -> void:
-	if AdManager.payment != null:
-		AdManager.payment.dlc_purchased.connect(_on_dlc_purchased)
-
 func level_name(section: int, level: int) -> String:
 	return "extra_level%02d_%02d" % [section, level]
 
@@ -101,21 +97,18 @@ func android_payment(section: int) -> String:
 func ios_payment(section: int) -> String:
 	return _config(section).get_value("section", "ios_payment", "")
 
-var dlc_purchases := {}
-func _on_dlc_purchased(payment_id: String) -> void:
-	dlc_purchases[payment_id] = true
-
 func steam_dlc(section: int) -> int:
 	return _config(section).get_value("section", "dlc", -1)
 
 func section_disabled(section: int) -> bool:
 	if Global.is_mobile:
+		var payment := AdManager.payment
 		if OS.get_name() == "Android":
 			var purchase := android_payment(section)
-			return purchase != "" and not dlc_purchases.has(purchase)
+			return purchase != "" and (payment == null or payment.purchased.find(purchase) == -1)
 		elif OS.get_name() == "iOS":
 			var purchase := ios_payment(section)
-			return purchase != "" and not dlc_purchases.has(purchase)
+			return purchase != "" and (payment == null or payment.purchased.find(purchase) == -1)
 	else:
 		var dlc := steam_dlc(section)
 		if dlc != -1 and (not SteamManager.enabled or not SteamManager.steam.isDLCInstalled(dlc)):

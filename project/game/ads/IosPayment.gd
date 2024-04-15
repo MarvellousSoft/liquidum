@@ -6,6 +6,7 @@ var api = null
 var dlc_ids: Array[String] = []
 
 func _init(api_) -> void:
+	super()
 	api = api_
 	var extra_section := 1
 	while ExtraLevelLister.has_section(extra_section):

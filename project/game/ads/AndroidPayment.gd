@@ -23,6 +23,7 @@ enum PurchaseState {
 }
 
 func _init(api_) -> void:
+	super()
 	api = api_
 	api.billing_resume.connect(_on_billing_resume)
 	api.connected.connect(_on_connected)
