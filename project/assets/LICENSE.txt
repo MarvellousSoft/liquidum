@@ -57,3 +57,9 @@ designed by Vectors Tank from Flaticon
 
 - images/ui/icons/lock.png
 by Adrien Coquet from thenounproject.com, CC BY 3.0
+
+- iPhone 15 background used in App Store images
+by Rafael Fernandez from Wikimedia, CC BY-SA 4.0
+
+- iPad background used in App Store images
+by Jem Riggs from Wikimedia, CC BY-SA 4.0

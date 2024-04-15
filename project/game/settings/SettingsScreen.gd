@@ -340,6 +340,6 @@ func _on_credits_pressed() -> void:
 
 func _on_restore_purchases_button_pressed() -> void:
 	if AdManager.payment != null and OS.get_name() == "iOS":
-		AdManager.payment.start()
+		(AdManager.payment as IosPayment).restore_purchases()
 	%RestorePurchasesButton.text = "PURCHASES_RESTORED"
 	%RestorePurchasesButton.disabled = true
