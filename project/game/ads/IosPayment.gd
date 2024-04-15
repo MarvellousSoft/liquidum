@@ -17,11 +17,12 @@ func _init(api_) -> void:
 # Apple does not recommend restoring purchases all the time, let's store purchases to a file and
 # just restore if a button is pressed.
 # Refunds are not handled, don't tell anyone.
+const PURCHASES_DIR := "user://"
 const PURCHASES_FILE := "ios_purchases"
 
 func load_purchases() -> Array[String]:
 	var arr: Array[String] = []
-	var data = FileManager._load_json_data("res://", PURCHASES_FILE, false) 
+	var data = FileManager._load_json_data(PURCHASES_DIR, PURCHASES_FILE, false) 
 	if data != null and data is Array:
 		arr.assign(data)
 	return arr
@@ -30,7 +31,7 @@ func save_purchase(id: String) -> void:
 	var arr := load_purchases()
 	if arr.find(id) == -1:
 		arr.append(id)
-		FileManager._save_json_data("res://", PURCHASES_FILE, arr)
+		FileManager._save_json_data(PURCHASES_DIR, PURCHASES_FILE, arr)
 
 func start() -> void:
 	print("Restoring iOS in app purchases")
