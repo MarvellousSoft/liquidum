@@ -1118,6 +1118,7 @@ func _on_dev_buttons_rotate_clock() -> void:
 	GridNode.grid_logic.rotate_clockwise()
 	GridNode.grid_logic.set_auto_update_hints(true)
 	GridNode.update(true, true)
+	scale_grid()
 
 
 func _on_dev_buttons_mirror_horizontal():
@@ -1126,6 +1127,7 @@ func _on_dev_buttons_mirror_horizontal():
 	GridNode.grid_logic.mirror_horizontal()
 	GridNode.grid_logic.set_auto_update_hints(true)
 	GridNode.update(true, true)
+	GridNode.setup_cell_corners()
 
 
 func _on_dev_buttons_mirror_vertical():
@@ -1134,6 +1136,7 @@ func _on_dev_buttons_mirror_vertical():
 	GridNode.grid_logic.mirror_vertical()
 	GridNode.grid_logic.set_auto_update_hints(true)
 	GridNode.update(true, true)
+	GridNode.setup_cell_corners()
 
 
 func _on_brush_picker_marker_button_toggled(on):
