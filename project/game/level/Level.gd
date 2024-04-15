@@ -718,7 +718,15 @@ func _apply_visibility(h: HintVisibility) -> void:
 		aqs[aq] = true
 	AquariumHints.set_should_be_visible(aqs)
 	GridNode.set_counters_visibility(h.row, h.col)
-	# TODO: #402
+	var g := GridNode.grid_logic
+	for i in g.rows():
+		for j in g.cols():
+			if g.get_cell(i, j).hints() == null:
+				continue
+			var flags: int = h.cells.get(Vector2i(i, j), h.default_cell_flag)
+			var hint: Hint = GridNode.get_cell(i, j).CellHints.get_node("Hint")
+			hint.set_visibility(bool(flags & HintBar.WATER_COUNT_VISIBLE), bool(flags & HintBar.WATER_TYPE_VISIBLE))
+		
 
 func _hint_visibility() -> HintVisibility:
 	var h := HintVisibility.new()
@@ -727,7 +735,18 @@ func _hint_visibility() -> HintVisibility:
 	h.expected_aquariums = AquariumHints.visible_sizes()
 	h.row = GridNode.row_hints_should_be_visible()
 	h.col = GridNode.col_hints_should_be_visible()
-	# TODO: #402
+	var g := GridNode.grid_logic
+	for i in g.rows():
+		for j in g.cols():
+			if g.get_cell(i, j).hints() == null:
+				continue
+			var hint: Hint = GridNode.get_cell(i, j).CellHints.get_node("Hint")
+			var flags := 0
+			if hint.should_be_visible():
+				flags |= HintBar.WATER_COUNT_VISIBLE
+			if hint.should_have_type():
+				flags |= HintBar.WATER_TYPE_VISIBLE
+			h.cells[Vector2i(i, j)] = flags
 	return h
 
 
