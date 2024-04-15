@@ -298,7 +298,7 @@ func update_hints(data: GridModel.CellModel) -> void:
 		var hint: Hint = CellHints.get_node("Hint")
 		hint.set_value(h_data.adj_water_count)
 		hint.set_hint_type(h_data.adj_water_count_type)
-		hint.set_status(data.hints_status())
+		hint.set_status(data.hints_status() if not editor_mode else E.HintStatus.Normal)
 		if editor_mode != hint.editor_mode:
 			if editor_mode:
 				hint.enable_editor()
