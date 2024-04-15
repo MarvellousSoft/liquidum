@@ -228,6 +228,7 @@ func _on_dark_mode_changed(is_dark):
 	%Boat.modulate = color.dark
 	%Wall.modulate = color.dark
 	%Block.modulate = color.dark
+	%CellHints.modulate = color.dark
 	%Water.material.set_shader_parameter(&"water_color", color.water_color)
 	%Water.material.set_shader_parameter(&"depth_color", color.depth_color)
 	%Water.material.set_shader_parameter(&"ray_value", color.ray_value)

@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cfqyxv2qi18jm" path="res://assets/images/ui/brush/brush_maybeboat_boat_only.png" id="7_seqbe"]
 [ext_resource type="Texture2D" uid="uid://c1hrhamsjlf35" path="res://assets/images/ui/brush/brush_picker_pressed.png" id="8_pcm1q"]
 [ext_resource type="Texture2D" uid="uid://cet38o0twsek0" path="res://assets/images/ui/brush/brush_picker_hover.png" id="9_aiaqv"]
-[ext_resource type="Texture2D" uid="uid://b784pbdsydvxp" path="res://assets/images/ui/cell/question_mark.png" id="11_1k2nb"]
+[ext_resource type="Texture2D" uid="uid://7u1s5mwle05k" path="res://assets/images/ui/brush/brush_picker_cellhint.png" id="11_q687m"]
 [ext_resource type="Texture2D" uid="uid://cnuh4btolonoa" path="res://assets/images/ui/icons/color_circle.png" id="13_jhyj3"]
 [ext_resource type="Texture2D" uid="uid://bvbgmtve6g7ww" path="res://assets/images/ui/icons/eraser.png" id="13_jkevr"]
 [ext_resource type="Texture2D" uid="uid://o0hkmxbq8my4" path="res://assets/images/ui/hint/button_visibility.png" id="13_mpfxo"]
@@ -312,7 +312,7 @@ expand_mode = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
-texture = ExtResource("11_1k2nb")
+texture = ExtResource("11_q687m")
 expand_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="CenterContainer/HBoxContainer/PanelContainer"]
