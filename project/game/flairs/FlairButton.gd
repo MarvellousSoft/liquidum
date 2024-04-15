@@ -1,7 +1,7 @@
 class_name FlairButton
 extends Control
 
-signal pressed(s : Node)
+signal pressed(s: Node)
 
 var id
 
@@ -21,9 +21,9 @@ func press():
 func unpress():
 	$Button.set_pressed_no_signal(false)
 
+func is_pressed() -> bool:
+	return $Button.button_pressed
 
-func _on_button_toggled(button_pressed):
-	if button_pressed:
-		pressed.emit(self)
-	else:
-		$Button.set_pressed_no_signal(true)
+
+func _on_button_toggled(_button_pressed: bool) -> void:
+	pressed.emit(self)
