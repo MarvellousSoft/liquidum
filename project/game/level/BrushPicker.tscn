@@ -314,7 +314,6 @@ custom_minimum_size = Vector2(250, 250)
 layout_mode = 2
 texture = ExtResource("11_1k2nb")
 expand_mode = 1
-stretch_mode = 5
 
 [node name="Buttons" type="HBoxContainer" parent="CenterContainer/HBoxContainer/PanelContainer"]
 layout_mode = 2

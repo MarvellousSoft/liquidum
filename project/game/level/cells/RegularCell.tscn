@@ -94,7 +94,7 @@ _data = {
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxuet"]
-bg_color = Color(0.0196078, 0.0196078, 0.0196078, 0.729412)
+bg_color = Color(0.45098, 0.941176, 0.776471, 0.368627)
 corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
@@ -945,6 +945,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="BG" type="Panel" parent="CellHints"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2

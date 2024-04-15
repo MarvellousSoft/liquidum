@@ -55,6 +55,9 @@ func _ready():
 	for side in Hints.keys():
 		set_hint_visibility(side, true)
 	
+	hint_alpha = 1.0 if ToggleHintType.is_pressed() else 0.0
+	update_label()
+	
 	update_dark_mode(Profile.get_option("dark_mode"))
 	update_bigger_hint(Profile.get_option("bigger_hints_font"))
 
