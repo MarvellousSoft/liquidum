@@ -230,8 +230,6 @@ func _input(event: InputEvent) -> void:
 	if Global.is_mobile and event is InputEventMouseMotion and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		# We don't have these in real mobiles so let's hide them in desktop
 		accept_event()
-	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
-		%PaintManager.active = not %PaintManager.active 
 	if %PaintManager.active and event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			%BrushPicker.switch_eraser_mode()
