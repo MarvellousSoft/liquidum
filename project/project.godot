@@ -50,6 +50,7 @@ GooglePlayGameServices="*res://game/mobile/GooglePlayGameServices.gd"
 PaletteShader="*res://game/ui/PaletteShader.tscn"
 StoreIntegrations="*res://addons/store_integrations/StoreIntegrationsAPI.gd"
 IosFacebookManager="*res://game/ads/IosFacebookManager.gd"
+PlayFabManager="*res://addons/godot-playfab/PlayFabManager.gd"
 
 [debug]
 
@@ -77,7 +78,7 @@ movie_writer/movie_file="C:/Users/yanco/Documents/Code/puzzle-aqua/project/video
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/facebook/plugin.cfg", "res://addons/localization_editor/plugin.cfg", "res://addons/store_integrations/plugin.cfg")
+enabled=PackedStringArray("res://addons/admob/plugin.cfg", "res://addons/facebook/plugin.cfg", "res://addons/godot-playfab/plugin.cfg", "res://addons/localization_editor/plugin.cfg", "res://addons/store_integrations/plugin.cfg")
 
 [facebook]
 
@@ -176,6 +177,10 @@ is_mobile.mobile=true
 [physics]
 
 common/physics_ticks_per_second.mobile=30
+
+[playfab]
+
+title_id="3D3A0"
 
 [rendering]
 
