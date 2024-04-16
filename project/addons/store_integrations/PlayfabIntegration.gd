@@ -9,7 +9,7 @@ var playfab: PlayFab
 var ld_mapping := {}
 
 static func available() -> bool:
-	return SteamIntegration.available()
+	return SteamIntegration.available() or GooglePlayGameServices.enabled
 
 func _ready() -> void:
 	assert(PlayFabManager.is_node_ready())
@@ -17,27 +17,46 @@ func _ready() -> void:
 	playfab.json_parse_error.connect(_on_err)
 	playfab.api_error.connect(_on_err)
 	playfab.server_error.connect(_on_err)
-	if not authenticated() and SteamManager.enabled:
-		print("Will try to authenticate through Steam")
-		# Can't use getAuthTicketForWebApi because we're using an old GodotSteam tied to 4.1.3
-		var ticket: Dictionary = Steam.getAuthSessionTicket()
-		var res: Array = await SteamManager.steam.get_auth_session_ticket_response
-		assert(res[0] == ticket.id)
-		if res[1] != SteamManager.steam.RESULT_OK:
-			print("Failed to get ticket: %s" % [res])
-			return
-		var buffer: PackedByteArray = ticket.buffer
-		buffer.resize(ticket.size)
-		playfab.post_dict(
-			{
-				TitleId = PlayFabManager.title_id,
-				CreateAccount = true,
-				SteamTicket = buffer.hex_encode(),
-				TicketIsServiceSpecific = false,
-			},
-			"/Client/LoginWithSteam",
-			_on_steam_login.bind(ticket.id),
-		)
+	if not authenticated():
+		if SteamManager.enabled:
+			print("Will try to authenticate through Steam")
+			# Can't use getAuthTicketForWebApi because we're using an old GodotSteam tied to 4.1.3
+			var ticket: Dictionary = SteamManager.steam.getAuthSessionTicket()
+			var res: Array = await SteamManager.steam.get_auth_session_ticket_response
+			assert(res[0] == ticket.id)
+			if res[1] != SteamManager.steam.RESULT_OK:
+				print("Failed to get ticket: %s" % [res])
+				return
+			var buffer: PackedByteArray = ticket.buffer
+			buffer.resize(ticket.size)
+			playfab.post_dict(
+				{
+					TitleId = PlayFabManager.title_id,
+					CreateAccount = true,
+					SteamTicket = buffer.hex_encode(),
+					TicketIsServiceSpecific = false,
+				},
+				"/Client/LoginWithSteam",
+				_on_steam_login.bind(ticket.id),
+			)
+		if GooglePlayGameServices.enabled:
+			print("Will try to authenticate through Play Services")
+			print("Device: %s" % [OS.get_unique_id()])
+			if not GooglePlayGameServices.auth_done:
+				print("Waiting for auth")
+				await GooglePlayGameServices.sign_in_user_authenticated
+			#GooglePlayGameServices.sign_in_request_server_side_access("530621401925", false)
+			#var res = await GooglePlayGameServices.sign_in_requested_server_side_access
+			#print("Result: %s" % [res])
+			# playfab.post_dict(
+			# 	{
+			# 		TitleId = PlayFabManager.title_id,
+			# 		CreateAccount = true,
+			# 		ServerAuthCode = "12",
+			# 	},
+			# 	"/Client/LoginWithGooglePlayGamesServices",
+			# 	_on_google_game_services_login,
+			# )
 	print("Playfab authenticated: %s" % [authenticated()])
 
 func _on_err(err) -> void:
@@ -45,11 +64,18 @@ func _on_err(err) -> void:
 	assert(false) # Open debugged in debug mode
 
 func _on_steam_login(result: Dictionary, ticket_id: int) -> void:
-	Steam.cancelAuthTicket(ticket_id)
+	SteamManager.steam.cancelAuthTicket(ticket_id)
 	var login_result = LoginResult.new()
 	login_result.from_dict(result["data"], login_result)
 	playfab.logged_in.emit(login_result)
-	
+
+func _on_google_game_services_login(result) -> void:
+	if result is Dictionary and result.has("data"):
+		var login_result = LoginResult.new()
+		login_result.from_dict(result["data"], login_result)
+		playfab.logged_in.emit(login_result)
+	else:
+		print("Weird login result: %s" % [result])
 
 func authenticated() -> bool:
 	return PlayFabManager.client_config.is_logged_in()

@@ -51,6 +51,7 @@ enum Collection {
 # Variables
 var android_plugin: JNISingleton
 var enabled := false
+var auth_done := false
 
 # Ids from game-ids.xml
 var ids := {}
@@ -324,7 +325,8 @@ func _on_players_searched(player: String) -> void:
 
 # Sign In
 func _on_sign_in_user_authenticated(_is_authenticated: bool) -> void:
-	print("Is authenticated: %s" % [_is_authenticated])
+	print("Play Games Service is authenticated: %s" % [_is_authenticated])
+	auth_done = true
 	sign_in_user_authenticated.emit(_is_authenticated)
 
 

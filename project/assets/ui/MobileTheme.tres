@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_qv3is"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_bhxdr"]
-[ext_resource type="StyleBox" uid="uid://d1dukto7plpi0" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
+[ext_resource type="StyleBox" path="res://assets/ui/ButtonHoverStyle.tres" id="2_eaqbs"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonNormalStyle.tres" id="3_u1kds"]
 [ext_resource type="StyleBox" uid="uid://ebm3wdl0cees" path="res://assets/ui/ButtonPressedStyle.tres" id="4_oftan"]
 [ext_resource type="StyleBox" uid="uid://cs152l3r72fun" path="res://assets/ui/Panel.tres" id="5_o5cjq"]
