@@ -43,6 +43,7 @@ var cam_target_zoom = NORMAL_ZOOM.desktop
 var cur_state = STATES.MAIN_MENU
 
 func _ready():
+	%NewIndicator.hide()
 	if ExtraLevelLister.count_all_game_sections() == 0:
 		%ExtraLevelsButton.hide()
 	Global.dev_mode_toggled.connect(_dev_mode_toggled)
