@@ -1,7 +1,7 @@
 # TODO Remove in future
 # https://github.com/godotengine/godot/pull/42408
 extends Node
-class_name UUID
+class_name UUIDPlayfab
 
 static func getRandomInt(max_value):
 	randomize()

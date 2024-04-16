@@ -30,6 +30,7 @@ config/project_settings_override.mobile="res://override_mobile.cfg"
 
 LocalizationManager="*res://addons/localization_editor/LocalizationManager.gd"
 Global="*res://game/Global.gd"
+PlayFabManager="*res://addons/godot-playfab/PlayFabManager.gd"
 AudioManager="*res://audio/AudioManager.tscn"
 TransitionManager="*res://game/ui/TransitionManager.tscn"
 FileManager="*res://game/file_manager/FileManager.gd"
@@ -50,7 +51,6 @@ GooglePlayGameServices="*res://game/mobile/GooglePlayGameServices.gd"
 PaletteShader="*res://game/ui/PaletteShader.tscn"
 StoreIntegrations="*res://addons/store_integrations/StoreIntegrationsAPI.gd"
 IosFacebookManager="*res://game/ads/IosFacebookManager.gd"
-PlayFabManager="*res://addons/godot-playfab/PlayFabManager.gd"
 
 [debug]
 

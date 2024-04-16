@@ -52,5 +52,5 @@ func is_login_token_expired() -> bool:
 
 # Sets the session_ticket and updates the login_timestamp
 func _set_session_ticket(value: String):
-	login_timestamp = Time.get_unix_time_from_system()
+	login_timestamp = int(Time.get_unix_time_from_system())
 	session_ticket = value
