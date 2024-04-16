@@ -45,7 +45,8 @@ func setup(grid, hints : Array, editor_mode : bool, swap_water_boat := false) ->
 		var water_hint = create_hint(grid, container, editor_mode, false, hints[i].water_count, hints[i].water_count_type)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
-		water_hint.left_clicked.connect(_on_hint_left_clicked.bind(i))
+		if not editor_mode:
+			water_hint.left_clicked.connect(_on_hint_left_clicked.bind(i))
 		if swap_water_boat:
 			boat_hint.move_to_front()
 			container.alignment = BoxContainer.ALIGNMENT_BEGIN
