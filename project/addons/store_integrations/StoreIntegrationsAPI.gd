@@ -76,6 +76,10 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, keep_best :=
 	for impl in impls:
 		await impl.leaderboard_upload_score(leaderboard_id, score, keep_best, steam_details)
 
+func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
+	for impl in impls:
+		await impl.leaderboard_upload_completion(leaderboard_id, time_secs, mistakes, keep_best, steam_details)
+
 func leaderboard_show(leaderboard_id: String, google_timespan := 2, google_collection := 0) -> void:
 	for impl in impls:
 		await impl.leaderboard_show(leaderboard_id, google_timespan, google_collection)
