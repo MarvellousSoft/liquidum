@@ -58,22 +58,27 @@ func _try_authenticate() -> void:
 					impl = impl2
 					break
 			if impl != null:
-				if impl.player_id == "":
-					print("Authenticating to get player_id")
-					impl.apple.authenticate()
-					await impl.authenticate_event
-				if impl.player_id == "":
+				if not await impl._try_authenticate():
 					print("Could not authenticate with Game Center")
 				else:
-					playfab.post_dict(
-						{
-							TitleId = PlayFabManager.title_id,
-							CreateAccount = true,
-							PlayerId = impl.player_id,
-						},
-						"/Client/LoginWithGameCenter",
-						_on_simple_login,
-					)
+					impl.apple.request_identity_verification_signature()
+					var ev: Dictionary = await impl.event
+					if ev["type"] != "identity_verification_signature" or ev["result"] != "ok":
+						print("Could not authenticate with Game Center: Failed to get signature")
+					else:
+						playfab.post_dict(
+							{
+								TitleId = PlayFabManager.title_id,
+								CreateAccount = true,
+								PlayerId = ev["player_id"],
+								PublicKeyUrl = ev["public_key_url"],
+								Signature = ev["signature"],
+								Salt = ev["salt"],
+								Timestamp = ev["timestamp"],
+							},
+							"/Client/LoginWithGameCenter",
+							_on_simple_login,
+						)
 	else:
 		print("Playfab login already saved")
 
