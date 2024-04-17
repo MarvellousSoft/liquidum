@@ -19,6 +19,7 @@ func _ready() -> void:
 	playfab.json_parse_error.connect(_on_err)
 	playfab.api_error.connect(_on_err)
 	playfab.server_error.connect(_on_err)
+	playfab.logged_in.connect(_logged_in, Object.CONNECT_DEFERRED)
 	if not authenticated():
 		if SteamManager.enabled:
 			print("Will try to authenticate through Steam")
@@ -43,27 +44,29 @@ func _ready() -> void:
 			)
 		if GooglePlayGameServices.enabled:
 			print("Will try to authenticate through Play Services")
-			print("Device: %s" % [OS.get_unique_id()])
 			if not GooglePlayGameServices.auth_done:
 				print("Waiting for auth")
 				await GooglePlayGameServices.sign_in_user_authenticated
-			#GooglePlayGameServices.sign_in_request_server_side_access("530621401925", false)
-			#var res = await GooglePlayGameServices.sign_in_requested_server_side_access
-			#print("Result: %s" % [res])
-			# playfab.post_dict(
-			# 	{
-			# 		TitleId = PlayFabManager.title_id,
-			# 		CreateAccount = true,
-			# 		ServerAuthCode = "12",
-			# 	},
-			# 	"/Client/LoginWithGooglePlayGamesServices",
-			# 	_on_google_game_services_login,
-			# )
-	print("Playfab authenticated: %s" % [authenticated()])
+			GooglePlayGameServices.sign_in_request_server_side_access("530621401925-gbemotmd7i0q0qeurk4vjni6l1enfm5r.apps.googleusercontent.com", false)
+			var res = await GooglePlayGameServices.sign_in_requested_server_side_access
+			playfab.post_dict(
+				{
+					TitleId = PlayFabManager.title_id,
+					CreateAccount = true,
+					ServerAuthCode = res,
+				},
+				"/Client/LoginWithGooglePlayGamesServices",
+				_on_google_game_services_login,
+			)
+	else:
+		print("Playfab login already saved")
 
 func _on_err(err) -> void:
 	print("Some error: %s" % [err])
 	assert(false) # Open debugged in debug mode
+
+func _logged_in(res) -> void:
+	print("Logged in to PlayFab: %s!" % [authenticated()])
 
 func _on_steam_login(result: Dictionary, ticket_id: int) -> void:
 	SteamManager.steam.cancelAuthTicket(ticket_id)

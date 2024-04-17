@@ -37,10 +37,13 @@ func save(password: String, new_config: PlayFabClientConfig):
 # Actual file system save logic
 # @param password: String - The password used to encrypt the ConfigFile
 func _save(password: String):
+	var err
 	if OS.is_debug_build() && DEBUG_DO_NOT_ENCRYPT:
-		_config.save(_load_path)
+		err = _config.save(_load_path)
 	else:
-		_config.save_encrypted_pass(_load_path, password)
+		err = _config.save_encrypted_pass(_load_path, password)
+	if err != OK:
+		print("Error saving: %s" % [err])
 
 
 # Loads an encrypted ConfigFile from disk and returns a `PlayFabClientConfig`
@@ -82,10 +85,7 @@ func clear(password: String):
 # Sets all property values from @paramref `new_config`checked `_config`
 # @param new_config: PlayFabClientConfig - object to get property values from
 func _set_values(new_config: PlayFabClientConfig):
-	var props = new_config.get_property_list()
-
-	for i in range(3, props.size()):
-		var name = props[i].name
+	for name in new_config._fields():
 		_config.set_value(SECTION_NAME, name, new_config.get(name))
 
 
@@ -93,10 +93,7 @@ func _set_values(new_config: PlayFabClientConfig):
 # checked the corresponding properties of @paramref `new_config`
 # @param new_config: PlayFabClientConfig - object to set properties checked
 func _get_values(new_config: PlayFabClientConfig):
-	var props = new_config.get_property_list()
-
-	for i in range(3, props.size()):
-		var name = props[i].name
+	for name in new_config._fields():
 		if _config.has_section_key(SECTION_NAME, name):
 			var value = _config.get_value(SECTION_NAME, name)
 			new_config.set(name, value)

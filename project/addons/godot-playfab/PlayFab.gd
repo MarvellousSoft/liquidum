@@ -48,9 +48,6 @@ func register_email_password(username: String, email: String, password: String, 
 
 
 func login_with_email(email: String, password: String, custom_tags: Dictionary, info_request_parameters: GetPlayerCombinedInfoRequestParams):
-	PlayFabManager.client_config.login_type = PlayFabClientConfig.LoginType.LOGIN_EMAIL
-	PlayFabManager.client_config.login_id = email
-
 	var request_params = LoginWithEmailAddressRequest.new()
 	request_params.TitleId = _title_id
 	request_params.Email = email
@@ -62,9 +59,6 @@ func login_with_email(email: String, password: String, custom_tags: Dictionary, 
 
 
 func login_with_custom_id(custom_id: String, create_user: bool, info_request_parameters: GetPlayerCombinedInfoRequestParams):
-	PlayFabManager.client_config.login_type = PlayFabClientConfig.LoginType.LOGIN_CUSTOM_ID
-	PlayFabManager.client_config.login_id = custom_id
-
 	var request_params = LoginWithCustomIdRequest.new()
 	request_params.TitleId = _title_id
 	request_params.CustomId = custom_id
