@@ -25,15 +25,15 @@ func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak
 
 func increment_recurring_all(type: RecurringMarathon.Type) -> void:
 	for impl in impls:
-		await impl.increment_recurring_all(type)
+		impl.increment_recurring_all(type)
 
 func increment_recurring_good(type: RecurringMarathon.Type) -> void:
 	for impl in impls:
-		await impl.increment_recurring_good(type)
+		impl.increment_recurring_good(type)
 
 func increment_recurring_started(type: RecurringMarathon.Type) -> void:
 	for impl in impls:
-		await impl.increment_recurring_started(type)
+		impl.increment_recurring_started(type)
 
 func increment_insane_good() -> void:
 	for impl in impls:

@@ -8,6 +8,7 @@ static func available() -> bool:
 var apple = null
 var ld_id_to_apple_id := {}
 var _authenticated := false
+var player_id := ""
 
 func _try_authenticate() -> bool:
 	if _authenticated:
@@ -32,6 +33,8 @@ func process(_dt: float) -> void:
 	while apple.get_pending_event_count() > 0:
 		var new_event: Dictionary = apple.pop_pending_event()
 		print("Apple event: %s" % [new_event])
+		if new_event["type"] == "authentication" and new_event.result == "ok":
+			player_id = new_event["player_id"]
 		event.emit(new_event)
 
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:

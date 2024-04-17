@@ -9,17 +9,9 @@ var playfab: PlayFab
 var ld_mapping := {}
 
 static func available() -> bool:
-	return SteamIntegration.available() or GooglePlayGameServices.enabled
+	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available()
 
-func _ready() -> void:
-	if not PlayFabManager.is_node_ready():
-		print("Waiting for PlayFab initialization")
-		await PlayFabManager.ready
-	playfab = PlayFabManager.client
-	playfab.json_parse_error.connect(_on_err)
-	playfab.api_error.connect(_on_err)
-	playfab.server_error.connect(_on_err)
-	playfab.logged_in.connect(_logged_in, Object.CONNECT_DEFERRED)
+func _try_authenticate() -> void:
 	if not authenticated():
 		if SteamManager.enabled:
 			print("Will try to authenticate through Steam")
@@ -56,10 +48,41 @@ func _ready() -> void:
 					ServerAuthCode = res,
 				},
 				"/Client/LoginWithGooglePlayGamesServices",
-				_on_google_game_services_login,
+				_on_simple_login,
 			)
+		if AppleIntegration.available():
+			print("Will try to authenticate with Game Center")
+			for impl in StoreIntegrations.impls:
+				if impl is AppleIntegration:
+					if impl.player_id == "":
+						impl.apple.authenticate()
+						await impl.event
+					if impl.player_id == "":
+						print("Could not authenticate with Game Center")
+					else:
+						playfab.post_dict(
+							{
+								TitleId = PlayFabManager.title_id,
+								CreateAccount = true,
+								PlayerId = impl.player_id,
+							},
+							"/Client/LoginWithGameCenter",
+							_on_simple_login,
+						)
 	else:
 		print("Playfab login already saved")
+
+func _ready() -> void:
+	if not PlayFabManager.is_node_ready():
+		print("Waiting for PlayFab initialization")
+		await PlayFabManager.ready
+	playfab = PlayFabManager.client
+	playfab.json_parse_error.connect(_on_err)
+	playfab.api_error.connect(_on_err)
+	playfab.server_error.connect(_on_err)
+	playfab.logged_in.connect(_logged_in, Object.CONNECT_DEFERRED)
+	await _try_authenticate()
+
 
 func _on_err(err) -> void:
 	var err_str: String = str(err)
@@ -68,18 +91,20 @@ func _on_err(err) -> void:
 		for prop in err.get_property_list():
 			err_str += "%s: %s, " % [prop.name, err.get(prop.name)]
 	print("Some error: %s" % [err_str])
+	if err.get("error") == "NotAuthenticated":
+		print("Not authenticated to Playfab, trying to login again.")
+		PlayFabManager.forget_login()
+		await _try_authenticate()
 	assert(false) # Open debugged in debug mode
 
 func _logged_in(res) -> void:
 	print("Logged in to PlayFab: %s!" % [authenticated()])
 
-func _on_steam_login(result: Dictionary, ticket_id: int) -> void:
+func _on_steam_login(result, ticket_id: int) -> void:
 	SteamManager.steam.cancelAuthTicket(ticket_id)
-	var login_result = LoginResult.new()
-	login_result.from_dict(result["data"], login_result)
-	playfab.logged_in.emit(login_result)
+	_on_simple_login(result)
 
-func _on_google_game_services_login(result) -> void:
+func _on_simple_login(result) -> void:
 	if result is Dictionary and result.has("data"):
 		var login_result = LoginResult.new()
 		login_result.from_dict(result["data"], login_result)

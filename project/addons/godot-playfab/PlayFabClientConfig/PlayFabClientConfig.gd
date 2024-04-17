@@ -4,7 +4,7 @@ extends RefCounted
 class_name PlayFabClientConfig
 
 # Timeout for the sesion token
-const TOKEN_TIMEOUT = 23 * 3600
+const TOKEN_TIMEOUT := 23 * 3600
 
 ## The Client Session ticket. Used for /Client API
 var session_ticket: String : set = _set_session_ticket
@@ -16,7 +16,7 @@ var master_player_account_id: String
 var entity_token: EntityTokenResponse = EntityTokenResponse.new()
 
 # Last Login timestamp - when tokens were refreshed
-var login_timestamp = 0
+var login_timestamp := 0
 
 # Checks whether the account is considered logged in
 func is_logged_in() -> bool:
@@ -28,7 +28,7 @@ func is_logged_in() -> bool:
 
 # Validates whether the login token has expired (based checked time)
 func is_login_token_expired() -> bool:
-	var elapsed_time = Time.get_unix_time_from_system() - login_timestamp
+	var elapsed_time := int(Time.get_unix_time_from_system()) - login_timestamp
 
 	if elapsed_time < 0 || elapsed_time > TOKEN_TIMEOUT:
 		return true
