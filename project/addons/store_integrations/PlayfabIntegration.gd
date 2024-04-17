@@ -52,23 +52,28 @@ func _try_authenticate() -> void:
 			)
 		if AppleIntegration.available():
 			print("Will try to authenticate with Game Center")
-			for impl in StoreIntegrations.impls:
-				if impl is AppleIntegration:
-					if impl.player_id == "":
-						impl.apple.authenticate()
-						await impl.event
-					if impl.player_id == "":
-						print("Could not authenticate with Game Center")
-					else:
-						playfab.post_dict(
-							{
-								TitleId = PlayFabManager.title_id,
-								CreateAccount = true,
-								PlayerId = impl.player_id,
-							},
-							"/Client/LoginWithGameCenter",
-							_on_simple_login,
-						)
+			var impl: AppleIntegration
+			for impl2 in StoreIntegrations.impls:
+				if impl2 is AppleIntegration:
+					impl = impl2
+					break
+			if impl != null:
+				if impl.player_id == "":
+					print("Authenticating to get player_id")
+					impl.apple.authenticate()
+					await impl.authenticate_event
+				if impl.player_id == "":
+					print("Could not authenticate with Game Center")
+				else:
+					playfab.post_dict(
+						{
+							TitleId = PlayFabManager.title_id,
+							CreateAccount = true,
+							PlayerId = impl.player_id,
+						},
+						"/Client/LoginWithGameCenter",
+						_on_simple_login,
+					)
 	else:
 		print("Playfab login already saved")
 

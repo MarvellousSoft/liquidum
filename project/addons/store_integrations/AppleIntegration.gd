@@ -1,6 +1,7 @@
 class_name AppleIntegration extends StoreIntegration
 
 signal event(data: Dictionary)
+signal authenticate_event(data: Dictionary)
 
 static func available() -> bool:
 	return Engine.has_singleton("GameCenter")
@@ -13,9 +14,12 @@ var player_id := ""
 func _try_authenticate() -> bool:
 	if _authenticated:
 		return true
+	_authenticated = apple.is_authenticated()
+	if _authenticated:
+		return true
 	print("Authenticating with apple")
 	apple.authenticate()
-	var resp = await event
+	var resp = await authenticate_event
 	_authenticated = resp.result == "ok"
 	assert(apple.is_authenticated() == _authenticated)
 	return _authenticated
@@ -24,6 +28,10 @@ func _init() -> void:
 	apple = Engine.get_singleton("GameCenter")
 	_authenticated = apple.is_authenticated()
 	await _try_authenticate()
+	update_campaign_later()
+
+func update_campaign_later() -> void:
+	await get_tree().create_timer(5).timeout
 	await StatsTracker.instance().update_campaign_stats()
 
 func authenticated() -> bool:
@@ -35,7 +43,10 @@ func process(_dt: float) -> void:
 		print("Apple event: %s" % [new_event])
 		if new_event["type"] == "authentication" and new_event.result == "ok":
 			player_id = new_event["player_id"]
-		event.emit(new_event)
+		if new_event["type"] == "authentication":
+			authenticate_event.emit(new_event)
+		else:
+			event.emit(new_event)
 
 func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) -> void:
 	for ld in lds:
