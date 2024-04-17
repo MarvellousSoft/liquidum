@@ -10,6 +10,9 @@ func leaderboard_create_if_not_exists(leaderboard_id: String, sort_method: Store
 func leaderboard_upload_score(leaderboard_id: String, score: float, keep_best: bool, steam_details: PackedInt32Array) -> void:
 	print("leaderboard_upload_score(%s, %.1f, %s, %s)" % [leaderboard_id, score, keep_best, steam_details])
 
+func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
+	print("leaderboard_upload_completion(%s, %.1f, %d, %s, %s)" % [leaderboard_id, time_secs, mistakes, keep_best, steam_details])
+
 func leaderboard_show(leaderboard_id: String, google_timespan: int, google_collection: int) -> void:
 	print("leaderboard_show(%s, %d, %d)" % [leaderboard_id, google_timespan, google_collection])
 

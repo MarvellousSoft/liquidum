@@ -46,6 +46,10 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 		})
 		await event
 
+func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
+	# 1h penalty
+	await leaderboard_upload_score(leaderboard_id, time_secs + 60 * 60 * mistakes, keep_best, steam_details)
+
 func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	if not await _try_authenticate():
 		return

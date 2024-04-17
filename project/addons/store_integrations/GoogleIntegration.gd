@@ -24,6 +24,10 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 		google.leaderboardsSubmitScore(id, score)
 		await google.leaderboardsScoreSubmitted
 
+func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
+	# 1h penalty, and Google uses milliseconds
+	await leaderboard_upload_score(leaderboard_id, (time_secs + 60 * 60 * mistakes) * 1000.0, keep_best, steam_details)
+
 func leaderboard_show(leaderboard_id: String, timespan: int, collection: int) -> void:
 	var id : String = ld_id_to_google_id.get(leaderboard_id, "")
 	if not id.is_empty():

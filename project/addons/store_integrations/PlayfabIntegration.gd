@@ -116,6 +116,11 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 	# Fire and forget while we are testing
 	# await uploaded_leaderboard
 
+func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
+	# We need to store both mistakes and time in the same score.
+	# Mistakes take priority.
+	await leaderboard_upload_score(leaderboard_id, minf(time_secs, RecurringMarathon.MAX_TIME - 1) + minf(mistakes, 1000) * RecurringMarathon.MAX_TIME, keep_best, steam_details)
+
 func _on_leaderboard_upload(res: Variant) -> void:
 	if res is Dictionary and res.get("status", "") == "OK":
 		print("Playfab leaderboard upload success")

@@ -244,20 +244,10 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 	# Steam needs to create the leaderboards dinamically
 	await SteamManager.ld_mutex.lock()
 	await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
-	var score: float
 	var details: LeaderboardDetails = null
 	if SteamIntegration.available():
-		# We need to store both mistakes and time in the same score.
-		# Mistakes take priority.
-		score = minf(info.total_marathon_mistakes, 1000) * MAX_TIME + minf(info.time_secs, MAX_TIME - 1)
 		details = LeaderboardDetails.new(get_my_flair())
-	elif GoogleIntegration.available():
-		# Google uses milliseconds
-		score = (info.time_secs + 60 * 60 * info.total_marathon_mistakes) * 1000
-	else:
-		score = info.time_secs + 60 * 60 * info.total_marathon_mistakes
-
-	await StoreIntegrations.leaderboard_upload_score(l_id, score, keep_best, LeaderboardDetails.to_arr(details))
+	await StoreIntegrations.leaderboard_upload_completion(l_id, info.time_secs, info.total_marathon_mistakes, keep_best, LeaderboardDetails.to_arr(details))
 	SteamManager.ld_mutex.unlock()
 
 class ListEntry:
