@@ -62,7 +62,12 @@ func _ready() -> void:
 		print("Playfab login already saved")
 
 func _on_err(err) -> void:
-	print("Some error: %s" % [err])
+	var err_str: String = str(err)
+	if err_str.begins_with("<RefCounted"):
+		err_str = ""
+		for prop in err.get_property_list():
+			err_str += "%s: %s, " % [prop.name, err.get(prop.name)]
+	print("Some error: %s" % [err_str])
 	assert(false) # Open debugged in debug mode
 
 func _logged_in(res) -> void:
@@ -101,7 +106,7 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 		{
 			Statistics = [{
 				StatisticName = id,
-				Value = score,
+				Value = int(score),
 			}]
 		},
 		"/Client/UpdatePlayerStatistics",
