@@ -130,7 +130,7 @@ func achievements_reveal(achievement_id: String, immediate := true) -> void:
 
 
 func achievements_set_steps(achievement_id: String, amount: int, immediate := true) -> void:
-	if android_plugin:
+	if android_plugin and amount > 0:
 		android_plugin.achievementsSetSteps(achievement_id, amount, immediate)
 
 

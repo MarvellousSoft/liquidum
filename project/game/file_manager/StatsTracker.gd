@@ -1,20 +1,19 @@
 class_name StatsTracker
 extends Node
 
-static var empty := StatsTracker.new()
+static var base := StatsTracker.new()
 static var steam := SteamStats.new()
 static var google := GoogleStats.new()
-static var apple := AppleStats.new()
-
 
 static func instance() -> StatsTracker:
 	if SteamManager.enabled and SteamManager.stats_received:
-		return steam
+		return MultiplexerStats.new([steam, base])
 	elif GooglePlayGameServices.enabled:
-		return google
+		return MultiplexerStats.new([google, base])
 	elif AppleIntegration.available():
-		return apple
-	return empty
+		# StoreIntegrations calls do the right thing
+		return base
+	return base
 
 func set_random_levels(completed_count: Array[int]) -> void:
 	var tot := 0
