@@ -2,6 +2,7 @@
 
 Steam page: https://store.steampowered.com/app/2716690/Liquidum?utm_source=github
 Play Store page: https://play.google.com/store/apps/details?id=com.marvelloussoft.liquidum&utm_source=github
+App Store page: https://apps.apple.com/us/app/liquidum-nonogram/id6480063194
 
 ## Godot specifics
 

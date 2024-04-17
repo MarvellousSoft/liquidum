@@ -12,7 +12,9 @@ static func available() -> bool:
 	return SteamIntegration.available() or GooglePlayGameServices.enabled
 
 func _ready() -> void:
-	assert(PlayFabManager.is_node_ready())
+	if not PlayFabManager.is_node_ready():
+		print("Waiting for PlayFab initialization")
+		await PlayFabManager.ready
 	playfab = PlayFabManager.client
 	playfab.json_parse_error.connect(_on_err)
 	playfab.api_error.connect(_on_err)
