@@ -1,7 +1,7 @@
 class_name SteamIntegration extends StoreIntegration
 
 static func available() -> bool:
-	return Engine.has_singleton(&"Steam")
+	return not Global.is_mobile and Engine.has_singleton(&"Steam")
 
 var steam = null
 var ld_id_to_steam_name := {}

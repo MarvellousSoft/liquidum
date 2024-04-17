@@ -1084,7 +1084,7 @@ libraries = {
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
-[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_thicker_walls_box_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer/CheckBox" to="." method="_on_daily_notif_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer/CheckBox" to="." method="_on_button_mouse_entered"]
