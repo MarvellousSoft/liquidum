@@ -4,6 +4,17 @@ var impls: Array[StoreIntegration] = []
 
 enum SortMethod { SmallestFirst = 1, LargestFirst = 2 }
 
+class LeaderboardEntry:
+	var rank: int
+	var display_name: String
+	var mistakes: int
+	var secs: int
+	var extra_data: Dictionary
+
+class LeaderboardData:
+	var has_self: bool = false
+	var entries: Array[LeaderboardEntry] = []
+
 class LeaderboardMapping:
 	var id: String
 	var steam_id: String
@@ -91,3 +102,10 @@ func achievement_set(ach_id: String, steps: int = 1, total_steps: int = 1) -> vo
 func achievement_show_all() -> void:
 	for impl in impls:
 		await impl.achievement_show_all()
+
+func leaderboard_download_completion(leaderboard_id: String, start: int = 1, count: int = 100) -> StoreIntegrations.LeaderboardData:
+	for impl in impls:
+		var data := await impl.leaderboard_download_completion(leaderboard_id, start, count)
+		if data != null:
+			return data
+	return StoreIntegrations.LeaderboardData.new()

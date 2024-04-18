@@ -55,3 +55,36 @@ func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mis
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	await leaderboard_upload_score(leaderboard_id, minf(time_secs, RecurringMarathon.MAX_TIME - 1) + minf(mistakes, 1000) * RecurringMarathon.MAX_TIME, keep_best, steam_details)
+
+func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
+	var id := await _get_ld_id(leaderboard_id)
+	if id <= 0:
+		return null
+	var total: int = steam.getLeaderboardEntryCount(id)
+	var data := StoreIntegrations.LeaderboardData.new()
+	if total == 0:
+		return data
+	steam.setLeaderboardDetailsMax(64)
+	steam.downloadLeaderboardEntries(start, start + count - 1, steam.LEADERBOARD_DATA_REQUEST_GLOBAL, id)
+	var ret: Array = await steam.leaderboard_scores_downloaded
+	steam.setLeaderboardDetailsMax(0)
+	var my_id: int = steam.getSteamID()
+	for steam_data in ret[2]:
+		if steam_data.steam_id == my_id:
+			data.has_self = true
+		var entry := StoreIntegrations.LeaderboardEntry.new()
+		entry.rank = steam_data.global_rank
+		if steam_data.steam_id == my_id:
+			entry.display_name = steam.getPersonaName()
+		else:
+			var nickname: String = steam.getPlayerNickname(steam_data.steam_id)
+			entry.display_name = steam.getFriendPersonaName(steam_data.steam_id) if nickname.is_empty() else nickname
+		entry.mistakes = steam_data.score / RecurringMarathon.MAX_TIME
+		entry.secs = steam_data.score % RecurringMarathon.MAX_TIME
+		entry.extra_data = {
+			steam_id = steam_data.steam_id,
+			steam_details = steam_data.get("details", PackedInt32Array()),
+		}
+		data.entries.append(entry)
+	return data
+	

@@ -207,27 +207,16 @@ func gen_and_play(push_scene: bool) -> void:
 		TransitionManager.change_scene(level, push_scene)
 		await level.ready
 		if SteamManager.enabled:
-			var l_id := await load_current_leaderboard()
-			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
-			if l_data[0].has_self:
+			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
+			if l_data.size() > 0 and l_data[0].has_self:
 				already_uploaded = true
-			l_id = await load_previous_leaderboard()
-			var y_data := await RecurringMarathon.get_leaderboard_data(l_id)
+			var y_data := await RecurringMarathon.get_leaderboard_data(steam_previous_leaderboard())
 			display_leaderboard(l_data, y_data, level)
 
 	MainButton.disabled = false
 
-func _load_leaderboard(ld_name: String) -> int:
-	return await SteamManager.get_or_create_leaderboard(ld_name, SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
-
 func close_streak():
 	%StreakButton.button_pressed = false
-
-func load_current_leaderboard() -> int:
-	return await _load_leaderboard(steam_current_leaderboard())
-
-func load_previous_leaderboard() -> int:
-	return await _load_leaderboard(steam_previous_leaderboard())
 
 static func get_monthly_leaderboard(month_str: String) -> int:
 	return await SteamManager.get_or_create_leaderboard("monthly_%s" % [month_str], \
@@ -252,7 +241,6 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 
 class ListEntry:
 	var global_rank: int
-	# Name. Might be "10% percentile"
 	var text: String
 	# Might be null
 	var image: Image
@@ -260,25 +248,19 @@ class ListEntry:
 	var secs: int
 	var flair: SteamFlair
 
-	static func create(data: Dictionary, override_name:="") -> ListEntry:
+	static func create(raw: StoreIntegrations.LeaderboardEntry) -> ListEntry:
 		var entry := ListEntry.new()
-		entry.global_rank = data.global_rank
-		entry.mistakes = data.score / MAX_TIME
-		entry.secs = data.score % MAX_TIME
-		var details := LeaderboardDetails.from_arr(data.get("details", PackedInt32Array()))
+		entry.global_rank = raw.rank
+		entry.mistakes = raw.mistakes
+		entry.secs = raw.secs
+		var details := LeaderboardDetails.from_arr(raw.extra_data.get("steam_details", PackedInt32Array()))
 		entry.flair = details.flair
-		if override_name.is_empty():
-			if data.steam_id == SteamManager.steam.getSteamID():
-				entry.text = SteamManager.steam.getPersonaName()
-			else:
-				var nickname: String = SteamManager.steam.getPlayerNickname(data.steam_id)
-				entry.text = SteamManager.steam.getFriendPersonaName(data.steam_id) if nickname.is_empty() else nickname
-			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, data.steam_id)
+		entry.text = raw.display_name
+		if SteamManager.enabled and raw.extra_data.has("steam_id"):
+			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
 			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
 			entry.image.generate_mipmaps()
-		else:
-			entry.text = override_name
 		return entry
 
 class LeaderboardData:
@@ -286,66 +268,20 @@ class LeaderboardData:
 	var has_self: bool = false
 	# List of friends and percentiles
 	var list: Array[ListEntry]
-	# Only the secs of the top 1000 scores that have no mistakes
-	# Used to draw an histogram
-	var top_no_mistakes: Array[int]
 	func is_empty() -> bool:
 		return list.is_empty()
 	func sort() -> void:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
 
-static func get_leaderboard_data(l_id: int) -> Array[LeaderboardData]:
-	if l_id <= 0 or not SteamManager.enabled:
+static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
+	var raw := await StoreIntegrations.leaderboard_download_completion(l_id, 1, 100)
+	if raw.entries.is_empty():
 		return []
-	var server := TranslationServer.get_translation_object(TranslationServer.get_locale())
-	var data_all := LeaderboardData.new()
-	var data_friends := LeaderboardData.new()
-	var total: int = SteamManager.steam.getLeaderboardEntryCount(l_id)
-	if total == 0:
-		return [data_all, data_friends]
-	SteamManager.steam.setLeaderboardDetailsMax(64)
-	var list_has_rank := {}
-	SteamManager.steam.downloadLeaderboardEntries(0, 0, SteamManager.steam.LEADERBOARD_DATA_REQUEST_FRIENDS, l_id)
-	var ret: Array = await SteamManager.steam.leaderboard_scores_downloaded
-	for entry in ret[2]:
-		list_has_rank[entry.global_rank] = true
-		if entry.steam_id == SteamManager.steam.getSteamID():
-			data_all.has_self = true
-			data_friends.has_self = true
-		var l_entry := await ListEntry.create(entry)
-		data_all.list.append(l_entry)
-		data_friends.list.append(l_entry)
-	SteamManager.steam.downloadLeaderboardEntries(1, 1000, SteamManager.steam.LEADERBOARD_DATA_REQUEST_GLOBAL, l_id)
-	ret = await SteamManager.steam.leaderboard_scores_downloaded
-	SteamManager.steam.setLeaderboardDetailsMax(0)
-	var percentiles := [[0.01, "PCT_1"], [0.1, "PCT_10"], [0.5, "PCT_50"]]
-	for entry in ret[2]:
-		var l_entry: ListEntry = null
-		# Tweak this if we get too many users
-		if not list_has_rank.has(entry.global_rank) and entry.global_rank < 100:
-			l_entry = await ListEntry.create(entry)
-			data_all.list.append(l_entry)
-		for dev_id in DEV_IDS:
-			if entry.steam_id == dev_id and not list_has_rank.has(entry.global_rank):
-				if l_entry == null:
-					l_entry = await ListEntry.create(entry)
-				data_friends.list.append(l_entry)
-				list_has_rank[entry.global_rank] = true
-		for pct in percentiles:
-			if entry.global_rank == ceili(float(total) * pct[0]) and not list_has_rank.has(entry.global_rank):
-				# Create again because we're using a custom name for percentiles
-				data_friends.list.append(await ListEntry.create(entry, server.tr(pct[1])))
-				list_has_rank[entry.global_rank] = true
-		# Only on no mistakes
-		if entry.score < MAX_TIME:
-			data_all.top_no_mistakes.append(entry.score)
-	for pct in percentiles:
-		if not list_has_rank.has(ceili(float(total) * pct[0])):
-			# If this happens, we can do extra requests. But are we really that popular?
-			push_warning("%.2f percentile not in top entries" % pct[0])
-	data_all.sort()
-	data_friends.sort()
-	return [data_all, data_friends]
+	var data := LeaderboardData.new()
+	data.has_self = raw.has_self
+	for raw_entry in raw.entries:
+		data.list.append(await ListEntry.create(raw_entry))
+	return [data]
 
 func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
 	if current_data.is_empty() and previous_data.is_empty():
@@ -383,7 +319,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 	if not already_uploaded:
 		await RecurringMarathon.upload_leaderboard(current_leaderboard(), info, false)
 		if SteamManager.enabled:
-			var l_data := await RecurringMarathon.get_leaderboard_data(await load_current_leaderboard())
+			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 			display_leaderboard(l_data, [], level)
 	if not MobileRequestReview.just_requested_review:
 		StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())

@@ -25,6 +25,10 @@ func leaderboard_upload_score(_leaderboard_id: String, _score: float, _keep_best
 func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	await null
 
+func leaderboard_download_completion(_leaderboard_id: String, _start: int, _count: int) -> StoreIntegrations.LeaderboardData:
+	await null
+	return null
+
 func achievement_set(_ach_id: String, _steps: int, _total_steps: int) -> void:
 	await null
 

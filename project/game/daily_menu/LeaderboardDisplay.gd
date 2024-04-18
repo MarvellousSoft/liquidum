@@ -34,20 +34,24 @@ func _ready() -> void:
 	var curr := tr("%s_CURR" % [tr_name])
 	Leaderboards.add_child(_single("%s (%s)" % [curr, tr("ALL")]))
 	Leaderboards.add_child(_single("%s (%s)" % [curr, tr("FRIENDS")]))
+	Leaderboards.set_tab_hidden(1, true)
 	if has_prev:
 		var prev := tr("%s_PREV" % [tr_name])
 		Leaderboards.add_child(_single("%s (%s)" % [prev, tr("ALL")]))
 		Leaderboards.add_child(_single("%s (%s)" % [prev, tr("FRIENDS")]))
+		Leaderboards.set_tab_hidden(3, true)
 
 func display(current_data: Array[RecurringMarathon.LeaderboardData], current_date: String, previous: Array[RecurringMarathon.LeaderboardData], previous_date: String) -> void:
 	if current_data.size() >= 1:
 		Leaderboards.get_child(0).display_day(current_data[0], current_date)
 	if current_data.size() >= 2:
+		Leaderboards.set_tab_hidden(1, false)
 		Leaderboards.get_child(1).display_day(current_data[1], current_date)
 	if has_prev:
 		if previous.size() >= 1:
 			Leaderboards.get_child(2).display_day(previous[0], previous_date)
 		if previous.size() >= 2:
+			Leaderboards.set_tab_hidden(3, false)
 			Leaderboards.get_child(3).display_day(previous[1], previous_date)
 	else:
 		assert(previous.is_empty())

@@ -202,7 +202,8 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		TransitionManager.push_scene(level)
 	await level.ready
 	if SteamManager.enabled and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
-		var l_id: int = await SteamManager.get_or_create_leaderboard(marathon_leaderboard(data.marathon_total, data.difficulty), SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+		var l_id := marathon_leaderboard(data.marathon_total, data.difficulty)
+		await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
 		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 		if not l_data.is_empty():
 			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
@@ -240,7 +241,8 @@ func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manual
 	if marathon_left == 0 and shows_marathon_leaderboards(marathon_total, manually_seeded):
 		await RecurringMarathon.upload_leaderboard(marathon_leaderboard(marathon_total, dif), info, true)
 		if SteamManager.enabled:
-			var l_id: int = await SteamManager.get_or_create_leaderboard(marathon_leaderboard(marathon_total, dif), SteamManager.steam.LEADERBOARD_SORT_METHOD_ASCENDING, SteamManager.steam.LEADERBOARD_DISPLAY_TYPE_TIME_SECONDS)
+			var l_id := marathon_leaderboard(marathon_total, dif)
+			await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
 			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if not l_data.is_empty():
 				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
