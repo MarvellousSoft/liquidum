@@ -147,11 +147,12 @@ func _get_ld_version(id: String) -> int:
 	if ld_mapping.has(id):
 		return -1
 	elif id.begins_with("daily_"):
-		# TODO: get version from day
-		pass
+		# Getting version from day
+		var day_unix := Time.get_unix_time_from_datetime_string(id.substr(6))
+		return (day_unix - Time.get_unix_time_from_datetime_string("2024-04-16")) / (24 * 60 * 60)
 	elif id.begins_with("weekly_"):
-		# TODO: get version from week
-		pass
+		var monday_unix := Time.get_unix_time_from_datetime_string(id.substr(6))
+		return (monday_unix - Time.get_unix_time_from_datetime_string("2024-04-15")) / (7 * 24 * 60 * 60)
 	return -1
 
 func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
@@ -195,7 +196,6 @@ func achievement_show_all() -> void:
 	await null
 
 func _on_leaderboard_downloaded(res) -> void:
-	print("downloaded leaderboard: %s" % [res])
 	downloaded_leaderboard.emit(res)
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
