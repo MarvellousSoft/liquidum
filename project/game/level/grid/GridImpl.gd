@@ -1318,10 +1318,12 @@ func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Dfs:
 class Dfs:
 	var grid: GridImpl
 	var changes: Array[Change] = []
-	func _init(grid_: GridImpl) -> void:
+	var check_area: Rect2i
+	func _init(grid_: GridImpl, check_area_ := Rect2i(0, 0, 100, 100)) -> void:
 		grid = grid_
 		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
 		grid.last_seen += 1
+		check_area = check_area_
 	# Called when visiting this cell for the first time. It might be only half a cell
 	# or the whole cell. If this cell doesn't have a diagonal, this function is called
 	# only ONCE for it, be careful.
@@ -1332,6 +1334,8 @@ class Dfs:
 		return GridModel.must_be_implemented()
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return GridModel.must_be_implemented()
+	func ok(i: int, j: int) -> bool:
+		return check_area.has_point(Vector2i(i, j))
 	func flood(i: int, j: int, corner: E.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
 		if cell.last_seen(corner) >= grid.last_seen:
@@ -1347,16 +1351,16 @@ class Dfs:
 		var is_left := E.corner_is_left(corner)
 		var is_top := E.corner_is_top(corner)
 		# Try to flood left
-		if !grid._has_wall_left(i, j) and !(cell.type != E.Single and !is_left):
+		if !grid._has_wall_left(i, j) and !(cell.type != E.Single and !is_left) and ok(i, j - 1):
 			flood(i, j - 1, E.diag_to_corner(grid._pure_cell(i, j - 1).type, E.Side.Right))
 		# Try to flood right
-		if !grid._has_wall_right(i, j) and !(cell.type != E.Single and is_left):
+		if !grid._has_wall_right(i, j) and !(cell.type != E.Single and is_left) and ok(i, j + 1):
 			flood(i, j + 1, E.diag_to_corner(grid._pure_cell(i, j + 1).type, E.Side.Left))
 		# Try to flood down
-		if !grid._has_wall_bottom(i, j) and !(cell.type != E.Single and is_top) and _can_go_down(i, j):
+		if !grid._has_wall_bottom(i, j) and !(cell.type != E.Single and is_top) and ok(i + 1, j) and _can_go_down(i, j):
 			flood(i + 1, j, E.diag_to_corner(grid._pure_cell(i + 1, j).type, E.Side.Top))
 		# Try to flood up, if gravity helps
-		if !grid._has_wall_top(i, j) and !(cell.type != E.Single and !is_top) and _can_go_up(i, j):
+		if !grid._has_wall_top(i, j) and !(cell.type != E.Single and !is_top) and ok(i - 1, j) and _can_go_up(i, j):
 			flood(i - 1, j, E.diag_to_corner(grid._pure_cell(i - 1, j).type, E.Side.Bottom))
 
 class AddWaterDfs extends Dfs:
@@ -1481,14 +1485,12 @@ class AquariumInfo:
 class CrawlAquarium extends Dfs:
 	var info: AquariumInfo
 	var pool_check: bool
-	var check_area: Rect2i
 	# If true, split aquariums with pools if they have nowater on top. They functionally work
 	# as two aquariums when filling up, but for the Aquarium rules that doesn't work.
 	var split_aquariums_by_nowater: bool
 	func _init(grid_: GridImpl, check_area_ := Rect2i(0, 0, 100, 100), split := false) -> void:
-		check_area = check_area_
 		split_aquariums_by_nowater = split
-		super(grid_)
+		super(grid_, check_area_)
 	func check_for_pools() -> bool:
 		return pool_check
 	func reset() -> void:
@@ -1503,15 +1505,11 @@ class CrawlAquarium extends Dfs:
 			info.add(WaterPosition.new(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner))
 		return true
 	func _can_go_up(i: int, j: int) -> bool:
-		if not check_area.has_point(Vector2i(i - 1, j)):
-			return false
 		var bottom_content := grid._pure_cell(i - 1, j)._content_bottom()
 		if split_aquariums_by_nowater and (bottom_content == Content.NoWater or bottom_content == Content.NoBoatWater):
 			return false
 		return true
 	func _can_go_down(i: int, j: int) -> bool:
-		if not check_area.has_point(Vector2i(i + 1, j)):
-			return false
 		var c := grid._pure_cell(i + 1, j)
 		if c._content_top() == Content.Water:
 			return true

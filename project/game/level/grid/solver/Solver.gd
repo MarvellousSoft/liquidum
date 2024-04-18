@@ -1360,7 +1360,7 @@ class CellHintsMore extends CellHintsStrategy:
 		super(grid_)
 		advanced = advanced_
 	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
-		if hint.adj_water_count < 0.0:
+		if hint.adj_water_count < 0.0 or grid.count_nothing_adj(i, j) == 0:
 			return false
 		# These are not necessarily full aquariums and MAY be in the same aquarium if
 		# we consider the whole grid, but we only consider the 3x3 part
@@ -1394,21 +1394,22 @@ class CellHintsMore extends CellHintsStrategy:
 		if not advanced:
 			for aq in rect_aqs:
 				# Fill from bottom to top with water if we NEED that much water
-				if not aq.has_pool:
-					for di in aq.empty_at_height.size():
-						if aq.empty_at_height[di] == 0:
-							continue
-						if total_empty - aq.total_empty < hint.adj_water_count - total_water:
-							any = true
-							for pos in aq.cells_at_height[di]:
-								SolverModel._put_water(grid, pos)
-							total_water += aq.empty_at_height[di]
-							aq.total_water += aq.empty_at_height[di]
-							total_empty -= aq.empty_at_height[di]
-							aq.total_empty -= aq.empty_at_height[di]
-							aq.empty_at_height[di] = 0.0
-						else:
-							break
+				if aq.has_pool:
+					continue
+				for di in aq.empty_at_height.size():
+					if aq.empty_at_height[di] == 0:
+						continue
+					if total_empty - aq.total_empty < hint.adj_water_count - total_water:
+						any = true
+						for pos in aq.cells_at_height[di]:
+							SolverModel._put_water(grid, pos)
+						total_water += aq.empty_at_height[di]
+						aq.total_water += aq.empty_at_height[di]
+						total_empty -= aq.empty_at_height[di]
+						aq.total_empty -= aq.empty_at_height[di]
+						aq.empty_at_height[di] = 0.0
+					else:
+						break
 				# Fill from top to bottom with nowater if we CAN'T HAVE that much water
 				for di in range(aq.empty_at_height.size() - 1, -1, -1):
 					if aq.empty_at_height[di] == 0:

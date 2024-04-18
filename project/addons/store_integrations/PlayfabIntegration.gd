@@ -221,6 +221,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	)
 	var res: Dictionary = await downloaded_leaderboard
 	if res.status != "OK":
+		print("Failed to download leaderboard %s: %s" % [leaderboard_id, res])
 		return null
 	var data := StoreIntegrations.LeaderboardData.new()
 	var my_id := PlayFabManager.client_config.master_player_account_id
