@@ -57,6 +57,8 @@ func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mis
 	await leaderboard_upload_score(leaderboard_id, minf(time_secs, RecurringMarathon.MAX_TIME - 1) + minf(mistakes, 1000) * RecurringMarathon.MAX_TIME, keep_best, steam_details)
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
+	if OS.is_debug_build():
+		return null
 	var id := await _get_ld_id(leaderboard_id)
 	if id <= 0:
 		return null

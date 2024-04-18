@@ -3,6 +3,7 @@ class_name PlayFabIntegration
 extends StoreIntegration
 
 signal uploaded_leaderboard()
+signal downloaded_leaderboard(res: Dictionary)
 
 var playfab: PlayFab
 
@@ -133,8 +134,28 @@ func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) 
 func leaderboard_create_if_not_exists(_leaderboard_id: String, _sort_method: StoreIntegrations.SortMethod) -> void:
 	await null
 
+func _get_ld_mapping(id: String) -> String:
+	if ld_mapping.has(id):
+		return ld_mapping[id]
+	elif id.begins_with("daily_"):
+		return "daily"
+	elif id.begins_with("weekly_"):
+		return "weekly"
+	return ""
+
+func _get_ld_version(id: String) -> int:
+	if ld_mapping.has(id):
+		return -1
+	elif id.begins_with("daily_"):
+		# TODO: get version from day
+		pass
+	elif id.begins_with("weekly_"):
+		# TODO: get version from week
+		pass
+	return -1
+
 func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
-	var id: String = ld_mapping.get(leaderboard_id, "")
+	var id := _get_ld_mapping(leaderboard_id)
 	if id == "" or not authenticated():
 		return
 	playfab.post_dict_auth(
@@ -172,3 +193,53 @@ func achievement_set(_ach_id: String, _steps: int, _total_steps: int) -> void:
 
 func achievement_show_all() -> void:
 	await null
+
+func _on_leaderboard_downloaded(res) -> void:
+	print("downloaded leaderboard: %s" % [res])
+	downloaded_leaderboard.emit(res)
+
+func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
+	var id := _get_ld_mapping(leaderboard_id)
+	if id == "" or not authenticated():
+		return null
+	var version := _get_ld_version(leaderboard_id)
+	var req := {
+		StartPosition = start - 1,
+		MaxResultsCount = mini(count, 100),
+		StatisticName = id,
+		ProfileConstraints = {
+			ShowLinkedAccounts = true,
+		},
+	}
+	if version != -1:
+		req["Version"] = version
+	playfab.post_dict_auth(
+		req,
+		"/Client/GetLeaderboard",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		_on_leaderboard_downloaded,
+	)
+	var res: Dictionary = await downloaded_leaderboard
+	if res.status != "OK":
+		return null
+	var data := StoreIntegrations.LeaderboardData.new()
+	var my_id := PlayFabManager.client_config.master_player_account_id
+	for raw_entry in res.data.Leaderboard:
+		var entry := StoreIntegrations.LeaderboardEntry.new()
+		entry.mistakes = int(raw_entry.StatValue) / RecurringMarathon.MAX_TIME
+		entry.secs = int(raw_entry.StatValue) % RecurringMarathon.MAX_TIME
+		entry.rank = int(raw_entry.Position) + 1
+		var display_name: String = raw_entry.get("DisplayName", "")
+		if raw_entry.PlayFabId == my_id:
+			data.has_self = true
+		for acc in raw_entry.Profile.LinkedAccounts:
+			if acc.get("Platform", "") == "Steam":
+				entry.extra_data["steam_id"] = int(acc.PlatformUserId)
+				if display_name == "":
+					display_name = acc.get("Username", "")
+		if display_name == "":
+			display_name = str(raw_entry.PlayFabId)
+		entry.display_name = display_name
+		data.entries.append(entry)
+	return data
+	
