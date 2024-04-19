@@ -253,8 +253,7 @@ class ListEntry:
 		entry.global_rank = raw.rank
 		entry.mistakes = raw.mistakes
 		entry.secs = raw.secs
-		var details := LeaderboardDetails.from_arr(raw.extra_data.get("steam_details", PackedInt32Array()))
-		entry.flair = details.flair
+		entry.flair = raw.extra_data.get("flair", null)
 		entry.text = raw.display_name
 		if SteamManager.enabled and raw.extra_data.has("steam_id"):
 			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)

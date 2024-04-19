@@ -83,9 +83,10 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 			entry.display_name = steam.getFriendPersonaName(steam_data.steam_id) if nickname.is_empty() else nickname
 		entry.mistakes = steam_data.score / RecurringMarathon.MAX_TIME
 		entry.secs = steam_data.score % RecurringMarathon.MAX_TIME
+		var ld_details := LeaderboardDetails.from_arr(steam_data.get("details", PackedInt32Array()))
 		entry.extra_data = {
 			steam_id = steam_data.steam_id,
-			steam_details = steam_data.get("details", PackedInt32Array()),
+			flair = ld_details.flair,
 		}
 		data.entries.append(entry)
 	return data

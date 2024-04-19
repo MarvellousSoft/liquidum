@@ -62,5 +62,8 @@
         "google_id": "CgkIxZaA3LgPEAIQNw",
         "apple_id": "insane_marathon_10",
         "playfab_id": "insane_marathon_10"
+    },
+    "flair": {
+        "playfab_id": "flair"
     }
 }

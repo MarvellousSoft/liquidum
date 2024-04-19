@@ -29,3 +29,18 @@ static func old_flair_decode_text(offset: int, arr: PackedByteArray) -> String:
 	if sz == 0:
 		return ""
 	return arr.slice(offset, offset + sz).get_string_from_utf8()
+
+const MAX_FLAIRS = 1000000
+
+func encode_to_int() -> int:
+	if id == -1:
+		return -1
+	return extra_flairs * MAX_FLAIRS + id
+
+static func decode_from_int(num: int) -> SteamFlair:
+	if num == -1:
+		return null
+	return SteamFlair.new(
+		num % MAX_FLAIRS,
+		num / MAX_FLAIRS
+	)	

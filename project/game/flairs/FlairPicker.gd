@@ -66,9 +66,16 @@ func _on_flair_button_pressed(flair_node):
 	update_flair()
 	
 
+func save_flair_to_playfab() -> void:
+	if StoreIntegrations.playfab == null:
+		return
+	await StoreIntegrations.playfab.leaderboard_upload_score(
+		"flair", float(FlairManager.get_current_flair().to_steam_flair().encode_to_int()), false, PackedInt32Array()
+	)
 
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
+	save_flair_to_playfab()
 	TransitionManager.pop_scene()
 
 

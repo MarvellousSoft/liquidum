@@ -113,8 +113,8 @@ static func _monthly_flairs() -> Array[SelectableFlair]:
 	var arr: Array[SelectableFlair] = []
 	var data := UserData.current()
 	var cur_year := 2024
-	var cur_month := 1
-	for i in data.monthly_good_dailies.size():
+	var cur_month := 2
+	for i in range(1, data.monthly_good_dailies.size()):
 		cur_month += 1
 		if cur_month == 13:
 			cur_month = 1

@@ -3,7 +3,6 @@ class_name PlayFabIntegration
 extends StoreIntegration
 
 signal uploaded_leaderboard()
-signal downloaded_leaderboard(res: Dictionary)
 
 var playfab: PlayFab
 
@@ -195,8 +194,20 @@ func achievement_set(_ach_id: String, _steps: int, _total_steps: int) -> void:
 func achievement_show_all() -> void:
 	await null
 
-func _on_leaderboard_downloaded(res) -> void:
-	downloaded_leaderboard.emit(res)
+class LeaderboardAndFlairs:
+	signal all_downloaded
+	var lds = null
+	var flairs = null
+	func _on_leaderboard_downloaded(res) -> void:
+		lds = res
+		check_complete()
+	func _on_flairs_downloaded(res) -> void:
+		flairs = res
+		check_complete()
+	func check_complete() -> void:
+		if lds != null and flairs != null:
+			all_downloaded.emit()
+
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
 	var id := _get_ld_mapping(leaderboard_id)
@@ -213,23 +224,44 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	}
 	if version != -1:
 		req["Version"] = version
+	print("Sending request %s" % [req])
+	var res := LeaderboardAndFlairs.new()
 	playfab.post_dict_auth(
 		req,
 		"/Client/GetLeaderboard",
 		PlayFab.AUTH_TYPE.SESSION_TICKET,
-		_on_leaderboard_downloaded,
+		res._on_leaderboard_downloaded,
 	)
-	var res: Dictionary = await downloaded_leaderboard
-	if res.status != "OK":
-		print("Failed to download leaderboard %s: %s" % [leaderboard_id, res])
+	# TODO: If we get too many players this has to change
+	playfab.post_dict_auth(
+		{
+			StartPosition = 0,
+			MaxResultsCount = 100,
+			StatisticName = "flair",
+		},
+		"/Client/GetLeaderboard",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		res._on_flairs_downloaded,
+	)
+	await res.all_downloaded
+	if res.lds.status != "OK":
+		print("Failed to download leaderboard %s: %s" % [leaderboard_id, res.lds])
 		return null
+	var id_to_flair := {}
+	if res.flairs.status == "OK":
+		for raw_entry in res.flairs.data.Leaderboard:
+			id_to_flair[raw_entry.PlayFabId] = SteamFlair.decode_from_int(int(raw_entry.StatValue))
+	else:
+		push_warning("Invalid flairs response: %s" % [res.flairs])
 	var data := StoreIntegrations.LeaderboardData.new()
 	var my_id := PlayFabManager.client_config.master_player_account_id
-	for raw_entry in res.data.Leaderboard:
+	for raw_entry in res.lds.data.Leaderboard:
 		var entry := StoreIntegrations.LeaderboardEntry.new()
 		entry.mistakes = int(raw_entry.StatValue) / RecurringMarathon.MAX_TIME
 		entry.secs = int(raw_entry.StatValue) % RecurringMarathon.MAX_TIME
 		entry.rank = int(raw_entry.Position) + 1
+		if id_to_flair.has(raw_entry.PlayFabId):
+			entry.extra_data["flair"] = id_to_flair[raw_entry.PlayFabId]
 		var display_name: String = raw_entry.get("DisplayName", "")
 		if raw_entry.PlayFabId == my_id:
 			data.has_self = true

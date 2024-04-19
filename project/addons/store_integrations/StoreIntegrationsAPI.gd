@@ -1,6 +1,7 @@
 extends Node
 
 var impls: Array[StoreIntegration] = []
+var playfab: PlayFabIntegration = null
 
 enum SortMethod { SmallestFirst = 1, LargestFirst = 2 }
 
@@ -37,7 +38,8 @@ func _ready() -> void:
 	if AppleIntegration.available():
 		impls.append(await AppleIntegration.new())
 	if PlayFabIntegration.available():
-		impls.append(PlayFabIntegration.new())
+		playfab = PlayFabIntegration.new()
+		impls.append(playfab)
 	
 	for impl in impls:
 		add_child(impl)
