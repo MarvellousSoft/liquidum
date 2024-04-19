@@ -61,10 +61,6 @@ func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak
 	var MAX := "%s_streak_max" % type_name
 	var upload_current: bool = (streak != SteamManager.steam.getStatInt(CUR))
 	var upload_max: bool = (streak > SteamManager.steam.getStatInt(MAX))
-	if type == RecurringMarathon.Type.Weekly and streak < 4 and best_streak < 4:
-		if SteamManager.steam.getAchievement("weekly_streak_4").achieved:
-			SteamManager.steam.clearAchievement("weekly_streak_4")
-			flushNewAchievements()
 	if _set_stat_with_goal(CUR, streak, StatsTracker.STREAK_ACH[type], "%s_streak_%d" % [type_name, STREAK_ACH[type]], 2):
 		flushNewAchievements()
 	await SteamManager.ld_mutex.lock()
