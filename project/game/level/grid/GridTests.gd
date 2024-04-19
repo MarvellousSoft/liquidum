@@ -1266,6 +1266,37 @@ func test_cell_hints() -> void:
 	....
 	L.L.
 	""")
+	# Using two cellhints
+	assert_apply_strategies("""
+	+cellhint=1:1:3
+	+cellhint=1:2:1
+	......
+	L.L.L.
+	......
+	L.L.L.
+	""","""
+	ww....
+	L.L.L.
+	ww....
+	L.L.L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:2.5
+	+cellhint=2:2:1
+	....#.
+	L.L.L/
+	......
+	L.L.L/
+	......
+	L.L.L/
+	""","""
+	....#w
+	L.L.L/
+	......
+	L.L.L/
+	......
+	L.L.L/
+	""")
 
 func assert_cell_hints_together(s: String, type := E.HintType.Together) -> void:
 	var g := str_grid(s)

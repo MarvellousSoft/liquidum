@@ -1478,7 +1478,7 @@ class CellHintsMore extends CellHintsStrategy:
 	var advanced: bool
 	func description() -> String:
 		if advanced:
-			return ""
+			return "By parity (more generically subset sum), if any aquarium must have some amount, use that."
 		else:
 			return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
 	func _init(grid_: GridImpl, advanced_: bool) -> void:
@@ -1488,6 +1488,66 @@ class CellHintsMore extends CellHintsStrategy:
 		if hint.adj_water_count < 0.0 or grid.count_nothing_adj(i, j) == 0:
 			return false
 		return SolverModel.generic_solve(grid, advanced, hint.adj_water_count, GridImpl.RectAreaCheck.new(Rect2i(i - 1, j - 1, 3, 3)))
+
+class RectWithExclusionArea extends GridImpl.AreaCheck:
+	var include_rect: Rect2i
+	var exclude_rect: Rect2i
+	func _init(inc: Rect2i, exc: Rect2i) -> void:
+		include_rect = inc
+		exclude_rect = exc
+	func inside(i: int, j: int) -> bool:
+		var v := Vector2i(i, j)
+		return include_rect.has_point(v) and not exclude_rect.has_point(v)
+	func all_points() -> Array[Vector2i]:
+		var all: Array[Vector2i] = []
+		all.assign(GridImpl.RectAreaCheck.new(include_rect).all_points().filter(func(v): return not exclude_rect.has_point(v)))
+		return all
+
+class TwoCellHints extends Strategy:
+	var advanced: bool
+	func description() -> String:
+		if advanced:
+			return "By parity (more generically subset sum), if any aquarium must have some amount, use that."
+		else:
+			return "If any aquarium in the hints region can't be fully empty or fully full, add waters/nowaters on the bottom/top."
+	func _init(grid_: GridImpl, advanced_: bool) -> void:
+		super(grid_)
+		advanced = advanced_
+	func _fixed_water_outside_intersection(i: int, j: int, di: int, dj: int) -> float:
+		var rect1 := Rect2i(0, 0, grid.rows(), grid.cols())
+		var rect2 := Rect2i(i + di - 1, j + dj - 1, 3, 3)
+		var tot := 0.0
+		for di2 in [-1, 0, 1]:
+			for dj2 in [-1, 0, 1]:
+				var v := Vector2i(i + di2, j + dj2)
+				if rect1.has_point(v) and not rect2.has_point(v):
+					var c := grid._pure_cell(i + di2, j + dj2)
+					tot += c.water_count()
+					if c.nothing_count() > 0:
+						return -1.0
+		return tot
+	func apply_any() -> bool:
+		var any := false
+		var rect := Rect2i(0, 0, grid.rows(), grid.cols())
+		for i in grid.rows():
+			for j in grid.cols():
+				var c := grid.get_cell(i, j).hints()
+				if c == null or c.adj_water_count <= 0.0:
+					continue
+				for di in range(-2, 3):
+					for dj in range(-2, 3):
+						if di == 0 and dj == 0 or not rect.has_point(Vector2i(i + di, j + dj)):
+							continue
+						var d := grid.get_cell(i + di, j + dj).hints()
+						if d == null or d.adj_water_count <= 0.0:
+							continue
+						var extra := _fixed_water_outside_intersection(i, j, di, dj)
+						if extra == -1:
+							continue
+						return SolverModel.generic_solve(grid, advanced, d.adj_water_count - (c.adj_water_count - extra), RectWithExclusionArea.new(Rect2i(i + di - 1, j + dj - 1, 3, 3), Rect2i(i - 1, j - 1, 3, 3)))
+
+		return any
+
 
 		
 
@@ -1518,7 +1578,9 @@ static var STRATEGY_LIST := {
 	AquariumsAdvanced = func(grid): return AquariumsStrategy.new(grid, false),
 	CellBasic = func(grid): return CellHintsBasic.new(grid),
 	CellMedium = func(grid): return CellHintsMore.new(grid, false),
+	TwoCellMedium = func(grid): return TwoCellHints.new(grid, false),
 	CellAdvanced = func(grid): return CellHintsMore.new(grid, true),
+	TwoCellAdvanced = func(grid): return TwoCellHints.new(grid, true),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

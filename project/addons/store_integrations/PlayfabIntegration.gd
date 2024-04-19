@@ -101,7 +101,7 @@ func _on_err(err) -> void:
 		for prop in err.get_property_list():
 			err_str += "%s: %s, " % [prop.name, err.get(prop.name)]
 	print("Some error: %s" % [err_str])
-	if err.get("error") == "NotAuthenticated":
+	if err is Dictionary and err.get("error") == "NotAuthenticated":
 		print("Not authenticated to Playfab, trying to login again.")
 		PlayFabManager.forget_login()
 		await _try_authenticate()
