@@ -55,7 +55,7 @@ func _find_leaderboard(l_name: String) -> int:
 	else:
 		return ret[0]
 
-func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
+func set_recurring_streak(type: RecurringMarathon.Type, streak: int, _best_streak: int) -> void:
 	var type_name := RecurringMarathon.type_name(type)
 	var CUR := "%s_streak_current" % type_name
 	var MAX := "%s_streak_max" % type_name

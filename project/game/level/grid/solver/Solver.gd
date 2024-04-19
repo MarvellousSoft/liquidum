@@ -1349,6 +1349,131 @@ class CellHintsBasic extends CellHintsStrategy:
 								c.put_nowater(corner, false, true)
 		return true
 
+static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, area_check: GridImpl.AreaCheck) -> bool:
+	# These are not necessarily full aquariums and MAY be in the same aquarium if
+	# we consider the whole grid, but we only consider the 3x3 part
+	var rect_aqs: Array[GridImpl.AquariumInfo] = []
+	var dfs := GridImpl.CrawlAquarium.new(grid, area_check, true)
+	# This will change, let's store it
+	var last_seen := grid.last_seen
+	var any_pools := false
+	var total_empty := 0.0
+	var total_water := 0.0
+	# Bottom up for correctness
+	for pos in area_check.all_points():
+		if not Rect2i(0, 0, grid.rows(), grid.cols()).has_point(pos):
+			continue
+		var i2: int = pos.x
+		var j2: int = pos.y
+		for corner in grid.get_cell(i2, j2).corners():
+			var c := grid._pure_cell(i2, j2)
+			# We also don't do the dfs on NoWater because of split_aquariums_by_nowater
+			if c.last_seen(corner) < last_seen and not c.block_at(corner) and not c.nowater_at(corner):
+				dfs.reset()
+				dfs.flood(i2, j2, corner)
+				dfs.reset_for_pool_check()
+				dfs.flood(i2, j2, corner)
+				rect_aqs.append(dfs.info)
+				total_empty += dfs.info.total_empty
+				total_water += dfs.info.total_water
+				any_pools = any_pools or dfs.info.has_pool
+	var any := false
+	if not advanced:
+		for aq in rect_aqs:
+			# Fill from bottom to top with water if we NEED that much water
+			if aq.has_pool:
+				continue
+			for di in aq.empty_at_height.size():
+				if aq.empty_at_height[di] == 0:
+					continue
+				if total_empty - aq.total_empty < water_hint - total_water:
+					any = true
+					for pos in aq.cells_at_height[di]:
+						SolverModel._put_water(grid, pos)
+					total_water += aq.empty_at_height[di]
+					aq.total_water += aq.empty_at_height[di]
+					total_empty -= aq.empty_at_height[di]
+					aq.total_empty -= aq.empty_at_height[di]
+					aq.empty_at_height[di] = 0.0
+				else:
+					break
+			# Fill from top to bottom with nowater if we CAN'T HAVE that much water
+			for di in range(aq.empty_at_height.size() - 1, -1, -1):
+				if aq.empty_at_height[di] == 0:
+					continue
+				if aq.total_empty > water_hint - total_water:
+					any = true
+					for pos in aq.cells_at_height[di]:
+						SolverModel._put_nowater(grid, pos)
+					total_empty -= aq.empty_at_height[di]
+					aq.total_empty -= aq.empty_at_height[di]
+					aq.empty_at_height[di] = 0.0
+				else:
+					break
+	else:
+		if not any_pools:
+			var options: Array[Array] = []
+			var opt_to_aq := {}
+			for aq in rect_aqs:
+				if aq.total_empty == 0:
+					continue
+				var opt := [0.]
+				for x in aq.empty_at_height:
+					if x == 0:
+						continue
+					opt.append(opt[-1] + x)
+				opt_to_aq[opt] = aq
+				options.append(opt)
+			options.sort()
+			var water_needed := water_hint - total_water
+			assert(OptionsSum.can_be_solved(water_needed, options))
+			for idx in options.size():
+				for jdx in options[idx].size():
+					var new := options.duplicate()
+					# Try to not use this value and check it is still possible
+					var new_inner := options[idx].duplicate()
+					new_inner.remove_at(jdx)
+					new[idx] = new_inner
+					new.sort()
+					if not OptionsSum.can_be_solved(water_needed, new):
+						var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
+						var water: float = options[idx][jdx]
+						for kdx in aq.empty_at_height.size():
+							if aq.empty_at_height[kdx] == 0:
+								continue
+							if water > 0:
+								water -= aq.empty_at_height[kdx]
+								for pos in aq.cells_at_height[kdx]:
+									SolverModel._put_water(grid, pos)
+							else:
+								for pos in aq.cells_at_height[kdx]:
+									SolverModel._put_nowater(grid, pos)
+						return true
+					elif options[idx].size() > 2 and (jdx == 0 or jdx == options[idx].size() - 1):
+						new = options.duplicate()
+						# Checking if new[idx][jdx] is NEVER in the solution is only useful
+						# for the top/bottom of the aquarium. (We don't have a marker for "water
+						# doesn't end here")
+						new.remove_at(idx)
+						if not OptionsSum.can_be_solved(water_needed - options[idx][jdx], new):
+							var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
+							if jdx == 0:
+								assert(options[idx][jdx] == 0)
+								for kdx in aq.empty_at_height.size():
+									if aq.empty_at_height[kdx] > 0:
+										for pos in aq.cells_at_height[kdx]:
+											SolverModel._put_water(grid, pos)
+										break
+							else:
+								for kdx in range(aq.empty_at_height.size() - 1, -1, -1):
+									if aq.empty_at_height[kdx] > 0:
+										for pos in aq.cells_at_height[kdx]:
+											SolverModel._put_nowater(grid, pos)
+										break
+							return true
+	return any
+
+
 class CellHintsMore extends CellHintsStrategy:
 	var advanced: bool
 	func description() -> String:
@@ -1362,130 +1487,7 @@ class CellHintsMore extends CellHintsStrategy:
 	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
 		if hint.adj_water_count < 0.0 or grid.count_nothing_adj(i, j) == 0:
 			return false
-		# These are not necessarily full aquariums and MAY be in the same aquarium if
-		# we consider the whole grid, but we only consider the 3x3 part
-		var rect_aqs: Array[GridImpl.AquariumInfo] = []
-		var dfs := GridImpl.CrawlAquarium.new(grid, Rect2i(i - 1, j - 1, 3, 3), true)
-		# This will change, let's store it
-		var last_seen := grid.last_seen
-		var any_pools := false
-		var total_empty := 0.0
-		var total_water := 0.0
-		# Bottom up for correctness
-		for i2 in [i + 1, i, i - 1]:
-			for j2 in [j - 1, j, j + 1]:
-				if not Rect2i(0, 0, grid.rows(), grid.cols()).has_point(Vector2i(i2, j2)):
-					continue
-				for corner in grid.get_cell(i2, j2).corners():
-					var c := grid._pure_cell(i2, j2)
-					# We also don't do the dfs on NoWater because of split_aquariums_by_nowater
-					if c.last_seen(corner) < last_seen and not c.block_at(corner) and not c.nowater_at(corner):
-						dfs.reset()
-						dfs.flood(i2, j2, corner)
-						dfs.reset_for_pool_check()
-						dfs.flood(i2, j2, corner)
-						rect_aqs.append(dfs.info)
-						total_empty += dfs.info.total_empty
-						total_water += dfs.info.total_water
-						any_pools = any_pools or dfs.info.has_pool
-		assert(total_empty == grid.count_nothing_adj(i, j))
-		assert(total_water == grid.count_water_adj(i, j))
-		var any := false
-		if not advanced:
-			for aq in rect_aqs:
-				# Fill from bottom to top with water if we NEED that much water
-				if aq.has_pool:
-					continue
-				for di in aq.empty_at_height.size():
-					if aq.empty_at_height[di] == 0:
-						continue
-					if total_empty - aq.total_empty < hint.adj_water_count - total_water:
-						any = true
-						for pos in aq.cells_at_height[di]:
-							SolverModel._put_water(grid, pos)
-						total_water += aq.empty_at_height[di]
-						aq.total_water += aq.empty_at_height[di]
-						total_empty -= aq.empty_at_height[di]
-						aq.total_empty -= aq.empty_at_height[di]
-						aq.empty_at_height[di] = 0.0
-					else:
-						break
-				# Fill from top to bottom with nowater if we CAN'T HAVE that much water
-				for di in range(aq.empty_at_height.size() - 1, -1, -1):
-					if aq.empty_at_height[di] == 0:
-						continue
-					if aq.total_empty > hint.adj_water_count - total_water:
-						any = true
-						for pos in aq.cells_at_height[di]:
-							SolverModel._put_nowater(grid, pos)
-						total_empty -= aq.empty_at_height[di]
-						aq.total_empty -= aq.empty_at_height[di]
-						aq.empty_at_height[di] = 0.0
-					else:
-						break
-		else:
-			if not any_pools:
-				var options: Array[Array] = []
-				var opt_to_aq := {}
-				for aq in rect_aqs:
-					if aq.total_empty == 0:
-						continue
-					var opt := [0.]
-					for x in aq.empty_at_height:
-						if x == 0:
-							continue
-						opt.append(opt[-1] + x)
-					opt_to_aq[opt] = aq
-					options.append(opt)
-				options.sort()
-				var water_needed := hint.adj_water_count - total_water
-				assert(OptionsSum.can_be_solved(water_needed, options))
-				for idx in options.size():
-					for jdx in options[idx].size():
-						var new := options.duplicate()
-						# Try to not use this value and check it is still possible
-						var new_inner := options[idx].duplicate()
-						new_inner.remove_at(jdx)
-						new[idx] = new_inner
-						new.sort()
-						if not OptionsSum.can_be_solved(water_needed, new):
-							var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
-							var water: float = options[idx][jdx]
-							for kdx in aq.empty_at_height.size():
-								if aq.empty_at_height[kdx] == 0:
-									continue
-								if water > 0:
-									water -= aq.empty_at_height[kdx]
-									for pos in aq.cells_at_height[kdx]:
-										SolverModel._put_water(grid, pos)
-								else:
-									for pos in aq.cells_at_height[kdx]:
-										SolverModel._put_nowater(grid, pos)
-							return true
-						elif options[idx].size() > 2 and (jdx == 0 or jdx == options[idx].size() - 1):
-							new = options.duplicate()
-							# Checking if new[idx][jdx] is NEVER in the solution is only useful
-							# for the top/bottom of the aquarium. (We don't have a marker for "water
-							# doesn't end here")
-							new.remove_at(idx)
-							if not OptionsSum.can_be_solved(water_needed - options[idx][jdx], new):
-								var aq: GridImpl.AquariumInfo = opt_to_aq[options[idx]]
-								if jdx == 0:
-									assert(options[idx][jdx] == 0)
-									for kdx in aq.empty_at_height.size():
-										if aq.empty_at_height[kdx] > 0:
-											for pos in aq.cells_at_height[kdx]:
-												SolverModel._put_water(grid, pos)
-											break
-								else:
-									for kdx in range(aq.empty_at_height.size() - 1, -1, -1):
-										if aq.empty_at_height[kdx] > 0:
-											for pos in aq.cells_at_height[kdx]:
-												SolverModel._put_nowater(grid, pos)
-											break
-								return true
-		return any
-		
+		return SolverModel.generic_solve(grid, advanced, hint.adj_water_count, GridImpl.RectAreaCheck.new(Rect2i(i - 1, j - 1, 3, 3)))
 
 		
 

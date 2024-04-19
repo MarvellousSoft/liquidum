@@ -1315,15 +1315,36 @@ func _flood_water(i: int, j: int, corner: E.Corner, add: bool) -> Dfs:
 		dfs.flood(i, j, corner)
 		return dfs
 
+class AreaCheck:
+	func inside(_i: int, _j: int) -> bool:
+		return GridModel.must_be_implemented()
+	func all_points() -> Array[Vector2i]:
+		return GridModel.must_be_implemented()
+
+class RectAreaCheck extends AreaCheck:
+	var rect: Rect2i
+	func _init(rect_: Rect2i) -> void:
+		rect = rect_
+	func inside(i: int, j: int) -> bool:
+		return rect.has_point(Vector2i(i, j))
+	# MUST be bottom up
+	func all_points() -> Array[Vector2i]:
+		var all: Array[Vector2i] = []
+		for dx in range(rect.size.x - 1, -1, -1):
+			for dy in rect.size.y:
+				all.append(rect.position + Vector2i(dx, dy))
+		return all
+
+
 class Dfs:
 	var grid: GridImpl
 	var changes: Array[Change] = []
-	var check_area: Rect2i
-	func _init(grid_: GridImpl, check_area_ := Rect2i(0, 0, 100, 100)) -> void:
+	var area_check: AreaCheck
+	func _init(grid_: GridImpl, area_check_: AreaCheck = null) -> void:
 		grid = grid_
 		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
 		grid.last_seen += 1
-		check_area = check_area_
+		area_check = area_check_
 	# Called when visiting this cell for the first time. It might be only half a cell
 	# or the whole cell. If this cell doesn't have a diagonal, this function is called
 	# only ONCE for it, be careful.
@@ -1335,7 +1356,7 @@ class Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return GridModel.must_be_implemented()
 	func ok(i: int, j: int) -> bool:
-		return check_area.has_point(Vector2i(i, j))
+		return area_check == null or area_check.inside(i, j)
 	func flood(i: int, j: int, corner: E.Corner) -> void:
 		var cell := grid._pure_cell(i, j)
 		if cell.last_seen(corner) >= grid.last_seen:
@@ -1488,9 +1509,9 @@ class CrawlAquarium extends Dfs:
 	# If true, split aquariums with pools if they have nowater on top. They functionally work
 	# as two aquariums when filling up, but for the Aquarium rules that doesn't work.
 	var split_aquariums_by_nowater: bool
-	func _init(grid_: GridImpl, check_area_ := Rect2i(0, 0, 100, 100), split := false) -> void:
+	func _init(grid_: GridImpl, area_check_: AreaCheck = null, split := false) -> void:
 		split_aquariums_by_nowater = split
-		super(grid_, check_area_)
+		super(grid_, area_check_)
 	func check_for_pools() -> bool:
 		return pool_check
 	func reset() -> void:
