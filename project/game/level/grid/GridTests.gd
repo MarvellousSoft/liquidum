@@ -1297,6 +1297,20 @@ func test_cell_hints() -> void:
 	......
 	L.L.L/
 	""")
+	# Can't do anything if one is not contained in the other
+	assert_apply_strategies("""
+	+cellhint=1:1:3
+	+cellhint=1:2:1
+	........
+	L.L.L.L.
+	........
+	L.L.L.L.
+	""","""
+	........
+	L.L.L.L.
+	........
+	L.L.L.L.
+	""")
 
 func assert_cell_hints_together(s: String, type := E.HintType.Together) -> void:
 	var g := str_grid(s)
