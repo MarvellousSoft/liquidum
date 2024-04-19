@@ -312,6 +312,7 @@ func _on_leaderboards_loaded(leaderboard: String) -> void:
 
 # Players
 func _on_players_current_loaded(player: String) -> void:
+	print("Current player loaded: %s" % [player])
 	players_current_loaded.emit(JSON.parse_string(player))
 
 
@@ -324,10 +325,10 @@ func _on_players_searched(player: String) -> void:
 
 
 # Sign In
-func _on_sign_in_user_authenticated(_is_authenticated: bool) -> void:
-	print("Play Games Service is authenticated: %s" % [_is_authenticated])
+func _on_sign_in_user_authenticated(is_authenticated: bool) -> void:
+	print("Play Games Service is authenticated: %s" % [is_authenticated])
 	auth_done = true
-	sign_in_user_authenticated.emit(_is_authenticated)
+	sign_in_user_authenticated.emit(is_authenticated)
 
 
 func _on_sign_in_requested_server_side_access(token: String) -> void:

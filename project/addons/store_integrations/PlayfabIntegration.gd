@@ -13,6 +13,10 @@ static func available() -> bool:
 
 func _try_authenticate() -> void:
 	if not authenticated():
+		var req := {
+			TitleId = PlayFabManager.title_id,
+			CreateAccount = true,
+		}
 		if SteamManager.enabled:
 			print("Will try to authenticate through Steam")
 			# Can't use getAuthTicketForWebApi because we're using an old GodotSteam tied to 4.1.3
@@ -24,15 +28,14 @@ func _try_authenticate() -> void:
 				return
 			var buffer: PackedByteArray = ticket.buffer
 			buffer.resize(ticket.size)
+			req.merge({
+				SteamTicket = buffer.hex_encode(),
+				TicketIsServiceSpecific = false,
+			})
 			playfab.post_dict(
-				{
-					TitleId = PlayFabManager.title_id,
-					CreateAccount = true,
-					SteamTicket = buffer.hex_encode(),
-					TicketIsServiceSpecific = false,
-				},
+				req,
 				"/Client/LoginWithSteam",
-				_on_steam_login.bind(ticket.id),
+				_on_steam_login.bind(ticket.id, func(): return SteamManager.steam.getPersonaName()),
 			)
 		if GooglePlayGameServices.enabled:
 			print("Will try to authenticate through Play Services")
@@ -41,14 +44,16 @@ func _try_authenticate() -> void:
 				await GooglePlayGameServices.sign_in_user_authenticated
 			GooglePlayGameServices.sign_in_request_server_side_access("530621401925-gbemotmd7i0q0qeurk4vjni6l1enfm5r.apps.googleusercontent.com", false)
 			var res = await GooglePlayGameServices.sign_in_requested_server_side_access
+			req.merge({
+				ServerAuthCode = res,
+			})
 			playfab.post_dict(
-				{
-					TitleId = PlayFabManager.title_id,
-					CreateAccount = true,
-					ServerAuthCode = res,
-				},
+				req,
 				"/Client/LoginWithGooglePlayGamesServices",
-				_on_simple_login,
+				_on_simple_login.bind(func():
+					GooglePlayGameServices.players_load_current(false)
+					var data = await GooglePlayGameServices.players_current_loaded
+					return data.get("displayName", "")),
 			)
 		if AppleIntegration.available():
 			print("Will try to authenticate with Game Center")
@@ -66,18 +71,17 @@ func _try_authenticate() -> void:
 					if ev["type"] != "identity_verification_signature" or ev["result"] != "ok":
 						print("Could not authenticate with Game Center: Failed to get signature")
 					else:
+						req.merge({
+							PlayerId = ev.player_id,
+							PublicKeyUrl = ev.public_key_url,
+							Signature = ev.signature,
+							Salt = ev.salt,
+							Timestamp = ev.timestamp,
+						})
 						playfab.post_dict(
-							{
-								TitleId = PlayFabManager.title_id,
-								CreateAccount = true,
-								PlayerId = ev["player_id"],
-								PublicKeyUrl = ev["public_key_url"],
-								Signature = ev["signature"],
-								Salt = ev["salt"],
-								Timestamp = ev["timestamp"],
-							},
+							req,
 							"/Client/LoginWithGameCenter",
-							_on_simple_login,
+							_on_simple_login.bind(null),
 						)
 	else:
 		print("Playfab login already saved")
@@ -110,17 +114,30 @@ func _on_err(err) -> void:
 func _logged_in(res) -> void:
 	print("Logged in to PlayFab: %s!" % [authenticated()])
 
-func _on_steam_login(result, ticket_id: int) -> void:
+func _on_steam_login(result, ticket_id: int, display_name_getter) -> void:
 	SteamManager.steam.cancelAuthTicket(ticket_id)
-	_on_simple_login(result)
+	_on_simple_login(result, display_name_getter)
 
-func _on_simple_login(result) -> void:
+func _on_simple_login(result, display_name_getter) -> void:
 	if result is Dictionary and result.has("data"):
 		var login_result = LoginResult.new()
 		login_result.from_dict(result["data"], login_result)
 		playfab.logged_in.emit(login_result)
+		if login_result.NewlyCreated and display_name_getter != null:
+			var display_name: String = await display_name_getter.call()
+			playfab.post_dict_auth(
+				{
+					DisplayName = display_name,
+				},
+				"/Client/UpdateUserTitleDisplayName",
+				PlayFab.AUTH_TYPE.SESSION_TICKET,
+				_generic_request,
+			)
 	else:
 		print("Weird login result: %s" % [result])
+
+func _generic_request(_res) -> void:
+	pass
 
 func authenticated() -> bool:
 	return PlayFabManager.client_config.is_logged_in()
