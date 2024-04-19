@@ -80,7 +80,7 @@ func _gen_puzzle(cur_grid: GridModel, cur_hints: Level.HintVisibility) -> GridMo
 		else:
 			# TODO: This can be refactored to use RandomLevelGenerator
 			var g: GridModel
-			var gen := Generator.builder().with_diags($Diags.button_pressed).with_boats($Boats.button_pressed).build(rng.randi())
+			var gen := Generator.builder().with_diags($Diags.button_pressed).with_boats($Boats.button_pressed).with_cell_hints($CellHintsSlider.value / 100.0).build(rng.randi())
 			if KeepWalls.button_pressed:
 				g = GridImpl.import_data(cur_grid.export_data(), GridModel.LoadMode.Editor)
 				if not KeepWater.button_pressed:
@@ -261,3 +261,7 @@ func _on_mirror_horizontal() -> void:
 
 func _on_mirror_vertical() -> void:
 	mirror_vertical.emit()
+
+
+func _on_cell_hints_slider_value_changed(value):
+	$CellHintsLabel.text = "CellHints max: %d%%" % [value]

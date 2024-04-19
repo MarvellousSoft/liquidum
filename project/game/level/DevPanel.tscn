@@ -108,6 +108,15 @@ layout_mode = 2
 focus_mode = 0
 text = "Aquariums"
 
+[node name="CellHintsLabel" type="Label" parent="."]
+layout_mode = 2
+text = "CellHints max: 0%"
+
+[node name="CellHintsSlider" type="HSlider" parent="."]
+layout_mode = 2
+focus_mode = 0
+max_value = 50.0
+
 [node name="Paste" type="Button" parent="."]
 layout_mode = 2
 focus_mode = 0
@@ -160,6 +169,7 @@ text = "Mirror vertical"
 [connection signal="mouse_entered" from="Diags" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Boats" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="Aquariums" to="." method="_on_button_mouse_entered"]
+[connection signal="value_changed" from="CellHintsSlider" to="." method="_on_cell_hints_slider_value_changed"]
 [connection signal="mouse_entered" from="Paste" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Paste" to="." method="_on_paste_pressed"]
 [connection signal="mouse_entered" from="Save" to="." method="_on_button_mouse_entered"]

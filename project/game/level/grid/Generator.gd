@@ -7,6 +7,7 @@ class Options:
 	var aquarium_count: int = 0
 	#
 	var min_water: int = 0
+	var cell_hints: float = 0.0
 	func with_boats(b := true) -> Options:
 		boats = b
 		return self
@@ -18,6 +19,9 @@ class Options:
 		return self
 	func with_min_water(count: int) -> Options:
 		min_water = count
+		return self
+	func with_cell_hints(pct := 0.0) -> Options:
+		cell_hints = pct
 		return self
 	func build(rseed: int) -> Generator:
 		return Generator.new(rseed, self)
@@ -170,6 +174,19 @@ func randomize_boats(grid: GridModel) -> void:
 			if not c.put_boat(true):
 				push_error("Boat placing should succeed")
 
+func randomize_cell_hints(grid: GridModel) -> void:
+	var all_cells := _all_cells(grid)
+	Global.shuffle(all_cells, rng)
+	var count := rng.randi_range(1, int(grid.rows() * grid.cols() * opts.cell_hints))
+	for idx in all_cells:
+		var water_around := grid.count_water_adj(idx.x, idx.y)
+		var size_around := Rect2i(0, 0, grid.rows(), grid.cols()).intersection(Rect2i(idx.x - 1, idx.y - 1, 3, 3)).get_area()
+		if water_around != 0 and water_around != size_around:
+			grid.get_cell(idx.x, idx.y).add_cell_hints()
+			count -= 1
+			if count <= 0:
+				break
+
 
 func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	if flush_undo:
@@ -238,6 +255,8 @@ func generate(n: int, m: int) -> GridModel:
 	if opts.boats:
 		randomize_boats(grid)
 	randomize_water(grid, false)
+	if opts.cell_hints > 0:
+		randomize_cell_hints(grid)
 	# Necessary because we did unsafe updates
 	grid.set_auto_update_hints(true)
 	return grid
