@@ -351,7 +351,12 @@ static func do_share(text: String) -> void:
 
 func _on_leaderboards_button_pressed() -> void:
 	assert(Global.is_mobile)
-	await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
+	if OS.is_debug_build():
+		var node: LeaderboardDisplay = load("res://game/daily_menu/MobileLeaderboardDisplay.tscn").instantiate()
+		node.tr_name = RecurringMarathon.type_name(type())
+		TransitionManager.push_scene(node)
+	else:
+		await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
 
 func share(mistakes: int, secs: int, marathon_i: int) -> void:
 	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))

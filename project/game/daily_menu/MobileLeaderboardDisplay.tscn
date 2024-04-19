@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://sdk5b3j3bqfc"]
+
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_gnox2"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_6npgg"]
+[ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="2_84umc"]
+
+[node name="MobileLeaderboardDisplay" type="Control"]
+custom_minimum_size = Vector2(720, 1280)
+layout_mode = 3
+theme = ExtResource("1_gnox2")
+script = ExtResource("2_84umc")
+
+[node name="MobileBGHelp" parent="." instance=ExtResource("2_6npgg")]
+layout_mode = 0
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 50.0
+offset_top = 30.0
+size_flags_horizontal = 0
+focus_mode = 0
+text = "BACK"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 50.0
+offset_right = -20.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "LEADERBOARDS"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 1
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="SpeedrunButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "SPEEDRUN_BUTTON"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

@@ -24,6 +24,9 @@ static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speed
 func _single(s_name: String) -> SingleDayLeaderboard:
 	var obj: SingleDayLeaderboard = load(^"res://game/daily_menu/SingleDayLeaderboard.tscn").instantiate()
 	obj.name = s_name
+	if Global.is_mobile:
+		obj.custom_minimum_size = Vector2(500, 500)
+		obj.theme = theme
 	return obj
 
 func _ready() -> void:
@@ -70,3 +73,8 @@ func _on_button_mouse_entered() -> void:
 func _on_speedrun_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	SteamManager.overlay_or_browser("https://www.speedrun.com/Liquidum?x=%s" % [speedrun_key])
+
+
+func _on_back_button_pressed():
+	AudioManager.play_sfx("button_pressed")
+	TransitionManager.pop_scene()
