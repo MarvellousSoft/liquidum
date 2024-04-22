@@ -207,13 +207,20 @@ func gen_and_play(push_scene: bool) -> void:
 		TransitionManager.change_scene(level, push_scene)
 		await level.ready
 		if SteamManager.enabled:
-			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
-			if l_data.size() > 0 and l_data[0].has_self:
-				already_uploaded = true
-			var y_data := await RecurringMarathon.get_leaderboard_data(steam_previous_leaderboard())
-			display_leaderboard(l_data, y_data, level)
+			await load_and_display_leaderboard(level)
 
 	MainButton.disabled = false
+
+func load_and_display_leaderboard(level: Level) -> void:
+	var display: LeaderboardDisplay = null
+	if Global.is_mobile:
+		display = LeaderboardDisplay.get_or_create(level, tr_name, true)
+	var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
+	if l_data.size() > 0 and l_data[0].has_self:
+		already_uploaded = true
+	var y_data := await RecurringMarathon.get_leaderboard_data(steam_previous_leaderboard())
+	display_leaderboard(display, l_data, y_data, level)
+	
 
 func close_streak():
 	%StreakButton.button_pressed = false
@@ -282,10 +289,13 @@ static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 		data.list.append(await ListEntry.create(raw_entry))
 	return [data]
 
-func display_leaderboard(current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
+func display_leaderboard(display: LeaderboardDisplay, current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
 	if current_data.is_empty() and previous_data.is_empty():
 		return
-	var display := LeaderboardDisplay.get_or_create(level, tr_name, true)
+	if display == null:
+		display = LeaderboardDisplay.get_or_create(level, tr_name, true)
+	if not display.is_node_ready():
+		await display.ready
 	display.display(current_data, current_period(), previous_data, previous_period())
 	display.show_current_all()
 
@@ -319,7 +329,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 		await RecurringMarathon.upload_leaderboard(current_leaderboard(), info, false)
 		if SteamManager.enabled:
 			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
-			display_leaderboard(l_data, [], level)
+			display_leaderboard(null, l_data, [], level)
 	if not MobileRequestReview.just_requested_review:
 		StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
 
@@ -352,9 +362,9 @@ static func do_share(text: String) -> void:
 func _on_leaderboards_button_pressed() -> void:
 	assert(Global.is_mobile)
 	if OS.is_debug_build():
-		var node: LeaderboardDisplay = load("res://game/daily_menu/MobileLeaderboardDisplay.tscn").instantiate()
-		node.tr_name = RecurringMarathon.type_name(type())
-		TransitionManager.push_scene(node)
+		%LeaderboardsButton.disabled = true
+		await load_and_display_leaderboard(null)
+		%LeaderboardsButton.disabled = false
 	else:
 		await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
 

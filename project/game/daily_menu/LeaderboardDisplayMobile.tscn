@@ -1,16 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://sdk5b3j3bqfc"]
+[gd_scene load_steps=4 format=3 uid="uid://bpg1y0tlnqige"]
 
-[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_gnox2"]
-[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_6npgg"]
-[ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="2_84umc"]
+[ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_w4nri"]
+[ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="2_tccoj"]
+[ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="3_rpn6q"]
 
-[node name="MobileLeaderboardDisplay" type="Control"]
+[node name="LeaderboardDisplayMobile" type="Control"]
 custom_minimum_size = Vector2(720, 1280)
 layout_mode = 3
-theme = ExtResource("1_gnox2")
-script = ExtResource("2_84umc")
+theme = ExtResource("1_w4nri")
+script = ExtResource("2_tccoj")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_6npgg")]
+[node name="MobileBGHelp" parent="." instance=ExtResource("3_rpn6q")]
 layout_mode = 0
 
 [node name="BackButton" type="Button" parent="."]
@@ -27,9 +27,7 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
 offset_top = 50.0
-offset_right = -20.0
 offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2

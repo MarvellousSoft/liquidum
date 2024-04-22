@@ -10,19 +10,27 @@ extends Control
 @onready var Leaderboards: TabContainer = %TabContainer
 
 static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speedrun_key_ := "") -> LeaderboardDisplay:
-	if not level.has_node("LeaderboardDisplay"):
-		var d: LeaderboardDisplay = load("res://game/daily_menu/LeaderboardDisplay.tscn").instantiate()
-		d.tr_name = tr_name_
-		d.has_prev = has_prev_
-		d.speedrun_key = speedrun_key_
+	if not Global.is_mobile and level.has_node("LeaderboardDisplay"):
+		return level.get_node("LeaderboardDisplay")
+	print(Global.load_mobile_compat("res://game/daily_menu/LeaderboardDisplay").instantiate())
+	var d = Global.load_mobile_compat("res://game/daily_menu/LeaderboardDisplay").instantiate()
+	assert(d is LeaderboardDisplay)
+	d.tr_name = tr_name_
+	d.has_prev = has_prev_
+	d.speedrun_key = speedrun_key_
+	# On mobile it's its own screen
+	if Global.is_mobile:
+		TransitionManager.push_scene(d)
+	# On desktop it shows up during the level
+	else:
 		d.modulate.a = 0
 		d.visible = not Global.is_dev_mode()
 		level.add_leaderboard_display(d)
 		level.create_tween().tween_property(d, "modulate:a", 1, 1)
-	return level.get_node("LeaderboardDisplay")
+	return d
 
 func _single(s_name: String) -> SingleDayLeaderboard:
-	var obj: SingleDayLeaderboard = load(^"res://game/daily_menu/SingleDayLeaderboard.tscn").instantiate()
+	var obj: SingleDayLeaderboard = Global.load_mobile_compat("res://game/daily_menu/SingleDayLeaderboard").instantiate()
 	obj.name = s_name
 	if Global.is_mobile:
 		obj.custom_minimum_size = Vector2(500, 500)
