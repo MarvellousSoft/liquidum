@@ -3,13 +3,17 @@ extends ScrollContainer
 
 @onready var Grid: GridContainer = %Grid
 
-
-func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
+func _ready() -> void:
 	# Leave the first five for copying so we don't need to programatically set stuff
 	while Grid.get_child_count() > 10:
 		var c := Grid.get_child(Grid.get_child_count() - 1)
 		Grid.remove_child(c)
 		c.queue_free()
+	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
+		Grid.get_node(c).hide()
+
+
+func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	Grid.get_node("Date").text = date
 	for item in data.list:
 		var icon := Grid.get_node("Icon1").duplicate()
@@ -39,8 +43,6 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		for c in [icon, pos, name_, mistakes, time]:
 			c.show()
 			Grid.add_child(c)
-	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
-		Grid.get_node(c).hide()
 	update_theme(Profile.get_option("dark_mode"))
 
 func update_theme(_dark_mode: bool) -> void:

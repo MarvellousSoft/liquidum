@@ -12,7 +12,6 @@ extends Control
 static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speedrun_key_ := "") -> LeaderboardDisplay:
 	if not Global.is_mobile and level.has_node("LeaderboardDisplay"):
 		return level.get_node("LeaderboardDisplay")
-	print(Global.load_mobile_compat("res://game/daily_menu/LeaderboardDisplay").instantiate())
 	var d = Global.load_mobile_compat("res://game/daily_menu/LeaderboardDisplay").instantiate()
 	assert(d is LeaderboardDisplay)
 	d.tr_name = tr_name_
@@ -35,6 +34,7 @@ func _single(s_name: String) -> SingleDayLeaderboard:
 	if Global.is_mobile:
 		obj.custom_minimum_size = Vector2(500, 500)
 		obj.theme = theme
+
 	return obj
 
 func _ready() -> void:
@@ -53,6 +53,8 @@ func _ready() -> void:
 		Leaderboards.set_tab_hidden(3, true)
 
 func display(current_data: Array[RecurringMarathon.LeaderboardData], current_date: String, previous: Array[RecurringMarathon.LeaderboardData], previous_date: String) -> void:
+	if Global.is_mobile and has_node("%LoadingContainer"):
+		%LoadingContainer.queue_free()
 	if current_data.size() >= 1:
 		Leaderboards.get_child(0).display_day(current_data[0], current_date)
 	if current_data.size() >= 2:
