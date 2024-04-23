@@ -9,7 +9,7 @@ var playfab: PlayFab
 var ld_mapping := {}
 
 static func available() -> bool:
-	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available()
+	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available() or OS.get_name() == "iOS"
 
 func _try_authenticate() -> void:
 	if not authenticated():
@@ -37,7 +37,7 @@ func _try_authenticate() -> void:
 				"/Client/LoginWithSteam",
 				_on_steam_login.bind(ticket.id, func(): return SteamManager.steam.getPersonaName()),
 			)
-		if GooglePlayGameServices.enabled:
+		elif GooglePlayGameServices.enabled:
 			print("Will try to authenticate through Play Services")
 			if not GooglePlayGameServices.auth_done:
 				print("Waiting for auth")
@@ -55,7 +55,8 @@ func _try_authenticate() -> void:
 					var data = await GooglePlayGameServices.players_current_loaded
 					return data.get("displayName", "")),
 			)
-		if AppleIntegration.available():
+		# This is not working for some reason
+		elif AppleIntegration.available() and false:
 			print("Will try to authenticate with Game Center")
 			var impl: AppleIntegration
 			for impl2 in StoreIntegrations.impls:
@@ -83,6 +84,18 @@ func _try_authenticate() -> void:
 							"/Client/LoginWithGameCenter",
 							_on_simple_login.bind(null),
 						)
+			elif OS.get_name() == "iOS":
+				req.merge({
+					DeviceId = OS.get_unique_id(),
+					DeviceModel = OS.get_model_name(),
+				})
+				playfab.post_dict(
+					req,
+					"/Client/LoginWithIOSDeviceID",
+					_on_simple_login.bind(null),
+				)
+			else:
+				print("PlayFab is not sure how to authenticate.")
 	else:
 		print("Playfab login already saved")
 
