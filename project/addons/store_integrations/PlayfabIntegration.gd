@@ -84,18 +84,20 @@ func _try_authenticate() -> void:
 							"/Client/LoginWithGameCenter",
 							_on_simple_login.bind(null),
 						)
-			elif OS.get_name() == "iOS":
-				req.merge({
-					DeviceId = OS.get_unique_id(),
-					DeviceModel = OS.get_model_name(),
-				})
-				playfab.post_dict(
-					req,
-					"/Client/LoginWithIOSDeviceID",
-					_on_simple_login.bind(null),
-				)
-			else:
-				print("PlayFab is not sure how to authenticate.")
+		elif OS.get_name() == "iOS":
+			print("Authenticating with iOS id")
+			req.merge({
+				DeviceId = OS.get_unique_id(),
+				DeviceModel = OS.get_model_name(),
+			})
+			print("Will call with %s" % [req])
+			playfab.post_dict(
+				req,
+				"/Client/LoginWithIOSDeviceID",
+				_on_simple_login.bind(null),
+			)
+		else:
+			print("PlayFab is not sure how to authenticate.")
 	else:
 		print("Playfab login already saved")
 

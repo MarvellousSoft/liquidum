@@ -48,7 +48,7 @@ func _get_api_url() -> String:
 
 func _http_request(request_method: int, body: Dictionary, path: String, callback: Callable, additional_headers: Dictionary = {}):
 	var json = JSON.stringify(body)
-	#print_debug(JSON.stringify(body, "\t"))
+	print("(PlayFab call) %s: %s" % [path, JSON.stringify(body, "\t")])
 	var headers = [
 		"Content-Type: application/json",
 		"Content-Length: " + str(json.length()),

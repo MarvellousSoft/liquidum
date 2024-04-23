@@ -27,10 +27,10 @@ func _try_authenticate() -> bool:
 func _init() -> void:
 	apple = Engine.get_singleton("GameCenter")
 	_authenticated = apple.is_authenticated()
-	await _try_authenticate()
 	update_campaign_later()
 
 func update_campaign_later() -> void:
+	await _try_authenticate()
 	await get_tree().create_timer(5).timeout
 	await StatsTracker.instance().update_campaign_stats()
 

@@ -29,5 +29,5 @@ func _ready():
 		_fb = Engine.get_singleton(&"Facebook")
 		_fb.init(_app_id, _client_token, _app_name)
 		await get_tree().create_timer(5.0).timeout
-		_fb.logEvent("custom_ios_event")
+		_fb.log_event("custom_ios_event")
 		print("Initialised Facebook iOS SDK")
