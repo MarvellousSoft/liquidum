@@ -1377,6 +1377,8 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 				total_empty += dfs.info.total_empty
 				total_water += dfs.info.total_water
 				any_pools = any_pools or dfs.info.has_pool
+	if water_hint <= total_water or total_empty == 0:
+		return false
 	var any := false
 	if not advanced:
 		for aq in rect_aqs:
@@ -1426,7 +1428,8 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 				options.append(opt)
 			options.sort()
 			var water_needed := water_hint - total_water
-			assert(OptionsSum.can_be_solved(water_needed, options))
+			if not OptionsSum.can_be_solved(water_needed, options):
+				return false
 			for idx in options.size():
 				for jdx in options[idx].size():
 					var new := options.duplicate()
