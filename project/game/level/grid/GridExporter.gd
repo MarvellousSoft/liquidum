@@ -155,7 +155,7 @@ func load_compatible_content(old_content: GridImpl.Content, new_content: GridImp
 func load_compatible_cell(old_cell: GridImpl.PureCell, new_cell: GridImpl.PureCell) -> bool:
 	if new_cell.cell_type() == E.Single and new_cell.c_left != new_cell.c_right:
 		return false
-	return old_cell.cell_type() == new_cell.cell_type() and load_compatible_content(old_cell.c_left, old_cell.c_right) \
+	return old_cell.cell_type() == new_cell.cell_type() and load_compatible_content(old_cell.c_left, new_cell.c_left) \
 	  and load_compatible_content(old_cell.c_right, new_cell.c_right)
 
 func load_compatible(old_grid: GridImpl, data: Dictionary, new_cells: Array[Array]) -> bool:
