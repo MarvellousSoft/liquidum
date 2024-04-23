@@ -237,6 +237,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		StatisticName = id,
 		ProfileConstraints = {
 			ShowLinkedAccounts = true,
+			ShowAvatarUrl = true,
 		},
 	}
 	if version != -1:
@@ -282,6 +283,8 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		var display_name: String = raw_entry.get("DisplayName", "")
 		if raw_entry.PlayFabId == my_id:
 			data.has_self = true
+		if raw_entry.Profile.get("AvatarUrl", "") != "":
+			entry.extra_data["avatar_url"] = raw_entry.Profile.AvatarUrl
 		for acc in raw_entry.Profile.LinkedAccounts:
 			if acc.get("Platform", "") == "Steam":
 				entry.extra_data["steam_id"] = int(acc.PlatformUserId)

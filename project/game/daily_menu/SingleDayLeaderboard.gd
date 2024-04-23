@@ -2,6 +2,7 @@ class_name SingleDayLeaderboard
 extends ScrollContainer
 
 @onready var Grid: GridContainer = %Grid
+var cur_downloader: ImageDowloader = null
 
 func _ready() -> void:
 	# Leave the first five for copying so we don't need to programatically set stuff
@@ -12,13 +13,64 @@ func _ready() -> void:
 	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
 		Grid.get_node(c).hide()
 
+class ImageDowloader extends Node:
+	static var cache: Dictionary = {}
+	var icons: Array[TextureRect] = []
+	var urls: Array[String] = []
+	var reqs: Array[HTTPRequest] = []
+	var canceled := false
+	func cancel() -> void:
+		canceled = true
+		for req in reqs:
+			req.cancel_request()
+	func add_image(icon: TextureRect, url: String) -> void:
+		if ImageDowloader.cache.has(url):
+			var img := Image.new()
+			img.load_jpg_from_buffer(ImageDowloader.cache[url])
+			icon.texture = ImageTexture.create_from_image(img)
+			return
+		icons.append(icon)
+		urls.append(url)
+		var req := HTTPRequest.new()
+		reqs.append(req)
+		add_child(req)
+		req.request_completed.connect(_request_completed.bind(icons.size() - 1, req))
+	func _download(i: int) -> void:
+		if canceled:
+			return
+		var req: HTTPRequest = reqs[i]
+		req.call_deferred("request", urls[i])
+		await req.request_completed
+	func _request_completed(result: int, _response_code: int, _headers, body: PackedByteArray, i: int, req: HTTPRequest) -> void:
+		print("[%d] Finished downloading %s" % [i, urls[i]])
+		remove_child(req)
+		req.queue_free()
+		if result != OK:
+			return
+		var img := Image.new()
+		if img.load_jpg_from_buffer(body) == OK:
+			ImageDowloader.cache[urls[i]] = body
+			img.generate_mipmaps()
+			icons[i].texture = ImageTexture.create_from_image(img)
+		else:
+			push_warning("Failed to download image from %s" % [urls[i]])
+	func start_all_downloads() -> void:
+		WorkerThreadPool.add_group_task(self._download, icons.size(), 5, false, "Downloads leaderboard icons")
 
 func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
+	if cur_downloader != null:
+		cur_downloader.canceled = true
+		remove_child(cur_downloader)
+	assert(is_inside_tree())
+	cur_downloader = ImageDowloader.new()
+	add_child(cur_downloader)
 	Grid.get_node("Date").text = date
 	for item in data.list:
 		var icon := Grid.get_node("Icon1").duplicate()
 		if item.image != null:
 			icon.texture = ImageTexture.create_from_image(item.image)
+		elif item.image_url != "":
+			cur_downloader.add_image(icon, item.image_url)
 		var pos := Grid.get_node("Pos1").duplicate()
 		pos.text = "%d." % item.global_rank
 		var name_ := Grid.get_node("NameContainer1").duplicate()
@@ -43,6 +95,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		for c in [icon, pos, name_, mistakes, time]:
 			c.show()
 			Grid.add_child(c)
+	cur_downloader.start_all_downloads()
 	update_theme(Profile.get_option("dark_mode"))
 
 func update_theme(_dark_mode: bool) -> void:

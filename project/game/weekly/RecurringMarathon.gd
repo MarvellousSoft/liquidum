@@ -251,6 +251,8 @@ class ListEntry:
 	var text: String
 	# Might be null
 	var image: Image
+	# To be downloaded later
+	var image_url: String
 	var mistakes: int
 	var secs: int
 	var flair: SteamFlair
@@ -265,8 +267,10 @@ class ListEntry:
 		if SteamManager.enabled and raw.extra_data.has("steam_id"):
 			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
-			entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-			entry.image.generate_mipmaps()
+			if ret[1] > 0:
+				entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+				entry.image.generate_mipmaps()
+		entry.image_url = raw.extra_data.get("avatar_url", "")
 		return entry
 
 class LeaderboardData:
