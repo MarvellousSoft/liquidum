@@ -82,12 +82,13 @@ func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 		text = "%s %s" % [tr(&"WEEKLY_SHARE_COMPLETE"), DailyButton._today()]
 	else:
 		text = tr(&"WEEKLY_SHARE_PARTIAL") % [DailyButton._today(), marathon_i, marathon_size]
-	return "{text}\n\n🕑 {time} ({total})\n{mistakes} ({total})".format({
+	return "{text}\n\n🕑 {time} ({total})\n{mistakes} ({total})\n{link}".format({
 		text = text,
 		today = DailyButton._today(),
 		time = Level.time_str(secs),
 		mistakes = mistakes_str,
 		total = tr(&"TOTAL" if marathon_i == marathon_size else &"SO_FAR"),
+		link = RecurringMarathon.SHARE_LINK,
 	})
 
 # Returns the string representation of the time when this marathon ends

@@ -114,11 +114,12 @@ func share_text(mistakes: int, secs: int, marathon_i: int) -> String:
 	var mistake_str: String = DailyButton._mistakes_str(mistakes)
 
 	var weekday: int = Time.get_datetime_dict_from_unix_time(DailyButton._unixtime_ok_timezone()).weekday
-	return "%s %s\n\n%s %s\n🕑 %s\n%s" % [
+	return "%s %s\n\n%s %s\n🕑 %s\n%s\n%s" % [
 		tr("SHARE_TEXT"), DailyButton._today(),
 		WEEKDAY_EMOJI[weekday], tr("%s_LEVEL" % DailyButton.DAY_STR[weekday]),
 		Level.time_str(secs),
 		mistake_str,
+		RecurringMarathon.SHARE_LINK,
 	]
 
 

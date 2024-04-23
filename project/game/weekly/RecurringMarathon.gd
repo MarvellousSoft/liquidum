@@ -4,6 +4,7 @@ extends Control
 # 27 hours, enough
 const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
+const SHARE_LINK := "linktr.ee/liquidum"
 
 signal streak_opened
 
