@@ -200,8 +200,21 @@ auto_translate = false
 localize_numeral_system = false
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
-text = "X hours left"
+text = "Xh left"
 vertical_alignment = 1
+
+[node name="CopiedLabel" type="Label" parent="CenterContainer/VBox/TimeBox/TimeLeft"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_right = -20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 35
+text = "COPIED"
 
 [node name="StreakButton" type="Button" parent="CenterContainer/VBox/TimeBox"]
 unique_name_in_owner = true

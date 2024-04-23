@@ -335,7 +335,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 			display_leaderboard(null, l_data, [], level)
 	if not MobileRequestReview.just_requested_review:
-		StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
+		await StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
 
 func _on_dark_mode_changed(is_dark: bool):
 	MainButton.theme = Global.get_theme(is_dark)
@@ -345,8 +345,8 @@ func _on_share_pressed() -> void:
 	var save := load_level_save(marathon_size)
 	if save != null and save.is_completed():
 		share(save.best_mistakes, int(save.best_time_secs), marathon_size)
-		if not Global.is_mobile:
-			# Mobile already has enough feedback because it opens a dialog
+		if OS.get_name() != "Android":
+			# Android already has enough feedback because it opens a dialog
 			if copied_tween != null:
 				copied_tween.kill()
 			var label: Label = %CopiedLabel
