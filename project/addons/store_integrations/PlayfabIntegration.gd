@@ -210,9 +210,9 @@ func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mis
 	await leaderboard_upload_score(leaderboard_id, minf(time_secs, RecurringMarathon.MAX_TIME - 1) + minf(mistakes, 1000) * RecurringMarathon.MAX_TIME, keep_best, steam_details)
 
 func _on_leaderboard_upload(res: Variant) -> void:
+	uploaded_leaderboard.emit()
 	if res is Dictionary and res.get("status", "") == "OK":
 		print("Playfab leaderboard upload success")
-		uploaded_leaderboard.emit()
 	else:
 		print("Playfab leaderboard upload failure")
 		assert(false)

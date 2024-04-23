@@ -882,7 +882,7 @@ func _show_level_completed_ad() -> bool:
 	if Global.is_mobile and not AdManager.disabled:
 		if level_number == -1 or level_number > 3 or section_number > 1:
 			if ["Android", "iOS"].has(OS.get_name()):
-				return true
+				return Time.get_ticks_msec() - AdManager.last_big_ad > 60000
 	return false
 
 func _on_continue_button_pressed() -> void:
@@ -894,7 +894,7 @@ func _on_continue_button_pressed() -> void:
 			return
 
 	if _show_level_completed_ad():
-		var show_big_ad: ShowBigAd = preload("res://game/ads/ShowBigAd.tscn").instantiate()
+		var show_big_ad: ShowBigAd = load("res://game/ads/ShowBigAd.tscn").instantiate()
 		show_big_ad.marathon_dif = difficulty
 		show_big_ad.marathon_left = marathon_left
 		show_big_ad.marathon_total = marathon_total

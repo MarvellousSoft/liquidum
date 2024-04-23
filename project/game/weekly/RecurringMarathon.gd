@@ -204,8 +204,14 @@ func gen_and_play(push_scene: bool) -> void:
 				save.mistakes = 0
 				save.timer_secs = 0.0
 				FileManager.save_level(_level_name(1), save)
-		TransitionManager.change_scene(level, push_scene)
-		await level.ready
+		if push_scene and level._show_level_completed_ad():
+			TransitionManager.push_scene(load("res://game/ads/ShowBigAd.tscn").instantiate())
+			await TransitionManager.transition_finished
+			TransitionManager.stack.append(level)
+		else:
+			TransitionManager.change_scene(level, push_scene)
+		if not level.is_node_ready():
+			await level.ready
 		if SteamManager.enabled:
 			await load_and_display_leaderboard(level)
 

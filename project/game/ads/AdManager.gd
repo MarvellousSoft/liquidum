@@ -11,6 +11,7 @@ var _big_ad: InterstitialAd = null
 var _loading_big_ad: bool = false
 var disabled := false
 var payment: PlatformPayment = null
+var last_big_ad: float = -100000.0
 
 func _ready() -> void:
 	if not Global.is_mobile:
@@ -69,6 +70,7 @@ func show_big_ad(exit_ad: Callable) -> void:
 		preload_big_ad()
 	if disabled:
 		return
+	last_big_ad = Time.get_ticks_msec()
 	if _loading_big_ad:
 		await big_ad_loaded
 	if _big_ad == null:
