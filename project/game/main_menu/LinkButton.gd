@@ -4,3 +4,7 @@ extends ModulateTextureButton
 
 func _on_button_pressed() -> void:
 	OS.shell_open(link)
+
+
+func _on_pressed():
+	OS.shell_open(link)

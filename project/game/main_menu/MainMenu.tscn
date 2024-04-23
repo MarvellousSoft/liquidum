@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ro0q1vkhf05x"]
+[gd_scene load_steps=17 format=3 uid="uid://ro0q1vkhf05x"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
-[ext_resource type="Texture2D" uid="uid://dxwpe527fcy3m" path="res://assets/images/icons/android_robot.png" id="4_gygl5"]
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
 [ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="5_ixgbd"]
+[ext_resource type="Texture2D" uid="uid://cn34duicfbus6" path="res://assets/images/ui/icons/android_robot_icon.png" id="6_a5w4w"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
+[ext_resource type="Texture2D" uid="uid://sfjbfiphlh2i" path="res://assets/images/ui/icons/apple_logo.png" id="7_a4ov8"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
 [ext_resource type="PackedScene" uid="uid://oir1c3787ivq" path="res://game/main_menu/PlayerDisplayButton.tscn" id="8_pplw8"]
 [ext_resource type="PackedScene" uid="uid://drtp5pcfag6ly" path="res://game/weekly/WeeklyButton.tscn" id="10_kkfou"]
@@ -105,15 +106,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 3014.0
+offset_left = 2898.0
 offset_top = 1519.0
-offset_right = 3776.0
+offset_right = 3792.0
 offset_bottom = 2120.0
 theme_override_constants/separation = 45
 
 [node name="DiscordButton" type="TextureButton" parent="InfoVBox"]
 modulate = Color(0.670588, 1, 0.819608, 1)
-custom_minimum_size = Vector2(150, 150)
+custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
@@ -124,28 +125,38 @@ script = ExtResource("5_ixgbd")
 link = "https://discord.gg/vDT8F4gGZE"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InfoVBox"]
-modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = -11
 alignment = 2
-script = ExtResource("5_ixgbd")
-link = "https://play.google.com/store/apps/details?id=com.marvelloussoft.liquidum&utm_source=steam_version"
 
-[node name="AndroidLabel" type="Label" parent="InfoVBox/HBoxContainer"]
+[node name="MobileLabel" type="Label" parent="InfoVBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
 theme_override_font_sizes/font_size = 61
-text = "PLAY_ON_ANDROID"
+text = "PLAY_ON_MOBILE"
 vertical_alignment = 2
 
 [node name="AndroidButton" type="TextureButton" parent="InfoVBox/HBoxContainer"]
 custom_minimum_size = Vector2(160, 90)
 layout_mode = 2
 size_flags_horizontal = 8
-texture_normal = ExtResource("4_gygl5")
+texture_normal = ExtResource("6_a5w4w")
 ignore_texture_size = true
 stretch_mode = 5
+script = ExtResource("5_ixgbd")
+link = "https://play.google.com/store/apps/details?id=com.marvelloussoft.liquidum&utm_source=steam_version"
+
+[node name="IOSButton" type="TextureButton" parent="InfoVBox/HBoxContainer"]
+custom_minimum_size = Vector2(100, 130)
+layout_mode = 2
+size_flags_horizontal = 0
+texture_normal = ExtResource("7_a4ov8")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("5_ixgbd")
+link = "https://apps.apple.com/us/app/liquidum-nonogram/id6480063194?utm_source=steam_version"
 
 [node name="CreditsButton" type="Button" parent="InfoVBox"]
 layout_mode = 2
@@ -268,9 +279,12 @@ is_main_menu = true
 [connection signal="mouse_entered" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_button_pressed"]
-[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_on_mouse_exited"]
-[connection signal="pressed" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer" method="_on_button_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_pressed"]
 [connection signal="mouse_entered" from="InfoVBox/CreditsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]
