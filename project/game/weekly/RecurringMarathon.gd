@@ -272,6 +272,7 @@ class ListEntry:
 		entry.flair = raw.extra_data.get("flair", null)
 		entry.text = raw.display_name
 		if SteamManager.enabled and raw.extra_data.has("steam_id"):
+			# TODO: Figure out when we don't have the image
 			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
 			if ret[1] > 0:

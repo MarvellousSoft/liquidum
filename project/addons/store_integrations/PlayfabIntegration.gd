@@ -268,7 +268,6 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	}
 	if version != -1:
 		req["Version"] = version
-	print("Sending request %s" % [req])
 	var res := LeaderboardAndFlairs.new()
 	playfab.post_dict_auth(
 		req,
@@ -301,6 +300,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	update_flair_if_outdated(id_to_flair)
 	var data := StoreIntegrations.LeaderboardData.new()
 	var my_id := PlayFabManager.client_config.master_player_account_id
+	var rng := RandomNumberGenerator.new()
 	for raw_entry in res.lds.data.Leaderboard:
 		var entry := StoreIntegrations.LeaderboardEntry.new()
 		var value: int = -int(raw_entry.StatValue) if negate else int(raw_entry.StatValue)
@@ -324,7 +324,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 			if display_name == "":
 				display_name = acc.get("Username", "")
 		if display_name == "":
-			display_name = str(raw_entry.PlayFabId)
+			display_name = NameGenerator.get_name(rng, str(raw_entry.PlayFabId))
 		entry.display_name = display_name
 		data.entries.append(entry)
 	return data
