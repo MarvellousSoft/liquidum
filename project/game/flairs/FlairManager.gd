@@ -1,8 +1,7 @@
 class_name FlairManager
 
 enum FlairId {
-	Dev = 0,
-	Streak30,
+	Streak30 = 1,
 	Insane100,
 	MainCampaign,
 	Dlc,
@@ -10,6 +9,7 @@ enum FlairId {
 	Functional,
 	# Dlc starts at 9001, and increment by 1 per DLC
 	ExtraIslandStart = 9000,
+	Dev = 9999,
 	# Pro ids start at 10000, on 2024-02, and increment 1 by month
 	ProStart = 10000,
 }
