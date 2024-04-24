@@ -257,7 +257,7 @@ class ListEntry:
 	var global_rank: int
 	var text: String
 	# Might be null
-	var image: Image
+	var texture: Texture
 	# To be downloaded later
 	var image_url: String
 	var mistakes: int
@@ -275,9 +275,14 @@ class ListEntry:
 			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
 			if ret[1] > 0:
-				entry.image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-				entry.image.generate_mipmaps()
+				var image := Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+				image.generate_mipmaps()
+				entry.texture = ImageTexture.create_from_image(image)
 		entry.image_url = raw.extra_data.get("avatar_url", "")
+		if entry.texture == null and raw.extra_data.has("android_id"):
+			entry.texture = load("res://assets/images/ui/icons/android_robot_icon.png")
+		if entry.texture == null and raw.extra_data.has("ios_device"):
+			entry.texture = load("res://assets/images/ui/icons/apple_logo.png")
 		return entry
 
 class LeaderboardData:
