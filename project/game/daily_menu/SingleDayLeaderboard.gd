@@ -5,13 +5,16 @@ extends ScrollContainer
 var cur_downloader: ImageDowloader = null
 
 func _ready() -> void:
+	clear_leaderboard()
+	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
+		Grid.get_node(c).hide()
+
+func clear_leaderboard() -> void:
 	# Leave the first five for copying so we don't need to programatically set stuff
 	while Grid.get_child_count() > 10:
 		var c := Grid.get_child(Grid.get_child_count() - 1)
 		Grid.remove_child(c)
 		c.queue_free()
-	for c in ["Icon1", "Pos1", "NameContainer1", "Mistakes1", "Time1"]:
-		Grid.get_node(c).hide()
 
 class ImageDowloader extends Node:
 	static var cache: Dictionary = {}
@@ -58,6 +61,7 @@ class ImageDowloader extends Node:
 		WorkerThreadPool.add_group_task(self._download, icons.size(), 5, false, "Downloads leaderboard icons")
 
 func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
+	clear_leaderboard()
 	if cur_downloader != null:
 		cur_downloader.canceled = true
 		remove_child(cur_downloader)

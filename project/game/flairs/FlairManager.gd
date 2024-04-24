@@ -10,7 +10,7 @@ enum FlairId {
 	Functional,
 	# Dlc starts at 9001, and increment by 1 per DLC
 	ExtraIslandStart = 9000,
-	# Pro ids start at 10000, on 2024-01, and increment 1 by month
+	# Pro ids start at 10000, on 2024-02, and increment 1 by month
 	ProStart = 10000,
 }
 
@@ -74,7 +74,7 @@ static func create_flair(id: int) -> SelectableFlair:
 	var S := TranslationServer.get_translation_object(TranslationServer.get_locale())
 	if id >= FlairId.ProStart:
 		var year: int = ((id - FlairId.ProStart) / 12) + 2024
-		var month: int = ((id - FlairId.ProStart) % 12) + 1
+		var month: int = ((id - FlairId.ProStart + 1) % 12) + 1
 		var rng := RandomNumberGenerator.new()
 		rng.seed = RandomHub.consistent_hash("%d-%d" % [month, year])
 		return SelectableFlair.new(
