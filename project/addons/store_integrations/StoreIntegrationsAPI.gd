@@ -22,12 +22,14 @@ class LeaderboardMapping:
 	var google_id: String
 	var apple_id: String
 	var playfab_id: String
-	func _init(id_: String, steam_id_: String, google_id_: String, apple_id_: String, playfab_id_: String) -> void:
+	var sort_method: SortMethod
+	func _init(id_: String, steam_id_: String, google_id_: String, apple_id_: String, playfab_id_: String, sort_method_: SortMethod) -> void:
 		id = id_
 		steam_id = steam_id_
 		google_id = google_id_
 		apple_id = apple_id_
 		playfab_id = playfab_id_
+		sort_method = sort_method_
 
 func _ready() -> void:
 	impls.append(LogIntegration.new())
@@ -78,6 +80,7 @@ func load_leaderboards_mapping_from_json(file_name: String) -> void:
 				data[id].get("google_id", ""),
 				data[id].get("apple_id", ""),
 				data[id].get("playfab_id", ""),
+				SortMethod.get(data[id].get("sort_method", ""), SortMethod.LargestFirst),
 			))
 		load_leaderboards_mapping(arr)
 

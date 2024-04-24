@@ -2,66 +2,77 @@
     "daily": {
         "google_id": "CgkIxZaA3LgPEAIQHQ",
         "apple_id": "daily",
-        "playfab_id": "daily"
+        "playfab_id": "daily",
+        "sort_method": "SmallestFirst"
     },
     "weekly": {
         "google_id": "CgkIxZaA3LgPEAIQLw",
         "apple_id": "weekly",
-        "playfab_id": "weekly"
+        "playfab_id": "weekly",
+        "sort_method": "SmallestFirst"
     },
     "daily_current_streak": {
         "steam_id": "current_streak",
         "google_id": "CgkIxZaA3LgPEAIQCQ",
         "apple_id": "daily_current_streak",
-        "playfab_id": "daily_current_streak"
+        "playfab_id": "daily_current_streak",
+        "sort_method": "LargestFirst"
     },
     "daily_max_streak": {
         "steam_id": "max_streak",
         "google_id": "CgkIxZaA3LgPEAIQCg",
         "apple_id": "daily_max_streak",
-        "playfab_id": "daily_max_streak"
+        "playfab_id": "daily_max_streak",
+        "sort_method": "LargestFirst"
     },
     "weekly_current_streak": {
         "steam_id": "weekly_current_streak",
         "google_id": "CgkIxZaA3LgPEAIQMA",
         "apple_id": "weekly_current_streak",
-        "playfab_id": "weekly_current_streak"
+        "playfab_id": "weekly_current_streak",
+        "sort_method": "LargestFirst"
     },
     "weekly_max_streak": {
         "steam_id": "weekly_max_streak",
         "google_id": "CgkIxZaA3LgPEAIQMQ",
         "apple_id": "weekly_max_streak",
-        "playfab_id": "weekly_max_streak"
+        "playfab_id": "weekly_max_streak",
+        "sort_method": "LargestFirst"
     },
     "easy_marathon_10": {
         "steam_id": "easy_marathon_10",
         "google_id": "CgkIxZaA3LgPEAIQMw",
         "apple_id": "easy_marathon_10",
-        "playfab_id": "easy_marathon_10"
+        "playfab_id": "easy_marathon_10",
+        "sort_method": "SmallestFirst"
     },
     "medium_marathon_10": {
         "steam_id": "medium_marathon_10",
         "google_id": "CgkIxZaA3LgPEAIQNA",
         "apple_id": "medium_marathon_10",
-        "playfab_id": "medium_marathon_10"
+        "playfab_id": "medium_marathon_10",
+        "sort_method": "SmallestFirst"
     },
     "hard_marathon_10": {
         "steam_id": "hard_marathon_10",
         "google_id": "CgkIxZaA3LgPEAIQNQ",
         "apple_id": "hard_marathon_10",
-        "playfab_id": "hard_marathon_10"
+        "playfab_id": "hard_marathon_10",
+        "sort_method": "SmallestFirst"
     },
     "expert_marathon_10": {
         "steam_id": "expert_marathon_10",
         "google_id": "CgkIxZaA3LgPEAIQNg",
         "apple_id": "expert_marathon_10",
-        "playfab_id": "expert_marathon_10"
+        "playfab_id": "expert_marathon_10",
+        "sort_method": "SmallestFirst"
     },
     "insane_marathon_10": {
         "steam_id": "insane_marathon_10",
         "google_id": "CgkIxZaA3LgPEAIQNw",
         "apple_id": "insane_marathon_10",
-        "playfab_id": "insane_marathon_10"
+        "playfab_id": "insane_marathon_10",
+        "sort_method": "SmallestFirst"
     },
     "flair": {
         "playfab_id": "flair"

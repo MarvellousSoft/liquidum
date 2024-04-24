@@ -7,6 +7,7 @@ signal uploaded_leaderboard()
 var playfab: PlayFab
 
 var ld_mapping := {}
+var sort_method := {}
 
 static func available() -> bool:
 	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available() or OS.get_name() == "iOS"
@@ -161,6 +162,7 @@ func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) 
 	for ld in lds:
 		if ld.playfab_id != "":
 			ld_mapping[ld.id] = ld.playfab_id
+			sort_method[ld.id] = ld.sort_method
 
 func leaderboard_create_if_not_exists(_leaderboard_id: String, _sort_method: StoreIntegrations.SortMethod) -> void:
 	await null
@@ -190,11 +192,14 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 	var id := _get_ld_mapping(leaderboard_id)
 	if id == "" or not authenticated():
 		return
+	var value := int(score)
+	if sort_method.get(leaderboard_id, StoreIntegrations.SortMethod.SmallestFirst) == StoreIntegrations.SortMethod.SmallestFirst:
+		value = -value
 	playfab.post_dict_auth(
 		{
 			Statistics = [{
 				StatisticName = id,
-				Value = int(score),
+				Value = value,
 			}]
 		},
 		"/Client/UpdatePlayerStatistics",
@@ -277,6 +282,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		res._on_flairs_downloaded,
 	)
 	await res.all_downloaded
+	var negate: bool = sort_method.get(leaderboard_id, StoreIntegrations.SortMethod.SmallestFirst) == StoreIntegrations.SortMethod.SmallestFirst
 	if res.lds.status != "OK":
 		print("Failed to download leaderboard %s: %s" % [leaderboard_id, res.lds])
 		return null
@@ -290,8 +296,9 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	var my_id := PlayFabManager.client_config.master_player_account_id
 	for raw_entry in res.lds.data.Leaderboard:
 		var entry := StoreIntegrations.LeaderboardEntry.new()
-		entry.mistakes = int(raw_entry.StatValue) / RecurringMarathon.MAX_TIME
-		entry.secs = int(raw_entry.StatValue) % RecurringMarathon.MAX_TIME
+		var value: int = -int(raw_entry.StatValue) if negate else int(raw_entry.StatValue)
+		entry.mistakes = value / RecurringMarathon.MAX_TIME
+		entry.secs = value % RecurringMarathon.MAX_TIME
 		entry.rank = int(raw_entry.Position) + 1
 		if id_to_flair.has(raw_entry.PlayFabId):
 			entry.extra_data["flair"] = id_to_flair[raw_entry.PlayFabId]
