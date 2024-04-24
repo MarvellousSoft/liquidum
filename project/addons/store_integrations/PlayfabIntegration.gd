@@ -208,6 +208,7 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 	)
 	# Fire and forget while we are testing
 	# await uploaded_leaderboard
+	await null
 
 func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
 	# We need to store both mistakes and time in the same score.
@@ -245,12 +246,12 @@ class LeaderboardAndFlairs:
 		if lds != null and flairs != null:
 			all_downloaded.emit()
 
-func update_flair_if_outdated(id_to_flairs: Dictionary) -> void:
+func update_flair_if_outdated(id_to_flair: Dictionary) -> void:
 	var cur_flair_int: int = FlairManager.get_current_flair().to_steam_flair().encode_to_int()
-	var ld_flair: SteamFlair = id_to_flairs.get(PlayFabManager.client_config.master_player_account_id, null)
+	var ld_flair: SteamFlair = id_to_flair.get(PlayFabManager.client_config.master_player_account_id, null)
 	var ld_flair_int: int = -1 if ld_flair == null else ld_flair.encode_to_int()
 	if cur_flair_int != ld_flair_int:
-		id_to_flairs[PlayFabManager.client_config.master_player_account_id] = SteamFlair.decode_from_int(cur_flair_int)
+		id_to_flair[PlayFabManager.client_config.master_player_account_id] = SteamFlair.decode_from_int(cur_flair_int)
 		await FlairPicker.save_flair_to_playfab()
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
@@ -265,6 +266,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		ProfileConstraints = {
 			ShowLinkedAccounts = true,
 			ShowAvatarUrl = true,
+			ShowDisplayName = true,
 		},
 	}
 	if version != -1:
@@ -299,7 +301,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 			id_to_flair[raw_entry.PlayFabId] = SteamFlair.decode_from_int(int(raw_entry.StatValue))
 	else:
 		push_warning("Invalid flairs response: %s" % [res.flairs])
-	update_flair_if_outdated(id_to_flair.get(PlayFabManager.client_config.master_player_account_id, null))
+	update_flair_if_outdated(id_to_flair)
 	var data := StoreIntegrations.LeaderboardData.new()
 	var my_id := PlayFabManager.client_config.master_player_account_id
 	for raw_entry in res.lds.data.Leaderboard:
@@ -310,7 +312,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		entry.rank = int(raw_entry.Position) + 1
 		if id_to_flair.has(raw_entry.PlayFabId):
 			entry.extra_data["flair"] = id_to_flair[raw_entry.PlayFabId]
-		var display_name: String = raw_entry.get("DisplayName", "")
+		var display_name: String = raw_entry.Profile.get("DisplayName", "")
 		if raw_entry.PlayFabId == my_id:
 			data.has_self = true
 		if raw_entry.Profile.get("AvatarUrl", "") != "":
@@ -318,8 +320,8 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		for acc in raw_entry.Profile.LinkedAccounts:
 			if acc.get("Platform", "") == "Steam":
 				entry.extra_data["steam_id"] = int(acc.PlatformUserId)
-				if display_name == "":
-					display_name = acc.get("Username", "")
+			if display_name == "":
+				display_name = acc.get("Username", "")
 		if display_name == "":
 			display_name = str(raw_entry.PlayFabId)
 		entry.display_name = display_name
