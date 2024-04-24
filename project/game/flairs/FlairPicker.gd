@@ -1,3 +1,4 @@
+class_name FlairPicker
 extends Control
 
 func _ready():
@@ -66,7 +67,7 @@ func _on_flair_button_pressed(flair_node):
 	update_flair()
 	
 
-func save_flair_to_playfab() -> void:
+static func save_flair_to_playfab() -> void:
 	if StoreIntegrations.playfab == null:
 		return
 	await StoreIntegrations.playfab.leaderboard_upload_score(
@@ -75,7 +76,7 @@ func save_flair_to_playfab() -> void:
 
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_back")
-	save_flair_to_playfab()
+	FlairPicker.save_flair_to_playfab()
 	TransitionManager.pop_scene()
 
 

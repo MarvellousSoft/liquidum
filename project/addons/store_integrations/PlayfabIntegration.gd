@@ -245,6 +245,13 @@ class LeaderboardAndFlairs:
 		if lds != null and flairs != null:
 			all_downloaded.emit()
 
+func update_flair_if_outdated(id_to_flairs: Dictionary) -> void:
+	var cur_flair_int: int = FlairManager.get_current_flair().to_steam_flair().encode_to_int()
+	var ld_flair: SteamFlair = id_to_flairs.get(PlayFabManager.client_config.master_player_account_id, null)
+	var ld_flair_int: int = -1 if ld_flair == null else ld_flair.encode_to_int()
+	if cur_flair_int != ld_flair_int:
+		id_to_flairs[PlayFabManager.client_config.master_player_account_id] = SteamFlair.decode_from_int(cur_flair_int)
+		await FlairPicker.save_flair_to_playfab()
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
 	var id := _get_ld_mapping(leaderboard_id)
@@ -292,6 +299,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 			id_to_flair[raw_entry.PlayFabId] = SteamFlair.decode_from_int(int(raw_entry.StatValue))
 	else:
 		push_warning("Invalid flairs response: %s" % [res.flairs])
+	update_flair_if_outdated(id_to_flair.get(PlayFabManager.client_config.master_player_account_id, null))
 	var data := StoreIntegrations.LeaderboardData.new()
 	var my_id := PlayFabManager.client_config.master_player_account_id
 	for raw_entry in res.lds.data.Leaderboard:
