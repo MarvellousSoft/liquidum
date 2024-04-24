@@ -36,7 +36,7 @@ func _try_authenticate() -> void:
 			playfab.post_dict(
 				req,
 				"/Client/LoginWithSteam",
-				_on_steam_login.bind(ticket.id, func(): return SteamManager.steam.getPersonaName()),
+				_on_steam_login.bind(ticket.id, null),
 			)
 		elif GooglePlayGameServices.enabled:
 			print("Will try to authenticate through Play Services")
@@ -51,10 +51,7 @@ func _try_authenticate() -> void:
 			playfab.post_dict(
 				req,
 				"/Client/LoginWithGooglePlayGamesServices",
-				_on_simple_login.bind(func():
-					GooglePlayGameServices.players_load_current(false)
-					var data = await GooglePlayGameServices.players_current_loaded
-					return data.get("displayName", "")),
+				_on_simple_login.bind(null)
 			)
 		# This is not working for some reason
 		elif AppleIntegration.available() and false:
