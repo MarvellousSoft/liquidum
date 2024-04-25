@@ -138,7 +138,7 @@ func selected_forced_strategies() -> Array:
 func setup(editor_mode: bool) -> void:
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions, $RotateClock, $MirrorH, $MirrorV]:
+	for node in [$Generate, $Interesting, $Seed, $Diags, $Boats, $Aquariums, $CellHintsLabel, $CellHintsSlider, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions, $RotateClock, $MirrorH, $MirrorV]:
 		node.visible = editor_mode
 	if editor_mode:
 		_on_keep_walls_toggled(KeepWalls.button_pressed)
