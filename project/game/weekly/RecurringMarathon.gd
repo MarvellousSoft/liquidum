@@ -155,9 +155,9 @@ func _update_streak() -> void:
 		data.current_streak[id] = 0
 		UserData.save()
 	if has_node("%StreakButton"):
-		%StreakButton.text = str(data.current_streak[type()])
-	CurStreak.text = str(data.current_streak[type()])
-	BestStreak.text = str(data.best_streak[type()])
+		%StreakButton.text = str(data.current_streak[id])
+	CurStreak.text = str(data.current_streak[id])
+	BestStreak.text = str(data.best_streak[id])
 
 func _on_mouse_entered() -> void:
 	AudioManager.play_sfx("button_hover")
@@ -330,16 +330,16 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 	stats.increment_recurring_all(id)
 	if info.total_marathon_mistakes <= streak_max_mistakes:
 		stats.increment_recurring_good(id)
-		if info.total_marathon_mistakes == 0:
-			await stats.unlock_recurring_no_mistakes(id)
 		# It the streak was broken this would be handled in _update_streak
 		if current_period() != data.last_day[id]:
 			data.last_day[id] = current_period()
 			data.current_streak[id] += 1
 			data.best_streak[id] = maxi(data.best_streak[id], data.current_streak[id])
 			UserData.save()
+		if info.total_marathon_mistakes == 0:
+			await stats.unlock_recurring_no_mistakes(id)
 	else:
-		if data.current_streak[id] > 0:
+		if current_period() != data.last_day[id] and data.current_streak[id] > 0:
 			data.current_streak[id] = 0
 			UserData.save()
 	if not already_uploaded:

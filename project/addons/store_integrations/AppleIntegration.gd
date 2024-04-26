@@ -54,11 +54,14 @@ func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) 
 
 func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
 	if ld_id_to_apple_id.has(leaderboard_id):
-		apple.post_score({
+		var res = apple.post_score({
 			score = score,
 			category = ld_id_to_apple_id[leaderboard_id],
 		})
-		await event
+		if res != OK:
+			push_warning("Error calling post_score: %s" % [res])
+		else:
+			await event
 
 func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
 	# 1h penalty
@@ -67,20 +70,27 @@ func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mis
 func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	if not await _try_authenticate():
 		return
+	var res
 	if ld_id_to_apple_id.has(leaderboard_id):
-		apple.show_game_center({"view": "leaderboards", "leaderboard_name": ld_id_to_apple_id[leaderboard_id]})
+		res = apple.show_game_center({"view": "leaderboards", "leaderboard_name": ld_id_to_apple_id[leaderboard_id]})
 	else:
-		apple.show_game_center({})
-	await event
+		res = apple.show_game_center({})
+	if res != OK:
+		push_warning("Error calling show_game_center: %s" % [res])
+	else:
+		await event
 
 func achievement_set(ach_id: String, steps: int, total_steps: int) -> void:
-	apple.award_achievement({
+	var res = apple.award_achievement({
 		name = ach_id,
 		progress = 100.0 * float(steps) / float(total_steps),
 	})
-	var resp: Dictionary = await event
-	if resp.result != "ok":
-		push_warning("Error setting achievement: %s" % [resp.error_code])
+	if res != OK:
+		push_warning("Error calling award_achievement: %s" % [res])
+	else:
+		var resp: Dictionary = await event
+		if resp.result != "ok":
+			push_warning("Error setting achievement: %s" % [resp.error_code])
 
 func achievement_show_all() -> void:
 	await leaderboard_show("", 0, 0)
