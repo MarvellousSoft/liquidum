@@ -10,6 +10,8 @@ var ld_mapping := {}
 var sort_method := {}
 
 static func available() -> bool:
+	if Global.is_demo:
+		return false
 	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available() or OS.get_name() == "iOS"
 
 func _try_authenticate() -> void:

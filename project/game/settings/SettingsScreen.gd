@@ -124,6 +124,9 @@ func setup_values() -> void:
 		else:
 			%DailyNotifContainer.show()
 			%DailyNotifContainer/CheckBox.button_pressed = daily_notif == Profile.DailyStatus.Enabled
+	if Global.is_demo:
+		%UnlockVBox.hide()
+		%MiscellaneousLabel.hide()
 
 
 func set_level_name(level_name: String, section := -1, level := -1) ->  void:

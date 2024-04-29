@@ -732,6 +732,7 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="MiscellaneousLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 theme_override_font_sizes/font_size = 120
@@ -740,6 +741,7 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="UnlockVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 20
 

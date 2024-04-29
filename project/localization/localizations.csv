@@ -361,6 +361,7 @@ ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
 DLC_FREE,Download for free,Baixe de graça,Baixe de graça
 LOCKED_DLC,Locked until level pack download,Bloqueado até baixar o pack de níveis,Bloqueado até baixar o pack de níveis
+LOCKED_DEMO,Locked in demo,Bloqueado no demo,Bloqueado no demo
 NEW,New!,Novo!,Novo!
 BY_AUTHOR,by %s,por %s,por %s
 PLAY_ON_MOBILE,Play on mobile,Jogue no celular,Jogue no celular

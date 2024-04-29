@@ -3,7 +3,7 @@ extends Control
 signal pressed
 
 func _ready():
-	if not SteamManager.enabled:
+	if not SteamManager.enabled or Global.is_demo:
 		hide()
 	else:
 		show()

@@ -72,6 +72,7 @@ func _update_unlocked() -> void:
 		if dif == "insane":
 			open = open and CampaignLevelLister.all_campaign_levels_completed()
 		open = open or Global.is_dev_mode() or Profile.get_option("unlock_everything")
+		open = open and not Global.is_demo
 		if dif == "insane" and Global.is_mobile:
 			%UnlockText.visible = not open
 		button.disabled = not open

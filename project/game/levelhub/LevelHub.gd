@@ -76,7 +76,7 @@ func update_sections() -> void:
 		c.disable_focus.connect(_on_level_section_disable_focus)
 		if extra_levels:
 			if not c.is_connected("loaded_endless", _on_loaded_endless):
-					c.loaded_endless.connect(_on_loaded_endless)
+				c.loaded_endless.connect(_on_loaded_endless)
 	var idx := 1
 	for section in Sections.get_children():
 		section.set_number(idx)
@@ -84,12 +84,11 @@ func update_sections() -> void:
 		var is_disabled := false
 		if level_lister.section_disabled(idx):
 			unlocked = 0
-			assert(extra_levels)
-			is_disabled = ExtraLevelLister.get_disabled_section_free_trial(idx).is_empty()
+			is_disabled = level_lister.get_disabled_section_free_trial(idx).is_empty()
 		elif Global.is_dev_mode() or Profile.get_option("unlock_everything"):
 			unlocked = level_lister.count_section_levels(idx)
 		section.set_section_name(level_lister.section_name(idx))
-		if not extra_levels and unlocked == 0:
+		if not extra_levels and unlocked == 0 and not Global.is_demo:
 			is_disabled = true
 		if is_disabled:
 			section.disable()

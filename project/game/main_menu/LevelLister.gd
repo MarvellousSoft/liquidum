@@ -13,6 +13,9 @@ func count_all_game_sections() -> int:
 func get_max_unlocked_level(_section: int) -> int:
 	return GridModel.must_be_implemented()
 
+func get_disabled_section_free_trial(_section: int) -> Array:
+	return GridModel.must_be_implemented()
+
 func count_section_levels(_section: int) -> int:
 	return GridModel.must_be_implemented()
 

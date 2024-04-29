@@ -125,6 +125,7 @@ offset_left = 235.0
 offset_top = 1000.0
 offset_right = 3035.0
 offset_bottom = 2049.0
+horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Flairs"]
 layout_mode = 2

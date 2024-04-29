@@ -101,6 +101,8 @@ func steam_dlc(section: int) -> int:
 	return _config(section).get_value("section", "dlc", -1)
 
 func section_disabled(section: int) -> bool:
+	if Global.is_demo:
+		return true
 	if Global.is_mobile:
 		var payment := AdManager.payment
 		if OS.get_name() == "Android":
@@ -143,6 +145,8 @@ func count_completed_levels(profile_name: String) -> int:
 
 # Number of levels that can be always played
 func get_disabled_section_free_trial(section: int) -> Array:
+	if Global.is_demo:
+		return []
 	return _config(section).get_value("section", "trial_levels", [1])
 
 func purchase_section(section: int) -> void:

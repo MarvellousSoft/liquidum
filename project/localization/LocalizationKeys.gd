@@ -365,6 +365,7 @@ const ONGOING = "ONGOING"
 const DLC_BUY = "DLC_BUY"
 const DLC_FREE = "DLC_FREE"
 const LOCKED_DLC = "LOCKED_DLC"
+const LOCKED_DEMO = "LOCKED_DEMO"
 const NEW = "NEW"
 const BY_AUTHOR = "BY_AUTHOR"
 const PLAY_ON_MOBILE = "PLAY_ON_MOBILE"
@@ -789,6 +790,7 @@ const KEYS = [
  "DLC_BUY",
  "DLC_FREE",
  "LOCKED_DLC",
+ "LOCKED_DEMO",
  "NEW",
  "BY_AUTHOR",
  "PLAY_ON_MOBILE",

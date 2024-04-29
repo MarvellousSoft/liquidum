@@ -82,9 +82,15 @@ signal dev_mode_toggled(status : bool)
 var _dev_mode := false
 var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
+var is_demo: bool = OS.has_feature("demo")
 var play_new_dif_again = -1
 var custom_portrait = null
 var shader_materials = {}
+
+const DEMO_UNLOCKED := {
+	1: [1, 2, 3, 4, 5, 6, 7, 8],
+	2: [1, 2, 3, 4, 5],
+}
 
 func _ready() -> void:
 	dev_mode_label = Label.new()

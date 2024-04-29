@@ -136,7 +136,7 @@ func delete_dlc_button() -> void:
 		%NewDLC.queue_free()
 		%BuyDLCButton.queue_free()
 
-func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
+func setup(hub_ref, section: int, unlocked_levels: int, extra_: bool) -> void:
 	extra = extra_
 	level_lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	var any_hard := false
@@ -146,15 +146,17 @@ func setup(hub_ref, section, unlocked_levels, extra_: bool) -> void:
 		Levels.remove_child(button)
 		button.queue_free()
 	var force_unlocked := {}
-	if extra and ExtraLevelLister.section_disabled(section):
-		for level in ExtraLevelLister.get_disabled_section_free_trial(section):
+	if level_lister.section_disabled(section):
+		for level in level_lister.get_disabled_section_free_trial(section):
 			force_unlocked[level] = true
-	%LockDesc.visible = not force_unlocked.is_empty()
+	var total_levels := level_lister.count_section_levels(my_section)
+	%LockDesc.visible = not force_unlocked.is_empty() and force_unlocked.size() < total_levels
+	if Global.is_demo:
+		%LockDesc/Meaning.text = "LOCKED_DEMO"
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
 	var flavor := ExtraLevelLister.section_endless_flavor(section) if extra else -1
-	var total_levels := level_lister.count_section_levels(my_section)
 	for i in range(1, total_levels + 1):
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)

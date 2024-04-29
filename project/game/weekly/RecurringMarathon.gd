@@ -54,7 +54,7 @@ static func _unixtime_ok_timezone() -> int:
 	return _unixtime() + _timezone_bias_secs()
 
 static func is_unlocked() -> bool:
-	return Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4)
+	return not Global.is_demo and (Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4))
 
 func _ready() -> void:
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)

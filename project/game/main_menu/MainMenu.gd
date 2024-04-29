@@ -44,8 +44,6 @@ var cur_state = STATES.MAIN_MENU
 
 func _ready():
 	%NewIndicator.hide()
-	if ExtraLevelLister.count_all_game_sections() == 0:
-		%ExtraLevelsButton.hide()
 	Global.dev_mode_toggled.connect(_dev_mode_toggled)
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
@@ -56,6 +54,15 @@ func _ready():
 	Camera.position = cam_pos.menu
 	AudioManager.start_bgm_loop()
 	UserData.current().save_stats()
+	
+	if Global.is_demo:
+		assert(not Global.is_mobile)
+		for but in [%ExtraLevelsButton, %RandomButton, %Workshop, %EditorButton]:
+			but.disabled = true
+			but.get_node("LockIcon").show()
+		%LockDesc.show()
+	elif not Global.is_mobile:
+		%LockDesc.queue_free()
 	
 	await get_tree().process_frame
 	
@@ -128,6 +135,8 @@ func update_level_hub():
 
 func check_for_new_dlc():
 	%NewIndicator.hide()
+	if Global.is_demo:
+		return
 	var idx = 1
 	for dlc in Profile.get_all_dlc_info().values():
 		if ExtraLevelLister.has_section(idx):
