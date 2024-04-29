@@ -82,7 +82,8 @@ signal dev_mode_toggled(status : bool)
 var _dev_mode := false
 var dev_mode_label: Label
 var is_mobile: bool = ProjectSettings.get_setting("liquidum/is_mobile")
-var is_demo: bool = OS.has_feature("demo")
+# SteamManager changes this
+var is_demo: bool = not is_mobile
 var play_new_dif_again = -1
 var custom_portrait = null
 var shader_materials = {}
