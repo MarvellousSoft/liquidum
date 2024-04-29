@@ -37,7 +37,7 @@ func increment_recurring_started(type: RecurringMarathon.Type) -> void:
 
 func increment_insane_good() -> void:
 	for impl in impls:
-		await impl.inscrement_insane_good()
+		await impl.increment_insane_good()
 
 func increment_random_any() -> void:
 	for impl in impls:

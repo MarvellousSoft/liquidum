@@ -181,6 +181,8 @@ func gen_and_play(push_scene: bool) -> void:
 			# TODO: put some marathon information in the level
 			save_level_data(marathon_i, level)
 		else:
+			if not push_scene:
+				TransitionManager.pop_scene()
 			return
 	var level_data := load_level_data(marathon_i)
 	already_uploaded = false

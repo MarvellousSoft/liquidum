@@ -40,14 +40,12 @@ func _enter_tree() -> void:
 	Profile.unlock_everything_changed.connect(_on_unlock_changed)
 	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	
-	GeneratingLevel.cancel.connect(_on_cancel_gen_pressed)
 	call_deferred(&"_update_unlocked")
 
 
 func _exit_tree() -> void:
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
-	GeneratingLevel.cancel.disconnect(_on_cancel_gen_pressed)
 	Profile.dark_mode_toggled.disconnect(_on_dark_mode_changed)
 
 func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> String:
@@ -156,6 +154,8 @@ func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, seed_str: String,
 	var g := await RandomHub.gen_from_difficulty(gen, rng, dif)
 	GeneratingLevel.disable()
 	if g == null:
+		if Global.play_new_dif_again != -1:
+			TransitionManager.pop_scene()
 		return
 	# There may be an existing level save
 	FileManager.clear_level(RANDOM)
@@ -359,10 +359,6 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		rng.seed = RandomHub.consistent_hash(seed_str)
 	assert(not seed_str.is_empty())
 	await gen_and_play(rng, dif, seed_str, manually_seeded, -1, -1, 0, 0)
-
-
-func _on_cancel_gen_pressed():
-	gen.cancel()
 
 
 func _on_custom_seed_button_pressed() -> void:

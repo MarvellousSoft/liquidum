@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://d1mr4677loeoa" path="res://game/steam/SteamPlaytimeTracker.tscn" id="16_78sh5"]
 [ext_resource type="StyleBox" uid="uid://ciykubaqs42b0" path="res://assets/ui/TutorialPanel.tres" id="16_y0h4x"]
 [ext_resource type="PackedScene" uid="uid://b4h8vntopam6n" path="res://game/steam/SteamRichPresence.tscn" id="21_s7rk0"]
-[ext_resource type="PackedScene" uid="uid://l8ufnptne6b4" path="res://game/level/PaintManager.tscn" id="23_pqssh"]
+[ext_resource type="PackedScene" path="res://game/level/PaintManager.tscn" id="23_pqssh"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("5_2usht")

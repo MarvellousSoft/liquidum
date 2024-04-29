@@ -1,6 +1,7 @@
 class_name RandomLevelGenerator
 
 const MAX_TIME_PER_SOLVE = 30.0
+const US_TO_S := 1000000.0
 
 var gen_thread := Thread.new()
 var cancel_gen := false
@@ -8,35 +9,38 @@ var cancel_gen := false
 # Can be used to generate it very quickly
 var success_state: int
 
+func _init() -> void:
+	GeneratingLevel.cancel.connect(self.cancel)
+
 func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats: bool) -> GridModel:
 	var initial_seed := rng.seed
 	var initial_state := rng.state
 	var g: GridModel = null
 	var solver := SolverModel.new()
 	var found := false
-	var start_time := Time.get_unix_time_from_system()
-	var total_gen := 0.0
-	var total_solve := 0.0
+	var start_time := Time.get_ticks_usec()
+	var total_gen := 0
+	var total_solve := 0
 	var tries := 0
 	for i in 1000:
 		if cancel_gen:
 			break
 		success_state = rng.state
-		var start_gen := Time.get_unix_time_from_system()
+		var start_gen := Time.get_ticks_usec()
 		var sz: Vector2i = gen_size.call(rng)
 		g = gen_options_builder.call(rng).build(rng.randi()).generate(sz.x, sz.y)
-		total_gen += Time.get_unix_time_from_system() - start_gen
+		total_gen += Time.get_ticks_usec() - start_gen
 		if force_boats and g.count_boats() == 0:
 			continue
 		g.set_auto_update_hints(false)
 		apply_hints.call(rng, g)
 		assert(g.are_hints_satisfied())
-		var start_solve := Time.get_unix_time_from_system()
+		var start_solve := Time.get_ticks_usec()
 		tries += 1
 		if not forced_strategies.is_empty():
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
 			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
-				total_solve += Time.get_unix_time_from_system() - start_solve
+				total_solve += Time.get_ticks_usec() - start_solve
 				g2.force_editor_mode(false)
 				g2.clear_content()
 				solver.apply_strategies(g2, strategies + forced_strategies)
@@ -47,14 +51,16 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 		else:
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-			if solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_unix_time_from_system() > start_solve + MAX_TIME_PER_SOLVE) == SolverModel.SolveResult.SolvedUnique:
-				total_solve += Time.get_unix_time_from_system() - start_solve
+			if solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S) == SolverModel.SolveResult.SolvedUnique:
+				total_solve += Time.get_ticks_usec() - start_solve
 				g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.SolutionNoClear)
 				found = true
 				break
-		total_solve += Time.get_unix_time_from_system() - start_solve
+		total_solve += Time.get_ticks_usec() - start_solve
 	if found:
-		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d,success_state=%d]" % [tries, Time.get_unix_time_from_system() - start_time, total_gen, total_solve, initial_seed, initial_state, success_state])
+		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d,success_state=%d]" % [tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S, initial_seed, initial_state, success_state])
+	else:
+		print("Level generation canceled after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S])
 	return g if found else null
 
 func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
