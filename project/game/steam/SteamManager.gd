@@ -34,7 +34,7 @@ func _ready() -> void:
 		set_process(false)
 		set_process_input(false)
 		return
-	Global.is_demo = not Steam.isSubscribedApp(2716690) or ProjectSettings.get_setting("liquidum/force_demo")
+	Global.is_demo = not steam.isSubscribedApp(2716690) or ProjectSettings.get_setting("liquidum/force_demo")
 	SteamManager.steam.dlc_installed.connect(_on_dlc_installed)
 	SteamManager.steam.current_stats_received.connect(_stats_received)
 	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
