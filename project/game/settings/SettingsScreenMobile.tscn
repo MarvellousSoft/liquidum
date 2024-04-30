@@ -725,6 +725,30 @@ popup/item_0/id = 0
 popup/item_1/text = "CELLHINTS_REMAINING"
 popup/item_1/id = 1
 
+[node name="HighlightCellHintContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer"]
+custom_minimum_size = Vector2(66, 70)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+texture_normal = ExtResource("4_d7qef")
+texture_pressed = ExtResource("5_olws7")
+texture_hover = ExtResource("6_gfgdl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 47
+text = "HIGHLIGHT_CELL_HINT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="AccessibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
@@ -1107,6 +1131,8 @@ libraries = {
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/SkipAnimsContainer/CheckBox" to="." method="_on_skip_anims_toggled"]
 [connection signal="item_selected" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer/OptionButton" to="." method="_on_cell_hint_item_selected"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer/OptionButton" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer/CheckBox" to="." method="_on_button_mouse_entered"]
+[connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer/CheckBox" to="." method="_on_highlight_cell_hint_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_button_mouse_entered"]
 [connection signal="toggled" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer/CheckBox" to="." method="_on_bigger_hints_toggled"]
 [connection signal="mouse_entered" from="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer/CheckBox" to="." method="_on_button_mouse_entered"]

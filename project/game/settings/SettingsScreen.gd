@@ -101,6 +101,7 @@ func setup_values() -> void:
 	%BiggerHintsContainer/CheckBox.set_pressed_no_signal(Profile.get_option("bigger_hints_font"))
 	%BlueFilterContainer/HSlider.value = Profile.get_option("blue_filter")
 	%HighlightHintsContainer/CheckBox.set_pressed_no_signal(Profile.get_option("highlight_finished_row_col"))
+	%HighlightCellHintContainer/CheckBox.set_pressed_no_signal(Profile.get_option("highlight_finished_cell_hint"))
 	%ShowPreviewContainer/CheckBox.set_pressed_no_signal(Profile.get_option("show_grid_preview"))
 	%LanguageSelectContainer/OptionButton.selected = Profile.get_option("locale")
 	%DarkModeContainer/CheckBox.set_pressed_no_signal(Profile.get_option("dark_mode"))
@@ -292,6 +293,10 @@ func _on_show_bubbles_toggled(on: bool) -> void:
 func _on_highlight_hints_toggled(on : bool) -> void:
 	checkbox_sound(on)
 	Profile.set_option("highlight_finished_row_col", on)
+
+func _on_highlight_cell_hint_toggled(on: bool) -> void:
+	checkbox_sound(on)
+	Profile.set_option("highlight_finished_cell_hint", on)
 
 
 func _on_blue_filter_slider_value_changed(value):

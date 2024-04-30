@@ -60,6 +60,7 @@ var options = {
 	"show_timer": true,
 	"allow_mistakes": false,
 	"highlight_finished_row_col": true,
+	"highlight_finished_cell_hint": false,
 	"progress_on_unknown": false,
 	"show_bubbles": true,
 	"bigger_hints_font": false,
