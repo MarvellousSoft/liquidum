@@ -23,7 +23,7 @@ func set_random_levels(completed_count: Array[int]) -> void:
 		if completed_count[dif_val] < 5:
 			each = false
 		tot += completed_count[dif_val]
-	await StoreIntegrations.achievement_set("random_all_levels", tot, 25)
+	await StoreIntegrations.achievement_set("random_25", tot, 25)
 	if tot > 0:
 		await StoreIntegrations.achievement_set("random_1")
 	if each:
@@ -93,7 +93,7 @@ func update_campaign_stats() -> void:
 		var completed_levels := ExtraLevelLister.count_completed_section_levels(extra_section)
 		var section_levels := ExtraLevelLister.count_section_levels(extra_section)
 		if ExtraLevelLister.is_free(extra_section):
-			await StoreIntegrations.achievement_set("extra_%02d_complete" % [section], completed_levels, section_levels)
+			await StoreIntegrations.achievement_set("extra_%02d_complete" % [extra_section], completed_levels, section_levels)
 		else:
 			pass
 		extra_section += 1

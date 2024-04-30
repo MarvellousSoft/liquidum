@@ -56,21 +56,17 @@ func _try_authenticate() -> void:
 				_on_simple_login.bind(null)
 			)
 		# This is not working for some reason
-		elif AppleIntegration.available() and false:
+		elif AppleIntegration.available():
 			print("Will try to authenticate with Game Center")
-			var impl: AppleIntegration
-			for impl2 in StoreIntegrations.impls:
-				if impl2 is AppleIntegration:
-					impl = impl2
-					break
+			var impl: AppleIntegration = StoreIntegrations.apple
 			if impl != null:
 				if not await impl._try_authenticate():
 					print("Could not authenticate with Game Center")
 				else:
 					impl.apple.request_identity_verification_signature()
-					var ev: Dictionary = await impl.event
+					var ev: Dictionary = await impl.identity_verification_event
 					if ev["type"] != "identity_verification_signature" or ev["result"] != "ok":
-						print("Could not authenticate with Game Center: Failed to get signature")
+						print("Could not authenticate with Game Center: Failed to get signature (%s)" % [ev])
 					else:
 						req.merge({
 							PlayerId = ev.player_id,
@@ -82,8 +78,10 @@ func _try_authenticate() -> void:
 						playfab.post_dict(
 							req,
 							"/Client/LoginWithGameCenter",
-							_on_simple_login.bind(null),
+							_on_simple_login.bind(func():
+								return StoreIntegrations.apple.display_name),
 						)
+		# Not really used anymore because we use GameCenter
 		elif OS.get_name() == "iOS":
 			print("Authenticating with iOS id")
 			req.merge({
@@ -140,14 +138,15 @@ func _on_simple_login(result, display_name_getter) -> void:
 		playfab.logged_in.emit(login_result)
 		if login_result.NewlyCreated and display_name_getter != null:
 			var display_name: String = await display_name_getter.call()
-			playfab.post_dict_auth(
-				{
-					DisplayName = display_name,
-				},
-				"/Client/UpdateUserTitleDisplayName",
-				PlayFab.AUTH_TYPE.SESSION_TICKET,
-				_generic_request,
-			)
+			if display_name != "":
+				playfab.post_dict_auth(
+					{
+						DisplayName = display_name,
+					},
+					"/Client/UpdateUserTitleDisplayName",
+					PlayFab.AUTH_TYPE.SESSION_TICKET,
+					_generic_request,
+				)
 	else:
 		print("Weird login result: %s" % [result])
 

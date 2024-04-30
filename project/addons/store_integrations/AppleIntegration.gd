@@ -2,6 +2,7 @@ class_name AppleIntegration extends StoreIntegration
 
 signal event(data: Dictionary)
 signal authenticate_event(data: Dictionary)
+signal identity_verification_event(data: Dictionary)
 
 static func available() -> bool:
 	return Engine.has_singleton("GameCenter")
@@ -9,7 +10,24 @@ static func available() -> bool:
 var apple = null
 var ld_id_to_apple_id := {}
 var _authenticated := false
-var player_id := ""
+var display_name := ""
+
+class WaitWithTimeout:
+	signal finished
+	var _finished := false
+	func _init(sig: Signal, timeout: float) -> void:
+		_wait_sig(sig)
+		_wait_timeout(timeout)
+	func _wait_sig(sig: Signal) -> void:
+		var res = await sig
+		_try_complete(res)
+	func _wait_timeout(timeout: float) -> void:
+		await Global.wait(timeout)
+		_try_complete(null)
+	func _try_complete(res) -> void:
+		if not _finished:
+			_finished = true
+			finished.emit(res)
 
 func _try_authenticate() -> bool:
 	if _authenticated:
@@ -17,34 +35,39 @@ func _try_authenticate() -> bool:
 	_authenticated = apple.is_authenticated()
 	if _authenticated:
 		return true
-	print("Authenticating with apple")
-	apple.authenticate()
-	var resp = await authenticate_event
-	_authenticated = resp.result == "ok"
+	var res = apple.authenticate()
+	if res == OK:
+		print("Authenticating with apple")
+		var resp = await WaitWithTimeout.new(authenticate_event, 3).finished
+		_authenticated = resp is Dictionary and resp.result == "ok"
+	else:
+		print("Failed apple.authenticate() call")
 	assert(apple.is_authenticated() == _authenticated)
 	return _authenticated
 
 func _init() -> void:
 	apple = Engine.get_singleton("GameCenter")
 	_authenticated = apple.is_authenticated()
-	update_campaign_later()
 
-func update_campaign_later() -> void:
+
+func _ready() -> void:
 	await _try_authenticate()
-	await get_tree().create_timer(5).timeout
 	await StatsTracker.instance().update_campaign_stats()
+	print("Apple ready")
 
 func authenticated() -> bool:
 	return _authenticated
 
-func process(_dt: float) -> void:
+func _process(_dt: float) -> void:
 	while apple.get_pending_event_count() > 0:
 		var new_event: Dictionary = apple.pop_pending_event()
 		print("Apple event: %s" % [new_event])
 		if new_event["type"] == "authentication" and new_event.result == "ok":
-			player_id = new_event["player_id"]
+			display_name = new_event.get("displayName", new_event.get("alias", ""))
 		if new_event["type"] == "authentication":
 			authenticate_event.emit(new_event)
+		elif new_event["type"] == "identity_verification_signature":
+			identity_verification_event.emit(new_event)
 		else:
 			event.emit(new_event)
 
