@@ -246,7 +246,8 @@ class LeaderboardAndFlairs:
 			all_downloaded.emit()
 
 func update_flair_if_outdated(id_to_flair: Dictionary) -> void:
-	var cur_flair_int: int = FlairManager.get_current_flair().to_steam_flair().encode_to_int()
+	var cur_flair := FlairManager.get_current_flair()
+	var cur_flair_int: int = cur_flair.to_steam_flair().encode_to_int() if cur_flair != null else -1
 	var ld_flair: SteamFlair = id_to_flair.get(PlayFabManager.client_config.master_player_account_id, null)
 	var ld_flair_int: int = -1 if ld_flair == null else ld_flair.encode_to_int()
 	if cur_flair_int != ld_flair_int:

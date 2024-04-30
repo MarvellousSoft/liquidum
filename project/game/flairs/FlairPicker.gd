@@ -70,8 +70,9 @@ func _on_flair_button_pressed(flair_node):
 static func save_flair_to_playfab() -> void:
 	if StoreIntegrations.playfab == null:
 		return
+	var cur_flair := FlairManager.get_current_flair()
 	await StoreIntegrations.playfab.leaderboard_upload_score(
-		"flair", float(FlairManager.get_current_flair().to_steam_flair().encode_to_int()), false, PackedInt32Array()
+		"flair", float(cur_flair.to_steam_flair().encode_to_int() if cur_flair != null else -1), false, PackedInt32Array()
 	)
 
 func _on_back_button_pressed():
