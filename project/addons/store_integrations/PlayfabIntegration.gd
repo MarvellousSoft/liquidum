@@ -251,6 +251,7 @@ func update_flair_if_outdated(id_to_flair: Dictionary) -> void:
 	var ld_flair: SteamFlair = id_to_flair.get(PlayFabManager.client_config.master_player_account_id, null)
 	var ld_flair_int: int = -1 if ld_flair == null else ld_flair.encode_to_int()
 	if cur_flair_int != ld_flair_int:
+		print("Flair changed from %d to %d, updating on PlayFab..." % [ld_flair_int, cur_flair_int])
 		id_to_flair[PlayFabManager.client_config.master_player_account_id] = SteamFlair.decode_from_int(cur_flair_int)
 		await FlairPicker.save_flair_to_playfab()
 
@@ -290,7 +291,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		res._on_flairs_downloaded,
 	)
 	await res.all_downloaded
-	var negate: bool = sort_method.get(leaderboard_id, StoreIntegrations.SortMethod.SmallestFirst) == StoreIntegrations.SortMethod.SmallestFirst
+	var _negate: bool = sort_method.get(leaderboard_id, StoreIntegrations.SortMethod.SmallestFirst) == StoreIntegrations.SortMethod.SmallestFirst
 	if res.lds.status != "OK":
 		print("Failed to download leaderboard %s: %s" % [leaderboard_id, res.lds])
 		return null
@@ -306,7 +307,8 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	var rng := RandomNumberGenerator.new()
 	for raw_entry in res.lds.data.Leaderboard:
 		var entry := StoreIntegrations.LeaderboardEntry.new()
-		var value: int = -int(raw_entry.StatValue) if negate else int(raw_entry.StatValue)
+		# Always positive so we can always get abs value and not care about negate
+		var value: int = absi(int(raw_entry.StatValue))
 		entry.mistakes = value / RecurringMarathon.MAX_TIME
 		entry.secs = value % RecurringMarathon.MAX_TIME
 		entry.rank = int(raw_entry.Position) + 1

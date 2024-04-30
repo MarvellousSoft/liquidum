@@ -275,6 +275,8 @@ class ListEntry:
 		entry.text = raw.display_name
 		if SteamManager.enabled and raw.extra_data.has("steam_id"):
 			# TODO: Figure out when we don't have the image
+			if SteamManager.steam.requestUserInformation(raw.extra_data.steam_id, false):
+				await SteamManager.steam.persona_state_change
 			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
 			var ret: Array = await SteamManager.steam.avatar_loaded
 			if ret[1] > 0:
@@ -306,6 +308,7 @@ static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 	data.has_self = raw.has_self
 	for raw_entry in raw.entries:
 		data.list.append(await ListEntry.create(raw_entry))
+	data.sort()
 	return [data]
 
 func display_leaderboard(display: LeaderboardDisplay, current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
