@@ -107,6 +107,7 @@ func setup_values() -> void:
 	%DragContainer/CheckBox.set_pressed_no_signal(Profile.get_option("drag_content"))
 	%InvertMouseContainer/CheckBox.set_pressed_no_signal(Profile.get_option("invert_mouse"))
 	%IncompleteInfoContainer/OptionButton.selected = Profile.get_option("line_info")
+	%CellHintsInfoContainer/OptionButton.selected = Profile.get_option("cell_hint_info")
 	populate_palette()
 	%PaletteContainer/OptionButton.selected = Profile.get_option("palette")
 	%VsyncContainer/OptionButton.selected = Profile.get_option("vsync")
@@ -222,6 +223,11 @@ func _on_line_info_item_selected(index: int) -> void:
 	checkbox_sound(true)
 	Profile.set_option("line_info", index)
 	Profile.line_info_changed.emit()
+
+func _on_cell_hint_item_selected(index: int) -> void:
+	checkbox_sound(true)
+	Profile.set_option("cell_hint_info", index)
+	Profile.cell_hint_info_changed.emit()
 
 
 func _on_back_button_pressed():

@@ -422,3 +422,6 @@ DEVELOPER_FLAIR_DESCRIPTION,Developer of Liquidum,Desenvolvedor de Liquidum,Dese
 EXTRA_ISLAND_FLAIR_DESC,Completed island %s,Completou a ilha %s,Completou a ilha %s
 RESTORE_PURCHASES,Restore purchases,Restaurar compras,Restaurar compras
 PURCHASES_RESTORED,Restored!,Restauradas!,Restauradas!
+CELLHINTS_INFO,Cell hint,Dica na célula,Dica na célula
+CELLHINTS_TOTAL,Show total value,Mostrar valor total,Mostrar valor total
+CELLHINTS_REMAINING,Show remaining value,Mostrar valor faltando,Mostrar valor faltando

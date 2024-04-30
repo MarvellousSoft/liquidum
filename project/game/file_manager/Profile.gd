@@ -11,6 +11,7 @@ signal bigger_hints_changed(on: bool)
 signal daily_notification_changed(on: bool)
 signal unlock_everything_changed(on: bool)
 signal thick_walls_mode_toggled(on: bool)
+signal cell_hint_info_changed()
 
 const LANGUAGES = [
 	"",
@@ -22,6 +23,10 @@ enum LineInfo {
 	None,
 	ShowMissing,
 	ShowCurrent,
+}
+enum CellHintInfo {
+	ShowTotal,
+	ShowRemaining,
 }
 const MOBILE_MASTER_VOLUME = 0.7
 
@@ -50,6 +55,7 @@ var options = {
 	"drag_content": true,
 	"invert_mouse": false,
 	"line_info": LineInfo.None,
+	"cell_hint_info": CellHintInfo.ShowTotal,
 	"vsync": int(DisplayServer.VSYNC_ADAPTIVE) if not Global.is_mobile else int(DisplayServer.VSYNC_DISABLED),
 	"show_timer": true,
 	"allow_mistakes": false,

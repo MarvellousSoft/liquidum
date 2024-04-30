@@ -64,13 +64,14 @@ func _ready():
 
 func _enter_tree() -> void:
 	Profile.line_info_changed.connect(_on_line_info_changed)
+	Profile.cell_hint_info_changed.connect(update)
 
 func _exit_tree() -> void:
 	Profile.line_info_changed.disconnect(_on_line_info_changed)
+	Profile.cell_hint_info_changed.disconnect(update)
 
 func _process(_dt):
 	update_drag_preview()
-
 
 func _input(event: InputEvent) -> void:
 	if current_brush_override != 0 and not Input.is_key_pressed(current_brush_override):
@@ -1131,7 +1132,6 @@ func _on_hint_bar_bottom_mouse_entered_hint(idx: int) -> void:
 func _on_line_info_changed() -> void:
 	setup_hints(true)
 	update_hints()
-
 
 func _on_hint_bar_top_left_clicked_hint(idx):
 	if disabled:
