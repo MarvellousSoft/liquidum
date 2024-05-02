@@ -320,10 +320,11 @@ color = Color(0.670588, 1, 0.819608, 1)
 [node name="MouseBlocker" type="ColorRect" parent="Button"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
-offset_left = -101.0
-offset_top = -65.0
-offset_right = 299.0
-offset_bottom = 335.0
+offset_left = -1375.0
+offset_top = -805.0
+offset_right = 1590.0
+offset_bottom = 1062.0
+mouse_force_pass_scroll_events = false
 
 [node name="OngoingSolution" parent="Button" instance=ExtResource("4_wvh0b")]
 unique_name_in_owner = true
@@ -391,7 +392,7 @@ size_flags_horizontal = 4
 theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 60
-text = "Section name is this one indeed"
+text = "Marine Mysteries"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b684of0yteu0u"]
+[gd_scene load_steps=4 format=3 uid="uid://b684of0yteu0u"]
 
 [ext_resource type="Script" path="res://game/levelhub/LevelHub.gd" id="1_bxko5"]
 [ext_resource type="PackedScene" uid="uid://dc0n1i0v2jf7g" path="res://game/levelhub/LevelSection.tscn" id="1_t5l7o"]
+[ext_resource type="Script" path="res://game/ui/DisableableScrollContainer.gd" id="2_7ocyv"]
 
 [node name="ExtraLevelHub" type="Control"]
 layout_mode = 3
@@ -23,6 +24,7 @@ offset_top = 100.0
 offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_7ocyv")
 
 [node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
 layout_mode = 2

@@ -138,6 +138,9 @@ func _on_level_section_enable_focus(pos, my_section, extra):
 	level_focused = true
 	section_focused = my_section
 	enable_focus.emit(pos, extra)
+	if has_node("ScrollContainer"):
+		var h: DisableableScrollContainer = get_node("ScrollContainer")
+		h.disable_scroll = true
 
 
 func _on_level_section_disable_focus():
@@ -145,6 +148,9 @@ func _on_level_section_disable_focus():
 	#Wait a frame to any back button event wont also trigger on level hub
 	await get_tree().process_frame
 	level_focused = false
+	if has_node("ScrollContainer"):
+		var h: DisableableScrollContainer = get_node("ScrollContainer")
+		h.disable_scroll = false
 
 func get_focused_section():
 	if not level_focused:
