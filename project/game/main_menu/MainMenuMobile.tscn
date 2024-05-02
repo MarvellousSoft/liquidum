@@ -142,6 +142,10 @@ grow_horizontal = 1
 grow_vertical = 1
 scale = Vector2(0.5, 0.5)
 
+[node name="ScrollContainer" parent="ExtraLevelHub" index="0"]
+offset_top = 640.0
+offset_bottom = -244.0
+
 [node name="MarginContainer" parent="ExtraLevelHub/ScrollContainer" index="0"]
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 100
