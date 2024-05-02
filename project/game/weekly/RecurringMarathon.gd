@@ -299,6 +299,11 @@ class LeaderboardData:
 		return list.is_empty()
 	func sort() -> void:
 		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool: return entry_a.global_rank < entry_b.global_rank)
+	func sort_ignore_rank() -> void:
+		list.sort_custom(func(entry_a: ListEntry, entry_b: ListEntry) -> bool:
+			return entry_a.mistakes < entry_b.mistakes if entry_a.mistakes != entry_b.mistakes else entry_a.secs < entry_b.secs)
+		for i in list.size():
+			list[i].global_rank = i + 1
 
 static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 	var raw := await StoreIntegrations.leaderboard_download_completion(l_id, 1, 100)
@@ -308,7 +313,8 @@ static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 	data.has_self = raw.has_self
 	for raw_entry in raw.entries:
 		data.list.append(await ListEntry.create(raw_entry))
-	data.sort()
+	# While our entries are a bit fucked up let's make our own ranks
+	data.sort_ignore_rank()
 	return [data]
 
 func display_leaderboard(display: LeaderboardDisplay, current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:
