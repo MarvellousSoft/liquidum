@@ -242,6 +242,7 @@ func set_highlight(value: bool) -> void:
 	if disabled:
 		return
 	highlight = value
+	$CellHintHighlight.hide()
 
 
 func fast_update_waters() -> void:
@@ -449,3 +450,6 @@ func _on_button_mouse_entered(which : E.Waters):
 
 func _on_block_mouse_entered():
 	block_entered.emit(row, column)
+
+func highlight_cellhint() -> void:
+	$CellHintHighlight.show()

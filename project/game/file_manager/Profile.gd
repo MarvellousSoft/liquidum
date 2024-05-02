@@ -48,6 +48,7 @@ var options = {
 	"window_size": Vector2i(-1, -1),
 	"window_screen": 0,
 	"highlight_grid": not ProjectSettings.get_setting("liquidum/is_mobile"),
+	"highlight_cellhint": true,
 	"show_grid_preview": true,
 	"locale": 0,
 	"dark_mode": false,

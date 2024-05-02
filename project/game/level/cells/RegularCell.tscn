@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://dg36xpbgk5g24"]
+[gd_scene load_steps=55 format=3 uid="uid://dg36xpbgk5g24"]
 
 [ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://nhgptovy7kt8" path="res://assets/images/ui/cell/wall_hint_left.png" id="20_6vhtd"]
 [ext_resource type="Texture2D" uid="uid://b2d8ap70x8y55" path="res://assets/images/ui/cell/wall_hint_dec_diag.png" id="21_23xke"]
 [ext_resource type="Texture2D" uid="uid://thonmystatny" path="res://assets/images/ui/cell/wall_left_thick.png" id="22_ffvl2"]
+[ext_resource type="Texture2D" uid="uid://cd10m54e2x8fc" path="res://assets/images/ui/cell/cellhint_highligh.png" id="22_q4k2l"]
 [ext_resource type="Texture2D" uid="uid://kfnuvlowqw0p" path="res://assets/images/ui/cell/wall_dec_diag_thick.png" id="23_mbu3t"]
 [ext_resource type="Texture2D" uid="uid://bav8sqx0x3f4" path="res://assets/images/ui/cell/block_single.png" id="24_0kqeq"]
 [ext_resource type="Texture2D" uid="uid://bg0odel7l3b84" path="res://assets/images/ui/cell/block_topleft.png" id="25_00o68"]
@@ -836,6 +837,15 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("21_23xke")
 
+[node name="CellHintHighlight" type="TextureRect" parent="."]
+modulate = Color(0.0156863, 0.105882, 0.219608, 0.407843)
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 500.0
+pivot_offset = Vector2(250, 250)
+mouse_filter = 2
+texture = ExtResource("22_q4k2l")
+
 [node name="Walls" type="Control" parent="."]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
@@ -974,6 +984,7 @@ mouse_filter = 2
 is_cell_hint = true
 
 [node name="Hints" parent="CellHints/Hint" index="1"]
+visible = false
 mouse_filter = 2
 
 [node name="VBoxContainer" parent="CellHints/Hint" index="2"]

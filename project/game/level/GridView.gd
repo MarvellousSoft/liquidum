@@ -569,13 +569,20 @@ func remove_all_highlights():
 
 
 func highlight_grid(p_i : int, p_j : int) -> void:
+	var oi := p_i
+	var oj := p_j
 	if not Profile.get_option("highlight_grid"):
 		# basically removes highlight instead
 		p_i = -1
 		p_j = -1
+	var has_hint: bool = grid_logic.get_cell(oi, oj).hints() != null and Profile.get_option("highlight_cellhint")
 	for i in rows:
 		for j in columns:
-			get_cell(i, j).set_highlight(i == p_i or j == p_j)
+			var c := get_cell(i, j)
+			c.set_highlight(i == p_i or j == p_j)
+			if has_hint:
+				if absi(j - oj) <= 1 and absi(i - oi) <= 1:
+					c.highlight_cellhint()
 	HintBars.left.highlight_hints(p_i)
 	HintBars.top.highlight_hints(p_j)
 	HintBars.right.highlight_hints(p_i)
