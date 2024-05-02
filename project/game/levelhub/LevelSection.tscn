@@ -394,7 +394,7 @@ theme_override_font_sizes/font_size = 60
 text = "Section name is this one indeed"
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 3
+autowrap_mode = 2
 
 [node name="SelectALevel" type="Label" parent="Button"]
 unique_name_in_owner = true
