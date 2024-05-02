@@ -330,8 +330,8 @@ EXTRA_04_07,Ordinskaya,Ordinskaya,Ordinskaya
 EXTRA_04_08,Smoo Cave,Smoo Cave,Smoo Cave
 EXTRA_04_09,Phang Nga Bay Cave,Phang Nga Bay Cave,Phang Nga Bay Cave
 EXTRA_04_10,Cuevas de Mármol,Cuevas de Mármol,Cuevas de Mármol
-EXTRA5_NAME,NewNew,NewNew,NewNew
-EXTRA_05_01,,,
+EXTRA5_NAME,Enigma Ebb,Enigma das Marés,Enigma das Marés
+EXTRA_05_01,Lanternfish,Peixe-lanterna,Peixe-lanterna
 EXTRA_05_02,,,
 EXTRA_05_03,,,
 EXTRA_05_04,,,
@@ -339,8 +339,8 @@ EXTRA_05_05,,,
 EXTRA_05_06,,,
 EXTRA_05_07,,,
 EXTRA_05_08,,,
-EXTRA6_NAME,,,
-EXTRA_06_01,,,
+EXTRA6_NAME,Reef Riddles,Recifes Confusos,Recifes Confusos
+EXTRA_06_01,Pelican Eel,Enguia Pelicano,Enguia Pelicano
 EXTRA_06_02,,,
 EXTRA_06_03,,,
 EXTRA_06_04,,,
@@ -348,13 +348,13 @@ EXTRA_06_05,,,
 EXTRA_06_06,,,
 EXTRA_06_07,,,
 EXTRA_06_08,,,
-EXTRA7_NAME,,,
+EXTRA7_NAME,Marine Mysteries,Mistérios Marinhos,Mistérios Marinhos
 EXTRA_07_01,,,
 EXTRA_07_02,,,
 EXTRA_07_03,,,
 EXTRA_07_04,,,
 EXTRA_07_05,,,
-EXTRA_07_06,,,
+EXTRA_07_06,Giant Isopod,Isópode Gigante,Isópode Gigante
 EXTRA_07_07,,,
 EXTRA_07_08,,,
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil

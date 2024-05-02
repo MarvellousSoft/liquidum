@@ -368,13 +368,14 @@ func remove_all_preview() -> void:
 		preview_water_flags[water] = false
 	preview_boat_flag = false
 
-
 func set_nowater(which : E.Waters, value: bool) -> void:
+	if which == E.Single and CellHints.visible:
+		which = E.Waters.BottomRight
 	NoContent[which].water.visible = value
 
-
-
 func set_noboat(which : E.Waters, value: bool) -> void:
+	if which == E.Single and CellHints.visible:
+		which = E.Waters.TopLeft
 	NoContent[which].boat.visible = value
 
 
