@@ -838,6 +838,7 @@ mouse_filter = 2
 texture = ExtResource("21_23xke")
 
 [node name="CellHintHighlight" type="TextureRect" parent="."]
+visible = false
 modulate = Color(0.0156863, 0.105882, 0.219608, 0.407843)
 layout_mode = 0
 offset_right = 500.0
