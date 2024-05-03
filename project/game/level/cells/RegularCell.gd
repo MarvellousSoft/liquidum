@@ -298,7 +298,7 @@ func update_hints(data: GridModel.CellModel) -> void:
 	if h_data != null:
 		var hint: Hint = CellHints.get_node("Hint")
 		var val := h_data.adj_water_count
-		if Profile.get_option("cell_hint_info") == Profile.CellHintInfo.ShowRemaining:
+		if val != -1 and Profile.get_option("cell_hint_info") == Profile.CellHintInfo.ShowRemaining:
 			val -= grid.grid_logic.count_water_adj(row, column)
 		hint.set_value(val)
 		hint.set_hint_type(h_data.adj_water_count_type)
