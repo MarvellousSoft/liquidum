@@ -177,7 +177,7 @@ func randomize_boats(grid: GridModel) -> void:
 func randomize_cell_hints(grid: GridModel) -> void:
 	var all_cells := _all_cells(grid)
 	Global.shuffle(all_cells, rng)
-	var count := rng.randi_range(1, int(grid.rows() * grid.cols() * opts.cell_hints))
+	var count := rng.randi_range(1, roundi(grid.rows() * grid.cols() * opts.cell_hints))
 	for idx in all_cells:
 		var water_around := grid.count_water_adj(idx.x, idx.y)
 		var size_around := Rect2i(0, 0, grid.rows(), grid.cols()).intersection(Rect2i(idx.x - 1, idx.y - 1, 3, 3)).get_area()

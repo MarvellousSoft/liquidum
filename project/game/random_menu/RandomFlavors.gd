@@ -29,6 +29,12 @@ enum Flavor {
 	AquariumTogether,
 	# Beautiful levels
 	FemmeFatale,
+	# Cellhints without {-, basic grid.
+	CellHints1,
+	# Cellhints with {-, diags and allwaters possible.
+	CellHints2,
+	# Cellhints, and everything else.
+	CellHints3,
 }
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -94,6 +100,11 @@ static func _everything(rng: RandomNumberGenerator, grid: GridModel) -> void:
 		RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(1, a.size() - 1))
 		if a == h.row:
 			RandomHub._vis_array_or(rng, a, HintBar.BOAT_TYPE_VISIBLE, rng.randi_range(1, a.size() - 1))
+	const VIS := [HintBar.WATER_COUNT_VISIBLE, HintBar.WATER_TYPE_VISIBLE, HintBar.WATER_COUNT_VISIBLE | HintBar.WATER_TYPE_VISIBLE]
+	for i in grid.rows():
+		for j in grid.cols():
+			if grid.get_cell(i, j).hints() != null:
+				h.cells[Vector2i(i, j)] = VIS[rng.randi_range(0, 2)]
 	h.apply_to_grid(grid)
 	Generator.randomize_aquarium_hints(rng, grid)
 	RandomHub.hide_too_easy_hints(grid)
@@ -134,6 +145,27 @@ static func _aquarium_together(rng: RandomNumberGenerator, grid: GridModel) -> v
 	h.apply_to_grid(grid)
 	Generator.randomize_aquarium_hints(rng, grid, 0.7)
 
+static func _cellhints_together(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.total_water = rng.randf() < 0.5
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(0, a.size() + 3))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-5, a.size() - 1))
+	var cellhints: Array[int] = []
+	for i in grid.rows():
+		for j in grid.cols():
+			if grid.get_cell(i, j).hints() != null:
+				cellhints.append(0)
+	RandomHub._vis_array_or(rng, cellhints, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, cellhints.size() + 2))
+	RandomHub._vis_array_or(rng, cellhints, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(1, cellhints.size()))
+	for i in grid.rows():
+		for j in grid.cols():
+			if grid.get_cell(i, j).hints() != null:
+				var v: int = cellhints.pop_back()
+				h.cells[Vector2i(i, j)] = v if v != 0 else HintBar.WATER_COUNT_VISIBLE
+	h.apply_to_grid(grid)
+	RandomHub.hide_too_easy_hints(grid)
+
 static func _builder(options: Generator.Options) -> Callable:
 	return func(_rng: RandomNumberGenerator) -> Generator.Options:
 		return options
@@ -171,6 +203,18 @@ static func _femme_fatale_builder(rng: RandomNumberGenerator) -> Generator.Optio
 		opts = opts.with_boats()
 	return opts
 
+static func _cellhints2_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	var opts := Generator.builder().with_cell_hints(rng.randf_range(0.01, 0.25))
+	if rng.randf() < 0.35:
+		opts.with_diags()
+	return opts
+
+static func _cellhints3_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	var opts := Generator.builder().with_cell_hints(rng.randf_range(0.01, 0.25))
+	if rng.randf() < 0.35:
+		opts.with_diags()
+	return opts
+
 static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor: Flavor) -> GridModel:
 	# WARNING: DO NOT use rng before calling l_gen.generate or preprocessing won't work
 	var strategies := SolverModel.STRATEGY_LIST.keys()
@@ -198,6 +242,12 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate(rng, 6, 6, RandomFlavors._aquarium_together, RandomFlavors._aquarium_together_builder, strategies, [], false)
 		Flavor.FemmeFatale:
 			return await l_gen.generate(rng, -1, -1, RandomFlavors._femme_fatale_hints, RandomFlavors._femme_fatale_builder, strategies, [], false)
+		Flavor.CellHints1:
+			return await l_gen.generate(rng, 7, 7, RandomFlavors._simple_hints, _builder(b.with_cell_hints(0.1)), strategies, [], false)
+		Flavor.CellHints2:
+			return await l_gen.generate(rng, 5, 6, RandomFlavors._cellhints_together, RandomFlavors._cellhints2_builder, strategies, [], false)
+		Flavor.CellHints3:
+			return await l_gen.generate(rng, 5, 5, RandomFlavors._everything, _builder(b.with_cell_hints(0.3).with_diags().with_boats()), strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null
