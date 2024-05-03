@@ -75,11 +75,21 @@ func add_leaderboard_mappings(lds: Array[StoreIntegrations.LeaderboardMapping]) 
 	for ld in lds:
 		ld_id_to_apple_id[ld.id] = ld.apple_id
 
+func _ld_map(id: String) -> String:
+	if ld_id_to_apple_id.has(id):
+		return ld_id_to_apple_id[id]
+	elif id.begins_with("daily_"):
+		return "daily"
+	elif id.begins_with("weekly_"):
+		return "weekly"
+	return ""
+
 func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: bool, _steam_details: PackedInt32Array) -> void:
-	if ld_id_to_apple_id.has(leaderboard_id):
+	var id := _ld_map(leaderboard_id)
+	if id != "":
 		var res = apple.post_score({
 			score = score,
-			category = ld_id_to_apple_id[leaderboard_id],
+			category = id,
 		})
 		if res != OK:
 			push_warning("Error calling post_score: %s" % [res])
@@ -93,9 +103,10 @@ func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mis
 func leaderboard_show(leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	if not await _try_authenticate():
 		return
+	var id := _ld_map(leaderboard_id)
 	var res
-	if ld_id_to_apple_id.has(leaderboard_id):
-		res = apple.show_game_center({"view": "leaderboards", "leaderboard_name": ld_id_to_apple_id[leaderboard_id]})
+	if id != "":
+		res = apple.show_game_center({"view": "leaderboards", "leaderboard_name": id})
 	else:
 		res = apple.show_game_center({})
 	if res != OK:

@@ -354,12 +354,12 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 			data.current_streak[id] = 0
 			UserData.save()
 	if not already_uploaded:
-		await RecurringMarathon.upload_leaderboard(current_leaderboard(), info, false)
+		await RecurringMarathon.upload_leaderboard(steam_current_leaderboard(), info, false)
 		if SteamManager.enabled:
 			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 			display_leaderboard(null, l_data, [], level)
 	if not MobileRequestReview.just_requested_review:
-		await StoreIntegrations.leaderboard_show(current_leaderboard(), google_leaderboard_span())
+		await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
 
 func _on_dark_mode_changed(is_dark: bool):
 	MainButton.theme = Global.get_theme(is_dark)
@@ -450,10 +450,3 @@ func share_text(_mistakes: int, _secs: int, _marathon_i: int) -> String:
 
 func type() -> Type:
 	return GridModel.must_be_implemented()
-
-func current_leaderboard() -> String:
-	if SteamIntegration.available():
-		# Steam uses a different leaderboard each day
-		return steam_current_leaderboard()
-	else:
-		return RecurringMarathon.type_name(type())
