@@ -174,4 +174,4 @@ static func get_current_flair() -> SelectableFlair:
 
 static func set_selected_flair_id(id: int) -> void:
 	UserData.current().selected_flair = id
-	UserData.save()
+	UserData.save(false)

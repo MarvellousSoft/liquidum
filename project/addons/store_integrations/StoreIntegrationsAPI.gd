@@ -4,6 +4,9 @@ var impls: Array[StoreIntegration] = []
 var apple: AppleIntegration = null
 var playfab: PlayFabIntegration = null
 
+# String -> true
+var dedup_uploads := {}
+
 enum SortMethod { SmallestFirst = 1, LargestFirst = 2 }
 
 class LeaderboardEntry:
@@ -84,6 +87,8 @@ func load_leaderboards_mapping_from_json(file_name: String) -> void:
 				data[id].get("playfab_id", ""),
 				SortMethod.get(data[id].get("sort_method", ""), SortMethod.LargestFirst),
 			))
+			if data[id].get("deduplicate_uploads", false) == true:
+				dedup_uploads[id] = true
 		load_leaderboards_mapping(arr)
 
 func leaderboard_create_if_not_exists(leaderboard_id: String, sort_method: SortMethod) -> void:
@@ -91,8 +96,14 @@ func leaderboard_create_if_not_exists(leaderboard_id: String, sort_method: SortM
 		await impl.leaderboard_create_if_not_exists(leaderboard_id, sort_method)
 
 func leaderboard_upload_score(leaderboard_id: String, score: float, keep_best := true, steam_details := PackedInt32Array()) -> void:
+	if dedup_uploads.has(leaderboard_id) and UserData.current().ld_uploads.get(leaderboard_id, NAN) == score:
+		print("Already uploaded %s to leaderboard %s, skipping." % [score, leaderboard_id])
+		return
 	for impl in impls:
 		await impl.leaderboard_upload_score(leaderboard_id, score, keep_best, steam_details)
+	if dedup_uploads.has(leaderboard_id):
+		UserData.current().ld_uploads[leaderboard_id] = score
+		UserData.save(false)
 
 func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
 	for impl in impls:

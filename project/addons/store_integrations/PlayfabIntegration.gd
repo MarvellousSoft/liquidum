@@ -252,7 +252,7 @@ func update_flair_if_outdated(id_to_flair: Dictionary) -> void:
 	if cur_flair_int != ld_flair_int:
 		print("Flair changed from %d to %d, updating on PlayFab..." % [ld_flair_int, cur_flair_int])
 		id_to_flair[PlayFabManager.client_config.master_player_account_id] = SteamFlair.decode_from_int(cur_flair_int)
-		await FlairPicker.save_flair_to_playfab()
+		await FlairPicker.save_flair()
 
 func leaderboard_download_completion(leaderboard_id: String, start: int, count: int) -> StoreIntegrations.LeaderboardData:
 	var id := _get_ld_mapping(leaderboard_id)

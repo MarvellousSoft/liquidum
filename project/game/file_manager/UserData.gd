@@ -9,12 +9,13 @@ static func current() -> UserData:
 		_current = FileManager._load_user_data()
 	return _current
 
-static func save() -> void:
+static func save(also_stats := true) -> void:
 	var data := current()
-	data.save_stats()
+	if also_stats:
+		data.save_stats()
 	FileManager._save_user_data(data)
 
-const VERSION := 7
+const VERSION := 8
 
 var random_levels_completed: Array[int]
 # Used to generate random levels in some order
@@ -35,8 +36,10 @@ var last_day: Array[String]
 var selected_flair: int
 # Last marathon replayed. Used to replay weekly levels.
 var replay_completed: Array[int]
+# Leaderboard uploads to be deduplicated. String -> float
+var ld_uploads: Dictionary
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int]) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
@@ -49,6 +52,7 @@ func _init(random_levels_completed_: Array[int], random_levels_created_: Array[i
 	selected_flair = selected_flair_
 	insane_good_levels = insane_good_levels_
 	replay_completed = replay_completed_
+	ld_uploads = ld_uploads_
 
 func get_data() -> Dictionary:
 	return {
@@ -65,6 +69,7 @@ func get_data() -> Dictionary:
 		selected_flair = selected_flair,
 		insane_good_levels = insane_good_levels,
 		replay_completed = replay_completed,
+		ld_uploads = ld_uploads,
 	}
 
 func save_stats() -> void:
@@ -140,7 +145,7 @@ static func load_data(data_: Variant) -> UserData:
 			endless.append(0)
 			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a)
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a, {})
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -161,9 +166,12 @@ static func load_data(data_: Variant) -> UserData:
 	if data.version < 6:
 		data.version = 6
 		data.insane_good_levels = 0
-	if data.version <  7:
+	if data.version < 7:
 		data.version = 7
 		data.replay_completed = [0, 0]
+	if data.version < 8:
+		data.version = 8
+		data.ld_uploads = {}
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
@@ -176,4 +184,4 @@ static func load_data(data_: Variant) -> UserData:
 	cur_streak_a.assign(data.current_streak)
 	last_day_a.assign(data.last_day)
 	replay_completed_a.assign(data.replay_completed)
-	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a)
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a, data.ld_uploads)
