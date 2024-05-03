@@ -580,7 +580,7 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 		for j in columns:
 			var c := get_cell(i, j)
 			c.set_highlight(i == p_i or j == p_j)
-			if has_hint:
+			if has_hint and oi >= 0 and oj >= 0:
 				if absi(j - oj) <= 1 and absi(i - oi) <= 1:
 					c.highlight_cellhint()
 	HintBars.left.highlight_hints(p_i)
