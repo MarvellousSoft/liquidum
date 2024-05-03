@@ -169,10 +169,12 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2898.0
-offset_top = 1519.0
-offset_right = 3792.0
+offset_left = 3840.0
+offset_top = 2160.0
+offset_right = 3800.0
 offset_bottom = 2120.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_constants/separation = 45
 
 [node name="DiscordButton" type="TextureButton" parent="InfoVBox"]
@@ -187,12 +189,13 @@ stretch_mode = 5
 script = ExtResource("5_ixgbd")
 link = "https://discord.gg/vDT8F4gGZE"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InfoVBox"]
+[node name="MobileHBox" type="HBoxContainer" parent="InfoVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = -11
 alignment = 2
 
-[node name="MobileLabel" type="Label" parent="InfoVBox/HBoxContainer"]
+[node name="MobileLabel" type="Label" parent="InfoVBox/MobileHBox"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 1
@@ -201,7 +204,7 @@ theme_override_font_sizes/font_size = 61
 text = "PLAY_ON_MOBILE"
 vertical_alignment = 2
 
-[node name="AndroidButton" type="TextureButton" parent="InfoVBox/HBoxContainer"]
+[node name="AndroidButton" type="TextureButton" parent="InfoVBox/MobileHBox"]
 custom_minimum_size = Vector2(160, 90)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -211,7 +214,7 @@ stretch_mode = 5
 script = ExtResource("5_ixgbd")
 link = "https://play.google.com/store/apps/details?id=com.marvelloussoft.liquidum&utm_source=steam_version"
 
-[node name="IOSButton" type="TextureButton" parent="InfoVBox/HBoxContainer"]
+[node name="IOSButton" type="TextureButton" parent="InfoVBox/MobileHBox"]
 custom_minimum_size = Vector2(100, 130)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -368,12 +371,12 @@ is_main_menu = true
 [connection signal="mouse_entered" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="InfoVBox/DiscordButton" to="InfoVBox/DiscordButton" method="_on_button_pressed"]
-[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_mouse_exited"]
-[connection signal="pressed" from="InfoVBox/HBoxContainer/AndroidButton" to="InfoVBox/HBoxContainer/AndroidButton" method="_on_pressed"]
-[connection signal="mouse_entered" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_mouse_exited"]
-[connection signal="pressed" from="InfoVBox/HBoxContainer/IOSButton" to="InfoVBox/HBoxContainer/IOSButton" method="_on_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/MobileHBox/AndroidButton" to="InfoVBox/MobileHBox/AndroidButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/MobileHBox/AndroidButton" to="InfoVBox/MobileHBox/AndroidButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/MobileHBox/AndroidButton" to="InfoVBox/MobileHBox/AndroidButton" method="_on_pressed"]
+[connection signal="mouse_entered" from="InfoVBox/MobileHBox/IOSButton" to="InfoVBox/MobileHBox/IOSButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="InfoVBox/MobileHBox/IOSButton" to="InfoVBox/MobileHBox/IOSButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="InfoVBox/MobileHBox/IOSButton" to="InfoVBox/MobileHBox/IOSButton" method="_on_pressed"]
 [connection signal="mouse_entered" from="InfoVBox/CreditsButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="InfoVBox/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="mouse_entered" from="ProfileButton" to="." method="_on_button_mouse_entered"]

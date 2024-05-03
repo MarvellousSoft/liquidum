@@ -56,6 +56,7 @@ func _ready():
 	UserData.current().save_stats()
 	
 	if Global.is_demo:
+		%MobileHBox.hide()
 		assert(not Global.is_mobile)
 		for but in [%ExtraLevelsButton, %RandomButton, %Workshop, %EditorButton]:
 			but.disabled = true
