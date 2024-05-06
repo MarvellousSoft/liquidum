@@ -1616,6 +1616,18 @@ class PropagateAdjacentEmptiesDfs extends GridImpl.Dfs:
 	func _can_go_down(_i: int, _j: int) -> bool:
 		return false
 
+static func can_separate_aqs(l: GridImpl.AquariumInfo, r: GridImpl.AquariumInfo) -> bool:
+	var tmp: GridImpl.AquariumInfo
+	if l.max_i == r.max_i:
+		# TODO: check if they're side to side
+		return true
+	elif abs(l.max_i - r.max_i) == 1:
+		# TODO: check if they intersect
+		return true
+	else:
+		return true
+	
+
 static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, hint: GridModel.CellHints) -> bool:
 	if hint.adj_water_count >= 0 and grid.count_water_adj(ci, cj) == hint.adj_water_count:
 		# Impossible if it is already full and together
@@ -1644,8 +1656,8 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 					# Two water components we can almost always separate
 					return false
 				wcmp = wdfs.info
+	var area := GridImpl.RectAreaCheck.new(Rect2i(ci - 1, cj - 1, 3, 3))
 	if wcmp != null:
-		var area := GridImpl.RectAreaCheck.new(Rect2i(ci - 1, cj - 1, 3, 3))
 		var propdfs := PropagateAdjacentEmptiesDfs.new(grid, area)
 		for pos in wcmp.neighbors:
 			var corner := E.waters_to_corner(pos.loc)
@@ -1665,9 +1677,36 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 						return false
 		return true
 	else:
-		# TODO: no waters yet
-		pass
-	return false
+		var rect_aqs: Array[GridImpl.AquariumInfo] = []
+		var aqdfs := GridImpl.CrawlAquarium.new(grid, area, false)
+		# This will change, let's store it
+		var last_seen := grid.last_seen
+		# Bottom up for correctness
+		for i in range(ci + 1, ci - 2, -1):
+			for j in range(cj - 1, cj + 2):
+				if not grid.inside(i, j):
+					continue
+				for corner in grid.get_cell(i, j).corners():
+					var c := grid._pure_cell(i, j)
+					var content := c._content_at(corner)
+					if c.last_seen(corner) < last_seen and (content == Content.Nothing or content == Content.NoBoat):
+						aqdfs.reset()
+						aqdfs.flood(i, j, corner)
+						aqdfs.reset_for_pool_check()
+						aqdfs.flood(i, j, corner)
+						if aqdfs.info.has_pool:
+							return false
+						assert(aqdfs.info.total_water == 0)
+						rect_aqs.append(aqdfs.info)
+						if rect_aqs.size() > 3:
+							# Always possible to make it work with 4
+							return false
+		for l in rect_aqs.size() - 1:
+			for r in range(l + 1, rect_aqs.size()):
+				if SolverModel.can_separate_aqs(rect_aqs[l], rect_aqs[r]):
+					return false
+		# Couldn't find 2 non-adjacent aquariums
+		return true
 
 class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints) -> bool:

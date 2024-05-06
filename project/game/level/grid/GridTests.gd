@@ -1415,7 +1415,7 @@ func test_cell_hints_together_strat() -> void:
 	""", "", ["TogetherSeparateCellHints"])
 	assert_apply_strategies("""
 	+cellhint=1:1:-?-
-	..XX..
+	WWXXWW
 	L.|.L.
 	XXXXXX
 	L._._.
