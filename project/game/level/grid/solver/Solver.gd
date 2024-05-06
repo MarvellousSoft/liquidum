@@ -1607,11 +1607,27 @@ class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
 			SolverModel._put_nowater(grid, pos)
 		return not todo.to_mark_nowater.is_empty()
 
+static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+	var dfs := ComponentAdjDfs.new(grid, ci, cj)
+	var cmp: GridImpl.ComponentInfo = null
+	for i in range(ci - 1, ci + 2):
+		for j2 in range(2 * cj - 2, 2 * cj + 4):
+			if dfs.flood(i, j2):
+				if cmp != null:
+					# Two components we can almost always separate
+					return false
+				cmp = dfs.info
+	if cmp == null:
+		return true
+	# No space to make a separation
+	if hint.adj_water_count >= 0 and hint.adj_water_count >= cmp.total_water + cmp.total_empty:
+		return true
+	return false
+
 class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
 		if hint.adj_water_count_type == E.HintType.Separated:
-			# TODO: Separated logic
-			return false
+			return SolverModel.is_cellhint_separated_impossible(grid, ci, cj, hint)
 		if hint.adj_water_count_type == E.HintType.Together:
 			return CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count).impossible
 		return false

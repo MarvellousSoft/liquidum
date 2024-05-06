@@ -1407,6 +1407,13 @@ func test_cell_hints_together_strat() -> void:
 	# XX..##
 	# L.L.L.
 	# """, "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	# Advanced separate
+	assert_apply_strategies("""
+	+cellhint=0:1:-1.0-
+	..##W#
+	L/L/L/
+	""", "", ["TogetherSeparateCellHints"])
+
 
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))
