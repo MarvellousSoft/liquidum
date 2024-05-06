@@ -1607,7 +1607,19 @@ class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
 			SolverModel._put_nowater(grid, pos)
 		return not todo.to_mark_nowater.is_empty()
 
+class PropagateAdjacentEmptiesDfs extends GridImpl.Dfs:
+	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
+		var content := cell._content_at(corner)
+		return content == Content.Nothing or content == Content.NoBoat
+	func _can_go_up(_i: int, _j: int) -> bool:
+		return true
+	func _can_go_down(_i: int, _j: int) -> bool:
+		return false
+
 static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+	if hint.adj_water_count >= 0 and grid.count_water_adj(ci, cj) == hint.adj_water_count:
+		# Impossible if it is already full and together
+		return grid.together_waters_adj(hint.adj_water_count, ci, cj) == E.HintType.Together
 	var dfs := ComponentAdjDfs.new(grid, ci, cj)
 	var cmp: GridImpl.ComponentInfo = null
 	for i in range(ci - 1, ci + 2):
@@ -1622,6 +1634,39 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 	# No space to make a separation
 	if hint.adj_water_count >= 0 and hint.adj_water_count >= cmp.total_water + cmp.total_empty:
 		return true
+	var wdfs := GridImpl.WaterAdjDfs.new(grid, ci, cj)
+	wdfs.calc_component_info()
+	var wcmp: GridImpl.ComponentInfo = null
+	for i in range(ci - 1, ci + 2):
+		for j2 in range(2 * cj - 2, 2 * cj + 4):
+			if wdfs.flood(i, j2):
+				if wcmp != null:
+					# Two water components we can almost always separate
+					return false
+				wcmp = wdfs.info
+	if wcmp != null:
+		var area := GridImpl.RectAreaCheck.new(Rect2i(ci - 1, cj - 1, 3, 3))
+		var propdfs := PropagateAdjacentEmptiesDfs.new(grid, area)
+		for pos in wcmp.neighbors:
+			var corner := E.waters_to_corner(pos.loc)
+			var content := grid._pure_cell(pos.i, pos.j)._content_at(corner)
+			if content == Content.Nothing or content == Content.NoBoat:
+				propdfs.flood(pos.i, pos.j, corner)
+		# Now cells with seen = grid.last_seen are not adjacent to the current water cells
+		for i in range(ci - 1, ci + 2):
+			for j in range(cj - 1, cj + 2):
+				if not grid.inside(i, j):
+					continue
+				var c := grid._pure_cell(i, j)
+				for corner in c.corners():
+					var content := c._content_at(corner)
+					if c.last_seen(corner) < grid.last_seen and (content == Content.Nothing or content == Content.NoBoat):
+						# A cell that is not adjacent to the current water component
+						return false
+		return true
+	else:
+		# TODO: no waters yet
+		pass
 	return false
 
 class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:

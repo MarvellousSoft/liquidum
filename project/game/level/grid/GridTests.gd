@@ -1413,6 +1413,13 @@ func test_cell_hints_together_strat() -> void:
 	..##W#
 	L/L/L/
 	""", "", ["TogetherSeparateCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:-?-
+	..XX..
+	L.|.L.
+	XXXXXX
+	L._._.
+	""")
 
 
 func test_options_sum() -> void:

@@ -873,6 +873,7 @@ class ComponentInfo:
 	var total_water: float
 	var total_empty: float
 	var empties: Array[GridModel.WaterPosition]
+	var neighbors: Array[GridModel.WaterPosition]
 	func debug() -> void:
 		print("Component with %.1f water and %.1f empty\nEmpty cells:" % [total_water, total_empty])
 		for cell in empties:
@@ -901,7 +902,16 @@ class BaseAdjDfs:
 			return c.c_right
 	func has_ok_content(i: int, j2: int) -> bool:
 		return has_point(i, j2) and _is_content_ok(content(i, j2))
-	func _maybe_go(stack: Array[Vector2i], i: int, j2: int) -> void:
+	func add_to_vec(arr: Array[WaterPosition], i: int, j2: int) -> void:
+		var type := grid._pure_cell(i, j2 / 2).type
+		if type == E.Single:
+			# Only add left side because we're adding for both sides
+			if (j2 & 1) == 0:
+				arr.append(GridModel.WaterPosition.new(i, j2 / 2, E.Waters.Single))
+		else:
+			var corner := E.diag_to_corner(type, E.Side.Left if (j2 & 1) == 0 else E.Side.Right)
+			arr.append(GridModel.WaterPosition.new(i, j2 / 2, corner as E.Waters))
+	func _maybe_go(stack: Array[Vector2i], i: int, j2: int, first: bool) -> void:
 		if has_ok_content(i, j2):
 			var c := grid._pure_cell(i, j2 / 2)
 			if j2 & 1 == 0:
@@ -911,6 +921,8 @@ class BaseAdjDfs:
 			elif c.last_seen_right < grid.last_seen:
 				c.last_seen_right = grid.last_seen
 				stack.push_back(Vector2i(i, j2))
+		elif not first and info != null and has_point(i, j2):
+			add_to_vec(info.neighbors, i, j2)
 	func add_to_comp(i: int, j2: int) -> void:
 		if info == null:
 			return
@@ -919,34 +931,27 @@ class BaseAdjDfs:
 			info.total_water += 0.5
 		elif c == Content.Nothing or c == Content.NoBoat:
 			info.total_empty += 0.5
-			var type := grid._pure_cell(i, j2 / 2).type
-			if type == E.Single:
-				# Only add left side because we're adding for both sides
-				if (j2 & 1) == 0:
-					info.empties.append(GridModel.WaterPosition.new(i, j2 / 2, E.Waters.Single))
-			else:
-				var corner := E.diag_to_corner(type, E.Side.Left if (j2 & 1) == 0 else E.Side.Right)
-				info.empties.append(GridModel.WaterPosition.new(i, j2 / 2, corner as E.Waters))
+			add_to_vec(info.empties, i, j2)
 	func flood(i: int, j2: int) -> bool:
 		var stack: Array[Vector2i] = []
-		_maybe_go(stack, i, j2)
+		_maybe_go(stack, i, j2, true)
 		if stack.is_empty():
 			return false
 		if info != null:
 			info = ComponentInfo.new()
 		while not stack.is_empty():
 			var v: Vector2i = stack.pop_back()
-			_maybe_go(stack, v.x, v.y - 1)
-			_maybe_go(stack, v.x, v.y + 1)
 			add_to_comp(v.x, v.y)
+			_maybe_go(stack, v.x, v.y - 1, false)
+			_maybe_go(stack, v.x, v.y + 1, false)
 			# Goes up
 			var nj2 := v.y & ~1
 			if (grid._pure_cell(v.x, v.y / 2).type == E.CellType.IncDiag) == ((v.y & 1) == 0):
 				if v.x > 0:
-					_maybe_go(stack, v.x - 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag))
+					_maybe_go(stack, v.x - 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag), false)
 			else:
 				if v.x < grid.n - 1:
-					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x + 1, v.y / 2).type == E.CellType.DecDiag))
+					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x + 1, v.y / 2).type == E.CellType.DecDiag), false)
 		return true
 
 class WaterAdjDfs extends BaseAdjDfs:
