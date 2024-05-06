@@ -1362,6 +1362,51 @@ func test_cell_hints_together_strat() -> void:
 	X##XXX
 	L/L/L/
 	""", "", ["BasicTogetherCellHints"])
+	# Advanced together
+	assert_apply_strategies("""
+	+cellhint=1:1:{3.0}
+	##WW..
+	L.L.L.
+	..WW##
+	L.L.L.
+	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:{2.0}
+	##....
+	L.L.L.
+	....##
+	L.L.L.
+	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:{2.0}
+	##WW..
+	L.L.L.
+	X#..##
+	L/L.L.
+	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:{2.0}
+	wW....
+	L/L.L.
+	......
+	L/L.L.
+	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:{?}
+	w.....
+	L/L.L.
+	......
+	L/L.L.
+	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
+	# Doesn't work yet, we need to do a Dijkstra to see cells that are "too far away"
+	# It needs to be a dijkstra not BFS if we want to consider aquarium shapes, which would be good
+	# assert_apply_strategies("""
+	# +cellhint=1:1:{2.0}
+	# ##ww..
+	# L.L.L.
+	# XX..##
+	# L.L.L.
+	# """, "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
 
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))

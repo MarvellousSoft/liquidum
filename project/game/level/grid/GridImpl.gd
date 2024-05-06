@@ -2180,3 +2180,6 @@ func rotate_counter() -> void:
 	# I don't want extra work. Sue me.
 	for _i in 3:
 		rotate_clockwise()
+
+func inside(i: int, j: int) -> bool:
+	return i >= 0 and i < n and j >= 0 and j < m

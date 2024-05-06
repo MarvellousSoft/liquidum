@@ -1561,7 +1561,7 @@ class ComponentAdjDfs extends GridImpl.BaseAdjDfs:
 class CellHintTogetherToDo:
 	var to_mark_nowater: Array[GridModel.WaterPosition] = []
 	# Will always be impossible
-	var invalid: bool = false
+	var impossible: bool = false
 	static func create(grid: GridImpl, ci: int, cj: int, expected_together_waters: float) -> CellHintTogetherToDo:
 		var todo := CellHintTogetherToDo.new()
 		var dfs := ComponentAdjDfs.new(grid, ci, cj)
@@ -1573,7 +1573,10 @@ class CellHintTogetherToDo:
 					if dfs.info.total_water > 0:
 						if any_water:
 							# >1 component with water
-							todo.invalid = true
+							todo.impossible = true
+						# This component is not big enough
+						if expected_together_waters >= 0 and dfs.info.total_water + dfs.info.total_empty < expected_together_waters:
+							todo.impossible = true
 						any_water = true
 					elif dfs.info.total_empty > 0:
 						# Component is too small to put enough waters together
@@ -1588,6 +1591,9 @@ class CellHintTogetherToDo:
 		if any_water:
 			for cmp in empty_cmps:
 				todo.to_mark_nowater.append_array(cmp.empties)
+		elif empty_cmps.is_empty():
+			# No component big enough
+			todo.impossible = true
 		return todo
 
 class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
@@ -1595,13 +1601,55 @@ class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
 		if hint.adj_water_count_type != E.HintType.Together:
 			return false
 		var todo := CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count)
-		if todo.invalid:
+		if todo.impossible:
 			return false
 		for pos in todo.to_mark_nowater:
 			SolverModel._put_nowater(grid, pos)
 		return not todo.to_mark_nowater.is_empty()
 
-		
+class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
+	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+		if hint.adj_water_count_type == E.HintType.Separated:
+			# TODO: Separated logic
+			return false
+		if hint.adj_water_count_type == E.HintType.Together:
+			return CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count).impossible
+		return false
+	func try_water_nowater(ci: int, cj: int, hint: GridModel.CellHints, i: int, j: int, waters: E.Waters) -> bool:
+		var c := grid.get_cell(i, j)
+		var corner := E.waters_to_corner(waters)
+		var content := grid._pure_cell(i, j)._content_at(corner)
+		if content == Content.Nothing or content == Content.NoBoat:
+			c.put_water(corner, true)
+			if hint_now_invalid(ci, cj, hint):
+				grid.undo()
+				SolverModel._put_nowater(grid, GridModel.WaterPosition.new(i, j, waters))
+				return true
+			grid.undo()
+			c.put_nowater(corner, true, true)
+			if hint_now_invalid(ci, cj, hint):
+				grid.undo()
+				SolverModel._put_water(grid, GridModel.WaterPosition.new(i, j, waters))
+				return true
+			grid.undo()
+		return false
+	func _apply(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+		if hint.adj_water_count_type in [E.HintType.Hidden, E.HintType.Zero]:
+			return false
+		var any := false
+		for i in range(ci - 1, ci + 2):
+			for j in range(cj - 1, cj + 2):
+				if not grid.inside(i, j):
+					continue
+				var c := grid.get_cell(i, j)
+				var waters := c.waters()
+				if grid.wall_at(i, j, E.Side.Left):
+					if try_water_nowater(ci, cj, hint, i, j, waters[0]):
+						any = true
+				if waters.size() > 1:
+					if try_water_nowater(ci, cj, hint, i, j, waters[1]):
+						any = true
+		return any
 
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
@@ -1634,6 +1682,7 @@ static var STRATEGY_LIST := {
 	CellAdvanced = func(grid): return CellHintsMore.new(grid, true),
 	TwoCellAdvanced = func(grid): return TwoCellHints.new(grid, true),
 	BasicTogetherCellHints = func(grid): return BasicTogetherCellHintsStrategy.new(grid),
+	TogetherSeparateCellHints = func(grid): return TogetherSeparateCellHintsStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

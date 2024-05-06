@@ -70,3 +70,9 @@ func waters_size(waters: E.Waters) -> float:
 			return 1.0
 		_:
 			return 0.5
+func waters_to_corner(waters: E.Waters) -> E.Corner:
+	match waters:
+		E.Waters.Single:
+			return E.Corner.TopLeft
+		_:
+			return waters as E.Corner
