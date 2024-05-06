@@ -1551,6 +1551,55 @@ class TwoCellHints extends Strategy:
 
 		return any
 
+class ComponentAdjDfs extends GridImpl.BaseAdjDfs:
+	func _init(grid_: GridImpl, ci: int, cj: int) -> void:
+		super(grid_, ci, cj)
+		calc_component_info()
+	func _is_content_ok(c: GridImpl.Content) -> bool:
+		return c == GridImpl.Content.Nothing or c == GridImpl.Content.NoBoat or c == GridImpl.Content.Water
+
+class CellHintTogetherToDo:
+	var to_mark_nowater: Array[GridModel.WaterPosition] = []
+	# Will always be impossible
+	var invalid: bool = false
+	static func create(grid: GridImpl, ci: int, cj: int, expected_together_waters: float) -> CellHintTogetherToDo:
+		var todo := CellHintTogetherToDo.new()
+		var dfs := ComponentAdjDfs.new(grid, ci, cj)
+		var empty_cmps: Array[GridImpl.ComponentInfo] = []
+		var any_water := false
+		for i in range(ci - 1, ci + 2):
+			for j2 in range(2 * cj - 2, 2 * cj + 4):
+				if dfs.flood(i, j2):
+					if dfs.info.total_water > 0:
+						if any_water:
+							# >1 component with water
+							todo.invalid = true
+						any_water = true
+					elif dfs.info.total_empty > 0:
+						# Component is too small to put enough waters together
+						# We could also use OptionsSum and aquarium decomposition to
+						# see if it could actually fit exactly N waters, but I don't
+						# think that would make it much better.
+						if expected_together_waters > dfs.info.total_empty:
+							todo.to_mark_nowater.append_array(dfs.info.empties)
+						else:
+							empty_cmps.append(dfs.info)
+		# One component has water, others can't
+		if any_water:
+			for cmp in empty_cmps:
+				todo.to_mark_nowater.append_array(cmp.empties)
+		return todo
+
+class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
+	func _apply(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+		if hint.adj_water_count_type != E.HintType.Together:
+			return false
+		var todo := CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count)
+		if todo.invalid:
+			return false
+		for pos in todo.to_mark_nowater:
+			SolverModel._put_nowater(grid, pos)
+		return not todo.to_mark_nowater.is_empty()
 
 		
 
@@ -1584,6 +1633,7 @@ static var STRATEGY_LIST := {
 	TwoCellMedium = func(grid): return TwoCellHints.new(grid, false),
 	CellAdvanced = func(grid): return CellHintsMore.new(grid, true),
 	TwoCellAdvanced = func(grid): return TwoCellHints.new(grid, true),
+	BasicTogetherCellHints = func(grid): return BasicTogetherCellHintsStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

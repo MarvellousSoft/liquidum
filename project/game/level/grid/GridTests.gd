@@ -1342,6 +1342,27 @@ func test_cell_hints_together() -> void:
 	L.L.L.
 	""")
 
+func test_cell_hints_together_strat() -> void:
+	# Basic
+	assert_apply_strategies("""
+	+cellhint=1:1:{1.5}
+	X#XX##
+	L/L/L.
+	..##..
+	L.L.|.
+	.#X#..
+	L/L/L.
+	""", "", ["BasicTogetherCellHints"])
+	assert_apply_strategies("""
+	+cellhint=1:1:{?}
+	XXX#XX
+	L/L/L/
+	##.w##
+	L.L/L.
+	X##XXX
+	L/L/L/
+	""", "", ["BasicTogetherCellHints"])
+
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))
 	assert(OptionsSum.can_be_solved(3., [[1., 9.], [2., 9.]]))
