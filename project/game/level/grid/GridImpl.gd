@@ -1162,6 +1162,23 @@ func to_str() -> String:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
 	for sz in _grid_hints.expected_aquariums:
 		builder.append("+aqua=%.1f:%d\n" % [sz, _grid_hints.expected_aquariums[sz]])
+	for i in n:
+		for j in m:
+			var h := get_cell(i, j).hints()
+			if h != null:
+				var op: String
+				var cl: String
+				match h.adj_water_count_type:
+					E.HintType.Together:
+						op = "{"
+						cl = "}"
+					E.HintType.Separated:
+						op = "-"
+						cl = "-"
+				builder.append("+cellhint=%d:%d:%s%.1f%s\n" % [
+					i, j,
+					op, h.adj_water_count, cl
+				])
 	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden) \
 		or _col_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden)
 	var hints := _row_hints.any(func(h): return h.water_count != -1. or h.water_count_type != E.HintType.Hidden) \

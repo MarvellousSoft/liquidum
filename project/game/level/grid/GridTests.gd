@@ -79,7 +79,11 @@ func assert_can_solve(s: String, strategies := [], result := true) -> void:
 func assert_cant_solve(s: String, strategies := []) -> void:
 	assert_can_solve(s, strategies, false)
 
-func assert_apply_strategies(s: String, res: String, strategies := []) -> void:
+func assert_apply_strategies(s: String, res: String = "", strategies := []) -> void:
+	if res == "":
+		# W and X show future water and nowater
+		res = s.replace("W", "w").replace("X", "x")
+		s = s.replace("W", ".").replace("X", ".")
 	assert_grid_eq(apply_strategies(s, strategies).to_str(), res)
 
 func get_rows(s : String) -> int:
@@ -1246,51 +1250,29 @@ func test_cell_hints() -> void:
 	+cellhint=1:1:1.5
 	....
 	|.L.
-	.#..
-	L/L.
-	""","""
-	....
-	|.L.
-	w#..
+	W#..
 	L/L.
 	""")
 	assert_apply_strategies("""
-	+cellhint=1:1:2
-	#...
-	|/L.
-	....
-	L.L.
-	""","""
-	#x..
+	+cellhint=1:1:2.0
+	#X..
 	|/L.
 	....
 	L.L.
 	""")
 	# Using two cellhints
 	assert_apply_strategies("""
-	+cellhint=1:1:3
-	+cellhint=1:2:1
-	......
+	+cellhint=1:1:3.0
+	+cellhint=1:2:1.0
+	WW....
 	L.L.L.
-	......
-	L.L.L.
-	""","""
-	ww....
-	L.L.L.
-	ww....
+	WW....
 	L.L.L.
 	""")
 	assert_apply_strategies("""
 	+cellhint=1:1:2.5
-	+cellhint=2:2:1
-	....#.
-	L.L.L/
-	......
-	L.L.L/
-	......
-	L.L.L/
-	""","""
-	....#w
+	+cellhint=2:2:1.0
+	....#W
 	L.L.L/
 	......
 	L.L.L/
@@ -1299,13 +1281,8 @@ func test_cell_hints() -> void:
 	""")
 	# Can't do anything if one is not contained in the other
 	assert_apply_strategies("""
-	+cellhint=1:1:3
-	+cellhint=1:2:1
-	........
-	L.L.L.L.
-	........
-	L.L.L.L.
-	""","""
+	+cellhint=1:1:3.0
+	+cellhint=1:2:1.0
 	........
 	L.L.L.L.
 	........
