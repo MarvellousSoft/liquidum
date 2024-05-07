@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bli5cxgvrmfa7"
-path="res://.godot/imported/water_cell_no_border_example.png-2982b83a11fe78aa26edcc0ce1c7d0d1.ctex"
+uid="uid://ldbuno7nvdvh"
+path="res://.godot/imported/water_cell_full_top_open_example.png-4260a583f435bbda86f2d93992e3ca79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ui/tutorial/water_cell_no_border_example.png"
-dest_files=["res://.godot/imported/water_cell_no_border_example.png-2982b83a11fe78aa26edcc0ce1c7d0d1.ctex"]
+source_file="res://assets/images/ui/tutorial/water_cell_full_top_open_example.png"
+dest_files=["res://.godot/imported/water_cell_full_top_open_example.png-4260a583f435bbda86f2d93992e3ca79.ctex"]
 
 [params]
 

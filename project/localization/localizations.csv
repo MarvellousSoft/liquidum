@@ -72,6 +72,9 @@ THIRD_LEVEL_DESCRIPTION,"Cells not separated by a wall belong to the same aquari
 UNIQUE_SOLUTION_DESCRIPTION,All levels have a unique solution. Pay attention to all hints,Todos níveis tem uma única solução. Preste atenção em todas as dicas,Todos níveis tem uma única solução. Preste atenção em todas as dicas
 ALLOW_MISTAKES_DESCRIPTION,"You can check ""Allow mistakes"" in the settings, alongside several other gameplay options.\nCheck them out to customize the experience to your playstyle!","Você pode habilitar ""Permitir erros"" no menu de opções, além de muitas outras coisas.\nExplore-as e customize sua experiência para seu estilo de jogo!","Você pode habilitar ""Permitir erros"" no menu de opções, além de muitas outras coisas.\nExplore-as e customize sua experiência para seu estilo de jogo!"
 PAINT_MODE_DESCRIPTION,"Next to the brush picker is a paintbrush button.\nClick it to enter ""Paint mode"". It can be useful in tougher puzzles!","Ao lado do seletor de marcador há um botão de pincel.\nClique nele para entrar no ""Modo de pintura"".\nPode ser útil em níveis mais difíceis!","Ao lado do seletor de marcador há um botão de pincel.\nClique nele para entrar no ""Modo de pintura"".\nPode ser útil em níveis mais difíceis!"
+CELLHINTS_DESCRIPTION,"Numbers inside cell are ""Cellhints"".\nThey count how much water is on all neighbouring cells.","Números dentro de espaços são ""Dicas de célula"".\nEles contam a quantidade de água em todas as células vizinhas.","Números dentro de espaços são ""Dicas de célula"".\nEles contam a quantidade de água em todas as células vizinhas."
+CELLHINTS2_DESCRIPTION,Cellhints not inside blocks also verify themselves for water.,Dicas de célula que não estão dentro de blocos também verificam sua própria célula.,Dicas de célula que não estão dentro de blocos também verificam sua própria célula.
+CELLLHINTS_SETTINGS_DESCRIPTION,"The are new gameplay settings you can adjust for cellhints,\nlike making them show ""remaining waters"" instead of the total amount.","Existem novas configurações de jogo que você pode ajustar para dicas de célula,\ncomo fazê-las mostrar ""águas restantes"" em vez do valor total.","Existem novas configurações de jogo que você pode ajustar para dicas de célula,\ncomo fazê-las mostrar ""águas restantes"" em vez do valor total."
 PLAYTEST,Playtest level,Testar nível,Nível de teste
 LEVEL_DESCRIPTION_PLACEHOLDER,Level description,Descrição do nível,Descrição do nível
 LEVEL_TITLE_PLACEHOLDER,Level title,Título do nivel,Título do nível
@@ -256,6 +259,10 @@ TUT_MOUSE1,Basics 1,Básicos 1,Básicos 1
 TUT_MOUSE2,Basics 2,Básicos 2,Básicos 2
 TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
 TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
+TUT_CELLHINTS,Cellhints 1,Dicas de Célula 1,Dicas de Célula 1
+TUT_CELLHINTS2,Cellhints 2,Dicas de Célula 2,Dicas de Célula 2
+TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de Célula Juntas,Dicas de Célula Juntas
+TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de Célula Separadas,Dicas de Célula Separadas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
 WORKSHOP_EXPLANATION,"You can dowload user-created levels by subscribing to then in the Steam Workshop, click the ""Open Workshop"" button above!","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima.","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima."
 DAILY_CURR,Today,Hoje,Hoje

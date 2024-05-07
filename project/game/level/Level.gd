@@ -185,6 +185,10 @@ func _ready():
 				$SteamRichPresence.set_display("#ExtraIsland")
 				$SteamRichPresence.set_key_value("section", ExtraLevelLister.section_name(extra_level_number))
 				$SteamRichPresence.set_key_value("level", str(extra_level_number))
+				var data = FileManager.load_extra_level_data(extra_section, extra_level_number)
+				if not data.tutorial.is_empty():
+					if add_tutorial(data.tutorial):
+						%TutorialContainer.show()
 			else:
 				# Assuming we're on playtesting
 				$SteamRichPresence.set_group("editor")
@@ -357,8 +361,11 @@ func setup(try_load := true) -> void:
 	update_counters()
 	
 	%TutorialButton.visible = not grid.editor_mode()
-	if not grid.editor_mode() and is_campaign_level():
-		%TutorialDisplay.show_level_tutorial(section_number, level_number)
+	if not grid.editor_mode() and (is_campaign_level() or is_extra_level()):
+		if is_extra_level():
+			%TutorialDisplay.show_level_tutorial(extra_section, extra_level_number, true)
+		else:
+			%TutorialDisplay.show_level_tutorial(section_number, level_number, false)
 	
 	if not Global.is_mobile:
 		%LevelLabel.visible = not grid.editor_mode()
@@ -392,8 +399,12 @@ func setup(try_load := true) -> void:
 	
 	process_game = true
 	
-	if is_campaign_level() and Global.is_mobile:
-		var data = FileManager.load_campaign_level_data(section_number, level_number)
+	if Global.is_mobile and (is_campaign_level() or is_extra_level()):
+		var data
+		if is_campaign_level():
+			data = FileManager.load_campaign_level_data(section_number, level_number)
+		else:
+			data = FileManager.load_extra_level_data(extra_section, extra_level_number)
 		if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 			await get_tree().create_timer(.5).timeout
 			_on_tutorial_button_pressed()
@@ -422,6 +433,10 @@ func set_level_names_and_descriptions():
 
 func is_campaign_level():
 	return level_number != -1 and section_number != -1
+
+
+func is_extra_level():
+	return extra_level_number != -1 and extra_section != -1
 
 
 func editor_mode() -> bool:

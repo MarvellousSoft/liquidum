@@ -45,13 +45,23 @@ func setup():
 			var data := FileManager.load_campaign_level_data(section_number, level_number)
 			if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 					tutorials.append(data.tutorial)
+	for section_number in range(1, ExtraLevelLister.count_all_game_sections(true)):
+		for level_number in range(1, ExtraLevelLister.get_max_unlocked_level(section_number)):
+			var data = ExtraLevelLister.get_level_data(section_number, level_number)
+			if not data.tutorial.is_empty():
+				tutorials.append(data.tutorial)
+				
 	idx = tutorials.size() - 1
 	update_tutorial()
 	%Back.visible = tutorials.size() > 1
 	%Forward.visible = tutorials.size() > 1
 
-func show_level_tutorial(section: int, level: int) -> void:
-	var data := FileManager.load_campaign_level_data(section, level)
+func show_level_tutorial(section: int, level: int, is_extra := false) -> void:
+	var data
+	if is_extra:
+		data = FileManager.load_extra_level_data(section, level)
+	else:
+		data = FileManager.load_campaign_level_data(section, level)
 	if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 		idx = maxi(tutorials.find(data.tutorial), 0)
 		update_tutorial()
