@@ -41,6 +41,12 @@ class WaterPosition:
 		loc = loc_
 	func to_vec3() -> Vector3i:
 		return Vector3i(i, j, loc)
+	func j2() -> int:
+		match loc:
+			E.Single, E.TopRight, E.BottomRight:
+				return 2 * j + 1
+			_:
+				return 2 * j
 
 class CellHints:
 	var adj_water_count: float

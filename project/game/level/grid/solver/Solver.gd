@@ -1617,13 +1617,16 @@ class PropagateAdjacentEmptiesDfs extends GridImpl.Dfs:
 		return false
 
 static func can_separate_aqs(l: GridImpl.AquariumInfo, r: GridImpl.AquariumInfo) -> bool:
-	var tmp: GridImpl.AquariumInfo
+	if l.cells_at_height[0][0].j > r.cells_at_height[0][0].j:
+		var tmp := l
+		l = r
+		r = tmp
+	var lr2: int = l.cells_at_height[0].back().j2()
+	var rl2: int = r.cells_at_height[0].front().j2()
 	if l.max_i == r.max_i:
-		# TODO: check if they're side to side
-		return true
+		return rl2 > lr2 + 1
 	elif abs(l.max_i - r.max_i) == 1:
-		# TODO: check if they intersect
-		return true
+		return rl2 > lr2
 	else:
 		return true
 	
