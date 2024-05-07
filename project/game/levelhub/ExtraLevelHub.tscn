@@ -41,7 +41,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 1250
-theme_override_constants/v_separation = 900
+theme_override_constants/v_separation = 800
 columns = 3
 
 [node name="LevelSection" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
