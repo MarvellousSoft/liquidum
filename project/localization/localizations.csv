@@ -179,7 +179,7 @@ BLUE_FILTER,Blue light filter,Filtro de luz azul,Filtro de luz azul
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
 HIGHLIGHT_LINES_MOBILE,Highligh last line touched,Destacar última linha tocada,Destacar última linha tocada
 HIGHLIGHT_HINTS,Highlight finished rows/columns,Destacar linhas/colunas completas,Destacar linhas/colunas completas
-HIGHLIGHT_CELL_HINT,Highlight finished cell hint,Destacar regra na célula completa,Destacar regra na célula completa
+HIGHLIGHT_CELL_HINT,Highlight finished cellhints,Destacar dicas de célula completas,Destacar dicas de célula completas
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
 DRAG_BUTTON,Fill with drag,Preencher arrastando,Preencher arrastando
 INCOMPLETE_LINE_INFO,Incomplete line info,Info. de linhas incompletas,Info. de linhas incompletas
@@ -258,11 +258,12 @@ TUT_BOATS,Boats,Barcos,Barcos
 TUT_MOUSE1,Basics 1,Básicos 1,Básicos 1
 TUT_MOUSE2,Basics 2,Básicos 2,Básicos 2
 TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
-TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
-TUT_CELLHINTS,Cellhints 1,Dicas de Célula 1,Dicas de Célula 1
-TUT_CELLHINTS2,Cellhints 2,Dicas de Célula 2,Dicas de Célula 2
-TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de Célula Juntas,Dicas de Célula Juntas
-TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de Célula Separadas,Dicas de Célula Separadas
+TUT_UNKNOWN,Unknown hints,Dicas desconhecidas,Dicas desconhecidas
+TUT_CELLHINTS,Cellhints 1,Dicas de célula 1,Dicas de célula 1
+TUT_CELLHINTS2,Cellhints 2,Dicas de célula 2,Dicas de célula 2
+TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de célula juntas,Dicas de célula juntas
+TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de célula separadas,Dicas de célula separadas
+TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de célula desconhecidas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
 WORKSHOP_EXPLANATION,"You can dowload user-created levels by subscribing to then in the Steam Workshop, click the ""Open Workshop"" button above!","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima.","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima."
 DAILY_CURR,Today,Hoje,Hoje
@@ -432,6 +433,6 @@ DEVELOPER_FLAIR_DESCRIPTION,Developer of Liquidum,Desenvolvedor de Liquidum,Dese
 EXTRA_ISLAND_FLAIR_DESC,Completed island %s,Completou a ilha %s,Completou a ilha %s
 RESTORE_PURCHASES,Restore purchases,Restaurar compras,Restaurar compras
 PURCHASES_RESTORED,Restored!,Restauradas!,Restauradas!
-CELLHINTS_INFO,Cell hint,Dica na célula,Dica na célula
+CELLHINTS_INFO,Cellhints,Dicas de célula,Dicas de célula
 CELLHINTS_TOTAL,Show total value,Mostrar valor total,Mostrar valor total
 CELLHINTS_REMAINING,Show remaining value,Mostrar valor faltando,Mostrar valor faltando
