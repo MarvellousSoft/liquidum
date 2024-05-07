@@ -619,10 +619,10 @@ class CellWithLoc extends GridModel.CellModel:
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.added_waters
-	func water_would_flood_which(corner: E.Corner) -> Array[WaterPosition]:
+	func water_would_flood_which(corner: E.Corner, in_area: GridImpl.AreaCheck = null) -> Array[WaterPosition]:
 		if water_at(corner):
 			return []
-		var dfs := AddWaterDfs.new(grid, i)
+		var dfs := AddWaterDfs.new(grid, i, in_area)
 		dfs.dry_run = true
 		dfs.flood(i, j, corner)
 		return dfs.water_locs
@@ -932,6 +932,28 @@ class BaseAdjDfs:
 		elif c == Content.Nothing or c == Content.NoBoat:
 			info.total_empty += 0.5
 			add_to_vec(info.empties, i, j2)
+	# Returns even stuff outside the grid
+	static func all_adj(ngrid: GridImpl, v: Vector2i, count_full_cell := false) -> Array[Vector2i]:
+		var arr: Array[Vector2i] = []
+		var dright := 0
+		var dleft := 0
+		var is_full_cell := count_full_cell and Ij2.waters(ngrid, v) == E.Single
+		if count_full_cell and is_full_cell:
+			assert((v.y & 1) == 0)
+			dright = 1
+		if count_full_cell and v.y > 0 and (v.y & 1) == 0 and ngrid.get_cell(v.x, (v.y - 1) / 2).cell_type() == E.Single:
+			dleft = 1
+		arr.append(Vector2i(v.x, v.y + 1 + dright))
+		arr.append(Vector2i(v.x, v.y - 1 - dleft))
+		var nj2 := v.y & ~1
+		var go_up: bool = (ngrid._pure_cell(v.x, v.y / 2).type == E.CellType.IncDiag) == ((v.y & 1) == 0)
+		if go_up or (count_full_cell and is_full_cell):
+			if v.x > 0:
+				arr.append(Vector2i(v.x - 1, nj2 | int(ngrid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag)))
+		if not go_up or (count_full_cell and is_full_cell):
+			if v.x < ngrid.n - 1:
+				arr.append(Vector2i(v.x + 1, nj2 | int(ngrid._pure_cell(v.x + 1, v.y / 2).type == E.CellType.DecDiag)))
+		return arr
 	func flood(i: int, j2: int) -> bool:
 		var stack: Array[Vector2i] = []
 		_maybe_go(stack, i, j2, true)
@@ -942,16 +964,8 @@ class BaseAdjDfs:
 		while not stack.is_empty():
 			var v: Vector2i = stack.pop_back()
 			add_to_comp(v.x, v.y)
-			_maybe_go(stack, v.x, v.y - 1, false)
-			_maybe_go(stack, v.x, v.y + 1, false)
-			# Goes up
-			var nj2 := v.y & ~1
-			if (grid._pure_cell(v.x, v.y / 2).type == E.CellType.IncDiag) == ((v.y & 1) == 0):
-				if v.x > 0:
-					_maybe_go(stack, v.x - 1, nj2 | int(grid._pure_cell(v.x - 1, v.y / 2).type == E.CellType.IncDiag), false)
-			else:
-				if v.x < grid.n - 1:
-					_maybe_go(stack, v.x + 1, nj2 | int(grid._pure_cell(v.x + 1, v.y / 2).type == E.CellType.DecDiag), false)
+			for adj in BaseAdjDfs.all_adj(grid, v):
+				_maybe_go(stack, adj.x, adj.y, false)
 		return true
 
 class WaterAdjDfs extends BaseAdjDfs:
@@ -1457,8 +1471,8 @@ class AddWaterDfs extends Dfs:
 	var added_waters := 0.0
 	var dry_run := false
 	var water_locs: Array[WaterPosition]
-	func _init(grid_: GridImpl, min_i_: int) -> void:
-		super(grid_)
+	func _init(grid_: GridImpl, min_i_: int, area_check_: AreaCheck = null) -> void:
+		super(grid_, area_check_)
 		min_i = min_i_
 	func _cell_logic(i: int, j: int, corner: E.Corner, cell: PureCell) -> bool:
 		var c := cell._content_at(corner)

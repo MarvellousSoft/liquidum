@@ -1562,15 +1562,99 @@ class CellHintTogetherToDo:
 	var to_mark_nowater: Array[GridModel.WaterPosition] = []
 	# Will always be impossible
 	var impossible: bool = false
+	# Returns an array of all positions that will be filled when filling this.
+	func get_fill_result(grid: GridImpl, fill_area: GridImpl.AreaCheck, rect: Rect2i, pos: Vector2i) -> Array[Vector2i]:
+		var arr: Array[Vector2i] = []
+		if pos.y < 0 or not grid.inside(pos.x, pos.y / 2):
+			return arr
+		match Ij2.content(grid, pos):
+			Content.Water:
+				return [pos]
+			Content.Nothing, Content.NoBoat:
+				pass
+			_:
+				return []
+		var all_filled := grid.get_cell(pos.x, pos.y / 2).water_would_flood_which(Ij2.corner(grid, pos), fill_area)
+		for filled in all_filled:
+			if rect.has_point(Vector2i(filled.i, filled.j)):
+				arr.append(filled.to_ij2())
+		return arr
+	func get_fill_cost(grid: GridImpl, result: Array[Vector2i]) -> float:
+		if result.is_empty():
+			return 0.0
+		if Ij2.content(grid, result[0]) == Content.Water:
+			return 0.0
+		var tot := 0.0
+		for filled in result:
+			tot += Ij2.size(grid, filled)
+		return tot
+	func mark_far_away_nowaters(grid: GridImpl, ci: int, cj: int, waters_left: float) -> void:
+		var start_positions: Array[Vector2i] = []
+		# Get one cell from each water component
+		var wdfs := GridImpl.WaterAdjDfs.new(grid, ci, cj)
+		for i in range(ci - 1, ci + 2):
+			for j2 in range(2 * cj - 2, 2 * cj + 4):
+				if wdfs.flood(i, j2):
+					start_positions.append(Vector2i(i, j2))
+		# also go to sides, because water may go out of 3x3 square and then back
+		var fill_area := GridImpl.RectAreaCheck.new(Rect2i(ci - 1, 0, 3, grid.m))
+		var rect_area := Rect2i(ci - 1, cj - 1, 3, 3)
+		var visited_any := {}
+		for spos in start_positions:
+			var visited := {}
+			var dist_2_pos := {}
+			var cur_dist := 0.0
+			dist_2_pos[cur_dist] = [spos]
+			while not dist_2_pos.is_empty():
+				var cur_pos: Array = dist_2_pos.get(cur_dist, [])
+				dist_2_pos.erase(cur_dist)
+				while not cur_pos.is_empty():
+					var pos: Vector2i = cur_pos.pop_back()
+					if visited.has(pos):
+						continue
+					visited[pos] = true
+					visited_any[pos] = true
+					for adj in GridImpl.BaseAdjDfs.all_adj(grid, pos, true):
+						var filled := get_fill_result(grid, fill_area, rect_area, adj)
+						var cost := get_fill_cost(grid, filled)
+						# Can't get there
+						if cur_dist + cost > waters_left:
+							continue
+						for npos in filled:
+							if cost == 0:
+								cur_pos.append(npos)
+							elif not dist_2_pos.has(cur_dist + cost):
+								dist_2_pos[cur_dist + cost] = [npos]
+							else:
+								dist_2_pos[cur_dist + cost].append(npos)
+				cur_dist += 0.5
+			for other_spos in start_positions:
+				# Can't connect two components
+				if not visited.has(other_spos):
+					impossible = true
+		for i in range(ci - 1, ci + 2):
+			for j in range(cj - 1, cj + 2):
+				if not grid.inside(i, j):
+					continue
+				var c := grid._pure_cell(i, j)
+				for loc in c.waters():
+					var wpos := GridModel.WaterPosition.new(i, j, loc)
+					if visited_any.has(wpos.to_ij2()):
+						continue
+					match c._content_at(E.waters_to_corner(loc)):
+						Content.Nothing, Content.NoBoat:
+							to_mark_nowater.append(wpos)
 	static func create(grid: GridImpl, ci: int, cj: int, expected_together_waters: float) -> CellHintTogetherToDo:
 		var todo := CellHintTogetherToDo.new()
 		var dfs := ComponentAdjDfs.new(grid, ci, cj)
 		var empty_cmps: Array[GridImpl.ComponentInfo] = []
 		var any_water := false
+		var waters_left := expected_together_waters
 		for i in range(ci - 1, ci + 2):
 			for j2 in range(2 * cj - 2, 2 * cj + 4):
 				if dfs.flood(i, j2):
 					if dfs.info.total_water > 0:
+						waters_left -= dfs.info.total_water
 						if any_water:
 							# >1 component with water
 							todo.impossible = true
@@ -1591,6 +1675,8 @@ class CellHintTogetherToDo:
 		if any_water:
 			for cmp in empty_cmps:
 				todo.to_mark_nowater.append_array(cmp.empties)
+			if waters_left > 0:
+				todo.mark_far_away_nowaters(grid, ci, cj, waters_left)
 		elif empty_cmps.is_empty():
 			# No component big enough
 			todo.impossible = true

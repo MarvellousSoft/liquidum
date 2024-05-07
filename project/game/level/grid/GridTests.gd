@@ -1386,9 +1386,9 @@ func test_cell_hints_together_strat() -> void:
 	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
 	assert_apply_strategies("""
 	+cellhint=1:1:{2.0}
-	wW....
+	wW..XX
 	L/L.L.
-	......
+	..XXXX
 	L/L.L.
 	""", "", ["BasicTogetherCellHints", "TogetherSeparateCellHints"])
 	assert_apply_strategies("""
@@ -1445,6 +1445,28 @@ func test_cell_hints_together_strat() -> void:
 	L.L/./
 	####W#
 	L.L.L/
+	""")
+	# Together with shortest path technique
+	assert_apply_strategies("""
+	+cellhint=0:1:{1.5}
+	XXWWW#
+	L.L.L/
+	XXXXXX
+	L.L.L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:{2.0}
+	XX..XX
+	L.L.L.
+	..ww..
+	L.L.L.
+	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:{3.0}
+	ww..XX
+	L.L.|.
+	....XX
+	L.L.L.
 	""")
 
 

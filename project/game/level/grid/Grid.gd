@@ -39,14 +39,20 @@ class WaterPosition:
 		i = i_
 		j = j_
 		loc = loc_
+	static func from_ij2(grid: GridModel, oi: int, oj2: int) -> WaterPosition:
+		var type := grid.get_cell(oi, oj2 / 2).cell_type()
+		var corner := E.diag_to_corner(type, E.Side.Left if (oj2 & 1) == 0 else E.Side.Right)
+		return WaterPosition.new(oi, oj2 / 2, E.corner_to_waters(corner, type))
 	func to_vec3() -> Vector3i:
 		return Vector3i(i, j, loc)
 	func j2() -> int:
 		match loc:
-			E.Single, E.TopRight, E.BottomRight:
-				return 2 * j + 1
-			_:
+			E.Single, E.TopLeft, E.BottomLeft:
 				return 2 * j
+			_:
+				return 2 * j + 1
+	func to_ij2() -> Vector2i:
+		return Vector2i(i, j2())
 
 class CellHints:
 	var adj_water_count: float
@@ -116,7 +122,7 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func water_would_flood_how_many(_corner: E.Corner) -> float:
 		return GridModel.must_be_implemented()
-	func water_would_flood_which(_corner: E.Corner) -> Array[WaterPosition]:
+	func water_would_flood_which(_corner: E.Corner, _in_area: GridImpl.AreaCheck = null) -> Array[WaterPosition]:
 		return GridModel.must_be_implemented()
 	# Can this cell have a boat? (True if it already has one)
 	func boat_possible(_disallow_nowater_below := true, _only_permanent_content := false) -> bool:
