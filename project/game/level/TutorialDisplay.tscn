@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_xlkyc"]
 [ext_resource type="Script" path="res://game/level/TutorialDisplay.gd" id="2_irhp8"]
-[ext_resource type="StyleBox" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
+[ext_resource type="StyleBox" uid="uid://6cdeg3oikb2d" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="3_s7fl0"]
 [ext_resource type="PackedScene" uid="uid://coyce45pjwmr7" path="res://database/tutorials/TogetherSeparate.tscn" id="4_5facx"]
 
@@ -16,7 +16,7 @@ theme_override_constants/separation = 20
 
 [node name="TopContainer" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Icon" type="TextureRect" parent="VBox/TopContainer"]
@@ -45,7 +45,7 @@ text = "X"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
-theme_override_constants/separation = 100
+theme_override_constants/separation = 110
 
 [node name="Back" type="Button" parent="VBox/HBoxContainer"]
 unique_name_in_owner = true

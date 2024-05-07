@@ -77,6 +77,12 @@ func load_tutorial(tut: String) -> PackedScene:
 			return load("res://database/tutorials/CellHints.tscn")
 		"cellhints2":
 			return load("res://database/tutorials/CellHints2.tscn")
+		"cellhints_tog":
+			return load("res://database/tutorials/CellHintsTogether.tscn")
+		"cellhints_sep":
+			return load("res://database/tutorials/CellHintsSeparate.tscn")
+		"cellhints_unk":
+			return load("res://database/tutorials/CellHintsUnknown.tscn")
 	return null
 
 signal dev_mode_toggled(status : bool)
