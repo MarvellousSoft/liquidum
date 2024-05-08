@@ -63,6 +63,8 @@ func _ready():
 			but.get_node("LockIcon").show()
 		%LockDesc.show()
 	elif not Global.is_mobile:
+		%BuyFullGameButton.queue_free()
+		%BuyFullGameSpace.queue_free()
 		%LockDesc.queue_free()
 	
 	await get_tree().process_frame
@@ -257,3 +259,8 @@ func _on_daily_button_streak_opened():
 func _on_player_display_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.push_scene(Global.load_mobile_compat("res://game/flairs/FlairPicker").instantiate())
+
+
+func _on_buy_full_game_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	SteamManager.overlay_or_browser("https://store.steampowered.com/app/2716690/Liquidum?utm_source=demo")

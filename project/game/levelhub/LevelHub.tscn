@@ -64,6 +64,7 @@ offset_bottom = 1732.5
 
 [node name="LockDesc" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 40.0
 offset_top = 2040.0
 offset_right = 624.0
