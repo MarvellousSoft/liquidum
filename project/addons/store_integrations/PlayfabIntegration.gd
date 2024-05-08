@@ -325,6 +325,8 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 				entry.extra_data["android_id"] = acc.PlatformUserId
 			if acc.get("Platform", "") == "IOSDevice":
 				entry.extra_data["ios_device"] = acc.PlatformUserId
+			if acc.get("Platform", "") == "GameCenter":
+				entry.extra_data["ios_game_center_id"] = acc.PlatformUserId
 			if display_name == "":
 				display_name = acc.get("Username", "")
 		if display_name == "":

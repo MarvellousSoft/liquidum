@@ -73,6 +73,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		var icon := Grid.get_node("Icon1").duplicate()
 		if item.texture != null:
 			icon.texture = item.texture
+			icon.modulate = item.texture_modulate
 		elif item.image_url != "":
 			cur_downloader.add_image(icon, item.image_url)
 		var pos := Grid.get_node("Pos1").duplicate()

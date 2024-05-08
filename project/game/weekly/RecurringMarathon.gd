@@ -260,6 +260,7 @@ class ListEntry:
 	var text: String
 	# Might be null
 	var texture: Texture
+	var texture_modulate: Color = Color.WHITE
 	# To be downloaded later
 	var image_url: String
 	var mistakes: int
@@ -286,8 +287,10 @@ class ListEntry:
 		entry.image_url = raw.extra_data.get("avatar_url", "")
 		if entry.texture == null and raw.extra_data.has("android_id"):
 			entry.texture = load("res://assets/images/ui/icons/android_robot_icon.png")
-		if entry.texture == null and raw.extra_data.has("ios_device"):
+			entry.texture_modulate = Global.COLORS.satisfied
+		if entry.texture == null and (raw.extra_data.has("ios_device") or raw.extra_data.has("ios_game_center_id")):
 			entry.texture = load("res://assets/images/ui/icons/apple_logo.png")
+			entry.texture_modulate = Global.COLORS.error
 		return entry
 
 class LeaderboardData:
