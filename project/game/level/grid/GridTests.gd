@@ -1484,6 +1484,19 @@ func test_cell_hints_together_strat() -> void:
 	XXXXXXWW
 	L._._.L.
 	""")
+	# We were incorrectly marking X on the top right cell
+	# because we calculated the price for walking up the
+	# aquarium twice
+	assert_apply_strategies("""
+	+cellhint=1:1:{3.0}
+	XXXX..
+	L.L.|.
+	XX....
+	L.L.L.
+	....ww
+	L.L.L.
+	""")
+
 
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))

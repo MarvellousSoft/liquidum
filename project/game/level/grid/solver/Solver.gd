@@ -1145,18 +1145,25 @@ class AllBoatsStrategy extends Strategy:
 						any = true
 		return any
 
-static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
+static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition) -> bool:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
 	var c := grid.get_cell(pos.i, pos.j)
 	if not c.water_at(corner):
 		var added := grid.get_cell(pos.i, pos.j).put_water(corner, false)
 		assert(added > 0, "_put_water call but didn't succeed to put water")
+		return added > 0
+	else:
+		return false
 
-static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition) -> void:
+static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition) -> bool:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
 	var c := grid.get_cell(pos.i, pos.j)
-	if c.nothing_at(corner) or c.noboat_at(corner):
-		c.put_nowater(corner, false, true)
+	if not c.nowater_at(corner):
+		var added := c.put_nowater(corner, false, true)
+		assert(added, "_put_nowater call but couldn't add nowater")
+		return added
+	else:
+		return false
 
 class AquariumsStrategy extends Strategy:
 	var basic: bool
@@ -1336,6 +1343,7 @@ class CellHintsBasic extends CellHintsStrategy:
 			fill_with = GridImpl.Content.Water
 		else:
 			return false
+		var any := false
 		for di in [-1, 0, 1]:
 			for dj in [-1, 0, 1]:
 				if i + di >= 0 and i + di < grid.rows() and j + dj >= 0 and j + dj < grid.cols():
@@ -1344,10 +1352,13 @@ class CellHintsBasic extends CellHintsStrategy:
 						var cont: GridImpl.Content = c.pure()._content_at(corner)
 						if cont == GridImpl.Content.Nothing or cont == GridImpl.Content.NoBoat:
 							if fill_with == GridImpl.Content.Water:
-								c.put_water(corner, false)
+								if c.put_water(corner, false) > 0:
+									any = true
 							else:
-								c.put_nowater(corner, false, true)
-		return true
+								if c.put_nowater(corner, false, true):
+									any = true
+		assert(any, "Should have added something")
+		return any
 
 static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, area_check: GridImpl.AreaCheck) -> bool:
 	# These are not necessarily full aquariums and MAY be in the same aquarium if
@@ -1562,24 +1573,24 @@ class CellHintTogetherToDo:
 	var to_mark_nowater: Array[GridModel.WaterPosition] = []
 	# Will always be impossible
 	var impossible: bool = false
-	# Returns an array of all positions that will be filled when filling this.
-	func get_fill_result(grid: GridImpl, fill_area: GridImpl.AreaCheck, rect: Rect2i, pos: Vector2i) -> Array[Vector2i]:
-		var arr: Array[Vector2i] = []
+	# Returns an array of all positions that will be filled when filling this. Dictionary[Vector2i -> true]
+	func get_fill_result(grid: GridImpl, fill_area: GridImpl.AreaCheck, rect: Rect2i, pos: Vector2i) -> Dictionary:
 		if pos.y < 0 or not grid.inside(pos.x, pos.y / 2):
-			return arr
+			return {}
 		match Ij2.content(grid, pos):
 			Content.Water:
-				return [pos]
+				return {pos: true}
 			Content.Nothing, Content.NoBoat:
 				pass
 			_:
-				return []
+				return {}
 		var all_filled := grid.get_cell(pos.x, pos.y / 2).water_would_flood_which(Ij2.corner(grid, pos), fill_area)
+		var ret := {}
 		for filled in all_filled:
 			if rect.has_point(Vector2i(filled.i, filled.j)):
-				arr.append(filled.to_ij2())
-		return arr
-	func get_fill_cost(grid: GridImpl, result: Array[Vector2i]) -> float:
+				ret[filled.to_ij2()] = true
+		return ret
+	func get_fill_cost(grid: GridImpl, result: Array) -> float:
 		if result.is_empty():
 			return 0.0
 		if Ij2.content(grid, result[0]) == Content.Water:
@@ -1603,6 +1614,7 @@ class CellHintTogetherToDo:
 		for spos in start_positions:
 			var visited := {}
 			var dist_2_pos := {}
+			var pos_2_filled := {}
 			var cur_dist := 0.0
 			var total_new_water_visited := 0.0
 			dist_2_pos[cur_dist] = [spos]
@@ -1618,7 +1630,15 @@ class CellHintTogetherToDo:
 					if Ij2.content(grid, pos) in [Content.Nothing, Content.NoBoat]:
 						total_new_water_visited += Ij2.size(grid, pos)
 					for adj in GridImpl.BaseAdjDfs.all_adj(grid, pos, true):
-						var filled := get_fill_result(grid, fill_area, rect_area, adj)
+						var filled_d := get_fill_result(grid, fill_area, rect_area, adj)
+						pos_2_filled[adj] = filled_d
+						var filled: Array[Vector2i] = []
+						var prev_filled: Dictionary = pos_2_filled.get(pos, {})
+						# This logic makes it work when we complete an aquarium from bottom
+						# to top
+						for npos in filled_d.keys():
+							if not prev_filled.has(npos):
+								filled.append(npos)
 						var cost := get_fill_cost(grid, filled)
 						# Can't get there
 						if cur_dist + cost > waters_left:
@@ -1696,9 +1716,12 @@ class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
 		var todo := CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count)
 		if todo.impossible:
 			return false
+		var any := false
 		for pos in todo.to_mark_nowater:
-			SolverModel._put_nowater(grid, pos)
-		return not todo.to_mark_nowater.is_empty()
+			if SolverModel._put_nowater(grid, pos):
+				any = true
+		assert(todo.to_mark_nowater.is_empty() or any, "Should do something")
+		return any
 
 class PropagateAdjacentEmptiesDfs extends GridImpl.Dfs:
 	func _cell_logic(_i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
@@ -1929,7 +1952,7 @@ func can_solve_with_strategies(grid_: GridModel, strategies_names: Array, forced
 	return true
 
 # Tries to solve the puzzle as much as possible. Returns whether it did anything.
-func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true) -> bool:
+func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true, once := false) -> bool:
 	# We'll merge all changes in the same undo here
 	if flush_undo:
 		grid.push_empty_undo()
@@ -1942,6 +1965,9 @@ func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := tr
 		var any := false
 		for name in strategies_names:
 			if strategies[name].apply_any():
+				if once:
+					print("Applied strategy: %s" % [name])
+					return true
 				if t > 35:
 					if t == 36:
 						grid.copy_to_clipboard()
