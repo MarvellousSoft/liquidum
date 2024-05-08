@@ -201,6 +201,8 @@ func disable() -> void:
 	MainButton.disabled = true
 	ShaderEffect.hide()
 	LevelCount.hide()
+	if Global.is_demo:
+		%LockIcon.show()
 
 
 func set_number(section: int) -> void:

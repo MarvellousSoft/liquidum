@@ -14,6 +14,8 @@ var last_button_to_endless: LevelButton = null
 @export var extra_levels := false
 
 func _ready() -> void:
+	if not Global.is_demo:
+		%LockDesc.queue_free()
 	if extra_levels:
 		while Sections.get_child_count() > 0:
 			var c := Sections.get_child(Sections.get_child_count() - 1)

@@ -509,6 +509,22 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "DLC_BUY"
 
+[node name="LockIcon" type="TextureRect" parent="Button"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0.847059, 0.996078, 0.882353, 1)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_bottom = 20.0
+grow_vertical = 0
+texture = ExtResource("8_py7ud")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "float"
 speed_scale = 0.7
