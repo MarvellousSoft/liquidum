@@ -37,6 +37,7 @@ const WATER_COLORS = {
 		"water_color": Color(0.671, 1, 0.82),
 		"depth_color": Color(0.078, 0.365, 0.529),
 		"ray_value": 0.3,
+		"cellhints_highlight": Color(0.016, 0.106, 0.22, 0.408),
 	},
 	"dark": {
 		"dark": Color(0.671, 1, 0.82),
@@ -45,6 +46,7 @@ const WATER_COLORS = {
 		"water_color": Color(0.671, 1, 0.82),
 		"depth_color": Color(0.275, 0.812, 0.702),
 		"ray_value": 1.0,
+		"cellhints_highlight": Color(0.851, 1, 0.886, 0.408),
 	}
 }
 const WATER_MATERIAL = preload("res://assets/shaders/WaterMaterial.tres")

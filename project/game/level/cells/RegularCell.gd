@@ -197,6 +197,7 @@ func update_dark_mode(is_dark : bool) -> void:
 	%Blocks.modulate = colors.dark
 	%Boat.modulate = colors.dark
 	%BoatPreview.modulate = colors.dark
+	%CellHintHighlight.modulate = colors.cellhints_highlight
 	%BG.color = colors.bg
 	for preview in Previews.values():
 		preview.self_modulate = colors.preview
