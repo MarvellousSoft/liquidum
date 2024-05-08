@@ -1953,6 +1953,7 @@ func can_solve_with_strategies(grid_: GridModel, strategies_names: Array, forced
 
 # Tries to solve the puzzle as much as possible. Returns whether it did anything.
 func apply_strategies(grid: GridModel, strategies_names: Array, flush_undo := true, once := false) -> bool:
+	assert(grid.editor_mode() and not grid.auto_update_hints())
 	# We'll merge all changes in the same undo here
 	if flush_undo:
 		grid.push_empty_undo()

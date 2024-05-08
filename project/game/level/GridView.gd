@@ -233,7 +233,9 @@ func get_grid_size() -> Vector2:
 
 
 func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := true, once := false) -> void:
+	grid_logic.force_editor_mode(true)
 	SolverModel.new().apply_strategies(grid_logic, strategies, flush_undo, once)
+	grid_logic.force_editor_mode(false)
 	update(do_emit_signal)
 
 
