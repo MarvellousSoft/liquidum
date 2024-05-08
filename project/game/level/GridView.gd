@@ -232,8 +232,8 @@ func get_grid_size() -> Vector2:
 	return GridCont.size
 
 
-func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := true) -> void:
-	SolverModel.new().apply_strategies(grid_logic, strategies, flush_undo)
+func apply_strategies(strategies: Array, flush_undo := true, do_emit_signal := true, once := false) -> void:
+	SolverModel.new().apply_strategies(grid_logic, strategies, flush_undo, once)
 	update(do_emit_signal)
 
 

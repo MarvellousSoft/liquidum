@@ -812,8 +812,8 @@ func _on_dev_buttons_full_solve():
 		%DevButtons.set_solve_type(r)
 
 
-func _on_dev_buttons_use_strategies():
-	GridNode.apply_strategies(%DevButtons.selected_strategies(), true, false)
+func _on_dev_buttons_use_strategies(once: bool):
+	GridNode.apply_strategies(%DevButtons.selected_strategies(), true, false, once)
 
 
 func _on_dev_buttons_generate() -> void:

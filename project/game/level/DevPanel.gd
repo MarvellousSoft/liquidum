@@ -2,7 +2,7 @@ class_name DevPanel
 extends VBoxContainer
 
 
-signal use_strategies()
+signal use_strategies(once: bool)
 signal full_solve()
 signal generate()
 signal load_grid(g: GridModel)
@@ -171,9 +171,9 @@ func start_solve(g: GridModel) -> void:
 	CancelSolve.button_pressed = false
 	solve_thread.start(_solve.bind(g))
 
-func _on_strategies_pressed():
+func _on_strategies_pressed(once: bool):
 	AudioManager.play_sfx("button_pressed")
-	use_strategies.emit()
+	use_strategies.emit(once)
 
 
 func _on_full_solve_pressed():
@@ -192,7 +192,7 @@ func _on_generate_pressed():
 
 func _on_god_mode_pressed():
 	AudioManager.play_sfx("button_pressed")
-	use_strategies.emit()
+	use_strategies.emit(false)
 
 
 func _on_paste_pressed():

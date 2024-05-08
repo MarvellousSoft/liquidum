@@ -16,6 +16,11 @@ layout_mode = 2
 focus_mode = 0
 text = "Strategies"
 
+[node name="StrategiesOnce" type="Button" parent="."]
+layout_mode = 2
+focus_mode = 0
+text = "1 Strategy"
+
 [node name="StrategyList" type="MenuButton" parent="."]
 layout_mode = 2
 text = "Used strategies"
@@ -148,7 +153,9 @@ focus_mode = 0
 text = "Mirror vertical"
 
 [connection signal="mouse_entered" from="Strategies" to="." method="_on_button_mouse_entered"]
-[connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed"]
+[connection signal="pressed" from="Strategies" to="." method="_on_strategies_pressed" binds= [false]]
+[connection signal="mouse_entered" from="StrategiesOnce" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="StrategiesOnce" to="." method="_on_strategies_pressed" binds= [true]]
 [connection signal="mouse_entered" from="StrategyList" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="ForcedStrategyList" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_entered" from="HBoxContainer/FullSolve" to="." method="_on_button_mouse_entered"]
