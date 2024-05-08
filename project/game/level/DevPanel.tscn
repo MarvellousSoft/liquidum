@@ -12,6 +12,7 @@ theme_override_constants/separation = 50
 script = ExtResource("2_3k7ls")
 
 [node name="Strategies" type="Button" parent="."]
+modulate = Color(0.141176, 1, 1, 1)
 layout_mode = 2
 focus_mode = 0
 text = "Strategies"
@@ -22,6 +23,7 @@ focus_mode = 0
 text = "1 Strategy"
 
 [node name="StrategyList" type="MenuButton" parent="."]
+modulate = Color(1, 0.498039, 0.313726, 1)
 layout_mode = 2
 text = "Used strategies"
 

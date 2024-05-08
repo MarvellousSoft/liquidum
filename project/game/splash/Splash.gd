@@ -8,6 +8,8 @@ func _ready() -> void:
 		call_deferred(&"_open_mobile_version")
 		return
 	FileManager.load_game()
+	# Print color from hex
+	# print(Color("24ffff").to_rgba32())
 
 func _open_mobile_version() -> void:
 	get_tree().change_scene_to_file("res://game/splash/SplashMobile.tscn")
