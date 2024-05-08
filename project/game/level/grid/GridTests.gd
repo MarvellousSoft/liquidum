@@ -1468,6 +1468,15 @@ func test_cell_hints_together_strat() -> void:
 	....XX
 	L.L.L.
 	""")
+	assert_apply_strategies("""
+	+cellhint=1:1:{1.5}
+	...xXX
+	L._/L.
+	xxxxxx
+	L.L.L.
+	X...XX
+	L/L.L.
+	""")
 
 
 func test_options_sum() -> void:

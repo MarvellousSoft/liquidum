@@ -1604,6 +1604,7 @@ class CellHintTogetherToDo:
 			var visited := {}
 			var dist_2_pos := {}
 			var cur_dist := 0.0
+			var total_new_water_visited := 0.0
 			dist_2_pos[cur_dist] = [spos]
 			while not dist_2_pos.is_empty():
 				var cur_pos: Array = dist_2_pos.get(cur_dist, [])
@@ -1614,6 +1615,8 @@ class CellHintTogetherToDo:
 						continue
 					visited[pos] = true
 					visited_any[pos] = true
+					if Ij2.content(grid, pos) in [Content.Nothing, Content.NoBoat]:
+						total_new_water_visited += Ij2.size(grid, pos)
 					for adj in GridImpl.BaseAdjDfs.all_adj(grid, pos, true):
 						var filled := get_fill_result(grid, fill_area, rect_area, adj)
 						var cost := get_fill_cost(grid, filled)
@@ -1628,6 +1631,8 @@ class CellHintTogetherToDo:
 							else:
 								dist_2_pos[cur_dist + cost].append(npos)
 				cur_dist += 0.5
+			if total_new_water_visited < waters_left:
+				impossible = true
 			for other_spos in start_positions:
 				# Can't connect two components
 				if not visited.has(other_spos):
