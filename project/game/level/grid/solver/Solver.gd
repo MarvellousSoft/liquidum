@@ -1688,6 +1688,8 @@ class CellHintTogetherToDo:
 		return todo
 
 class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
+	func description() -> String:
+		return "Put X on small components, and if there's a water, put X on all other components and far away cells."
 	func _apply(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
 		if hint.adj_water_count_type != E.HintType.Together:
 			return false
@@ -1803,6 +1805,8 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 		return true
 
 class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
+	func description() -> String:
+		return "Try puttin water and no water on each place and see if satisfying the cellhint becomes impossible."
 	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
 		if hint.adj_water_count_type == E.HintType.Separated:
 			return SolverModel.is_cellhint_separated_impossible(grid, ci, cj, hint)
@@ -1837,7 +1841,7 @@ class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 					continue
 				var c := grid.get_cell(i, j)
 				var waters := c.waters()
-				if grid.wall_at(i, j, E.Side.Left):
+				if j == cj - 1 or grid.wall_at(i, j, E.Side.Left):
 					if try_water_nowater(ci, cj, hint, i, j, waters[0]):
 						any = true
 				if waters.size() > 1:

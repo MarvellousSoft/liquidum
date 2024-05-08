@@ -1477,7 +1477,13 @@ func test_cell_hints_together_strat() -> void:
 	X...XX
 	L/L.L.
 	""")
-
+	assert_apply_strategies("""
+	+cellhint=1:2:-?-
+	WWWWXX..
+	L._.|.|.
+	XXXXXXWW
+	L._._.L.
+	""")
 
 func test_options_sum() -> void:
 	assert(OptionsSum.can_be_solved(10., [[1., 9.], [2., 9.]]))
