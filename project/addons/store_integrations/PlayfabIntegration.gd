@@ -139,14 +139,7 @@ func _on_simple_login(result, display_name_getter) -> void:
 		if login_result.NewlyCreated and display_name_getter != null:
 			var display_name: String = await display_name_getter.call()
 			if display_name != "":
-				playfab.post_dict_auth(
-					{
-						DisplayName = display_name,
-					},
-					"/Client/UpdateUserTitleDisplayName",
-					PlayFab.AUTH_TYPE.SESSION_TICKET,
-					_generic_request,
-				)
+				await change_display_name(display_name)
 	else:
 		print("Weird login result: %s" % [result])
 
@@ -334,4 +327,24 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		entry.display_name = display_name
 		data.entries.append(entry)
 	return data
-	
+
+signal display_name_change(success: bool)
+
+func _on_display_name_call(res, new_name: String) -> void:
+	if not res is Dictionary or res.status != "OK":
+		print("Invalid response: %s" % [res])
+		display_name_change.emit(false)
+	else:
+		display_name_change.emit(res.data.DisplayName == new_name)
+
+# Returns whether the name change was successful
+func change_display_name(new_name: String) -> bool:
+	if not authenticated():
+		return false
+	playfab.post_dict_auth(
+		{DisplayName = new_name},
+		"/Client/UpdateUserTitleDisplayName",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		_on_display_name_call.bind(new_name),
+	)
+	return await display_name_change
