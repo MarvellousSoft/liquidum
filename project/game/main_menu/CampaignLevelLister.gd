@@ -72,6 +72,8 @@ func get_max_unlocked_level(section: int) -> int:
 		if save != null and save.is_completed():
 			count_completed += 1
 		i += 1
+	if Global.is_demo:
+		i = mini(i, Global.DEMO_UNLOCKED.get(section, 0) + 1)
 	return i - 1
 
 
@@ -83,9 +85,9 @@ func count_section_levels(section : int) -> int:
 		count += 1
 	return count
 
-func get_disabled_section_free_trial(section: int) -> Array:
-	assert(Global.is_demo)
-	return Global.DEMO_UNLOCKED.get(section, [])
+func get_disabled_section_free_trial(_section: int) -> Array:
+	assert(false)
+	return []
 
 func count_completed_section_levels(section : int) -> int:
 	var count := 0
@@ -155,7 +157,7 @@ func section_name(_section: int) -> String:
 	return ""
 
 func section_disabled(_section: int) -> bool:
-	return Global.is_demo
+	return false
 
 func is_hard(section: int, level: int) -> bool:
 	return level >= 7 or section == 6

@@ -201,7 +201,7 @@ func disable() -> void:
 	MainButton.disabled = true
 	ShaderEffect.hide()
 	LevelCount.hide()
-	if Global.is_demo:
+	if Global.is_demo and not Global.DEMO_UNLOCKED.has(my_section):
 		%LockIcon.show()
 
 
@@ -354,6 +354,8 @@ func _on_level_first_win(button):
 		return
 	var completed_levels := level_lister.count_completed_section_levels(section)
 	var section_levels := level_lister.count_section_levels(section)
+	if Global.is_demo:
+		section_levels = Global.DEMO_UNLOCKED.get(section)
 	if extra:
 		if level_lister.get_max_unlocked_level(section) < section_levels:
 			hub.prepare_to_unlock_level(section, level_lister.get_max_unlocked_level(section))

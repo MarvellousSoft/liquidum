@@ -66,7 +66,7 @@ func _ready():
 func extra_level() -> bool:
 	return lister == ExtraLevelLister
 
-func setup(section : int, level: int, active : bool, is_disabled_section: bool, extra: bool) -> void:
+func setup(section : int, level: int, active : bool, _is_disabled_section: bool, extra: bool) -> void:
 	%AlternateText.queue_free()
 	lister = ExtraLevelLister as LevelLister if extra else CampaignLevelLister as LevelLister
 	my_section = section
@@ -77,7 +77,7 @@ func setup(section : int, level: int, active : bool, is_disabled_section: bool, 
 	else:
 		MainButton.text = str(my_level)
 	
-	if is_disabled_section and not active:
+	if Global.is_demo and level > Global.DEMO_UNLOCKED.get(section, 0):
 		LockIcon.show()
 	else:
 		LockIcon.queue_free()

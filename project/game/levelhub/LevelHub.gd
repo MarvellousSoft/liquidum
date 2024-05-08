@@ -90,7 +90,7 @@ func update_sections() -> void:
 		elif Global.is_dev_mode() or Profile.get_option("unlock_everything"):
 			unlocked = level_lister.count_section_levels(idx)
 		section.set_section_name(level_lister.section_name(idx))
-		if not extra_levels and unlocked == 0 and not Global.is_demo:
+		if not extra_levels and unlocked == 0:
 			is_disabled = true
 		if is_disabled:
 			section.disable()
@@ -127,11 +127,15 @@ func check_unlocks() -> void:
 
 
 func prepare_to_unlock_level(section, level):
+	if Global.is_demo and Global.DEMO_UNLOCKED.get(section, 0) < level:
+		return
 	section_to_unlock = section
 	level_to_unlock = level
 
 
 func unlock_section(prev_section):
+	if Global.is_demo and not Global.DEMO_UNLOCKED.has(prev_section + 1):
+		return
 	level_to_unlock = -1
 	section_to_unlock = prev_section + 1
 

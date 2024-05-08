@@ -101,8 +101,8 @@ var custom_portrait = null
 var shader_materials = {}
 
 const DEMO_UNLOCKED := {
-	1: [1, 2, 3, 4, 5, 6, 7, 8],
-	2: [1, 2, 3, 4, 5],
+	1: 8,
+	2: 5,
 }
 
 func _ready() -> void:
