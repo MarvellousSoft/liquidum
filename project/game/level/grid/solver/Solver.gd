@@ -1388,7 +1388,7 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 				total_empty += dfs.info.total_empty
 				total_water += dfs.info.total_water
 				any_pools = any_pools or dfs.info.has_pool
-	if water_hint <= total_water or total_empty == 0:
+	if water_hint < total_water or total_empty == 0:
 		return false
 	var any := false
 	if not advanced:
@@ -1550,7 +1550,7 @@ class TwoCellHints extends Strategy:
 					continue
 				for di in range(-2, 3):
 					for dj in range(-2, 3):
-						if di == 0 and dj == 0 or not rect.has_point(Vector2i(i + di, j + dj)):
+						if (di == 0 and dj == 0) or not rect.has_point(Vector2i(i + di, j + dj)):
 							continue
 						var d := grid.get_cell(i + di, j + dj).hints()
 						if d == null or d.adj_water_count <= 0.0:
@@ -1558,8 +1558,8 @@ class TwoCellHints extends Strategy:
 						var extra := _fixed_water_outside_intersection(i, j, di, dj)
 						if extra == -1:
 							continue
-						return SolverModel.generic_solve(grid, advanced, d.adj_water_count - (c.adj_water_count - extra), RectWithExclusionArea.new(Rect2i(i + di - 1, j + dj - 1, 3, 3), Rect2i(i - 1, j - 1, 3, 3)))
-
+						if SolverModel.generic_solve(grid, advanced, d.adj_water_count - (c.adj_water_count - extra), RectWithExclusionArea.new(Rect2i(i + di - 1, j + dj - 1, 3, 3), Rect2i(i - 1, j - 1, 3, 3))):
+							any = true
 		return any
 
 class ComponentAdjDfs extends GridImpl.BaseAdjDfs:
