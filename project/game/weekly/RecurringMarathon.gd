@@ -101,7 +101,7 @@ func _update() -> void:
 		%TimeBox.visible = unlocked
 	if Global.is_mobile:
 		%LeaderboardsButton.visible = unlocked
-		%LeaderboardsButton.modulate.a = 1.0 if GoogleIntegration.available() or AppleIntegration.available() else 0.0
+		%LeaderboardsButton.modulate.a = 1.0 if PlayFabIntegration.available() else 0.0
 		# Looks better
 		%DailyHBox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN if unlocked else Control.SIZE_SHRINK_CENTER
 		%DailyHBox/OffsetRight.visible = unlocked and Completed.visible
@@ -221,9 +221,17 @@ func load_and_display_leaderboard(level: Level) -> void:
 	var display: LeaderboardDisplay = null
 	if Global.is_mobile:
 		display = LeaderboardDisplay.get_or_create(level, tr_name, true)
+		if not display.is_node_ready():
+			await display.ready
+		display.set_dates(current_period(), previous_period())
 	var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 	if l_data.size() > 0 and l_data[0].has_self:
 		already_uploaded = true
+	if Global.is_mobile:
+		# On mobile, show leaderboard as soon as possible
+		display.display(l_data, current_period(), [], "")
+		l_data = []
+		print("Displayed first page")
 	var y_data := await RecurringMarathon.get_leaderboard_data(steam_previous_leaderboard())
 	display_leaderboard(display, l_data, y_data, level)
 	
@@ -325,7 +333,8 @@ func display_leaderboard(display: LeaderboardDisplay, current_data: Array[Leader
 	if not display.is_node_ready():
 		await display.ready
 	display.display(current_data, current_period(), previous_data, previous_period())
-	display.show_current_all()
+	if not Global.is_mobile:
+		display.show_current_all()
 
 func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_replay: bool) -> void:
 	var data := UserData.current()
@@ -388,13 +397,11 @@ static func do_share(text: String) -> void:
 		DisplayServer.clipboard_set(text)
 
 func _on_leaderboards_button_pressed() -> void:
-	assert(Global.is_mobile)
-	if OS.is_debug_build():
-		%LeaderboardsButton.disabled = true
-		await load_and_display_leaderboard(null)
-		%LeaderboardsButton.disabled = false
-	else:
-		await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
+	if not Global.is_mobile or not PlayFabIntegration.available():
+		return
+	%LeaderboardsButton.disabled = true
+	await load_and_display_leaderboard(null)
+	%LeaderboardsButton.disabled = false
 
 func share(mistakes: int, secs: int, marathon_i: int) -> void:
 	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))

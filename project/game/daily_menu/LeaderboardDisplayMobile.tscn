@@ -8,6 +8,7 @@
 [node name="LeaderboardDisplayMobile" type="Control"]
 custom_minimum_size = Vector2(720, 1280)
 layout_mode = 3
+anchors_preset = 0
 theme = ExtResource("1_w4nri")
 script = ExtResource("2_tccoj")
 

@@ -41,6 +41,7 @@ class ImageDowloader extends Node:
 	func _download(i: int) -> void:
 		if canceled:
 			return
+		print("[%d] Started downloading %s" % [i, urls[i]])
 		var req: HTTPRequest = reqs[i]
 		req.call_deferred("request", urls[i])
 		await req.request_completed
@@ -59,6 +60,9 @@ class ImageDowloader extends Node:
 			push_warning("Failed to download image from %s" % [urls[i]])
 	func start_all_downloads() -> void:
 		WorkerThreadPool.add_group_task(self._download, icons.size(), 5, false, "Downloads leaderboard icons")
+
+func set_date(date: String) -> void:
+	Grid.get_node("Date").text = date
 
 func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	clear_leaderboard()

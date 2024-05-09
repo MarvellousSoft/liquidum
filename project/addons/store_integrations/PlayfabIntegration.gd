@@ -12,7 +12,7 @@ var sort_method := {}
 static func available() -> bool:
 	if Global.is_demo:
 		return false
-	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available() or OS.get_name() == "iOS"
+	return SteamIntegration.available() or GooglePlayGameServices.enabled or AppleIntegration.available() or OS.get_name() == "iOS" or Global.is_fake_mobile()
 
 func _try_authenticate() -> void:
 	if not authenticated():
@@ -27,7 +27,7 @@ func _try_authenticate() -> void:
 				},
 			}
 		}
-		if SteamManager.enabled:
+		if SteamManager.enabled or Global.is_fake_mobile():
 			print("Will try to authenticate through Steam")
 			# Can't use getAuthTicketForWebApi because we're using an old GodotSteam tied to 4.1.3
 			var ticket: Dictionary = SteamManager.steam.getAuthSessionTicket()

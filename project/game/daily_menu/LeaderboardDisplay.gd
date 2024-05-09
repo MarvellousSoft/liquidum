@@ -52,6 +52,14 @@ func _ready() -> void:
 		Leaderboards.add_child(_single("%s (%s)" % [prev, tr("FRIENDS")]))
 		Leaderboards.set_tab_hidden(3, true)
 
+func set_dates(current: String, previous: String) -> void:
+	if current != "":
+		Leaderboards.get_child(0).set_date(current)
+		Leaderboards.get_child(1).set_date(current)
+	if previous != "":
+		Leaderboards.get_child(2).set_date(previous)
+		Leaderboards.get_child(3).set_date(previous)
+
 func display(current_data: Array[RecurringMarathon.LeaderboardData], current_date: String, previous: Array[RecurringMarathon.LeaderboardData], previous_date: String) -> void:
 	if Global.is_mobile and has_node("%LoadingContainer"):
 		%LoadingContainer.queue_free()

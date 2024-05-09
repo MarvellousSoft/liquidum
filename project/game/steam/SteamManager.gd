@@ -14,7 +14,7 @@ var cached_lds := {}
 var ld_mutex := DumbMutex.new()
 
 func _init() -> void:
-	if not Global.is_mobile and Engine.has_singleton("Steam"):
+	if Engine.has_singleton("Steam"):
 		steam = Engine.get_singleton("Steam")
 	else:
 		enabled = false
@@ -39,6 +39,9 @@ func _ready() -> void:
 	SteamManager.steam.current_stats_received.connect(_stats_received)
 	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
 	SteamManager.steam.requestCurrentStats()
+	# False mobile on computer
+	if Global.is_mobile:
+		enabled = false
 
 func _stats_received(game: int, result: int, user: int) -> void:
 	if stats_received:

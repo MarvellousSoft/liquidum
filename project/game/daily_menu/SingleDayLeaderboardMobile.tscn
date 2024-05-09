@@ -36,7 +36,7 @@ theme_override_constants/margin_right = 25
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/v_separation = 20
 columns = 5
 
 [node name="E1" type="Control" parent="MarginContainer/Grid"]
@@ -95,8 +95,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -10.0
-offset_top = -30.0
+offset_left = -22.5
+offset_top = -26.0
+offset_right = 12.5
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0

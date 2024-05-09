@@ -119,7 +119,6 @@ func _ready() -> void:
 	Profile.dark_mode_toggled.connect(update_dark_mode)
 	update_dark_mode(Profile.get_option("dark_mode"))
 
-
 func _input(event):
 	if event.is_action_pressed(&"toggle_fullscreen"):
 		toggle_fullscreen()
@@ -148,6 +147,8 @@ func toggle_dev_mode():
 	if not is_mobile:
 		dev_mode_label.visible = _dev_mode
 
+func is_fake_mobile() -> bool:
+	return OS.is_debug_build() and is_mobile and not OS.get_name() in ["iOS", "Android"]
 
 func check_cmdline_args():
 	for arg in OS.get_cmdline_args():
