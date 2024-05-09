@@ -78,6 +78,7 @@ func showWeekly(title: String, message: String, weekday: Time.Weekday, at_hour: 
 	if not ln:
 		not_found_plugin()
 		return
+	assert(OS.get_name() != "iOS", "This doesn't work on iOS")
 	ln.showRepeating(title, message, _generate_weekly_notify_interval(weekday, at_hour, at_minute), 60 * 60 * 24 * 7, tag)
 
 func cancel(tag):

@@ -125,7 +125,7 @@ func setup_values() -> void:
 			%DailyNotifContainer.hide()
 		else:
 			%DailyNotifContainer.show()
-			%DailyNotifContainer/CheckBox.button_pressed = daily_notif == Profile.DailyStatus.Enabled
+			%DailyNotifContainer/CheckBox.set_pressed_no_signal(daily_notif == Profile.DailyStatus.Enabled)
 	if Global.is_demo:
 		%UnlockVBox.hide()
 		%MiscellaneousLabel.hide()
@@ -310,7 +310,7 @@ func _on_bigger_hints_toggled(on : bool) -> void:
 	Profile.bigger_hints_changed.emit(on)
 
 func _on_daily_notif_changed(on: bool) -> void:
-	%DailyNotifContainer/CheckBox.button_pressed = on
+	%DailyNotifContainer/CheckBox.set_pressed_no_signal(on)
 
 func _on_daily_notif_toggled(on: bool) -> void:
 	checkbox_sound(on)
