@@ -36,6 +36,7 @@ const DIFFICULTY_NAMES = [
 	"EASY_BUTTON", "MEDIUM_BUTTON", "HARD_BUTTON",\
 	"EXPERT_BUTTON", "INSANE_BUTTON"
 ]
+const MAX_EXTRA_RICH_PRESENCE := 7
 
 signal won(info: WinInfo)
 signal had_first_win
@@ -171,19 +172,31 @@ func _ready():
 			elif is_daily():
 				$SteamRichPresence.set_group("daily")
 				$SteamRichPresence.set_display("#Daily")
+			elif is_weekly():
+				$SteamRichPresence.set_group("daily")
+				$SteamRichPresence.set_display("#Weekly")
+				$SteamRichPresence.set_key_value("level", str(RecurringMarathon.idx_from_level_name(level_name)))
 			elif difficulty != -1:
 				$SteamRichPresence.set_group("random")
 				$SteamRichPresence.set_display("#Random")
 				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
 			elif extra_section != -1 and extra_level_number == -1:
 				$SteamRichPresence.set_group("extra_island")
-				$SteamRichPresence.set_display("#ExtraIsland")
-				$SteamRichPresence.set_key_value("section", ExtraLevelLister.section_name(extra_level_number))
+				if extra_section > MAX_EXTRA_RICH_PRESENCE:
+					$SteamRichPresence.set_display("#ExtraIsland")
+					$SteamRichPresence.set_key_value("section", tr(ExtraLevelLister.section_name(extra_section)))
+				else:
+					$SteamRichPresence.set_display("#ExtraIslandLoc")
+					$SteamRichPresence.set_key_value("section", str(extra_section))
 				$SteamRichPresence.set_key_value("level", "∞")
 			elif extra_section != -1 and extra_level_number != -1:
 				$SteamRichPresence.set_group("extra_island")
-				$SteamRichPresence.set_display("#ExtraIsland")
-				$SteamRichPresence.set_key_value("section", ExtraLevelLister.section_name(extra_level_number))
+				if extra_section > MAX_EXTRA_RICH_PRESENCE:
+					$SteamRichPresence.set_display("#ExtraIsland")
+					$SteamRichPresence.set_key_value("section", tr(ExtraLevelLister.section_name(extra_section)))
+				else:
+					$SteamRichPresence.set_display("#ExtraIslandLoc")
+					$SteamRichPresence.set_key_value("section", str(extra_section))
 				$SteamRichPresence.set_key_value("level", str(extra_level_number))
 				var data = FileManager.load_extra_level_data(extra_section, extra_level_number)
 				if not data.tutorial.is_empty():

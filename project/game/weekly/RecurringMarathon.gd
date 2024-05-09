@@ -405,6 +405,12 @@ func share(mistakes: int, secs: int, marathon_i: int) -> void:
 func _level_name(marathon_i: int) -> String:
 	return "%s_%d" % [level_basename(), marathon_i]
 
+static func idx_from_level_name(level: String) -> int:
+	var idx := level.rfind("_")
+	if idx == -1:
+		return 1
+	return int(level.substr(idx + 1))
+
 func has_level_save(marathon_i: int) -> bool:
 	return FileManager.has_level(_level_name(marathon_i))
 
