@@ -17,7 +17,7 @@ expand_margin_bottom = 10.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iw5xt"]
 
 [node name="FlairButton" type="Control"]
-custom_minimum_size = Vector2(660, 100)
+custom_minimum_size = Vector2(660, 160)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 700.0
@@ -27,8 +27,8 @@ script = ExtResource("1_nlg1v")
 [node name="FlairContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 660.0
-offset_bottom = 159.0
-theme_override_constants/separation = 20
+offset_bottom = 160.0
+theme_override_constants/separation = 5
 
 [node name="Flair" type="Label" parent="FlairContainer"]
 unique_name_in_owner = true
@@ -53,8 +53,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 60
-theme_override_font_sizes/font_size = 43
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 36
 text = "  This is a big reason why you have this flair"
 horizontal_alignment = 1
 vertical_alignment = 1

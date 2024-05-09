@@ -32,31 +32,30 @@ script = ExtResource("1_x4isc")
 layout_mode = 0
 
 [node name="TopContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_right = -3120.0
+layout_mode = 0
+offset_right = 720.0
 offset_bottom = 652.0
-grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TopContainer"]
 layout_mode = 2
 theme_override_constants/separation = 85
+alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="TopContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_right = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
 
 [node name="TitleContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 20
+alignment = 1
 
 [node name="Title" type="Label" parent="TopContainer/VBoxContainer/MarginContainer/TitleContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 60
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 53
 text = "FLAIR_PICKER_TITLE"
 horizontal_alignment = 1
 
@@ -64,7 +63,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 25
 text = "FLAIR_EXPLANATION"
 horizontal_alignment = 1
 
@@ -126,7 +125,7 @@ alignment = 1
 
 [node name="Name" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(590, 0)
+custom_minimum_size = Vector2(550, 0)
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -140,7 +139,7 @@ text_overrun_behavior = 3
 [node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(590, 0)
+custom_minimum_size = Vector2(550, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_colors/caret_color = Color(0.670588, 1, 0.819608, 1)
@@ -195,7 +194,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_right = 20
 
 [node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer"]
 unique_name_in_owner = true
