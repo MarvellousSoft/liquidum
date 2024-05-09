@@ -40,7 +40,9 @@ class ImageDowloader extends Node:
 		reqs.append(req)
 		add_child(req)
 		req.request_completed.connect(_request_completed.bind(icons.size() - 1, req))
-	func _continue_downloads() -> void:
+	func continue_downloads() -> void:
+		if not is_inside_tree():
+			return
 		while current_downloads < 5 and next_download_to_start < reqs.size():
 			current_downloads += 1
 			reqs[next_download_to_start].request(urls[next_download_to_start])
@@ -50,7 +52,7 @@ class ImageDowloader extends Node:
 		remove_child(req)
 		req.queue_free()
 		current_downloads -= 1
-		_continue_downloads()
+		continue_downloads()
 		if result != OK:
 			return
 		var img := Image.new()
@@ -60,8 +62,6 @@ class ImageDowloader extends Node:
 			icons[i].texture = ImageTexture.create_from_image(img)
 		else:
 			push_warning("Failed to download image from %s" % [urls[i]])
-	func start_all_downloads() -> void:
-		_continue_downloads()
 
 func set_date(date: String) -> void:
 	Grid.get_node("Date").text = date
@@ -71,7 +71,6 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	if cur_downloader != null:
 		cur_downloader.canceled = true
 		remove_child(cur_downloader)
-	assert(is_inside_tree())
 	cur_downloader = ImageDowloader.new()
 	add_child(cur_downloader)
 	Grid.get_node("Date").text = date
@@ -109,7 +108,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		for c in [icon, pos, name_, mistakes, time]:
 			c.show()
 			Grid.add_child(c)
-	cur_downloader.start_all_downloads()
+	cur_downloader.continue_downloads()
 	update_theme(Profile.get_option("dark_mode"))
 
 func update_theme(_dark_mode: bool) -> void:

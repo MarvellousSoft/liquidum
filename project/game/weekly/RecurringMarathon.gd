@@ -344,7 +344,11 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 	var id := type()
 	if is_replay:
 		data.replay_completed[id] = marathon_i
-	level.get_node("%ShareButton").visible = true
+	level.get_node("%ShareButton").show()
+	if Global.is_mobile:
+		var ld_button = level.get_node("%LeaderboardsButton")
+		ld_button.show()
+		ld_button.pressed.connect(_on_level_leaderboards_button_pressed.bind(ld_button))
 	var stats := StatsTracker.instance()
 	if info.first_win and marathon_i == 1 and marathon_size > 1:
 		stats.increment_recurring_started(id)
@@ -405,6 +409,14 @@ func _on_leaderboards_button_pressed() -> void:
 	%LeaderboardsButton.disabled = true
 	await load_and_display_leaderboard(null)
 	%LeaderboardsButton.disabled = false
+
+func _on_level_leaderboards_button_pressed(but: Button) -> void:
+	if not Global.is_mobile or not PlayFabIntegration.available():
+		return
+	but.disabled = true
+	await load_and_display_leaderboard(null)
+	but.disabled = false
+
 
 func share(mistakes: int, secs: int, marathon_i: int) -> void:
 	RecurringMarathon.do_share(share_text(mistakes, secs, marathon_i))
