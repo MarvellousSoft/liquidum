@@ -32,7 +32,7 @@ func _process(dt):
 func _update() -> void:
 	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
 	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
-	var weekday_reset := Time.WEEKDAY_SUNDAY if RecurringMarathon.use_fixed_google_tz() else Time.WEEKDAY_MONDAY
+	var weekday_reset := Time.WEEKDAY_MONDAY
 	var days_back_till_fst_day: int = (now_dict.weekday - weekday_reset + 7) % 7
 	curr_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - days_back_till_fst_day * 24 * 60 * 60)
 	prev_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - (days_back_till_fst_day + 7) * 24 * 60 * 60)
@@ -50,9 +50,6 @@ static func possible_flavors() -> Array[RandomFlavors.Flavor]:
 
 static func gen_level(gen: RandomLevelGenerator, fst_day: String, marathon_i: int, m_size: int) -> LevelData:
 	var seed_str := fst_day
-	# Android resets on sunday, but we actually use the seed as monday for consistency with desktop and preprocessing
-	if RecurringMarathon.use_fixed_google_tz():
-		seed_str = _day_strip_time(Time.get_unix_time_from_datetime_string(fst_day) + 24 * 60 * 60)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = RandomHub.consistent_hash(seed_str)
 	# Here, use rng for stuff that only changes weekly

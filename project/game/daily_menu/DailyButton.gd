@@ -154,6 +154,9 @@ func current_period() -> String:
 func previous_period() -> String:
 	return yesterday
 
+func previous_previous_period() -> String:
+	return DailyButton._today(2 * 24 * 60 * 60)
+
 func level_basename() -> String:
 	return FileManager._daily_basename(today)
 

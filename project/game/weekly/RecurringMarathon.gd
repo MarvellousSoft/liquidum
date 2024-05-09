@@ -39,16 +39,9 @@ static func _unixtime() -> int:
 		return SteamManager.steam.getServerRealTime()
 	return int(Time.get_unix_time_from_system())
 
-static func use_fixed_google_tz() -> bool:
-	return OS.get_name() == "Android"
-
 static func _timezone_bias_secs() -> int:
-	if use_fixed_google_tz():
-		# UTC-7 because that's when google play leaderboards reset
-		# https://developers.google.com/games/services/common/concepts/leaderboards
-		return - 7 * 60 * 60
-	else:
-		return int(Time.get_time_zone_from_system().bias) * 60
+	# Playfab uses UTC to reset
+	return 0
 
 static func _unixtime_ok_timezone() -> int:
 	return _unixtime() + _timezone_bias_secs()
@@ -152,8 +145,12 @@ func _update_streak() -> void:
 	var data := UserData.current()
 	var id := type()
 	if data.current_streak[id] > 0 and not data.last_day[id] in [current_period(), previous_period()]:
-		data.current_streak[id] = 0
-		UserData.save()
+		if data.allow_streak_skip_this_one_time and data.last_day[id] == previous_previous_period():
+			# Allow streak skip
+			pass
+		else:
+			data.current_streak[id] = 0
+			UserData.save()
 	if has_node("%StreakButton"):
 		%StreakButton.text = str(data.current_streak[id])
 	CurStreak.text = str(data.current_streak[id])
@@ -444,6 +441,10 @@ func current_period() -> String:
 
 func previous_period() -> String:
 	return GridModel.must_be_implemented()
+
+# If not "" and UserData.allow_streak_skip_this_one_time is set, used to allow skipping one day
+func previous_previous_period() -> String:
+	return ""
 	
 func level_basename() -> String:
 	return GridModel.must_be_implemented()
