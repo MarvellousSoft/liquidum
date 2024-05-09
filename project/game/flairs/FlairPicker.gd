@@ -2,11 +2,9 @@ class_name FlairPicker
 extends Control
 
 func _ready():
-	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
 	populate_flairs()
 	update_info()
 	update_flair()
-	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 	
 
 func reset_flairs():
@@ -117,9 +115,3 @@ func _on_upload_name_pressed() -> void:
 
 func _on_name_edit_text_submitted(_new_text):
 	await _on_upload_name_pressed()
-
-
-func _on_dark_mode_changed(is_dark : bool):
-	var color = Color(1.0, 1.0, 1.0) if is_dark else Color(0, 0.035, 0.141)
-	for node in [%EditButton, %UploadButton]:
-		node.modulate = color

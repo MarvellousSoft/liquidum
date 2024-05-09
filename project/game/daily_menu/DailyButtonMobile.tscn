@@ -115,6 +115,7 @@ layout_mode = 2
 texture_normal = ExtResource("5_yp6m4")
 ignore_texture_size = true
 stretch_mode = 5
+script = ExtResource("3_o6f01")
 
 [node name="Share" type="TextureButton" parent="CenterContainer/VBox/DailyHBox"]
 unique_name_in_owner = true

@@ -80,6 +80,7 @@ alignment = 1
 
 [node name="Image" type="TextureRect" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 mouse_filter = 2

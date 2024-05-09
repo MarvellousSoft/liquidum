@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxeyb8lqhqk0h"]
+[gd_scene load_steps=4 format=3 uid="uid://dxeyb8lqhqk0h"]
 
 [ext_resource type="PackedScene" uid="uid://cpiojpbtpveaj" path="res://game/daily_menu/DailyButtonMobile.tscn" id="1_g3lim"]
 [ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="2_vilvt"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="3_3rbi3"]
 
 [node name="WeeklyButton" instance=ExtResource("1_g3lim")]
 custom_minimum_size = Vector2(720, 150)
@@ -9,6 +10,9 @@ script = ExtResource("2_vilvt")
 
 [node name="DailyHBox" parent="CenterContainer/VBox" index="0"]
 theme_override_constants/separation = 6
+
+[node name="LeaderboardsButton" parent="CenterContainer/VBox/DailyHBox" index="0"]
+script = ExtResource("3_3rbi3")
 
 [node name="3Mistakes" parent="CenterContainer/VBox/StreakContainer" index="1"]
 text = "LESS_SIX_MISTAKES"

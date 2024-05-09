@@ -27,9 +27,9 @@ text = "BACK"
 [node name="CustomizeButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 483.0
+offset_left = 411.0
 offset_top = 30.0
-offset_right = 679.0
+offset_right = 607.0
 offset_bottom = 80.0
 size_flags_horizontal = 0
 focus_mode = 0

@@ -11,7 +11,8 @@ const HOVER_COLOR := {
 }
 
 func _ready():
-	modulate = get_color(NORMAL_COLOR)
+	Profile.dark_mode_toggled.connect(_on_dark_mode_changed)
+	_on_dark_mode_changed(Profile.get_option("dark_mode"))
 
 
 func get_color(color):
@@ -23,4 +24,8 @@ func _on_mouse_entered() -> void:
 	modulate = get_color(HOVER_COLOR)
 
 func _on_mouse_exited() -> void:
+	modulate = get_color(NORMAL_COLOR)
+
+
+func _on_dark_mode_changed(_is_dark):
 	modulate = get_color(NORMAL_COLOR)
