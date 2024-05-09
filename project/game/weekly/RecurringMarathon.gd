@@ -225,7 +225,7 @@ func load_and_display_leaderboard(level: Level) -> void:
 			await display.ready
 		display.set_dates(current_period(), previous_period())
 	var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
-	if l_data.size() > 0 and l_data[0].has_self:
+	if l_data.size() > 0 and l_data[0].self_idx != -1:
 		already_uploaded = true
 	if Global.is_mobile:
 		# On mobile, show leaderboard as soon as possible
@@ -299,8 +299,8 @@ class ListEntry:
 		return entry
 
 class LeaderboardData:
-	# Is this user present on list?
-	var has_self: bool = false
+	# Is this user present on list? -1 if not
+	var self_idx: int = -1
 	# List of friends and percentiles
 	var list: Array[ListEntry]
 	func is_empty() -> bool:
@@ -318,11 +318,14 @@ static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 	if raw.entries.is_empty():
 		return []
 	var data := LeaderboardData.new()
-	data.has_self = raw.has_self
 	for raw_entry in raw.entries:
 		data.list.append(await ListEntry.create(raw_entry))
+	var prev_self := null if raw.self_idx == -1 else data.list[raw.self_idx]
 	# While our entries are a bit fucked up let's make our own ranks
 	data.sort_ignore_rank()
+	# Getting self idx later because we changed the order
+	if prev_self != null:
+		data.self_idx = data.list.find(prev_self)
 	return [data]
 
 func display_leaderboard(display: LeaderboardDisplay, current_data: Array[LeaderboardData], previous_data: Array[LeaderboardData], level: Level) -> void:

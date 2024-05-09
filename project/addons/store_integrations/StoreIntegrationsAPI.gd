@@ -17,7 +17,7 @@ class LeaderboardEntry:
 	var extra_data: Dictionary
 
 class LeaderboardData:
-	var has_self: bool = false
+	var self_idx: int = -1
 	var entries: Array[LeaderboardEntry] = []
 
 class LeaderboardMapping:

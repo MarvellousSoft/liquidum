@@ -73,7 +73,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 	var my_id: int = steam.getSteamID()
 	for steam_data in ret[2]:
 		if steam_data.steam_id == my_id:
-			data.has_self = true
+			data.self_idx = data.entries.size()
 		var entry := StoreIntegrations.LeaderboardEntry.new()
 		entry.rank = steam_data.global_rank
 		if steam_data.steam_id == my_id:
