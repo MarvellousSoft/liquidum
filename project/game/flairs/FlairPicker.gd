@@ -74,3 +74,40 @@ func _on_back_button_pressed():
 
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
+
+
+func _on_edit_name_pressed() -> void:
+	if not %Name.visible:
+		return
+	%NameEdit.text = %Name.text
+	%Name.hide()
+	%NameEdit.show()
+	%NameEdit.grab_focus()
+	%EditButton.hide()
+	%UploadButton.show()
+
+func _on_upload_name_pressed() -> void:
+	if %Name.visible or %NameLoading.visible:
+		return
+	var new_name: String = %NameEdit.text
+	var old_name: String = %Name.text
+	%UploadButton.hide()
+	%NameLoading.show()
+	%NameEdit.hide()
+	%Name.text = new_name
+	%Name.show()
+	if await StoreIntegrations.playfab.change_display_name(new_name):
+		%NameLoading.hide()
+		%EditButton.show()
+	else:
+		AudioManager.play_sfx("error")
+		%Name.hide()
+		%Name.text = old_name
+		%NameEdit.show()
+		%NameLoading.hide()
+		%UploadButton.show()
+	
+
+
+func _on_name_edit_text_submitted(_new_text):
+	await _on_upload_name_pressed()

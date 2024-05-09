@@ -1,8 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhvs33ket0l57"]
+[gd_scene load_steps=9 format=3 uid="uid://bhvs33ket0l57"]
 
 [ext_resource type="Script" path="res://game/flairs/FlairPicker.gd" id="1_cr2h3"]
 [ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="2_ljy7n"]
+[ext_resource type="Texture2D" uid="uid://dha8a5x24don4" path="res://assets/images/ui/icons/pencil.png" id="3_8v7yg"]
 [ext_resource type="PackedScene" uid="uid://dv1u5f265dm05" path="res://game/flairs/FlairButton.tscn" id="3_jn8da"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_7ov7p"]
+[ext_resource type="Texture2D" uid="uid://7vssyechjmut" path="res://assets/images/ui/icons/cloud-upload.png" id="5_wvht4"]
+[ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="6_u4tod"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpiaw"]
 bg_color = Color(1, 1, 1, 1)
@@ -55,7 +59,7 @@ text = "FLAIR_EXPLANATION"
 horizontal_alignment = 1
 
 [node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(2500, 300)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 50
@@ -105,7 +109,6 @@ vertical_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1200, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 1
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 70
@@ -113,6 +116,46 @@ theme_override_font_sizes/font_size = 140
 text = "Person name"
 vertical_alignment = 1
 text_overrun_behavior = 3
+
+[node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(1200, 0)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_colors/caret_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_constants/outline_size = 70
+theme_override_constants/caret_width = 5
+theme_override_font_sizes/font_size = 140
+alignment = 1
+max_length = 25
+middle_mouse_paste_enabled = false
+select_all_on_focus = true
+
+[node name="EditButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+texture_normal = ExtResource("3_8v7yg")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_7ov7p")
+
+[node name="UploadButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+texture_normal = ExtResource("5_wvht4")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_7ov7p")
+
+[node name="NameLoading" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" instance=ExtResource("6_u4tod")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 0
@@ -163,5 +206,13 @@ offset_bottom = 220.0
 focus_mode = 0
 text = "BACK"
 
+[connection signal="mouse_entered" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/NameEdit" to="." method="_on_button_mouse_entered"]
+[connection signal="text_submitted" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/NameEdit" to="." method="_on_name_edit_text_submitted"]
+[connection signal="mouse_entered" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/EditButton" to="TopContainer/VBoxContainer/LeaderboardExampleContainer/EditButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/EditButton" to="TopContainer/VBoxContainer/LeaderboardExampleContainer/EditButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/EditButton" to="." method="_on_edit_name_pressed"]
+[connection signal="mouse_entered" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" to="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" to="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" to="." method="_on_upload_name_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

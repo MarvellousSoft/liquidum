@@ -364,7 +364,7 @@ func _on_display_name_call(res, new_name: String) -> void:
 
 # Returns whether the name change was successful
 func change_display_name(new_name: String) -> bool:
-	if not authenticated():
+	if not authenticated() or new_name.length() < 3 or new_name.length() > 25:
 		return false
 	playfab.post_dict_auth(
 		{DisplayName = new_name},

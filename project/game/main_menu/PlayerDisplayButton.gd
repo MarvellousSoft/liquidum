@@ -11,6 +11,9 @@ func _ready():
 		update_info()
 		update_flair()
 
+func _enter_tree() -> void:
+	%Name.text = PlayerDisplayButton.get_display_name()
+
 static func get_display_name() -> String:
 	var display_name := StoreIntegrations.playfab.current_display_name()
 	if display_name == "" and SteamManager.enabled:
@@ -35,7 +38,6 @@ static func get_icon() -> Texture:
 
 
 func update_info():
-	%Name.text = PlayerDisplayButton.get_display_name()
 	%Image.texture = await PlayerDisplayButton.get_icon()
 
 
