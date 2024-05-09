@@ -171,6 +171,8 @@ func clear_all_level_saves(profile_name: String) -> void:
 		section += 1
 
 func flair_text(section: int) -> String:
+	if Global.is_mobile and _config(section).has_section_key("flair", "mobile_text"):
+		return _config(section).get_value("flair", "mobile_text", "")
 	return _config(section).get_value("flair", "text", "")
 
 func flair_color(section: int) -> int:
