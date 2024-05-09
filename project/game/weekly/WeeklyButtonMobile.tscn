@@ -7,5 +7,8 @@
 custom_minimum_size = Vector2(720, 150)
 script = ExtResource("2_vilvt")
 
+[node name="DailyHBox" parent="CenterContainer/VBox" index="0"]
+theme_override_constants/separation = 6
+
 [node name="3Mistakes" parent="CenterContainer/VBox/StreakContainer" index="1"]
 text = "LESS_SIX_MISTAKES"

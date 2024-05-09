@@ -96,3 +96,8 @@ func _on_speedrun_button_pressed() -> void:
 func _on_back_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
+
+
+func _on_customize_button_pressed():
+	AudioManager.play_sfx("button_pressed")
+	TransitionManager.push_scene(Global.load_mobile_compat("res://game/flairs/FlairPicker").instantiate())

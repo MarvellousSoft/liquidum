@@ -24,12 +24,23 @@ size_flags_horizontal = 0
 focus_mode = 0
 text = "BACK"
 
+[node name="CustomizeButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 483.0
+offset_top = 30.0
+offset_right = 679.0
+offset_bottom = 80.0
+size_flags_horizontal = 0
+focus_mode = 0
+text = "CUSTOMIZE"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
+offset_top = 107.0
 offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -82,3 +93,4 @@ text = "LOADING"
 layout_mode = 2
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="CustomizeButton" to="." method="_on_customize_button_pressed"]

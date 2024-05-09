@@ -24,6 +24,7 @@ FULLSCREEN,Fullscreen,Tela Cheia,Tela cheia
 SAVE_AND_EXIT,Quit game,Fechar o jogo,Fechar o jogo
 SAVE_AND_BACK,Back,Voltar,Voltar
 REMOVE_ADS,Remove ads,Remover anúncios,Remover anúncios
+CUSTOMIZE,Customize,Personalizar,Personalizar
 AQUARIUMS_COUNTER,Aquariums Expected,Aquários Esperados,Aquários Esperados
 AQUARIUMS_COUNTER_EDITOR,Total Aquariums,Aquários Totais,Aquários Totais
 SIZE,Size,Tam.,Tamanho
@@ -36,8 +37,8 @@ CREATE_NEW_LEVEL,Create new level,Criar nível novo,Criar novo nível
 YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
-CLICK_TO_CUSTOMIZE_FLAIR,Click to customize flair,Clique para customizar emblema,Clique para customizar emblema
-FLAIR_PICKER_TITLE,Choose your flair,Escolha seu emblema,Escolha seu emblema
+CLICK_TO_CUSTOMIZE_FLAIR,Click to customize,Clique para personalizar,Clique para personalizar
+FLAIR_PICKER_TITLE,Customize,Personalizar,Personalizar
 FLAIR_EXPLANATION,Flairs appear next to your name in leaderboards.\nComplete challenges to earn more flairs!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
 CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza que quer resetar este nível?
