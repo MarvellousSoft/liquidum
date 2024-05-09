@@ -22,6 +22,8 @@ class ImageDowloader extends Node:
 	var urls: Array[String] = []
 	var reqs: Array[HTTPRequest] = []
 	var canceled := false
+	var next_download_to_start := 0
+	var current_downloads := 0
 	func cancel() -> void:
 		canceled = true
 		for req in reqs:
@@ -38,17 +40,17 @@ class ImageDowloader extends Node:
 		reqs.append(req)
 		add_child(req)
 		req.request_completed.connect(_request_completed.bind(icons.size() - 1, req))
-	func _download(i: int) -> void:
-		if canceled:
-			return
-		print("[%d] Started downloading %s" % [i, urls[i]])
-		var req: HTTPRequest = reqs[i]
-		req.call_deferred("request", urls[i])
-		await req.request_completed
+	func _continue_downloads() -> void:
+		while current_downloads < 5 and next_download_to_start < reqs.size():
+			current_downloads += 1
+			reqs[next_download_to_start].request(urls[next_download_to_start])
+			next_download_to_start += 1
 	func _request_completed(result: int, _response_code: int, _headers, body: PackedByteArray, i: int, req: HTTPRequest) -> void:
 		print("[%d] Finished downloading %s" % [i, urls[i]])
 		remove_child(req)
 		req.queue_free()
+		current_downloads -= 1
+		_continue_downloads()
 		if result != OK:
 			return
 		var img := Image.new()
@@ -59,7 +61,7 @@ class ImageDowloader extends Node:
 		else:
 			push_warning("Failed to download image from %s" % [urls[i]])
 	func start_all_downloads() -> void:
-		WorkerThreadPool.add_group_task(self._download, icons.size(), 5, false, "Downloads leaderboard icons")
+		_continue_downloads()
 
 func set_date(date: String) -> void:
 	Grid.get_node("Date").text = date
