@@ -1,6 +1,7 @@
 extends ModulateTextureButton
 
 func _ready() -> void:
+	super()
 	if not AppleIntegration.available() and not GoogleIntegration.available():
 		queue_free()
 

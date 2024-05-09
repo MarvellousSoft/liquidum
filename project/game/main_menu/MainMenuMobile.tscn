@@ -242,6 +242,7 @@ texture_normal = ExtResource("10_cb1wk")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("11_waysh")
+ignore_hover = null
 
 [node name="SteamButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
@@ -255,6 +256,7 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://store.steampowered.com/app/2716690/Liquidum?utm_source=android_app"
+ignore_hover = null
 
 [node name="DiscordButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
@@ -271,6 +273,7 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://discord.gg/vDT8F4gGZE"
+ignore_hover = null
 
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true
@@ -298,6 +301,7 @@ texture_normal = ExtResource("15_odq8t")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("16_h6coi")
+ignore_hover = null
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
