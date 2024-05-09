@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="3_nnq5w"]
-[ext_resource type="PackedScene" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
+[ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="3_twfmx"]
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]

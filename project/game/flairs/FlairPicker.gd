@@ -3,7 +3,7 @@ extends Control
 
 func _ready():
 	populate_flairs()
-	update_steam_info()
+	update_info()
 	update_flair()
 
 
@@ -26,16 +26,9 @@ func populate_flairs():
 	if not cur_flair:
 		%FlairList.get_child(0).press()
 
-func update_steam_info():
-	%Name.text = SteamManager.steam.getPersonaName()
-	SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, SteamManager.steam.getSteamID())
-	var ret: Array = await SteamManager.steam.avatar_loaded
-	var image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-	if image != null:
-		image.generate_mipmaps()
-		%Image.texture = ImageTexture.create_from_image(image)
-	else:
-		%Image.texture = load("res://assets/images/icons/icon.png")
+func update_info():
+	%Name.text = PlayerDisplayButton.get_display_name()
+	%Image.texture = await PlayerDisplayButton.get_icon()
 
 
 func update_flair():

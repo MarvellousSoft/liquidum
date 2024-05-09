@@ -1,26 +1,42 @@
+class_name PlayerDisplayButton
 extends Control
 
 signal pressed
 
 func _ready():
-	if not SteamManager.enabled or Global.is_demo:
+	if Global.is_demo or not PlayFabIntegration.available():
 		hide()
 	else:
 		show()
-		update_steam_info()
+		update_info()
 		update_flair()
 
+static func get_display_name() -> String:
+	var display_name := StoreIntegrations.playfab.current_display_name()
+	if display_name == "" and SteamManager.enabled:
+		display_name = SteamManager.steam.getPersonaName()
+	if display_name == "":
+		display_name = "YOU"
+	return display_name
 
-func update_steam_info():
-	%Name.text = SteamManager.steam.getPersonaName()
-	SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, SteamManager.steam.getSteamID())
-	var ret: Array = await SteamManager.steam.avatar_loaded
-	var image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-	if image != null:
-		image.generate_mipmaps()
-		%Image.texture = ImageTexture.create_from_image(image)
-	else:
-		%Image.texture = load("res://assets/images/icons/icon.png")
+static func get_icon() -> Texture:
+	# If we use avatar url in the future, download it here
+	var icon: Texture = null
+	if icon == null and SteamManager.enabled:
+		SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, SteamManager.steam.getSteamID())
+		var ret: Array = await SteamManager.steam.avatar_loaded
+		var image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+		if image != null:
+			image.generate_mipmaps()
+			icon = ImageTexture.create_from_image(image)
+	if icon == null:
+		icon = load("res://assets/images/icons/icon.png")
+	return icon
+
+
+func update_info():
+	%Name.text = PlayerDisplayButton.get_display_name()
+	%Image.texture = await PlayerDisplayButton.get_icon()
 
 
 func update_flair():
