@@ -19,6 +19,13 @@ func _try_authenticate() -> void:
 		var req := {
 			TitleId = PlayFabManager.title_id,
 			CreateAccount = true,
+			InfoRequestParameters = {
+				GetPlayerProfile = true,
+				ProfileConstraints = {
+					ShowDisplayName = true,
+					ShowLinkedAccounts = true,
+				},
+			}
 		}
 		if SteamManager.enabled:
 			print("Will try to authenticate through Steam")
@@ -97,6 +104,8 @@ func _try_authenticate() -> void:
 		else:
 			print("PlayFab is not sure how to authenticate.")
 	else:
+		if current_display_name() == "":
+			_reload_display_name()
 		print("Playfab login already saved")
 
 func _ready() -> void:
@@ -134,14 +143,36 @@ func _on_steam_login(result, ticket_id: int, display_name_getter) -> void:
 func _on_simple_login(result, display_name_getter) -> void:
 	if result is Dictionary and result.has("data"):
 		var login_result = LoginResult.new()
-		login_result.from_dict(result["data"], login_result)
+		login_result.from_dict(result.data, login_result)
 		playfab.logged_in.emit(login_result)
+		var display_name := ""
 		if login_result.NewlyCreated and display_name_getter != null:
-			var display_name: String = await display_name_getter.call()
+			display_name = await display_name_getter.call()
 			if display_name != "":
-				await change_display_name(display_name)
+				if not await change_display_name(display_name):
+					display_name = ""
+		if display_name == "":
+			display_name = _display_from_profile(result.data.get("InfoResultPayload", {}).get("PlayerProfile"))
+		print("Extracted display name: %s" % [display_name])
+		var user_data := UserData.current()
+		if display_name == "":
+			if UserData.current().display_name != "":
+				return
+			_reload_display_name()
+		else:
+			_update_cached_display_name(display_name)
 	else:
 		print("Weird login result: %s" % [result])
+
+func _display_from_profile(prof) -> String:
+	if prof == null:
+		return ""
+	if prof.get("DisplayName", "") != "":
+		return prof.DisplayName
+	for acc in prof.get("LinkedAccounts", []):
+		if acc.get("Username", "") != "":
+			return acc.Username
+	return ""
 
 func _generic_request(_res) -> void:
 	pass
@@ -306,7 +337,6 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		entry.rank = int(raw_entry.Position) + 1
 		if id_to_flair.has(raw_entry.PlayFabId):
 			entry.extra_data["flair"] = id_to_flair[raw_entry.PlayFabId]
-		var display_name: String = raw_entry.Profile.get("DisplayName", "")
 		if raw_entry.PlayFabId == my_id:
 			data.has_self = true
 		if raw_entry.Profile.get("AvatarUrl", "") != "":
@@ -320,8 +350,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 				entry.extra_data["ios_device"] = acc.PlatformUserId
 			if acc.get("Platform", "") == "GameCenter":
 				entry.extra_data["ios_game_center_id"] = acc.PlatformUserId
-			if display_name == "":
-				display_name = acc.get("Username", "")
+		var display_name := _display_from_profile(raw_entry.Profile)
 		if display_name == "":
 			display_name = NameGenerator.get_name(rng, str(raw_entry.PlayFabId))
 		entry.display_name = display_name
@@ -336,6 +365,7 @@ func _on_display_name_call(res, new_name: String) -> void:
 		display_name_change.emit(false)
 	else:
 		display_name_change.emit(res.data.DisplayName == new_name)
+		_update_cached_display_name(res.data.DisplayName)
 
 # Returns whether the name change was successful
 func change_display_name(new_name: String) -> bool:
@@ -348,3 +378,33 @@ func change_display_name(new_name: String) -> bool:
 		_on_display_name_call.bind(new_name),
 	)
 	return await display_name_change
+
+func current_display_name() -> String:
+	return UserData.current().display_name
+
+func _update_cached_display_name(display_name: String) -> void:
+	var user_data := UserData.current()
+	if display_name != "" and user_data.display_name != display_name:
+		user_data.display_name = display_name
+		UserData.save(false)
+
+func _get_profile_call(res) -> void:
+	if not res is Dictionary or res.status != "OK":
+		print("Invalid response: %s" % [res])
+	else:
+		_update_cached_display_name(_display_from_profile(res.data.PlayerProfile))
+
+
+func _reload_display_name() -> void:
+	playfab.post_dict_auth(
+		{
+			PlayFabId = PlayFabManager.client_config.master_player_account_id,
+			ProfileConstraints = {
+				ShowDisplayName = true,
+				ShowLinkedAccounts = true,
+			}
+		},
+		"/Client/GetPlayerProfile",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		_get_profile_call,
+	)

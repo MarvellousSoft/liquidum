@@ -20,6 +20,10 @@ func _notification(what: int) -> void:
 	if what == MainLoop.NOTIFICATION_CRASH:
 		save_game()
 
+func _ready() -> void:
+	# This is very important, so let's do it early
+	load_current_profile()
+
 func save_game() -> void:
 	save_current_profile()
 	save_profile()
