@@ -1,9 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://di2bf2ormot60"]
+[gd_scene load_steps=7 format=3 uid="uid://di2bf2ormot60"]
 
 [ext_resource type="Script" path="res://game/daily_menu/SingleDayLeaderboard.gd" id="1_dn36x"]
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/hint/x.png" id="1_wkjq3"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="2_lmufn"]
 [ext_resource type="Texture2D" uid="uid://beax5oseh6sd5" path="res://assets/images/icons/256_256.png" id="3_ef8ai"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nk0if"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5mbkq"]
 bg_color = Color(1, 1, 1, 1)
@@ -72,6 +79,15 @@ size_flags_horizontal = 3
 texture = ExtResource("3_ef8ai")
 expand_mode = 2
 stretch_mode = 5
+
+[node name="PlayerBG" type="Panel" parent="MarginContainer/Grid/Icon1"]
+modulate = Color(0.0156863, 0.105882, 0.219608, 0.513726)
+show_behind_parent = true
+offset_left = 10.0
+offset_top = -10.0
+offset_right = 1140.0
+offset_bottom = 110.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nk0if")
 
 [node name="Pos1" type="Label" parent="MarginContainer/Grid"]
 layout_mode = 2

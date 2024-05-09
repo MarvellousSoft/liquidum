@@ -83,9 +83,8 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 			icon.modulate = item.texture_modulate
 		elif item.image_url != "":
 			cur_downloader.add_image(icon, item.image_url)
-		if Global.is_mobile:
-			if i != data.self_idx:
-				icon.get_node("PlayerBG").queue_free()
+		if i != data.self_idx:
+			icon.get_node("PlayerBG").queue_free()
 		var pos := Grid.get_node("Pos1").duplicate()
 		pos.text = "%d." % item.global_rank
 		var name_ := Grid.get_node("NameContainer1").duplicate()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ud5g8llmj1lx"]
+[gd_scene load_steps=10 format=3 uid="uid://crsmi0h6d1x66"]
 
 [ext_resource type="Script" path="res://game/flairs/FlairPicker.gd" id="1_x4isc"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qvdnd"]
@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="5_0jska"]
 [ext_resource type="Texture2D" uid="uid://7vssyechjmut" path="res://assets/images/ui/icons/cloud-upload.png" id="6_nupha"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="7_m1stc"]
-[ext_resource type="PackedScene" uid="uid://dg2us6yeidxme" path="res://game/flairs/FlairButtonMobile.tscn" id="8_3i1if"]
+[ext_resource type="PackedScene" path="res://game/flairs/FlairButtonMobile.tscn" id="8_3i1if"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpiaw"]
 bg_color = Color(1, 1, 1, 1)
