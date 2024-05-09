@@ -217,6 +217,7 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 	var value := int(score)
 	if sort_method.get(leaderboard_id, StoreIntegrations.SortMethod.SmallestFirst) == StoreIntegrations.SortMethod.SmallestFirst:
 		value = -value
+	var cb := AwaitCallback.new()
 	playfab.post_dict_auth(
 		{
 			Statistics = [{
@@ -226,24 +227,18 @@ func leaderboard_upload_score(leaderboard_id: String, score: float, _keep_best: 
 		},
 		"/Client/UpdatePlayerStatistics",
 		PlayFab.AUTH_TYPE.SESSION_TICKET,
-		_on_leaderboard_upload,
+		cb.callback,
 	)
-	# Fire and forget while we are testing
-	# await uploaded_leaderboard
-	await null
+	var res = await cb.called
+	if res is Dictionary and res.get("status", "") == "OK":
+		print("Playfab leaderboard upload success")
+	else:
+		print("Playfab leaderboard upload failure: %s" % [res])
 
 func leaderboard_upload_completion(leaderboard_id: String, time_secs: float, mistakes: int, keep_best: bool, steam_details: PackedInt32Array) -> void:
 	# We need to store both mistakes and time in the same score.
 	# Mistakes take priority.
 	await leaderboard_upload_score(leaderboard_id, minf(time_secs, RecurringMarathon.MAX_TIME - 1) + minf(mistakes, 1000) * RecurringMarathon.MAX_TIME, keep_best, steam_details)
-
-func _on_leaderboard_upload(res: Variant) -> void:
-	uploaded_leaderboard.emit()
-	if res is Dictionary and res.get("status", "") == "OK":
-		print("Playfab leaderboard upload success")
-	else:
-		print("Playfab leaderboard upload failure")
-		assert(false)
 
 func leaderboard_show(_leaderboard_id: String, _google_timespan: int, _google_collection: int) -> void:
 	await null
