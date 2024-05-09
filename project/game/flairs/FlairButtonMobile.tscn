@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=3 uid="uid://dg2us6yeidxme"]
+
+[ext_resource type="Script" path="res://game/flairs/FlairButton.gd" id="1_nlg1v"]
+[ext_resource type="StyleBox" uid="uid://d13epprvp6n7f" path="res://assets/ui/InvisibleButton/InvisibleButtonHover.tres" id="2_uu24p"]
+[ext_resource type="StyleBox" uid="uid://dlk0d25ppdw36" path="res://assets/ui/InvisibleButton/InvisibleButtonPressed.tres" id="3_g5qid"]
+[ext_resource type="ButtonGroup" uid="uid://b78vn2d22cyg0" path="res://assets/ui/FlairButtonGroup.tres" id="4_j2j1f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnex5"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iw5xt"]
+
+[node name="FlairButton" type="Control"]
+custom_minimum_size = Vector2(660, 100)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 700.0
+offset_bottom = 100.0
+script = ExtResource("1_nlg1v")
+
+[node name="FlairContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 660.0
+offset_bottom = 159.0
+theme_override_constants/separation = 20
+
+[node name="Flair" type="Label" parent="FlairContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "  dev  "
+vertical_alignment = 1
+
+[node name="BG" type="Panel" parent="FlairContainer/Flair"]
+modulate = Color(0, 0.0352941, 0.141176, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hnex5")
+
+[node name="Reason" type="Label" parent="FlairContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 60
+theme_override_font_sizes/font_size = 43
+text = "  This is a big reason why you have this flair"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="."]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_iw5xt")
+theme_override_styles/hover = ExtResource("2_uu24p")
+theme_override_styles/pressed = ExtResource("3_g5qid")
+toggle_mode = true
+button_group = ExtResource("4_j2j1f")
+
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

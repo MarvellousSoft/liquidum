@@ -17,7 +17,11 @@ func reset_flairs():
 func populate_flairs():
 	reset_flairs()
 	var cur_flair = FlairManager.get_current_flair()
-	var flair_cls: PackedScene = load("res://game/flairs/FlairButton.tscn")
+	var flair_cls :  PackedScene
+	if Global.is_mobile:
+		flair_cls = load("res://game/flairs/FlairButtonMobile.tscn")
+	else:
+		flair_cls = load("res://game/flairs/FlairButton.tscn")
 	for flair_data in FlairManager.get_flair_list():
 		var new_flair: FlairButton = flair_cls.instantiate()
 		new_flair.setup(flair_data)
