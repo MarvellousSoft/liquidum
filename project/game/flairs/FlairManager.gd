@@ -53,7 +53,7 @@ static func create_flair(id: int) -> SelectableFlair:
 		FlairId.Dlc:
 			return SelectableFlair.new(
 					FlairId.Dlc,
-					"❤",
+					"❤" if not Global.is_mobile else "<3",
 					Color.HOT_PINK,
 					"FLAIR_DLC_DESC",
 				)

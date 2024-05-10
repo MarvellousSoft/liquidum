@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene load_steps=19 format=3 uid="uid://cj4y7dyk1n7hy"]
 
 [ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://game/main_menu/AchButton.gd" id="11_waysh"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="12_a1g2a"]
 [ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="13_epnyx"]
+[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="15_o571r"]
 [ext_resource type="Texture2D" uid="uid://cyn4cbxifv4xn" path="res://assets/images/icons/no_ads.png" id="15_odq8t"]
 [ext_resource type="Script" path="res://game/main_menu/NoAdsButton.gd" id="16_h6coi"]
 
@@ -242,7 +243,6 @@ texture_normal = ExtResource("10_cb1wk")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("11_waysh")
-ignore_hover = null
 
 [node name="SteamButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
@@ -256,7 +256,6 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://store.steampowered.com/app/2716690/Liquidum?utm_source=android_app"
-ignore_hover = null
 
 [node name="DiscordButton" type="TextureButton" parent="."]
 modulate = Color(0.670588, 1, 0.819608, 1)
@@ -273,7 +272,6 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://discord.gg/vDT8F4gGZE"
-ignore_hover = null
 
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true
@@ -286,6 +284,7 @@ theme_override_font_sizes/font_size = 30
 text = "VERSION"
 horizontal_alignment = 2
 vertical_alignment = 1
+script = ExtResource("15_o571r")
 
 [node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
 is_main_menu = true
@@ -301,7 +300,6 @@ texture_normal = ExtResource("15_odq8t")
 ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("16_h6coi")
-ignore_hover = null
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

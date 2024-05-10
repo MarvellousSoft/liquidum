@@ -131,7 +131,7 @@ func _on_err(err) -> void:
 		print("Not authenticated to Playfab, trying to login again.")
 		PlayFabManager.forget_login()
 		await _try_authenticate()
-	assert(false) # Open debugged in debug mode
+	#assert(false) # Open debugged in debug mode
 
 func _logged_in(res) -> void:
 	print("Logged in to PlayFab: %s!" % [authenticated()])

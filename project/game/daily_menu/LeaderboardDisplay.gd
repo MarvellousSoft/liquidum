@@ -97,6 +97,16 @@ func _on_back_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.pop_scene()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"return"):
+		_back_logic()
+
+func _back_logic() -> void:
+	_on_back_button_pressed()
+
+func _notification(what: int) -> void:
+	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
+		_back_logic()
 
 func _on_customize_button_pressed():
 	AudioManager.play_sfx("button_pressed")
