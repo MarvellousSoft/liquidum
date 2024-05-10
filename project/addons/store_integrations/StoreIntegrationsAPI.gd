@@ -37,6 +37,9 @@ class LeaderboardMapping:
 
 func _ready() -> void:
 	impls.append(LogIntegration.new())
+	if PlayFabIntegration.available():
+		playfab = PlayFabIntegration.new()
+		impls.append(playfab)
 	if SteamIntegration.available():
 		impls.append(SteamIntegration.new())
 	if GoogleIntegration.available():
@@ -44,9 +47,6 @@ func _ready() -> void:
 	if AppleIntegration.available():
 		apple = AppleIntegration.new()
 		impls.append(apple)
-	if PlayFabIntegration.available():
-		playfab = PlayFabIntegration.new()
-		impls.append(playfab)
 	
 	for impl in impls:
 		add_child(impl)
