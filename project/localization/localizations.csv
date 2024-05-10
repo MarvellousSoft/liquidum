@@ -24,7 +24,7 @@ FULLSCREEN,Fullscreen,Tela Cheia,Tela cheia
 SAVE_AND_EXIT,Quit game,Fechar o jogo,Fechar o jogo
 SAVE_AND_BACK,Back,Voltar,Voltar
 REMOVE_ADS,Remove ads,Remover anúncios,Remover anúncios
-CUSTOMIZE,Customize profile,Personalizar perfil,Personalizar perfil
+CUSTOMIZE,Customize,Personalizar,Personalizar
 AQUARIUMS_COUNTER,Aquariums Expected,Aquários Esperados,Aquários Esperados
 AQUARIUMS_COUNTER_EDITOR,Total Aquariums,Aquários Totais,Aquários Totais
 SIZE,Size,Tam.,Tamanho
@@ -38,7 +38,7 @@ YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
 CLICK_TO_CUSTOMIZE_FLAIR,Click to customize,Clique para personalizar,Clique para personalizar
-FLAIR_PICKER_TITLE,Customize Profile,Personalizar Perfil,Personalizar Perfil
+FLAIR_PICKER_TITLE,Customize,Personalizar,Personalizar
 FLAIR_EXPLANATION,Flairs appear next to your name in leaderboards.\nComplete challenges to earn more flairs!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
 CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza que quer resetar este nível?
@@ -177,7 +177,7 @@ BLUE_FILTER,Blue light filter,Filtro de luz azul,Filtro de luz azul
 HIGHLIGHT_LINES,Highlight hovered line,Destacar linha com mouse,Destacar linha com mouse
 HIGHLIGHT_LINES_MOBILE,Highligh last line touched,Destacar última linha tocada,Destacar última linha tocada
 HIGHLIGHT_HINTS,Highlight finished rows/columns,Destacar linhas/colunas completas,Destacar linhas/colunas completas
-HIGHLIGHT_CELL_HINT,Highlight finished cell hint,Destacar regra na célula completa,Destacar regra na célula completa
+HIGHLIGHT_CELL_HINT,Highlight finished cellhints,Destacar dicas de célula completas,Destacar dicas de célula completas
 SHOW_PREVIEW,Show water preview,Mostrar previsão de água,Mostrar previsão de água
 DRAG_BUTTON,Fill with drag,Preencher arrastando,Preencher arrastando
 INCOMPLETE_LINE_INFO,Incomplete line info,Info. de linhas incompletas,Info. de linhas incompletas
@@ -256,7 +256,7 @@ TUT_BOATS,Boats,Barcos,Barcos
 TUT_MOUSE1,Basics 1,Básicos 1,Básicos 1
 TUT_MOUSE2,Basics 2,Básicos 2,Básicos 2
 TUT_TOG_SEP,Together & Separate,Juntos & Separados,Juntos & Separados
-TUT_UNKNOWN,Unknown Hints,Dicas Desconhecidas,Dicas Desconhecidas
+TUT_UNKNOWN,Unknown hints,Dicas desconhecidas,Dicas desconhecidas
 OPEN_WORKSHOP,Open Workshop,Abrir Oficina,Abrir Oficina
 WORKSHOP_EXPLANATION,"You can dowload user-created levels by subscribing to then in the Steam Workshop, click the ""Open Workshop"" button above!","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima.","Você pode baixar níveis criados por usuários se inscrevendo neles na Oficina Steam, clique no botão ""Abrir Oficina"" ali em cima."
 DAILY_CURR,Today,Hoje,Hoje
@@ -426,9 +426,17 @@ DEVELOPER_FLAIR_DESCRIPTION,Developer of Liquidum,Desenvolvedor de Liquidum,Dese
 EXTRA_ISLAND_FLAIR_DESC,Completed island %s,Completou a ilha %s,Completou a ilha %s
 RESTORE_PURCHASES,Restore purchases,Restaurar compras,Restaurar compras
 PURCHASES_RESTORED,Restored!,Restauradas!,Restauradas!
-CELLHINTS_INFO,Cell hint,Dica na célula,Dica na célula
+CELLHINTS_INFO,Cellhints,Dicas de célula,Dicas de célula
 CELLHINTS_TOTAL,Show total value,Mostrar valor total,Mostrar valor total
 CELLHINTS_REMAINING,Show remaining value,Mostrar valor faltando,Mostrar valor faltando
 BUY_FULL_GAME,Buy the full game!,Compre o jogo completo!,Compre o jogo completo!
 YOU,You,Você,Você
 LOADING,Loading,Carregando,Carregando
+CELLHINTS_DESCRIPTION,"Numbers inside cell are ""Cellhints"".\nThey count how much water is on all neighbouring cells.","Números dentro de espaços são ""Dicas de célula"".\nEles contam a quantidade de água em todas as células vizinhas.","Números dentro de espaços são ""Dicas de célula"".\nEles contam a quantidade de água em todas as células vizinhas."
+CELLHINTS2_DESCRIPTION,Cellhints not inside blocks also check themselves for water.,Dicas de célula que não estão dentro de blocos também verificam sua própria célula.,Dicas de célula que não estão dentro de blocos também verificam sua própria célula.
+CELLLHINTS_SETTINGS_DESCRIPTION,"The are new gameplay settings you can adjust for cellhints,\nlike making them show ""remaining waters"" instead of the total amount.","Existem novas configurações de jogo que você pode ajustar para dicas de célula,\ncomo fazê-las mostrar ""águas restantes"" em vez do valor total.","Existem novas configurações de jogo que você pode ajustar para dicas de célula,\ncomo fazê-las mostrar ""águas restantes"" em vez do valor total."
+TUT_CELLHINTS,Cellhints 1,Dicas de célula 1,Dicas de célula 1
+TUT_CELLHINTS2,Cellhints 2,Dicas de célula 2,Dicas de célula 2
+TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de célula juntas,Dicas de célula Juntas
+TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de célula separadas,Dicas de célula separadas
+TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de célula desconhecidas
