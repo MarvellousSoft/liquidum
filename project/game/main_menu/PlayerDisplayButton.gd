@@ -15,7 +15,7 @@ func _enter_tree() -> void:
 	%Name.text = PlayerDisplayButton.get_display_name()
 
 static func get_display_name() -> String:
-	var display_name := StoreIntegrations.playfab.current_display_name()
+	var display_name: String = UserData.current().display_name
 	if display_name == "" and SteamManager.enabled:
 		display_name = SteamManager.steam.getPersonaName()
 	if display_name == "":
