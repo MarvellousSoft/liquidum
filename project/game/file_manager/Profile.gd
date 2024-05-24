@@ -70,6 +70,7 @@ var options = {
 	"thicker_walls": false,
 	"skip_animations": false,
 	"palette": 0, #PaletteShader.Palette.None
+	"leaderboard_visible": true,
 	# Android only
 	"deadline_for_next_review_request": Time.get_unix_time_from_system() + randf() * 14 * 24 * 60 * 60,
 }

@@ -8,6 +8,7 @@ extends Control
 @export var speedrun_key: String = ""
 
 @onready var Leaderboards: TabContainer = %TabContainer
+@onready var AnimPlayer: AnimationPlayer = $AnimationPlayer
 
 static func get_or_create(level: Level, tr_name_: String, has_prev_: bool, speedrun_key_ := "") -> LeaderboardDisplay:
 	if not Global.is_mobile and level.has_node("LeaderboardDisplay"):
@@ -51,6 +52,10 @@ func _ready() -> void:
 		Leaderboards.add_child(_single("%s (%s)" % [prev, tr("ALL")]))
 		Leaderboards.add_child(_single("%s (%s)" % [prev, tr("FRIENDS")]))
 		Leaderboards.set_tab_hidden(3, true)
+	var vis: bool = Profile.get_option("leaderboard_visible")
+	%ToggleVisibility.set_pressed_no_signal(vis)
+	if not vis:
+		AnimPlayer.play(&"HideLd", -1, 1, true)
 
 func set_dates(current: String, previous: String) -> void:
 	if current != "":
@@ -111,3 +116,11 @@ func _notification(what: int) -> void:
 func _on_customize_button_pressed():
 	AudioManager.play_sfx("button_pressed")
 	TransitionManager.push_scene(Global.load_mobile_compat("res://game/flairs/FlairPicker").instantiate())
+
+
+func _on_toggle_visibility_toggled(on: bool) -> void:
+	Profile.set_option("leaderboard_visible", on)
+	if on:
+		AnimPlayer.play_backwards(&"HideLd")
+	else:
+		AnimPlayer.play(&"HideLd")
