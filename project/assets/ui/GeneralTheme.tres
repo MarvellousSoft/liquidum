@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=29 format=3 uid="uid://bjysepqligucr"]
+[gd_resource type="Theme" load_steps=30 format=3 uid="uid://bjysepqligucr"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]
@@ -118,6 +118,17 @@ border_color = Color(0, 0.0352941, 0.141176, 0.501961)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvrvo"]
+bg_color = Color(0.0156863, 0.105882, 0.219608, 0.698039)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osq2p"]
 bg_color = Color(0.847059, 0.996078, 0.882353, 1)
 corner_radius_top_left = 10
@@ -188,6 +199,7 @@ TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_sfcym")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_8j4fw")
 TextEdit/font_sizes/font_size = 60
 TextEdit/fonts/font = ExtResource("1_x6xj1")
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_fvrvo")
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_osq2p")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_frb2o")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_kqwc6")
