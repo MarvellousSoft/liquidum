@@ -705,6 +705,7 @@ libraries = {
 
 [node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
+modulate = Color(1, 1, 1, 1)
 layout_mode = 0
 offset_right = 0.0
 offset_bottom = 0.0
