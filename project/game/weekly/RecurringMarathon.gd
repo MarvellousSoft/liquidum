@@ -374,7 +374,7 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 		if SteamManager.enabled:
 			var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 			display_leaderboard(null, l_data, [], level)
-	if not MobileRequestReview.just_requested_review:
+	if not PlayFabIntegration.available() and not MobileRequestReview.just_requested_review:
 		await StoreIntegrations.leaderboard_show(RecurringMarathon.type_name(type()), google_leaderboard_span())
 
 func _on_dark_mode_changed(is_dark: bool):
