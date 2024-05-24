@@ -20,6 +20,9 @@ var eraser_mode := false
 var erasing := false
 var cooldown := 0.0
 
+func _ready() -> void:
+	Global.starting_quit.connect(hide)
+
 func _process(dt):
 	if cooldown > 0.0:
 		cooldown = max(cooldown - dt, 0.0)

@@ -88,6 +88,7 @@ func load_tutorial(tut: String) -> PackedScene:
 	return null
 
 signal dev_mode_toggled(status : bool)
+signal starting_quit()
 
 @onready var level_scene = load_mobile_compat("res://game/level/Level")
 
@@ -193,6 +194,7 @@ func exit_game() -> void:
 	if get_window().mode == Window.MODE_WINDOWED:
 		_store_window()
 	FileManager.save_game()
+	starting_quit.emit()
 	call_deferred(&"_do_exit")
 
 
