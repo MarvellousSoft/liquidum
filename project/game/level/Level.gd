@@ -624,10 +624,12 @@ func win() -> void:
 	ContinueAnim.play("show")
 
 func _set_brush_cursor() -> void:
-	var brush_name = E.BrushMode.find_key(GridNode.brush_mode)
-	var new_cursor = CursorManager.CursorMode.get(brush_name, CursorManager.CursorMode.Normal)
-	CursorManager.set_cursor(new_cursor)
-	
+	if %PaintManager.active:
+		CursorManager.set_cursor(CursorManager.CursorMode.Brush)
+	else:
+		var brush_name = E.BrushMode.find_key(GridNode.brush_mode)
+		var new_cursor = CursorManager.CursorMode.get(brush_name, CursorManager.CursorMode.Normal)
+		CursorManager.set_cursor(new_cursor)
 
 func _on_brush_picker_brushed_picked(mode : E.BrushMode) -> void:
 	GridNode.set_brush_mode(mode)
@@ -800,7 +802,6 @@ func _on_back_button_pressed() -> void:
 
 func _on_settings_screen_pause_toggled(paused: bool) -> void:
 	if paused:
-		%BrushPicker.unpress_marker_button()
 		CursorManager.reset_cursor()
 	else:
 		_set_brush_cursor()
@@ -970,7 +971,6 @@ func _on_dev_buttons_copy_to_editor():
 
 func _on_tutorial_button_pressed():
 	%PaintManager.visible = false
-	%BrushPicker.unpress_marker_button()
 	CursorManager.reset_cursor()
 	AudioManager.play_sfx("button_pressed")
 	process_game = false
