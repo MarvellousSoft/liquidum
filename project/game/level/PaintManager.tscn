@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://l8ufnptne6b4"]
+[gd_scene load_steps=2 format=3 uid="uid://nvoc8ctns0pu"]
 
 [ext_resource type="Script" path="res://game/level/PaintManager.gd" id="1_r4g8g"]
 

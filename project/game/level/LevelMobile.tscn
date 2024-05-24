@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cpoyo7yv1jpj6" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
 [ext_resource type="Script" path="res://game/ads/BottomAdShower.gd" id="20_ff4mn"]
 [ext_resource type="PackedScene" uid="uid://d1mr4677loeoa" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
-[ext_resource type="PackedScene" path="res://game/level/PaintManager.tscn" id="23_1d80d"]
+[ext_resource type="PackedScene" uid="uid://nvoc8ctns0pu" path="res://game/level/PaintManager.tscn" id="23_1d80d"]
 
 [sub_resource type="FontVariation" id="FontVariation_hmnss"]
 base_font = ExtResource("6_gng55")
@@ -200,6 +200,18 @@ tracks/5/path = NodePath("%ContinueButton/../../HintsMarginContainer:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("%BrushPicker:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,

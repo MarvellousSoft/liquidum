@@ -589,7 +589,7 @@ func reset_level() -> void:
 	Settings.enable_button()
 	BackButton.disabled = false
 	%TutorialButton.disabled = false
-	%ContinueAnim.play("RESET")
+	%ContinueAnim.play(&"RESET")
 	maybe_save()
 
 
