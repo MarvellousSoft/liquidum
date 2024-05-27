@@ -66,7 +66,7 @@ func set_dates(current: String, previous: String) -> void:
 		Leaderboards.get_child(3).set_date(previous)
 
 func display(current_data: Array[RecurringMarathon.LeaderboardData], current_date: String, previous: Array[RecurringMarathon.LeaderboardData], previous_date: String) -> void:
-	if Global.is_mobile and has_node("%LoadingContainer"):
+	if has_node("%LoadingContainer"):
 		%LoadingContainer.queue_free()
 	if current_data.size() >= 1:
 		Leaderboards.get_child(0).display_day(current_data[0], current_date)

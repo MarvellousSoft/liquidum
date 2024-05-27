@@ -218,12 +218,11 @@ func gen_and_play(push_scene: bool) -> void:
 	MainButton.disabled = false
 
 func load_and_display_leaderboard(level: Level) -> void:
-	var display: LeaderboardDisplay = null
-	if Global.is_mobile:
-		display = LeaderboardDisplay.get_or_create(level, tr_name, true)
-		if not display.is_node_ready():
-			await display.ready
-		display.set_dates(current_period(), previous_period())
+	var watch := Stopwatch.new()
+	var display: LeaderboardDisplay =  LeaderboardDisplay.get_or_create(level, tr_name, true)
+	if not display.is_node_ready():
+		await display.ready
+	display.set_dates(current_period(), previous_period())
 	var l_data := await RecurringMarathon.get_leaderboard_data(steam_current_leaderboard())
 	if l_data.size() > 0 and l_data[0].self_idx != -1:
 		already_uploaded = true
@@ -231,8 +230,9 @@ func load_and_display_leaderboard(level: Level) -> void:
 		# On mobile, show leaderboard as soon as possible
 		display.display(l_data, current_period(), [], "")
 		l_data = []
-		print("Displayed first page")
+	print("Downloaded first ld page in %.1fs" % [watch.elapsed_reset()])
 	var y_data := await RecurringMarathon.get_leaderboard_data(steam_previous_leaderboard())
+	print("Downloaded second ld page in %.1fs" % [watch.elapsed_reset()])
 	display_leaderboard(display, l_data, y_data, level)
 	
 
@@ -314,7 +314,9 @@ class LeaderboardData:
 			list[i].global_rank = i + 1
 
 static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
+	var watch := Stopwatch.new()
 	var raw := await StoreIntegrations.leaderboard_download_completion(l_id, 1, 100)
+	print("Downloaded raw entries in %.1fs" % [watch.elapsed_reset()])
 	if raw.entries.is_empty():
 		return []
 	var data := LeaderboardData.new()
