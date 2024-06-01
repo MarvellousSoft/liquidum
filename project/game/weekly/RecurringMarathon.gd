@@ -272,22 +272,13 @@ class ListEntry:
 	var image_url: String = ""
 	var image_steam_id: int = -1
 	
-	func set_default_image(extra_data: Dictionary) -> void:
-		if SteamManager.enabled and raw.extra_data.has("steam_id"):
-			# TODO: Figure out when we don't have the image
-			if SteamManager.steam.requestUserInformation(raw.extra_data.steam_id, false):
-				await SteamManager.steam.persona_state_change
-			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, raw.extra_data.steam_id)
-			var ret: Array = await SteamManager.steam.avatar_loaded
-			if ret[1] > 0:
-				var image := Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
-				image.generate_mipmaps()
-				entry.texture = ImageTexture.create_from_image(image)
+	func set_image(extra_data: Dictionary) -> void:
 		image_url = extra_data.get("avatar_url", "")
+		image_steam_id = extra_data.get("steam_id", -1)
 		if texture != null:
 			# All good, already have image
 			pass
-		elif image_url != "":
+		elif image_url != "" or (image_steam_id != -1 and SteamManager.enabled):
 			# TODO: Set some loading texture
 			pass
 		elif extra_data.has("android_id"):
@@ -334,7 +325,7 @@ static func get_leaderboard_data(l_id: String) -> Array[LeaderboardData]:
 		return []
 	var data := LeaderboardData.new()
 	for raw_entry in raw.entries:
-		data.list.append(await ListEntry.create(raw_entry))
+		data.list.append(ListEntry.create(raw_entry))
 	var prev_self := null if raw.self_idx == -1 else data.list[raw.self_idx]
 	# While our entries are a bit fucked up let's make our own ranks
 	data.sort_ignore_rank()

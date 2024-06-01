@@ -28,6 +28,7 @@ class ImageDowloader extends Node:
 		canceled = true
 		for req in reqs:
 			req.cancel_request()
+		queue_free()
 	func add_image(icon: TextureRect, url: String) -> void:
 		if ImageDowloader.cache.has(url):
 			var img := Image.new()
@@ -56,25 +57,51 @@ class ImageDowloader extends Node:
 		if result != OK:
 			return
 		var img := Image.new()
-		if img.load_jpg_from_buffer(body) == OK:
+		var err
+		if urls[i].ends_with(".png"):
+			err = img.load_png_from_buffer(body)
+		else:
+			err = img.load_jpg_from_buffer(body)
+		if err == OK:
 			ImageDowloader.cache[urls[i]] = body
 			img.generate_mipmaps()
 			icons[i].texture = ImageTexture.create_from_image(img)
 		else:
 			push_warning("Failed to download image from %s" % [urls[i]])
 
-class SteamDownloader:
+class SteamDownloader extends Node:
 	var icons: Array[TextureRect] = []
-	var steam_ids: Array[String] = []
-	var running := false
-	func continue_downloads() -> void:
-		if running:
+	var steam_ids: Array[int] = []
+	static var mutex := DumbMutex.new()
+	# id(int) -> Image
+	static var cache: Dictionary = {}
+	var free_if_done := false
+	func _process(_dt: float) -> void:
+		if icons.is_empty():
+			if free_if_done:
+				queue_free()
 			return
-		running = true
-		while not icons.is_empty():
-			pass
+		var icon: TextureRect = icons.pop_front()
+		var steam_id: int = steam_ids.pop_front()
+		var image: Image = null
+		if SteamDownloader.cache.has(steam_id):
+			image = SteamDownloader.cache[steam_id]
+		else:
+			await SteamDownloader.mutex.lock()
+			if SteamManager.steam.requestUserInformation(steam_id, false):
+				await SteamManager.steam.persona_state_change
+			SteamManager.steam.getPlayerAvatar(SteamManager.steam.AVATAR_LARGE, steam_id)
+			var ret: Array = await SteamManager.steam.avatar_loaded
+			if ret[1] > 0:
+				image = Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
+				image.generate_mipmaps()
+				SteamDownloader.cache[steam_id] = image
+			SteamDownloader.mutex.unlock()
+		if image != null:
+			icon.texture = ImageTexture.create_from_image(image)
 	func add_image(icon: TextureRect, steam_id: int) -> void:
-		pass
+		icons.append(icon)
+		steam_ids.append(steam_id)
 
 func set_date(date: String) -> void:
 	Grid.get_node("Date").text = date
@@ -82,10 +109,13 @@ func set_date(date: String) -> void:
 func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	clear_leaderboard()
 	if cur_downloader != null:
-		cur_downloader.cancel()
 		remove_child(cur_downloader)
+		cur_downloader.cancel()
 	cur_downloader = ImageDowloader.new()
 	add_child(cur_downloader)
+	var steam_downloader: SteamDownloader = SteamDownloader.new() if SteamManager.enabled else null
+	if steam_downloader != null:
+		add_child(steam_downloader)
 	Grid.get_node("Date").text = date
 	for i in data.list.size():
 		var item: RecurringMarathon.ListEntry = data.list[i]
@@ -93,6 +123,8 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		if item.texture != null:
 			icon.texture = item.texture
 			icon.modulate = item.texture_modulate
+		elif steam_downloader != null and item.image_steam_id != -1:
+			steam_downloader.add_image(icon, item.image_steam_id)
 		elif item.image_url != "":
 			cur_downloader.add_image(icon, item.image_url)
 		if i != data.self_idx:
@@ -121,7 +153,10 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		for c in [icon, pos, name_, mistakes, time]:
 			c.show()
 			Grid.add_child(c)
+		await Global.get_tree().process_frame
 	cur_downloader.continue_downloads()
+	if steam_downloader:
+		steam_downloader.free_if_done = true
 	update_theme(Profile.get_option("dark_mode"))
 
 func update_theme(_dark_mode: bool) -> void:
