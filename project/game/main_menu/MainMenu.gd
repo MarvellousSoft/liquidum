@@ -242,10 +242,8 @@ func _on_credits_button_pressed() -> void:
 func _on_dark_mode_changed(is_dark : bool):
 	theme = Global.get_theme(is_dark)
 
-func _dev_mode_toggled(on: bool) -> void:
-	%ExtraLevelsButton.visible = ExtraLevelLister.count_all_game_sections() > 0
-	if has_node("%WeeklyButton"):
-		%WeeklyButton.visible = on
+func _dev_mode_toggled(_on: bool) -> void:
+	pass
 
 
 func _on_weekly_button_streak_opened():

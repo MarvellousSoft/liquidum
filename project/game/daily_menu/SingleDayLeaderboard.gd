@@ -63,13 +63,26 @@ class ImageDowloader extends Node:
 		else:
 			push_warning("Failed to download image from %s" % [urls[i]])
 
+class SteamDownloader:
+	var icons: Array[TextureRect] = []
+	var steam_ids: Array[String] = []
+	var running := false
+	func continue_downloads() -> void:
+		if running:
+			return
+		running = true
+		while not icons.is_empty():
+			pass
+	func add_image(icon: TextureRect, steam_id: int) -> void:
+		pass
+
 func set_date(date: String) -> void:
 	Grid.get_node("Date").text = date
 
 func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 	clear_leaderboard()
 	if cur_downloader != null:
-		cur_downloader.canceled = true
+		cur_downloader.cancel()
 		remove_child(cur_downloader)
 	cur_downloader = ImageDowloader.new()
 	add_child(cur_downloader)

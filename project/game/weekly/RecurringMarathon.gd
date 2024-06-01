@@ -262,22 +262,17 @@ static func upload_leaderboard(l_id: String, info: Level.WinInfo, keep_best: boo
 class ListEntry:
 	var global_rank: int
 	var text: String
+	var mistakes: int
+	var secs: int
+	var flair: SteamFlair
 	# Might be null
 	var texture: Texture
 	var texture_modulate: Color = Color.WHITE
 	# To be downloaded later
-	var image_url: String
-	var mistakes: int
-	var secs: int
-	var flair: SteamFlair
-
-	static func create(raw: StoreIntegrations.LeaderboardEntry) -> ListEntry:
-		var entry := ListEntry.new()
-		entry.global_rank = raw.rank
-		entry.mistakes = raw.mistakes
-		entry.secs = raw.secs
-		entry.flair = raw.extra_data.get("flair", null)
-		entry.text = raw.display_name
+	var image_url: String = ""
+	var image_steam_id: int = -1
+	
+	func set_default_image(extra_data: Dictionary) -> void:
 		if SteamManager.enabled and raw.extra_data.has("steam_id"):
 			# TODO: Figure out when we don't have the image
 			if SteamManager.steam.requestUserInformation(raw.extra_data.steam_id, false):
@@ -288,13 +283,32 @@ class ListEntry:
 				var image := Image.create_from_data(ret[1], ret[1], false, Image.FORMAT_RGBA8, ret[2])
 				image.generate_mipmaps()
 				entry.texture = ImageTexture.create_from_image(image)
-		entry.image_url = raw.extra_data.get("avatar_url", "")
-		if entry.texture == null and raw.extra_data.has("android_id"):
-			entry.texture = load("res://assets/images/ui/icons/android_robot_icon.png")
-			entry.texture_modulate = Global.COLORS.satisfied
-		if entry.texture == null and (raw.extra_data.has("ios_device") or raw.extra_data.has("ios_game_center_id")):
-			entry.texture = load("res://assets/images/ui/icons/apple_logo.png")
-			entry.texture_modulate = Global.COLORS.error
+		image_url = extra_data.get("avatar_url", "")
+		if texture != null:
+			# All good, already have image
+			pass
+		elif image_url != "":
+			# TODO: Set some loading texture
+			pass
+		elif extra_data.has("android_id"):
+			texture = load("res://assets/images/ui/icons/android_robot_icon.png")
+			texture_modulate = Global.COLORS.satisfied
+		elif extra_data.has("ios_device") or extra_data.has("ios_game_center_id"):
+			texture = load("res://assets/images/ui/icons/apple_logo.png")
+			texture_modulate = Global.COLORS.error
+		else:
+			# No image at all, will default to the boat
+			pass
+
+
+	static func create(raw: StoreIntegrations.LeaderboardEntry) -> ListEntry:
+		var entry := ListEntry.new()
+		entry.global_rank = raw.rank
+		entry.mistakes = raw.mistakes
+		entry.secs = raw.secs
+		entry.flair = raw.extra_data.get("flair", null)
+		entry.text = raw.display_name
+		entry.set_image(raw.extra_data)
 		return entry
 
 class LeaderboardData:
