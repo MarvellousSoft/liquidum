@@ -1936,8 +1936,9 @@ func can_solve_with_strategies(grid_: GridModel, strategies_names: Array, forced
 					return false
 				E.HintStatus.Satisfied:
 					break
-		if not _put_block_on_nowater(grid):
-			return false
+		return false # The strategy below doesn't really work
+		#if not _put_block_on_nowater(grid):
+		#	return false
 	grid.clear_content()
 	apply_strategies(grid, strategies_names)
 	# Sometimes adding blocks make some strategies stop working

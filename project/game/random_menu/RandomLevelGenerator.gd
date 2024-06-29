@@ -41,10 +41,11 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
 			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
 				total_solve += Time.get_ticks_usec() - start_solve
-				g2.force_editor_mode(false)
+				g2.force_editor_mode()
 				g2.clear_content()
 				solver.apply_strategies(g2, strategies + forced_strategies)
 				assert(g2.are_hints_satisfied())
+				g2.force_editor_mode(false)
 				g = g2
 				found = true
 				break
