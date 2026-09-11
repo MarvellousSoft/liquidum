@@ -31,7 +31,7 @@ describe('Level Validation', () => {
     expect(isLevelComplete(gridData as any)).toBe(true);
   });
 
-  it('should fail if a cell is Nothing', () => {
+  it('should be complete when all hints are satisfied even if cells are Nothing (airs not required)', () => {
     const gridData = {
       cells: [
         [
@@ -49,7 +49,29 @@ describe('Level Validation', () => {
       grid_hints: { total_water: 1, total_boats: 0, expected_aquariums: {} }
     };
     
-    // Fails because of Content.Nothing rule
+    // Complete because all hints are satisfied (airs are not required)
+    expect(isLevelComplete(gridData as any)).toBe(true);
+  });
+
+  it('should fail if any hint is unsatisfied', () => {
+    const gridData = {
+      cells: [
+        [
+          { c_left: Content.Water, c_right: Content.Water, type: CellType.Single },
+          { c_left: Content.Water, c_right: Content.Water, type: CellType.Single }
+        ]
+      ],
+      row_hints: [{ water_count: 1, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }],
+      col_hints: [
+        { water_count: 1, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden },
+        { water_count: 0, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }
+      ],
+      wall_bottom: [],
+      wall_right: [[false]],
+      grid_hints: { total_water: 1, total_boats: 0, expected_aquariums: {} }
+    };
+    
+    // Fails because water count is 2 but hints expect 1 and 0
     expect(isLevelComplete(gridData as any)).toBe(false);
   });
 

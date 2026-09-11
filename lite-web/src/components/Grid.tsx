@@ -104,13 +104,13 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     const cellAbove = gridData.cells[r - 1]?.[c];
     if (!cellAbove) return false;
     if (cellAbove.type === CellType.Single) {
-      return cellAbove.c_left === Content.Water || cellAbove.c_left === Content.Boat;
+      return cellAbove.c_left === Content.Water;
     }
     if (cellAbove.type === CellType.IncDiag) {
-      return cellAbove.c_right === Content.Water || cellAbove.c_right === Content.Boat;
+      return cellAbove.c_right === Content.Water;
     }
     if (cellAbove.type === CellType.DecDiag) {
-      return cellAbove.c_left === Content.Water || cellAbove.c_left === Content.Boat;
+      return cellAbove.c_left === Content.Water;
     }
     return false;
   };

@@ -302,6 +302,20 @@ body {
 .tool-btn-water-inactive:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
+.tool-btn-air-active {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: var(--game-navy);
+  box-shadow: 0 2px 0 var(--game-navy);
+  transform: scale(1.04);
+}
+.tool-btn-air-inactive {
+  color: #fca5a5;
+  background: transparent;
+}
+.tool-btn-air-inactive:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
 .tool-btn-boat-active {
   background-color: #f59e0b;
   color: var(--game-navy);
@@ -735,6 +749,15 @@ body {
   filter: drop-shadow(0 1px 2px rgba(0, 9, 36, 0.4));
 }
 
+.air-sprite-diagonal,
+.cell-sprite-diagonal {
+  width: 30%;
+  height: 30%;
+  max-width: 1rem;
+  max-height: 1rem;
+  object-fit: contain;
+}
+
 .cell-block {
   position: absolute;
   inset: 0;
@@ -744,16 +767,16 @@ body {
 
 /* Corner alignments for diagonal cells */
 .align-center { align-items: center; justify-content: center; }
-.align-top-left { align-items: flex-start; justify-content: flex-start; padding-left: 2px; padding-top: 2px; }
-.align-bottom-right { align-items: flex-end; justify-content: flex-end; padding-right: 2px; padding-bottom: 2px; }
-.align-top-right { align-items: flex-start; justify-content: flex-end; padding-right: 2px; padding-top: 2px; }
-.align-bottom-left { align-items: flex-end; justify-content: flex-start; padding-left: 2px; padding-bottom: 2px; }
+.align-top-left { align-items: flex-start; justify-content: flex-start; padding-left: 3px; padding-top: 3px; }
+.align-bottom-right { align-items: flex-end; justify-content: flex-end; padding-right: 3px; padding-bottom: 3px; }
+.align-top-right { align-items: flex-start; justify-content: flex-end; padding-right: 3px; padding-top: 3px; }
+.align-bottom-left { align-items: flex-end; justify-content: flex-start; padding-left: 3px; padding-bottom: 3px; }
 
 @media (min-width: 640px) {
-  .align-top-left { padding-left: 4px; padding-top: 4px; }
-  .align-bottom-right { padding-right: 4px; padding-bottom: 4px; }
-  .align-top-right { padding-right: 4px; padding-top: 4px; }
-  .align-bottom-left { padding-left: 4px; padding-bottom: 4px; }
+  .align-top-left { padding-left: 5px; padding-top: 5px; }
+  .align-bottom-right { padding-right: 5px; padding-bottom: 5px; }
+  .align-top-right { padding-right: 5px; padding-top: 5px; }
+  .align-bottom-left { padding-left: 5px; padding-bottom: 5px; }
 }
 
 /* Faint interior grid lines */

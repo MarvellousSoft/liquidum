@@ -24,7 +24,7 @@ export function App() {
   const [dragAction, setDragAction] = useState<{ corner: Corner, content: Content } | null>(null);
   const [won, setWon] = useState(false);
   const [autoFloodAir, setAutoFloodAir] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat>(Content.Water);
+  const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater>(Content.Water);
 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
@@ -56,7 +56,7 @@ export function App() {
         }
       }
       setGridData(data);
-      setWon(isLevelComplete(data));
+      setWon(preserveContents ? isLevelComplete(data) : false);
     } catch (e) {
       console.error("Failed to load level from string", e);
     }
@@ -95,7 +95,7 @@ export function App() {
   useEffect(() => {
     (window as any).loadLevelString = loadLevelFromString;
     (window as any).loadLevelKey = loadLevel;
-    (window as any).setTool = (tool: Content.Water | Content.Boat) => setSelectedTool(tool);
+    (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater) => setSelectedTool(tool);
     (window as any).setAutoFloodAir = (val: boolean) => setAutoFloodAir(val);
     (window as any).setDarkMode = (val: boolean) => setIsDarkMode(val);
     (window as any).exportLevelString = () => {
@@ -242,6 +242,14 @@ export function App() {
              <span>Water</span>
            </button>
            <button 
+             data-testid="tool-air"
+             onClick={() => setSelectedTool(Content.NoWater)}
+             class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
+           >
+             <img src="/icons/nowater.png" class="w-3.5 h-3.5 object-contain" alt="air" />
+             <span>Air</span>
+           </button>
+           <button 
              data-testid="tool-boat"
              onClick={() => setSelectedTool(Content.Boat)}
              class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
@@ -302,7 +310,7 @@ export function App() {
           </div>
         ) : (
           <div class="controls-hint">
-            Left-click: Water/Boat • Right-click: Air (✕)
+            Tap/Click: Place selected tool • Right-click: Air (✕)
           </div>
         )}
       </div>

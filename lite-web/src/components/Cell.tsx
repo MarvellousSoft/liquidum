@@ -67,20 +67,21 @@ export function Cell({
   const isBlockRight = cell.c_right === Content.Block;
 
   const renderHalf = (corner: Corner, isWater: boolean, isNoWater: boolean, isBoat: boolean, isBlock: boolean, clipPath?: string, halfIsSurface: boolean = isSurface) => {
-    const alignment = getCornerAlignClass(corner, Boolean(clipPath));
+    const isDiagonal = Boolean(clipPath);
+    const alignment = getCornerAlignClass(corner, isDiagonal);
   
     let content = null;
     if (isBlock) content = <div class="cell-block" />;
     else if (isWater) content = <div class={`cell-water ${halfIsSurface ? 'is-surface' : ''}`} />;
     else if (isBoat) content = (
       <div class={`cell-boat ${alignment}`}>
-        <img src="/icons/boat_small.png" alt="boat" class="cell-sprite boat-sprite" />
+        <img src="/icons/boat_small.png" alt="boat" class={`cell-sprite boat-sprite ${isDiagonal ? 'cell-sprite-diagonal' : ''}`} />
         <span class="sr-only">⛵</span>
       </div>
     );
     else if (isNoWater) content = (
       <div class={`cell-air ${alignment}`}>
-        <img src="/icons/nowater.png" alt="air" class="cell-sprite air-sprite" />
+        <img src="/icons/nowater.png" alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} />
         <span class="sr-only">✕</span>
       </div>
     );

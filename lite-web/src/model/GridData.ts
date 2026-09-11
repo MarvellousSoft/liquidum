@@ -429,19 +429,32 @@ export function getAquariums(gridData: GridModelData): { size: number, boats: nu
 export function isLevelComplete(gridData: GridModelData): boolean {
   if (gridData.cells.length === 0) return false;
   
-  // Rule 1: All cells must be filled (no Content.Nothing)
-  for (let r = 0; r < gridData.cells.length; r++) {
-    for (let c = 0; c < gridData.cells[r].length; c++) {
-      const cell = gridData.cells[r][c];
-      if (cell.type === CellType.Single) {
-        if (cell.c_left === Content.Nothing) return false;
-      } else {
-        if (cell.c_left === Content.Nothing || cell.c_right === Content.Nothing) return false;
+  // Must have at least one active hint or target in the level
+  let hasAnyHint = false;
+  for (let r = 0; r < gridData.row_hints.length; r++) {
+    const hint = gridData.row_hints[r];
+    if (hint.water_count >= 0 || hint.boat_count >= 0 || hint.water_count_type !== HintType.Hidden || hint.boat_count_type !== HintType.Hidden) {
+      hasAnyHint = true;
+      break;
+    }
+  }
+  if (!hasAnyHint) {
+    for (let c = 0; c < gridData.col_hints.length; c++) {
+      const hint = gridData.col_hints[c];
+      if (hint.water_count >= 0 || hint.boat_count >= 0 || hint.water_count_type !== HintType.Hidden || hint.boat_count_type !== HintType.Hidden) {
+        hasAnyHint = true;
+        break;
       }
     }
   }
+  if (!hasAnyHint) {
+    if (gridData.grid_hints.total_water >= 0 || gridData.grid_hints.total_boats > 0 || (gridData.grid_hints.expected_aquariums && Object.keys(gridData.grid_hints.expected_aquariums).length > 0)) {
+      hasAnyHint = true;
+    }
+  }
+  if (!hasAnyHint) return false;
   
-  // Check hints
+  // Check hints (airs/non-water empty cells are not required to be marked)
   for (let r = 0; r < gridData.row_hints.length; r++) {
     const hint = gridData.row_hints[r];
     if (hint.water_count >= 0 && countWaterRow(gridData, r) !== hint.water_count) return false;
