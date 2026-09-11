@@ -122,8 +122,26 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
   // If this cell is a block, it should be visually merged with neighbor blocks.
   const isBlock = cell.c_left === Content.Block && cell.type === CellType.Single;
 
+  const getContentName = (c: Content) => {
+    switch (c) {
+      case Content.Water: return 'water';
+      case Content.NoWater: return 'air';
+      case Content.Boat: return 'boat';
+      case Content.Block: return 'block';
+      case Content.NoBoat: return 'noboat';
+      case Content.NoBoatWater: return 'noboatwater';
+      default: return 'none';
+    }
+  };
+
   return (
     <div 
+      data-testid={`cell-${row}-${col}`}
+      data-row={row}
+      data-col={col}
+      data-cell-type={cell.type}
+      data-content-left={getContentName(cell.c_left)}
+      data-content-right={getContentName(cell.c_right)}
       class="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 cursor-pointer select-none"
       style={{ backgroundColor: isBlock ? '#000000' : 'var(--cell-bg)' }}
       onPointerDown={(e) => {
