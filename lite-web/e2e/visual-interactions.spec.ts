@@ -268,5 +268,60 @@ L._.
     await expect(page.locator('[data-testid="cell-1-1"]')).toHaveAttribute('data-content-left', 'none');
   });
 
+  test('visual_test_total_water_hint_counter', async ({ page }) => {
+    // Load Level 01/05 which has a total water hint of 7
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/05"));
+
+    const waterCounter = page.locator('[data-testid="hint-water-counter"]');
+    await expect(waterCounter).toBeVisible();
+    await expect(waterCounter).toContainText('0 / 7');
+    await expect(waterCounter).toContainText('7 left');
+
+    // Click tool water and fill isolated 1x1 bucket cell (0, 0)
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-0"]');
+
+    // Cell (0, 0) has walls around it, adding exactly 1 water
+    await expect(waterCounter).toContainText('1 / 7');
+    await expect(waterCounter).toContainText('6 left');
+    await expect(waterCounter).toHaveClass(/hint-stat-normal/);
+  });
+
+  test('visual_test_total_boats_counter', async ({ page }) => {
+    // Load Level 04/05 which features total boats (2)
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+
+    const boatCounter = page.locator('[data-testid="hint-boat-counter"]');
+    await expect(boatCounter).toBeVisible();
+    await expect(boatCounter).toContainText('0 / 2');
+    await expect(boatCounter).toContainText('2 left');
+
+    // Select boat tool and place boat in cell (0, 1)
+    await page.click('[data-testid="tool-boat"]');
+    await page.click('[data-testid="cell-0-1"]');
+
+    await expect(boatCounter).toContainText('1 / 2');
+    await expect(boatCounter).toContainText('1 left');
+  });
+
+  test('visual_test_aquarium_hints_visual_tanks_and_satisfaction', async ({ page }) => {
+    // Load Level 05/08 which features aquariums (0.5 x 1, 1 x 2)
+    await page.evaluate(() => (window as any).loadLevelKey("Level 05/08"));
+
+    const aqSection = page.locator('[data-testid="aquarium-section"]');
+    await expect(aqSection).toBeVisible();
+    await expect(page.locator('[data-testid="aquarium-hint-0.5"]')).toBeVisible();
+    await expect(page.locator('[data-testid="aquarium-hint-1"]')).toBeVisible();
+
+    // Fill top-left diagonal of cell (0, 0)
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-0"]', { position: { x: 5, y: 5 } });
+
+    // The 0.5 aquarium hint should immediately be satisfied
+    const halfHint = page.locator('[data-testid="aquarium-hint-0.5"]');
+    await expect(halfHint).toHaveClass(/aquarium-card-satisfied/);
+    await expect(halfHint).toContainText('✓ 1');
+  });
+
 });
 
