@@ -276,7 +276,9 @@ body {
 
 .tool-btn {
   font-family: var(--font-game);
-  padding: 0.3rem 0.85rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
   border-radius: 9999px;
   font-weight: 500;
   font-size: 0.875rem;
@@ -285,7 +287,7 @@ body {
   border: 2px solid transparent;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
   user-select: none;
 }
 .tool-btn-water-active {
@@ -329,6 +331,29 @@ body {
 }
 .tool-btn-boat-inactive:hover {
   background-color: rgba(255, 255, 255, 0.15);
+}
+.tool-btn-maybeboat-active {
+  background-color: #8b5cf6;
+  color: #ffffff;
+  border-color: var(--game-navy);
+  box-shadow: 0 2px 0 var(--game-navy);
+  transform: scale(1.04);
+}
+.tool-btn-maybeboat-inactive {
+  color: #c4b5fd;
+  background: transparent;
+}
+.tool-btn-maybeboat-inactive:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.filter-dark-navy {
+  filter: brightness(0);
+}
+.dark .filter-dark-navy {
+  filter: brightness(0) invert(1);
+}
+.filter-mint {
+  filter: brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(928%) hue-rotate(85deg) brightness(102%) contrast(105%);
 }
 
 .btn-restart {
@@ -518,10 +543,23 @@ body {
   color: var(--game-mint);
 }
 .hint-stat-satisfied {
-  background-color: var(--stat-satisfied);
-  color: var(--game-navy);
-  box-shadow: 0 2.5px 0 var(--game-navy), 0 0 14px rgba(170, 255, 208, 0.45);
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border-color: var(--game-navy);
+  box-shadow: 0 2.5px 0 var(--game-navy), 0 0 16px rgba(16, 185, 129, 0.4);
   transform: translateY(-1px);
+}
+.hint-stat-satisfied .hint-stat-label {
+  color: #d1fae5;
+}
+.hint-stat-satisfied .hint-stat-value {
+  color: #ffffff;
+  font-weight: 800;
+}
+.hint-stat-satisfied .badge-satisfied {
+  background-color: rgba(0, 15, 35, 0.4);
+  color: #a7f3d0;
+  border-color: rgba(0, 9, 36, 0.6);
 }
 .hint-stat-over {
   background-color: #ef4444;
@@ -698,8 +736,8 @@ body {
 .aq-size-half {
   position: absolute;
   bottom: 2px;
-  left: 3px;
-  font-size: 0.75rem;
+  left: 2px;
+  font-size: 0.65rem;
 }
 
 .aq-info {
@@ -804,10 +842,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 1rem;
-  gap: 0.5rem;
+  padding-right: 0.75rem;
+  gap: 0.35rem;
   font-family: var(--font-game);
   font-size: 1rem;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 @media (min-width: 640px) {
   .row-hint {
@@ -819,6 +860,23 @@ body {
   .row-hint {
     width: 6rem;
     font-size: 1.25rem;
+  }
+}
+
+.has-dual-row-hints .grid-corner-spacer,
+.has-dual-row-hints .row-hint {
+  width: 6.5rem;
+}
+@media (min-width: 640px) {
+  .has-dual-row-hints .grid-corner-spacer,
+  .has-dual-row-hints .row-hint {
+    width: 7.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .has-dual-row-hints .grid-corner-spacer,
+  .has-dual-row-hints .row-hint {
+    width: 8.5rem;
   }
 }
 
@@ -927,7 +985,50 @@ body {
 }
 
 .air-sprite {
+  max-width: 52%;
+  max-height: 52%;
   filter: drop-shadow(0 1px 2px rgba(0, 9, 36, 0.4));
+}
+
+.cell-maybeboat {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.maybeboat-wrap {
+  position: relative;
+  width: 54%;
+  height: 54%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maybeboat-wrap-diagonal {
+  width: 30%;
+  height: 30%;
+  max-width: 1rem;
+  max-height: 1rem;
+}
+
+.maybeboat-boat {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 9, 36, 0.6));
+}
+
+.maybeboat-question {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 9, 36, 0.7));
 }
 
 .air-sprite-diagonal,

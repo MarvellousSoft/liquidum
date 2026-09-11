@@ -51,7 +51,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     if (count >= 0) {
       if (type === HintType.Together) {
         return (
-          <span class="flex items-center">
+          <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
             {boatImg}{`{ ${count} }`}
             <span class="sr-only">{boatChar}{count}</span>
           </span>
@@ -59,14 +59,14 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
       }
       if (type === HintType.Separated) {
         return (
-          <span class="flex items-center">
+          <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
             {boatImg}{`- ${count} -`}
             <span class="sr-only">{boatChar}{count}</span>
           </span>
         );
       }
       return (
-        <span class="flex items-center">
+        <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
           {boatImg}{count}
           <span class="sr-only">{boatChar}{count}</span>
         </span>
@@ -74,7 +74,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     }
     if (type === HintType.Together) {
       return (
-        <span class="flex items-center">
+        <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
           {boatImg}{`{ ? }`}
           <span class="sr-only">{boatChar}{'{?}'}</span>
         </span>
@@ -82,7 +82,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     }
     if (type === HintType.Separated) {
       return (
-        <span class="flex items-center">
+        <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
           {boatImg}{`- ? -`}
           <span class="sr-only">{boatChar}{'-?-'}</span>
         </span>
@@ -90,7 +90,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     }
     if (type === HintType.Zero) {
       return (
-        <span class="flex items-center">
+        <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
           {boatImg}0
           <span class="sr-only">{boatChar}0</span>
         </span>
@@ -115,8 +115,13 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
     return false;
   };
 
+  const hasDualRowHints = gridData.row_hints.some(
+    h => (h.water_count >= 0 || h.water_count_type !== HintType.Hidden) &&
+         (h.boat_count >= 0 || h.boat_count_type !== HintType.Hidden)
+  );
+
   return (
-    <div class="inline-block relative">
+    <div class={`inline-block relative ${hasDualRowHints ? 'has-dual-row-hints' : ''}`}>
       {/* Column Hints Header */}
       <div class="flex">
         {/* Empty top-left corner */}
@@ -132,14 +137,14 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
              
              return (
               <div key={c} class="col-hint">
-                 {(hint.water_count >= 0 || hint.water_count_type !== HintType.Hidden) && (
-                   <span class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}>
-                      {renderHint(hint.water_count, hint.water_count_type, true)}
-                   </span>
-                 )}
                  {(hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && (
                    <span class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}>
                       {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                   </span>
+                 )}
+                 {(hint.water_count >= 0 || hint.water_count_type !== HintType.Hidden) && (
+                   <span class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}>
+                      {renderHint(hint.water_count, hint.water_count_type, true)}
                    </span>
                  )}
               </div>
@@ -160,14 +165,14 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
         <div key={r} class="flex">
           {/* Row hint */}
           <div class="row-hint">
-             {(gridData.row_hints[r].water_count >= 0 || gridData.row_hints[r].water_count_type !== HintType.Hidden) && (
-               <span class={getHintClass(wCountRow, gridData.row_hints[r].water_count, true, gridData.row_hints[r].water_count_type, wBools)}>
-                 {renderHint(gridData.row_hints[r].water_count, gridData.row_hints[r].water_count_type, true)}
-               </span>
-             )}
              {(gridData.row_hints[r].boat_count >= 0 || gridData.row_hints[r].boat_count_type !== HintType.Hidden) && (
                <span class={getHintClass(bCountRow, gridData.row_hints[r].boat_count, false, gridData.row_hints[r].boat_count_type, bBools)}>
                  {renderHint(gridData.row_hints[r].boat_count, gridData.row_hints[r].boat_count_type, false)}
+               </span>
+             )}
+             {(gridData.row_hints[r].water_count >= 0 || gridData.row_hints[r].water_count_type !== HintType.Hidden) && (
+               <span class={getHintClass(wCountRow, gridData.row_hints[r].water_count, true, gridData.row_hints[r].water_count_type, wBools)}>
+                 {renderHint(gridData.row_hints[r].water_count, gridData.row_hints[r].water_count_type, true)}
                </span>
              )}
           </div>

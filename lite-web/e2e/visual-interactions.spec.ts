@@ -14,10 +14,10 @@ test.describe('Visual & Interactive Gameplay Tests', () => {
     const level01Btn = page.locator('button:has-text("Level 01/01")');
     await expect(level01Btn).toHaveCount(0);
 
-    // Tools and grid are visible
+    // Tools and grid are visible (Level 01/01 has no boats, so boat tool is not visible)
     await expect(page.locator('[data-testid="tool-water"]')).toBeVisible();
     await expect(page.locator('[data-testid="tool-air"]')).toBeVisible();
-    await expect(page.locator('[data-testid="tool-boat"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-boat"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
   });
 
@@ -166,8 +166,9 @@ L._...
   });
 
   test('visual_test_boat_placement_and_water (adapted from test_boat_place_remove)', async ({ page }) => {
-    // 2x2 grid with walls below row 1
+    // 2x2 grid with walls below row 1 and +boats=1 declaration
     const gridWithWalls = `
++boats=1
 ....
 ....
 ....
@@ -275,7 +276,7 @@ L._.
     const waterCounter = page.locator('[data-testid="hint-water-counter"]');
     await expect(waterCounter).toBeVisible();
     await expect(waterCounter).toContainText('0 / 7');
-    await expect(waterCounter).toContainText('7 left');
+    await expect(waterCounter).not.toContainText('left');
 
     // Click tool water and fill isolated 1x1 bucket cell (0, 0)
     await page.click('[data-testid="tool-water"]');
@@ -283,7 +284,7 @@ L._.
 
     // Cell (0, 0) has walls around it, adding exactly 1 water
     await expect(waterCounter).toContainText('1 / 7');
-    await expect(waterCounter).toContainText('6 left');
+    await expect(waterCounter).not.toContainText('left');
     await expect(waterCounter).toHaveClass(/hint-stat-normal/);
   });
 
@@ -294,14 +295,14 @@ L._.
     const boatCounter = page.locator('[data-testid="hint-boat-counter"]');
     await expect(boatCounter).toBeVisible();
     await expect(boatCounter).toContainText('0 / 2');
-    await expect(boatCounter).toContainText('2 left');
+    await expect(boatCounter).not.toContainText('left');
 
     // Select boat tool and place boat in cell (0, 1)
     await page.click('[data-testid="tool-boat"]');
     await page.click('[data-testid="cell-0-1"]');
 
     await expect(boatCounter).toContainText('1 / 2');
-    await expect(boatCounter).toContainText('1 left');
+    await expect(boatCounter).not.toContainText('left');
   });
 
   test('visual_test_aquarium_hints_visual_tanks_and_satisfaction', async ({ page }) => {
@@ -310,7 +311,10 @@ L._.
 
     const aqSection = page.locator('[data-testid="aquarium-section"]');
     await expect(aqSection).toBeVisible();
-    await expect(page.locator('[data-testid="aquarium-hint-0.5"]')).toBeVisible();
+    const halfTank = page.locator('[data-testid="aquarium-hint-0.5"]');
+    await expect(halfTank).toBeVisible();
+    await expect(halfTank).toContainText('0.5');
+    await expect(halfTank).not.toContainText('½');
     await expect(page.locator('[data-testid="aquarium-hint-1"]')).toBeVisible();
 
     // Fill top-left diagonal of cell (0, 0)
@@ -318,10 +322,147 @@ L._.
     await page.click('[data-testid="cell-0-0"]', { position: { x: 5, y: 5 } });
 
     // The 0.5 aquarium hint should immediately be satisfied
-    const halfHint = page.locator('[data-testid="aquarium-hint-0.5"]');
-    await expect(halfHint).toHaveClass(/aquarium-card-satisfied/);
-    await expect(halfHint).toContainText('✓ 1');
+    await expect(halfTank).toHaveClass(/aquarium-card-satisfied/);
+    await expect(halfTank).toContainText('✓ 1');
+  });
+
+  test('visual_test_maybeboat_tool_and_cell_placement', async ({ page }) => {
+    // Level 04/05 has boats, so maybeboat tool is visible
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+
+    const maybeTool = page.locator('[data-testid="tool-maybeboat"]');
+    await expect(maybeTool).toBeVisible();
+    await maybeTool.click();
+    await expect(maybeTool).toHaveClass(/tool-btn-maybeboat-active/);
+
+    // Place MaybeBoat on cell (0, 5)
+    await page.click('[data-testid="cell-0-5"]');
+    const cell = page.locator('[data-testid="cell-0-5"]');
+    await expect(cell.locator('.cell-maybeboat')).toBeVisible();
+    await expect(cell).toHaveAttribute('data-content-left', 'noboat');
+
+    // Click again to remove
+    await page.click('[data-testid="cell-0-5"]');
+    await expect(cell.locator('.cell-maybeboat')).not.toBeVisible();
+    await expect(cell).toHaveAttribute('data-content-left', 'none');
+  });
+
+  test('visual_test_level_06_03_hints_layout_nowrap', async ({ page }) => {
+    await page.evaluate(() => (window as any).loadLevelKey("Level 06/03"));
+    const gridContainer = page.locator('.has-dual-row-hints');
+    await expect(gridContainer).toBeVisible();
+
+    // Verify row 1 has both hints without text breaking
+    const rowHints = page.locator('.row-hint');
+    await expect(rowHints.nth(0)).toContainText('0');
+    await expect(rowHints.nth(1)).toContainText('?');
+  });
+
+  test('visual_test_level_04_05_boat_does_not_break_water_hint_and_solves', async ({ page }) => {
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+
+    const row0Hint = page.locator('.row-hint').nth(0).locator('span.hint-satisfied-water, span.hint-normal, span.hint-over');
+    await expect(row0Hint).toContainText('4');
+
+    // Fill water to satisfy Row 0 hint {4}:
+    // Left container: (2,0), (2,1), (1,0), (1,1), (0,0), (0,1)
+    // Middle container: (2,2), (1,2), (0,2), (0,3)
+    await page.evaluate(() => {
+      const put = (window as any).putCellAction;
+      put(2, 0, 5, 1);
+      put(2, 1, 5, 1);
+      put(1, 0, 5, 1);
+      put(1, 1, 5, 1);
+      put(0, 0, 8, 1);
+      put(0, 0, 6, 1);
+      put(0, 1, 5, 1);
+      put(2, 2, 5, 1);
+      put(1, 2, 5, 1);
+      put(0, 2, 5, 1);
+      put(0, 3, 5, 1);
+    });
+
+    // Hint {4} should now be green (satisfied)
+    await expect(row0Hint).toHaveClass(/hint-satisfied-water/);
+    await expect(row0Hint).not.toHaveClass(/hint-over/);
+
+    // Place boat at cell (0, 5) using interactive boat tool
+    await page.click('[data-testid="tool-boat"]');
+    await page.click('[data-testid="cell-0-5"]');
+
+    // CRITICAL REQUIREMENT: Row 0 hint {4} must STILL be satisfied/green, and NOT red/hint-over!
+    await expect(row0Hint).toHaveClass(/hint-satisfied-water/);
+    await expect(row0Hint).not.toHaveClass(/hint-over/);
+
+    // Verify boat counter shows 1 / 2
+    const boatCounter = page.locator('[data-testid="hint-boat-counter"]');
+    await expect(boatCounter).toContainText('1 / 2');
+
+    // Complete remaining water for the puzzle:
+    await page.evaluate(() => {
+      const put = (window as any).putCellAction;
+      put(2, 3, 7, 1);
+      put(2, 4, 5, 1);
+      put(2, 5, 5, 1);
+      put(1, 5, 6, 1);
+    });
+
+    // Place second boat at cell (1, 3) to complete the level
+    await page.click('[data-testid="cell-1-3"]');
+    await expect(boatCounter).toContainText('2 / 2');
+    await expect(boatCounter).toHaveClass(/hint-stat-satisfied/);
+
+    // Level should be completed!
+    await expect(page.locator('[data-testid="win-banner"]')).toBeVisible();
+    await expect(page.locator('[data-testid="win-banner"]')).toContainText('Level Complete');
+  });
+
+  test('visual_test_total_boats_counter_natural_styling_when_satisfied', async ({ page }) => {
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+
+    const boatCounter = page.locator('[data-testid="hint-boat-counter"]');
+    await expect(boatCounter).toHaveClass(/hint-stat-normal/);
+
+    // Place 2 boats
+    await page.click('[data-testid="tool-boat"]');
+    await page.click('[data-testid="cell-0-5"]');
+    await page.click('[data-testid="cell-1-3"]');
+
+    // When complete, becomes green
+    await expect(boatCounter).toHaveClass(/hint-stat-satisfied/);
+    await expect(boatCounter).toContainText('2 / 2');
+    await expect(boatCounter.locator('.badge-satisfied')).toBeVisible();
+
+    // Verify text is white/light and NOT dark navy / black blob
+    const valueEl = boatCounter.locator('.hint-stat-value');
+    const color = await valueEl.evaluate((el) => window.getComputedStyle(el).color);
+    // rgb(255, 255, 255) is white
+    expect(color).toBe('rgb(255, 255, 255)');
+  });
+
+  test('visual_test_only_show_relevant_tools_for_current_level', async ({ page }) => {
+    // 1. Level 01/01 has no boats: boat tools must NOT be shown
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+    await expect(page.locator('[data-testid="tool-water"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-air"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-boat"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="tool-maybeboat"]')).toHaveCount(0);
+
+    // 2. Level 04/05 has boats: boat and maybeboat tools MUST be shown
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+    await expect(page.locator('[data-testid="tool-water"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-air"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-boat"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-maybeboat"]')).toBeVisible();
+
+    // 3. Switch back to a level without boats (e.g. Level 02/01): boat tools must disappear again
+    await page.evaluate(() => (window as any).loadLevelKey("Level 02/01"));
+    await expect(page.locator('[data-testid="tool-water"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-air"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tool-boat"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="tool-maybeboat"]')).toHaveCount(0);
   });
 
 });
+
 

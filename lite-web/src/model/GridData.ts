@@ -181,8 +181,8 @@ export function countWaterCol(gridData: GridModelData, c: number) {
   let count = 0;
   for (let r = 0; r < gridData.cells.length; r++) {
     const cell = gridData.cells[r][c];
-    const isWaterLeft = cell.c_left === Content.Water || cell.c_left === Content.Boat;
-    const isWaterRight = cell.c_right === Content.Water || cell.c_right === Content.Boat;
+    const isWaterLeft = cell.c_left === Content.Water;
+    const isWaterRight = cell.c_right === Content.Water;
     
     if (isWaterLeft) count += 0.5;
     if (cell.type === CellType.Single && isWaterLeft) count += 0.5;
@@ -195,8 +195,8 @@ export function countWaterRow(gridData: GridModelData, r: number) {
   let count = 0;
   for (let c = 0; c < gridData.cells[r].length; c++) {
     const cell = gridData.cells[r][c];
-    const isWaterLeft = cell.c_left === Content.Water || cell.c_left === Content.Boat;
-    const isWaterRight = cell.c_right === Content.Water || cell.c_right === Content.Boat;
+    const isWaterLeft = cell.c_left === Content.Water;
+    const isWaterRight = cell.c_right === Content.Water;
     
     if (isWaterLeft) count += 0.5;
     if (cell.type === CellType.Single && isWaterLeft) count += 0.5;
@@ -236,8 +236,8 @@ export function rowBools(gridData: GridModelData, r: number, content: Content): 
   const arr: boolean[] = [];
   for (let c = 0; c < gridData.cells[r].length; c++) {
     const cell = gridData.cells[r][c];
-    const hasLeft = cell.c_left === content || (content === Content.Water && cell.c_left === Content.Boat);
-    const hasRight = cell.c_right === content || (content === Content.Water && cell.c_right === Content.Boat);
+    const hasLeft = cell.c_left === content;
+    const hasRight = cell.c_right === content;
     if (cell.type === CellType.Single) {
       arr.push(hasLeft);
       arr.push(hasRight);
@@ -253,8 +253,8 @@ export function colBools(gridData: GridModelData, c: number, content: Content): 
   const arr: boolean[] = [];
   for (let r = 0; r < gridData.cells.length; r++) {
     const cell = gridData.cells[r][c];
-    const hasLeft = cell.c_left === content || (content === Content.Water && cell.c_left === Content.Boat);
-    const hasRight = cell.c_right === content || (content === Content.Water && cell.c_right === Content.Boat);
+    const hasLeft = cell.c_left === content;
+    const hasRight = cell.c_right === content;
     
     if (cell.type === CellType.Single) {
       arr.push(hasLeft);
@@ -329,16 +329,16 @@ export function getAquariums(gridData: GridModelData): { size: number, boats: nu
           const currCell = gridData.cells[curr.r][curr.c];
           
           if (currCell.type === CellType.Single) {
-            if (currCell.c_left === Content.Water || currCell.c_left === Content.Boat) aquariumWater += 0.5;
-            if (currCell.c_right === Content.Water || currCell.c_right === Content.Boat) aquariumWater += 0.5;
+            if (currCell.c_left === Content.Water) aquariumWater += 0.5;
+            if (currCell.c_right === Content.Water) aquariumWater += 0.5;
             if (currCell.c_left === Content.Boat || currCell.c_right === Content.Boat) aquariumBoats += 1;
           } else if (currCell.type === CellType.IncDiag) {
             const content = curr.corner === Corner.TopLeft ? currCell.c_left : currCell.c_right;
-            if (content === Content.Water || content === Content.Boat) aquariumWater += 0.5;
+            if (content === Content.Water) aquariumWater += 0.5;
             if (content === Content.Boat) aquariumBoats += 1;
           } else if (currCell.type === CellType.DecDiag) {
             const content = curr.corner === Corner.BottomLeft ? currCell.c_left : currCell.c_right;
-            if (content === Content.Water || content === Content.Boat) aquariumWater += 0.5;
+            if (content === Content.Water) aquariumWater += 0.5;
             if (content === Content.Boat) aquariumBoats += 1;
           }
           
@@ -502,12 +502,22 @@ export function isLevelComplete(gridData: GridModelData): boolean {
     }
   }
   
-  if (gridData.grid_hints.total_boats > 0) {
-    const foundAquariums = getAquariums(gridData);
-    for (const aq of foundAquariums) {
-      if (aq.size > 0 && aq.boats !== 1) return false;
-    }
-  }
-  
   return true;
 }
+
+export function levelHasBoats(gridData: GridModelData | null): boolean {
+  if (!gridData) return false;
+  const totalBoats = gridData.grid_hints?.total_boats ?? -1;
+  if (totalBoats > 0) return true;
+
+  const hasBoatHint = (h: { boat_count: number; boat_count_type: HintType }) => {
+    return h.boat_count > 0 || (h.boat_count_type !== HintType.Hidden && h.boat_count_type !== HintType.Zero);
+  };
+
+  if (gridData.row_hints?.some(hasBoatHint)) return true;
+  if (gridData.col_hints?.some(hasBoatHint)) return true;
+  if (gridData.cells?.some(row => row.some(cell => cell.c_left === Content.Boat || cell.c_right === Content.Boat))) return true;
+
+  return false;
+}
+

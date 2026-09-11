@@ -57,8 +57,8 @@ export function Cell({
   const isWaterLeft = cell.c_left === Content.Water;
   const isWaterRight = cell.c_right === Content.Water;
   
-  const isNoWaterLeft = cell.c_left === Content.NoWater || cell.c_left === Content.NoBoatWater;
-  const isNoWaterRight = cell.c_right === Content.NoWater || cell.c_right === Content.NoBoatWater;
+  const isNoWaterLeft = cell.c_left === Content.NoWater;
+  const isNoWaterRight = cell.c_right === Content.NoWater;
 
   const isBoatLeft = cell.c_left === Content.Boat;
   const isBoatRight = cell.c_right === Content.Boat;
@@ -66,7 +66,23 @@ export function Cell({
   const isBlockLeft = cell.c_left === Content.Block;
   const isBlockRight = cell.c_right === Content.Block;
 
-  const renderHalf = (corner: Corner, isWater: boolean, isNoWater: boolean, isBoat: boolean, isBlock: boolean, clipPath?: string, halfIsSurface: boolean = isSurface) => {
+  const isNoBoatLeft = cell.c_left === Content.NoBoat;
+  const isNoBoatRight = cell.c_right === Content.NoBoat;
+
+  const isNoBoatWaterLeft = cell.c_left === Content.NoBoatWater;
+  const isNoBoatWaterRight = cell.c_right === Content.NoBoatWater;
+
+  const renderHalf = (
+    corner: Corner, 
+    isWater: boolean, 
+    isNoWater: boolean, 
+    isBoat: boolean, 
+    isBlock: boolean, 
+    isNoBoat: boolean,
+    isNoBoatWater: boolean,
+    clipPath?: string, 
+    halfIsSurface: boolean = isSurface
+  ) => {
     const isDiagonal = Boolean(clipPath);
     const alignment = getCornerAlignClass(corner, isDiagonal);
   
@@ -77,6 +93,27 @@ export function Cell({
       <div class={`cell-boat ${alignment}`}>
         <img src="/icons/boat_small.png" alt="boat" class={`cell-sprite boat-sprite ${isDiagonal ? 'cell-sprite-diagonal' : ''}`} />
         <span class="sr-only">⛵</span>
+      </div>
+    );
+    else if (isNoBoat) content = (
+      <div class={`cell-maybeboat ${alignment}`}>
+        <div class={`maybeboat-wrap ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`}>
+          <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
+          <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+        </div>
+        <span class="sr-only">?</span>
+      </div>
+    );
+    else if (isNoBoatWater) content = (
+      <div class={`cell-maybeboat ${alignment}`}>
+        <div class="flex items-center justify-center gap-0.5">
+          <img src="/icons/nowater.png" alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} style={{ maxWidth: '40%', maxHeight: '40%' }} />
+          <div class={`maybeboat-wrap ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`} style={{ maxWidth: '40%', maxHeight: '40%' }}>
+            <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
+            <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+          </div>
+        </div>
+        <span class="sr-only">✕?</span>
       </div>
     );
     else if (isNoWater) content = (
@@ -109,24 +146,24 @@ export function Cell({
 
   const renderContent = () => {
     if (cell.type === CellType.Single) {
-      return renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, undefined, isSurface);
+      return renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, undefined, isSurface);
     } 
     
     if (cell.type === CellType.IncDiag) {
       return (
         <div class="cell-content-layer">
-          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 0, 0 100%)', isSurface)}
-          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(100% 0, 100% 100%, 0 100%)', false)}
+          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, 'polygon(0 0, 100% 0, 0 100%)', isSurface)}
+          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, isNoBoatRight, isNoBoatWaterRight, 'polygon(100% 0, 100% 100%, 0 100%)', false)}
           {renderDiagonalLine(CellType.IncDiag)}
         </div>
       );
-    }
+    } 
     
     if (cell.type === CellType.DecDiag) {
       return (
         <div class="cell-content-layer">
-          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(0 0, 100% 0, 100% 100%)', isSurface)}
-          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 100%, 0 100%)', false)}
+          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, isNoBoatRight, isNoBoatWaterRight, 'polygon(0 0, 100% 0, 100% 100%)', isSurface)}
+          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, 'polygon(0 0, 100% 100%, 0 100%)', false)}
           {renderDiagonalLine(CellType.DecDiag)}
         </div>
       );

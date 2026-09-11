@@ -76,7 +76,7 @@ describe('Level Validation', () => {
   });
 
   it('should validate aquariums and boats correctly', () => {
-    // 2x2 grid, 1 boat, 3 water, all connected -> aquarium of size 4 with 1 boat
+    // 2x2 grid, 1 boat, 3 water, all connected -> aquarium of water size 3 with 1 boat
     const gridData = {
       cells: [
         [
@@ -89,23 +89,23 @@ describe('Level Validation', () => {
         ]
       ],
       row_hints: [
-        { water_count: 2, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
+        { water_count: 1, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
         { water_count: 2, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }
       ],
       col_hints: [
-        { water_count: 2, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
+        { water_count: 1, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
         { water_count: 2, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }
       ],
       wall_bottom: [[false, false]],
       wall_right: [[false], [false]],
-      grid_hints: { total_water: 4, total_boats: 1, expected_aquariums: { "4": 1 } }
+      grid_hints: { total_water: 3, total_boats: 1, expected_aquariums: { "3": 1 } }
     };
     
     expect(isLevelComplete(gridData as any)).toBe(true);
   });
   
   it('should fail if aquariums sizes do not match', () => {
-    // 2x2 grid, 1 boat, 3 water, separated by a wall into size 1 and size 3
+    // 2x2 grid, 1 boat, 3 water, separated by a wall into size 1 and size 2
     const gridData = {
       cells: [
         [
@@ -118,17 +118,17 @@ describe('Level Validation', () => {
         ]
       ],
       row_hints: [
-        { water_count: 2, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
+        { water_count: 1, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
         { water_count: 2, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }
       ],
       col_hints: [
-        { water_count: 2, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
+        { water_count: 1, water_count_type: HintType.Hidden, boat_count: 1, boat_count_type: HintType.Hidden },
         { water_count: 2, water_count_type: HintType.Hidden, boat_count: 0, boat_count_type: HintType.Hidden }
       ],
-      wall_bottom: [[true, false]], // Boat is walled off from below
-      wall_right: [[true], [false]], // Boat is walled off from right
-      // The expected says we should have one aquarium of size 4
-      grid_hints: { total_water: 4, total_boats: 1, expected_aquariums: { "4": 1 } }
+      wall_bottom: [[true, true]], // (0,1) is walled off from (1,1), splitting water into size 1 and size 2
+      wall_right: [[true], [false]], 
+      // The expected says we should have one aquarium of size 3, but found aquariums are size 1 and size 2
+      grid_hints: { total_water: 3, total_boats: 1, expected_aquariums: { "3": 1 } }
     };
     
     expect(isLevelComplete(gridData as any)).toBe(false);

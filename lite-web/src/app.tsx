@@ -1,7 +1,7 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import { Grid } from './components/Grid';
-import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums } from './model/GridData';
+import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums, levelHasBoats } from './model/GridData';
 import type { GridModelData } from './model/GridData';
 
 const LEVELS: Record<string, any> = {
@@ -19,6 +19,16 @@ const LEVELS: Record<string, any> = {
 };
 
 import { GridImpl } from './engine/GridImpl';
+import { E } from './engine/E';
+
+function toEngineCorner(c: Corner): E.Corner {
+  switch (c) {
+    case Corner.TopLeft: return E.Corner.TopLeft;
+    case Corner.TopRight: return E.Corner.TopRight;
+    case Corner.BottomLeft: return E.Corner.BottomLeft;
+    case Corner.BottomRight: return E.Corner.BottomRight;
+  }
+}
 
 export function App() {
   const [gridData, setGridData] = useState<GridModelData | null>(null);
@@ -28,7 +38,16 @@ export function App() {
   const [dragAction, setDragAction] = useState<{ corner: Corner, content: Content } | null>(null);
   const [won, setWon] = useState(false);
   const [autoFloodAir, setAutoFloodAir] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater>(Content.Water);
+  const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
+  const hasBoats = levelHasBoats(gridData);
+  const hasBoatsRef = useRef(hasBoats);
+  hasBoatsRef.current = hasBoats;
+
+  useEffect(() => {
+    if (!hasBoats && (selectedTool === Content.Boat || selectedTool === Content.NoBoat)) {
+      setSelectedTool(Content.Water);
+    }
+  }, [hasBoats, selectedTool]);
 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
@@ -92,14 +111,29 @@ export function App() {
       loadLevel("Level 01/01");
     }
     const handleUp = () => setIsPointerDown(false);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '1') setSelectedTool(Content.Water);
+      else if (e.key === '2') setSelectedTool(Content.NoWater);
+      else if (e.key === '3' && hasBoatsRef.current) setSelectedTool(Content.Boat);
+      else if (e.key === '4' && hasBoatsRef.current) setSelectedTool(Content.NoBoat);
+    };
     window.addEventListener('pointerup', handleUp);
-    return () => window.removeEventListener('pointerup', handleUp);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('pointerup', handleUp);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   useEffect(() => {
     (window as any).loadLevelString = loadLevelFromString;
     (window as any).loadLevelKey = loadLevel;
-    (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater) => setSelectedTool(tool);
+    (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater | Content.NoBoat) => {
+      if ((tool === Content.Boat || tool === Content.NoBoat) && !hasBoatsRef.current) {
+        return;
+      }
+      setSelectedTool(tool);
+    };
     (window as any).setAutoFloodAir = (val: boolean) => setAutoFloodAir(val);
     (window as any).setDarkMode = (val: boolean) => setIsDarkMode(val);
     (window as any).exportLevelString = () => {
@@ -108,6 +142,9 @@ export function App() {
     };
     (window as any).isWon = () => won;
     (window as any).getGridData = () => gridData;
+    (window as any).putCellAction = (r: number, c: number, corner: Corner, content: Content) => {
+      executeEngineAction(r, c, { corner, content });
+    };
   }, [gridData, won, isDarkMode]);
 
   const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }) => {
@@ -115,18 +152,25 @@ export function App() {
     setGridData(prev => {
       if (!prev) return prev;
       const engine = GridImpl.load_from_grid_data(prev);
+      const eCorner = toEngineCorner(action.corner);
       
-      const currContent = (engine.get_cell(r, c) as any).pure()._content_at(action.corner as unknown as any);
+      const currContent = (engine.get_cell(r, c) as any).pure()._content_at(eCorner);
       if (currContent === Content.Block) return prev;
       
       if (action.content === Content.Water) {
-        (engine.get_cell(r, c) as any).put_water(action.corner as unknown as any);
+        (engine.get_cell(r, c) as any).put_water(eCorner);
       } else if (action.content === Content.NoWater) {
-        (engine.get_cell(r, c) as any).put_nowater(action.corner as unknown as any, false, autoFloodAir);
+        (engine.get_cell(r, c) as any).put_nowater(eCorner, false, autoFloodAir);
       } else if (action.content === Content.Boat) {
         (engine.get_cell(r, c) as any).put_boat();
+      } else if (action.content === Content.NoBoat) {
+        (engine.get_cell(r, c) as any).put_noboat(eCorner);
       } else if (action.content === Content.Nothing) {
-        (engine.get_cell(r, c) as any).remove_content(action.corner as unknown as any, false, autoFloodAir);
+        if (currContent === Content.NoBoat || currContent === Content.NoBoatWater) {
+          (engine.get_cell(r, c) as any).remove_noboat(eCorner);
+        } else {
+          (engine.get_cell(r, c) as any).remove_content(eCorner, false, autoFloodAir);
+        }
       }
       
       const next = engine.to_grid_data();
@@ -160,7 +204,13 @@ export function App() {
     if (e.button === 2) {
       targetContent = currentContent === Content.NoWater ? Content.Nothing : Content.NoWater;
     } else {
-      targetContent = currentContent === selectedTool ? Content.Nothing : selectedTool;
+      if (selectedTool === Content.NoBoat) {
+        targetContent = (currentContent === Content.NoBoat || currentContent === Content.NoBoatWater) ? Content.Nothing : Content.NoBoat;
+      } else if (selectedTool === Content.NoWater) {
+        targetContent = (currentContent === Content.NoWater || currentContent === Content.NoBoatWater) ? Content.Nothing : Content.NoWater;
+      } else {
+        targetContent = currentContent === selectedTool ? Content.Nothing : selectedTool;
+      }
     }
     
     setDragAction({ corner, content: targetContent });
@@ -236,31 +286,50 @@ export function App() {
         </label>
         
         <div class="tool-selector">
-           <span class="text-white font-medium pl-2 pr-1">Tool:</span>
            <button 
              data-testid="tool-water"
              onClick={() => setSelectedTool(Content.Water)}
              class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
+             title="Water (1)"
+             aria-label="Water"
            >
-             <span>💧</span>
-             <span>Water</span>
+             <span class="text-base leading-none">💧</span>
            </button>
            <button 
              data-testid="tool-air"
              onClick={() => setSelectedTool(Content.NoWater)}
              class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
+             title="Air (2)"
+             aria-label="Air"
            >
-             <img src="/icons/nowater.png" class="w-3.5 h-3.5 object-contain" alt="air" />
-             <span>Air</span>
+             <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
            </button>
-           <button 
-             data-testid="tool-boat"
-             onClick={() => setSelectedTool(Content.Boat)}
-             class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
-           >
-             <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
-             <span>Boat</span>
-           </button>
+           {hasBoats && (
+             <>
+               <button 
+                 data-testid="tool-boat"
+                 onClick={() => setSelectedTool(Content.Boat)}
+                 class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
+                 title="Boat (3)"
+                 aria-label="Boat"
+               >
+                 <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+               </button>
+               <button 
+                 data-testid="tool-maybeboat"
+                 data-tool-id="noboat"
+                 onClick={() => setSelectedTool(Content.NoBoat)}
+                 class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
+                 title="Maybe Boat (4)"
+                 aria-label="Maybe Boat"
+               >
+                 <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
+                   <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
+                   <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
+                 </div>
+               </button>
+             </>
+           )}
         </div>
 
         <button
@@ -352,11 +421,7 @@ export function App() {
                       <span class="hint-status-badge badge-satisfied">✓ Done</span>
                     ) : currentWater > gridData.grid_hints.total_water ? (
                       <span class="hint-status-badge badge-over">⚠ Over</span>
-                    ) : (
-                      <span class="hint-status-badge badge-needed">
-                        {gridData.grid_hints.total_water - currentWater} left
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                 )}
 
@@ -378,11 +443,7 @@ export function App() {
                       <span class="hint-status-badge badge-satisfied">✓ Done</span>
                     ) : currentBoats > gridData.grid_hints.total_boats ? (
                       <span class="hint-status-badge badge-over">⚠ Over</span>
-                    ) : (
-                      <span class="hint-status-badge badge-needed">
-                        {gridData.grid_hints.total_boats - currentBoats} left
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                 )}
 
@@ -414,7 +475,7 @@ export function App() {
                                 </svg>
                               )}
                               <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>
-                                {targetSize === 0.5 ? '½' : targetSize}
+                                {targetSize}
                               </span>
                             </div>
                             <div class="aq-info">
