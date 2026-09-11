@@ -45,7 +45,7 @@ L...
     await expect(page.locator('[data-testid="cell-1-0"]')).toHaveAttribute('data-content-left', 'water');
 
     // Visual check: cells have water background styling
-    const waterDiv = page.locator('[data-testid="cell-0-0"] div.bg-\\[var\\(--cell-water\\)\\]');
+    const waterDiv = page.locator('[data-testid="cell-0-0"] div.cell-water');
     await expect(waterDiv).toBeVisible();
   });
 

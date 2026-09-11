@@ -180,29 +180,26 @@ export function App() {
 
   return (
     <div 
-      class="min-h-screen flex flex-col items-center justify-center p-4 relative"
+      class="game-container"
       onPointerUp={() => setIsPointerDown(false)}
       onPointerLeave={() => setIsPointerDown(false)}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 -z-10" />
+      <div class="game-bg" />
       
       {!isTestMode && (
-        <div class="mb-4 flex flex-wrap gap-2 max-w-2xl justify-center">
+        <div class="level-picker">
           {levelKeys.map(key => {
             const isCurrent = key === currentLevelKey;
             const isDone = completedLevels.has(key);
+            const statusClass = isCurrent ? 'level-btn-current' : isDone ? 'level-btn-done' : 'level-btn-unsolved';
             return (
               <button 
                 key={key}
                 onClick={() => loadLevel(key)}
-                class={`px-3 py-1 md:px-4 md:py-2 text-sm md:text-base font-bold transition-all rounded shadow-md flex items-center gap-1.5 ${
-                   isCurrent ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-emerald-900/50' :
-                   isDone ? 'bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 border border-emerald-500/30' :
-                   'bg-blue-600 hover:bg-blue-500 text-white'
-                }`}
+                class={`level-btn ${statusClass}`}
               >
-                {isDone && <span class="text-emerald-300">✓</span>}
+                {isDone && <span>✓</span>}
                 <span>{key}</span>
               </button>
             );
@@ -210,31 +207,31 @@ export function App() {
         </div>
       )}
       
-      <div class="mb-4 flex flex-wrap gap-4 items-center justify-center bg-white/5 p-4 rounded-xl border border-white/10 shadow-lg backdrop-blur-md">
-        <label class="flex items-center space-x-2 text-white font-bold cursor-pointer bg-white/10 px-4 py-2 rounded-full border border-white/20 hover:bg-white/20 transition-colors">
+      <div class="controls-toolbar">
+        <label class="toolbar-toggle">
           <input 
              type="checkbox" 
              data-testid="auto-flood-air"
              checked={autoFloodAir} 
              onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
-             class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-600 focus:ring-2 cursor-pointer"
+             class="checkbox-input"
           />
           <span>Auto-Flood Air (✕)</span>
         </label>
         
-        <div class="flex items-center space-x-2 bg-white/10 px-2 py-1 rounded-full border border-white/20">
+        <div class="tool-selector">
            <span class="text-white font-bold pl-2 pr-1">Tool:</span>
            <button 
              data-testid="tool-water"
              onClick={() => setSelectedTool(Content.Water)}
-             class={`px-4 py-1 rounded-full font-bold transition-all ${selectedTool === Content.Water ? 'bg-blue-500 text-white shadow-lg scale-105' : 'text-blue-200 hover:bg-white/10'}`}
+             class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
            >
              💧 Water
            </button>
            <button 
              data-testid="tool-boat"
              onClick={() => setSelectedTool(Content.Boat)}
-             class={`px-4 py-1 rounded-full font-bold transition-all ${selectedTool === Content.Boat ? 'bg-amber-500 text-white shadow-lg scale-105' : 'text-amber-200 hover:bg-white/10'}`}
+             class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
            >
              ⛵ Boat
            </button>
@@ -243,7 +240,7 @@ export function App() {
         <button
           data-testid="btn-restart"
           onClick={() => loadLevel(currentLevelKey)}
-          class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full border border-white/20 transition-all flex items-center gap-1.5 shadow-md active:scale-95"
+          class="btn-restart"
           title="Restart Level"
         >
           <span>🔄</span>
@@ -251,19 +248,19 @@ export function App() {
         </button>
       </div>
 
-      <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4 drop-shadow-lg">
+      <h1 class="game-title">
         Liquidum Lite
       </h1>
 
-      <div class="min-h-[72px] flex items-center justify-center mb-4 w-full max-w-xl transition-all">
+      <div class="banner-slot">
         {won ? (
-          <div data-testid="win-banner" class="w-full px-6 py-3 bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 rounded-2xl flex flex-wrap items-center justify-between gap-4 shadow-[0_0_30px_rgba(16,185,129,0.3)] backdrop-blur-md">
-            <div class="text-xl font-black flex items-center gap-2">🎉 Level Complete! 🎉</div>
+          <div data-testid="win-banner" class="win-banner">
+            <div class="win-title">🎉 Level Complete! 🎉</div>
             <div class="flex items-center gap-2">
               <button
                 data-testid="btn-play-again"
                 onClick={() => loadLevel(currentLevelKey)}
-                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/20 shadow transition-transform hover:scale-105 active:scale-95 flex items-center gap-1.5 text-sm"
+                class="win-btn-again"
               >
                 <span>🔄</span>
                 <span>Play Again</span>
@@ -272,7 +269,7 @@ export function App() {
                 <button
                   data-testid="btn-next-level"
                   onClick={() => loadLevel(nextLevelKey)}
-                  class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center gap-1.5 text-sm"
+                  class="win-btn-next"
                 >
                   <span>Next Level ({nextLevelKey})</span>
                   <span>→</span>
@@ -281,7 +278,7 @@ export function App() {
             </div>
           </div>
         ) : (
-          <div class="text-xs text-slate-400/70 font-medium tracking-wide bg-white/5 px-4 py-1.5 rounded-full border border-white/5">
+          <div class="controls-hint">
             Left-click: Water/Boat • Right-click: Air (✕)
           </div>
         )}
@@ -291,9 +288,9 @@ export function App() {
         <div class="flex flex-col items-center">
           {/* Grid Hints Header */}
           {(gridData.grid_hints.total_water > 0 || gridData.grid_hints.total_boats > 0 || Object.entries(gridData.grid_hints.expected_aquariums).some(([k, v]) => k !== "0" && v > 0)) && (
-            <div class="mb-4 flex flex-wrap gap-5 items-center justify-center text-lg font-black text-white/80 bg-white/5 px-6 py-2.5 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md">
+            <div class="grid-hints-card">
               {gridData.grid_hints.total_water > 0 && (
-                 <div class={`flex items-center gap-1.5 transition-colors ${
+                 <div class={`hint-stat-item ${
                    currentWater === gridData.grid_hints.total_water ? 'text-sky-400 font-bold' :
                    currentWater > gridData.grid_hints.total_water ? 'text-red-400 font-bold' :
                    'text-slate-300'
@@ -303,7 +300,7 @@ export function App() {
                  </div>
               )}
               {gridData.grid_hints.total_boats > 0 && (
-                 <div class={`flex items-center gap-1.5 transition-colors ${
+                 <div class={`hint-stat-item ${
                    currentBoats === gridData.grid_hints.total_boats ? 'text-amber-400 font-bold' :
                    currentBoats > gridData.grid_hints.total_boats ? 'text-red-400 font-bold' :
                    'text-slate-300'
@@ -313,8 +310,8 @@ export function App() {
                  </div>
               )}
               {Object.keys(gridData.grid_hints.expected_aquariums).some(k => k !== "0") && (
-                 <div class="flex flex-wrap gap-2 items-center border-l border-white/20 pl-4">
-                   <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold mr-1">Aquariums:</span>
+                 <div class="aquarium-section">
+                   <span class="aquarium-label">Aquariums:</span>
                    {Object.entries(gridData.grid_hints.expected_aquariums)
                      .filter(([k, v]) => k !== "0" && v > 0)
                      .map(([sizeStr, expectedCount]) => {
@@ -322,12 +319,9 @@ export function App() {
                        const actualCount = getActualCount(targetSize);
                        const isSatisfied = actualCount === expectedCount;
                        const isOver = actualCount > expectedCount;
+                       const badgeClass = isSatisfied ? 'aquarium-badge-satisfied' : isOver ? 'aquarium-badge-over' : 'aquarium-badge-normal';
                        return (
-                         <span class={`px-2.5 py-1 rounded text-sm font-mono border transition-all ${
-                           isSatisfied ? 'bg-sky-500/20 border-sky-400/40 text-sky-300 font-bold shadow-[0_0_10px_rgba(56,189,248,0.2)]' :
-                           isOver ? 'bg-red-500/20 border-red-400/40 text-red-300 font-bold' :
-                           'bg-white/5 border-white/10 text-slate-300'
-                         }`}>
+                         <span key={sizeStr} class={`aquarium-badge ${badgeClass}`}>
                            {expectedCount}x[{targetSize}] ({actualCount})
                          </span>
                        );
@@ -337,11 +331,7 @@ export function App() {
             </div>
           )}
 
-          <div class={`backdrop-blur-md bg-white/5 p-4 md:p-8 rounded-3xl border transition-all ${
-            won 
-              ? 'border-emerald-500/50 ring-2 ring-emerald-400/20 pointer-events-none' 
-              : 'border-white/10'
-          } shadow-[0_0_40px_rgba(0,0,0,0.3)]`}>
+          <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
             <Grid 
               gridData={gridData} 
               onCellPointerDown={handleCellDown}

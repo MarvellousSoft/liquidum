@@ -23,7 +23,35 @@ interface CellProps {
   onPointerUp?: (row: number, col: number, e: PointerEvent) => void;
 }
 
-export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, hasLeftWall, isBlockTopNeighbor, isBlockBottomNeighbor, isBlockLeftNeighbor, isBlockRightNeighbor, isTopEdge, isLeftEdge, isBottomEdge, isRightEdge, onPointerDown, onPointerEnter, onPointerUp }: CellProps) {
+const getContentName = (c: Content) => {
+  switch (c) {
+    case Content.Water: return 'water';
+    case Content.NoWater: return 'air';
+    case Content.Boat: return 'boat';
+    case Content.Block: return 'block';
+    case Content.NoBoat: return 'noboat';
+    case Content.NoBoatWater: return 'noboatwater';
+    default: return 'none';
+  }
+};
+
+const getCornerAlignClass = (corner: Corner, clipped: boolean): string => {
+  if (!clipped) return 'align-center';
+  switch (corner) {
+    case Corner.TopLeft: return 'align-top-left';
+    case Corner.BottomRight: return 'align-bottom-right';
+    case Corner.TopRight: return 'align-top-right';
+    case Corner.BottomLeft: return 'align-bottom-left';
+    default: return 'align-center';
+  }
+};
+
+export function Cell({ 
+  cell, row, col, 
+  hasBottomWall, hasRightWall, hasTopWall, hasLeftWall, 
+  isTopEdge, isLeftEdge, isBottomEdge, isRightEdge, 
+  onPointerDown, onPointerEnter, onPointerUp 
+}: CellProps) {
   const isWaterLeft = cell.c_left === Content.Water;
   const isWaterRight = cell.c_right === Content.Water;
   
@@ -37,34 +65,26 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
   const isBlockRight = cell.c_right === Content.Block;
 
   const renderHalf = (corner: Corner, isWater: boolean, isNoWater: boolean, isBoat: boolean, isBlock: boolean, clipPath?: string) => {
-    let alignment = 'items-center justify-center';
-    if (clipPath) {
-      if (corner === Corner.TopLeft) alignment = 'items-start justify-start pl-0.5 pt-0.5 sm:pl-1 sm:pt-1';
-      else if (corner === Corner.BottomRight) alignment = 'items-end justify-end pr-0.5 pb-0.5 sm:pr-1 sm:pb-1';
-      else if (corner === Corner.TopRight) alignment = 'items-start justify-end pr-0.5 pt-0.5 sm:pr-1 sm:pt-1';
-      else if (corner === Corner.BottomLeft) alignment = 'items-end justify-start pl-0.5 pb-0.5 sm:pl-1 sm:pb-1';
-    }
+    const alignment = getCornerAlignClass(corner, Boolean(clipPath));
   
     let content = null;
-    // We don't render a background div for blocks anymore if the whole cell is a block,
-    // we set it on the parent container. But for half-blocks (not possible in Liquidum currently, but safe):
-    if (isBlock) content = <div class="absolute inset-0 bg-black z-10"></div>;
-    else if (isWater) content = <div class="absolute inset-0 bg-[var(--cell-water)] border border-black/10"></div>;
-    else if (isBoat) content = <div class={`absolute inset-0 flex ${alignment} text-base sm:text-xl`}>⛵</div>;
-    else if (isNoWater) content = <div class={`absolute inset-0 flex ${alignment} text-[var(--text-secondary)] opacity-50 font-bold text-sm sm:text-base`}>✕</div>;
+    if (isBlock) content = <div class="cell-block" />;
+    else if (isWater) content = <div class="cell-water" />;
+    else if (isBoat) content = <div class={`cell-boat ${alignment}`}>⛵</div>;
+    else if (isNoWater) content = <div class={`cell-air ${alignment}`}>✕</div>;
     
     if (!content) return null;
-    return clipPath ? <div class="absolute inset-0" style={{ clipPath }}>{content}</div> : content;
+    return clipPath ? <div class="cell-layer" style={{ clipPath }}>{content}</div> : content;
   };
 
   const renderDiagonalLine = (type: CellType.IncDiag | CellType.DecDiag) => {
     const isInc = type === CellType.IncDiag;
     return (
-      <svg class="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible">
+      <svg class="diag-svg">
         <line
-          x1={isInc ? "0%" : "0%"}
+          x1="0%"
           y1={isInc ? "100%" : "0%"}
-          x2={isInc ? "100%" : "100%"}
+          x2="100%"
           y2={isInc ? "0%" : "100%"}
           stroke="black"
           stroke-width="3"
@@ -80,26 +100,20 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
     } 
     
     if (cell.type === CellType.IncDiag) {
-      // /
-      const clipTopLeft = 'polygon(0 0, 100% 0, 0 100%)';
-      const clipBottomRight = 'polygon(100% 0, 100% 100%, 0 100%)';
       return (
-        <div class="absolute inset-0 pointer-events-none">
-          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, clipTopLeft)}
-          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, clipBottomRight)}
+        <div class="cell-content-layer">
+          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 0, 0 100%)')}
+          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(100% 0, 100% 100%, 0 100%)')}
           {renderDiagonalLine(CellType.IncDiag)}
         </div>
       );
     }
     
     if (cell.type === CellType.DecDiag) {
-      // \
-      const clipTopRight = 'polygon(0 0, 100% 0, 100% 100%)';
-      const clipBottomLeft = 'polygon(0 0, 100% 100%, 0 100%)';
       return (
-        <div class="absolute inset-0 pointer-events-none">
-          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, clipTopRight)}
-          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, clipBottomLeft)}
+        <div class="cell-content-layer">
+          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(0 0, 100% 0, 100% 100%)')}
+          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 100%, 0 100%)')}
           {renderDiagonalLine(CellType.DecDiag)}
         </div>
       );
@@ -119,20 +133,7 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
     }
   };
 
-  // If this cell is a block, it should be visually merged with neighbor blocks.
   const isBlock = cell.c_left === Content.Block && cell.type === CellType.Single;
-
-  const getContentName = (c: Content) => {
-    switch (c) {
-      case Content.Water: return 'water';
-      case Content.NoWater: return 'air';
-      case Content.Boat: return 'boat';
-      case Content.Block: return 'block';
-      case Content.NoBoat: return 'noboat';
-      case Content.NoBoatWater: return 'noboatwater';
-      default: return 'none';
-    }
-  };
 
   return (
     <div 
@@ -142,8 +143,7 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
       data-cell-type={cell.type}
       data-content-left={getContentName(cell.c_left)}
       data-content-right={getContentName(cell.c_right)}
-      class="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 cursor-pointer select-none"
-      style={{ backgroundColor: isBlock ? '#000000' : 'var(--cell-bg)' }}
+      class={`cell ${isBlock ? 'cell-block-bg' : ''}`}
       onPointerDown={(e) => {
         const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);
         onPointerDown?.(row, col, corner, e);
@@ -155,18 +155,25 @@ export function Cell({ cell, row, col, hasBottomWall, hasRightWall, hasTopWall, 
       onPointerUp={(e) => onPointerUp?.(row, col, e)}
       onContextMenu={(e) => e.preventDefault()}
     >
-      {/* Faint Grid Lines (drawn under content) */}
-      {!isRightEdge && !hasRightWall && <div class="absolute top-0 bottom-0 right-0 pointer-events-none" style={{ width: '1px', marginRight: '-0.5px', backgroundColor: 'rgba(255,255,255,0.08)' }} />}
-      {!isBottomEdge && !hasBottomWall && <div class="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: '1px', marginBottom: '-0.5px', backgroundColor: 'rgba(255,255,255,0.08)' }} />}
+      {/* Interior Grid Lines */}
+      {!isRightEdge && !hasRightWall && <div class="cell-grid-line-v" />}
+      {!isBottomEdge && !hasBottomWall && <div class="cell-grid-line-h" />}
 
       {renderContent()}
       
-      {/* Overlay Thick Walls. */}
-      {(hasTopWall || isTopEdge) && <div class="absolute top-0 left-0 right-0 bg-black z-20 pointer-events-none" style={{ height: '3px', marginTop: isTopEdge ? '0px' : '-1.5px', marginLeft: isLeftEdge ? '0px' : '-1.5px', marginRight: isRightEdge ? '0px' : '-1.5px' }} />}
-      {(hasBottomWall || isBottomEdge) && <div class="absolute bottom-0 left-0 right-0 bg-black z-20 pointer-events-none" style={{ height: '3px', marginBottom: isBottomEdge ? '0px' : '-1.5px', marginLeft: isLeftEdge ? '0px' : '-1.5px', marginRight: isRightEdge ? '0px' : '-1.5px' }} />}
-      {(hasLeftWall || isLeftEdge) && <div class="absolute top-0 bottom-0 left-0 bg-black z-20 pointer-events-none" style={{ width: '3px', marginLeft: isLeftEdge ? '0px' : '-1.5px', marginTop: isTopEdge ? '0px' : '-1.5px', marginBottom: isBottomEdge ? '0px' : '-1.5px' }} />}
-      {(hasRightWall || isRightEdge) && <div class="absolute top-0 bottom-0 right-0 bg-black z-20 pointer-events-none" style={{ width: '3px', marginRight: isRightEdge ? '0px' : '-1.5px', marginTop: isTopEdge ? '0px' : '-1.5px', marginBottom: isBottomEdge ? '0px' : '-1.5px' }} />}
+      {/* Overlay Thick Walls */}
+      {(hasTopWall || isTopEdge) && (
+        <div class={`cell-wall cell-wall-top ${isTopEdge ? 'edge-top' : ''} ${isLeftEdge ? 'edge-left' : ''} ${isRightEdge ? 'edge-right' : ''}`} />
+      )}
+      {(hasBottomWall || isBottomEdge) && (
+        <div class={`cell-wall cell-wall-bottom ${isBottomEdge ? 'edge-bottom' : ''} ${isLeftEdge ? 'edge-left' : ''} ${isRightEdge ? 'edge-right' : ''}`} />
+      )}
+      {(hasLeftWall || isLeftEdge) && (
+        <div class={`cell-wall cell-wall-left ${isLeftEdge ? 'edge-left' : ''} ${isTopEdge ? 'edge-top' : ''} ${isBottomEdge ? 'edge-bottom' : ''}`} />
+      )}
+      {(hasRightWall || isRightEdge) && (
+        <div class={`cell-wall cell-wall-right ${isRightEdge ? 'edge-right' : ''} ${isTopEdge ? 'edge-top' : ''} ${isBottomEdge ? 'edge-bottom' : ''}`} />
+      )}
     </div>
   );
 }
-

@@ -16,19 +16,19 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
 
   if (rows === 0 || cols === 0) return <div>Empty Grid</div>;
 
-  const getHintColor = (current: number, target: number, isWater: boolean, targetType: HintType, bools: boolean[]) => {
+  const getHintClass = (current: number, target: number, isWater: boolean, targetType: HintType, bools: boolean[]) => {
     if (target < 0 && targetType === HintType.Hidden) return 'opacity-0';
     if (target < 0) {
-      if (isTogether(bools) === targetType) return isWater ? 'text-[var(--cell-water)] font-bold' : 'text-white font-bold';
-      return 'text-slate-400 font-bold';
+      if (isTogether(bools) === targetType) return isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+      return 'hint-normal';
     }
     
     const countOk = current === target;
     const typeOk = targetType === HintType.Hidden || isTogether(bools) === targetType;
     
-    if (countOk && typeOk) return isWater ? 'text-[var(--cell-water)] font-bold' : 'text-white font-bold';
-    if (current > target) return 'text-red-500 font-bold';
-    return 'text-slate-400 font-bold';
+    if (countOk && typeOk) return isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+    if (current > target) return 'hint-over';
+    return 'hint-normal';
   };
   
   const isBlockSide = (r: number, c: number, side: 'top' | 'bottom' | 'left' | 'right') => {
@@ -59,7 +59,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
       {/* Column Hints Header */}
       <div class="flex">
         {/* Empty top-left corner */}
-        <div class="w-16 sm:w-20 md:w-24 flex-shrink-0"></div>
+        <div class="grid-corner-spacer" />
         {/* Column hints */}
         <div class="flex" style={{ width: `calc(${cols} * var(--cell-size, 3rem))` }}>
           {gridData.col_hints.map((hint, c) => {
@@ -70,9 +70,17 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
              const bBools = colBools(gridData, c, Content.Boat);
              
              return (
-              <div class="w-8 sm:w-10 md:w-12 flex flex-col justify-end items-center pb-2 text-sm sm:text-base font-mono gap-1">
-                 {(hint.water_count >= 0 || hint.water_count_type !== HintType.Hidden) && <span class={getHintColor(wCount, hint.water_count, true, hint.water_count_type, wBools)}>{renderHint(hint.water_count, hint.water_count_type, true)}</span>}
-                 {(hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && <span class={getHintColor(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}>{renderHint(hint.boat_count, hint.boat_count_type, false)}</span>}
+              <div key={c} class="col-hint">
+                 {(hint.water_count >= 0 || hint.water_count_type !== HintType.Hidden) && (
+                   <span class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}>
+                     {renderHint(hint.water_count, hint.water_count_type, true)}
+                   </span>
+                 )}
+                 {(hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && (
+                   <span class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}>
+                     {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                   </span>
+                 )}
               </div>
             );
           })}
@@ -88,11 +96,19 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
         const bBools = rowBools(gridData, r, Content.Boat);
         
         return (
-        <div class="flex">
+        <div key={r} class="flex">
           {/* Row hint */}
-          <div class="w-16 sm:w-20 md:w-24 flex items-center justify-end pr-4 gap-2 text-sm sm:text-base font-mono">
-             {(gridData.row_hints[r].water_count >= 0 || gridData.row_hints[r].water_count_type !== HintType.Hidden) && <span class={getHintColor(wCountRow, gridData.row_hints[r].water_count, true, gridData.row_hints[r].water_count_type, wBools)}>{renderHint(gridData.row_hints[r].water_count, gridData.row_hints[r].water_count_type, true)}</span>}
-             {(gridData.row_hints[r].boat_count >= 0 || gridData.row_hints[r].boat_count_type !== HintType.Hidden) && <span class={getHintColor(bCountRow, gridData.row_hints[r].boat_count, false, gridData.row_hints[r].boat_count_type, bBools)}>{renderHint(gridData.row_hints[r].boat_count, gridData.row_hints[r].boat_count_type, false)}</span>}
+          <div class="row-hint">
+             {(gridData.row_hints[r].water_count >= 0 || gridData.row_hints[r].water_count_type !== HintType.Hidden) && (
+               <span class={getHintClass(wCountRow, gridData.row_hints[r].water_count, true, gridData.row_hints[r].water_count_type, wBools)}>
+                 {renderHint(gridData.row_hints[r].water_count, gridData.row_hints[r].water_count_type, true)}
+               </span>
+             )}
+             {(gridData.row_hints[r].boat_count >= 0 || gridData.row_hints[r].boat_count_type !== HintType.Hidden) && (
+               <span class={getHintClass(bCountRow, gridData.row_hints[r].boat_count, false, gridData.row_hints[r].boat_count_type, bBools)}>
+                 {renderHint(gridData.row_hints[r].boat_count, gridData.row_hints[r].boat_count_type, false)}
+               </span>
+             )}
           </div>
           {/* Row cells */}
           <div class="flex">
@@ -109,6 +125,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
               
               return (
                 <Cell 
+                  key={c}
                   cell={cell} 
                   row={r} 
                   col={c} 
