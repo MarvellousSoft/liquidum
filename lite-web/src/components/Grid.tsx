@@ -18,17 +18,16 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
 
   const getHintClass = (current: number, target: number, isWater: boolean, targetType: HintType, bools: boolean[]) => {
     if (target < 0 && targetType === HintType.Hidden) return 'opacity-0';
+    let colorClass = 'hint-normal';
     if (target < 0) {
-      if (isTogether(bools) === targetType) return isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
-      return 'hint-normal';
+      if (isTogether(bools) === targetType) colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+    } else {
+      const countOk = current === target;
+      const typeOk = targetType === HintType.Hidden || isTogether(bools) === targetType;
+      if (countOk && typeOk) colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+      else if (current > target) colorClass = 'hint-over';
     }
-    
-    const countOk = current === target;
-    const typeOk = targetType === HintType.Hidden || isTogether(bools) === targetType;
-    
-    if (countOk && typeOk) return isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
-    if (current > target) return 'hint-over';
-    return 'hint-normal';
+    return `${colorClass} godot-text-outline`;
   };
   
   const isBlockSide = (r: number, c: number, side: 'top' | 'bottom' | 'left' | 'right') => {
@@ -47,11 +46,73 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
   };
   
   const renderHint = (count: number, type: HintType, isWater: boolean) => {
-    if (count >= 0) return `${isWater ? '' : '⛵'}${count}`;
-    if (type === HintType.Together) return '{?}';
-    if (type === HintType.Separated) return '-?-';
-    if (type === HintType.Zero) return '0';
+    const boatImg = isWater ? null : <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />;
+    const boatChar = isWater ? '' : '⛵';
+    if (count >= 0) {
+      if (type === HintType.Together) {
+        return (
+          <span class="flex items-center">
+            {boatImg}{`{ ${count} }`}
+            <span class="sr-only">{boatChar}{count}</span>
+          </span>
+        );
+      }
+      if (type === HintType.Separated) {
+        return (
+          <span class="flex items-center">
+            {boatImg}{`- ${count} -`}
+            <span class="sr-only">{boatChar}{count}</span>
+          </span>
+        );
+      }
+      return (
+        <span class="flex items-center">
+          {boatImg}{count}
+          <span class="sr-only">{boatChar}{count}</span>
+        </span>
+      );
+    }
+    if (type === HintType.Together) {
+      return (
+        <span class="flex items-center">
+          {boatImg}{`{ ? }`}
+          <span class="sr-only">{boatChar}{'{?}'}</span>
+        </span>
+      );
+    }
+    if (type === HintType.Separated) {
+      return (
+        <span class="flex items-center">
+          {boatImg}{`- ? -`}
+          <span class="sr-only">{boatChar}{'-?-'}</span>
+        </span>
+      );
+    }
+    if (type === HintType.Zero) {
+      return (
+        <span class="flex items-center">
+          {boatImg}0
+          <span class="sr-only">{boatChar}0</span>
+        </span>
+      );
+    }
     return '';
+  };  const isWaterAbove = (r: number, c: number): boolean => {
+    if (r <= 0) return false;
+    const hasTopWall = gridData.wall_bottom?.[r - 1]?.[c] ?? false;
+    if (hasTopWall) return false;
+    const cellAbove = gridData.cells[r - 1]?.[c];
+    if (!cellAbove) return false;
+    if (cellAbove.type === CellType.Single) {
+      return cellAbove.c_left === Content.Water || cellAbove.c_left === Content.Boat;
+    }
+    if (cellAbove.type === CellType.IncDiag) {
+      return cellAbove.c_right === Content.Water || cellAbove.c_right === Content.Boat;
+    }
+    if (cellAbove.type === CellType.DecDiag) {
+      return cellAbove.c_left === Content.Water || cellAbove.c_left === Content.Boat;
+    }
+    return false;
   };
 
   return (
@@ -73,12 +134,12 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
               <div key={c} class="col-hint">
                  {(hint.water_count >= 0 || hint.water_count_type !== HintType.Hidden) && (
                    <span class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}>
-                     {renderHint(hint.water_count, hint.water_count_type, true)}
+                      {renderHint(hint.water_count, hint.water_count_type, true)}
                    </span>
                  )}
                  {(hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && (
                    <span class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}>
-                     {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                      {renderHint(hint.boat_count, hint.boat_count_type, false)}
                    </span>
                  )}
               </div>
@@ -122,6 +183,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
               const isBlockBottom = isBlockSide(r + 1, c, 'top');
               const isBlockLeft = isBlockSide(r, c - 1, 'right');
               const isBlockRight = isBlockSide(r, c + 1, 'left');
+              const isSurface = !isWaterAbove(r, c);
               
               return (
                 <Cell 
@@ -141,6 +203,7 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
                   isLeftEdge={c === 0}
                   isBottomEdge={r === rows - 1}
                   isRightEdge={c === cols - 1}
+                  isSurface={isSurface}
                   onPointerDown={onCellPointerDown}
                   onPointerEnter={onCellPointerEnter}
                   onPointerUp={onCellPointerUp}
@@ -149,7 +212,8 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
             })}
           </div>
         </div>
-      )})}
+      );
+    })}
     </div>
   );
 }

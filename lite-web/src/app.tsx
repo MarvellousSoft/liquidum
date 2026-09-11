@@ -26,6 +26,17 @@ export function App() {
   const [autoFloodAir, setAutoFloodAir] = useState(false);
   const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat>(Content.Water);
 
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('liquidum_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('liquidum_theme', isDarkMode ? 'dark' : 'light');
+    }
+  }, [isDarkMode]);
+
   const isTestMode = typeof window !== 'undefined' && (
     new URLSearchParams(window.location.search).get('mode') === 'test' ||
     new URLSearchParams(window.location.search).has('testLevel') ||
@@ -86,13 +97,14 @@ export function App() {
     (window as any).loadLevelKey = loadLevel;
     (window as any).setTool = (tool: Content.Water | Content.Boat) => setSelectedTool(tool);
     (window as any).setAutoFloodAir = (val: boolean) => setAutoFloodAir(val);
+    (window as any).setDarkMode = (val: boolean) => setIsDarkMode(val);
     (window as any).exportLevelString = () => {
       if (!gridData) return '';
       return GridImpl.load_from_grid_data(gridData).to_str();
     };
     (window as any).isWon = () => won;
     (window as any).getGridData = () => gridData;
-  }, [gridData, won]);
+  }, [gridData, won, isDarkMode]);
 
   const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }) => {
     if (won) return;
@@ -180,7 +192,7 @@ export function App() {
 
   return (
     <div 
-      class="game-container"
+      class={`game-container ${isDarkMode ? 'theme-dark' : ''}`}
       onPointerUp={() => setIsPointerDown(false)}
       onPointerLeave={() => setIsPointerDown(false)}
       onContextMenu={(e) => e.preventDefault()}
@@ -199,7 +211,7 @@ export function App() {
                 onClick={() => loadLevel(key)}
                 class={`level-btn ${statusClass}`}
               >
-                {isDone && <span>✓</span>}
+                {isDone && <img src="/icons/checkmark.png" class="w-3.5 h-3.5 object-contain" alt="done" />}
                 <span>{key}</span>
               </button>
             );
@@ -220,20 +232,22 @@ export function App() {
         </label>
         
         <div class="tool-selector">
-           <span class="text-white font-bold pl-2 pr-1">Tool:</span>
+           <span class="text-white font-medium pl-2 pr-1">Tool:</span>
            <button 
              data-testid="tool-water"
              onClick={() => setSelectedTool(Content.Water)}
              class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
            >
-             💧 Water
+             <span>💧</span>
+             <span>Water</span>
            </button>
            <button 
              data-testid="tool-boat"
              onClick={() => setSelectedTool(Content.Boat)}
              class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
            >
-             ⛵ Boat
+             <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+             <span>Boat</span>
            </button>
         </div>
 
@@ -243,8 +257,17 @@ export function App() {
           class="btn-restart"
           title="Restart Level"
         >
-          <span>🔄</span>
+          <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
           <span>Restart</span>
+        </button>
+
+        <button
+          data-testid="btn-theme-toggle"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          class="btn-theme-toggle"
+          title={isDarkMode ? "Switch to Aquatic Light Mode" : "Switch to Deep Ocean Dark Mode"}
+        >
+          <span>{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
       </div>
 
@@ -262,7 +285,7 @@ export function App() {
                 onClick={() => loadLevel(currentLevelKey)}
                 class="win-btn-again"
               >
-                <span>🔄</span>
+                <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
                 <span>Play Again</span>
               </button>
               {nextLevelKey && (
@@ -291,22 +314,22 @@ export function App() {
             <div class="grid-hints-card">
               {gridData.grid_hints.total_water > 0 && (
                  <div class={`hint-stat-item ${
-                   currentWater === gridData.grid_hints.total_water ? 'text-sky-400 font-bold' :
-                   currentWater > gridData.grid_hints.total_water ? 'text-red-400 font-bold' :
-                   'text-slate-300'
+                   currentWater === gridData.grid_hints.total_water ? 'hint-satisfied-water' :
+                   currentWater > gridData.grid_hints.total_water ? 'hint-over' :
+                   'hint-normal'
                  }`}>
                    <span>💧</span>
-                   <span>{currentWater} / {gridData.grid_hints.total_water}</span>
+                   <span class="godot-text-outline">{currentWater} / {gridData.grid_hints.total_water}</span>
                  </div>
               )}
               {gridData.grid_hints.total_boats > 0 && (
                  <div class={`hint-stat-item ${
-                   currentBoats === gridData.grid_hints.total_boats ? 'text-amber-400 font-bold' :
-                   currentBoats > gridData.grid_hints.total_boats ? 'text-red-400 font-bold' :
-                   'text-slate-300'
+                   currentBoats === gridData.grid_hints.total_boats ? 'hint-satisfied-boat' :
+                   currentBoats > gridData.grid_hints.total_boats ? 'hint-over' :
+                   'hint-normal'
                  }`}>
-                   <span>⛵</span>
-                   <span>{currentBoats} / {gridData.grid_hints.total_boats}</span>
+                   <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+                   <span class="godot-text-outline">{currentBoats} / {gridData.grid_hints.total_boats}</span>
                  </div>
               )}
               {Object.keys(gridData.grid_hints.expected_aquariums).some(k => k !== "0") && (

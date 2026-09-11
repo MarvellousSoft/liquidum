@@ -18,6 +18,7 @@ interface CellProps {
   isLeftEdge: boolean;
   isBottomEdge: boolean;
   isRightEdge: boolean;
+  isSurface?: boolean;
   onPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerUp?: (row: number, col: number, e: PointerEvent) => void;
@@ -49,7 +50,8 @@ const getCornerAlignClass = (corner: Corner, clipped: boolean): string => {
 export function Cell({ 
   cell, row, col, 
   hasBottomWall, hasRightWall, hasTopWall, hasLeftWall, 
-  isTopEdge, isLeftEdge, isBottomEdge, isRightEdge, 
+  isTopEdge, isLeftEdge, isBottomEdge, isRightEdge,
+  isSurface = true,
   onPointerDown, onPointerEnter, onPointerUp 
 }: CellProps) {
   const isWaterLeft = cell.c_left === Content.Water;
@@ -64,14 +66,24 @@ export function Cell({
   const isBlockLeft = cell.c_left === Content.Block;
   const isBlockRight = cell.c_right === Content.Block;
 
-  const renderHalf = (corner: Corner, isWater: boolean, isNoWater: boolean, isBoat: boolean, isBlock: boolean, clipPath?: string) => {
+  const renderHalf = (corner: Corner, isWater: boolean, isNoWater: boolean, isBoat: boolean, isBlock: boolean, clipPath?: string, halfIsSurface: boolean = isSurface) => {
     const alignment = getCornerAlignClass(corner, Boolean(clipPath));
   
     let content = null;
     if (isBlock) content = <div class="cell-block" />;
-    else if (isWater) content = <div class="cell-water" />;
-    else if (isBoat) content = <div class={`cell-boat ${alignment}`}>⛵</div>;
-    else if (isNoWater) content = <div class={`cell-air ${alignment}`}>✕</div>;
+    else if (isWater) content = <div class={`cell-water ${halfIsSurface ? 'is-surface' : ''}`} />;
+    else if (isBoat) content = (
+      <div class={`cell-boat ${alignment}`}>
+        <img src="/icons/boat_small.png" alt="boat" class="cell-sprite boat-sprite" />
+        <span class="sr-only">⛵</span>
+      </div>
+    );
+    else if (isNoWater) content = (
+      <div class={`cell-air ${alignment}`}>
+        <img src="/icons/nowater.png" alt="air" class="cell-sprite air-sprite" />
+        <span class="sr-only">✕</span>
+      </div>
+    );
     
     if (!content) return null;
     return clipPath ? <div class="cell-layer" style={{ clipPath }}>{content}</div> : content;
@@ -86,7 +98,7 @@ export function Cell({
           y1={isInc ? "100%" : "0%"}
           x2="100%"
           y2={isInc ? "0%" : "100%"}
-          stroke="black"
+          stroke="#000924"
           stroke-width="3"
           stroke-linecap="round"
         />
@@ -96,14 +108,14 @@ export function Cell({
 
   const renderContent = () => {
     if (cell.type === CellType.Single) {
-      return renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft);
+      return renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, undefined, isSurface);
     } 
     
     if (cell.type === CellType.IncDiag) {
       return (
         <div class="cell-content-layer">
-          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 0, 0 100%)')}
-          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(100% 0, 100% 100%, 0 100%)')}
+          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 0, 0 100%)', isSurface)}
+          {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(100% 0, 100% 100%, 0 100%)', false)}
           {renderDiagonalLine(CellType.IncDiag)}
         </div>
       );
@@ -112,8 +124,8 @@ export function Cell({
     if (cell.type === CellType.DecDiag) {
       return (
         <div class="cell-content-layer">
-          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(0 0, 100% 0, 100% 100%)')}
-          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 100%, 0 100%)')}
+          {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, 'polygon(0 0, 100% 0, 100% 100%)', isSurface)}
+          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, 'polygon(0 0, 100% 100%, 0 100%)', false)}
           {renderDiagonalLine(CellType.DecDiag)}
         </div>
       );
