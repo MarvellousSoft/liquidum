@@ -155,6 +155,11 @@ export function parseGridData(data: any): GridModelData {
   const wallBottom = parseBoolMatrix(data["grid_data"]?.[ExportFields.wall_bottom]);
   const wallRight = parseBoolMatrix(data["grid_data"]?.[ExportFields.wall_right]);
 
+  const rawGridHints = data["grid_data"]?.[ExportFields.grid_hints] ?? data["grid_data"]?.["16"] ?? data["grid_hints"] ?? {};
+  const totalWater = rawGridHints[ExportFields.total_water] ?? rawGridHints["8"] ?? data.grid_data?.["8"] ?? -1;
+  const totalBoats = rawGridHints[ExportFields.total_boats] ?? rawGridHints["9"] ?? data.grid_data?.["9"] ?? -1;
+  const expectedAquariums = rawGridHints[ExportFields.expected_aquariums] ?? rawGridHints["10"] ?? data.grid_data?.["10"] ?? {};
+
   return {
     version,
     cells,
@@ -163,7 +168,11 @@ export function parseGridData(data: any): GridModelData {
     col_hints: colHints,
     wall_bottom: wallBottom,
     wall_right: wallRight,
-    grid_hints: { total_water: data.grid_data?.["8"] ?? -1, total_boats: data.grid_data?.["9"] ?? 0, expected_aquariums: data.grid_data?.["10"] ?? {} },
+    grid_hints: { 
+      total_water: totalWater, 
+      total_boats: totalBoats, 
+      expected_aquariums: expectedAquariums 
+    },
     full_name: data.full_name
   };
 }
@@ -172,9 +181,12 @@ export function countWaterCol(gridData: GridModelData, c: number) {
   let count = 0;
   for (let r = 0; r < gridData.cells.length; r++) {
     const cell = gridData.cells[r][c];
-    if (cell.c_left === Content.Water) count += 0.5;
-    if (cell.type === CellType.Single && cell.c_left === Content.Water) count += 0.5;
-    else if (cell.type !== CellType.Single && cell.c_right === Content.Water) count += 0.5;
+    const isWaterLeft = cell.c_left === Content.Water || cell.c_left === Content.Boat;
+    const isWaterRight = cell.c_right === Content.Water || cell.c_right === Content.Boat;
+    
+    if (isWaterLeft) count += 0.5;
+    if (cell.type === CellType.Single && isWaterLeft) count += 0.5;
+    else if (cell.type !== CellType.Single && isWaterRight) count += 0.5;
   }
   return count;
 }
@@ -183,9 +195,12 @@ export function countWaterRow(gridData: GridModelData, r: number) {
   let count = 0;
   for (let c = 0; c < gridData.cells[r].length; c++) {
     const cell = gridData.cells[r][c];
-    if (cell.c_left === Content.Water) count += 0.5;
-    if (cell.type === CellType.Single && cell.c_left === Content.Water) count += 0.5;
-    else if (cell.type !== CellType.Single && cell.c_right === Content.Water) count += 0.5;
+    const isWaterLeft = cell.c_left === Content.Water || cell.c_left === Content.Boat;
+    const isWaterRight = cell.c_right === Content.Water || cell.c_right === Content.Boat;
+    
+    if (isWaterLeft) count += 0.5;
+    if (cell.type === CellType.Single && isWaterLeft) count += 0.5;
+    else if (cell.type !== CellType.Single && isWaterRight) count += 0.5;
   }
   return count;
 }
@@ -217,41 +232,40 @@ export function isTogether(arr: boolean[]): HintType {
   return i === arr.length ? HintType.Together : HintType.Separated;
 }
 
-function rowBools(gridData: GridModelData, r: number, content: Content): boolean[] {
+export function rowBools(gridData: GridModelData, r: number, content: Content): boolean[] {
   const arr: boolean[] = [];
   for (let c = 0; c < gridData.cells[r].length; c++) {
     const cell = gridData.cells[r][c];
+    const hasLeft = cell.c_left === content || (content === Content.Water && cell.c_left === Content.Boat);
+    const hasRight = cell.c_right === content || (content === Content.Water && cell.c_right === Content.Boat);
     if (cell.type === CellType.Single) {
-      arr.push(cell.c_left === content);
-      arr.push(cell.c_right === content);
+      arr.push(hasLeft);
+      arr.push(hasRight);
     } else {
-      arr.push(cell.c_left === content);
-      arr.push(cell.c_right === content); // Note: Original game tracks top/bottom logic for columns too, left/right for rows
+      arr.push(hasLeft);
+      arr.push(hasRight);
     }
   }
   return arr;
 }
 
-function colBools(gridData: GridModelData, c: number, content: Content): boolean[] {
+export function colBools(gridData: GridModelData, c: number, content: Content): boolean[] {
   const arr: boolean[] = [];
   for (let r = 0; r < gridData.cells.length; r++) {
     const cell = gridData.cells[r][c];
+    const hasLeft = cell.c_left === content || (content === Content.Water && cell.c_left === Content.Boat);
+    const hasRight = cell.c_right === content || (content === Content.Water && cell.c_right === Content.Boat);
+    
     if (cell.type === CellType.Single) {
-      arr.push(cell.c_left === content);
-      arr.push(cell.c_right === content);
+      arr.push(hasLeft);
+      arr.push(hasRight);
     } else {
-      // In Godot it's _content_top and _content_bottom for colBools
-      // For Single: same. For Diagonals: Top/Bottom
-      // We'll simplify and just push left/right for now since web doesn't fully track top/bottom in purecell yet, 
-      // but actually we know: TopLeft/TopRight is top.
-      const isTopLeft = cell.c_left;
-      const isBottomRight = cell.c_right;
       if (cell.type === CellType.IncDiag) { // /
-        arr.push(isTopLeft === content);
-        arr.push(isBottomRight === content);
+        arr.push(hasLeft);
+        arr.push(hasRight);
       } else if (cell.type === CellType.DecDiag) { // \
-        arr.push(cell.c_right === content); // TopRight
-        arr.push(cell.c_left === content); // BottomLeft
+        arr.push(hasRight);
+        arr.push(hasLeft);
       }
     }
   }
@@ -263,10 +277,171 @@ export function hintTypeOk(hint: HintType, arr: boolean[]): boolean {
   return isTogether(arr) === hint;
 }
 
+export function getAquariums(gridData: GridModelData): { size: number, boats: number }[] {
+  const rows = gridData.cells.length;
+  const cols = rows > 0 ? gridData.cells[0].length : 0;
+  if (rows === 0 || cols === 0) return [];
+  
+  const visited = new Set<string>();
+  const aquariums: { size: number, boats: number }[] = [];
+  
+  function isBlock(r: number, c: number, corner: Corner): boolean {
+    const cell = gridData.cells[r][c];
+    if (cell.type === CellType.Single) {
+      return cell.c_left === Content.Block || cell.c_right === Content.Block;
+    }
+    if (cell.type === CellType.IncDiag) {
+      return corner === Corner.TopLeft ? cell.c_left === Content.Block : cell.c_right === Content.Block;
+    }
+    if (cell.type === CellType.DecDiag) {
+      return corner === Corner.BottomLeft ? cell.c_left === Content.Block : cell.c_right === Content.Block;
+    }
+    return false;
+  }
+  
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cell = gridData.cells[r][c];
+      let startCorners: Corner[] = [];
+      if (cell.type === CellType.Single) {
+        startCorners = [Corner.TopLeft];
+      } else if (cell.type === CellType.IncDiag) {
+        startCorners = [Corner.TopLeft, Corner.BottomRight];
+      } else if (cell.type === CellType.DecDiag) {
+        startCorners = [Corner.BottomLeft, Corner.TopRight];
+      }
+      
+      for (const startCorner of startCorners) {
+        const startId = `${r},${c},${startCorner}`;
+        if (visited.has(startId)) continue;
+        if (isBlock(r, c, startCorner)) {
+          visited.add(startId);
+          continue;
+        }
+        
+        let aquariumWater = 0;
+        let aquariumBoats = 0;
+        const queue: { r: number, c: number, corner: Corner }[] = [{ r, c, corner: startCorner }];
+        visited.add(startId);
+        
+        while (queue.length > 0) {
+          const curr = queue.shift()!;
+          const currCell = gridData.cells[curr.r][curr.c];
+          
+          if (currCell.type === CellType.Single) {
+            if (currCell.c_left === Content.Water || currCell.c_left === Content.Boat) aquariumWater += 0.5;
+            if (currCell.c_right === Content.Water || currCell.c_right === Content.Boat) aquariumWater += 0.5;
+            if (currCell.c_left === Content.Boat || currCell.c_right === Content.Boat) aquariumBoats += 1;
+          } else if (currCell.type === CellType.IncDiag) {
+            const content = curr.corner === Corner.TopLeft ? currCell.c_left : currCell.c_right;
+            if (content === Content.Water || content === Content.Boat) aquariumWater += 0.5;
+            if (content === Content.Boat) aquariumBoats += 1;
+          } else if (currCell.type === CellType.DecDiag) {
+            const content = curr.corner === Corner.BottomLeft ? currCell.c_left : currCell.c_right;
+            if (content === Content.Water || content === Content.Boat) aquariumWater += 0.5;
+            if (content === Content.Boat) aquariumBoats += 1;
+          }
+          
+          const isLeft = curr.corner === Corner.TopLeft || curr.corner === Corner.BottomLeft;
+          const isTop = curr.corner === Corner.TopLeft || curr.corner === Corner.TopRight;
+          
+          // 1. Try Left
+          if (!(currCell.type !== CellType.Single && !isLeft)) {
+            if (curr.c > 0 && !gridData.wall_right[curr.r]?.[curr.c - 1]) {
+              const nr = curr.r;
+              const nc = curr.c - 1;
+              const nCell = gridData.cells[nr][nc];
+              let nCorner = Corner.TopLeft;
+              if (nCell.type === CellType.IncDiag) nCorner = Corner.BottomRight;
+              else if (nCell.type === CellType.DecDiag) nCorner = Corner.TopRight;
+              
+              const nid = `${nr},${nc},${nCorner}`;
+              if (!visited.has(nid) && !isBlock(nr, nc, nCorner)) {
+                visited.add(nid);
+                queue.push({ r: nr, c: nc, corner: nCorner });
+              }
+            }
+          }
+          
+          // 2. Try Right
+          if (!(currCell.type !== CellType.Single && isLeft)) {
+            if (curr.c < cols - 1 && !gridData.wall_right[curr.r]?.[curr.c]) {
+              const nr = curr.r;
+              const nc = curr.c + 1;
+              const nCell = gridData.cells[nr][nc];
+              let nCorner = Corner.TopLeft;
+              if (nCell.type === CellType.IncDiag) nCorner = Corner.TopLeft;
+              else if (nCell.type === CellType.DecDiag) nCorner = Corner.BottomLeft;
+              
+              const nid = `${nr},${nc},${nCorner}`;
+              if (!visited.has(nid) && !isBlock(nr, nc, nCorner)) {
+                visited.add(nid);
+                queue.push({ r: nr, c: nc, corner: nCorner });
+              }
+            }
+          }
+          
+          // 3. Try Down
+          if (!(currCell.type !== CellType.Single && isTop)) {
+            if (curr.r < rows - 1 && !gridData.wall_bottom[curr.r]?.[curr.c]) {
+              const nr = curr.r + 1;
+              const nc = curr.c;
+              const nCell = gridData.cells[nr][nc];
+              let nCorner = Corner.TopLeft;
+              if (nCell.type === CellType.IncDiag) nCorner = Corner.TopLeft;
+              else if (nCell.type === CellType.DecDiag) nCorner = Corner.TopRight;
+              
+              const nid = `${nr},${nc},${nCorner}`;
+              if (!visited.has(nid) && !isBlock(nr, nc, nCorner)) {
+                visited.add(nid);
+                queue.push({ r: nr, c: nc, corner: nCorner });
+              }
+            }
+          }
+          
+          // 4. Try Up
+          if (!(currCell.type !== CellType.Single && !isTop)) {
+            if (curr.r > 0 && !gridData.wall_bottom[curr.r - 1]?.[curr.c]) {
+              const nr = curr.r - 1;
+              const nc = curr.c;
+              const nCell = gridData.cells[nr][nc];
+              let nCorner = Corner.TopLeft;
+              if (nCell.type === CellType.IncDiag) nCorner = Corner.BottomRight;
+              else if (nCell.type === CellType.DecDiag) nCorner = Corner.BottomLeft;
+              
+              const nid = `${nr},${nc},${nCorner}`;
+              if (!visited.has(nid) && !isBlock(nr, nc, nCorner)) {
+                visited.add(nid);
+                queue.push({ r: nr, c: nc, corner: nCorner });
+              }
+            }
+          }
+        }
+        
+        aquariums.push({ size: aquariumWater, boats: aquariumBoats });
+      }
+    }
+  }
+  
+  return aquariums;
+}
+
 export function isLevelComplete(gridData: GridModelData): boolean {
   if (gridData.cells.length === 0) return false;
   
-  // Check if any hints are unsatisfied
+  // Rule 1: All cells must be filled (no Content.Nothing)
+  for (let r = 0; r < gridData.cells.length; r++) {
+    for (let c = 0; c < gridData.cells[r].length; c++) {
+      const cell = gridData.cells[r][c];
+      if (cell.type === CellType.Single) {
+        if (cell.c_left === Content.Nothing) return false;
+      } else {
+        if (cell.c_left === Content.Nothing || cell.c_right === Content.Nothing) return false;
+      }
+    }
+  }
+  
+  // Check hints
   for (let r = 0; r < gridData.row_hints.length; r++) {
     const hint = gridData.row_hints[r];
     if (hint.water_count >= 0 && countWaterRow(gridData, r) !== hint.water_count) return false;
@@ -287,10 +462,38 @@ export function isLevelComplete(gridData: GridModelData): boolean {
     for (let r = 0; r < gridData.cells.length; r++) totalWater += countWaterRow(gridData, r);
     if (totalWater !== gridData.grid_hints.total_water) return false;
   }
+  
   if (gridData.grid_hints.total_boats >= 0) {
     let totalBoats = 0;
     for (let r = 0; r < gridData.cells.length; r++) totalBoats += countBoatRow(gridData, r);
     if (totalBoats !== gridData.grid_hints.total_boats) return false;
+  }
+  
+  // Check aquariums
+  const expAquariums = gridData.grid_hints.expected_aquariums;
+  if (expAquariums && Object.keys(expAquariums).length > 0) {
+    const foundAquariums = getAquariums(gridData);
+    
+    for (const sizeKey of Object.keys(expAquariums)) {
+      const expCount = expAquariums[sizeKey];
+      if (expCount === -1) continue;
+      const parsedSize = parseFloat(sizeKey);
+      
+      let actualCount = 0;
+      for (const aq of foundAquariums) {
+        if (Math.abs(aq.size - parsedSize) < 0.01) {
+          actualCount++;
+        }
+      }
+      if (actualCount !== expCount) return false;
+    }
+  }
+  
+  if (gridData.grid_hints.total_boats > 0) {
+    const foundAquariums = getAquariums(gridData);
+    for (const aq of foundAquariums) {
+      if (aq.size > 0 && aq.boats !== 1) return false;
+    }
   }
   
   return true;

@@ -87,7 +87,7 @@ export abstract class CellModel {
     abstract put_noboat(corner: E.Corner, flush_undo?: boolean): boolean;
     abstract put_block(corner: E.Corner, flush_undo?: boolean): boolean;
     
-    abstract remove_content(corner: E.Corner, flush_undo?: boolean): void;
+    abstract remove_content(corner: E.Corner, flush_undo?: boolean, flood_air?: boolean): void;
     abstract remove_nowater(corner: E.Corner, flush_undo?: boolean): void;
     abstract remove_noboat(corner: E.Corner, flush_undo?: boolean): void;
     

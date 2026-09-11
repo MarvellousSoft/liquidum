@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether } from '../model/GridData';
+import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools } from '../model/GridData';
 import type { GridModelData } from '../model/GridData';
 import { Cell } from './Cell';
 
@@ -66,8 +66,8 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
              const wCount = countWaterCol(gridData, c);
              const bCount = countBoatCol(gridData, c);
              
-             const wBools = gridData.cells.flatMap(r => [r[c].c_left === Content.Water, r[c].c_right === Content.Water]);
-             const bBools = gridData.cells.flatMap(r => [r[c].c_left === Content.Boat, r[c].c_right === Content.Boat]);
+             const wBools = colBools(gridData, c, Content.Water);
+             const bBools = colBools(gridData, c, Content.Boat);
              
              return (
               <div class="w-8 sm:w-10 md:w-12 flex flex-col justify-end items-center pb-2 text-sm sm:text-base font-mono gap-1">
@@ -83,8 +83,10 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
       {gridData.cells.map((rowCells, r) => {
         const wCountRow = countWaterRow(gridData, r);
         const bCountRow = countBoatRow(gridData, r);
-        const wBools = rowCells.flatMap(c => [c.c_left === Content.Water, c.c_right === Content.Water]);
-        const bBools = rowCells.flatMap(c => [c.c_left === Content.Boat, c.c_right === Content.Boat]);
+        
+        const wBools = rowBools(gridData, r, Content.Water);
+        const bBools = rowBools(gridData, r, Content.Boat);
+        
         return (
         <div class="flex">
           {/* Row hint */}
