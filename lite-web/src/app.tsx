@@ -36,7 +36,8 @@ export function App() {
   const [currentLevelKey, setCurrentLevelKey] = useState<string>("Level 01/01");
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set());
   const [isPointerDown, setIsPointerDown] = useState(false);
-  const [dragAction, setDragAction] = useState<{ corner: Corner, content: Content } | null>(null);
+  const [mouseHoldStatus, setMouseHoldStatus] = useState<E.MouseDragState>(E.MouseDragState.None);
+  const mouseHoldStatusRef = useRef<E.MouseDragState>(E.MouseDragState.None);
   const [won, setWon] = useState(false);
   const [autoFloodAir, setAutoFloodAir] = useState(false);
   const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
@@ -84,7 +85,8 @@ export function App() {
 
   const handlePointerUp = () => {
     setIsPointerDown(false);
-    setDragAction(null);
+    mouseHoldStatusRef.current = E.MouseDragState.None;
+    setMouseHoldStatus(E.MouseDragState.None);
     if (engineRef.current) {
       while (
         engineRef.current.undo_stack.length > 0 &&
@@ -265,8 +267,34 @@ export function App() {
     (window as any).getGridData = () => gridData;
     (window as any).getMistakes = () => mistakesRef.current;
     (window as any).putCellAction = (r: number, c: number, corner: Corner, content: Content) => {
-      executeEngineAction(r, c, { corner, content }, true);
+      const engine = engineRef.current;
+      if (!engine) return;
+      const eCorner = toEngineCorner(corner);
+      const cell = engine.get_cell(r, c) as any;
+      if (cell.block_at(eCorner)) return;
+
+      engine.push_empty_undo();
+      if (content === Content.Water) {
+        cell.put_water(eCorner, false);
+      } else if (content === Content.NoWater) {
+        cell.put_nowater(eCorner, false, autoFloodAir);
+      } else if (content === Content.Boat) {
+        cell.put_boat(false);
+      } else if (content === Content.NoBoat) {
+        cell.put_noboat(eCorner, false);
+      } else if (content === Content.Nothing) {
+        cell.remove_content(eCorner, false, autoFloodAir);
+      }
+
       handlePointerUp();
+      const next = engine.to_grid_data();
+      setGridData(next);
+      setCanUndo(engine.can_undo());
+      setCanRedo(engine.can_redo());
+      if (isLevelComplete(next)) {
+        setWon(true);
+        setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+      }
     };
     (window as any).undo = () => handleUndoRef.current();
     (window as any).redo = () => handleRedoRef.current();
@@ -296,7 +324,8 @@ export function App() {
     }, 800);
 
     setIsPointerDown(false);
-    setDragAction(null);
+    mouseHoldStatusRef.current = E.MouseDragState.None;
+    setMouseHoldStatus(E.MouseDragState.None);
 
     if (engineRef.current) {
       while (
@@ -310,54 +339,86 @@ export function App() {
     }
   };
 
-  const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }, isStartOfStroke: boolean = false) => {
+  const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
     if (won) return;
     const engine = engineRef.current;
     if (!engine) return;
 
-    if (isStartOfStroke) {
-      engine.push_empty_undo();
-    }
-
-    const eCorner = toEngineCorner(action.corner);
+    const eCorner = toEngineCorner(corner);
     const cell = engine.get_cell(r, c) as any;
-    const currContent = cell.pure()._content_at(eCorner);
-    if (currContent === Content.Block) return;
+    if (cell.block_at(eCorner)) return;
 
-    let madeChange = false;
-    if (action.content === Content.Water) {
-      if (currContent !== Content.Water) {
-        const added = cell.put_water(eCorner, false);
-        if (added <= 0.0) {
-          triggerMistake(r, c, action.corner);
-          return;
-        }
-        madeChange = true;
-      }
-    } else if (action.content === Content.NoWater) {
-      cell.put_nowater(eCorner, false, autoFloodAir);
-      madeChange = true;
-    } else if (action.content === Content.Boat) {
-      if (currContent !== Content.Boat) {
-        const success = cell.put_boat(false);
-        if (!success) {
-          triggerMistake(r, c, action.corner);
-          return;
-        }
-        madeChange = true;
-      }
-    } else if (action.content === Content.NoBoat) {
-      cell.put_noboat(eCorner, false);
-      madeChange = true;
-    } else if (action.content === Content.Nothing) {
-      if (currContent === Content.NoBoat || currContent === Content.NoBoatWater) {
+    engine.push_empty_undo();
+    let status = E.MouseDragState.None;
+
+    if (e.button === 2) {
+      // Secondary button (Right Click) - Port of Godot cell_pressed_second_button
+      if (cell.nowater_at(eCorner)) {
+        status = E.MouseDragState.RemoveNoWater;
+        cell.remove_nowater(eCorner, false);
+      } else if (cell.noboat_at(eCorner)) {
+        status = E.MouseDragState.RemoveNoBoat;
         cell.remove_noboat(eCorner, false);
-        madeChange = true;
+      } else if (cell.has_boat()) {
+        status = E.MouseDragState.RemoveBoat;
+        cell.remove_content(eCorner, false);
       } else {
-        cell.remove_content(eCorner, false, autoFloodAir);
-        madeChange = true;
+        if (selectedTool === Content.Boat) {
+          status = E.MouseDragState.NoBoat;
+          cell.put_noboat(eCorner, false);
+        } else {
+          status = E.MouseDragState.NoWater;
+          cell.put_nowater(eCorner, false, autoFloodAir);
+        }
+      }
+    } else {
+      // Primary button (Left Click) - Port of Godot _process_click
+      if (selectedTool === Content.Water) {
+        if (cell.water_at(eCorner)) {
+          status = E.MouseDragState.RemoveWater;
+          cell.remove_content(eCorner, false, autoFloodAir);
+        } else {
+          status = E.MouseDragState.Water;
+          const added = cell.put_water(eCorner, false);
+          if (added <= 0.0) {
+            triggerMistake(r, c, corner);
+            return;
+          }
+        }
+      } else if (selectedTool === Content.NoWater) {
+        if (cell.nowater_at(eCorner)) {
+          status = E.MouseDragState.RemoveNoWater;
+          cell.remove_nowater(eCorner, false);
+        } else {
+          status = E.MouseDragState.NoWater;
+          cell.put_nowater(eCorner, false, autoFloodAir);
+        }
+      } else if (selectedTool === Content.Boat) {
+        if (cell.has_boat()) {
+          status = E.MouseDragState.RemoveBoat;
+          cell.remove_content(E.Corner.BottomLeft, false);
+        } else {
+          status = E.MouseDragState.Boat;
+          const success = cell.put_boat(false);
+          if (!success) {
+            triggerMistake(r, c, corner);
+            return;
+          }
+        }
+      } else if (selectedTool === Content.NoBoat) {
+        if (cell.noboat_at(eCorner)) {
+          status = E.MouseDragState.RemoveNoBoat;
+          cell.remove_noboat(eCorner, false);
+        } else {
+          status = E.MouseDragState.NoBoat;
+          cell.put_noboat(eCorner, false);
+        }
       }
     }
+
+    mouseHoldStatusRef.current = status;
+    setMouseHoldStatus(status);
+    setIsPointerDown(true);
 
     const next = engine.to_grid_data();
     setGridData(next);
@@ -367,47 +428,74 @@ export function App() {
     if (complete) {
       setWon(true);
       setIsPointerDown(false);
-      setDragAction(null);
+      mouseHoldStatusRef.current = E.MouseDragState.None;
+      setMouseHoldStatus(E.MouseDragState.None);
       setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
     }
   };
 
-  const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
-    if (won) return;
-    setIsPointerDown(true);
-    if (!gridData) return;
-    const cell = gridData.cells[r][c];
-
-    let currentContent = Content.Nothing;
-    if (cell.type === CellType.Single) {
-      currentContent = cell.c_left;
-    } else {
-      currentContent = (corner === Corner.TopLeft || corner === Corner.BottomLeft) ? cell.c_left : cell.c_right;
-    }
-
-    if (currentContent === Content.Block) return;
-
-    let targetContent = Content.Nothing;
-    if (e.button === 2) {
-      targetContent = currentContent === Content.NoWater ? Content.Nothing : Content.NoWater;
-    } else {
-      if (selectedTool === Content.NoBoat) {
-        targetContent = (currentContent === Content.NoBoat || currentContent === Content.NoBoatWater) ? Content.Nothing : Content.NoBoat;
-      } else if (selectedTool === Content.NoWater) {
-        targetContent = (currentContent === Content.NoWater || currentContent === Content.NoBoatWater) ? Content.Nothing : Content.NoWater;
-      } else {
-        targetContent = currentContent === selectedTool ? Content.Nothing : selectedTool;
-      }
-    }
-
-    setDragAction({ corner, content: targetContent });
-    executeEngineAction(r, c, { corner, content: targetContent }, true);
-  };
-
   const handleCellEnter = (r: number, c: number, corner: Corner, e: PointerEvent) => {
     if (won) return;
-    if (isPointerDown && dragAction) {
-      executeEngineAction(r, c, { corner: corner, content: dragAction.content }, false);
+    const engine = engineRef.current;
+    if (!engine) return;
+
+    const dragStatus = mouseHoldStatusRef.current;
+    if (!isPointerDown || dragStatus === E.MouseDragState.None) return;
+
+    const eCorner = toEngineCorner(corner);
+    const cell = engine.get_cell(r, c) as any;
+    if (cell.block_at(eCorner)) return;
+
+    let madeChange = false;
+
+    // Port of Godot _on_cell_mouse_entered:
+    if (dragStatus === E.MouseDragState.Water && cell.nothing_at(eCorner)) {
+      const added = cell.put_water(eCorner, false);
+      if (added <= 0.0) {
+        triggerMistake(r, c, corner);
+        return;
+      }
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.NoWater && (cell.noboat_at(eCorner) || cell.nothing_at(eCorner))) {
+      cell.put_nowater(eCorner, false, autoFloodAir);
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.NoBoat && (cell.nowater_at(eCorner) || cell.nothing_at(eCorner))) {
+      cell.put_noboat(eCorner, false);
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.Boat && cell.nothing_at(eCorner)) {
+      const success = cell.put_boat(false);
+      if (!success) {
+        triggerMistake(r, c, corner);
+        return;
+      }
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.RemoveWater && cell.water_at(eCorner)) {
+      cell.remove_content(eCorner, false, autoFloodAir);
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.RemoveNoWater && cell.nowater_at(eCorner)) {
+      cell.remove_nowater(eCorner, false);
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.RemoveNoBoat && cell.noboat_at(eCorner)) {
+      cell.remove_noboat(eCorner, false);
+      madeChange = true;
+    } else if (dragStatus === E.MouseDragState.RemoveBoat && cell.has_boat()) {
+      cell.remove_content(eCorner, false);
+      madeChange = true;
+    }
+
+    if (madeChange) {
+      const next = engine.to_grid_data();
+      setGridData(next);
+      setCanUndo(engine.can_undo());
+      setCanRedo(engine.can_redo());
+      const complete = isLevelComplete(next);
+      if (complete) {
+        setWon(true);
+        setIsPointerDown(false);
+        mouseHoldStatusRef.current = E.MouseDragState.None;
+        setMouseHoldStatus(E.MouseDragState.None);
+        setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+      }
     }
   };
 

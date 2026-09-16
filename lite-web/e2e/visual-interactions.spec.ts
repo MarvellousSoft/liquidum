@@ -692,6 +692,157 @@ L._.
     }
   });
 
+  test('visual_test_drag_water_does_not_overwrite_x', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Cell (0, 0) is Air in solution. Place Air on cell (0, 0)
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Select Water tool
+    await page.click('[data-testid="tool-water"]');
+
+    // Drag from cell (0, 1) across cell (0, 0) to cell (0, 2)
+    // Note: in Level 01/01, (0, 1) and (0, 2) are valid water cells in solution
+    const cell01 = page.locator('[data-testid="cell-0-1"]');
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    const cell02 = page.locator('[data-testid="cell-0-2"]');
+
+    const box01 = await cell01.boundingBox();
+    const box00 = await cell00.boundingBox();
+    const box02 = await cell02.boundingBox();
+
+    expect(box01 && box00 && box02).toBeTruthy();
+    if (box01 && box00 && box02) {
+      await page.mouse.move(box01.x + box01.width / 2, box01.y + box01.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box00.x + box00.width / 2, box00.y + box00.height / 2, { steps: 5 });
+      await page.mouse.move(box02.x + box02.width / 2, box02.y + box02.height / 2, { steps: 5 });
+      await page.mouse.up();
+
+      // (0, 1) should have water
+      await expect(cell01).toHaveAttribute('data-content-left', 'water');
+      // CRITICAL: (0, 0) must NOT have been overwritten with water; it retains air (X)!
+      await expect(cell00).toHaveAttribute('data-content-left', 'air');
+      // No mistake should have been triggered
+      const mistakes = await page.evaluate(() => (window as any).getMistakes());
+      expect(mistakes).toBe(0);
+      // (0, 2) should have water
+      await expect(cell02).toHaveAttribute('data-content-left', 'water');
+    }
+  });
+
+  test('visual_test_drag_air_does_not_overwrite_water', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Place water on cell (0, 1)
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-1"]');
+    await expect(page.locator('[data-testid="cell-0-1"]')).toHaveAttribute('data-content-left', 'water');
+
+    // Select Air tool
+    await page.click('[data-testid="tool-air"]');
+
+    // Drag from cell (0, 0) across cell (0, 1) to cell (1, 0)
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    const cell01 = page.locator('[data-testid="cell-0-1"]');
+    const cell10 = page.locator('[data-testid="cell-1-0"]');
+
+    const box00 = await cell00.boundingBox();
+    const box01 = await cell01.boundingBox();
+    const box10 = await cell10.boundingBox();
+
+    expect(box00 && box01 && box10).toBeTruthy();
+    if (box00 && box01 && box10) {
+      await page.mouse.move(box00.x + box00.width / 2, box00.y + box00.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box01.x + box01.width / 2, box01.y + box01.height / 2, { steps: 5 });
+      await page.mouse.move(box10.x + box10.width / 2, box10.y + box10.height / 2, { steps: 5 });
+      await page.mouse.up();
+
+      // (0, 0) and (1, 0) should have air
+      await expect(cell00).toHaveAttribute('data-content-left', 'air');
+      await expect(cell10).toHaveAttribute('data-content-left', 'air');
+      // CRITICAL: (0, 1) retains its water and is NOT overwritten with air!
+      await expect(cell01).toHaveAttribute('data-content-left', 'water');
+    }
+  });
+
+  test('visual_test_drag_remove_water_only_removes_water', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Put Water on (0, 1) and Air on (0, 0)
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-1"]');
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+
+    await expect(page.locator('[data-testid="cell-0-1"]')).toHaveAttribute('data-content-left', 'water');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Select Water tool
+    await page.click('[data-testid="tool-water"]');
+
+    // Drag starting on (0, 1) [RemoveWater mode] over to (0, 0)
+    const cell01 = page.locator('[data-testid="cell-0-1"]');
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    const box01 = await cell01.boundingBox();
+    const box00 = await cell00.boundingBox();
+
+    expect(box01 && box00).toBeTruthy();
+    if (box01 && box00) {
+      await page.mouse.move(box01.x + box01.width / 2, box01.y + box01.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box00.x + box00.width / 2, box00.y + box00.height / 2, { steps: 5 });
+      await page.mouse.up();
+
+      // Water was removed from (0, 1)
+      await expect(cell01).toHaveAttribute('data-content-left', 'none');
+      // (0, 0) still retains its Air (X) because RemoveWater only removes water!
+      await expect(cell00).toHaveAttribute('data-content-left', 'air');
+    }
+  });
+
+  test('visual_test_drag_remove_air_only_removes_air', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Put Air on (0, 0) and Water on (0, 1)
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-1"]');
+
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+    await expect(page.locator('[data-testid="cell-0-1"]')).toHaveAttribute('data-content-left', 'water');
+
+    // Select Air tool
+    await page.click('[data-testid="tool-air"]');
+
+    // Drag starting on (0, 0) [RemoveNoWater mode] over to (0, 1)
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    const cell01 = page.locator('[data-testid="cell-0-1"]');
+    const box00 = await cell00.boundingBox();
+    const box01 = await cell01.boundingBox();
+
+    expect(box00 && box01).toBeTruthy();
+    if (box00 && box01) {
+      await page.mouse.move(box00.x + box00.width / 2, box00.y + box00.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box01.x + box01.width / 2, box01.y + box01.height / 2, { steps: 5 });
+      await page.mouse.up();
+
+      // Air was removed from (0, 0)
+      await expect(cell00).toHaveAttribute('data-content-left', 'none');
+      // (0, 1) still retains its Water because RemoveNoWater only removes air!
+      await expect(cell01).toHaveAttribute('data-content-left', 'water');
+    }
+  });
+
 });
 
 
