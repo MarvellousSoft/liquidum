@@ -703,6 +703,25 @@ export interface AreaCheck {
     all_points?(): Vector2i[];
 }
 
+export class RectAreaCheck implements AreaCheck {
+    rect: Rect2i;
+    constructor(rect: Rect2i) {
+        this.rect = rect;
+    }
+    inside(i: number, j: number): boolean {
+        return this.rect.has_point(new Vector2i(i, j));
+    }
+    all_points(): Vector2i[] {
+        const all: Vector2i[] = [];
+        for (let dx = this.rect.size.x - 1; dx >= 0; dx--) {
+            for (let dy = 0; dy < this.rect.size.y; dy++) {
+                all.push(new Vector2i(this.rect.position.x + dx, this.rect.position.y + dy));
+            }
+        }
+        return all;
+    }
+}
+
 export class Dfs {
     grid: GridImpl;
     changes: Change[] = [];
@@ -884,6 +903,88 @@ export class CountWaterDfs extends Dfs {
 
     _can_go_up(i: number, j: number): boolean { return true; }
     _can_go_down(i: number, j: number): boolean { return true; }
+}
+
+export class AquariumInfo {
+    has_pool: boolean = false;
+    cells_at_height: WaterPosition[][] = [];
+    empty_at_height: number[] = [];
+    max_i: number = 0;
+    total_water: number = 0;
+    total_empty: number = 0;
+
+    add(pos: WaterPosition, content: Content): void {
+        if (this.cells_at_height.length === 0) {
+            this.max_i = pos.i;
+        }
+        while (this.max_i - this.cells_at_height.length >= pos.i) {
+            this.cells_at_height.push([]);
+            this.empty_at_height.push(0.0);
+        }
+        const h = this.max_i - pos.i;
+        this.cells_at_height[h].push(pos);
+        if (content === Content.Water) {
+            this.total_water += E.waters_size(pos.loc);
+        } else if (content === Content.Nothing || content === Content.NoBoat) {
+            this.total_empty += E.waters_size(pos.loc);
+            this.empty_at_height[h] += E.waters_size(pos.loc);
+        }
+    }
+
+    fixed_water(): boolean {
+        return this.total_empty === 0;
+    }
+}
+
+export class CrawlAquarium extends Dfs {
+    info: AquariumInfo = new AquariumInfo();
+    pool_check: boolean = false;
+    split_aquariums_by_nowater: boolean;
+
+    constructor(grid: GridImpl, area_check: AreaCheck | null = null, split: boolean = false) {
+        super(grid, area_check);
+        this.split_aquariums_by_nowater = split;
+    }
+
+    check_for_pools(): boolean {
+        return this.pool_check;
+    }
+
+    reset(): void {
+        this.info = new AquariumInfo();
+        this.pool_check = false;
+    }
+
+    reset_for_pool_check(): void {
+        this.grid.last_seen += 1;
+        this.pool_check = true;
+    }
+
+    _cell_logic(i: number, j: number, corner: E.Corner, cell: PureCell): boolean {
+        if (this.check_for_pools()) {
+            this.info.add(new WaterPosition(i, j, E.corner_to_waters(corner, cell.cell_type())), cell._content_at(corner));
+        }
+        return true;
+    }
+
+    _can_go_up(i: number, j: number): boolean {
+        const bottom_content = this.grid._pure_cell(i - 1, j)._content_bottom();
+        if (this.split_aquariums_by_nowater && (bottom_content === Content.NoWater || bottom_content === Content.NoBoatWater)) {
+            return false;
+        }
+        return true;
+    }
+
+    _can_go_down(i: number, j: number): boolean {
+        const c = this.grid._pure_cell(i + 1, j);
+        if (c._content_top() === Content.Water) {
+            return true;
+        }
+        if (this.check_for_pools() && c.last_seen(E.diag_to_corner(c.cell_type(), E.Side.Top)) <= this.grid.last_seen - 2) {
+            this.info.has_pool = true;
+        }
+        return this.check_for_pools();
+    }
 }
 
 export class ComponentInfo {
@@ -2343,6 +2444,10 @@ export class GridImpl extends GridModel {
 
     is_corner_partially_valid(c: Content, i: number, j: number, corner: E.Corner): boolean {
         return this.editor_mode() || this._is_content_partial_solution(c, this._content_sol(i, j, corner));
+    }
+
+    inside(i: number, j: number): boolean {
+        return i >= 0 && i < this.n && j >= 0 && j < this.m;
     }
 
     validate(): void {}
