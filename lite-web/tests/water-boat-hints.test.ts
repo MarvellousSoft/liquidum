@@ -12,7 +12,8 @@ import {
   isTogether,
   hintTypeOk,
   isLevelComplete,
-  parseGridData
+  parseGridData,
+  getAquariums
 } from '../src/model/GridData';
 import type { GridModelData } from '../src/model/GridData';
 import { GridImpl } from '../src/engine/GridImpl';
@@ -287,5 +288,46 @@ describe('Water and Boat Hint Satisfiability & Level 04/05', () => {
     expect(isTogether(colBools(gridData, 0, Content.Water))).toBe(HintType.Separated);
     expect(isTogether(colBools(gridData, 0, Content.Boat))).toBe(HintType.Together);
     expect(isLevelComplete(gridData)).toBe(true);
+  });
+
+  it('Level 05/01 includes 0-water aquarium hint in expected_aquariums and satisfies when empty count is 0', () => {
+    const rawData = {
+      full_name: "LEVEL_05_01",
+      grid_data: {
+        "0": 1,
+        "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }],
+        "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }],
+        "13": [
+          [{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }],
+          [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 1, "2": 1, "3": 11 }],
+          [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]
+        ],
+        "14": [[0, 0, 0, 0, 0], [1, 1, 1, 0, 1]],
+        "15": [[0, 1, 0, 0], [0, 1, 0, 1], [0, 0, 0, 0]],
+        "16": { "8": -1, "9": 0, "10": { "0": 0, "2.5": 1, "3": 1 } }
+      },
+      version: 1
+    };
+    const parsed = parseGridData(rawData);
+    expect(parsed.grid_hints.expected_aquariums).toHaveProperty('0');
+    expect(parsed.grid_hints.expected_aquariums['0']).toBe(0);
+    expect(parsed.grid_hints.expected_aquariums['2.5']).toBe(1);
+    expect(parsed.grid_hints.expected_aquariums['3']).toBe(1);
+
+    const aqEntries = Object.entries(parsed.grid_hints.expected_aquariums)
+      .filter(([_, v]) => v !== -1 && v >= 0)
+      .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
+
+    expect(aqEntries).toEqual([
+      ['0', 0],
+      ['2.5', 1],
+      ['3', 1]
+    ]);
+
+    // Solved level has 0 aquariums with 0 water
+    const aquariumsSolved = getAquariums(parsed);
+    const zeroWaterAqs = aquariumsSolved.filter(aq => Math.abs(aq.size - 0) < 0.01);
+    expect(zeroWaterAqs.length).toBe(0);
+    expect(isLevelComplete(parsed)).toBe(true);
   });
 });

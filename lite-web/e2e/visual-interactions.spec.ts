@@ -514,6 +514,35 @@ L._.
     expect(mistakesAfterRestart).toBe(0);
   });
 
+  test('visual_test_level_05_01_zero_water_aquarium_hint', async ({ page }) => {
+    // Load Level 05/01 which has aquarium hints: {"0": 0, "2.5": 1, "3": 1}
+    await page.evaluate(() => (window as any).loadLevelKey("Level 05/01"));
+
+    // Aquarium section must be visible
+    const aqSection = page.locator('[data-testid="aquarium-section"]');
+    await expect(aqSection).toBeVisible();
+
+    // 0-water aquarium hint must be visible
+    const zeroAqHint = page.locator('[data-testid="aquarium-hint-0"]');
+    await expect(zeroAqHint).toBeVisible();
+    await expect(zeroAqHint.locator('.aq-tank-size')).toHaveText('0');
+    // It should not render water texture inside the tank
+    await expect(zeroAqHint.locator('.aq-tank-water')).toHaveCount(0);
+    // Expected count should be ×0
+    await expect(zeroAqHint.locator('.aq-expected-count')).toHaveText('×0');
+
+    // The other aquarium hints must also be visible
+    const aq25 = page.locator('[data-testid="aquarium-hint-2.5"]');
+    await expect(aq25).toBeVisible();
+    await expect(aq25.locator('.aq-tank-size')).toHaveText('2.5');
+    await expect(aq25.locator('.aq-expected-count')).toHaveText('×1');
+
+    const aq3 = page.locator('[data-testid="aquarium-hint-3"]');
+    await expect(aq3).toBeVisible();
+    await expect(aq3.locator('.aq-tank-size')).toHaveText('3');
+    await expect(aq3.locator('.aq-expected-count')).toHaveText('×1');
+  });
+
 });
 
 

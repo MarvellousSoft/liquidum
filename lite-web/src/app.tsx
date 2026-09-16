@@ -465,7 +465,7 @@ export function App() {
             const hasTotalWater = gridData.grid_hints.total_water >= 0;
             const hasTotalBoats = gridData.grid_hints.total_boats > 0;
             const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
-              .filter(([k, v]) => k !== "0" && v > 0)
+              .filter(([_, v]) => v !== -1 && v >= 0)
               .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
             const hasAquariums = aquariumEntries.length > 0;
 
@@ -549,7 +549,9 @@ export function App() {
                             title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
                           >
                             <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
-                              <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
+                              {targetSize > 0 && (
+                                <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
+                              )}
                               {targetSize === 0.5 && (
                                 <svg class="aq-diag-line">
                                   <line x1="0" y1="0" x2="100%" y2="100%" stroke="#000924" stroke-width="2" />
