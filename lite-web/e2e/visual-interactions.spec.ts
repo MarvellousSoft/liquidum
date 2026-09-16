@@ -884,6 +884,156 @@ L._.
     expect(darkAqDiagStroke).toBe('rgb(171, 255, 209)');
   });
 
+  test('visual_test_middle_click_places_and_removes_boat', async ({ page }) => {
+    // 1. Load Level 04/05 which has boats
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+
+    const cell05 = page.locator('[data-testid="cell-0-5"]');
+    await expect(cell05).toBeVisible();
+    await expect(cell05).toHaveAttribute('data-content-left', 'none');
+
+    // 2. Middle click cell (0, 5) to place a boat
+    await cell05.click({ button: 'middle' });
+    await expect(cell05).toHaveAttribute('data-content-left', 'boat');
+
+    // 3. Middle click cell (0, 5) again to remove the boat
+    await cell05.click({ button: 'middle' });
+    await expect(cell05).toHaveAttribute('data-content-left', 'none');
+  });
+
+  test('visual_test_hover_and_key_shortcuts', async ({ page }) => {
+    // 1. Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    await expect(cell00).toBeVisible();
+
+    // Hover cell (0, 0) and press X -> puts Air
+    await cell00.hover();
+    await page.keyboard.press('x');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // Press X again -> removes Air
+    await page.keyboard.press('x');
+    await expect(cell00).toHaveAttribute('data-content-left', 'none');
+
+    // Cell (0, 2) has water in the solution: hover cell (0, 2) and press W -> places Water
+    const cell02 = page.locator('[data-testid="cell-0-2"]');
+    await cell02.hover();
+    await page.keyboard.press('w');
+    await expect(cell02).toHaveAttribute('data-content-left', 'water');
+
+    // Press W again -> removes Water
+    await page.keyboard.press('w');
+    await expect(cell02).toHaveAttribute('data-content-left', 'none');
+
+    // 2. Tool cycling with Tab
+    const toolWater = page.locator('[data-testid="tool-water"]');
+    const toolAir = page.locator('[data-testid="tool-air"]');
+    await expect(toolWater).toHaveClass(/tool-btn-water-active/);
+
+    await page.keyboard.press('Tab');
+    await expect(toolAir).toHaveClass(/tool-btn-air-active/);
+
+    await page.keyboard.press('Tab');
+    await expect(toolWater).toHaveClass(/tool-btn-water-active/);
+
+    // 3. Load Level 04/05 for boat hover shortcuts
+    await page.evaluate(() => (window as any).loadLevelKey("Level 04/05"));
+    const cell05 = page.locator('[data-testid="cell-0-5"]');
+    await cell05.hover();
+
+    // Press B -> puts boat
+    await page.keyboard.press('b');
+    await expect(cell05).toHaveAttribute('data-content-left', 'boat');
+
+    // Press B again -> removes boat
+    await page.keyboard.press('b');
+    await expect(cell05).toHaveAttribute('data-content-left', 'none');
+
+    // Hover cell (2, 1) and press N -> puts maybe boat (noboat)
+    const cell21 = page.locator('[data-testid="cell-2-1"]');
+    await cell21.hover();
+    await page.keyboard.press('n');
+    await expect(cell21).toHaveAttribute('data-content-left', 'noboat');
+
+    // Press N again -> removes maybe boat
+    await page.keyboard.press('n');
+    await expect(cell21).toHaveAttribute('data-content-left', 'none');
+  });
+
+  test('visual_test_shortcuts_popup_and_banner_removal', async ({ page }) => {
+    // 1. Verify "Tap/Click: Place selected tool • Right-click: Air (✕)" is removed from the banner slot
+    const bannerSlot = page.locator('.banner-slot');
+    await expect(bannerSlot).not.toContainText('Tap/Click: Place selected tool');
+
+    // 2. Click shortcuts button in controls toolbar to open popup
+    const shortcutsBtn = page.locator('[data-testid="btn-shortcuts"]');
+    await expect(shortcutsBtn).toBeVisible();
+    await shortcutsBtn.click();
+
+    const modal = page.locator('[data-testid="shortcuts-modal"]');
+    await expect(modal).toBeVisible();
+
+    // Verify modal content documents controls
+    await expect(modal).toContainText('Mouse & Touch Controls');
+    await expect(modal).toContainText('Tap / Left Click');
+    await expect(modal).toContainText('Right Click');
+    await expect(modal).toContainText('Middle Click');
+    await expect(modal).toContainText('Place / remove Boat');
+    await expect(modal).toContainText('Quick Hover Keys');
+    await expect(modal).toContainText('Tool Selection');
+    await expect(modal).toContainText('Game Actions');
+
+    // 3. Close modal via close button
+    const closeBtn = page.locator('[data-testid="btn-close-shortcuts"]');
+    await closeBtn.click();
+    await expect(modal).toHaveCount(0);
+
+    // 4. Open modal via keyboard '?'
+    await page.keyboard.press('?');
+    await expect(modal).toBeVisible();
+
+    // 5. Close modal via 'Escape'
+    await page.keyboard.press('Escape');
+    await expect(modal).toHaveCount(0);
+  });
+
+  test('visual_test_long_holding_key_does_not_repeat_toggle', async ({ page }) => {
+    // 1. Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    await expect(cell00).toBeVisible();
+    await cell00.hover();
+
+    // 2. Press down 'x' and simulate long hold with repeated keydown events
+    await page.keyboard.down('x');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // Dispatch repeated keydown events (as browsers do when held)
+    await page.evaluate(() => {
+      for (let i = 0; i < 10; i++) {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'x', repeat: true, bubbles: true }));
+      }
+    });
+
+    // The cell must STILL be air (never toggled off)
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // Wait 300ms while still down
+    await page.waitForTimeout(300);
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // 3. Release key
+    await page.keyboard.up('x');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // 4. Next single key press removes air
+    await page.keyboard.press('x');
+    await expect(cell00).toHaveAttribute('data-content-left', 'none');
+  });
+
 });
 
 

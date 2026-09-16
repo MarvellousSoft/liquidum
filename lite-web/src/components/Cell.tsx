@@ -23,6 +23,8 @@ interface CellProps {
   errorCorner?: Corner | null;
   onPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
+  onPointerMove?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
+  onPointerLeave?: (row: number, col: number, e: PointerEvent) => void;
   onPointerUp?: (row: number, col: number, e: PointerEvent) => void;
 }
 
@@ -56,7 +58,7 @@ export function Cell({
   isSurface = true,
   hasError = false,
   errorCorner = null,
-  onPointerDown, onPointerEnter, onPointerUp 
+  onPointerDown, onPointerEnter, onPointerMove, onPointerLeave, onPointerUp 
 }: CellProps) {
   const isWaterLeft = cell.c_left === Content.Water;
   const isWaterRight = cell.c_right === Content.Water;
@@ -252,6 +254,7 @@ export function Cell({
       data-error={hasError ? "true" : undefined}
       class={`cell ${isBlock ? 'cell-block-bg' : ''} ${hasError ? 'cell-error-active' : ''}`}
       onPointerDown={(e) => {
+        if (e.button === 1) e.preventDefault();
         const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);
         onPointerDown?.(row, col, corner, e);
       }}
@@ -259,7 +262,17 @@ export function Cell({
         const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);
         onPointerEnter?.(row, col, corner, e);
       }}
-      onPointerUp={(e) => onPointerUp?.(row, col, e)}
+      onPointerMove={(e) => {
+        const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);
+        onPointerMove?.(row, col, corner, e);
+      }}
+      onPointerLeave={(e) => {
+        onPointerLeave?.(row, col, e);
+      }}
+      onMouseDown={(e) => {
+        if (e.button === 1) e.preventDefault();
+      }}
+      onAuxClick={(e) => e.preventDefault()}
       onContextMenu={(e) => e.preventDefault()}
     >
       {/* Interior Grid Lines */}

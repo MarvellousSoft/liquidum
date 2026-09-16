@@ -50,6 +50,22 @@ export function App() {
   const hasBoatsRef = useRef(hasBoats);
   hasBoatsRef.current = hasBoats;
 
+  const [showShortcuts, setShowShortcuts] = useState<boolean>(false);
+  const showShortcutsRef = useRef(showShortcuts);
+  showShortcutsRef.current = showShortcuts;
+
+  const hoveredCellRef = useRef<{ row: number; col: number; corner: Corner } | null>(null);
+  const currentBrushKeyRef = useRef<string | null>(null);
+
+  const selectedToolRef = useRef(selectedTool);
+  selectedToolRef.current = selectedTool;
+  const currentLevelKeyRef = useRef(currentLevelKey);
+  currentLevelKeyRef.current = currentLevelKey;
+  const autoFloodAirRef = useRef(autoFloodAir);
+  autoFloodAirRef.current = autoFloodAir;
+  const wonRef = useRef(won);
+  wonRef.current = won;
+
   const [canUndo, setCanUndo] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
   const engineRef = useRef<GridImpl | null>(null);
@@ -87,6 +103,7 @@ export function App() {
     setIsPointerDown(false);
     mouseHoldStatusRef.current = E.MouseDragState.None;
     setMouseHoldStatus(E.MouseDragState.None);
+    currentBrushKeyRef.current = null;
     if (engineRef.current) {
       while (
         engineRef.current.undo_stack.length > 0 &&
@@ -217,7 +234,27 @@ export function App() {
         return;
       }
       const key = e.key.toLowerCase();
-      if ((key === 'z' && (e.ctrlKey || e.metaKey)) || key === 'z') {
+
+      // Ignore browser auto-repeat for shortcuts, tool selection, and modal toggles
+      if (e.repeat && key !== 'z' && key !== 'y') {
+        return;
+      }
+
+      // Escape closes shortcuts modal
+      if (e.key === 'Escape') {
+        setShowShortcuts(false);
+        return;
+      }
+
+      // Help / shortcuts popup toggle
+      if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+        e.preventDefault();
+        setShowShortcuts(s => !s);
+        return;
+      }
+
+      // Undo
+      if ((key === 'z' && (e.ctrlKey || e.metaKey)) || (key === 'z' && !e.shiftKey)) {
         if (!e.shiftKey) {
           e.preventDefault();
           handleUndoRef.current();
@@ -228,22 +265,129 @@ export function App() {
           return;
         }
       }
+
+      // Redo
       if ((key === 'y' && (e.ctrlKey || e.metaKey)) || key === 'y') {
         e.preventDefault();
         handleRedoRef.current();
         return;
       }
-      if (e.key === '1') setSelectedTool(Content.Water);
-      else if (e.key === '2') setSelectedTool(Content.NoWater);
-      else if (e.key === '3' && hasBoatsRef.current) setSelectedTool(Content.Boat);
-      else if (e.key === '4' && hasBoatsRef.current) setSelectedTool(Content.NoBoat);
+
+      // Restart shortcut (R without modifier)
+      if (key === 'r' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        loadLevelRef.current(currentLevelKeyRef.current);
+        return;
+      }
+
+      // Tool cycling: Tab / Shift+Tab
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const availableTools: (Content.Water | Content.Boat | Content.NoWater | Content.NoBoat)[] = [
+          Content.Water,
+          Content.NoWater,
+          ...(hasBoatsRef.current ? ([Content.Boat, Content.NoBoat] as (Content.Boat | Content.NoBoat)[]) : [])
+        ];
+        const idx = availableTools.indexOf(selectedToolRef.current);
+        if (idx !== -1) {
+          const nextIdx = e.shiftKey
+            ? (idx - 1 + availableTools.length) % availableTools.length
+            : (idx + 1) % availableTools.length;
+          setSelectedTool(availableTools[nextIdx]);
+        }
+        return;
+      }
+
+      const isBrushKey = key === 'w' || key === 'x' || (key === 'b' && hasBoatsRef.current) || (key === 'n' && hasBoatsRef.current);
+      if (isBrushKey && currentBrushKeyRef.current !== null) {
+        return;
+      }
+
+      // Hover cell shortcuts (when hovering over a cell):
+      // W -> Water, X -> NoWater, B -> Boat, N -> NoBoat
+      if (hoveredCellRef.current && !wonRef.current) {
+        const { row: hr, col: hc, corner: hCorner } = hoveredCellRef.current;
+        if (key === 'w') {
+          e.preventDefault();
+          currentBrushKeyRef.current = 'w';
+          const status = applyToolToCellRef.current(hr, hc, hCorner, Content.Water, false);
+          if (status !== E.MouseDragState.None) {
+            mouseHoldStatusRef.current = status;
+            setMouseHoldStatus(status);
+            setIsPointerDown(true);
+          }
+          return;
+        }
+        if (key === 'x') {
+          e.preventDefault();
+          currentBrushKeyRef.current = 'x';
+          const status = applyToolToCellRef.current(hr, hc, hCorner, Content.NoWater, false);
+          if (status !== E.MouseDragState.None) {
+            mouseHoldStatusRef.current = status;
+            setMouseHoldStatus(status);
+            setIsPointerDown(true);
+          }
+          return;
+        }
+        if (key === 'b' && hasBoatsRef.current) {
+          e.preventDefault();
+          currentBrushKeyRef.current = 'b';
+          const status = applyToolToCellRef.current(hr, hc, hCorner, Content.Boat, false);
+          if (status !== E.MouseDragState.None) {
+            mouseHoldStatusRef.current = status;
+            setMouseHoldStatus(status);
+            setIsPointerDown(true);
+          }
+          return;
+        }
+        if (key === 'n' && hasBoatsRef.current) {
+          e.preventDefault();
+          currentBrushKeyRef.current = 'n';
+          const status = applyToolToCellRef.current(hr, hc, hCorner, Content.NoBoat, false);
+          if (status !== E.MouseDragState.None) {
+            mouseHoldStatusRef.current = status;
+            setMouseHoldStatus(status);
+            setIsPointerDown(true);
+          }
+          return;
+        }
+      }
+
+      // Direct Tool selection: 1, 2, 3, 4 (or W, X, B, N when not hovering a cell)
+      if (e.key === '1' || key === 'w') setSelectedTool(Content.Water);
+      else if (e.key === '2' || key === 'x') setSelectedTool(Content.NoWater);
+      else if ((e.key === '3' || key === 'b') && hasBoatsRef.current) setSelectedTool(Content.Boat);
+      else if ((e.key === '4' || key === 'n') && hasBoatsRef.current) setSelectedTool(Content.NoBoat);
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      if (key === currentBrushKeyRef.current || key === 'w' || key === 'x' || key === 'b' || key === 'n') {
+        currentBrushKeyRef.current = null;
+        handlePointerUp();
+      }
+    };
+
+    const handleBlur = () => {
+      currentBrushKeyRef.current = null;
+      handlePointerUp();
+    };
+
+    const handleAuxClick = (e: MouseEvent) => {
+      if (e.button === 1) e.preventDefault();
     };
 
     window.addEventListener('pointerup', handlePointerUp);
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('auxclick', handleAuxClick);
+    window.addEventListener('blur', handleBlur);
     return () => {
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('auxclick', handleAuxClick);
+      window.removeEventListener('blur', handleBlur);
     };
   }, []);
 
@@ -300,7 +444,12 @@ export function App() {
     (window as any).redo = () => handleRedoRef.current();
     (window as any).canUndo = () => engineRef.current?.can_undo() ?? false;
     (window as any).canRedo = () => engineRef.current?.can_redo() ?? false;
-  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo]);
+    (window as any).setShowShortcuts = (val: boolean) => setShowShortcuts(val);
+    (window as any).getShowShortcuts = () => showShortcutsRef.current;
+    (window as any).setHoveredCell = (r: number, c: number, corner: Corner = Corner.TopLeft) => {
+      hoveredCellRef.current = { row: r, col: c, corner };
+    };
+  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -339,20 +488,28 @@ export function App() {
     }
   };
 
-  const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
-    if (won) return;
+  const loadLevelRef = useRef(loadLevel);
+  loadLevelRef.current = loadLevel;
+
+  const applyToolToCell = (
+    r: number,
+    c: number,
+    corner: Corner,
+    tool: Content,
+    isSecondary: boolean = false
+  ): E.MouseDragState => {
+    if (wonRef.current) return E.MouseDragState.None;
     const engine = engineRef.current;
-    if (!engine) return;
+    if (!engine) return E.MouseDragState.None;
 
     const eCorner = toEngineCorner(corner);
     const cell = engine.get_cell(r, c) as any;
-    if (cell.block_at(eCorner)) return;
+    if (cell.block_at(eCorner)) return E.MouseDragState.None;
 
     engine.push_empty_undo();
     let status = E.MouseDragState.None;
 
-    if (e.button === 2) {
-      // Secondary button (Right Click) - Port of Godot cell_pressed_second_button
+    if (isSecondary) {
       if (cell.nowater_at(eCorner)) {
         status = E.MouseDragState.RemoveNoWater;
         cell.remove_nowater(eCorner, false);
@@ -363,62 +520,55 @@ export function App() {
         status = E.MouseDragState.RemoveBoat;
         cell.remove_content(eCorner, false);
       } else {
-        if (selectedTool === Content.Boat) {
+        if (selectedToolRef.current === Content.Boat) {
           status = E.MouseDragState.NoBoat;
           cell.put_noboat(eCorner, false);
         } else {
           status = E.MouseDragState.NoWater;
-          cell.put_nowater(eCorner, false, autoFloodAir);
+          cell.put_nowater(eCorner, false, autoFloodAirRef.current);
         }
       }
-    } else {
-      // Primary button (Left Click) - Port of Godot _process_click
-      if (selectedTool === Content.Water) {
-        if (cell.water_at(eCorner)) {
-          status = E.MouseDragState.RemoveWater;
-          cell.remove_content(eCorner, false, autoFloodAir);
-        } else {
-          status = E.MouseDragState.Water;
-          const added = cell.put_water(eCorner, false);
-          if (added <= 0.0) {
-            triggerMistake(r, c, corner);
-            return;
-          }
+    } else if (tool === Content.Water) {
+      if (cell.water_at(eCorner)) {
+        status = E.MouseDragState.RemoveWater;
+        cell.remove_content(eCorner, false, autoFloodAirRef.current);
+      } else {
+        status = E.MouseDragState.Water;
+        const added = cell.put_water(eCorner, false);
+        if (added <= 0.0) {
+          triggerMistake(r, c, corner);
+          return E.MouseDragState.None;
         }
-      } else if (selectedTool === Content.NoWater) {
-        if (cell.nowater_at(eCorner)) {
-          status = E.MouseDragState.RemoveNoWater;
-          cell.remove_nowater(eCorner, false);
-        } else {
-          status = E.MouseDragState.NoWater;
-          cell.put_nowater(eCorner, false, autoFloodAir);
+      }
+    } else if (tool === Content.NoWater) {
+      if (cell.nowater_at(eCorner)) {
+        status = E.MouseDragState.RemoveNoWater;
+        cell.remove_nowater(eCorner, false);
+      } else {
+        status = E.MouseDragState.NoWater;
+        cell.put_nowater(eCorner, false, autoFloodAirRef.current);
+      }
+    } else if (tool === Content.Boat) {
+      if (cell.has_boat()) {
+        status = E.MouseDragState.RemoveBoat;
+        cell.remove_content(E.Corner.BottomLeft, false);
+      } else {
+        status = E.MouseDragState.Boat;
+        const success = cell.put_boat(false);
+        if (!success) {
+          triggerMistake(r, c, corner);
+          return E.MouseDragState.None;
         }
-      } else if (selectedTool === Content.Boat) {
-        if (cell.has_boat()) {
-          status = E.MouseDragState.RemoveBoat;
-          cell.remove_content(E.Corner.BottomLeft, false);
-        } else {
-          status = E.MouseDragState.Boat;
-          const success = cell.put_boat(false);
-          if (!success) {
-            triggerMistake(r, c, corner);
-            return;
-          }
-        }
-      } else if (selectedTool === Content.NoBoat) {
-        if (cell.noboat_at(eCorner)) {
-          status = E.MouseDragState.RemoveNoBoat;
-          cell.remove_noboat(eCorner, false);
-        } else {
-          status = E.MouseDragState.NoBoat;
-          cell.put_noboat(eCorner, false);
-        }
+      }
+    } else if (tool === Content.NoBoat) {
+      if (cell.noboat_at(eCorner)) {
+        status = E.MouseDragState.RemoveNoBoat;
+        cell.remove_noboat(eCorner, false);
+      } else {
+        status = E.MouseDragState.NoBoat;
+        cell.put_noboat(eCorner, false);
       }
     }
-
-    mouseHoldStatusRef.current = status;
-    setMouseHoldStatus(status);
-    setIsPointerDown(true);
 
     const next = engine.to_grid_data();
     setGridData(next);
@@ -430,11 +580,42 @@ export function App() {
       setIsPointerDown(false);
       mouseHoldStatusRef.current = E.MouseDragState.None;
       setMouseHoldStatus(E.MouseDragState.None);
-      setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+      setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
+    }
+
+    return status;
+  };
+
+  const applyToolToCellRef = useRef(applyToolToCell);
+  applyToolToCellRef.current = applyToolToCell;
+
+  const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
+    if (won) return;
+    let status = E.MouseDragState.None;
+
+    if (e.button === 1) {
+      // Middle button (Auxiliary click): Put / Remove Boat - Port of Godot MOUSE_BUTTON_MIDDLE
+      e.preventDefault();
+      status = applyToolToCell(r, c, corner, Content.Boat, false);
+    } else if (e.button === 2) {
+      // Secondary button (Right Click) - Port of Godot cell_pressed_second_button
+      status = applyToolToCell(r, c, corner, Content.NoWater, true);
+    } else if (e.button === 0) {
+      // Primary button (Left Click) - Port of Godot _process_click
+      status = applyToolToCell(r, c, corner, selectedTool, false);
+    } else {
+      return;
+    }
+
+    if (status !== E.MouseDragState.None) {
+      mouseHoldStatusRef.current = status;
+      setMouseHoldStatus(status);
+      setIsPointerDown(true);
     }
   };
 
   const handleCellEnter = (r: number, c: number, corner: Corner, e: PointerEvent) => {
+    hoveredCellRef.current = { row: r, col: c, corner };
     if (won) return;
     const engine = engineRef.current;
     if (!engine) return;
@@ -496,6 +677,16 @@ export function App() {
         setMouseHoldStatus(E.MouseDragState.None);
         setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
       }
+    }
+  };
+
+  const handleCellMove = (r: number, c: number, corner: Corner) => {
+    hoveredCellRef.current = { row: r, col: c, corner };
+  };
+
+  const handleCellLeave = (r: number, c: number) => {
+    if (hoveredCellRef.current?.row === r && hoveredCellRef.current?.col === c) {
+      hoveredCellRef.current = null;
     }
   };
 
@@ -649,6 +840,17 @@ export function App() {
         </button>
 
         <button
+          data-testid="btn-shortcuts"
+          onClick={() => setShowShortcuts(true)}
+          class="btn-shortcuts"
+          title="Shortcuts & Controls (?)"
+          aria-label="Shortcuts"
+        >
+          <span class="text-base">⌨️</span>
+          <span>Shortcuts</span>
+        </button>
+
+        <button
           data-testid="btn-theme-toggle"
           onClick={() => setIsDarkMode(!isDarkMode)}
           class="btn-theme-toggle"
@@ -663,7 +865,7 @@ export function App() {
       </h1>
 
       <div class="banner-slot">
-        {won ? (
+        {won && (
           <div data-testid="win-banner" class="win-banner">
             <div class="win-title">🎉 Level Complete! 🎉</div>
             <div class="flex items-center gap-2">
@@ -686,10 +888,6 @@ export function App() {
                 </button>
               )}
             </div>
-          </div>
-        ) : (
-          <div class="controls-hint">
-            Tap/Click: Place selected tool • Right-click: Air (✕)
           </div>
         )}
       </div>
@@ -822,11 +1020,140 @@ export function App() {
               blinkingCells={blinkingCells}
               onCellPointerDown={handleCellDown}
               onCellPointerEnter={handleCellEnter}
+              onCellPointerMove={handleCellMove}
+              onCellPointerLeave={handleCellLeave}
             />
           </div>
         </div>
       ) : (
         <p>Loading...</p>
+      )}
+
+      {showShortcuts && (
+        <div
+          data-testid="shortcuts-modal"
+          class="modal-backdrop"
+          onClick={() => setShowShortcuts(false)}
+        >
+          <div
+            class="shortcuts-dialog"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div class="shortcuts-header">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">⌨️</span>
+                <h2 class="shortcuts-title godot-text-outline">Controls & Shortcuts</h2>
+              </div>
+              <button
+                data-testid="btn-close-shortcuts"
+                onClick={() => setShowShortcuts(false)}
+                class="shortcuts-close-btn"
+                title="Close (Esc)"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="shortcuts-content">
+              {/* Mouse & Touch */}
+              <div class="shortcut-section">
+                <h3 class="shortcut-section-title">🖱️ Mouse & Touch Controls</h3>
+                <div class="shortcut-list">
+                  <div class="shortcut-item">
+                    <span class="shortcut-key">Tap / Left Click</span>
+                    <span class="shortcut-desc">Place selected tool (or clear matching content)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <span class="shortcut-key">Right Click</span>
+                    <span class="shortcut-desc">Air (✕) / clear pencil marks</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <span class="shortcut-key">Middle Click</span>
+                    <span class="shortcut-desc">Place / remove Boat (⛵)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <span class="shortcut-key">Click & Drag</span>
+                    <span class="shortcut-desc">Draw or erase across multiple cells</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hover Keys */}
+              <div class="shortcut-section">
+                <h3 class="shortcut-section-title">✨ Quick Hover Keys</h3>
+                <p class="shortcut-section-hint">Hover mouse over any cell and press or hold:</p>
+                <div class="shortcut-list">
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">W</kbd></div>
+                    <span class="shortcut-desc">Place or remove Water (💧)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">X</kbd></div>
+                    <span class="shortcut-desc">Place or remove Air (✕)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">B</kbd></div>
+                    <span class="shortcut-desc">Place or remove Boat (⛵)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">N</kbd></div>
+                    <span class="shortcut-desc">Place or remove Maybe Boat (?)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tool Selection */}
+              <div class="shortcut-section">
+                <h3 class="shortcut-section-title">🎯 Tool Selection</h3>
+                <div class="shortcut-list">
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5">
+                      <kbd class="kbd">1</kbd>
+                      <kbd class="kbd">2</kbd>
+                      <kbd class="kbd">3</kbd>
+                      <kbd class="kbd">4</kbd>
+                    </div>
+                    <span class="shortcut-desc">Select Water, Air, Boat, Maybe Boat</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5">
+                      <kbd class="kbd">Tab</kbd> / <kbd class="kbd">Shift+Tab</kbd>
+                    </div>
+                    <span class="shortcut-desc">Next / Previous tool</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions & Game */}
+              <div class="shortcut-section">
+                <h3 class="shortcut-section-title">⚡ Game Actions</h3>
+                <div class="shortcut-list">
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5">
+                      <kbd class="kbd">Z</kbd> / <kbd class="kbd">Ctrl+Z</kbd>
+                    </div>
+                    <span class="shortcut-desc">Undo last move</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5">
+                      <kbd class="kbd">Y</kbd> / <kbd class="kbd">Ctrl+Y</kbd>
+                    </div>
+                    <span class="shortcut-desc">Redo move</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">R</kbd></div>
+                    <span class="shortcut-desc">Restart current level</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">Esc</kbd> / <kbd class="kbd">?</kbd></div>
+                    <span class="shortcut-desc">Toggle / close shortcuts popup</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

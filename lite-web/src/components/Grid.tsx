@@ -8,10 +8,12 @@ interface GridProps {
   blinkingCells?: Map<string, { corner: Corner, timestamp: number }>;
   onCellPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onCellPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
+  onCellPointerMove?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
+  onCellPointerLeave?: (row: number, col: number, e: PointerEvent) => void;
   onCellPointerUp?: (row: number, col: number, e: PointerEvent) => void;
 }
 
-export function Grid({ gridData, blinkingCells, onCellPointerDown, onCellPointerEnter, onCellPointerUp }: GridProps) {
+export function Grid({ gridData, blinkingCells, onCellPointerDown, onCellPointerEnter, onCellPointerMove, onCellPointerLeave, onCellPointerUp }: GridProps) {
   const rows = gridData.cells.length;
   const cols = rows > 0 ? gridData.cells[0].length : 0;
 
@@ -217,6 +219,8 @@ export function Grid({ gridData, blinkingCells, onCellPointerDown, onCellPointer
                   errorCorner={errorCorner}
                   onPointerDown={onCellPointerDown}
                   onPointerEnter={onCellPointerEnter}
+                  onPointerMove={onCellPointerMove}
+                  onPointerLeave={onCellPointerLeave}
                   onPointerUp={onCellPointerUp}
                 />
               );
