@@ -790,7 +790,7 @@ export function App() {
                               )}
                               {targetSize === 0.5 && (
                                 <svg class="aq-diag-line">
-                                  <line x1="0" y1="0" x2="100%" y2="100%" stroke="#000924" stroke-width="2" />
+                                  <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--cell-wall)" stroke-width="2" />
                                 </svg>
                               )}
                               <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>

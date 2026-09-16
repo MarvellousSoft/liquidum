@@ -140,7 +140,7 @@ export function Cell({
           y1={isInc ? "100%" : "0%"}
           x2="100%"
           y2={isInc ? "0%" : "100%"}
-          stroke="#000924"
+          stroke="var(--cell-wall)"
           stroke-width="3"
           stroke-linecap="round"
         />

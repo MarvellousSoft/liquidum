@@ -843,6 +843,47 @@ L._.
     }
   });
 
+  test('visual_test_dark_mode_bright_walls', async ({ page }) => {
+    // 1. Load Level 01/01 in light mode
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+    await page.evaluate(() => (window as any).setDarkMode(false));
+
+    const wall00Right = page.locator('[data-testid="cell-0-0"] .cell-wall-right');
+    await expect(wall00Right).toBeVisible();
+
+    // In Light mode, walls are authentic Godot navy #000924 (rgb(0, 9, 36))
+    const lightWallBg = await wall00Right.evaluate((el) => window.getComputedStyle(el).backgroundColor);
+    expect(lightWallBg).toBe('rgb(0, 9, 36)');
+
+    // 2. Toggle to Dark Mode via theme toggle button
+    const themeBtn = page.locator('[data-testid="btn-theme-toggle"]');
+    await themeBtn.click();
+    await expect(page.locator('.game-container')).toHaveClass(/theme-dark/);
+
+    // In Dark mode, walls must be bright mint foam #abffd1 (rgb(171, 255, 209)), matching Godot!
+    const darkWallBg = await wall00Right.evaluate((el) => window.getComputedStyle(el).backgroundColor);
+    expect(darkWallBg).toBe('rgb(171, 255, 209)');
+
+    // 3. Load Level 03/01 which has diagonal cells
+    await page.evaluate(() => (window as any).loadLevelKey("Level 03/01"));
+    const diagLine = page.locator('.diag-svg line').first();
+    await expect(diagLine).toBeVisible();
+    const darkDiagStroke = await diagLine.evaluate((el) => window.getComputedStyle(el).stroke);
+    expect(darkDiagStroke).toBe('rgb(171, 255, 209)');
+
+    // 4. Load Level 05/08 which has aquariums with half-tank preview
+    await page.evaluate(() => (window as any).loadLevelKey("Level 05/08"));
+    const halfTank = page.locator('[data-testid="aquarium-hint-0.5"] .aq-tank');
+    await expect(halfTank).toBeVisible();
+    const darkAqBorder = await halfTank.evaluate((el) => window.getComputedStyle(el).borderColor);
+    expect(darkAqBorder).toBe('rgb(171, 255, 209)');
+
+    const aqDiagLine = page.locator('.aq-diag-line line').first();
+    await expect(aqDiagLine).toBeVisible();
+    const darkAqDiagStroke = await aqDiagLine.evaluate((el) => window.getComputedStyle(el).stroke);
+    expect(darkAqDiagStroke).toBe('rgb(171, 255, 209)');
+  });
+
 });
 
 

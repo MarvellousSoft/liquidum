@@ -32,7 +32,7 @@
   --cell-water: #00a2e8;
   --cell-foam: #abffd1;
   --cell-wall: #000924;
-  --cell-block: #000000;
+  --cell-block: #000924;
   
   --stat-satisfied: #61fc89;
   --stat-error: #ff6a6a;
@@ -43,13 +43,15 @@
   --font-title: 'Comfortaa', cursive, system-ui, sans-serif;
 }
 
-/* Deep Ocean Dark Mode */
+/* Deep Ocean Dark Mode (from project Background.gd & Global.gd) */
 .theme-dark {
   --bg-gradient-top: #000924;
   --bg-gradient-bottom: #093659;
   --cell-bg: rgba(0, 9, 36, 0.45);
-  --cell-border: rgba(217, 255, 226, 0.15);
+  --cell-border: rgba(171, 255, 209, 0.2);
   --cell-water: #0099cc;
+  --cell-wall: #abffd1;
+  --cell-block: #abffd1;
   --game-teal: #093659;
   --game-teal-hover: #144f7e;
   --game-teal-pressed: #051e33;
@@ -730,7 +732,7 @@ body {
   position: relative;
   border-radius: 0.4rem;
   overflow: hidden;
-  border: 2px solid var(--game-navy);
+  border: 2px solid var(--cell-wall);
   background-color: rgba(0, 9, 36, 0.7);
   display: flex;
   align-items: center;
@@ -757,6 +759,9 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 2;
+}
+.aq-diag-line line {
+  stroke: var(--cell-wall);
 }
 .aq-tank-size {
   position: relative;
@@ -971,7 +976,7 @@ body {
 }
 
 .cell-block-bg {
-  background-color: #000000 !important;
+  background-color: var(--cell-block) !important;
 }
 
 .cell-layer {
@@ -1109,7 +1114,7 @@ body {
   right: 0;
   width: 1px;
   margin-right: -0.5px;
-  background-color: rgba(0, 9, 36, 0.2);
+  background-color: var(--cell-border);
   pointer-events: none;
 }
 
@@ -1120,7 +1125,7 @@ body {
   right: 0;
   height: 1px;
   margin-bottom: -0.5px;
-  background-color: rgba(0, 9, 36, 0.2);
+  background-color: var(--cell-border);
   pointer-events: none;
 }
 
@@ -1189,6 +1194,9 @@ body {
   pointer-events: none;
   z-index: 20;
   overflow: visible;
+}
+.diag-svg line {
+  stroke: var(--cell-wall);
 }
 
 /* Cell Error Blink Overlay & Animations (Authentic to Godot Liquidum) */
