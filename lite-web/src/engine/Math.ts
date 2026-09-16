@@ -46,4 +46,8 @@ export class Rect2i {
         }
         return new Rect2i(x1, y1, x2 - x1, y2 - y1);
     }
+
+    get_area(): number {
+        return this.size.x * this.size.y;
+    }
 }

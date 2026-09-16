@@ -2013,7 +2013,7 @@ export class CellHintsBasic extends CellHintsStrategy {
                 if (i + di >= 0 && i + di < this.grid.rows() && j + dj >= 0 && j + dj < this.grid.cols()) {
                     const c = this.grid.get_cell(i + di, j + dj);
                     for (const corner of c.corners()) {
-                        const cont = c.pure()._content_at(corner);
+                        const cont = (c as CellWithLoc).pure()._content_at(corner);
                         if (cont === Content.Nothing || cont === Content.NoBoat) {
                             if (fill_with === Content.Water) {
                                 if (c.put_water(corner, false) > 0) any = true;
@@ -2257,7 +2257,7 @@ export class CellHintTogetherToDo {
 
         for (let i = ci - 1; i <= ci + 1; i++) {
             for (let j2 = 2 * cj - 2; j2 <= 2 * cj + 3; j2++) {
-                if (dfs.flood(i, j2)) {
+                if (dfs.flood(i, j2) && dfs.info) {
                     if (dfs.info.total_water > 0) {
                         waters_left -= dfs.info.total_water;
                         if (any_water) {

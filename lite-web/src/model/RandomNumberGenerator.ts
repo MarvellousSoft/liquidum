@@ -1,10 +1,10 @@
 export class RandomNumberGenerator {
-  private state: bigint = 0n;
-  private inc: bigint = 0n;
-
   // PCG32 Multiplier and Default Increment
   private static readonly MULTIPLIER = 6364136223846793005n;
   private static readonly PCG_DEFAULT_INC_64 = 1442695040888963407n;
+
+  private state: bigint = 0n;
+  private inc: bigint = (RandomNumberGenerator.PCG_DEFAULT_INC_64 << 1n) | 1n;
 
   private currentSeed: bigint = 0n;
 
@@ -29,11 +29,11 @@ export class RandomNumberGenerator {
   }
 
   get_state(): bigint {
-    return this.state;
+    return BigInt.asIntN(64, this.state);
   }
 
   set_state(state: number | bigint) {
-    this.state = BigInt(state) & 0xFFFFFFFFFFFFFFFFn;
+    this.state = BigInt.asUintN(64, BigInt(state));
   }
 
   // Returns a 32-bit unsigned integer

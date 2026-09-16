@@ -1772,13 +1772,40 @@ export class GridImpl extends GridModel {
                 this._update_cell_hint(i, j);
             }
         }
+        this._grid_hints.total_boats = this.count_boats();
+        this._grid_hints.total_water = this.count_waters();
+        this._grid_hints.expected_aquariums = this.all_aquarium_counts();
+        for (let i = 0; i < this.n; i++) {
+            this._row_hints[i].boat_count = this.count_boat_row(i);
+            let type = this._is_together(this._row_bools(i, Content.Boat));
+            this._row_hints[i].boat_count_type = type;
+            this._row_hints[i].water_count = this.count_water_row(i);
+            type = this._is_together(this._row_bools(i, Content.Water));
+            this._row_hints[i].water_count_type = type;
+        }
+        for (let j = 0; j < this.m; j++) {
+            this._col_hints[j].boat_count = this.count_boat_col(j);
+            let type = this._is_together(this._col_bools(j, Content.Boat));
+            this._col_hints[j].boat_count_type = type;
+            this._col_hints[j].water_count = this.count_water_col(j);
+            type = this._is_together(this._col_bools(j, Content.Water));
+            this._col_hints[j].water_count_type = type;
+        }
     }
 
     grid_hints(): GridHints { return this._grid_hints; }
 
     all_aquarium_counts(): Record<number, number> {
-        const dfs = new CountWaterDfs(this);
         const counts: Record<number, number> = {};
+        for (const [k, v] of this.all_aquarium_counts_ordered()) {
+            counts[k] = v;
+        }
+        return counts;
+    }
+
+    all_aquarium_counts_ordered(): Map<number, number> {
+        const dfs = new CountWaterDfs(this);
+        const counts = new Map<number, number>();
         for (let i = 0; i < this.n; i++) {
             for (let j = 0; j < this.m; j++) {
                 for (const corner of [E.Corner.TopLeft, E.Corner.TopRight, E.Corner.BottomRight, E.Corner.BottomLeft]) {
@@ -1786,7 +1813,7 @@ export class GridImpl extends GridModel {
                     if (c._valid_corner(corner) && c.last_seen(corner) < this.last_seen && !c.block_at(corner)) {
                         dfs.water_count = 0;
                         dfs.flood(i, j, corner);
-                        counts[dfs.water_count] = (counts[dfs.water_count] || 0) + 1;
+                        counts.set(dfs.water_count, (counts.get(dfs.water_count) || 0) + 1);
                     }
                 }
             }
