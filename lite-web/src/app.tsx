@@ -39,6 +39,11 @@ export function App() {
   const [won, setWon] = useState(false);
   const [autoFloodAir, setAutoFloodAir] = useState(false);
   const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
+  const [mistakes, setMistakes] = useState<number>(0);
+  const mistakesRef = useRef(mistakes);
+  mistakesRef.current = mistakes;
+  const [blinkingCells, setBlinkingCells] = useState<Map<string, { corner: Corner, timestamp: number }>>(new Map());
+  const [mistakePulse, setMistakePulse] = useState<boolean>(false);
   const hasBoats = levelHasBoats(gridData);
   const hasBoatsRef = useRef(hasBoats);
   hasBoatsRef.current = hasBoats;
@@ -80,6 +85,8 @@ export function App() {
       }
       setGridData(data);
       setWon(preserveContents ? isLevelComplete(data) : false);
+      setMistakes(0);
+      setBlinkingCells(new Map());
     } catch (e) {
       console.error("Failed to load level from string", e);
     }
@@ -89,6 +96,31 @@ export function App() {
     try {
       setCurrentLevelKey(levelKey);
       const data = parseGridData(LEVELS[levelKey]);
+      
+      const solution_c_left: Content[][] = [];
+      const solution_c_right: Content[][] = [];
+      let hasSolutionCells = false;
+      for (let r = 0; r < data.cells.length; r++) {
+        solution_c_left.push([]);
+        solution_c_right.push([]);
+        for (let c = 0; c < data.cells[r].length; c++) {
+          solution_c_left[r].push(data.cells[r][c].c_left);
+          solution_c_right[r].push(data.cells[r][c].c_right);
+          if (
+            data.cells[r][c].c_left === Content.Water ||
+            data.cells[r][c].c_left === Content.Boat ||
+            data.cells[r][c].c_right === Content.Water ||
+            data.cells[r][c].c_right === Content.Boat
+          ) {
+            hasSolutionCells = true;
+          }
+        }
+      }
+      if (hasSolutionCells) {
+        data.solution_c_left = solution_c_left;
+        data.solution_c_right = solution_c_right;
+      }
+
       for (let r = 0; r < data.cells.length; r++) {
         for (let c = 0; c < data.cells[r].length; c++) {
           if (data.cells[r][c].c_left !== Content.Block) data.cells[r][c].c_left = Content.Nothing;
@@ -97,6 +129,8 @@ export function App() {
       }
       setGridData(data);
       setWon(false);
+      setMistakes(0);
+      setBlinkingCells(new Map());
     } catch (e) {
       console.error(e);
     }
@@ -142,10 +176,36 @@ export function App() {
     };
     (window as any).isWon = () => won;
     (window as any).getGridData = () => gridData;
+    (window as any).getMistakes = () => mistakesRef.current;
     (window as any).putCellAction = (r: number, c: number, corner: Corner, content: Content) => {
       executeEngineAction(r, c, { corner, content });
     };
-  }, [gridData, won, isDarkMode]);
+  }, [gridData, won, isDarkMode, mistakes]);
+
+  const triggerMistake = (r: number, c: number, corner: Corner) => {
+    setMistakes(m => m + 1);
+    setMistakePulse(true);
+    setTimeout(() => setMistakePulse(false), 400);
+
+    const cellKey = `${r}-${c}`;
+    setBlinkingCells(prev => {
+      const next = new Map(prev);
+      next.set(cellKey, { corner, timestamp: Date.now() });
+      return next;
+    });
+
+    setTimeout(() => {
+      setBlinkingCells(prev => {
+        if (!prev.has(cellKey)) return prev;
+        const next = new Map(prev);
+        next.delete(cellKey);
+        return next;
+      });
+    }, 800);
+
+    setIsPointerDown(false);
+    setDragAction(null);
+  };
 
   const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }) => {
     if (won) return;
@@ -158,11 +218,21 @@ export function App() {
       if (currContent === Content.Block) return prev;
       
       if (action.content === Content.Water) {
-        (engine.get_cell(r, c) as any).put_water(eCorner);
+        if (currContent === Content.Water) return prev;
+        const added = (engine.get_cell(r, c) as any).put_water(eCorner);
+        if (added <= 0.0) {
+          triggerMistake(r, c, action.corner);
+          return prev;
+        }
       } else if (action.content === Content.NoWater) {
         (engine.get_cell(r, c) as any).put_nowater(eCorner, false, autoFloodAir);
       } else if (action.content === Content.Boat) {
-        (engine.get_cell(r, c) as any).put_boat();
+        if (currContent === Content.Boat) return prev;
+        const success = (engine.get_cell(r, c) as any).put_boat();
+        if (!success) {
+          triggerMistake(r, c, action.corner);
+          return prev;
+        }
       } else if (action.content === Content.NoBoat) {
         (engine.get_cell(r, c) as any).put_noboat(eCorner);
       } else if (action.content === Content.Nothing) {
@@ -399,10 +469,21 @@ export function App() {
               .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
             const hasAquariums = aquariumEntries.length > 0;
 
-            if (!hasTotalWater && !hasTotalBoats && !hasAquariums) return null;
-
             return (
               <div class="grid-hints-card" data-testid="grid-hints-card">
+                {/* Mistake Counter */}
+                <div 
+                  data-testid="mistake-counter"
+                  class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
+                  title="Mistakes made"
+                >
+                  <span class="hint-stat-icon">❌</span>
+                  <span class="hint-stat-label">Mistakes</span>
+                  <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
+                    {mistakes}
+                  </span>
+                </div>
+
                 {hasTotalWater && (
                   <div 
                     data-testid="hint-water-counter"
@@ -501,6 +582,7 @@ export function App() {
           <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
             <Grid 
               gridData={gridData} 
+              blinkingCells={blinkingCells}
               onCellPointerDown={handleCellDown}
               onCellPointerEnter={handleCellEnter}
             />

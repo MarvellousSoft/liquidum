@@ -2,6 +2,7 @@
 
 import { E } from './E';
 import { Vector2i, Vector3i } from './Math'; // We will define some basic math types
+import { Content } from '../model/GridData';
 
 export class LineHint {
     water_count: number = -1;
@@ -199,4 +200,7 @@ export abstract class GridModel {
     abstract mirror_vertical(): void;
     abstract rotate_clockwise(): void;
     abstract rotate_counter(): void;
+    
+    abstract is_corner_partially_valid(c: Content, i: number, j: number, corner: E.Corner): boolean;
+    abstract is_solution_partially_valid(): boolean;
 }

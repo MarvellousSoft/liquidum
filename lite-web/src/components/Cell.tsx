@@ -19,6 +19,8 @@ interface CellProps {
   isBottomEdge: boolean;
   isRightEdge: boolean;
   isSurface?: boolean;
+  hasError?: boolean;
+  errorCorner?: Corner | null;
   onPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerUp?: (row: number, col: number, e: PointerEvent) => void;
@@ -52,6 +54,8 @@ export function Cell({
   hasBottomWall, hasRightWall, hasTopWall, hasLeftWall, 
   isTopEdge, isLeftEdge, isBottomEdge, isRightEdge,
   isSurface = true,
+  hasError = false,
+  errorCorner = null,
   onPointerDown, onPointerEnter, onPointerUp 
 }: CellProps) {
   const isWaterLeft = cell.c_left === Content.Water;
@@ -185,6 +189,58 @@ export function Cell({
 
   const isBlock = cell.c_left === Content.Block && cell.type === CellType.Single;
 
+  const renderErrorOverlay = () => {
+    if (!hasError) return null;
+    if (cell.type === CellType.Single) {
+      return (
+        <div data-testid="cell-error" class="cell-error-overlay cell-error-single">
+          <img src="/icons/error_single.png" alt="error" class="cell-error-img" />
+        </div>
+      );
+    }
+    if (cell.type === CellType.IncDiag) {
+      const isTopLeft = errorCorner === Corner.TopLeft;
+      return (
+        <div 
+          data-testid="cell-error" 
+          class="cell-error-overlay"
+          style={{
+            clipPath: isTopLeft 
+              ? 'polygon(0 0, 100% 0, 0 100%)' 
+              : 'polygon(100% 0, 100% 100%, 0 100%)'
+          }}
+        >
+          <img 
+            src={isTopLeft ? '/icons/error_topleft.png' : '/icons/error_bottomright.png'} 
+            alt="error" 
+            class="cell-error-img" 
+          />
+        </div>
+      );
+    }
+    if (cell.type === CellType.DecDiag) {
+      const isTopRight = errorCorner === Corner.TopRight;
+      return (
+        <div 
+          data-testid="cell-error" 
+          class="cell-error-overlay"
+          style={{
+            clipPath: isTopRight 
+              ? 'polygon(0 0, 100% 0, 100% 100%)' 
+              : 'polygon(0 0, 0 100%, 100% 100%)'
+          }}
+        >
+          <img 
+            src={isTopRight ? '/icons/error_topright.png' : '/icons/error_bottomleft.png'} 
+            alt="error" 
+            class="cell-error-img" 
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div 
       data-testid={`cell-${row}-${col}`}
@@ -193,7 +249,8 @@ export function Cell({
       data-cell-type={cell.type}
       data-content-left={getContentName(cell.c_left)}
       data-content-right={getContentName(cell.c_right)}
-      class={`cell ${isBlock ? 'cell-block-bg' : ''}`}
+      data-error={hasError ? "true" : undefined}
+      class={`cell ${isBlock ? 'cell-block-bg' : ''} ${hasError ? 'cell-error-active' : ''}`}
       onPointerDown={(e) => {
         const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);
         onPointerDown?.(row, col, corner, e);
@@ -210,6 +267,7 @@ export function Cell({
       {!isBottomEdge && !hasBottomWall && <div class="cell-grid-line-h" />}
 
       {renderContent()}
+      {renderErrorOverlay()}
       
       {/* Overlay Thick Walls */}
       {(hasTopWall || isTopEdge) && (

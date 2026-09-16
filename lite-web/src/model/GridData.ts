@@ -87,6 +87,8 @@ export interface GridModelData {
   wall_right: boolean[][];
   grid_hints: GridHints;
   full_name?: string;
+  solution_c_left?: Content[][];
+  solution_c_right?: Content[][];
 }
 
 export function parsePureCell(data: Record<string, any>): PureCell {

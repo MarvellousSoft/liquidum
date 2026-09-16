@@ -1063,6 +1063,11 @@ export class GridImpl extends GridModel {
             grid._col_hints[j] = data.col_hints[j] as LineHint;
         }
 
+        if (data.solution_c_left && data.solution_c_left.length > 0) {
+            grid.solution_c_left = data.solution_c_left.map(r => [...r]);
+            grid.solution_c_right = (data.solution_c_right || []).map(r => [...r]);
+        }
+
         grid.flood_all();
         return grid;
     }
@@ -1089,7 +1094,9 @@ export class GridImpl extends GridModel {
             col_hints: this._col_hints,
             wall_bottom: this.wall_bottom,
             wall_right: this.wall_right,
-            grid_hints: this._grid_hints
+            grid_hints: this._grid_hints,
+            solution_c_left: this.solution_c_left.map(r => [...r]),
+            solution_c_right: this.solution_c_right.map(r => [...r])
         };
     }
 
@@ -1864,14 +1871,22 @@ export class GridImpl extends GridModel {
         this.undo_stack = [];
         this.redo_stack = [];
         if (load_mode === LoadMode.Solution || load_mode === LoadMode.SolutionNoClear) {
-            this.solution_c_left = [];
-            this.solution_c_right = [];
-            for (let i = 0; i < this.n; i++) {
-                this.solution_c_left.push(this.pure_cells[i].map(c => c.c_left));
-                this.solution_c_right.push(this.pure_cells[i].map(c => c.c_right));
-            }
-            if (load_mode !== LoadMode.SolutionNoClear) {
-                this.clear_content();
+            const hasSolutionContent = this.pure_cells.some(row =>
+                row.some(c => c.c_left === Content.Water || c.c_left === Content.Boat || c.c_right === Content.Water || c.c_right === Content.Boat)
+            );
+            if (hasSolutionContent) {
+                this.solution_c_left = [];
+                this.solution_c_right = [];
+                for (let i = 0; i < this.n; i++) {
+                    this.solution_c_left.push(this.pure_cells[i].map(c => c.c_left));
+                    this.solution_c_right.push(this.pure_cells[i].map(c => c.c_right));
+                }
+                if (load_mode !== LoadMode.SolutionNoClear) {
+                    this.clear_content();
+                }
+            } else {
+                this.solution_c_left = [];
+                this.solution_c_right = [];
             }
         }
         this.auto_update_hints_ = load_mode === LoadMode.Editor;
@@ -2271,8 +2286,49 @@ export class GridImpl extends GridModel {
         }
     }
 
-    is_corner_partially_valid(c: Content, i: number, j: number, corner: E.Corner): boolean {
+    _is_content_partial_solution(c: Content, sol: Content): boolean {
+        switch (c) {
+            case Content.Block:
+            case Content.Water:
+            case Content.Boat:
+                return sol === c;
+            case Content.Nothing:
+            case Content.NoWater:
+            case Content.NoBoat:
+            case Content.NoBoatWater:
+                return true;
+        }
         return true;
+    }
+
+    _is_content_equal_solution(c: Content, sol: Content): boolean {
+        return this._is_content_partial_solution(c, sol) && this._is_content_partial_solution(sol, c);
+    }
+
+    _content_sol(i: number, j: number, corner: E.Corner): Content {
+        if (E.corner_is_left(corner)) {
+            return this.solution_c_left[i]?.[j] ?? Content.Nothing;
+        } else {
+            return this.solution_c_right[i]?.[j] ?? Content.Nothing;
+        }
+    }
+
+    is_solution_partially_valid(): boolean {
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.m; j++) {
+                if (!this._is_content_partial_solution(this._pure_cell(i, j).c_left, this.solution_c_left[i]?.[j] ?? Content.Nothing)) {
+                    return false;
+                }
+                if (!this._is_content_partial_solution(this._pure_cell(i, j).c_right, this.solution_c_right[i]?.[j] ?? Content.Nothing)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    is_corner_partially_valid(c: Content, i: number, j: number, corner: E.Corner): boolean {
+        return this.editor_mode() || this._is_content_partial_solution(c, this._content_sol(i, j, corner));
     }
 
     validate(): void {}

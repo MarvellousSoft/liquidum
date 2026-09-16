@@ -297,9 +297,9 @@ L._.
     await expect(boatCounter).toContainText('0 / 2');
     await expect(boatCounter).not.toContainText('left');
 
-    // Select boat tool and place boat in cell (0, 1)
+    // Select boat tool and place boat in cell (0, 5) which is a solution boat
     await page.click('[data-testid="tool-boat"]');
-    await page.click('[data-testid="cell-0-1"]');
+    await page.click('[data-testid="cell-0-5"]');
 
     await expect(boatCounter).toContainText('1 / 2');
     await expect(boatCounter).not.toContainText('left');
@@ -463,6 +463,58 @@ L._.
     await expect(page.locator('[data-testid="tool-maybeboat"]')).toHaveCount(0);
   });
 
+  test('visual_test_mistake_counter_and_cell_blink', async ({ page }) => {
+    // 1. Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Initial state: mistake counter should be 0
+    const mistakeCounter = page.locator('[data-testid="mistake-counter"]');
+    await expect(mistakeCounter).toBeVisible();
+    const mistakeCount = page.locator('[data-testid="mistake-count"]');
+    await expect(mistakeCount).toHaveText('0');
+    const getMistakesVal = await page.evaluate(() => (window as any).getMistakes());
+    expect(getMistakesVal).toBe(0);
+
+    // In Level 01/01, row 0 is [Air, Water, Water]. Cell (0, 0) is Air in the solution!
+    // Selecting water tool and clicking cell (0, 0) is a mistake!
+    await page.click('[data-testid="tool-water"]');
+    await page.click('[data-testid="cell-0-0"]');
+
+    // Verify cell blinked red with authentic error overlay and data-error="true"
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    await expect(cell00).toHaveAttribute('data-error', 'true');
+    const errorOverlay = cell00.locator('[data-testid="cell-error"]');
+    await expect(errorOverlay).toBeVisible();
+
+    // Verify invalid content was NOT placed in the cell
+    await expect(cell00).toHaveAttribute('data-content-left', 'none');
+
+    // Verify mistake counter incremented to 1
+    await expect(mistakeCount).toHaveText('1');
+    const mistakesAfterOne = await page.evaluate(() => (window as any).getMistakes());
+    expect(mistakesAfterOne).toBe(1);
+
+    // 2. Pencil marks (Air / ✕) are never mistakes:
+    // Right-click cell (0, 0) to place Air
+    await page.click('[data-testid="cell-0-0"]', { button: 'right' });
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+    // Mistakes should still be 1
+    await expect(mistakeCount).toHaveText('1');
+
+    // 3. Valid move (cell 0-1 is water in the solution):
+    await page.click('[data-testid="cell-0-1"]');
+    await expect(page.locator('[data-testid="cell-0-1"]')).toHaveAttribute('data-content-left', 'water');
+    // Mistakes should still be 1
+    await expect(mistakeCount).toHaveText('1');
+
+    // 4. Click restart button: mistake counter must reset to 0
+    await page.click('[data-testid="btn-restart"]');
+    await expect(mistakeCount).toHaveText('0');
+    const mistakesAfterRestart = await page.evaluate(() => (window as any).getMistakes());
+    expect(mistakesAfterRestart).toBe(0);
+  });
+
 });
+
 
 

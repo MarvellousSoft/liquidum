@@ -5,12 +5,13 @@ import { Cell } from './Cell';
 
 interface GridProps {
   gridData: GridModelData;
+  blinkingCells?: Map<string, { corner: Corner, timestamp: number }>;
   onCellPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onCellPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onCellPointerUp?: (row: number, col: number, e: PointerEvent) => void;
 }
 
-export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPointerUp }: GridProps) {
+export function Grid({ gridData, blinkingCells, onCellPointerDown, onCellPointerEnter, onCellPointerUp }: GridProps) {
   const rows = gridData.cells.length;
   const cols = rows > 0 ? gridData.cells[0].length : 0;
 
@@ -189,6 +190,9 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
               const isBlockLeft = isBlockSide(r, c - 1, 'right');
               const isBlockRight = isBlockSide(r, c + 1, 'left');
               const isSurface = !isWaterAbove(r, c);
+              const errorInfo = blinkingCells?.get(`${r}-${c}`);
+              const hasError = Boolean(errorInfo);
+              const errorCorner = errorInfo?.corner ?? null;
               
               return (
                 <Cell 
@@ -209,6 +213,8 @@ export function Grid({ gridData, onCellPointerDown, onCellPointerEnter, onCellPo
                   isBottomEdge={r === rows - 1}
                   isRightEdge={c === cols - 1}
                   isSurface={isSurface}
+                  hasError={hasError}
+                  errorCorner={errorCorner}
                   onPointerDown={onCellPointerDown}
                   onPointerEnter={onCellPointerEnter}
                   onPointerUp={onCellPointerUp}
