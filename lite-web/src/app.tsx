@@ -21,13 +21,20 @@ const LEVELS: Record<string, any> = {
 import { GridImpl } from './engine/GridImpl';
 import { E } from './engine/E';
 import { LoadMode } from './engine/Grid';
+import {
+  load_daily_level_data,
+  get_today_str,
+  shiftDate
+} from './engine/DailyLevel';
+import type { DailyLevelMeta } from './engine/DailyLevel';
 
-function toEngineCorner(c: Corner): E.Corner {
+function toEngineCorner(c: Corner | E.Corner): E.Corner {
   switch (c) {
     case Corner.TopLeft: return E.Corner.TopLeft;
     case Corner.TopRight: return E.Corner.TopRight;
     case Corner.BottomLeft: return E.Corner.BottomLeft;
     case Corner.BottomRight: return E.Corner.BottomRight;
+    default: return E.Corner.TopLeft;
   }
 }
 
@@ -35,6 +42,16 @@ export function App() {
   const [gridData, setGridData] = useState<GridModelData | null>(null);
   const [currentLevelKey, setCurrentLevelKey] = useState<string>("Level 01/01");
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set());
+  const [isDailyMode, setIsDailyMode] = useState<boolean>(false);
+  const [dailyDate, setDailyDate] = useState<string>(() => get_today_str());
+  const [dailyMeta, setDailyMeta] = useState<DailyLevelMeta | null>(null);
+  const [isLoadingDaily, setIsLoadingDaily] = useState<boolean>(false);
+  const [copiedShare, setCopiedShare] = useState<boolean>(false);
+
+  const isDailyModeRef = useRef(isDailyMode);
+  isDailyModeRef.current = isDailyMode;
+  const dailyDateRef = useRef(dailyDate);
+  dailyDateRef.current = dailyDate;
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [mouseHoldStatus, setMouseHoldStatus] = useState<E.MouseDragState>(E.MouseDragState.None);
   const mouseHoldStatusRef = useRef<E.MouseDragState>(E.MouseDragState.None);
@@ -53,6 +70,10 @@ export function App() {
   const [showShortcuts, setShowShortcuts] = useState<boolean>(false);
   const showShortcutsRef = useRef(showShortcuts);
   showShortcutsRef.current = showShortcuts;
+
+  const [showLevelsModal, setShowLevelsModal] = useState<boolean>(false);
+  const showLevelsModalRef = useRef(showLevelsModal);
+  showLevelsModalRef.current = showLevelsModal;
 
   const hoveredCellRef = useRef<{ row: number; col: number; corner: Corner } | null>(null);
   const currentBrushKeyRef = useRef<string | null>(null);
@@ -141,6 +162,8 @@ export function App() {
 
   const loadLevelFromString = (levelStr: string, preserveContents: boolean = false) => {
     try {
+      setIsDailyMode(false);
+      setDailyMeta(null);
       const engine = GridImpl.from_str(levelStr, preserveContents ? LoadMode.Testing : LoadMode.SolutionNoClear);
       if (!preserveContents) {
         for (let r = 0; r < engine.rows(); r++) {
@@ -169,6 +192,18 @@ export function App() {
 
   const loadLevel = (levelKey: string) => {
     try {
+      setIsDailyMode(false);
+      setDailyMeta(null);
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('daily') || url.searchParams.has('date') || url.searchParams.get('mode') === 'daily') {
+          url.searchParams.delete('daily');
+          url.searchParams.delete('date');
+          url.searchParams.delete('mode');
+          window.history.replaceState({}, '', url.toString());
+        }
+      }
+
       setCurrentLevelKey(levelKey);
       const data = parseGridData(LEVELS[levelKey]);
 
@@ -220,13 +255,111 @@ export function App() {
     }
   };
 
+  const loadDailyLevel = async (dateStr?: string) => {
+    const todayStr = get_today_str();
+    let targetDate = (dateStr && dateStr !== 'today') ? dateStr : (dailyDateRef.current || todayStr);
+    if (targetDate > todayStr) {
+      targetDate = todayStr;
+    }
+    setIsLoadingDaily(true);
+    setIsDailyMode(true);
+    setDailyDate(targetDate);
+    setCopiedShare(false);
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('daily', targetDate);
+      url.searchParams.delete('testLevel');
+      url.searchParams.delete('level');
+      url.searchParams.delete('mode');
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    try {
+      const result = await load_daily_level_data(targetDate);
+      if (!result) {
+        console.error("Failed to generate daily level for", targetDate);
+        setIsLoadingDaily(false);
+        return;
+      }
+      const { engine, gridData: data, meta } = result;
+      engineRef.current = engine;
+      setGridData(data);
+      setDailyMeta(meta);
+      setWon(false);
+      setMistakes(0);
+      setBlinkingCells(new Map());
+      setCanUndo(false);
+      setCanRedo(false);
+    } catch (err) {
+      console.error("Error loading daily level:", err);
+    } finally {
+      setIsLoadingDaily(false);
+    }
+  };
+
+  const handleRestart = () => {
+    if (isDailyModeRef.current) {
+      loadDailyLevel(dailyDateRef.current);
+    } else {
+      loadLevel(currentLevelKeyRef.current);
+    }
+  };
+
+  const handleShare = () => {
+    const mistakesStr = mistakes === 0 ? "🏆 0 Mistakes" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`;
+    const text = `Liquidum Daily ${dailyDate}\n\n${dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}\n` : ''}${mistakesStr}\nhttps://store.steampowered.com/app/2690070/Liquidum/`;
+    const markCopied = () => {
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2500);
+    };
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(markCopied).catch(() => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          markCopied();
+        } catch {
+          markCopied();
+        }
+      });
+    } else {
+      markCopied();
+    }
+  };
+
+  const loadLevelRef = useRef(loadLevel);
+  loadLevelRef.current = loadLevel;
+  const loadDailyLevelRef = useRef(loadDailyLevel);
+  loadDailyLevelRef.current = loadDailyLevel;
+  const handleRestartRef = useRef(handleRestart);
+  handleRestartRef.current = handleRestart;
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const customLevel = params.get('testLevel') || params.get('level');
+    const dailyParam = params.get('daily') || params.get('date');
+    const mode = params.get('mode');
+
     if (customLevel) {
       loadLevelFromString(customLevel);
-    } else {
+    } else if (dailyParam || mode === 'daily') {
+      const todayStr = get_today_str();
+      const requestedDate = (dailyParam && dailyParam !== 'today') ? dailyParam : todayStr;
+      const dateToLoad = requestedDate > todayStr ? todayStr : requestedDate;
+      loadDailyLevel(dateToLoad);
+    } else if (mode === 'test') {
       loadLevel("Level 01/01");
+    } else {
+      loadDailyLevel();
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -240,9 +373,10 @@ export function App() {
         return;
       }
 
-      // Escape closes shortcuts modal
+      // Escape closes shortcuts and levels modals
       if (e.key === 'Escape') {
         setShowShortcuts(false);
+        setShowLevelsModal(false);
         return;
       }
 
@@ -276,7 +410,7 @@ export function App() {
       // Restart shortcut (R without modifier)
       if (key === 'r' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
-        loadLevelRef.current(currentLevelKeyRef.current);
+        handleRestartRef.current();
         return;
       }
 
@@ -394,6 +528,10 @@ export function App() {
   useEffect(() => {
     (window as any).loadLevelString = loadLevelFromString;
     (window as any).loadLevelKey = loadLevel;
+    (window as any).loadDailyLevel = loadDailyLevel;
+    (window as any).getDailyDate = () => dailyDateRef.current;
+    (window as any).isDaily = () => isDailyModeRef.current;
+    (window as any).restartLevel = handleRestart;
     (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater | Content.NoBoat) => {
       if ((tool === Content.Boat || tool === Content.NoBoat) && !hasBoatsRef.current) {
         return;
@@ -437,7 +575,9 @@ export function App() {
       setCanRedo(engine.can_redo());
       if (isLevelComplete(next)) {
         setWon(true);
-        setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+        if (!isDailyModeRef.current) {
+          setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+        }
       }
     };
     (window as any).undo = () => handleUndoRef.current();
@@ -446,10 +586,12 @@ export function App() {
     (window as any).canRedo = () => engineRef.current?.can_redo() ?? false;
     (window as any).setShowShortcuts = (val: boolean) => setShowShortcuts(val);
     (window as any).getShowShortcuts = () => showShortcutsRef.current;
+    (window as any).setShowLevelsModal = (val: boolean) => setShowLevelsModal(val);
+    (window as any).getShowLevelsModal = () => showLevelsModalRef.current;
     (window as any).setHoveredCell = (r: number, c: number, corner: Corner = Corner.TopLeft) => {
       hoveredCellRef.current = { row: r, col: c, corner };
     };
-  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts]);
+  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -487,9 +629,6 @@ export function App() {
       setCanRedo(engineRef.current.can_redo());
     }
   };
-
-  const loadLevelRef = useRef(loadLevel);
-  loadLevelRef.current = loadLevel;
 
   const applyToolToCell = (
     r: number,
@@ -580,7 +719,9 @@ export function App() {
       setIsPointerDown(false);
       mouseHoldStatusRef.current = E.MouseDragState.None;
       setMouseHoldStatus(E.MouseDragState.None);
-      setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
+      if (!isDailyModeRef.current) {
+        setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
+      }
     }
 
     return status;
@@ -675,7 +816,9 @@ export function App() {
         setIsPointerDown(false);
         mouseHoldStatusRef.current = E.MouseDragState.None;
         setMouseHoldStatus(E.MouseDragState.None);
-        setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+        if (!isDailyModeRef.current) {
+          setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+        }
       }
     }
   };
@@ -721,21 +864,27 @@ export function App() {
 
       {!isTestMode && (
         <div class="level-picker">
-          {levelKeys.map(key => {
-            const isCurrent = key === currentLevelKey;
-            const isDone = completedLevels.has(key);
-            const statusClass = isCurrent ? 'level-btn-current' : isDone ? 'level-btn-done' : 'level-btn-unsolved';
-            return (
-              <button
-                key={key}
-                onClick={() => loadLevel(key)}
-                class={`level-btn ${statusClass}`}
-              >
-                {isDone && <img src="/icons/checkmark.png" class="w-3.5 h-3.5 object-contain" alt="done" />}
-                <span>{key}</span>
-              </button>
-            );
-          })}
+          <button
+            data-testid="btn-daily-mode"
+            onClick={() => {
+              if (!isDailyMode) {
+                loadDailyLevel();
+              }
+            }}
+            class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
+            title="Play Daily Level"
+          >
+            <span>📅 Daily Level</span>
+          </button>
+
+          <button
+            data-testid="btn-open-levels-modal"
+            onClick={() => setShowLevelsModal(true)}
+            class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
+            title="Fixed levels for testing"
+          >
+            <span>🧪 Test Levels {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
+          </button>
         </div>
       )}
 
@@ -831,9 +980,9 @@ export function App() {
 
         <button
           data-testid="btn-restart"
-          onClick={() => loadLevel(currentLevelKey)}
+          onClick={handleRestart}
           class="btn-restart"
-          title="Restart Level"
+          title="Restart Level (R)"
         >
           <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
           <span>Restart</span>
@@ -864,35 +1013,84 @@ export function App() {
         Liquidum Lite
       </h1>
 
+      {isDailyMode && dailyMeta && (
+        <div class="daily-banner" data-testid="daily-banner">
+          <div class="daily-info" data-testid="daily-info">
+            <span class="daily-emoji">{dailyMeta.emoji}</span>
+            <span class="font-bold text-base text-[var(--game-mint)]">{dailyMeta.flavorName}</span>
+            <span class="opacity-80 text-sm">({dailyMeta.date})</span>
+            <span class="text-xs opacity-75">— {dailyMeta.description}</span>
+          </div>
+        </div>
+      )}
+
       <div class="banner-slot">
         {won && (
           <div data-testid="win-banner" class="win-banner">
-            <div class="win-title">🎉 Level Complete! 🎉</div>
-            <div class="flex items-center gap-2">
+            <div class="win-title">
+              {isDailyMode ? `🎉 Daily Complete! 🎉` : `🎉 Level Complete! 🎉`}
+            </div>
+            {isDailyMode && (
+              <div class="text-sm font-semibold opacity-95 text-[var(--game-mint)] flex items-center justify-center gap-2">
+                <span>{dailyMeta?.emoji} {dailyMeta?.flavorName}</span>
+                <span>•</span>
+                <span>{mistakes === 0 ? "🏆 0 Mistakes!" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`}</span>
+              </div>
+            )}
+            <div class="flex items-center gap-2 flex-wrap justify-center">
               <button
                 data-testid="btn-play-again"
-                onClick={() => loadLevel(currentLevelKey)}
+                onClick={handleRestart}
                 class="win-btn-again"
               >
                 <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
                 <span>Play Again</span>
               </button>
-              {nextLevelKey && (
+              {isDailyMode ? (
                 <button
-                  data-testid="btn-next-level"
-                  onClick={() => loadLevel(nextLevelKey)}
-                  class="win-btn-next"
+                  data-testid="btn-share-result"
+                  onClick={handleShare}
+                  class="btn-share"
+                  title="Copy share text to clipboard"
                 >
-                  <span>Next Level ({nextLevelKey})</span>
-                  <span>→</span>
+                  <span>{copiedShare ? "✓ Copied!" : "📋 Share Result"}</span>
                 </button>
+              ) : (
+                nextLevelKey && (
+                  <button
+                    data-testid="btn-next-level"
+                    onClick={() => loadLevel(nextLevelKey)}
+                    class="win-btn-next"
+                  >
+                    <span>Next Level ({nextLevelKey})</span>
+                    <span>→</span>
+                  </button>
+                )
               )}
+              <a
+                data-testid="btn-steam-link"
+                href="https://store.steampowered.com/app/2690070/Liquidum/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-steam"
+                title="Play the full game on Steam"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z"/>
+                </svg>
+                <span>Liquidum on Steam</span>
+              </a>
             </div>
           </div>
         )}
       </div>
 
-      {gridData ? (
+      {isLoadingDaily ? (
+        <div class="daily-loading" data-testid="daily-loading">
+          <div class="loading-spinner" />
+          <span>Generating Daily Level for {dailyDate}...</span>
+        </div>
+      ) : gridData ? (
         <div class="flex flex-col items-center">
           {/* Grid Hints Header */}
           {(() => {
@@ -1150,6 +1348,62 @@ export function App() {
                     <span class="shortcut-desc">Toggle / close shortcuts popup</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLevelsModal && (
+        <div
+          data-testid="levels-modal"
+          class="modal-backdrop"
+          onClick={() => setShowLevelsModal(false)}
+        >
+          <div
+            class="shortcuts-dialog"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '440px' }}
+          >
+            <div class="shortcuts-header">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🧪</span>
+                <h2 class="shortcuts-title godot-text-outline">Test Levels</h2>
+              </div>
+              <button
+                data-testid="btn-close-levels-modal"
+                onClick={() => setShowLevelsModal(false)}
+                class="shortcuts-close-btn"
+                title="Close (Esc)"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="shortcuts-content">
+              <p class="text-xs opacity-75 mb-3 text-[var(--game-mint)]">
+                Fixed levels for testing (will be removed later):
+              </p>
+              <div class="grid grid-cols-2 gap-2">
+                {levelKeys.map(key => {
+                  const isCurrent = !isDailyMode && key === currentLevelKey;
+                  const isDone = completedLevels.has(key);
+                  const statusClass = isCurrent ? 'level-btn-current' : isDone ? 'level-btn-done' : 'level-btn-unsolved';
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        loadLevel(key);
+                        setShowLevelsModal(false);
+                      }}
+                      class={`level-btn ${statusClass} justify-center w-full`}
+                    >
+                      {isDone && <img src="/icons/checkmark.png" class="w-3.5 h-3.5 object-contain" alt="done" />}
+                      <span>{key}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

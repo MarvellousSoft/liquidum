@@ -1466,3 +1466,183 @@ body {
   box-shadow: 0 1px 0 var(--game-navy);
 }
 
+/* ==========================================================================
+   Daily Level UI Styling
+   ========================================================================== */
+.level-btn-daily {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #000924;
+  border-color: #000924;
+  font-weight: 800;
+}
+
+.level-btn-daily:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.level-btn-daily-active {
+  background: #61fc89 !important;
+  color: #000924 !important;
+  box-shadow: 0 0 12px rgba(97, 252, 137, 0.6), 0 3px 0 #000924 !important;
+}
+
+.daily-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(0, 9, 36, 0.35);
+  border: 2.5px solid var(--game-navy);
+  border-radius: 1.25rem;
+  padding: 0.6rem 1.25rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 4px 0 var(--game-navy), 0 8px 16px rgba(0, 9, 36, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.daily-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.daily-nav-btn {
+  font-family: var(--font-game);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid var(--game-navy);
+  background-color: var(--game-teal);
+  color: var(--game-mint);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 0 var(--game-navy);
+}
+
+.daily-nav-btn:hover {
+  background-color: var(--game-teal-hover);
+  transform: translateY(-1px);
+}
+
+.daily-nav-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.daily-today-btn {
+  background-color: rgba(0, 9, 36, 0.4);
+}
+
+.daily-date-input {
+  font-family: var(--font-game);
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 2px solid var(--game-navy);
+  background-color: rgba(0, 9, 36, 0.5);
+  color: var(--game-mint);
+  outline: none;
+  cursor: pointer;
+}
+
+.daily-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.daily-emoji {
+  font-size: 1.25rem;
+}
+
+.daily-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--game-mint);
+}
+
+.loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid rgba(217, 255, 226, 0.2);
+  border-top-color: var(--game-mint);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-share {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-game);
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  border: 2px solid var(--game-navy);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--game-navy);
+  transition: all 0.12s ease;
+}
+
+.btn-share:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-share:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn-steam {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-game);
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
+  border: 2px solid #66c0f4;
+  background: linear-gradient(135deg, #1b2838 0%, #171a21 100%);
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--game-navy), 0 0 10px rgba(102, 192, 244, 0.3);
+  transition: all 0.15s ease;
+}
+
+.btn-steam:hover {
+  background: linear-gradient(135deg, #2a475e 0%, #1b2838 100%);
+  border-color: #c7d5e0;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--game-navy), 0 0 14px rgba(102, 192, 244, 0.5);
+}
+
+.btn-steam:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+

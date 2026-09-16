@@ -1,0 +1,3 @@
+- Use the same result message as normal liquidum "I won #liquidum ..." with the linktree link.
+- Use the same share logic as in the base game: If on mobile, use the share dialog, but when on desktop, just copy to clipboard because Window's share dialog is bad.
+- Add some text: "Want More? Download liquidum on Steam" with the link.
