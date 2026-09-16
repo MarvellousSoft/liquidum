@@ -543,6 +543,155 @@ L._.
     await expect(aq3.locator('.aq-expected-count')).toHaveText('×1');
   });
 
+  test('visual_test_undo_redo_buttons_and_reactive_states', async ({ page }) => {
+    // 1. Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    const btnUndo = page.locator('[data-testid="btn-undo"]');
+    const btnRedo = page.locator('[data-testid="btn-redo"]');
+    await expect(btnUndo).toBeVisible();
+    await expect(btnRedo).toBeVisible();
+
+    // Initial state: both should be disabled
+    await expect(btnUndo).toBeDisabled();
+    await expect(btnRedo).toBeDisabled();
+
+    // Place air in cell (0, 0)
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Undo is now enabled, Redo is still disabled
+    await expect(btnUndo).toBeEnabled();
+    await expect(btnRedo).toBeDisabled();
+
+    // Click Undo
+    await btnUndo.click();
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'none');
+
+    // Undo is now disabled, Redo is now enabled
+    await expect(btnUndo).toBeDisabled();
+    await expect(btnRedo).toBeEnabled();
+
+    // Click Redo
+    await btnRedo.click();
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Undo is enabled, Redo is disabled
+    await expect(btnUndo).toBeEnabled();
+    await expect(btnRedo).toBeDisabled();
+  });
+
+  test('visual_test_undo_redo_keyboard_shortcuts', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+
+    // Place air in cell 0-0
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // Test single-key 'z' for Undo
+    await page.keyboard.press('z');
+    await expect(cell00).toHaveAttribute('data-content-left', 'none');
+
+    // Test single-key 'y' for Redo
+    await page.keyboard.press('y');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+
+    // Test modifier key 'Control+z' for Undo
+    await page.keyboard.press('Control+z');
+    await expect(cell00).toHaveAttribute('data-content-left', 'none');
+
+    // Test modifier key 'Control+y' for Redo
+    await page.keyboard.press('Control+y');
+    await expect(cell00).toHaveAttribute('data-content-left', 'air');
+  });
+
+  test('visual_test_undo_winning_move_restores_playable_state', async ({ page }) => {
+    // Level 01/01 water cells: (0, 1), (0, 2), (1, 2), (2, 0), (2, 1), (2, 2)
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+    await page.click('[data-testid="tool-water"]');
+
+    // Place 5 of the 6 waters:
+    await page.click('[data-testid="cell-0-1"]');
+    await page.click('[data-testid="cell-0-2"]');
+    await page.click('[data-testid="cell-1-2"]');
+    await page.click('[data-testid="cell-2-0"]');
+    await page.click('[data-testid="cell-2-1"]');
+
+    const winBanner = page.locator('[data-testid="win-banner"]');
+    await expect(winBanner).toHaveCount(0);
+
+    // Place the 6th water cell to complete the puzzle:
+    await page.click('[data-testid="cell-2-2"]');
+
+    // Win banner appears!
+    await expect(winBanner).toBeVisible();
+
+    // Now press Undo
+    await page.click('[data-testid="btn-undo"]');
+
+    // Win banner must be dismissed, and (2, 2) is empty again!
+    await expect(winBanner).toHaveCount(0);
+    await expect(page.locator('[data-testid="cell-2-2"]')).toHaveAttribute('data-content-left', 'none');
+
+    // Press Redo
+    await page.click('[data-testid="btn-redo"]');
+
+    // Win banner reappears!
+    await expect(winBanner).toBeVisible();
+    await expect(page.locator('[data-testid="cell-2-2"]')).toHaveAttribute('data-content-left', 'water');
+  });
+
+  test('visual_test_drag_stroke_undo_reverts_multiple_cells_in_one_step', async ({ page }) => {
+    // Load Level 01/01
+    await page.evaluate(() => (window as any).loadLevelKey("Level 01/01"));
+
+    // Select Air tool
+    await page.click('[data-testid="tool-air"]');
+
+    // Drag from cell (0, 0) across to (1, 0) and (1, 1)
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    const cell10 = page.locator('[data-testid="cell-1-0"]');
+    const cell11 = page.locator('[data-testid="cell-1-1"]');
+
+    const box00 = await cell00.boundingBox();
+    const box10 = await cell10.boundingBox();
+    const box11 = await cell11.boundingBox();
+
+    if (box00 && box10 && box11) {
+      await page.mouse.move(box00.x + box00.width / 2, box00.y + box00.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box10.x + box10.width / 2, box10.y + box10.height / 2);
+      await page.mouse.move(box11.x + box11.width / 2, box11.y + box11.height / 2);
+      await page.mouse.up();
+
+      // All 3 cells should now have air
+      await expect(cell00).toHaveAttribute('data-content-left', 'air');
+      await expect(cell10).toHaveAttribute('data-content-left', 'air');
+      await expect(cell11).toHaveAttribute('data-content-left', 'air');
+
+      // Undo once with keyboard 'z'
+      await page.keyboard.press('z');
+
+      // All 3 cells reverted together!
+      await expect(cell00).toHaveAttribute('data-content-left', 'none');
+      await expect(cell10).toHaveAttribute('data-content-left', 'none');
+      await expect(cell11).toHaveAttribute('data-content-left', 'none');
+
+      // Redo once with keyboard 'y'
+      await page.keyboard.press('y');
+
+      // All 3 cells restored together!
+      await expect(cell00).toHaveAttribute('data-content-left', 'air');
+      await expect(cell10).toHaveAttribute('data-content-left', 'air');
+      await expect(cell11).toHaveAttribute('data-content-left', 'air');
+    }
+  });
+
 });
 
 

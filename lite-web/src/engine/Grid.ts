@@ -170,6 +170,8 @@ export abstract class GridModel {
     
     abstract undo(skip_empty?: boolean): boolean;
     abstract redo(skip_empty?: boolean): boolean;
+    abstract can_undo(): boolean;
+    abstract can_redo(): boolean;
     abstract push_empty_undo(): void;
     
     abstract flood_all(flush_undo?: boolean): boolean;

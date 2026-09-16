@@ -2024,6 +2024,20 @@ export class GridImpl extends GridModel {
         return this._undo_impl(this.redo_stack, this.undo_stack, skip_empty);
     }
 
+    can_undo(): boolean {
+        for (let i = this.undo_stack.length - 1; i >= 0; i--) {
+            if (this.undo_stack[i].changes.length > 0) return true;
+        }
+        return false;
+    }
+
+    can_redo(): boolean {
+        for (let i = this.redo_stack.length - 1; i >= 0; i--) {
+            if (this.redo_stack[i].changes.length > 0) return true;
+        }
+        return false;
+    }
+
     push_empty_undo(): void {
         this._push_undo_changes([], true);
     }

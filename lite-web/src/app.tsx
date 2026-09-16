@@ -5,21 +5,22 @@ import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRo
 import type { GridModelData } from './model/GridData';
 
 const LEVELS: Record<string, any> = {
-  "Level 01/01": {"description":"FIRST_LEVEL_DESCRIPTION","full_name":"LEVEL_01_01","grid_data":{"0":1,"11":[{"4":2,"5":0,"6":-1,"7":0},{"4":1,"5":0,"6":-1,"7":0},{"4":3,"5":0,"6":-1,"7":0}],"12":[{"4":1,"5":0,"6":-1,"7":0},{"4":2,"5":0,"6":-1,"7":0},{"4":3,"5":0,"6":-1,"7":0}],"13":[[{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[1,1,1],[1,1,1]],"15":[[1,1],[1,1],[1,1]],"16":{"8":-1,"9":0,"10":{}}},"version":1, "tutorial":"mouse1"},
-  "Level 01/05": {"description":"UNIQUE_SOLUTION_DESCRIPTION","full_name":"LEVEL_01_05","grid_data":{"0":1,"11":[{"4":-1,"5":0,"6":-1,"7":0},{"4":3,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":2,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"13":[[{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11}],[{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[1,0,1,0,1],[0,0,0,1,0]],"15":[[1,0,0,0],[1,1,1,1],[0,1,0,0]],"16":{"8":7,"9":0,"10":{}}},"version":1},
-  "Level 02/01": {"full_name":"LEVEL_02_01","grid_data":{"0":1,"11":[{"4":3,"5":2,"6":-1,"7":0},{"4":3,"5":2,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0},{"4":2,"5":1,"6":-1,"7":0}],"12":[{"4":3,"5":2,"6":-1,"7":0},{"4":3,"5":2,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0}],"13":[[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11}]],"14":[[1,1,1,1],[1,1,1,1],[1,1,1,1]],"15":[[1,1,1],[1,1,0],[1,1,1],[1,1,1]],"16":{"8":-1,"9":0,"10":{}}},"version":1, "tutorial": "together_separate"},
-  "Level 03/01": {"full_name":"LEVEL_03_01","grid_data":{"0":1,"11":[{"4":0.5,"5":0,"6":-1,"7":0},{"4":1.5,"5":0,"6":-1,"7":0},{"4":1,"5":0,"6":-1,"7":0},{"4":2.5,"5":0,"6":-1,"7":0}],"12":[{"4":-1,"5":0,"6":-1,"7":0},{"4":1.5,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":0.5,"5":0,"6":-1,"7":0}],"13":[[{"1":1,"2":2,"3":9},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":10}],[{"1":1,"2":1,"3":10},{"1":1,"2":2,"3":9},{"1":2,"2":2,"3":10},{"1":2,"2":2,"3":11}],[{"1":1,"2":2,"3":9},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":1,"3":10}],[{"1":2,"2":1,"3":10},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11}]],"14":[[0,0,0,0],[0,0,0,0],[1,1,1,1]],"15":[[0,0,0],[0,0,0],[0,1,0],[0,0,1]],"16":{"8":-1,"9":0,"10":{}}},"version":1},
-  "Level 03/07": {"full_name":"LEVEL_03_07","grid_data":{"0":1,"11":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"13":[[{"1":3,"2":0,"3":9},{"1":0,"2":3,"3":10},{"1":3,"2":3,"3":11},{"1":3,"2":0,"3":9},{"1":0,"2":3,"3":10},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":3,"3":9}],[{"1":3,"2":0,"3":10},{"1":0,"2":3,"3":9},{"1":3,"2":1,"3":10},{"1":1,"2":1,"3":11},{"1":1,"2":3,"3":9},{"1":0,"2":0,"3":11},{"1":3,"2":3,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":3,"3":10},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11},{"1":3,"2":1,"3":10},{"1":3,"2":3,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":3,"3":10},{"1":3,"2":1,"3":10},{"1":1,"2":3,"3":10},{"1":3,"2":3,"3":11},{"1":1,"2":3,"3":10}],[{"1":1,"2":3,"3":9},{"1":0,"2":0,"3":11},{"1":0,"2":3,"3":9},{"1":3,"2":3,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":3,"3":9}],[{"1":3,"2":3,"3":11},{"1":1,"2":3,"3":9},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11},{"1":3,"2":3,"3":11}]],"14":[[0,0,1,0,0,1,1],[0,0,0,0,0,0,1],[1,1,1,1,1,0,1],[0,0,1,1,1,1,1],[0,0,0,1,0,1,0],[1,0,1,1,1,1,1]],"15":[[0,1,1,0,1,1],[0,0,0,0,0,0],[0,1,0,0,1,1],[0,1,1,1,1,1],[0,0,1,0,1,1],[1,0,1,1,0,0],[1,1,1,1,1,1]],"16":{"8":-1,"9":0,"10":{}}},"version":1},
-  "Level 04/01": {"full_name":"LEVEL_04_01","grid_data":{"0":1,"11":[{"4":-1,"5":0,"6":2,"7":0},{"4":-1,"5":0,"6":2,"7":0},{"4":4.5,"5":0,"6":-1,"7":0}],"12":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"13":[[{"1":4,"2":4,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":4,"2":4,"3":11}],[{"1":1,"2":1,"3":11},{"1":4,"2":4,"3":11},{"1":0,"2":0,"3":11},{"1":4,"2":4,"3":11},{"1":0,"2":1,"3":10}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":10},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":0,"3":10}]],"14":[[0,1,1,1,0],[0,0,0,0,0]],"15":[[0,0,0,0],[1,0,0,1],[0,0,0,0]],"16":{"8":-1,"9":-1,"10":{}}},"version":1, "tutorial": "boats"},
-  "Level 04/05": {"full_name":"LEVEL_04_05","grid_data":{"0":1,"11":[{"4":4,"5":1,"6":-1,"7":0},{"4":3.5,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0}],"13":[[{"1":1,"2":1,"3":10},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":4,"2":4,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":10},{"1":1,"2":1,"3":11},{"1":4,"2":4,"3":11},{"1":0,"2":0,"3":9},{"1":0,"2":1,"3":10}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":9},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[0,0,1,1,0,0],[0,1,0,0,0,0]],"15":[[0,1,0,1,0],[0,0,1,1,0],[1,0,1,0,0]],"16":{"8":-1,"9":2,"10":{}}},"version":1},
-  "Level 05/01": {"full_name":"LEVEL_05_01","grid_data":{"0":1,"11":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"13":[[{"1":1,"2":1,"3":10},{"1":1,"2":1,"3":9},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":3,"3":9},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[0,0,0,0,0],[1,1,1,0,1]],"15":[[0,1,0,0],[0,1,0,1],[0,0,0,0]],"16":{"8":-1,"9":0,"10":{"0":0,"2.5":1,"3":1}}},"version":1},
-  "Level 05/08": {"full_name":"LEVEL_05_08","grid_data":{"0":1,"11":[{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0}],"12":[{"4":3,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0}],"13":[[{"1":1,"2":0,"3":9},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":9}],[{"1":0,"2":0,"3":11},{"1":4,"2":4,"3":11},{"1":4,"2":4,"3":11}],[{"1":0,"2":1,"3":9},{"1":1,"2":1,"3":9},{"1":1,"2":1,"3":10}],[{"1":0,"2":0,"3":9},{"1":4,"2":4,"3":11},{"1":1,"2":1,"3":11}],[{"1":3,"2":1,"3":9},{"1":1,"2":1,"3":9},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":10},{"1":1,"2":1,"3":10},{"1":1,"2":0,"3":9}],[{"1":0,"2":1,"3":10},{"1":0,"2":1,"3":10},{"1":0,"2":0,"3":9}]],"14":[[0,1,0],[0,0,0],[1,1,0],[1,0,0],[1,0,0],[0,0,0]],"15":[[0,0],[1,0],[0,0],[0,1],[0,0],[0,0],[1,1]],"16":{"8":-1,"9":3,"10":{"0.5":1,"1":2}}},"version":1},
-  "Level 06/01": {"full_name":"LEVEL_06_01","grid_data":{"0":1,"11":[{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0}],"12":[{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0}],"13":[[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[1,1,1,1],[1,1,1,1],[1,0,1,1]],"15":[[0,1,1],[1,0,1],[1,1,1],[1,1,0]],"16":{"8":-1,"9":0,"10":{}}},"version":1},
-  "Level 06/03": {"full_name":"LEVEL_06_03","grid_data":{"0":1,"11":[{"4":-1,"5":1,"6":0,"7":0},{"4":-1,"5":2,"6":-1,"7":1},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0}],"12":[{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":-1,"7":0},{"4":-1,"5":1,"6":-1,"7":0},{"4":-1,"5":2,"6":1,"7":0},{"4":-1,"5":2,"6":2,"7":0},{"4":-1,"5":2,"6":2,"7":0}],"13":[[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":2,"2":2,"3":11}],[{"1":1,"2":1,"3":11},{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":4,"2":4,"3":11},{"1":4,"2":4,"3":11},{"1":4,"2":4,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":4,"2":4,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":4,"2":4,"3":11},{"1":1,"2":1,"3":11}],[{"1":2,"2":2,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[0,1,1,1,0,1],[0,0,1,0,0,0],[1,0,1,1,0,1],[1,1,1,0,1,0],[1,1,1,1,0,1]],"15":[[0,1,0,1,1],[1,1,1,1,1],[1,0,1,1,1],[0,1,0,1,1],[0,0,1,1,1],[1,0,1,0,0]],"16":{"8":27,"9":5,"10":{}}},"version":1}
+  "Level 01/01": { "description": "FIRST_LEVEL_DESCRIPTION", "full_name": "LEVEL_01_01", "grid_data": { "0": 1, "11": [{ "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 1, 1], [1, 1, 1]], "15": [[1, 1], [1, 1], [1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1, "tutorial": "mouse1" },
+  "Level 01/05": { "description": "UNIQUE_SOLUTION_DESCRIPTION", "full_name": "LEVEL_01_05", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 0, 1, 0, 1], [0, 0, 0, 1, 0]], "15": [[1, 0, 0, 0], [1, 1, 1, 1], [0, 1, 0, 0]], "16": { "8": 7, "9": 0, "10": {} } }, "version": 1 },
+  "Level 02/01": { "full_name": "LEVEL_02_01", "grid_data": { "0": 1, "11": [{ "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 1, "6": -1, "7": 0 }, { "4": 2, "5": 1, "6": -1, "7": 0 }], "12": [{ "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }]], "14": [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]], "15": [[1, 1, 1], [1, 1, 0], [1, 1, 1], [1, 1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1, "tutorial": "together_separate" },
+  "Level 03/01": { "full_name": "LEVEL_03_01", "grid_data": { "0": 1, "11": [{ "4": 0.5, "5": 0, "6": -1, "7": 0 }, { "4": 1.5, "5": 0, "6": -1, "7": 0 }, { "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 2.5, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 1.5, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 0.5, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 10 }], [{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 10 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 1, "3": 10 }], [{ "1": 2, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }]], "14": [[0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1]], "15": [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
+  "Level 03/07": { "full_name": "LEVEL_03_07", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 3, "2": 0, "3": 9 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 0, "3": 9 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 9 }], [{ "1": 3, "2": 0, "3": 10 }, { "1": 0, "2": 3, "3": 9 }, { "1": 3, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 1, "3": 10 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 1, "3": 10 }, { "1": 1, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 3, "3": 10 }], [{ "1": 1, "2": 3, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 9 }, { "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }], [{ "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }]], "14": [[0, 0, 1, 0, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1], [1, 1, 1, 1, 1, 0, 1], [0, 0, 1, 1, 1, 1, 1], [0, 0, 0, 1, 0, 1, 0], [1, 0, 1, 1, 1, 1, 1]], "15": [[0, 1, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 1, 1], [0, 1, 1, 1, 1, 1], [0, 0, 1, 0, 1, 1], [1, 0, 1, 1, 0, 0], [1, 1, 1, 1, 1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
+  "Level 04/01": { "full_name": "LEVEL_04_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": 2, "7": 0 }, { "4": -1, "5": 0, "6": 2, "7": 0 }, { "4": 4.5, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": 1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": 1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 1, "3": 10 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 0, "3": 10 }]], "14": [[0, 1, 1, 1, 0], [0, 0, 0, 0, 0]], "15": [[0, 0, 0, 0], [1, 0, 0, 1], [0, 0, 0, 0]], "16": { "8": -1, "9": -1, "10": {} } }, "version": 1, "tutorial": "boats" },
+  "Level 04/05": { "full_name": "LEVEL_04_05", "grid_data": { "0": 1, "11": [{ "4": 4, "5": 1, "6": -1, "7": 0 }, { "4": 3.5, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 9 }, { "1": 0, "2": 1, "3": 10 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 0, 1, 1, 0, 0], [0, 1, 0, 0, 0, 0]], "15": [[0, 1, 0, 1, 0], [0, 0, 1, 1, 0], [1, 0, 1, 0, 0]], "16": { "8": -1, "9": 2, "10": {} } }, "version": 1 },
+  "Level 05/01": { "full_name": "LEVEL_05_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 0, 0, 0, 0], [1, 1, 1, 0, 1]], "15": [[0, 1, 0, 0], [0, 1, 0, 1], [0, 0, 0, 0]], "16": { "8": -1, "9": 0, "10": { "0": 0, "2.5": 1, "3": 1 } } }, "version": 1 },
+  "Level 05/08": { "full_name": "LEVEL_05_08", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "12": [{ "4": 3, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 0, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 9 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 0, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 10 }], [{ "1": 0, "2": 0, "3": 9 }, { "1": 4, "2": 4, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 3, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 0, "3": 9 }], [{ "1": 0, "2": 1, "3": 10 }, { "1": 0, "2": 1, "3": 10 }, { "1": 0, "2": 0, "3": 9 }]], "14": [[0, 1, 0], [0, 0, 0], [1, 1, 0], [1, 0, 0], [1, 0, 0], [0, 0, 0]], "15": [[0, 0], [1, 0], [0, 0], [0, 1], [0, 0], [0, 0], [1, 1]], "16": { "8": -1, "9": 3, "10": { "0.5": 1, "1": 2 } } }, "version": 1 },
+  "Level 06/01": { "full_name": "LEVEL_06_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 1, 1, 1], [1, 1, 1, 1], [1, 0, 1, 1]], "15": [[0, 1, 1], [1, 0, 1], [1, 1, 1], [1, 1, 0]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
+  "Level 06/03": { "full_name": "LEVEL_06_03", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 1, "6": 0, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 1 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": 1, "7": 0 }, { "4": -1, "5": 2, "6": 2, "7": 0 }, { "4": -1, "5": 2, "6": 2, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 1, 1, 1, 0, 1], [0, 0, 1, 0, 0, 0], [1, 0, 1, 1, 0, 1], [1, 1, 1, 0, 1, 0], [1, 1, 1, 1, 0, 1]], "15": [[0, 1, 0, 1, 1], [1, 1, 1, 1, 1], [1, 0, 1, 1, 1], [0, 1, 0, 1, 1], [0, 0, 1, 1, 1], [1, 0, 1, 0, 0]], "16": { "8": 27, "9": 5, "10": {} } }, "version": 1 }
 };
 
 import { GridImpl } from './engine/GridImpl';
 import { E } from './engine/E';
+import { LoadMode } from './engine/Grid';
 
 function toEngineCorner(c: Corner): E.Corner {
   switch (c) {
@@ -48,6 +49,54 @@ export function App() {
   const hasBoatsRef = useRef(hasBoats);
   hasBoatsRef.current = hasBoats;
 
+  const [canUndo, setCanUndo] = useState<boolean>(false);
+  const [canRedo, setCanRedo] = useState<boolean>(false);
+  const engineRef = useRef<GridImpl | null>(null);
+
+  const handleUndo = () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (engine.undo()) {
+      const next = engine.to_grid_data();
+      setGridData(next);
+      setWon(isLevelComplete(next));
+      setCanUndo(engine.can_undo());
+      setCanRedo(engine.can_redo());
+    }
+  };
+
+  const handleRedo = () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (engine.redo()) {
+      const next = engine.to_grid_data();
+      setGridData(next);
+      setWon(isLevelComplete(next));
+      setCanUndo(engine.can_undo());
+      setCanRedo(engine.can_redo());
+    }
+  };
+
+  const handleUndoRef = useRef(handleUndo);
+  handleUndoRef.current = handleUndo;
+  const handleRedoRef = useRef(handleRedo);
+  handleRedoRef.current = handleRedo;
+
+  const handlePointerUp = () => {
+    setIsPointerDown(false);
+    setDragAction(null);
+    if (engineRef.current) {
+      while (
+        engineRef.current.undo_stack.length > 0 &&
+        engineRef.current.undo_stack[engineRef.current.undo_stack.length - 1].changes.length === 0
+      ) {
+        engineRef.current.undo_stack.pop();
+      }
+      setCanUndo(engineRef.current.can_undo());
+      setCanRedo(engineRef.current.can_redo());
+    }
+  };
+
   useEffect(() => {
     if (!hasBoats && (selectedTool === Content.Boat || selectedTool === Content.NoBoat)) {
       setSelectedTool(Content.Water);
@@ -73,20 +122,27 @@ export function App() {
 
   const loadLevelFromString = (levelStr: string, preserveContents: boolean = false) => {
     try {
-      const engine = GridImpl.from_str(levelStr);
-      const data = engine.to_grid_data();
+      const engine = GridImpl.from_str(levelStr, preserveContents ? LoadMode.Testing : LoadMode.SolutionNoClear);
       if (!preserveContents) {
-        for (let r = 0; r < data.cells.length; r++) {
-          for (let c = 0; c < data.cells[r].length; c++) {
-            if (data.cells[r][c].c_left !== Content.Block) data.cells[r][c].c_left = Content.Nothing;
-            if (data.cells[r][c].c_right !== Content.Block) data.cells[r][c].c_right = Content.Nothing;
+        for (let r = 0; r < engine.rows(); r++) {
+          for (let c = 0; c < engine.cols(); c++) {
+            const pure = engine.pure_cells[r][c];
+            if (pure.c_left !== Content.Block) pure.c_left = Content.Nothing;
+            if (pure.c_right !== Content.Block) pure.c_right = Content.Nothing;
           }
         }
       }
+      engine.undo_stack = [];
+      engine.redo_stack = [];
+      engine.maybe_update_hints();
+      engineRef.current = engine;
+      const data = engine.to_grid_data();
       setGridData(data);
       setWon(preserveContents ? isLevelComplete(data) : false);
       setMistakes(0);
       setBlinkingCells(new Map());
+      setCanUndo(false);
+      setCanRedo(false);
     } catch (e) {
       console.error("Failed to load level from string", e);
     }
@@ -96,7 +152,7 @@ export function App() {
     try {
       setCurrentLevelKey(levelKey);
       const data = parseGridData(LEVELS[levelKey]);
-      
+
       const solution_c_left: Content[][] = [];
       const solution_c_right: Content[][] = [];
       let hasSolutionCells = false;
@@ -127,10 +183,19 @@ export function App() {
           if (data.cells[r][c].c_right !== Content.Block) data.cells[r][c].c_right = Content.Nothing;
         }
       }
+
+      const engine = GridImpl.load_from_grid_data(data);
+      engine.undo_stack = [];
+      engine.redo_stack = [];
+      engine.maybe_update_hints();
+      engineRef.current = engine;
+
       setGridData(data);
       setWon(false);
       setMistakes(0);
       setBlinkingCells(new Map());
+      setCanUndo(false);
+      setCanRedo(false);
     } catch (e) {
       console.error(e);
     }
@@ -144,17 +209,38 @@ export function App() {
     } else {
       loadLevel("Level 01/01");
     }
-    const handleUp = () => setIsPointerDown(false);
+
     const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA') {
+        return;
+      }
+      const key = e.key.toLowerCase();
+      if ((key === 'z' && (e.ctrlKey || e.metaKey)) || key === 'z') {
+        if (!e.shiftKey) {
+          e.preventDefault();
+          handleUndoRef.current();
+          return;
+        } else {
+          e.preventDefault();
+          handleRedoRef.current();
+          return;
+        }
+      }
+      if ((key === 'y' && (e.ctrlKey || e.metaKey)) || key === 'y') {
+        e.preventDefault();
+        handleRedoRef.current();
+        return;
+      }
       if (e.key === '1') setSelectedTool(Content.Water);
       else if (e.key === '2') setSelectedTool(Content.NoWater);
       else if (e.key === '3' && hasBoatsRef.current) setSelectedTool(Content.Boat);
       else if (e.key === '4' && hasBoatsRef.current) setSelectedTool(Content.NoBoat);
     };
-    window.addEventListener('pointerup', handleUp);
+
+    window.addEventListener('pointerup', handlePointerUp);
     window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('pointerup', handleUp);
+      window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
@@ -171,6 +257,7 @@ export function App() {
     (window as any).setAutoFloodAir = (val: boolean) => setAutoFloodAir(val);
     (window as any).setDarkMode = (val: boolean) => setIsDarkMode(val);
     (window as any).exportLevelString = () => {
+      if (engineRef.current) return engineRef.current.to_str();
       if (!gridData) return '';
       return GridImpl.load_from_grid_data(gridData).to_str();
     };
@@ -178,9 +265,14 @@ export function App() {
     (window as any).getGridData = () => gridData;
     (window as any).getMistakes = () => mistakesRef.current;
     (window as any).putCellAction = (r: number, c: number, corner: Corner, content: Content) => {
-      executeEngineAction(r, c, { corner, content });
+      executeEngineAction(r, c, { corner, content }, true);
+      handlePointerUp();
     };
-  }, [gridData, won, isDarkMode, mistakes]);
+    (window as any).undo = () => handleUndoRef.current();
+    (window as any).redo = () => handleRedoRef.current();
+    (window as any).canUndo = () => engineRef.current?.can_undo() ?? false;
+    (window as any).canRedo = () => engineRef.current?.can_redo() ?? false;
+  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -205,54 +297,79 @@ export function App() {
 
     setIsPointerDown(false);
     setDragAction(null);
+
+    if (engineRef.current) {
+      while (
+        engineRef.current.undo_stack.length > 0 &&
+        engineRef.current.undo_stack[engineRef.current.undo_stack.length - 1].changes.length === 0
+      ) {
+        engineRef.current.undo_stack.pop();
+      }
+      setCanUndo(engineRef.current.can_undo());
+      setCanRedo(engineRef.current.can_redo());
+    }
   };
 
-  const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }) => {
+  const executeEngineAction = (r: number, c: number, action: { corner: Corner, content: Content }, isStartOfStroke: boolean = false) => {
     if (won) return;
-    setGridData(prev => {
-      if (!prev) return prev;
-      const engine = GridImpl.load_from_grid_data(prev);
-      const eCorner = toEngineCorner(action.corner);
-      
-      const currContent = (engine.get_cell(r, c) as any).pure()._content_at(eCorner);
-      if (currContent === Content.Block) return prev;
-      
-      if (action.content === Content.Water) {
-        if (currContent === Content.Water) return prev;
-        const added = (engine.get_cell(r, c) as any).put_water(eCorner);
+    const engine = engineRef.current;
+    if (!engine) return;
+
+    if (isStartOfStroke) {
+      engine.push_empty_undo();
+    }
+
+    const eCorner = toEngineCorner(action.corner);
+    const cell = engine.get_cell(r, c) as any;
+    const currContent = cell.pure()._content_at(eCorner);
+    if (currContent === Content.Block) return;
+
+    let madeChange = false;
+    if (action.content === Content.Water) {
+      if (currContent !== Content.Water) {
+        const added = cell.put_water(eCorner, false);
         if (added <= 0.0) {
           triggerMistake(r, c, action.corner);
-          return prev;
+          return;
         }
-      } else if (action.content === Content.NoWater) {
-        (engine.get_cell(r, c) as any).put_nowater(eCorner, false, autoFloodAir);
-      } else if (action.content === Content.Boat) {
-        if (currContent === Content.Boat) return prev;
-        const success = (engine.get_cell(r, c) as any).put_boat();
+        madeChange = true;
+      }
+    } else if (action.content === Content.NoWater) {
+      cell.put_nowater(eCorner, false, autoFloodAir);
+      madeChange = true;
+    } else if (action.content === Content.Boat) {
+      if (currContent !== Content.Boat) {
+        const success = cell.put_boat(false);
         if (!success) {
           triggerMistake(r, c, action.corner);
-          return prev;
+          return;
         }
-      } else if (action.content === Content.NoBoat) {
-        (engine.get_cell(r, c) as any).put_noboat(eCorner);
-      } else if (action.content === Content.Nothing) {
-        if (currContent === Content.NoBoat || currContent === Content.NoBoatWater) {
-          (engine.get_cell(r, c) as any).remove_noboat(eCorner);
-        } else {
-          (engine.get_cell(r, c) as any).remove_content(eCorner, false, autoFloodAir);
-        }
+        madeChange = true;
       }
-      
-      const next = engine.to_grid_data();
-      const complete = isLevelComplete(next);
-      if (complete) {
-        setWon(true);
-        setIsPointerDown(false);
-        setDragAction(null);
-        setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+    } else if (action.content === Content.NoBoat) {
+      cell.put_noboat(eCorner, false);
+      madeChange = true;
+    } else if (action.content === Content.Nothing) {
+      if (currContent === Content.NoBoat || currContent === Content.NoBoatWater) {
+        cell.remove_noboat(eCorner, false);
+        madeChange = true;
+      } else {
+        cell.remove_content(eCorner, false, autoFloodAir);
+        madeChange = true;
       }
-      return next;
-    });
+    }
+
+    const next = engine.to_grid_data();
+    setGridData(next);
+    setCanUndo(engine.can_undo());
+    setCanRedo(engine.can_redo());
+    const complete = isLevelComplete(next);
+    if (complete) {
+      setWon(true);
+      setIsPointerDown(false);
+      setDragAction(null);
+      setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+    }
   };
 
   const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
@@ -260,14 +377,14 @@ export function App() {
     setIsPointerDown(true);
     if (!gridData) return;
     const cell = gridData.cells[r][c];
-    
+
     let currentContent = Content.Nothing;
     if (cell.type === CellType.Single) {
       currentContent = cell.c_left;
     } else {
       currentContent = (corner === Corner.TopLeft || corner === Corner.BottomLeft) ? cell.c_left : cell.c_right;
     }
-    
+
     if (currentContent === Content.Block) return;
 
     let targetContent = Content.Nothing;
@@ -282,15 +399,15 @@ export function App() {
         targetContent = currentContent === selectedTool ? Content.Nothing : selectedTool;
       }
     }
-    
+
     setDragAction({ corner, content: targetContent });
-    executeEngineAction(r, c, { corner, content: targetContent });
+    executeEngineAction(r, c, { corner, content: targetContent }, true);
   };
 
   const handleCellEnter = (r: number, c: number, corner: Corner, e: PointerEvent) => {
     if (won) return;
     if (isPointerDown && dragAction) {
-      executeEngineAction(r, c, { corner: corner, content: dragAction.content });
+      executeEngineAction(r, c, { corner: corner, content: dragAction.content }, false);
     }
   };
 
@@ -315,14 +432,14 @@ export function App() {
   const nextLevelKey = currentIndex >= 0 && currentIndex < levelKeys.length - 1 ? levelKeys[currentIndex + 1] : null;
 
   return (
-    <div 
+    <div
       class={`game-container ${isDarkMode ? 'theme-dark' : ''}`}
-      onPointerUp={() => setIsPointerDown(false)}
-      onPointerLeave={() => setIsPointerDown(false)}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerUp}
       onContextMenu={(e) => e.preventDefault()}
     >
       <div class="game-bg" />
-      
+
       {!isTestMode && (
         <div class="level-picker">
           {levelKeys.map(key => {
@@ -330,7 +447,7 @@ export function App() {
             const isDone = completedLevels.has(key);
             const statusClass = isCurrent ? 'level-btn-current' : isDone ? 'level-btn-done' : 'level-btn-unsolved';
             return (
-              <button 
+              <button
                 key={key}
                 onClick={() => loadLevel(key)}
                 class={`level-btn ${statusClass}`}
@@ -342,64 +459,95 @@ export function App() {
           })}
         </div>
       )}
-      
+
       <div class="controls-toolbar">
         <label class="toolbar-toggle">
-          <input 
-             type="checkbox" 
-             data-testid="auto-flood-air"
-             checked={autoFloodAir} 
-             onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
-             class="checkbox-input"
+          <input
+            type="checkbox"
+            data-testid="auto-flood-air"
+            checked={autoFloodAir}
+            onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
+            class="checkbox-input"
           />
           <span>Auto-Flood Air (✕)</span>
         </label>
-        
+
         <div class="tool-selector">
-           <button 
-             data-testid="tool-water"
-             onClick={() => setSelectedTool(Content.Water)}
-             class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
-             title="Water (1)"
-             aria-label="Water"
-           >
-             <span class="text-base leading-none">💧</span>
-           </button>
-           <button 
-             data-testid="tool-air"
-             onClick={() => setSelectedTool(Content.NoWater)}
-             class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
-             title="Air (2)"
-             aria-label="Air"
-           >
-             <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
-           </button>
-           {hasBoats && (
-             <>
-               <button 
-                 data-testid="tool-boat"
-                 onClick={() => setSelectedTool(Content.Boat)}
-                 class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
-                 title="Boat (3)"
-                 aria-label="Boat"
-               >
-                 <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
-               </button>
-               <button 
-                 data-testid="tool-maybeboat"
-                 data-tool-id="noboat"
-                 onClick={() => setSelectedTool(Content.NoBoat)}
-                 class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
-                 title="Maybe Boat (4)"
-                 aria-label="Maybe Boat"
-               >
-                 <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
-                   <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
-                   <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
-                 </div>
-               </button>
-             </>
-           )}
+          <button
+            data-testid="tool-water"
+            onClick={() => setSelectedTool(Content.Water)}
+            class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
+            title="Water (1)"
+            aria-label="Water"
+          >
+            <span class="text-base leading-none">💧</span>
+          </button>
+          <button
+            data-testid="tool-air"
+            onClick={() => setSelectedTool(Content.NoWater)}
+            class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
+            title="Air (2)"
+            aria-label="Air"
+          >
+            <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
+          </button>
+          {hasBoats && (
+            <>
+              <button
+                data-testid="tool-boat"
+                onClick={() => setSelectedTool(Content.Boat)}
+                class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
+                title="Boat (3)"
+                aria-label="Boat"
+              >
+                <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+              </button>
+              <button
+                data-testid="tool-maybeboat"
+                data-tool-id="noboat"
+                onClick={() => setSelectedTool(Content.NoBoat)}
+                class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
+                title="Maybe Boat (4)"
+                aria-label="Maybe Boat"
+              >
+                <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
+                  <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
+                  <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
+                </div>
+              </button>
+            </>
+          )}
+        </div>
+
+        <div class="undo-redo-group">
+          <button
+            data-testid="btn-undo"
+            onClick={handleUndo}
+            class={`btn-action btn-undo ${!canUndo ? 'btn-disabled' : ''}`}
+            title="Undo (Z or Ctrl+Z)"
+            aria-label="Undo"
+            disabled={!canUndo}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 7v6h6" />
+              <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
+            </svg>
+            <span>Undo</span>
+          </button>
+          <button
+            data-testid="btn-redo"
+            onClick={handleRedo}
+            class={`btn-action btn-redo ${!canRedo ? 'btn-disabled' : ''}`}
+            title="Redo (Y or Ctrl+Y)"
+            aria-label="Redo"
+            disabled={!canRedo}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 7v6h-6" />
+              <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" />
+            </svg>
+            <span>Redo</span>
+          </button>
         </div>
 
         <button
@@ -472,7 +620,7 @@ export function App() {
             return (
               <div class="grid-hints-card" data-testid="grid-hints-card">
                 {/* Mistake Counter */}
-                <div 
+                <div
                   data-testid="mistake-counter"
                   class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
                   title="Mistakes made"
@@ -485,13 +633,13 @@ export function App() {
                 </div>
 
                 {hasTotalWater && (
-                  <div 
+                  <div
                     data-testid="hint-water-counter"
-                    class={`hint-stat-card ${
-                      currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
+                    class={`hint-stat-card ${currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
                       currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
-                      'hint-stat-normal'
-                    }`}
+                        'hint-stat-normal'
+                      }`}
+                    title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
                   >
                     <span class="hint-stat-icon">💧</span>
                     <span class="hint-stat-label">Water</span>
@@ -499,7 +647,7 @@ export function App() {
                       {currentWater} / {gridData.grid_hints.total_water}
                     </span>
                     {currentWater === gridData.grid_hints.total_water ? (
-                      <span class="hint-status-badge badge-satisfied">✓ Done</span>
+                      <span class="hint-status-badge badge-satisfied">✓</span>
                     ) : currentWater > gridData.grid_hints.total_water ? (
                       <span class="hint-status-badge badge-over">⚠ Over</span>
                     ) : null}
@@ -507,13 +655,13 @@ export function App() {
                 )}
 
                 {hasTotalBoats && (
-                  <div 
+                  <div
                     data-testid="hint-boat-counter"
-                    class={`hint-stat-card ${
-                      currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
+                    class={`hint-stat-card ${currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
                       currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
-                      'hint-stat-normal'
-                    }`}
+                        'hint-stat-normal'
+                      }`}
+                    title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
                   >
                     <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
                     <span class="hint-stat-label">Boats</span>
@@ -521,7 +669,7 @@ export function App() {
                       {currentBoats} / {gridData.grid_hints.total_boats}
                     </span>
                     {currentBoats === gridData.grid_hints.total_boats ? (
-                      <span class="hint-status-badge badge-satisfied">✓ Done</span>
+                      <span class="hint-status-badge badge-satisfied">✓</span>
                     ) : currentBoats > gridData.grid_hints.total_boats ? (
                       <span class="hint-status-badge badge-over">⚠ Over</span>
                     ) : null}
@@ -542,8 +690,8 @@ export function App() {
                         const isOver = actualCount > expectedCount;
                         const cardClass = isSatisfied ? 'aquarium-card-satisfied' : isOver ? 'aquarium-card-over' : 'aquarium-card-normal';
                         return (
-                          <div 
-                            key={sizeStr} 
+                          <div
+                            key={sizeStr}
                             data-testid={`aquarium-hint-${sizeStr}`}
                             class={`aquarium-card ${cardClass}`}
                             title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
@@ -563,11 +711,10 @@ export function App() {
                             </div>
                             <div class="aq-info">
                               <span class="aq-expected-count">×{expectedCount}</span>
-                              <span class={`aq-status-pill ${
-                                isSatisfied ? 'aq-pill-satisfied' :
+                              <span class={`aq-status-pill ${isSatisfied ? 'aq-pill-satisfied' :
                                 isOver ? 'aq-pill-over' :
-                                'aq-pill-normal'
-                              }`}>
+                                  'aq-pill-normal'
+                                }`}>
                                 {isSatisfied ? `✓ ${actualCount}` : `${actualCount}/${expectedCount}`}
                               </span>
                             </div>
@@ -582,8 +729,8 @@ export function App() {
           })()}
 
           <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
-            <Grid 
-              gridData={gridData} 
+            <Grid
+              gridData={gridData}
               blinkingCells={blinkingCells}
               onCellPointerDown={handleCellDown}
               onCellPointerEnter={handleCellEnter}
