@@ -362,8 +362,9 @@ EXTRA_07_06,Revonoc,Revonoc,Revonoc
 EXTRA_07_07,USS Proteus,USS Proteus,USS Proteus
 EXTRA_07_08,Witchcraft,Witchcraft,Witchcraft
 DLC5_NAME,PANDORA,PANDORA,PANDORA
-SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regras ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9","Regras ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9"
-LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regras ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regras ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
+SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9"
+LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
+EXTRA_08_01,Liar 1,Liar 1,Liar 1
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
