@@ -274,4 +274,43 @@ test.describe('Daily Level E2E Tests', () => {
     expect(clipboardText).toContain('linktr.ee/liquidum');
   });
 
+  test('verifies page layout order: logo, selector, daily description, tools, grid, and NxM size string', async ({ page }) => {
+    await page.goto('/?daily=2024-01-07');
+
+    const logo = page.locator('.game-title');
+    const selector = page.locator('.level-picker');
+    const description = page.locator('[data-testid="daily-banner"]');
+    const tools = page.locator('.controls-toolbar');
+    const gridHints = page.locator('[data-testid="grid-hints-card"]');
+    const sizeLabel = page.locator('[data-testid="grid-size-label"]');
+
+    await expect(logo).toBeVisible();
+    await expect(selector).toBeVisible();
+    await expect(description).toBeVisible();
+    await expect(tools).toBeVisible();
+    await expect(gridHints).toBeVisible();
+    await expect(sizeLabel).toBeVisible();
+
+    // Verify NxM string format (e.g. 6x6)
+    await expect(sizeLabel).toHaveText(/^\d+x\d+$/);
+    const sizeText = await sizeLabel.textContent();
+    expect(sizeText).toBe('5x4');
+
+    // Verify vertical layout ordering: Logo -> Selector -> Description -> Tools -> Grid
+    const logoBox = await logo.boundingBox();
+    const selectorBox = await selector.boundingBox();
+    const descBox = await description.boundingBox();
+    const toolsBox = await tools.boundingBox();
+    const gridBox = await gridHints.boundingBox();
+    const sizeBox = await sizeLabel.boundingBox();
+
+    expect(logoBox!.y).toBeLessThan(selectorBox!.y);
+    expect(selectorBox!.y).toBeLessThan(descBox!.y);
+    expect(descBox!.y).toBeLessThan(toolsBox!.y);
+    expect(toolsBox!.y).toBeLessThan(gridBox!.y);
+
+    // Size label should be at bottom of grid
+    expect(sizeBox!.y).toBeGreaterThan(gridBox!.y);
+  });
+
 });

@@ -614,6 +614,18 @@ body {
   box-shadow: 0 2.5px 0 var(--game-navy), 0 0 14px rgba(239, 68, 68, 0.45);
 }
 
+.hint-stat-timer {
+  min-width: 9.75rem;
+  justify-content: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.hint-stat-timer .hint-stat-value {
+  display: inline-block;
+  min-width: 3.25rem;
+  text-align: center;
+}
+
 .hint-stat-icon {
   font-size: 1.15rem;
   line-height: 1;
@@ -847,6 +859,17 @@ body {
   border-color: var(--stat-satisfied);
   outline: 3px solid rgba(97, 252, 137, 0.4);
   pointer-events: none;
+}
+
+.grid-size-label {
+  font-family: var(--font-game);
+  color: var(--game-mint);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  user-select: none;
+  line-height: 1;
 }
 
 /* ==========================================================================

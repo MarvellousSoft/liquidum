@@ -1,2 +1,2 @@
 - Implement weekly marathon.
-- Put the logo on top of the page, then the daily/test selector, then daily level description, then tools, then the grid.
+- Add settings screen with customizable settings.

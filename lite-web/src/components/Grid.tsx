@@ -229,6 +229,16 @@ export function Grid({ gridData, blinkingCells, onCellPointerDown, onCellPointer
         </div>
       );
     })}
+
+      {/* Bottom right grid size indicator like in original Godot game */}
+      <div class="flex justify-end items-center mt-2 pr-1 select-none pointer-events-none">
+        <span
+          data-testid="grid-size-label"
+          class="grid-size-label godot-text-outline"
+        >
+          {rows}x{cols}
+        </span>
+      </div>
     </div>
   );
 }

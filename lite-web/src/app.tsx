@@ -1216,6 +1216,12 @@ export function App() {
     >
       <div class="game-bg" />
 
+      {/* 1. Logo on top of the page */}
+      <h1 class="game-title">
+        Liquidum Lite
+      </h1>
+
+      {/* 2. Daily / Test selector */}
       {!isTestMode && (
         <div class="level-picker">
           <button
@@ -1253,6 +1259,29 @@ export function App() {
         </div>
       )}
 
+      {/* 3. Daily level description */}
+      {isDailyMode && dailyMeta && (
+        <div class="daily-banner" data-testid="daily-banner">
+          <div class="daily-info" data-testid="daily-info">
+            <span class="daily-emoji">{dailyMeta.emoji}</span>
+            <span class="font-bold text-base text-[var(--game-mint)]">{dailyMeta.flavorName}</span>
+            <span class="opacity-80 text-sm">({dailyMeta.date})</span>
+            <span class="text-xs opacity-75">— {dailyMeta.description}</span>
+          </div>
+          {dailyDate === get_today_str() && (
+            <div
+              data-testid="daily-time-left-banner"
+              class="ml-auto hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono"
+              title="Time left today to solve the daily level"
+            >
+              <span>⏳</span>
+              <span data-testid="time-left-text">{formatTimeLeft(timeLeftSeconds)}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 4. Tools */}
       <div class="controls-toolbar">
         <label class="toolbar-toggle">
           <input
@@ -1387,31 +1416,7 @@ export function App() {
         </button>
       </div>
 
-      <h1 class="game-title">
-        Liquidum Lite
-      </h1>
-
-      {isDailyMode && dailyMeta && (
-        <div class="daily-banner" data-testid="daily-banner">
-          <div class="daily-info" data-testid="daily-info">
-            <span class="daily-emoji">{dailyMeta.emoji}</span>
-            <span class="font-bold text-base text-[var(--game-mint)]">{dailyMeta.flavorName}</span>
-            <span class="opacity-80 text-sm">({dailyMeta.date})</span>
-            <span class="text-xs opacity-75">— {dailyMeta.description}</span>
-          </div>
-          {dailyDate === get_today_str() && (
-            <div
-              data-testid="daily-time-left-banner"
-              class="ml-auto hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono"
-              title="Time left today to solve the daily level"
-            >
-              <span>⏳</span>
-              <span data-testid="time-left-text">{formatTimeLeft(timeLeftSeconds)}</span>
-            </div>
-          )}
-        </div>
-      )}
-
+      {/* 5. The Grid and banners */}
       <div class="banner-slot">
         {won && (
           <div data-testid="win-banner" class="win-banner">
@@ -1570,12 +1575,12 @@ export function App() {
                     {isDailyMode && (
                       <div
                         data-testid="hint-timer"
-                        class="hint-stat-card hint-stat-normal"
+                        class="hint-stat-card hint-stat-normal hint-stat-timer"
                         title="Time elapsed"
                       >
                         <span class="hint-stat-icon">⏱️</span>
                         <span class="hint-stat-label">Time</span>
-                        <span data-testid="timer-value" class="hint-stat-value godot-text-outline font-mono">
+                        <span data-testid="timer-value" class="hint-stat-value godot-text-outline">
                           {formatSolveTime(secondsElapsed)}
                         </span>
                       </div>
