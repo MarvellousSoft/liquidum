@@ -7,7 +7,7 @@ const SAVE_VERSION := 2
 # We're not human-editing this anyway
 enum {version, c_left, c_right, cell_type, water_count, water_count_type, boat_count, boat_count_type,
 total_water, total_boats, expected_aquariums, row_hints, col_hints, cells, wall_bottom, wall_right,
-grid_hints, cell_hints, adj_water_count, adj_water_count_type, water_alt_text, boat_alt_text}
+grid_hints, cell_hints, adj_water_count, adj_water_count_type, water_alt_text, boat_alt_text, variants}
 
 func _export_pure_cell(pure: GridImpl.PureCell) -> Dictionary:
 	return {

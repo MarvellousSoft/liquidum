@@ -252,6 +252,20 @@ func all_aquarium_counts() -> Dictionary:
 func aquarium_hints_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
+# Additional rules operating on this grid
+enum RuleVariant {
+	Sudoku,
+	Liar,
+	Snake,
+	Symbols
+}
+
+func rule_variants() -> Array[RuleVariant]:
+	return GridModel.must_be_implemented()
+
+func rule_variants_status() -> Array[E.HintStatus]:
+	return GridModel.must_be_implemented()
+
 enum LoadMode {
 	# Default. Must be a solution, and the water/nowater/boats are cleared after loading and validation.
 	Solution,

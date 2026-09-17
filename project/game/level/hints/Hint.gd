@@ -259,6 +259,7 @@ func _on_gui_input(event):
 
 
 func _on_alt_text_edit():
+	grid.remove_all_preview(true)
 	grid.disabled = true
 	var res = await HintAltTextScreen.open(alt_text)
 	grid.disabled = false

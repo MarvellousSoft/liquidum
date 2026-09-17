@@ -74,7 +74,7 @@ func _process(_dt):
 	update_drag_preview()
 
 func _input(event: InputEvent) -> void:
-	if current_brush_override != 0 and not Input.is_key_pressed(current_brush_override):
+	if not disabled and current_brush_override != 0 and not Input.is_key_pressed(current_brush_override):
 		mouse_hold_status = E.MouseDragState.None
 		current_brush_override = 0
 	if event is InputEventMouseButton:
@@ -91,7 +91,7 @@ func _input(event: InputEvent) -> void:
 	elif not disabled and grid_logic and event.is_action_pressed(&"redo"):
 		grid_logic.redo()
 		update()
-	if current_brush_override == 0 and last_cell_entered != null and event is InputEventKey and event.is_pressed() and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	if not disabled and current_brush_override == 0 and last_cell_entered != null and event is InputEventKey and event.is_pressed() and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		var cell = last_cell_entered
 		var key := (event as InputEventKey).keycode
 		if BRUSH_KEYS.has(key):

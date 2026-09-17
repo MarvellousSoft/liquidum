@@ -26,8 +26,9 @@ func _on_cancel() -> void:
 	AudioManager.play_sfx("button_pressed")
 	completed.emit(null)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if visible and event.is_action_pressed(&"ui_cancel"): # Escape key
+		get_viewport().set_input_as_handled()
 		_on_cancel()
 
 func _on_button_mouse_entered():

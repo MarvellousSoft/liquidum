@@ -1643,6 +1643,11 @@ func aquarium_hints_status() -> E.HintStatus:
 			return E.HintStatus.Normal
 	return E.HintStatus.Satisfied
 
+func rule_variants() -> Array[GridModel.RuleVariant]:
+	return GridModel.must_be_implemented()
+
+func rule_variants_status() -> Array[E.HintStatus]:
+	return GridModel.must_be_implemented()
 
 func count_nowater_row(i : int) -> float:
 	var count: float = 0.
