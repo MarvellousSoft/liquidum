@@ -59,6 +59,7 @@ func _load_single_cell_hints(data: Dictionary) -> GridModel.CellHints:
 	var c := GridModel.CellHints.new()
 	c.adj_water_count = float(data[adj_water_count])
 	c.adj_water_count_type = data[adj_water_count_type]
+	c.water_alt_text = data.get(water_alt_text, "")
 	return c
 
 # Let's be a little smarter here than storing a full grid because it is very sparse
