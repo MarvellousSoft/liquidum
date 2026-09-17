@@ -364,7 +364,7 @@ EXTRA_07_08,Witchcraft,Witchcraft,Witchcraft
 DLC5_NAME,PANDORA,PANDORA,PANDORA
 SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9"
 LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
-SNAKE_RULES,"""Snake"" Rules - Water cells form a continuous snake. The snake may not touch itself orthogonally.","Regra ""Cobra"" - As células de água formam uma cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.","Regra ""Cobra"" - As células de água formam uma cobra contínua. A cobra não pode tocar em si mesma ortogonalmente."
+SNAKE_RULES,"""Snake"" Rules - Water cells form a single continuous snake. The snake may not touch itself orthogonally.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente."
 EXTRA_08_01,Liar 1,Liar 1,Liar 1
 EXTRA_08_02,Level,,
 EXTRA_08_03,Level,,

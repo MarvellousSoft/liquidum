@@ -19,7 +19,7 @@ class LineHint:
 		var h := LineHint.new()
 		h.water_count = water_count
 		h.water_count_type = water_count_type
-		h.watter_alt_text = water_alt_text
+		h.water_alt_text = water_alt_text
 		h.boat_count = boat_count
 		h.boat_count_type = boat_count_type
 		h.boat_alt_text = boat_alt_text
