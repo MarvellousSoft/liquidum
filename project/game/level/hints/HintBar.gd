@@ -42,8 +42,8 @@ func setup(grid, hints : Array, editor_mode : bool, swap_water_boat := false) ->
 		container.alignment = BoxContainer.ALIGNMENT_END
 		container.add_theme_constant_override("separation", 0)
 		bar.add_child(container)
-		var boat_hint = create_hint(grid, container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type)
-		var water_hint = create_hint(grid, container, editor_mode, false, hints[i].water_count, hints[i].water_count_type)
+		var boat_hint = create_hint(grid, container, editor_mode, true, hints[i].boat_count, hints[i].boat_count_type, hints[i].boat_alt_text)
+		var water_hint = create_hint(grid, container, editor_mode, false, hints[i].water_count, hints[i].water_count_type, hints[i].water_alt_text)
 		boat_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		water_hint.mouse_entered.connect(_on_hint_mouse_entered.bind(i))
 		if not editor_mode:
@@ -92,11 +92,12 @@ func startup(editor_mode : bool, delay : float, fast_startup : bool) -> void:
 		modulate.a = max_alpha
 
 
-func create_hint(grid : Node, container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType) -> Node:
+func create_hint(grid : Node, container : Container, editor_mode : bool, is_boat: float, hint_value : float, type: E.HintType, alt_text: String) -> Node:
 	var new_hint = HINT.instantiate()
 	new_hint.grid = grid
 	container.add_child(new_hint)
 	new_hint.set_boat(is_boat)
+	new_hint.set_alt_text(alt_text)
 	#Set value
 	if hint_value == -1 and is_boat and\
 	   (type == E.HintType.Hidden or type == E.HintType.Zero):

@@ -371,6 +371,7 @@ func _inner_update_hint(hints: Array[GridModel.LineHint], bar: HintBar, get_stat
 			if hint:
 				var val := float(hints[i].boat_count) if hint_type == E.HintContent.Boat else hints[i].water_count
 				hint.set_value(val)
+				hint.set_alt_text(hints[i].boat_alt_text if hint_type == E.HintContent.Boat else hints[i].water_alt_text)
 				hint.set_hint_type(hints[i].boat_count_type if hint_type == E.HintContent.Boat else hints[i].water_count_type)
 				hint.set_status(get_status.call(i, hint_type))
 

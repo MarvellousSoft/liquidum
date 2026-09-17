@@ -43,6 +43,7 @@ var is_dummy := false
 var highlight := false
 var cur_status : E.HintStatus = E.HintStatus.Normal
 var fade_out := false
+var alt_text := ""
 var grid
 
 func _ready():
@@ -129,6 +130,10 @@ func set_value(new_value : float) -> void:
 	hint_value = new_value
 	update_label()
 
+func set_alt_text(new_text : String) -> void:
+	alt_text = new_text
+	update_label()
+
 
 func set_highlight(value: bool) -> void:
 	highlight = value
@@ -160,14 +165,18 @@ func can_be_hidden() -> bool:
 
 func update_label() -> void:
 	Number.text = ""
+	
 	var value = str(hint_value) if hint_value != -1 else "?"
-	var hidden_or_zero := hint_type == E.HintType.Hidden or hint_type == E.HintType.Zero
-	if can_be_hidden() and Profile.get_option("hide_unknown"):
-		value = " "
-	if editor_mode and (value == "0" or value == "?"):
-		value = "  "+value+"  " 
-	if is_boat:
-		set_visible(hint_value != -1 or not hidden_or_zero)
+	if alt_text != "":
+		value = alt_text
+	else:
+		var hidden_or_zero := hint_type == E.HintType.Hidden or hint_type == E.HintType.Zero
+		if can_be_hidden() and Profile.get_option("hide_unknown"):
+			value = " "
+		if editor_mode and (value == "0" or value == "?"):
+			value = "  "+value+"  " 
+		if is_boat:
+			set_visible(hint_value != -1 or not hidden_or_zero)
 	match hint_type:
 		E.HintType.Zero, E.HintType.Hidden:
 			Number.text += value

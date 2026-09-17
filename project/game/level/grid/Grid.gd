@@ -10,15 +10,19 @@ static func must_be_implemented() -> Variant:
 class LineHint:
 	var water_count: float
 	var water_count_type: E.HintType
+	var water_alt_text: String
 	var boat_count: int
 	# On columns this must always be Any
 	var boat_count_type: E.HintType
+	var boat_alt_text: String
 	func duplicate() -> LineHint:
 		var h := LineHint.new()
 		h.water_count = water_count
 		h.water_count_type = water_count_type
+		h.watter_alt_text = water_alt_text
 		h.boat_count = boat_count
 		h.boat_count_type = boat_count_type
+		h.boat_alt_text = boat_alt_text
 		return h
 
 class GridHints:
@@ -57,6 +61,7 @@ class WaterPosition:
 class CellHints:
 	var adj_water_count: float
 	var adj_water_count_type: E.HintType
+	var water_alt_text: String
 
 class CellModel:
 	func water_full() -> bool:

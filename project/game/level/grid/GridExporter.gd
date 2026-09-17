@@ -7,7 +7,7 @@ const SAVE_VERSION := 2
 # We're not human-editing this anyway
 enum {version, c_left, c_right, cell_type, water_count, water_count_type, boat_count, boat_count_type,
 total_water, total_boats, expected_aquariums, row_hints, col_hints, cells, wall_bottom, wall_right,
-grid_hints, cell_hints, adj_water_count, adj_water_count_type}
+grid_hints, cell_hints, adj_water_count, adj_water_count_type, water_alt_text, boat_alt_text}
 
 func _export_pure_cell(pure: GridImpl.PureCell) -> Dictionary:
 	return {
@@ -45,10 +45,13 @@ func _load_grid(data: Array, inner_load: Callable) -> Array[Array]:
 func _export_single_cell_hints(hints: GridModel.CellHints) -> Dictionary:
 	if hints == null:
 		return {}
-	return {
+	var data := {
 		adj_water_count: hints.adj_water_count,
 		adj_water_count_type: hints.adj_water_count_type,
 	}
+	if hints.water_alt_text:
+		data[water_alt_text] = hints.water_alt_text
+	return data
 
 func _load_single_cell_hints(data: Dictionary) -> GridModel.CellHints:
 	if data.is_empty():
@@ -81,19 +84,26 @@ func _load_all_cell_hints(data: Array, n: int, m: int) -> Array[Array]:
 	return hints
 
 func _export_line_hint(line: GridModel.LineHint) -> Dictionary:
-	return {
+	var data := {
 		water_count: line.water_count,
 		water_count_type: line.water_count_type,
 		boat_count: line.boat_count,
 		boat_count_type: line.boat_count_type,
 	}
+	if line.water_alt_text != "":
+		data[water_alt_text] = line.water_alt_text
+	if line.boat_alt_text != "":
+		data[boat_alt_text] = line.boat_alt_text
+	return data
 
 func _load_line_hint(data: Dictionary) -> GridModel.LineHint:
 	var hint := GridModel.LineHint.new()
 	hint.water_count = data[water_count]
 	hint.water_count_type = data[water_count_type]
+	hint.water_alt_text = data.get(water_alt_text, "")
 	hint.boat_count = data[boat_count]
 	hint.boat_count_type = data[boat_count_type]
+	hint.boat_alt_text = data.get(boat_alt_text, "")
 	return hint
 
 func _export_bool(b: bool) -> int:
