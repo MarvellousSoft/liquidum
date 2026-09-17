@@ -453,5 +453,8 @@ func _on_button_mouse_entered(which : E.Waters):
 func _on_block_mouse_entered():
 	block_entered.emit(row, column)
 
+func _on_cellhint_alt_text_changed(text: String) -> void:
+	grid.grid_logic.get_cell(row, column).hints().water_alt_text = text
+
 func highlight_cellhint() -> void:
 	$CellHintHighlight.show()

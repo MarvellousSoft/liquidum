@@ -2,6 +2,7 @@ class_name Hint
 extends Control
 
 signal left_clicked
+signal alt_text_changed(text: String)
 
 const COLORS = {
 	"normal": {
@@ -28,6 +29,7 @@ const FADE_SPEED = 2.0
 @onready var EditorButtons = $VBoxContainer/EditorButtons
 @onready var ToggleHintType: TextureButton = $VBoxContainer/EditorButtons/ToggleHintType
 @onready var ToggleVisibility: TextureButton = $VBoxContainer/EditorButtons/ToggleVisibility
+@onready var EditAltText: TextureButton = $VBoxContainer/EditorButtons/EditAltText
 @onready var HintsContainer = $VBoxContainer/HintsContainer
 @onready var Number = %Number
 @onready var Boat = %Boat
@@ -252,3 +254,13 @@ func _on_gui_input(event):
 			toggle_fade()
 		elif hint_value != -1:
 			left_clicked.emit()
+
+
+func _on_alt_text_edit():
+	grid.disabled = true
+	var res = await HintAltTextScreen.open(alt_text)
+	grid.disabled = false
+	if res == null:
+		return
+	alt_text_changed.emit(res)
+	set_alt_text(res)

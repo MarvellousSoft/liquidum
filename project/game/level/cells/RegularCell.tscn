@@ -1117,6 +1117,8 @@ libraries = {
 [connection signal="mouse_entered" from="Buttons/BottomRight" to="." method="_on_button_mouse_entered" binds= [7]]
 [connection signal="gui_input" from="Buttons/BottomLeft" to="." method="_on_button_gui_input" binds= [8]]
 [connection signal="mouse_entered" from="Buttons/BottomLeft" to="." method="_on_button_mouse_entered" binds= [8]]
+[connection signal="alt_text_changed" from="CellHints/Hint" to="." method="_on_cellhint_alt_text_changed"]
 
 [editable path="CellHints/Hint"]
 [editable path="CellHints/Hint/VBoxContainer/EditorButtons/ToggleHintType"]
+[editable path="CellHints/Hint/VBoxContainer/EditorButtons/EditAltText"]
