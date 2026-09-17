@@ -216,6 +216,7 @@ func update_thick_walls(is_thick : bool) -> void:
 func setup(grid_ref : Node, data : GridModel.CellModel, i : int, j : int, editor : bool, startup_delay : float, fast_startup : bool) -> void:
 	editor_mode = editor
 	grid = grid_ref
+	CellHints.get_node("Hint").grid = grid_ref
 	row = i
 	column = j
 	for corner in Waters.keys():
