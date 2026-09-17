@@ -12,10 +12,10 @@ LEVEL_EDITOR_BUTTON,Create,Criar,Criar
 LEVEL_EDITOR_TOOLTIP,Level editor,Editor de níveis,Editor de níveis
 EXIT_CONFIRMATION,Are you sure you want to exit the game?,Tem certeza que quer sair do jogo?,Tem certeza de que deseja sair do jogo?
 DEFAULT_CONFIRMATION,Are you sure?,Tem certeza?,Tem certeza?
-WATERS_COUNTER,Waters Missing: ,Águas Faltando: ,Águas Faltando: 
-WATERS_COUNTER_EDITOR,Total Waters: ,Águas Totais: ,Águas Totais: 
-BOATS_COUNTER,Boats Missing: ,Barcos Faltando: ,Barcos Faltando: 
-BOATS_COUNTER_EDITOR,Total Boats: ,Barcos Totais: ,Barcos Totais: 
+WATERS_COUNTER,Waters Missing: ,Águas Faltando: ,Águas Faltando:
+WATERS_COUNTER_EDITOR,Total Waters: ,Águas Totais: ,Águas Totais:
+BOATS_COUNTER,Boats Missing: ,Barcos Faltando: ,Barcos Faltando:
+BOATS_COUNTER_EDITOR,Total Boats: ,Barcos Totais: ,Barcos Totais:
 MISTAKES_COUNTER,Mistakes: ,Erros: ,Erros:
 MASTER_SOUND,Master volume,Volume geral,Volume geral
 BGM_SOUND,Background music volume,Volume da música de fundo,Volume da música de fundo
@@ -29,7 +29,7 @@ AQUARIUMS_COUNTER,Aquariums Expected,Aquários Esperados,Aquários Esperados
 AQUARIUMS_COUNTER_EDITOR,Total Aquariums,Aquários Totais,Aquários Totais
 SIZE,Size,Tam.,Tamanho
 AQ_AMOUNT,Total  (Cur.),Total  (Atual),Total  (Atual)
-AQ_AMOUNT_EDITOR,Total  ,Total  ,Total  
+AQ_AMOUNT_EDITOR,Total  ,Total  ,Total
 BACK,Back,Voltar,Voltar
 CONTINUE,Continue,Continuar,Continuar
 PLAY_AGAIN_NEW_LEVEL,New %s level,Novo nível %s,Novo nível %s
@@ -361,6 +361,18 @@ EXTRA_07_05,USS Pickering,USS Pickering,USS Pickering
 EXTRA_07_06,Revonoc,Revonoc,Revonoc
 EXTRA_07_07,USS Proteus,USS Proteus,USS Proteus
 EXTRA_07_08,Witchcraft,Witchcraft,Witchcraft
+DLC5_NAME,PANDORA,PANDORA,PANDORA
+SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9"
+LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
+SNAKE_RULES,"""Snake"" Rules - Water cells form a continuous snake. The snake may not touch itself orthogonally.","Regra ""Cobra"" - As células de água formam uma cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.","Regra ""Cobra"" - As células de água formam uma cobra contínua. A cobra não pode tocar em si mesma ortogonalmente."
+EXTRA_08_01,Liar 1,Liar 1,Liar 1
+EXTRA_08_02,Level,,
+EXTRA_08_03,Level,,
+EXTRA_08_04,Level,,
+EXTRA_08_05,Level,,
+EXTRA_08_06,Level,,
+EXTRA_08_07,Level,,
+EXTRA_08_08,Level,,
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
