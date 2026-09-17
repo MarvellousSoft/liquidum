@@ -21,6 +21,7 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
               InfoResultPayload: {
                 PlayerProfile: {
                   DisplayName: "AquaNovice",
+                  AvatarUrl: "https://example.com/aqua-novice.png",
                 },
               },
             },
@@ -30,19 +31,33 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
       }
 
       if (url.includes("/Client/GetLeaderboard")) {
-        const isYesterday = postData.Version && postData.Version < 883;
+        const todayUtc = new Date();
+        const todayVersion = Math.floor(
+          (Date.UTC(todayUtc.getUTCFullYear(), todayUtc.getUTCMonth(), todayUtc.getUTCDate()) -
+            Date.UTC(2024, 3, 16)) /
+            (86400 * 1000)
+        );
+        const isYesterday = postData.Version !== undefined && postData.Version < todayVersion;
         const mockLeaderboard = isYesterday
           ? [
               {
                 Position: 0,
                 PlayFabId: "PLAYER_YEST_1",
                 DisplayName: "SeaOtter",
+                Profile: {
+                  DisplayName: "SeaOtter",
+                  AvatarUrl: "https://example.com/sea-otter.png",
+                },
                 StatValue: -42, // 0 mistakes, 42s
               },
               {
                 Position: 1,
                 PlayFabId: "TEST_USER_999",
                 DisplayName: "AquaNovice",
+                Profile: {
+                  DisplayName: "AquaNovice",
+                  AvatarUrl: "https://example.com/aqua-novice.png",
+                },
                 StatValue: -100060, // 1 mistake, 60s
               },
             ]
@@ -51,24 +66,40 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
                 Position: 0,
                 PlayFabId: "PLAYER_TODAY_1",
                 DisplayName: "WhaleRider",
+                Profile: {
+                  DisplayName: "WhaleRider",
+                  AvatarUrl: "https://example.com/whale.png",
+                },
                 StatValue: -50, // 0 mistakes, 50s
               },
               {
                 Position: 1,
                 PlayFabId: "PLAYER_TODAY_2",
                 DisplayName: "DolphinDiver",
+                Profile: {
+                  DisplayName: "DolphinDiver",
+                  AvatarUrl: null,
+                },
                 StatValue: -75, // 0 mistakes, 75s
               },
               {
                 Position: 2,
                 PlayFabId: "PLAYER_TODAY_3",
                 DisplayName: "CoralReef",
+                Profile: {
+                  DisplayName: "CoralReef",
+                  AvatarUrl: "https://example.com/coral.png",
+                },
                 StatValue: -100045, // 1 mistake, 45s
               },
               {
                 Position: 3,
                 PlayFabId: "TEST_USER_999", // Current user
                 DisplayName: "AquaNovice",
+                Profile: {
+                  DisplayName: "AquaNovice",
+                  AvatarUrl: "https://example.com/aqua-novice.png",
+                },
                 StatValue: -200110, // 2 mistakes, 110s
               },
             ];
@@ -154,56 +185,89 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     expect(timerVal).toMatch(/^0:0[1-9]$/);
   });
 
-  test("opens leaderboard modal from top bar and switches between Today and Yesterday tabs", async ({
+  test("displays leaderboard side-by-side next to grid immediately on desktop with avatars and tabs", async ({
     page,
   }) => {
     await page.goto("/?daily=2024-01-07");
 
+    // Desktop leaderboard is visible right away without clicking any button or starting puzzle
+    const sidePanel = page.locator('[data-testid="desktop-leaderboard"]');
+    await expect(sidePanel).toBeVisible();
+    await expect(sidePanel).toContainText("Daily Leaderboard");
+
+    // Top bar button is hidden on desktop in daily mode
+    await expect(page.locator('[data-testid="btn-leaderboard"]')).toBeHidden();
+
+    // Default tab: Today
+    await expect(sidePanel.locator("text=WhaleRider")).toBeVisible();
+    await expect(sidePanel.locator("text=DolphinDiver")).toBeVisible();
+    await expect(sidePanel.locator("text=🥇")).toBeVisible();
+    await expect(sidePanel.locator("text=🥈")).toBeVisible();
+    await expect(sidePanel.locator("text=🥉")).toBeVisible();
+
+    // Current user row highlighted
+    await expect(sidePanel.locator("text=AquaNovice (You)")).toBeVisible();
+
+    // Avatar image is rendered
+    const avatarImg = sidePanel.locator('img[src="https://example.com/whale.png"]');
+    await expect(avatarImg).toBeVisible();
+
+    // Switch to Yesterday tab
+    await sidePanel.locator('button:has-text("Yesterday")').click();
+    await expect(sidePanel.locator("text=SeaOtter")).toBeVisible();
+  });
+
+  test("on mobile viewport, hides side panel and opens leaderboard modal from top bar button", async ({
+    page,
+  }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/?daily=2024-01-07");
+
+    // Desktop leaderboard is hidden
+    await expect(page.locator('[data-testid="desktop-leaderboard"]')).toBeHidden();
+
+    // Mobile button is visible
+    const mobileBtn = page.locator('[data-testid="btn-leaderboard"]');
+    await expect(mobileBtn).toBeVisible();
+
     // Click Leaderboard button in top bar
-    await page.click('[data-testid="btn-leaderboard"]');
+    await mobileBtn.click();
 
     const modal = page.locator('[role="dialog"]');
     await expect(modal).toBeVisible();
     await expect(modal).toContainText("Daily Leaderboard");
 
     // Default tab: Today
-    await expect(page.locator("text=WhaleRider")).toBeVisible();
-    await expect(page.locator("text=DolphinDiver")).toBeVisible();
-    await expect(page.locator("text=🥇")).toBeVisible();
-    await expect(page.locator("text=🥈")).toBeVisible();
-    await expect(page.locator("text=🥉")).toBeVisible();
-
-    // Current user row highlighted
-    await expect(page.locator("text=AquaNovice (You)")).toBeVisible();
+    await expect(modal.locator("text=WhaleRider")).toBeVisible();
 
     // Switch to Yesterday tab
-    await page.click('button:has-text("Yesterday")');
-    await expect(page.locator("text=SeaOtter")).toBeVisible();
+    await modal.locator('button:has-text("Yesterday")').click();
+    await expect(modal.locator("text=SeaOtter")).toBeVisible();
 
     // Close modal
-    await page.click('button[aria-label="Close"]');
+    await modal.locator('button[aria-label="Close"]').click();
     await expect(modal).toHaveCount(0);
   });
 
-  test("allows editing player display name in the leaderboard modal", async ({ page }) => {
+  test("allows editing player display name in the leaderboard", async ({ page }) => {
     await page.goto("/?daily=2024-01-07");
 
-    // Open leaderboard
-    await page.click('[data-testid="btn-leaderboard"]');
-    await expect(page.locator('[role="dialog"]')).toBeVisible();
+    const sidePanel = page.locator('[data-testid="desktop-leaderboard"]');
+    await expect(sidePanel).toBeVisible();
 
     // Click Edit Name
-    await page.click("button:has-text('Edit Name')");
+    await sidePanel.locator("button:has-text('Edit Name')").click();
 
-    const input = page.locator('input[placeholder*="Enter name"]');
+    const input = sidePanel.locator('input[placeholder*="Enter name"]');
     await expect(input).toBeVisible();
 
     // Fill new name and save
     await input.fill("PoseidonGod");
-    await page.click("button:has-text('Save')");
+    await sidePanel.locator("button:has-text('Save')").click();
 
     // Name updated in profile bar
-    await expect(page.locator("text=PoseidonGod")).toBeVisible();
+    await expect(sidePanel.locator("text=PoseidonGod")).toBeVisible();
   });
 
   test("submits daily score on first victory and removes Play Again button", async ({

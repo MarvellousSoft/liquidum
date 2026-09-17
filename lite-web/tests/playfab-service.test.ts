@@ -7,10 +7,13 @@ import {
   getOrCreateCustomId,
   isDailyScoreSubmitted,
   markDailyScoreSubmitted,
+  extractDisplayNameFromProfile,
+  extractAvatarUrlFromProfile,
   PlayFabService,
   PLAYFAB_TITLE_ID,
   DAILY_STATISTIC_NAME,
 } from "../src/engine/PlayFabService";
+import { getGeneratedName } from "../src/engine/NameGenerator";
 
 // Helper in-memory storage for testing
 function createMockStorage(): Storage {
@@ -149,18 +152,27 @@ describe("PlayFabService - Mocked API Workflows", () => {
                   Position: 0,
                   PlayFabId: "PLAYER_TOP_1",
                   DisplayName: "CoralReef",
+                  Profile: {
+                    DisplayName: "CoralReef",
+                    AvatarUrl: "https://example.com/avatar1.png",
+                  },
                   StatValue: -55, // 0 mistakes, 55s
                 },
                 {
                   Position: 1,
                   PlayFabId: "PLAYFAB_USER_123", // Current user
                   DisplayName: "AquaMaster",
+                  Profile: {
+                    DisplayName: "AquaMaster",
+                    AvatarUrl: null,
+                  },
                   StatValue: -100045, // 1 mistake, 45s
                 },
                 {
                   Position: 2,
                   PlayFabId: "PLAYER_3",
-                  DisplayName: "", // Anonymous
+                  DisplayName: "", // Anonymous fallback to generated name
+                  Profile: {},
                   StatValue: -200110, // 2 mistakes, 110s
                 },
               ],
@@ -234,6 +246,7 @@ describe("PlayFabService - Mocked API Workflows", () => {
       position: 1,
       playFabId: "PLAYER_TOP_1",
       displayName: "CoralReef",
+      avatarUrl: "https://example.com/avatar1.png",
       seconds: 55,
       mistakes: 0,
       rawScore: -55,
@@ -245,17 +258,19 @@ describe("PlayFabService - Mocked API Workflows", () => {
       position: 2,
       playFabId: "PLAYFAB_USER_123",
       displayName: "AquaMaster",
+      avatarUrl: null,
       seconds: 45,
       mistakes: 1,
       rawScore: -100045,
       isCurrentUser: true,
     });
 
-    // Rank 3 - Anonymous
+    // Rank 3 - Fallback name
     expect(entries[2]).toEqual({
       position: 3,
       playFabId: "PLAYER_3",
-      displayName: "Anonymous",
+      displayName: getGeneratedName("PLAYER_3"),
+      avatarUrl: null,
       seconds: 110,
       mistakes: 2,
       rawScore: -200110,
@@ -339,3 +354,50 @@ describe("PlayFabService - Mocked API Workflows", () => {
     await expect(failingService.login()).rejects.toBeTruthy();
   });
 });
+
+describe("PlayFabService - Profile Data Extraction (Godot Parity)", () => {
+  it("extracts display name following priority: DisplayName -> LinkedAccounts -> Generated Name", () => {
+    // 1. Direct DisplayName
+    expect(
+      extractDisplayNameFromProfile(
+        { DisplayName: "OceanKing" },
+        "USER_1"
+      )
+    ).toBe("OceanKing");
+
+    // 2. LinkedAccounts Username if DisplayName is empty or missing
+    expect(
+      extractDisplayNameFromProfile(
+        {
+          DisplayName: "",
+          LinkedAccounts: [{ Platform: "Steam", Username: "SteamSailor" }],
+        },
+        "USER_2"
+      )
+    ).toBe("SteamSailor");
+
+    // 3. Fallback to top-level raw name if provided
+    expect(
+      extractDisplayNameFromProfile(
+        null,
+        "USER_3",
+        "DirectRawName"
+      )
+    ).toBe("DirectRawName");
+
+    // 4. Deterministic NameGenerator fallback if no name or account found
+    const generated = extractDisplayNameFromProfile(null, "USER_4");
+    expect(generated).toBe(getGeneratedName("USER_4"));
+    expect(generated.split(" ")).toHaveLength(2); // "<Adjective> <Animal>"
+  });
+
+  it("extracts avatarUrl from profile if present", () => {
+    expect(
+      extractAvatarUrlFromProfile({ AvatarUrl: "https://cdn.example.com/avatar.png" })
+    ).toBe("https://cdn.example.com/avatar.png");
+
+    expect(extractAvatarUrlFromProfile({ AvatarUrl: "" })).toBeNull();
+    expect(extractAvatarUrlFromProfile(null)).toBeNull();
+  });
+});
+

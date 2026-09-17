@@ -28,6 +28,7 @@ import {
 } from './engine/DailyLevel';
 import type { DailyLevelMeta } from './engine/DailyLevel';
 import { LeaderboardModal } from './components/LeaderboardModal';
+import { LeaderboardView } from './components/LeaderboardView';
 import { playFabService } from './engine/PlayFabService';
 
 function formatSolveTime(totalSeconds: number): string {
@@ -84,6 +85,7 @@ export function App() {
   showLevelsModalRef.current = showLevelsModal;
 
   const [showLeaderboardModal, setShowLeaderboardModal] = useState<boolean>(false);
+  const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState<number>(0);
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const hasStartedRef = useRef(hasStarted);
   hasStartedRef.current = hasStarted;
@@ -109,6 +111,7 @@ export function App() {
         .then((res) => {
           if (res.submitted) {
             console.log("PlayFab daily score submitted successfully!");
+            setLeaderboardRefreshKey((k) => k + 1);
           } else if (res.reason === "already_submitted") {
             console.log("Daily score already submitted for this day.");
           }
@@ -936,7 +939,7 @@ export function App() {
           <button
             data-testid="btn-leaderboard"
             onClick={() => setShowLeaderboardModal(true)}
-            class="level-btn"
+            class={`level-btn ${isDailyMode ? 'lg:hidden' : ''}`}
             title="View Daily Leaderboard"
           >
             <span>🏆 Leaderboard</span>
@@ -1171,7 +1174,8 @@ export function App() {
           <span>Generating Daily Level for {dailyDate}...</span>
         </div>
       ) : gridData ? (
-        <div class="relative flex flex-col items-center">
+        <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto px-2">
+          <div class="relative flex flex-col items-center">
           {/* Start Puzzle Overlay for Daily Mode */}
           {isDailyMode && !hasStarted && (
             <div
@@ -1342,6 +1346,20 @@ export function App() {
             />
           </div>
         </div>
+      </div>
+
+        {/* Desktop Side-by-Side Leaderboard (only in daily mode on lg+ screens) */}
+        {isDailyMode && (
+          <div
+            data-testid="desktop-leaderboard"
+            class="hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 self-stretch max-w-sm"
+          >
+            <LeaderboardView
+              isSidePanel={true}
+              refreshTrigger={leaderboardRefreshKey}
+            />
+          </div>
+        )}
       </div>
       ) : (
         <p>Loading...</p>
@@ -1533,6 +1551,7 @@ export function App() {
       <LeaderboardModal
         isOpen={showLeaderboardModal}
         onClose={() => setShowLeaderboardModal(false)}
+        refreshTrigger={leaderboardRefreshKey}
       />
     </div>
   );

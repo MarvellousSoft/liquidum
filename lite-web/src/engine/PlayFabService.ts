@@ -1,4 +1,5 @@
 import { PlayFab, PlayFabClient } from "playfab-sdk";
+import { getGeneratedName } from "./NameGenerator";
 
 export const PLAYFAB_TITLE_ID = "3D3A0";
 export const DAILY_STATISTIC_NAME = "daily";
@@ -8,6 +9,7 @@ export interface LeaderboardEntry {
   position: number; // 1-indexed rank
   playFabId: string;
   displayName: string;
+  avatarUrl?: string | null;
   seconds: number;
   mistakes: number;
   rawScore: number;
@@ -17,6 +19,7 @@ export interface LeaderboardEntry {
 export interface LoginResultInfo {
   playFabId: string;
   displayName: string;
+  avatarUrl?: string | null;
   newlyCreated: boolean;
 }
 
@@ -115,6 +118,46 @@ export function markDailyScoreSubmitted(version: number, storage?: Storage): voi
 }
 
 /**
+ * Extracts display name matching Godot's PlayfabIntegration.gd:
+ * 1. profile.DisplayName if non-empty
+ * 2. profile.LinkedAccounts[].Username if non-empty
+ * 3. Deterministic generated name via NameGenerator.get_name(rng, playFabId)
+ */
+export function extractDisplayNameFromProfile(
+  profile: any,
+  playFabId: string,
+  fallbackDisplayName?: string
+): string {
+  if (profile) {
+    if (profile.DisplayName && typeof profile.DisplayName === "string" && profile.DisplayName.trim() !== "") {
+      return profile.DisplayName.trim();
+    }
+    if (Array.isArray(profile.LinkedAccounts)) {
+      for (const acc of profile.LinkedAccounts) {
+        if (acc && acc.Username && typeof acc.Username === "string" && acc.Username.trim() !== "") {
+          return acc.Username.trim();
+        }
+      }
+    }
+  }
+  if (fallbackDisplayName && typeof fallbackDisplayName === "string" && fallbackDisplayName.trim() !== "") {
+    return fallbackDisplayName.trim();
+  }
+  return getGeneratedName(String(playFabId || ""));
+}
+
+/**
+ * Extracts avatar URL matching Godot's PlayfabIntegration.gd:
+ * profile.AvatarUrl if present
+ */
+export function extractAvatarUrlFromProfile(profile: any): string | null {
+  if (profile && profile.AvatarUrl && typeof profile.AvatarUrl === "string" && profile.AvatarUrl.trim() !== "") {
+    return profile.AvatarUrl.trim();
+  }
+  return null;
+}
+
+/**
  * Adapts PlayFab.MakeRequest to use global fetch instead of Node https.
  */
 export function setupPlayFabFetchAdapter(): void {
@@ -174,6 +217,7 @@ setupPlayFabFetchAdapter();
 export class PlayFabService {
   private currentPlayFabId: string | null = null;
   private currentDisplayName: string | null = null;
+  private currentAvatarUrl: string | null = null;
   private loginPromise: Promise<LoginResultInfo> | null = null;
   private storage: Storage | null = null;
 
@@ -193,6 +237,10 @@ export class PlayFabService {
     return this.currentDisplayName;
   }
 
+  public getAvatarUrl(): string | null {
+    return this.currentAvatarUrl;
+  }
+
   public isLoggedIn(): boolean {
     return PlayFabClient.IsClientLoggedIn() && Boolean(this.currentPlayFabId);
   }
@@ -205,6 +253,7 @@ export class PlayFabService {
       return {
         playFabId: this.currentPlayFabId!,
         displayName: this.currentDisplayName || "Anonymous",
+        avatarUrl: this.currentAvatarUrl,
         newlyCreated: false,
       };
     }
@@ -214,7 +263,6 @@ export class PlayFabService {
     }
 
     const effectiveCustomId = customId || getOrCreateCustomId(this.storage || undefined);
-    console.log("Logging in to playfab with id: " + effectiveCustomId)
 
     this.loginPromise = new Promise<LoginResultInfo>((resolve, reject) => {
       PlayFab.settings.titleId = PLAYFAB_TITLE_ID;
@@ -226,6 +274,8 @@ export class PlayFabService {
         InfoRequestParameters: {
           GetPlayerProfile: true,
           ProfileConstraints: {
+            ShowLinkedAccounts: true,
+            ShowAvatarUrl: true,
             ShowDisplayName: true,
           },
         },
@@ -240,11 +290,13 @@ export class PlayFabService {
         const data = result.data;
         this.currentPlayFabId = data.PlayFabId ?? null;
         const profile = data.InfoResultPayload?.PlayerProfile;
-        this.currentDisplayName = profile?.DisplayName || "";
+        this.currentDisplayName = extractDisplayNameFromProfile(profile, this.currentPlayFabId || "");
+        this.currentAvatarUrl = extractAvatarUrlFromProfile(profile);
 
         resolve({
           playFabId: this.currentPlayFabId || "",
           displayName: this.currentDisplayName,
+          avatarUrl: this.currentAvatarUrl,
           newlyCreated: Boolean(data.NewlyCreated),
         });
       });
@@ -268,6 +320,8 @@ export class PlayFabService {
         StartPosition: 0,
         MaxResultsCount: Math.min(maxResults, 100),
         ProfileConstraints: {
+          ShowLinkedAccounts: true,
+          ShowAvatarUrl: true,
           ShowDisplayName: true,
         },
       };
@@ -284,11 +338,15 @@ export class PlayFabService {
         const rawList = result.data?.Leaderboard || [];
         const entries: LeaderboardEntry[] = rawList.map((item: any) => {
           const { seconds, mistakes } = decodeDailyScore(item.StatValue);
-          console.log(item);
+          const profile = item.Profile;
+          const displayName = extractDisplayNameFromProfile(profile, item.PlayFabId, item.DisplayName);
+          const avatarUrl = extractAvatarUrlFromProfile(profile);
+
           return {
             position: item.Position + 1, // 1-based rank
             playFabId: item.PlayFabId,
-            displayName: item.DisplayName || "Anonymous",
+            displayName,
+            avatarUrl,
             seconds,
             mistakes,
             rawScore: item.StatValue,
