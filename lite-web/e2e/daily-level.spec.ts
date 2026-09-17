@@ -86,7 +86,7 @@ test.describe('Daily Level E2E Tests', () => {
     await expect(page.locator('[data-testid="btn-daily-mode"]')).toHaveClass(/level-btn-daily-active/);
   });
 
-  test('restarts daily level with R key and button', async ({ page }) => {
+  test('hides restart button on daily levels and ignores R shortcut', async ({ page }) => {
     await page.goto('/?daily=2024-01-07');
     await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
 
@@ -95,18 +95,112 @@ test.describe('Daily Level E2E Tests', () => {
     await page.click('[data-testid="btn-start-puzzle"]');
     await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toHaveCount(0);
 
+    // Restart button should NOT be visible on daily level
+    await expect(page.locator('[data-testid="btn-restart"]')).toHaveCount(0);
+
     // Place air on cell 0-0
     await page.click('[data-testid="tool-air"]');
     await page.click('[data-testid="cell-0-0"]');
     await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
 
-    // Press 'r' shortcut to restart
+    // Press 'r' shortcut: should be ignored on daily level
     await page.keyboard.press('r');
 
-    // Cell should be reset to none
-    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'none');
-    // Should still be in daily mode
+    // Cell should NOT be reset
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
     await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+  });
+
+  test('persists level progress and timer across reloads using UserLevelSaveData', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-testid="btn-start-puzzle"]')).toBeVisible();
+
+    // Click start puzzle
+    await page.click('[data-testid="btn-start-puzzle"]');
+    await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toHaveCount(0);
+
+    // Place air on cell 0-0
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Wait for at least 1 second for timer to advance and auto-save
+    await page.waitForTimeout(1200);
+
+    // Reload the page
+    await page.reload();
+
+    // After reload, start overlay should NOT be present (already started)
+    await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toHaveCount(0);
+
+    // Cell content should be restored from localStorage
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Timer should be greater than 0
+    const timeSecs = await page.evaluate(() => (window as any).getTime());
+    expect(timeSecs).toBeGreaterThanOrEqual(1);
+  });
+
+  test('discards yesterday daily progress when loading today', async ({ page }) => {
+    // Inject yesterday's progress into localStorage
+    await page.goto('/');
+    await page.evaluate(() => {
+      const yesterdaySave = {
+        date: '2024-01-01',
+        save_data: {
+          version: 1,
+          grid_data: {},
+          is_empty: false,
+          mistakes: 3,
+          timer_secs: 55.0,
+          best_mistakes: -1,
+          best_time_secs: -1.0,
+        },
+      };
+      localStorage.setItem('liquidum_daily_level_save', JSON.stringify(yesterdaySave));
+    });
+
+    // Reload page (loads today's puzzle)
+    await page.reload();
+
+    // Start overlay should be visible because yesterday's save was discarded
+    await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toBeVisible();
+
+    // Storage should no longer contain yesterday's date
+    const stored = await page.evaluate(() => localStorage.getItem('liquidum_daily_level_save'));
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      expect(parsed.date).not.toBe('2024-01-01');
+    }
+  });
+
+  test('loads test levels via URL query parameters and shows restart button without leaderboard', async ({ page }) => {
+    await page.goto('/?level=01/01');
+
+    // Should load test level 01/01
+    await expect(page.locator('[data-testid="btn-open-levels-modal"]')).toContainText('Level 01/01');
+    await expect(page.locator('[data-testid="daily-banner"]')).toHaveCount(0);
+
+    // On test levels, leaderboard button should be removed
+    await expect(page.locator('[data-testid="btn-leaderboard"]')).toHaveCount(0);
+
+    // Restart button should be visible on test levels
+    await expect(page.locator('[data-testid="btn-restart"]')).toBeVisible();
+
+    // Place air on cell 0-0
+    await page.click('[data-testid="tool-air"]');
+    await page.click('[data-testid="cell-0-0"]');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
+
+    // Click restart button
+    await page.click('[data-testid="btn-restart"]');
+    await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'none');
+
+    // Test another section level via URL
+    await page.goto('/?level=04/05');
+    await expect(page.locator('[data-testid="btn-open-levels-modal"]')).toContainText('Level 04/05');
+    // Boat tool should be visible for section 04
+    await expect(page.locator('[data-testid="tool-boat"]')).toBeVisible();
   });
 
   test('completes daily level and displays win banner without next day or play again button', async ({ page }) => {

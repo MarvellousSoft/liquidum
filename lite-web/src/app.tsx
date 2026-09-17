@@ -4,21 +4,22 @@ import { Grid } from './components/Grid';
 import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums, levelHasBoats } from './model/GridData';
 import type { GridModelData } from './model/GridData';
 
-const LEVELS: Record<string, any> = {
-  "Level 01/01": { "description": "FIRST_LEVEL_DESCRIPTION", "full_name": "LEVEL_01_01", "grid_data": { "0": 1, "11": [{ "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 1, 1], [1, 1, 1]], "15": [[1, 1], [1, 1], [1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1, "tutorial": "mouse1" },
-  "Level 01/05": { "description": "UNIQUE_SOLUTION_DESCRIPTION", "full_name": "LEVEL_01_05", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 2, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 0, 1, 0, 1], [0, 0, 0, 1, 0]], "15": [[1, 0, 0, 0], [1, 1, 1, 1], [0, 1, 0, 0]], "16": { "8": 7, "9": 0, "10": {} } }, "version": 1 },
-  "Level 02/01": { "full_name": "LEVEL_02_01", "grid_data": { "0": 1, "11": [{ "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 1, "6": -1, "7": 0 }, { "4": 2, "5": 1, "6": -1, "7": 0 }], "12": [{ "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": 3, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 3, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }]], "14": [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]], "15": [[1, 1, 1], [1, 1, 0], [1, 1, 1], [1, 1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1, "tutorial": "together_separate" },
-  "Level 03/01": { "full_name": "LEVEL_03_01", "grid_data": { "0": 1, "11": [{ "4": 0.5, "5": 0, "6": -1, "7": 0 }, { "4": 1.5, "5": 0, "6": -1, "7": 0 }, { "4": 1, "5": 0, "6": -1, "7": 0 }, { "4": 2.5, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 1.5, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": 0.5, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 10 }], [{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 10 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 1, "2": 2, "3": 9 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 1, "3": 10 }], [{ "1": 2, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }]], "14": [[0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1]], "15": [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
-  "Level 03/07": { "full_name": "LEVEL_03_07", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 3, "2": 0, "3": 9 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 0, "3": 9 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 9 }], [{ "1": 3, "2": 0, "3": 10 }, { "1": 0, "2": 3, "3": 9 }, { "1": 3, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 1, "3": 10 }, { "1": 3, "2": 3, "3": 11 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 10 }, { "1": 3, "2": 1, "3": 10 }, { "1": 1, "2": 3, "3": 10 }, { "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 3, "3": 10 }], [{ "1": 1, "2": 3, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 3, "3": 9 }, { "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }], [{ "1": 3, "2": 3, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }, { "1": 3, "2": 3, "3": 11 }]], "14": [[0, 0, 1, 0, 0, 1, 1], [0, 0, 0, 0, 0, 0, 1], [1, 1, 1, 1, 1, 0, 1], [0, 0, 1, 1, 1, 1, 1], [0, 0, 0, 1, 0, 1, 0], [1, 0, 1, 1, 1, 1, 1]], "15": [[0, 1, 1, 0, 1, 1], [0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 1, 1], [0, 1, 1, 1, 1, 1], [0, 0, 1, 0, 1, 1], [1, 0, 1, 1, 0, 0], [1, 1, 1, 1, 1, 1]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
-  "Level 04/01": { "full_name": "LEVEL_04_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": 2, "7": 0 }, { "4": -1, "5": 0, "6": 2, "7": 0 }, { "4": 4.5, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": 1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": 1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 1, "3": 10 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 0, "3": 10 }]], "14": [[0, 1, 1, 1, 0], [0, 0, 0, 0, 0]], "15": [[0, 0, 0, 0], [1, 0, 0, 1], [0, 0, 0, 0]], "16": { "8": -1, "9": -1, "10": {} } }, "version": 1, "tutorial": "boats" },
-  "Level 04/05": { "full_name": "LEVEL_04_05", "grid_data": { "0": 1, "11": [{ "4": 4, "5": 1, "6": -1, "7": 0 }, { "4": 3.5, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 0, "2": 0, "3": 9 }, { "1": 0, "2": 1, "3": 10 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 0, 1, 1, 0, 0], [0, 1, 0, 0, 0, 0]], "15": [[0, 1, 0, 1, 0], [0, 0, 1, 1, 0], [1, 0, 1, 0, 0]], "16": { "8": -1, "9": 2, "10": {} } }, "version": 1 },
-  "Level 05/01": { "full_name": "LEVEL_05_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 3, "3": 9 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 0, 0, 0, 0], [1, 1, 1, 0, 1]], "15": [[0, 1, 0, 0], [0, 1, 0, 1], [0, 0, 0, 0]], "16": { "8": -1, "9": 0, "10": { "0": 0, "2.5": 1, "3": 1 } } }, "version": 1 },
-  "Level 05/08": { "full_name": "LEVEL_05_08", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "12": [{ "4": 3, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 0, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 0, "3": 9 }, { "1": 0, "2": 0, "3": 11 }, { "1": 0, "2": 0, "3": 9 }], [{ "1": 0, "2": 0, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 0, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 10 }], [{ "1": 0, "2": 0, "3": 9 }, { "1": 4, "2": 4, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 3, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 9 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 1, "3": 10 }, { "1": 1, "2": 0, "3": 9 }], [{ "1": 0, "2": 1, "3": 10 }, { "1": 0, "2": 1, "3": 10 }, { "1": 0, "2": 0, "3": 9 }]], "14": [[0, 1, 0], [0, 0, 0], [1, 1, 0], [1, 0, 0], [1, 0, 0], [0, 0, 0]], "15": [[0, 0], [1, 0], [0, 0], [0, 1], [0, 0], [0, 0], [1, 1]], "16": { "8": -1, "9": 3, "10": { "0.5": 1, "1": 2 } } }, "version": 1 },
-  "Level 06/01": { "full_name": "LEVEL_06_01", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 0, "2": 0, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[1, 1, 1, 1], [1, 1, 1, 1], [1, 0, 1, 1]], "15": [[0, 1, 1], [1, 0, 1], [1, 1, 1], [1, 1, 0]], "16": { "8": -1, "9": 0, "10": {} } }, "version": 1 },
-  "Level 06/03": { "full_name": "LEVEL_06_03", "grid_data": { "0": 1, "11": [{ "4": -1, "5": 1, "6": 0, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 1 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }], "12": [{ "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": -1, "7": 0 }, { "4": -1, "5": 1, "6": -1, "7": 0 }, { "4": -1, "5": 2, "6": 1, "7": 0 }, { "4": -1, "5": 2, "6": 2, "7": 0 }, { "4": -1, "5": 2, "6": 2, "7": 0 }], "13": [[{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 2, "2": 2, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }], [{ "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 4, "2": 4, "3": 11 }, { "1": 1, "2": 1, "3": 11 }], [{ "1": 2, "2": 2, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }, { "1": 1, "2": 1, "3": 11 }]], "14": [[0, 1, 1, 1, 0, 1], [0, 0, 1, 0, 0, 0], [1, 0, 1, 1, 0, 1], [1, 1, 1, 0, 1, 0], [1, 1, 1, 1, 0, 1]], "15": [[0, 1, 0, 1, 1], [1, 1, 1, 1, 1], [1, 0, 1, 1, 1], [0, 1, 0, 1, 1], [0, 0, 1, 1, 1], [1, 0, 1, 0, 0]], "16": { "8": 27, "9": 5, "10": {} } }, "version": 1 }
-};
-
-import { GridImpl } from './engine/GridImpl';
+import {
+  TEST_LEVEL_KEYS,
+  normalizeLevelKey,
+  loadLevelData,
+} from './engine/LevelDatabase';
+import {
+  UserLevelSaveData,
+  saveDailyLevelProgress,
+  loadDailyLevelProgress,
+  clearDailyLevelProgress,
+  saveLevelProgress,
+  loadLevelProgress,
+  LEVEL_SAVE_STORAGE_PREFIX,
+} from './engine/UserLevelSaveData';
+import { GridExporter } from './engine/GridExporter';
+import { GridImpl, PureCell } from './engine/GridImpl';
 import { E } from './engine/E';
 import { LoadMode } from './engine/Grid';
 import {
@@ -131,8 +132,88 @@ export function App() {
     return () => clearInterval(interval);
   }, [hasStarted, won]);
 
+  const hoveredCellRef = useRef<{ row: number; col: number; corner: Corner } | null>(null);
+  const currentBrushKeyRef = useRef<string | null>(null);
+
+  const selectedToolRef = useRef(selectedTool);
+  selectedToolRef.current = selectedTool;
+  const currentLevelKeyRef = useRef(currentLevelKey);
+  currentLevelKeyRef.current = currentLevelKey;
+  const autoFloodAirRef = useRef(autoFloodAir);
+  autoFloodAirRef.current = autoFloodAir;
+  const wonRef = useRef(won);
+  wonRef.current = won;
+
+  const [canUndo, setCanUndo] = useState<boolean>(false);
+  const [canRedo, setCanRedo] = useState<boolean>(false);
+  const engineRef = useRef<GridImpl | null>(null);
+
+  const saveProgress = (forceWon?: boolean) => {
+    const engine = engineRef.current;
+    if (!engine || !hasStartedRef.current) return;
+
+    const isLevelWon = forceWon !== undefined ? forceWon : wonRef.current;
+    const isEmpty = engine.is_empty();
+    const curMistakes = mistakesRef.current;
+    const curTime = secondsElapsedRef.current;
+    const gridDataExport = engine.export_data();
+
+    const existing = isDailyModeRef.current
+      ? loadDailyLevelProgress(dailyDateRef.current)
+      : loadLevelProgress(currentLevelKeyRef.current);
+
+    const save = new UserLevelSaveData(
+      gridDataExport,
+      isEmpty,
+      curMistakes,
+      curTime
+    );
+
+    if (existing) {
+      save.best_mistakes = existing.best_mistakes;
+      save.best_time_secs = existing.best_time_secs;
+    }
+
+    if (isLevelWon) {
+      save.save_completion(curMistakes, curTime);
+    }
+
+    if (isDailyModeRef.current) {
+      if (dailyDateRef.current) {
+        saveDailyLevelProgress(dailyDateRef.current, save);
+      }
+    } else {
+      if (currentLevelKeyRef.current) {
+        saveLevelProgress(currentLevelKeyRef.current, save);
+      }
+    }
+  };
+
+  const saveProgressRef = useRef(saveProgress);
+  saveProgressRef.current = saveProgress;
+
+  // Persist timer & progress on each second tick
+  useEffect(() => {
+    if (hasStarted) {
+      saveProgressRef.current();
+    }
+  }, [secondsElapsed]);
+
+  // Persist progress before unload / refresh
+  useEffect(() => {
+    const onBeforeUnload = () => {
+      saveProgressRef.current();
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, []);
+
   // Submit daily score on first victory & update streak
   useEffect(() => {
+    if (won) {
+      saveProgressRef.current(true);
+    }
+
     if (won && isDailyModeRef.current && dailyDateRef.current) {
       const todayStr = get_today_str();
       const isToday = dailyDateRef.current === todayStr;
@@ -158,6 +239,7 @@ export function App() {
             if (res.submitted) {
               console.log("PlayFab daily score submitted successfully!");
               setLeaderboardRefreshKey((k) => k + 1);
+              setShowLeaderboardModal(true);
             } else if (res.reason === "already_submitted") {
               console.log("Daily score already submitted for this day.");
             } else if (res.reason === "older_level") {
@@ -171,22 +253,6 @@ export function App() {
     }
   }, [won]);
 
-  const hoveredCellRef = useRef<{ row: number; col: number; corner: Corner } | null>(null);
-  const currentBrushKeyRef = useRef<string | null>(null);
-
-  const selectedToolRef = useRef(selectedTool);
-  selectedToolRef.current = selectedTool;
-  const currentLevelKeyRef = useRef(currentLevelKey);
-  currentLevelKeyRef.current = currentLevelKey;
-  const autoFloodAirRef = useRef(autoFloodAir);
-  autoFloodAirRef.current = autoFloodAir;
-  const wonRef = useRef(won);
-  wonRef.current = won;
-
-  const [canUndo, setCanUndo] = useState<boolean>(false);
-  const [canRedo, setCanRedo] = useState<boolean>(false);
-  const engineRef = useRef<GridImpl | null>(null);
-
   const handleUndo = () => {
     const engine = engineRef.current;
     if (!engine) return;
@@ -196,6 +262,7 @@ export function App() {
       setWon(isLevelComplete(next));
       setCanUndo(engine.can_undo());
       setCanRedo(engine.can_redo());
+      saveProgressRef.current();
     }
   };
 
@@ -208,6 +275,7 @@ export function App() {
       setWon(isLevelComplete(next));
       setCanUndo(engine.can_undo());
       setCanRedo(engine.can_redo());
+      saveProgressRef.current();
     }
   };
 
@@ -230,6 +298,7 @@ export function App() {
       }
       setCanUndo(engineRef.current.can_undo());
       setCanRedo(engineRef.current.can_redo());
+      saveProgressRef.current();
     }
   };
 
@@ -251,9 +320,7 @@ export function App() {
   }, [isDarkMode]);
 
   const isTestMode = typeof window !== 'undefined' && (
-    new URLSearchParams(window.location.search).get('mode') === 'test' ||
-    new URLSearchParams(window.location.search).has('testLevel') ||
-    new URLSearchParams(window.location.search).has('level')
+    new URLSearchParams(window.location.search).get('mode') === 'test'
   );
 
   const loadLevelFromString = (levelStr: string, preserveContents: boolean = false) => {
@@ -286,22 +353,39 @@ export function App() {
     }
   };
 
-  const loadLevel = (levelKey: string) => {
+  const loadLevel = async (levelKeyOrShort: string) => {
     try {
       setIsDailyMode(false);
       setDailyMeta(null);
+      setGameMode('test');
+
+      const norm = normalizeLevelKey(levelKeyOrShort);
+      const canonicalKey = norm ? norm.key : levelKeyOrShort;
+      setCurrentLevelKey(canonicalKey);
+
       if (typeof window !== 'undefined') {
         const url = new URL(window.location.href);
         if (url.searchParams.has('daily') || url.searchParams.has('date') || url.searchParams.get('mode') === 'daily') {
           url.searchParams.delete('daily');
           url.searchParams.delete('date');
           url.searchParams.delete('mode');
-          window.history.replaceState({}, '', url.toString());
         }
+        url.searchParams.delete('testLevel');
+        if (norm) {
+          url.searchParams.set('level', `${norm.section}/${norm.level}`);
+        } else {
+          url.searchParams.set('level', canonicalKey);
+        }
+        window.history.replaceState({}, '', url.toString());
       }
 
-      setCurrentLevelKey(levelKey);
-      const data = parseGridData(LEVELS[levelKey]);
+      const rawLevel = await loadLevelData(canonicalKey);
+      if (!rawLevel) {
+        console.error(`Failed to load level data for ${canonicalKey}`);
+        return;
+      }
+
+      const data = parseGridData(rawLevel);
 
       const solution_c_left: Content[][] = [];
       const solution_c_right: Content[][] = [];
@@ -340,14 +424,34 @@ export function App() {
       engine.maybe_update_hints();
       engineRef.current = engine;
 
-      setGridData(data);
-      setWon(false);
-      setMistakes(0);
+      const saved = loadLevelProgress(canonicalKey);
+      if (saved && saved.grid_data) {
+        try {
+          new GridExporter().load_data(engine, saved.grid_data, LoadMode.ContentOnly, PureCell);
+          const restoredData = engine.to_grid_data();
+          const isComplete = isLevelComplete(restoredData);
+          setGridData(restoredData);
+          setWon(isComplete);
+          setMistakes(saved.mistakes || 0);
+          setSecondsElapsed(Math.floor(saved.timer_secs) || 0);
+        } catch (e) {
+          console.warn("Failed to restore test level progress:", e);
+          setGridData(data);
+          setWon(false);
+          setMistakes(0);
+          setSecondsElapsed(0);
+        }
+      } else {
+        setGridData(data);
+        setWon(false);
+        setMistakes(0);
+        setSecondsElapsed(0);
+      }
+
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
       setHasStarted(true);
-      setSecondsElapsed(0);
     } catch (e) {
       console.error(e);
     }
@@ -390,15 +494,38 @@ export function App() {
       }
       const { engine, gridData: data, meta } = result;
       engineRef.current = engine;
-      setGridData(data);
       setDailyMeta(meta);
-      setWon(false);
-      setMistakes(0);
+
+      const saved = loadDailyLevelProgress(targetDate);
+      if (saved && saved.grid_data) {
+        try {
+          new GridExporter().load_data(engine, saved.grid_data, LoadMode.ContentOnly, PureCell);
+          const restoredData = engine.to_grid_data();
+          const isComplete = isLevelComplete(restoredData);
+          setGridData(restoredData);
+          setWon(isComplete);
+          setMistakes(saved.mistakes || 0);
+          setSecondsElapsed(Math.floor(saved.timer_secs) || 0);
+          setHasStarted(!saved.is_empty || saved.timer_secs > 0 || isComplete);
+        } catch (e) {
+          console.warn("Failed to restore daily level progress:", e);
+          setGridData(data);
+          setWon(false);
+          setMistakes(0);
+          setSecondsElapsed(0);
+          setHasStarted(false);
+        }
+      } else {
+        setGridData(data);
+        setWon(false);
+        setMistakes(0);
+        setSecondsElapsed(0);
+        setHasStarted(false);
+      }
+
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
-      setHasStarted(false);
-      setSecondsElapsed(0);
     } catch (err) {
       console.error("Error loading daily level:", err);
     } finally {
@@ -409,10 +536,14 @@ export function App() {
   const handleRestart = () => {
     setSecondsElapsed(0);
     if (isDailyModeRef.current) {
+      clearDailyLevelProgress();
       loadDailyLevel(dailyDateRef.current).then(() => {
         setHasStarted(true);
       });
     } else {
+      try {
+        localStorage.removeItem(LEVEL_SAVE_STORAGE_PREFIX + currentLevelKeyRef.current);
+      } catch {}
       loadLevel(currentLevelKeyRef.current);
     }
   };
@@ -493,13 +624,19 @@ export function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const customLevel = params.get('testLevel') || params.get('level');
+    const levelParam = params.get('testLevel') || params.get('level');
     const dailyParam = params.get('daily') || params.get('date');
     const mode = params.get('mode');
 
-    if (customLevel) {
-      setGameMode('custom');
-      loadLevelFromString(customLevel);
+    if (levelParam) {
+      const norm = normalizeLevelKey(levelParam);
+      if (norm) {
+        setGameMode('test');
+        loadLevel(norm.key);
+      } else {
+        setGameMode('custom');
+        loadLevelFromString(levelParam);
+      }
     } else if (dailyParam) {
       const todayStr = get_today_str();
       const requestedDate = dailyParam !== 'today' ? dailyParam : todayStr;
@@ -560,10 +697,12 @@ export function App() {
         return;
       }
 
-      // Restart shortcut (R without modifier)
+      // Restart shortcut (R without modifier) - only enabled for non-daily levels
       if (key === 'r' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault();
-        handleRestartRef.current();
+        if (!isDailyModeRef.current) {
+          e.preventDefault();
+          handleRestartRef.current();
+        }
         return;
       }
 
@@ -880,6 +1019,7 @@ export function App() {
         setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
       }
     }
+    saveProgressRef.current(complete);
 
     return status;
   };
@@ -977,6 +1117,7 @@ export function App() {
           setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
         }
       }
+      saveProgressRef.current(complete);
     }
   };
 
@@ -1006,7 +1147,7 @@ export function App() {
     return foundAquariums.filter(aq => Math.abs(aq.size - targetSize) < 0.01).length;
   };
 
-  const levelKeys = Object.keys(LEVELS);
+  const levelKeys = TEST_LEVEL_KEYS;
   const currentIndex = levelKeys.indexOf(currentLevelKey);
   const nextLevelKey = currentIndex >= 0 && currentIndex < levelKeys.length - 1 ? levelKeys[currentIndex + 1] : null;
 
@@ -1034,14 +1175,16 @@ export function App() {
             <span>📅 Daily Level</span>
           </button>
 
-          <button
-            data-testid="btn-leaderboard"
-            onClick={() => setShowLeaderboardModal(true)}
-            class={`level-btn ${isDailyMode ? 'lg:hidden' : ''}`}
-            title="View Daily Leaderboard"
-          >
-            <span>🏆 Leaderboard</span>
-          </button>
+          {isDailyMode && (
+            <button
+              data-testid="btn-leaderboard"
+              onClick={() => setShowLeaderboardModal(true)}
+              class="level-btn lg:hidden"
+              title="View Daily Leaderboard"
+            >
+              <span>🏆 Leaderboard</span>
+            </button>
+          )}
 
           <button
             data-testid="btn-open-levels-modal"
@@ -1144,15 +1287,17 @@ export function App() {
           </button>
         </div>
 
-        <button
-          data-testid="btn-restart"
-          onClick={handleRestart}
-          class="btn-restart"
-          title="Restart Level (R)"
-        >
-          <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
-          <span>Restart</span>
-        </button>
+        {!isDailyMode && (
+          <button
+            data-testid="btn-restart"
+            onClick={handleRestart}
+            class="btn-restart"
+            title="Restart Level (R)"
+          >
+            <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
+            <span>Restart</span>
+          </button>
+        )}
 
         <button
           data-testid="btn-shortcuts"
@@ -1341,7 +1486,11 @@ export function App() {
 
               <button
                 data-testid="btn-start-puzzle"
-                onClick={() => setHasStarted(true)}
+                onClick={() => {
+                  setHasStarted(true);
+                  hasStartedRef.current = true;
+                  saveProgressRef.current();
+                }}
                 class="btn-start-puzzle"
               >
                 <span>▶ Start Puzzle</span>

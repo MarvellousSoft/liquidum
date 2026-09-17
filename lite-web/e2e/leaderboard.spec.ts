@@ -375,14 +375,19 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     // Verify Play Again button is NOT present in daily mode
     await expect(page.locator('[data-testid="btn-play-again"]')).toHaveCount(0);
 
-    // Verify Leaderboard button on win banner works
+    // Leaderboard modal opened automatically upon score submission
+    await expect(page.locator('[data-testid="leaderboard-modal"]')).toBeVisible();
+    await page.click('button[aria-label="Close"]');
+    await expect(page.locator('[data-testid="leaderboard-modal"]')).toHaveCount(0);
+
+    // Verify Leaderboard button on win banner can reopen it
     await page.click('[data-testid="btn-leaderboard-win"]');
-    await expect(page.locator('[role="dialog"]')).toBeVisible();
+    await expect(page.locator('[data-testid="leaderboard-modal"]')).toBeVisible();
     await page.click('button[aria-label="Close"]');
 
     // Second completion test: resetting statsUpdateCalled and restarting should NOT submit again
     statsUpdateCalled = false;
-    await page.keyboard.press('r');
+    await page.evaluate(() => (window as any).restartLevel());
     // Solve level again
     await page.evaluate(() => {
       const g = (window as any).getGridData();
@@ -449,5 +454,64 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     // Wait and verify UpdatePlayerStatistics was NEVER called for older level
     await page.waitForTimeout(600);
     expect(statsUpdateCalled).toBe(false);
+  });
+
+  test("removes leaderboard button while on test levels", async ({ page }) => {
+    await page.goto("/?level=01/01");
+    await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
+
+    // Leaderboard button in toolbar should NOT exist
+    await expect(page.locator('[data-testid="btn-leaderboard"]')).toHaveCount(0);
+    // Desktop side panel leaderboard should NOT exist
+    await expect(page.locator('[data-testid="desktop-leaderboard"]')).toHaveCount(0);
+
+    // Switch back to daily level
+    await page.click('[data-testid="btn-daily-mode"]');
+    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    // Daily mode has desktop leaderboard (on desktop viewport)
+    await expect(page.locator('[data-testid="desktop-leaderboard"]')).toBeVisible();
+  });
+
+  test("automatically shows leaderboard modal after daily level completion and score submission", async ({ page }) => {
+    let statsUpdateCalled = false;
+
+    await page.route("**/Client/UpdatePlayerStatistics", async (route) => {
+      statsUpdateCalled = true;
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ code: 200, status: "OK", data: {} }),
+      });
+    });
+
+    await page.goto("/");
+    await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
+
+    // Start puzzle
+    await page.click('[data-testid="btn-start-puzzle"]');
+
+    // Solve today's level
+    await page.evaluate(() => {
+      const g = (window as any).getGridData();
+      if (!g || !g.solution_c_left) return;
+      for (let r = 0; r < g.cells.length; r++) {
+        for (let c = 0; c < g.cells[r].length; c++) {
+          const cell = g.cells[r][c];
+          const solL = g.solution_c_left[r][c];
+          const solR = g.solution_c_right[r][c];
+          const leftCorner = cell.type === 10 ? 8 : 5;
+          const rightCorner = cell.type === 9 ? 7 : 6;
+          if (solL === 1 || solL === 2 || solL === 4) (window as any).putCellAction(r, c, leftCorner, solL);
+          if (solR === 1 || solR === 2 || solR === 4) (window as any).putCellAction(r, c, rightCorner, solR);
+        }
+      }
+    });
+
+    // Score is submitted to PlayFab
+    await expect.poll(() => statsUpdateCalled).toBe(true);
+
+    // Leaderboard modal should automatically appear after submission
+    await expect(page.locator('[data-testid="leaderboard-modal"]')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('[data-testid="leaderboard-modal"]')).toContainText("Daily Leaderboard");
   });
 });
