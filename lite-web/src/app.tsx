@@ -187,25 +187,63 @@ export function App() {
         saveLevelProgress(currentLevelKeyRef.current, save);
       }
     }
+    if (moveSaveTimeoutRef.current !== null) {
+      clearTimeout(moveSaveTimeoutRef.current);
+      moveSaveTimeoutRef.current = null;
+    }
   };
 
   const saveProgressRef = useRef(saveProgress);
   saveProgressRef.current = saveProgress;
 
-  // Persist timer & progress on each second tick
-  useEffect(() => {
-    if (hasStarted) {
-      saveProgressRef.current();
-    }
-  }, [secondsElapsed]);
+  const moveSaveTimeoutRef = useRef<any>(null);
 
-  // Persist progress before unload / refresh
+  const scheduleMoveSave = () => {
+    if (moveSaveTimeoutRef.current !== null) {
+      clearTimeout(moveSaveTimeoutRef.current);
+    }
+    moveSaveTimeoutRef.current = setTimeout(() => {
+      moveSaveTimeoutRef.current = null;
+      saveProgressRef.current();
+    }, 5000);
+  };
+  const scheduleMoveSaveRef = useRef(scheduleMoveSave);
+  scheduleMoveSaveRef.current = scheduleMoveSave;
+
+  // Periodic heartbeat save every 30 seconds
   useEffect(() => {
-    const onBeforeUnload = () => {
+    if (!hasStarted || won) return;
+    const interval = setInterval(() => {
+      saveProgressRef.current();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [hasStarted, won]);
+
+  // Persist progress when user tries to close, reload, or background
+  useEffect(() => {
+    const handleCloseOrBackground = () => {
       saveProgressRef.current();
     };
-    window.addEventListener('beforeunload', onBeforeUnload);
-    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        saveProgressRef.current();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleCloseOrBackground);
+    window.addEventListener('pagehide', handleCloseOrBackground);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleCloseOrBackground);
+      window.removeEventListener('pagehide', handleCloseOrBackground);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (moveSaveTimeoutRef.current !== null) {
+        clearTimeout(moveSaveTimeoutRef.current);
+        moveSaveTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   // Submit daily score on first victory & update streak
@@ -259,10 +297,15 @@ export function App() {
     if (engine.undo()) {
       const next = engine.to_grid_data();
       setGridData(next);
-      setWon(isLevelComplete(next));
+      const complete = isLevelComplete(next);
+      setWon(complete);
       setCanUndo(engine.can_undo());
       setCanRedo(engine.can_redo());
-      saveProgressRef.current();
+      if (complete) {
+        saveProgressRef.current(true);
+      } else {
+        scheduleMoveSaveRef.current();
+      }
     }
   };
 
@@ -272,10 +315,15 @@ export function App() {
     if (engine.redo()) {
       const next = engine.to_grid_data();
       setGridData(next);
-      setWon(isLevelComplete(next));
+      const complete = isLevelComplete(next);
+      setWon(complete);
       setCanUndo(engine.can_undo());
       setCanRedo(engine.can_redo());
-      saveProgressRef.current();
+      if (complete) {
+        saveProgressRef.current(true);
+      } else {
+        scheduleMoveSaveRef.current();
+      }
     }
   };
 
@@ -298,7 +346,7 @@ export function App() {
       }
       setCanUndo(engineRef.current.can_undo());
       setCanRedo(engineRef.current.can_redo());
-      saveProgressRef.current();
+      scheduleMoveSaveRef.current();
     }
   };
 
@@ -543,7 +591,7 @@ export function App() {
     } else {
       try {
         localStorage.removeItem(LEVEL_SAVE_STORAGE_PREFIX + currentLevelKeyRef.current);
-      } catch {}
+      } catch { }
       loadLevel(currentLevelKeyRef.current);
     }
   };
@@ -1019,7 +1067,11 @@ export function App() {
         setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
       }
     }
-    saveProgressRef.current(complete);
+    if (complete) {
+      saveProgressRef.current(true);
+    } else {
+      scheduleMoveSaveRef.current();
+    }
 
     return status;
   };
@@ -1117,7 +1169,11 @@ export function App() {
           setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
         }
       }
-      saveProgressRef.current(complete);
+      if (complete) {
+        saveProgressRef.current(true);
+      } else {
+        scheduleMoveSaveRef.current();
+      }
     }
   };
 
@@ -1432,7 +1488,7 @@ export function App() {
                 title="Play the full game on Steam"
               >
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z"/>
+                  <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z" />
                 </svg>
                 <span>Liquidum on Steam</span>
               </a>
@@ -1449,217 +1505,217 @@ export function App() {
       ) : gridData ? (
         <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto px-2">
           <div class="relative flex flex-col items-center">
-          {/* Start Puzzle Overlay for Daily Mode */}
-          {isDailyMode && !hasStarted && (
-            <div
-              data-testid="start-puzzle-overlay"
-              class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/70 backdrop-blur-md rounded-2xl p-6 text-center"
-            >
-              <div class="text-5xl mb-2">{dailyMeta?.emoji || "🐟"}</div>
-              <h3 class="text-2xl font-bold text-cyan-300 mb-1">
-                {dailyMeta?.flavorName || "Daily Puzzle"}
-              </h3>
-              <p class="text-xs text-slate-300 opacity-90 mb-4 max-w-xs">
-                {dailyMeta?.description || "Solve the daily puzzle as fast as you can with minimal mistakes!"}
-              </p>
-
-              <div class="flex items-center gap-2.5 mb-5 flex-wrap justify-center">
-                {dailyDate === get_today_str() && (
-                  <div
-                    data-testid="daily-time-left"
-                    class="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono"
-                    title="Time remaining to solve today's daily puzzle"
-                  >
-                    <span>⏳</span>
-                    <span>{formatTimeLeft(timeLeftSeconds)}</span>
-                  </div>
-                )}
-                <div
-                  data-testid="daily-streak-display"
-                  class="flex items-center gap-1 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
-                  title={`Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
-                >
-                  <span>🔥</span>
-                  <span>Streak: {streakData.currentStreak}</span>
-                </div>
-              </div>
-
-              <button
-                data-testid="btn-start-puzzle"
-                onClick={() => {
-                  setHasStarted(true);
-                  hasStartedRef.current = true;
-                  saveProgressRef.current();
-                }}
-                class="btn-start-puzzle"
+            {/* Start Puzzle Overlay for Daily Mode */}
+            {isDailyMode && !hasStarted && (
+              <div
+                data-testid="start-puzzle-overlay"
+                class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/70 backdrop-blur-md rounded-2xl p-6 text-center"
               >
-                <span>▶ Start Puzzle</span>
-              </button>
-            </div>
-          )}
+                <div class="text-5xl mb-2">{dailyMeta?.emoji || "🐟"}</div>
+                <h3 class="text-2xl font-bold text-cyan-300 mb-1">
+                  {dailyMeta?.flavorName || "Daily Puzzle"}
+                </h3>
+                <p class="text-xs text-slate-300 opacity-90 mb-4 max-w-xs">
+                  {dailyMeta?.description || "Solve the daily puzzle as fast as you can with minimal mistakes!"}
+                </p>
 
-          <div class={`flex flex-col items-center transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
-            {/* Grid Hints Header */}
-            {(() => {
-              const hasTotalWater = gridData.grid_hints.total_water >= 0;
-              const hasTotalBoats = gridData.grid_hints.total_boats > 0;
-              const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
-                .filter(([_, v]) => v !== -1 && v >= 0)
-                .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
-              const hasAquariums = aquariumEntries.length > 0;
-
-              return (
-                <div class="grid-hints-card" data-testid="grid-hints-card">
-                  {/* Timer for Daily Mode */}
-                  {isDailyMode && (
+                <div class="flex items-center gap-2.5 mb-5 flex-wrap justify-center">
+                  {dailyDate === get_today_str() && (
                     <div
-                      data-testid="hint-timer"
-                      class="hint-stat-card hint-stat-normal"
-                      title="Time elapsed"
+                      data-testid="daily-time-left"
+                      class="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono"
+                      title="Time remaining to solve today's daily puzzle"
                     >
-                      <span class="hint-stat-icon">⏱️</span>
-                      <span class="hint-stat-label">Time</span>
-                      <span data-testid="timer-value" class="hint-stat-value godot-text-outline font-mono">
-                        {formatSolveTime(secondsElapsed)}
-                      </span>
+                      <span>⏳</span>
+                      <span>{formatTimeLeft(timeLeftSeconds)}</span>
                     </div>
                   )}
-
-                  {/* Mistake Counter */}
                   <div
-                    data-testid="mistake-counter"
-                    class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
-                    title="Mistakes made"
+                    data-testid="daily-streak-display"
+                    class="flex items-center gap-1 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
+                    title={`Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
                   >
-                    <span class="hint-stat-icon">❌</span>
-                    <span class="hint-stat-label">Mistakes</span>
-                    <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
-                      {mistakes}
-                    </span>
+                    <span>🔥</span>
+                    <span>Streak: {streakData.currentStreak}</span>
                   </div>
+                </div>
 
-                {hasTotalWater && (
-                  <div
-                    data-testid="hint-water-counter"
-                    class={`hint-stat-card ${currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
-                      currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
-                        'hint-stat-normal'
-                      }`}
-                    title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
-                  >
-                    <span class="hint-stat-icon">💧</span>
-                    <span class="hint-stat-label">Water</span>
-                    <span class="hint-stat-value godot-text-outline">
-                      {currentWater} / {gridData.grid_hints.total_water}
-                    </span>
-                    {currentWater === gridData.grid_hints.total_water ? (
-                      <span class="hint-status-badge badge-satisfied">✓</span>
-                    ) : currentWater > gridData.grid_hints.total_water ? (
-                      <span class="hint-status-badge badge-over">⚠ Over</span>
-                    ) : null}
-                  </div>
-                )}
-
-                {hasTotalBoats && (
-                  <div
-                    data-testid="hint-boat-counter"
-                    class={`hint-stat-card ${currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
-                      currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
-                        'hint-stat-normal'
-                      }`}
-                    title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
-                  >
-                    <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
-                    <span class="hint-stat-label">Boats</span>
-                    <span class="hint-stat-value godot-text-outline">
-                      {currentBoats} / {gridData.grid_hints.total_boats}
-                    </span>
-                    {currentBoats === gridData.grid_hints.total_boats ? (
-                      <span class="hint-status-badge badge-satisfied">✓</span>
-                    ) : currentBoats > gridData.grid_hints.total_boats ? (
-                      <span class="hint-status-badge badge-over">⚠ Over</span>
-                    ) : null}
-                  </div>
-                )}
-
-                {hasAquariums && (
-                  <div class={`aquarium-section ${(hasTotalWater || hasTotalBoats) ? 'has-counters' : ''}`} data-testid="aquarium-section">
-                    <div class="aquarium-header">
-                      <span class="aquarium-icon">🌊</span>
-                      <span class="aquarium-label">Aquariums:</span>
-                    </div>
-                    <div class="aquarium-items">
-                      {aquariumEntries.map(([sizeStr, expectedCount]) => {
-                        const targetSize = parseFloat(sizeStr);
-                        const actualCount = getActualCount(targetSize);
-                        const isSatisfied = actualCount === expectedCount;
-                        const isOver = actualCount > expectedCount;
-                        const cardClass = isSatisfied ? 'aquarium-card-satisfied' : isOver ? 'aquarium-card-over' : 'aquarium-card-normal';
-                        return (
-                          <div
-                            key={sizeStr}
-                            data-testid={`aquarium-hint-${sizeStr}`}
-                            class={`aquarium-card ${cardClass}`}
-                            title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
-                          >
-                            <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
-                              {targetSize > 0 && (
-                                <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
-                              )}
-                              {targetSize === 0.5 && (
-                                <svg class="aq-diag-line">
-                                  <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--cell-wall)" stroke-width="2" />
-                                </svg>
-                              )}
-                              <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>
-                                {targetSize}
-                              </span>
-                            </div>
-                            <div class="aq-info">
-                              <span class="aq-expected-count">×{expectedCount}</span>
-                              <span class={`aq-status-pill ${isSatisfied ? 'aq-pill-satisfied' :
-                                isOver ? 'aq-pill-over' :
-                                  'aq-pill-normal'
-                                }`}>
-                                {isSatisfied ? `✓ ${actualCount}` : `${actualCount}/${expectedCount}`}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                <button
+                  data-testid="btn-start-puzzle"
+                  onClick={() => {
+                    setHasStarted(true);
+                    hasStartedRef.current = true;
+                    saveProgressRef.current();
+                  }}
+                  class="btn-start-puzzle"
+                >
+                  <span>▶ Start Puzzle</span>
+                </button>
               </div>
-            );
-          })()}
+            )}
 
-          <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
-            <Grid
-              gridData={gridData}
-              blinkingCells={blinkingCells}
-              onCellPointerDown={handleCellDown}
-              onCellPointerEnter={handleCellEnter}
-              onCellPointerMove={handleCellMove}
-              onCellPointerLeave={handleCellLeave}
-            />
+            <div class={`flex flex-col items-center transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
+              {/* Grid Hints Header */}
+              {(() => {
+                const hasTotalWater = gridData.grid_hints.total_water >= 0;
+                const hasTotalBoats = gridData.grid_hints.total_boats > 0;
+                const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
+                  .filter(([_, v]) => v !== -1 && v >= 0)
+                  .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
+                const hasAquariums = aquariumEntries.length > 0;
+
+                return (
+                  <div class="grid-hints-card" data-testid="grid-hints-card">
+                    {/* Timer for Daily Mode */}
+                    {isDailyMode && (
+                      <div
+                        data-testid="hint-timer"
+                        class="hint-stat-card hint-stat-normal"
+                        title="Time elapsed"
+                      >
+                        <span class="hint-stat-icon">⏱️</span>
+                        <span class="hint-stat-label">Time</span>
+                        <span data-testid="timer-value" class="hint-stat-value godot-text-outline font-mono">
+                          {formatSolveTime(secondsElapsed)}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Mistake Counter */}
+                    <div
+                      data-testid="mistake-counter"
+                      class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
+                      title="Mistakes made"
+                    >
+                      <span class="hint-stat-icon">❌</span>
+                      <span class="hint-stat-label">Mistakes</span>
+                      <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
+                        {mistakes}
+                      </span>
+                    </div>
+
+                    {hasTotalWater && (
+                      <div
+                        data-testid="hint-water-counter"
+                        class={`hint-stat-card ${currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
+                          currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
+                            'hint-stat-normal'
+                          }`}
+                        title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
+                      >
+                        <span class="hint-stat-icon">💧</span>
+                        <span class="hint-stat-label">Water</span>
+                        <span class="hint-stat-value godot-text-outline">
+                          {currentWater} / {gridData.grid_hints.total_water}
+                        </span>
+                        {currentWater === gridData.grid_hints.total_water ? (
+                          <span class="hint-status-badge badge-satisfied">✓</span>
+                        ) : currentWater > gridData.grid_hints.total_water ? (
+                          <span class="hint-status-badge badge-over">⚠ Over</span>
+                        ) : null}
+                      </div>
+                    )}
+
+                    {hasTotalBoats && (
+                      <div
+                        data-testid="hint-boat-counter"
+                        class={`hint-stat-card ${currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
+                          currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
+                            'hint-stat-normal'
+                          }`}
+                        title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
+                      >
+                        <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
+                        <span class="hint-stat-label">Boats</span>
+                        <span class="hint-stat-value godot-text-outline">
+                          {currentBoats} / {gridData.grid_hints.total_boats}
+                        </span>
+                        {currentBoats === gridData.grid_hints.total_boats ? (
+                          <span class="hint-status-badge badge-satisfied">✓</span>
+                        ) : currentBoats > gridData.grid_hints.total_boats ? (
+                          <span class="hint-status-badge badge-over">⚠ Over</span>
+                        ) : null}
+                      </div>
+                    )}
+
+                    {hasAquariums && (
+                      <div class={`aquarium-section ${(hasTotalWater || hasTotalBoats) ? 'has-counters' : ''}`} data-testid="aquarium-section">
+                        <div class="aquarium-header">
+                          <span class="aquarium-icon">🌊</span>
+                          <span class="aquarium-label">Aquariums:</span>
+                        </div>
+                        <div class="aquarium-items">
+                          {aquariumEntries.map(([sizeStr, expectedCount]) => {
+                            const targetSize = parseFloat(sizeStr);
+                            const actualCount = getActualCount(targetSize);
+                            const isSatisfied = actualCount === expectedCount;
+                            const isOver = actualCount > expectedCount;
+                            const cardClass = isSatisfied ? 'aquarium-card-satisfied' : isOver ? 'aquarium-card-over' : 'aquarium-card-normal';
+                            return (
+                              <div
+                                key={sizeStr}
+                                data-testid={`aquarium-hint-${sizeStr}`}
+                                class={`aquarium-card ${cardClass}`}
+                                title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
+                              >
+                                <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
+                                  {targetSize > 0 && (
+                                    <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
+                                  )}
+                                  {targetSize === 0.5 && (
+                                    <svg class="aq-diag-line">
+                                      <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--cell-wall)" stroke-width="2" />
+                                    </svg>
+                                  )}
+                                  <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>
+                                    {targetSize}
+                                  </span>
+                                </div>
+                                <div class="aq-info">
+                                  <span class="aq-expected-count">×{expectedCount}</span>
+                                  <span class={`aq-status-pill ${isSatisfied ? 'aq-pill-satisfied' :
+                                    isOver ? 'aq-pill-over' :
+                                      'aq-pill-normal'
+                                    }`}>
+                                    {isSatisfied ? `✓ ${actualCount}` : `${actualCount}/${expectedCount}`}
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+              <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
+                <Grid
+                  gridData={gridData}
+                  blinkingCells={blinkingCells}
+                  onCellPointerDown={handleCellDown}
+                  onCellPointerEnter={handleCellEnter}
+                  onCellPointerMove={handleCellMove}
+                  onCellPointerLeave={handleCellLeave}
+                />
+              </div>
+            </div>
           </div>
+
+          {/* Desktop Side-by-Side Leaderboard (only in daily mode on lg+ screens) */}
+          {isDailyMode && (
+            <div
+              data-testid="desktop-leaderboard"
+              class="hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 self-stretch max-w-sm"
+            >
+              <LeaderboardView
+                isSidePanel={true}
+                refreshTrigger={leaderboardRefreshKey}
+              />
+            </div>
+          )}
         </div>
-      </div>
-
-        {/* Desktop Side-by-Side Leaderboard (only in daily mode on lg+ screens) */}
-        {isDailyMode && (
-          <div
-            data-testid="desktop-leaderboard"
-            class="hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 self-stretch max-w-sm"
-          >
-            <LeaderboardView
-              isSidePanel={true}
-              refreshTrigger={leaderboardRefreshKey}
-            />
-          </div>
-        )}
-      </div>
       ) : (
         <p>Loading...</p>
       )}
