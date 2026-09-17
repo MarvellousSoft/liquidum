@@ -254,9 +254,9 @@ func aquarium_hints_status() -> E.HintStatus:
 
 # Additional rules operating on this grid
 enum RuleVariant {
-	Sudoku,
 	Liar,
 	Snake,
+	Sudoku,
 	Symbols
 }
 

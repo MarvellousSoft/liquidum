@@ -300,12 +300,12 @@ func update_hints(data: GridModel.CellModel) -> void:
 	if h_data != null:
 		var hint: Hint = CellHints.get_node("Hint")
 		var val := h_data.adj_water_count
-		if val != -1 and not editor_mode and Profile.get_option("cell_hint_info") == Profile.CellHintInfo.ShowRemaining:
+		if val != -1 and not editor_mode and h_data.water_alt_text == "" and Profile.get_option("cell_hint_info") == Profile.CellHintInfo.ShowRemaining:
 			val -= grid.grid_logic.count_water_adj(row, column)
 		hint.set_value(val)
 		hint.set_alt_text(h_data.water_alt_text)
 		hint.set_hint_type(h_data.adj_water_count_type)
-		hint.set_status(data.hints_status() if not editor_mode else E.HintStatus.Normal)
+		hint.set_status(E.HintStatus.Normal if editor_mode or h_data.water_alt_text != "" else data.hints_status())
 		if editor_mode != hint.editor_mode:
 			if editor_mode:
 				hint.enable_editor()

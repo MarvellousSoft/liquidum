@@ -55,6 +55,7 @@ var last_seen := 0
 # List of changes to undo and redo
 var undo_stack: Array[Changes] = []
 var redo_stack: Array[Changes] = []
+var _rule_variants: Array[GridModel.RuleVariant] = []
 
 var solution_c_left: Array[Array]
 var solution_c_right: Array[Array]
@@ -1644,10 +1645,34 @@ func aquarium_hints_status() -> E.HintStatus:
 	return E.HintStatus.Satisfied
 
 func rule_variants() -> Array[GridModel.RuleVariant]:
+	return _rule_variants
+
+func _liar_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
+func _snake_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
+func _sudoku_status() -> E.HintStatus:
+	return GridModel.must_be_implemented()
+
+func _symbols_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
 func rule_variants_status() -> Array[E.HintStatus]:
-	return GridModel.must_be_implemented()
+	var ret := []
+	for rule in _rule_variants:
+		if rule == GridModel.RuleVariant.Liar:
+			ret.append(_liar_status())
+		elif rule == GridModel.RuleVariant.Snake:
+			ret.append(_snake_status())
+		elif rule == GridModel.RuleVariant.Sudoku:
+			ret.append(_sudoku_status())
+		elif rule == GridModel.RuleVariant.Symbols:
+			ret.append(_symbols_status())
+		else:
+			push_warning("Unknown variant")
+	return ret
 
 func count_nowater_row(i : int) -> float:
 	var count: float = 0.
