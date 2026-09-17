@@ -152,11 +152,11 @@ func _inner_get_hints(hints: Array[GridModel.LineHint], count_water: Callable, c
 		h.water_count = count_water.call(i)
 		h.boat_count = count_boat.call(i)
 		if info == Profile.LineInfo.ShowMissing:
-			if hints[i].water_count == -1.0:
+			if hints[i].water_count == -1.0 or hints[i].water_alt_text != "":
 				h.water_count = -1.0
 			else:
 				h.water_count = hints[i].water_count - h.water_count
-			if hints[i].boat_count == -1:
+			if hints[i].boat_count == -1 or hints[i].boat_alt_text != "":
 				h.boat_count = -1
 			else:
 				h.boat_count = hints[i].boat_count - h.boat_count
@@ -377,24 +377,27 @@ func _inner_update_hint(hints: Array[GridModel.LineHint], bar: HintBar, get_stat
 
 
 func _inner_row_status(i: int, content: E.HintContent, incomplete_info := false) -> E.HintStatus:
-	if editor_mode:
+	var hint_i := grid_logic.row_hints()[i]
+	var alt_text := hint_i.boat_alt_text if content == E.HintContent.Boat else hint_i.water_alt_text
+	if editor_mode or alt_text != "":
 		return E.HintStatus.Normal
 	# If the other side is ? we should never be green
 	if incomplete_info and not Profile.get_option("progress_on_unknown"):
-		var hints := grid_logic.row_hints()
-		var val := float(hints[i].boat_count) if content == E.HintContent.Boat else hints[i].water_count
+		var val := float(hint_i.boat_count) if content == E.HintContent.Boat else hint_i.water_count
 		if val == -1:
 			return E.HintStatus.Normal
 	return grid_logic.get_row_hint_status(i, content)
 
 
 func _inner_col_status(j: int, content: E.HintContent, incomplete_info := false) -> E.HintStatus:
-	if editor_mode:
+	var hint_j := grid_logic.col_hints()[j]
+	var alt_text := hint_j.boat_alt_text if content == E.HintContent.Boat else hint_j.water_alt_text
+	if editor_mode or alt_text != "":
 		return E.HintStatus.Normal
 	# If the other side is ? we should never be green
 	if incomplete_info and not Profile.get_option("progress_on_unknown"):
 		var hints := grid_logic.col_hints()
-		var val := float(hints[j].boat_count) if content == E.HintContent.Boat else hints[j].water_count
+		var val := float(hint_j.boat_count) if content == E.HintContent.Boat else hint_j.water_count
 		if val == -1:
 			return E.HintStatus.Normal
 	return grid_logic.get_col_hint_status(j, content)
