@@ -6,6 +6,7 @@ import {
   getDateStringForOffset,
   type LeaderboardEntry,
 } from "../engine/PlayFabService";
+import type { FlairInfo } from "../engine/FlairManager";
 
 export interface LeaderboardViewProps {
   onClose?: () => void;
@@ -40,6 +41,23 @@ export function LeaderboardView({
   const [nameSaving, setNameSaving] = useState(false);
   const [currentDisplayName, setCurrentDisplayName] = useState<string>("");
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(null);
+  const [currentFlair, setCurrentFlair] = useState<FlairInfo | null>(null);
+
+  // Avatar hover preview popover
+  const [previewAvatar, setPreviewAvatar] = useState<{ url: string; x: number; y: number } | null>(null);
+
+  const handleAvatarMouseEnter = (url: string, e: any) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const previewSize = 72;
+    const placeLeft = rect.right + previewSize + 20 > window.innerWidth;
+    const x = placeLeft ? rect.left - previewSize - 12 : rect.right + 12;
+    const y = rect.top + rect.height / 2;
+    setPreviewAvatar({ url, x, y });
+  };
+
+  const handleAvatarMouseLeave = () => {
+    setPreviewAvatar(null);
+  };
 
   const todayDate = getDateStringForOffset(0);
   const yesterdayDate = getDateStringForOffset(-1);
@@ -55,6 +73,7 @@ export function LeaderboardView({
       setEntries(data);
       setCurrentDisplayName(playFabService.getDisplayName() || "Anonymous");
       setCurrentAvatarUrl(playFabService.getAvatarUrl());
+      setCurrentFlair(playFabService.getFlair());
     } catch (err: any) {
       setError(err?.errorMessage || err?.message || "Failed to load leaderboard");
     } finally {
@@ -184,17 +203,36 @@ export function LeaderboardView({
                 <img
                   src={currentAvatarUrl}
                   alt=""
-                  className="w-6 h-6 rounded-full object-cover border border-cyan-400/50"
+                  className="w-6 h-6 rounded-full object-cover border border-cyan-400/50 cursor-pointer hover:scale-125 transition-transform duration-150"
+                  onMouseEnter={(e) => handleAvatarMouseEnter(currentAvatarUrl, e)}
+                  onMouseLeave={handleAvatarMouseLeave}
                 />
               ) : (
                 <span className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-[11px]">
                   🐟
                 </span>
               )}
-              <div className="flex flex-col leading-tight">
+              <div className="flex items-center gap-1.5 leading-tight">
                 <span className="font-semibold text-slate-200 truncate max-w-[130px]">
                   {currentDisplayName || "Anonymous"}
                 </span>
+                {currentFlair && (
+                  <span
+                    data-testid="user-profile-flair"
+                    className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help"
+                    style={{
+                      color: currentFlair.color,
+                      borderColor: `${currentFlair.color}66`,
+                      backgroundColor: `${currentFlair.color}1f`,
+                    }}
+                    title={currentFlair.description}
+                  >
+                    <span>{currentFlair.text}</span>
+                    {currentFlair.extraFlairs > 0 && (
+                      <span className="text-[8px] opacity-80">+{currentFlair.extraFlairs}</span>
+                    )}
+                  </span>
+                )}
               </div>
               <button
                 className="text-cyan-400 hover:text-cyan-300 underline text-[11px] ml-0.5"
@@ -267,12 +305,14 @@ export function LeaderboardView({
                       {medal ? <span className="text-sm">{medal}</span> : entry.position}
                     </td>
                     <td className="py-1.5 px-2">
-                      <div className="flex items-center gap-1.5 truncate max-w-[140px]">
+                      <div className="flex items-center gap-1.5 truncate max-w-[180px]">
                         {entry.avatarUrl ? (
                           <img
                             src={entry.avatarUrl}
                             alt=""
-                            className="w-4 h-4 rounded-full object-cover border border-slate-700 flex-shrink-0"
+                            className="w-4 h-4 rounded-full object-cover border border-slate-700 flex-shrink-0 cursor-pointer hover:scale-125 transition-transform duration-150"
+                            onMouseEnter={(e) => handleAvatarMouseEnter(entry.avatarUrl!, e)}
+                            onMouseLeave={handleAvatarMouseLeave}
                           />
                         ) : (
                           <span className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[9px] flex-shrink-0">
@@ -280,6 +320,23 @@ export function LeaderboardView({
                           </span>
                         )}
                         <span className="truncate">{entry.displayName}</span>
+                        {entry.flair && (
+                          <span
+                            data-testid={`flair-${entry.playFabId}`}
+                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help transition-transform hover:scale-105"
+                            style={{
+                              color: entry.flair.color,
+                              borderColor: `${entry.flair.color}66`,
+                              backgroundColor: `${entry.flair.color}1f`,
+                            }}
+                            title={entry.flair.description}
+                          >
+                            <span>{entry.flair.text}</span>
+                            {entry.flair.extraFlairs > 0 && (
+                              <span className="text-[8px] opacity-80">+{entry.flair.extraFlairs}</span>
+                            )}
+                          </span>
+                        )}
                         {entry.isCurrentUser && (
                           <>
                             {" "}
@@ -303,6 +360,21 @@ export function LeaderboardView({
           </table>
         )}
       </div>
+
+      {/* Floating avatar hover preview */}
+      {previewAvatar && (
+        <div
+          data-testid="avatar-preview-popover"
+          className="fixed z-[9999] pointer-events-none -translate-y-1/2 bg-slate-950/95 border-2 border-cyan-400/80 rounded-xl p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 flex flex-col items-center"
+          style={{ left: `${previewAvatar.x}px`, top: `${previewAvatar.y}px` }}
+        >
+          <img
+            src={previewAvatar.url}
+            alt="Avatar preview"
+            className="w-16 h-16 rounded-lg object-cover shadow"
+          />
+        </div>
+      )}
 
       {/* Footer (if in modal) */}
       {onClose && (

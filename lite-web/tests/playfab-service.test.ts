@@ -14,6 +14,12 @@ import {
   DAILY_STATISTIC_NAME,
 } from "../src/engine/PlayFabService";
 import { getGeneratedName } from "../src/engine/NameGenerator";
+import {
+  decodeFlairFromInt,
+  encodeFlairToInt,
+  createFlair,
+  FlairId,
+} from "../src/engine/FlairManager";
 
 // Helper in-memory storage for testing
 function createMockStorage(): Storage {
@@ -142,6 +148,30 @@ describe("PlayFabService - Mocked API Workflows", () => {
       }
 
       if (urlStr.includes("/Client/GetLeaderboard")) {
+        if (body.StatisticName === "flair") {
+          return new Response(
+            JSON.stringify({
+              code: 200,
+              status: "OK",
+              data: {
+                Leaderboard: [
+                  {
+                    Position: 0,
+                    PlayFabId: "PLAYER_TOP_1",
+                    StatValue: 1, // Streak30 (id=1, extraFlairs=0)
+                  },
+                  {
+                    Position: 1,
+                    PlayFabId: "PLAYFAB_USER_123",
+                    StatValue: 9999 + 2 * 1000000, // Dev with +2 extra flairs
+                  },
+                ],
+              },
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          );
+        }
+
         return new Response(
           JSON.stringify({
             code: 200,
@@ -247,6 +277,13 @@ describe("PlayFabService - Mocked API Workflows", () => {
       playFabId: "PLAYER_TOP_1",
       displayName: "CoralReef",
       avatarUrl: "https://example.com/avatar1.png",
+      flair: {
+        id: 1,
+        extraFlairs: 0,
+        text: "30✓",
+        color: "#ff4500",
+        description: "Got a 30 daily streak",
+      },
       seconds: 55,
       mistakes: 0,
       rawScore: -55,
@@ -259,6 +296,13 @@ describe("PlayFabService - Mocked API Workflows", () => {
       playFabId: "PLAYFAB_USER_123",
       displayName: "AquaMaster",
       avatarUrl: null,
+      flair: {
+        id: 9999,
+        extraFlairs: 2,
+        text: "dev",
+        color: "#ef4444",
+        description: "Developer of Liquidum",
+      },
       seconds: 45,
       mistakes: 1,
       rawScore: -100045,
@@ -271,6 +315,7 @@ describe("PlayFabService - Mocked API Workflows", () => {
       playFabId: "PLAYER_3",
       displayName: getGeneratedName("PLAYER_3"),
       avatarUrl: null,
+      flair: null,
       seconds: 110,
       mistakes: 2,
       rawScore: -200110,
@@ -400,4 +445,69 @@ describe("PlayFabService - Profile Data Extraction (Godot Parity)", () => {
     expect(extractAvatarUrlFromProfile(null)).toBeNull();
   });
 });
+
+describe("FlairManager - Flair Decoding & Ported Definitions", () => {
+  it("encodes and decodes flair integers accurately", () => {
+    expect(decodeFlairFromInt(-1)).toBeNull();
+    expect(decodeFlairFromInt(undefined as any)).toBeNull();
+
+    // Streak30 with 0 extra flairs
+    expect(decodeFlairFromInt(1)).toEqual({ id: 1, extraFlairs: 0 });
+    expect(encodeFlairToInt(1, 0)).toBe(1);
+
+    // Dev with 2 extra flairs: 2 * 1,000,000 + 9999 = 2,009,999
+    expect(decodeFlairFromInt(2009999)).toEqual({ id: 9999, extraFlairs: 2 });
+    expect(encodeFlairToInt(9999, 2)).toBe(2009999);
+  });
+
+  it("creates standard flairs with correct metadata", () => {
+    const streak = createFlair(FlairId.Streak30, 0);
+    expect(streak).toEqual({
+      id: 1,
+      extraFlairs: 0,
+      text: "30✓",
+      color: "#ff4500",
+      description: "Got a 30 daily streak",
+    });
+
+    const dev = createFlair(FlairId.Dev, 3);
+    expect(dev).toEqual({
+      id: 9999,
+      extraFlairs: 3,
+      text: "dev",
+      color: "#ef4444",
+      description: "Developer of Liquidum",
+    });
+
+    const dlc = createFlair(FlairId.Dlc, 0);
+    expect(dlc?.text).toBe("❤");
+
+    const won = createFlair(FlairId.MainCampaign, 0);
+    expect(won?.text).toBe("won");
+  });
+
+  it("creates monthly pro flairs with deterministic color and formatted date", () => {
+    // ProStart (10000) corresponds to February 2024
+    const feb2024 = createFlair(FlairId.ProStart, 1);
+    expect(feb2024?.text).toBe("pro");
+    expect(feb2024?.extraFlairs).toBe(1);
+    expect(feb2024?.description).toContain("February 2024");
+    expect(feb2024?.color).toMatch(/^#[0-9a-f]{6}$/i);
+
+    // March 2024 (10001)
+    const mar2024 = createFlair(10001, 0);
+    expect(mar2024?.description).toContain("March 2024");
+  });
+
+  it("creates extra island flairs", () => {
+    const island1 = createFlair(FlairId.ExtraIslandStart + 1, 0);
+    expect(island1?.text).toBe("🤏");
+    expect(island1?.description).toBe("Completed island 1");
+
+    const island3 = createFlair(FlairId.ExtraIslandStart + 3, 0);
+    expect(island3?.text).toBe("👄");
+    expect(island3?.color).toBe("#fe2d86");
+  });
+});
+
 

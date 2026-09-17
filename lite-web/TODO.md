@@ -1,3 +1,10 @@
+- Save on local storage the current progress on a level, together with the date, so we can discard if it is an old level when we load tomorrow.
 - Use the same result message as normal liquidum "I won #liquidum ..." with the linktree link.
 - Use the same share logic as in the base game: If on mobile, use the share dialog, but when on desktop, just copy to clipboard because Window's share dialog is bad.
 - Add some text: "Want More? Download liquidum on Steam" with the link.
+- Don't submit leaderboard score when accessing older levels.
+- There's a bug when the current day is behind the newest puzzle. Puzzles reset everywhere at the same time, but e.g. in SP it resets at 9pm, but I opened the game after 9pm and it still had the old puzzle, when it should have the new.
+- Show the time left today to solve the daily level.
+- When loading the daily level, don't auto-add the date to the URL, because then reloading it tomorrow makes it go to yesterday level, when it should go to the most recent one. Make it the default. And on your design already consider that in the future we will be able to chose between daily level and weekly marathon, which will also have a current one. (But we did not implement the weekly marathon yet.)
+- Implement weekly marathon.
+- Keep track of daily and weekly streak.

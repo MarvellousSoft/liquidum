@@ -1,5 +1,10 @@
 import { PlayFab, PlayFabClient } from "playfab-sdk";
 import { getGeneratedName } from "./NameGenerator";
+import {
+  type FlairInfo,
+  createFlair,
+  decodeFlairFromInt,
+} from "./FlairManager";
 
 export const PLAYFAB_TITLE_ID = "3D3A0";
 export const DAILY_STATISTIC_NAME = "daily";
@@ -10,6 +15,7 @@ export interface LeaderboardEntry {
   playFabId: string;
   displayName: string;
   avatarUrl?: string | null;
+  flair?: FlairInfo | null;
   seconds: number;
   mistakes: number;
   rawScore: number;
@@ -218,6 +224,7 @@ export class PlayFabService {
   private currentPlayFabId: string | null = null;
   private currentDisplayName: string | null = null;
   private currentAvatarUrl: string | null = null;
+  private currentFlair: FlairInfo | null = null;
   private loginPromise: Promise<LoginResultInfo> | null = null;
   private storage: Storage | null = null;
 
@@ -239,6 +246,10 @@ export class PlayFabService {
 
   public getAvatarUrl(): string | null {
     return this.currentAvatarUrl;
+  }
+
+  public getFlair(): FlairInfo | null {
+    return this.currentFlair;
   }
 
   public isLoggedIn(): boolean {
@@ -314,49 +325,84 @@ export class PlayFabService {
 
     const targetVersion = version !== undefined ? version : getDailyLeaderboardVersion();
 
-    return new Promise<LeaderboardEntry[]>((resolve, reject) => {
-      const request: any = {
-        StatisticName: DAILY_STATISTIC_NAME,
-        StartPosition: 0,
-        MaxResultsCount: Math.min(maxResults, 100),
-        ProfileConstraints: {
-          ShowLinkedAccounts: true,
-          ShowAvatarUrl: true,
-          ShowDisplayName: true,
-        },
-      };
+    const [dailyResult, flairResult] = await Promise.all([
+      new Promise<any>((resolve, reject) => {
+        const request: any = {
+          StatisticName: DAILY_STATISTIC_NAME,
+          StartPosition: 0,
+          MaxResultsCount: Math.min(maxResults, 100),
+          ProfileConstraints: {
+            ShowLinkedAccounts: true,
+            ShowAvatarUrl: true,
+            ShowDisplayName: true,
+          },
+        };
 
-      if (targetVersion >= 0) {
-        request.Version = targetVersion;
-      }
-
-      PlayFabClient.GetLeaderboard(request, (error, result) => {
-        if (error || !result || result.code !== 200) {
-          return reject(error || new Error("Failed to fetch leaderboard"));
+        if (targetVersion >= 0) {
+          request.Version = targetVersion;
         }
 
-        const rawList = result.data?.Leaderboard || [];
-        const entries: LeaderboardEntry[] = rawList.map((item: any) => {
-          const { seconds, mistakes } = decodeDailyScore(item.StatValue);
-          const profile = item.Profile;
-          const displayName = extractDisplayNameFromProfile(profile, item.PlayFabId, item.DisplayName);
-          const avatarUrl = extractAvatarUrlFromProfile(profile);
-
-          return {
-            position: item.Position + 1, // 1-based rank
-            playFabId: item.PlayFabId,
-            displayName,
-            avatarUrl,
-            seconds,
-            mistakes,
-            rawScore: item.StatValue,
-            isCurrentUser: item.PlayFabId === this.currentPlayFabId,
-          };
+        PlayFabClient.GetLeaderboard(request, (error, result) => {
+          if (error || !result || result.code !== 200) {
+            return reject(error || new Error("Failed to fetch leaderboard"));
+          }
+          resolve(result);
         });
+      }),
+      new Promise<any>((resolve) => {
+        const request: any = {
+          StatisticName: "flair",
+          StartPosition: 0,
+          MaxResultsCount: Math.min(maxResults, 100),
+        };
+        PlayFabClient.GetLeaderboard(request, (error, result) => {
+          if (error || !result || result.code !== 200) {
+            return resolve(null); // Flairs are non-fatal
+          }
+          resolve(result);
+        });
+      }),
+    ]);
 
-        resolve(entries);
-      });
+    const idToFlair: Record<string, FlairInfo> = {};
+    if (flairResult && flairResult.data?.Leaderboard) {
+      for (const rawEntry of flairResult.data.Leaderboard) {
+        const decoded = decodeFlairFromInt(rawEntry.StatValue);
+        if (decoded && decoded.id !== -1) {
+          const flairObj = createFlair(decoded.id, decoded.extraFlairs);
+          if (flairObj) {
+            idToFlair[rawEntry.PlayFabId] = flairObj;
+          }
+        }
+      }
+    }
+
+    const rawList = dailyResult.data?.Leaderboard || [];
+    const entries: LeaderboardEntry[] = rawList.map((item: any) => {
+      const { seconds, mistakes } = decodeDailyScore(item.StatValue);
+      const profile = item.Profile;
+      const displayName = extractDisplayNameFromProfile(profile, item.PlayFabId, item.DisplayName);
+      const avatarUrl = extractAvatarUrlFromProfile(profile);
+      const flair = idToFlair[item.PlayFabId] || null;
+
+      return {
+        position: item.Position + 1, // 1-based rank
+        playFabId: item.PlayFabId,
+        displayName,
+        avatarUrl,
+        flair,
+        seconds,
+        mistakes,
+        rawScore: item.StatValue,
+        isCurrentUser: item.PlayFabId === this.currentPlayFabId,
+      };
     });
+
+    if (this.currentPlayFabId && idToFlair[this.currentPlayFabId]) {
+      this.currentFlair = idToFlair[this.currentPlayFabId];
+    }
+
+    return entries;
   }
 
   /**

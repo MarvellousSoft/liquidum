@@ -31,6 +31,32 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
       }
 
       if (url.includes("/Client/GetLeaderboard")) {
+        if (postData.StatisticName === "flair") {
+          await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({
+              code: 200,
+              status: "OK",
+              data: {
+                Leaderboard: [
+                  {
+                    Position: 0,
+                    PlayFabId: "PLAYER_TODAY_1",
+                    StatValue: 9999, // Dev flair
+                  },
+                  {
+                    Position: 1,
+                    PlayFabId: "TEST_USER_999",
+                    StatValue: 1 + 1000000, // 30 streak with +1
+                  },
+                ],
+              },
+            }),
+          });
+          return;
+        }
+
         const todayUtc = new Date();
         const todayVersion = Math.floor(
           (Date.UTC(todayUtc.getUTCFullYear(), todayUtc.getUTCMonth(), todayUtc.getUTCDate()) -
@@ -206,11 +232,36 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     await expect(sidePanel.locator("text=🥉")).toBeVisible();
 
     // Current user row highlighted
-    await expect(sidePanel.locator("text=AquaNovice (You)")).toBeVisible();
+    const currentUserRow = sidePanel.locator("tr", { hasText: "AquaNovice" });
+    await expect(currentUserRow).toBeVisible();
+    await expect(currentUserRow.locator("text=(You)")).toBeVisible();
 
     // Avatar image is rendered
     const avatarImg = sidePanel.locator('img[src="https://example.com/whale.png"]');
     await expect(avatarImg).toBeVisible();
+
+    // Flair is rendered next to WhaleRider (PLAYER_TODAY_1)
+    const whaleFlair = sidePanel.locator('[data-testid="flair-PLAYER_TODAY_1"]');
+    await expect(whaleFlair).toBeVisible();
+    await expect(whaleFlair).toContainText("dev");
+    await expect(whaleFlair).toHaveAttribute("title", "Developer of Liquidum");
+
+    // Flair is rendered next to current user (TEST_USER_999) with +1 extra
+    const userFlair = sidePanel.locator('[data-testid="flair-TEST_USER_999"]');
+    await expect(userFlair).toBeVisible();
+    await expect(userFlair).toContainText("30✓");
+    await expect(userFlair).toContainText("+1");
+
+    // Hovering an avatar image displays a larger preview popover
+    await expect(page.locator('[data-testid="avatar-preview-popover"]')).toHaveCount(0);
+    await avatarImg.hover();
+    const popover = page.locator('[data-testid="avatar-preview-popover"]');
+    await expect(popover).toBeVisible();
+    await expect(popover.locator('img[src="https://example.com/whale.png"]')).toBeVisible();
+
+    // Moving mouse away hides the popover
+    await page.mouse.move(0, 0);
+    await expect(popover).toHaveCount(0);
 
     // Switch to Yesterday tab
     await sidePanel.locator('button:has-text("Yesterday")').click();
