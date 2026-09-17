@@ -40,15 +40,15 @@ describe('Daily Level Loading and Integration', () => {
     expect(metaTue.emoji).toBe('⛵');
   });
 
-  test('getDailiesForYear loads 2024 and 2025 databases', () => {
-    const d2024 = getDailiesForYear(2024);
+  test('getDailiesForYear loads 2024 and 2025 databases', async () => {
+    const d2024 = await getDailiesForYear(2024);
     expect(d2024).not.toBeNull();
     expect(d2024?.success_state(1, 1)).toBe(BigInt('-7291427775475410410'));
 
-    const d2025 = getDailiesForYear(2025);
+    const d2025 = await getDailiesForYear(2025);
     expect(d2025).not.toBeNull();
 
-    const d2026 = getDailiesForYear(2026);
+    const d2026 = await getDailiesForYear(2026);
     expect(d2026).toBeNull();
   });
 

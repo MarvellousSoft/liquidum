@@ -27,6 +27,14 @@ import {
   shiftDate
 } from './engine/DailyLevel';
 import type { DailyLevelMeta } from './engine/DailyLevel';
+import { LeaderboardModal } from './components/LeaderboardModal';
+import { playFabService } from './engine/PlayFabService';
+
+function formatSolveTime(totalSeconds: number): string {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
 
 function toEngineCorner(c: Corner | E.Corner): E.Corner {
   switch (c) {
@@ -74,6 +82,42 @@ export function App() {
   const [showLevelsModal, setShowLevelsModal] = useState<boolean>(false);
   const showLevelsModalRef = useRef(showLevelsModal);
   showLevelsModalRef.current = showLevelsModal;
+
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState<boolean>(false);
+  const [hasStarted, setHasStarted] = useState<boolean>(false);
+  const hasStartedRef = useRef(hasStarted);
+  hasStartedRef.current = hasStarted;
+
+  const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
+  const secondsElapsedRef = useRef(secondsElapsed);
+  secondsElapsedRef.current = secondsElapsed;
+
+  // Solving timer: ticks every 1 second when started and level not yet won
+  useEffect(() => {
+    if (!hasStarted || won) return;
+    const interval = setInterval(() => {
+      setSecondsElapsed((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [hasStarted, won]);
+
+  // Submit daily score on first victory
+  useEffect(() => {
+    if (won && isDailyModeRef.current && dailyDateRef.current) {
+      playFabService
+        .submitDailyScore(secondsElapsedRef.current, mistakesRef.current, dailyDateRef.current)
+        .then((res) => {
+          if (res.submitted) {
+            console.log("PlayFab daily score submitted successfully!");
+          } else if (res.reason === "already_submitted") {
+            console.log("Daily score already submitted for this day.");
+          }
+        })
+        .catch((err) => {
+          console.warn("PlayFab score submission skipped or failed:", err);
+        });
+    }
+  }, [won]);
 
   const hoveredCellRef = useRef<{ row: number; col: number; corner: Corner } | null>(null);
   const currentBrushKeyRef = useRef<string | null>(null);
@@ -250,6 +294,8 @@ export function App() {
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
+      setHasStarted(true);
+      setSecondsElapsed(0);
     } catch (e) {
       console.error(e);
     }
@@ -291,6 +337,8 @@ export function App() {
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
+      setHasStarted(false);
+      setSecondsElapsed(0);
     } catch (err) {
       console.error("Error loading daily level:", err);
     } finally {
@@ -299,8 +347,11 @@ export function App() {
   };
 
   const handleRestart = () => {
+    setSecondsElapsed(0);
     if (isDailyModeRef.current) {
-      loadDailyLevel(dailyDateRef.current);
+      loadDailyLevel(dailyDateRef.current).then(() => {
+        setHasStarted(true);
+      });
     } else {
       loadLevel(currentLevelKeyRef.current);
     }
@@ -308,7 +359,8 @@ export function App() {
 
   const handleShare = () => {
     const mistakesStr = mistakes === 0 ? "🏆 0 Mistakes" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`;
-    const text = `Liquidum Daily ${dailyDate}\n\n${dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}\n` : ''}${mistakesStr}\nhttps://store.steampowered.com/app/2690070/Liquidum/`;
+    const timeStr = `⏱️ ${formatSolveTime(secondsElapsedRef.current)}`;
+    const text = `Liquidum Daily ${dailyDate}\n\n${dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}\n` : ''}${timeStr} • ${mistakesStr}\nhttps://store.steampowered.com/app/2690070/Liquidum/`;
     const markCopied = () => {
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 2500);
@@ -532,6 +584,10 @@ export function App() {
     (window as any).getDailyDate = () => dailyDateRef.current;
     (window as any).isDaily = () => isDailyModeRef.current;
     (window as any).restartLevel = handleRestart;
+    (window as any).startPuzzle = () => setHasStarted(true);
+    (window as any).hasStarted = () => hasStartedRef.current;
+    (window as any).openLeaderboard = () => setShowLeaderboardModal(true);
+    (window as any).getTime = () => secondsElapsedRef.current;
     (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater | Content.NoBoat) => {
       if ((tool === Content.Boat || tool === Content.NoBoat) && !hasBoatsRef.current) {
         return;
@@ -878,6 +934,15 @@ export function App() {
           </button>
 
           <button
+            data-testid="btn-leaderboard"
+            onClick={() => setShowLeaderboardModal(true)}
+            class="level-btn"
+            title="View Daily Leaderboard"
+          >
+            <span>🏆 Leaderboard</span>
+          </button>
+
+          <button
             data-testid="btn-open-levels-modal"
             onClick={() => setShowLevelsModal(true)}
             class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
@@ -1034,27 +1099,42 @@ export function App() {
               <div class="text-sm font-semibold opacity-95 text-[var(--game-mint)] flex items-center justify-center gap-2">
                 <span>{dailyMeta?.emoji} {dailyMeta?.flavorName}</span>
                 <span>•</span>
+                <span data-testid="win-time">⏱️ {formatSolveTime(secondsElapsed)}</span>
+                <span>•</span>
                 <span>{mistakes === 0 ? "🏆 0 Mistakes!" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`}</span>
               </div>
             )}
             <div class="flex items-center gap-2 flex-wrap justify-center">
-              <button
-                data-testid="btn-play-again"
-                onClick={handleRestart}
-                class="win-btn-again"
-              >
-                <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
-                <span>Play Again</span>
-              </button>
-              {isDailyMode ? (
+              {!isDailyMode && (
                 <button
-                  data-testid="btn-share-result"
-                  onClick={handleShare}
-                  class="btn-share"
-                  title="Copy share text to clipboard"
+                  data-testid="btn-play-again"
+                  onClick={handleRestart}
+                  class="win-btn-again"
                 >
-                  <span>{copiedShare ? "✓ Copied!" : "📋 Share Result"}</span>
+                  <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
+                  <span>Play Again</span>
                 </button>
+              )}
+              {isDailyMode ? (
+                <>
+                  <button
+                    data-testid="btn-leaderboard-win"
+                    onClick={() => setShowLeaderboardModal(true)}
+                    class="level-btn flex items-center gap-1.5"
+                    title="View Daily Leaderboard"
+                  >
+                    <span>🏆</span>
+                    <span>Leaderboard</span>
+                  </button>
+                  <button
+                    data-testid="btn-share-result"
+                    onClick={handleShare}
+                    class="btn-share"
+                    title="Copy share text to clipboard"
+                  >
+                    <span>{copiedShare ? "✓ Copied!" : "📋 Share Result"}</span>
+                  </button>
+                </>
               ) : (
                 nextLevelKey && (
                   <button
@@ -1091,30 +1171,69 @@ export function App() {
           <span>Generating Daily Level for {dailyDate}...</span>
         </div>
       ) : gridData ? (
-        <div class="flex flex-col items-center">
-          {/* Grid Hints Header */}
-          {(() => {
-            const hasTotalWater = gridData.grid_hints.total_water >= 0;
-            const hasTotalBoats = gridData.grid_hints.total_boats > 0;
-            const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
-              .filter(([_, v]) => v !== -1 && v >= 0)
-              .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
-            const hasAquariums = aquariumEntries.length > 0;
+        <div class="relative flex flex-col items-center">
+          {/* Start Puzzle Overlay for Daily Mode */}
+          {isDailyMode && !hasStarted && (
+            <div
+              data-testid="start-puzzle-overlay"
+              class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-md rounded-2xl p-6 text-center"
+            >
+              <div class="text-5xl mb-3">{dailyMeta?.emoji || "🐟"}</div>
+              <h3 class="text-2xl font-bold text-cyan-300 mb-1">
+                {dailyMeta?.flavorName || "Daily Puzzle"}
+              </h3>
+              <p class="text-xs text-slate-300 opacity-90 mb-6 max-w-xs">
+                {dailyMeta?.description || "Solve the daily puzzle as fast as you can with minimal mistakes!"}
+              </p>
+              <button
+                data-testid="btn-start-puzzle"
+                onClick={() => setHasStarted(true)}
+                class="btn-start-puzzle"
+              >
+                <span>▶ Start Puzzle</span>
+              </button>
+            </div>
+          )}
 
-            return (
-              <div class="grid-hints-card" data-testid="grid-hints-card">
-                {/* Mistake Counter */}
-                <div
-                  data-testid="mistake-counter"
-                  class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
-                  title="Mistakes made"
-                >
-                  <span class="hint-stat-icon">❌</span>
-                  <span class="hint-stat-label">Mistakes</span>
-                  <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
-                    {mistakes}
-                  </span>
-                </div>
+          <div class={`flex flex-col items-center transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
+            {/* Grid Hints Header */}
+            {(() => {
+              const hasTotalWater = gridData.grid_hints.total_water >= 0;
+              const hasTotalBoats = gridData.grid_hints.total_boats > 0;
+              const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
+                .filter(([_, v]) => v !== -1 && v >= 0)
+                .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
+              const hasAquariums = aquariumEntries.length > 0;
+
+              return (
+                <div class="grid-hints-card" data-testid="grid-hints-card">
+                  {/* Timer for Daily Mode */}
+                  {isDailyMode && (
+                    <div
+                      data-testid="hint-timer"
+                      class="hint-stat-card hint-stat-normal"
+                      title="Time elapsed"
+                    >
+                      <span class="hint-stat-icon">⏱️</span>
+                      <span class="hint-stat-label">Time</span>
+                      <span data-testid="timer-value" class="hint-stat-value godot-text-outline font-mono">
+                        {formatSolveTime(secondsElapsed)}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Mistake Counter */}
+                  <div
+                    data-testid="mistake-counter"
+                    class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
+                    title="Mistakes made"
+                  >
+                    <span class="hint-stat-icon">❌</span>
+                    <span class="hint-stat-label">Mistakes</span>
+                    <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
+                      {mistakes}
+                    </span>
+                  </div>
 
                 {hasTotalWater && (
                   <div
@@ -1223,6 +1342,7 @@ export function App() {
             />
           </div>
         </div>
+      </div>
       ) : (
         <p>Loading...</p>
       )}
@@ -1409,6 +1529,11 @@ export function App() {
           </div>
         </div>
       )}
+
+      <LeaderboardModal
+        isOpen={showLeaderboardModal}
+        onClose={() => setShowLeaderboardModal(false)}
+      />
     </div>
   );
 }

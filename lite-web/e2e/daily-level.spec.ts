@@ -82,6 +82,11 @@ test.describe('Daily Level E2E Tests', () => {
     await page.goto('/?daily=2024-01-07');
     await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
 
+    // Start puzzle overlay should be visible
+    await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toBeVisible();
+    await page.click('[data-testid="btn-start-puzzle"]');
+    await expect(page.locator('[data-testid="start-puzzle-overlay"]')).toHaveCount(0);
+
     // Place air on cell 0-0
     await page.click('[data-testid="tool-air"]');
     await page.click('[data-testid="cell-0-0"]');
@@ -96,9 +101,21 @@ test.describe('Daily Level E2E Tests', () => {
     await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
   });
 
-  test('completes daily level and displays win banner without next day button', async ({ page }) => {
+  test('completes daily level and displays win banner without next day or play again button', async ({ page }) => {
+    // Mock any PlayFab calls to ensure zero production requests
+    await page.route('**/*playfabapi.com/**', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ code: 200, status: 'OK', data: {} }),
+      });
+    });
+
     await page.goto('/?daily=2024-01-07');
     await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
+
+    // Click start puzzle
+    await page.click('[data-testid="btn-start-puzzle"]');
 
     // Solve the daily level using solution cells
     await page.evaluate(() => {
@@ -126,9 +143,13 @@ test.describe('Daily Level E2E Tests', () => {
     // Win banner should appear
     await expect(page.locator('[data-testid="win-banner"]')).toBeVisible();
     await expect(page.locator('[data-testid="win-banner"]')).toContainText('Daily Complete');
+    await expect(page.locator('[data-testid="win-time"]')).toBeVisible();
     await expect(page.locator('[data-testid="btn-share-result"]')).toBeVisible();
-    // Next Day button should NOT exist
+    await expect(page.locator('[data-testid="btn-leaderboard-win"]')).toBeVisible();
+
+    // Next Day button and Play Again button should NOT exist in daily mode
     await expect(page.locator('[data-testid="btn-next-day-win"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="btn-play-again"]')).toHaveCount(0);
 
     // Steam link should be visible and link to Steam store
     const steamLink = page.locator('[data-testid="btn-steam-link"]');

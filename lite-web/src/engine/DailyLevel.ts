@@ -71,14 +71,14 @@ export function get_daily_meta(date_str: string): DailyLevelMeta {
 export async function gen_daily_level(
     l_gen: RandomLevelGenerator,
     today_str: string,
-    dailies_provider: (year: number) => PreprocessedDailies | null = getDailiesForYear
+    dailies_provider: (year: number) => Promise<PreprocessedDailies | null> = getDailiesForYear
 ): Promise<GridImpl | null> {
     const { year, month, day, weekday } = parse_date(today_str);
     const rng = new RandomNumberGenerator();
     rng.set_seed(consistent_hash(today_str));
 
     if (dailies_provider) {
-        const dailies = dailies_provider(year);
+        const dailies = await dailies_provider(year);
         if (dailies) {
             const preprocessed_state = dailies.success_state(month, day);
             if (preprocessed_state !== 0n) {
@@ -92,7 +92,7 @@ export async function gen_daily_level(
 
 export async function load_daily_level_data(
     today_str?: string,
-    dailies_provider: (year: number) => PreprocessedDailies | null = getDailiesForYear
+    dailies_provider: (year: number) => Promise<PreprocessedDailies | null> = getDailiesForYear
 ): Promise<{ engine: GridImpl; gridData: GridModelData; meta: DailyLevelMeta } | null> {
     const date_str = today_str || get_today_str();
     const l_gen = new RandomLevelGenerator();
