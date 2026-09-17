@@ -331,7 +331,7 @@ describe("PlayFabService - Mocked API Workflows", () => {
   });
 
   it("submits score only on the very first completion and skips subsequent solves", async () => {
-    const version = 883;
+    const version = getDailyLeaderboardVersion();
 
     // First attempt: should submit
     const firstResult = await service.submitDailyScore(45, 1, version);
@@ -355,6 +355,13 @@ describe("PlayFabService - Mocked API Workflows", () => {
     expect(secondResult.submitted).toBe(false);
     expect(secondResult.reason).toBe("already_submitted");
     expect(fetchSpy.mock.calls.length).toBe(initialCalls); // No new network call!
+  });
+
+  it("skips score submission for older past daily levels", async () => {
+    const olderDate = "2024-01-07"; // In the past
+    const result = await service.submitDailyScore(45, 0, olderDate);
+    expect(result.submitted).toBe(false);
+    expect(result.reason).toBe("older_level");
   });
 
   it("validates and updates display name", async () => {

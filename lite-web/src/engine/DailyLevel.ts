@@ -29,10 +29,81 @@ export const WEEKDAY_INFO: Record<number, { name: string; desc: string; emoji: s
 };
 
 export function get_today_str(d: Date = new Date()): string {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(d.getUTCDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
+}
+
+export function get_yesterday_str(d: Date = new Date()): string {
+    return shiftDate(get_today_str(d), -1);
+}
+
+export function getTimeLeftTodaySeconds(now: Date = new Date()): number {
+    const nextMidnightUtc = Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0, 0, 0
+    );
+    const diff = Math.floor((nextMidnightUtc - now.getTime()) / 1000);
+    return Math.max(0, diff);
+}
+
+export function formatTimeLeft(secs: number): string {
+    if (secs >= 24 * 3600) {
+        const days = Math.floor(secs / (24 * 3600));
+        const hours = Math.floor((secs % (24 * 3600)) / 3600);
+        return `${days}d ${hours}h left`;
+    }
+    if (secs >= 3600) {
+        const hours = Math.floor(secs / 3600);
+        return `${hours}h left`;
+    }
+    const minutes = Math.floor(secs / 60);
+    if (minutes <= 0) return "< 1 minute left";
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} left`;
+}
+
+export function formatTimeLeftDetailed(secs: number): string {
+    const hours = Math.floor(secs / 3600);
+    const minutes = Math.floor((secs % 3600) / 60);
+    const seconds = secs % 60;
+    if (hours > 0) {
+        return `${hours}h ${String(minutes).padStart(2, '0')}m left`;
+    }
+    return `${minutes}m ${String(seconds).padStart(2, '0')}s left`;
+}
+
+export function formatSolveTimeGodot(secs: number): string {
+    const hours = Math.floor(secs / 3600);
+    const minutes = Math.floor((secs % 3600) / 60);
+    const seconds = secs % 60;
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+export function formatMistakesStr(mistakes: number): string {
+    if (mistakes === 0) {
+        return "🏆 0 mistakes";
+    }
+    return `❌ ${mistakes} ${mistakes > 1 ? "mistakes" : "mistake"}`;
+}
+
+export const SHARE_LINK = "linktr.ee/liquidum";
+
+export function generateDailyShareText(opts: {
+    dateStr: string;
+    seconds: number;
+    mistakes: number;
+}): string {
+    const { weekday } = parse_date(opts.dateStr);
+    const info = WEEKDAY_INFO[weekday] || { name: "Daily Level", emoji: "🐟" };
+    const timeStr = formatSolveTimeGodot(opts.seconds);
+    const mistakesStr = formatMistakesStr(opts.mistakes);
+    return `I won #liquidum daily on ${opts.dateStr}\n\n${info.emoji} ${info.name}\n🕑 ${timeStr}\n${mistakesStr}\n${SHARE_LINK}`;
 }
 
 export function parse_date(date_str: string): { year: number; month: number; day: number; weekday: number } {

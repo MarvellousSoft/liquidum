@@ -24,12 +24,23 @@ import { LoadMode } from './engine/Grid';
 import {
   load_daily_level_data,
   get_today_str,
-  shiftDate
+  shiftDate,
+  getTimeLeftTodaySeconds,
+  formatTimeLeft,
+  formatTimeLeftDetailed,
+  generateDailyShareText,
 } from './engine/DailyLevel';
 import type { DailyLevelMeta } from './engine/DailyLevel';
+import {
+  getStreakData,
+  recordDailyCompletion,
+} from './engine/StreakManager';
+import type { StreakData } from './engine/StreakManager';
 import { LeaderboardModal } from './components/LeaderboardModal';
 import { LeaderboardView } from './components/LeaderboardView';
 import { playFabService } from './engine/PlayFabService';
+
+export type GameMode = 'daily' | 'weekly' | 'custom' | 'test';
 
 function formatSolveTime(totalSeconds: number): string {
   const mins = Math.floor(totalSeconds / 60);
@@ -51,11 +62,14 @@ export function App() {
   const [gridData, setGridData] = useState<GridModelData | null>(null);
   const [currentLevelKey, setCurrentLevelKey] = useState<string>("Level 01/01");
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set());
+  const [gameMode, setGameMode] = useState<GameMode>("daily");
   const [isDailyMode, setIsDailyMode] = useState<boolean>(false);
   const [dailyDate, setDailyDate] = useState<string>(() => get_today_str());
   const [dailyMeta, setDailyMeta] = useState<DailyLevelMeta | null>(null);
   const [isLoadingDaily, setIsLoadingDaily] = useState<boolean>(false);
   const [copiedShare, setCopiedShare] = useState<boolean>(false);
+  const [timeLeftSeconds, setTimeLeftSeconds] = useState<number>(() => getTimeLeftTodaySeconds());
+  const [streakData, setStreakData] = useState<StreakData>(() => getStreakData());
 
   const isDailyModeRef = useRef(isDailyMode);
   isDailyModeRef.current = isDailyMode;
@@ -94,6 +108,20 @@ export function App() {
   const secondsElapsedRef = useRef(secondsElapsed);
   secondsElapsedRef.current = secondsElapsed;
 
+  // Countdown timer for daily puzzle deadline (UTC midnight)
+  useEffect(() => {
+    setTimeLeftSeconds(getTimeLeftTodaySeconds());
+    const interval = setInterval(() => {
+      setTimeLeftSeconds(getTimeLeftTodaySeconds());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Refresh streak data on mount
+  useEffect(() => {
+    setStreakData(getStreakData());
+  }, []);
+
   // Solving timer: ticks every 1 second when started and level not yet won
   useEffect(() => {
     if (!hasStarted || won) return;
@@ -103,22 +131,43 @@ export function App() {
     return () => clearInterval(interval);
   }, [hasStarted, won]);
 
-  // Submit daily score on first victory
+  // Submit daily score on first victory & update streak
   useEffect(() => {
     if (won && isDailyModeRef.current && dailyDateRef.current) {
-      playFabService
-        .submitDailyScore(secondsElapsedRef.current, mistakesRef.current, dailyDateRef.current)
-        .then((res) => {
-          if (res.submitted) {
-            console.log("PlayFab daily score submitted successfully!");
-            setLeaderboardRefreshKey((k) => k + 1);
-          } else if (res.reason === "already_submitted") {
-            console.log("Daily score already submitted for this day.");
-          }
-        })
-        .catch((err) => {
-          console.warn("PlayFab score submission skipped or failed:", err);
+      const todayStr = get_today_str();
+      const isToday = dailyDateRef.current === todayStr;
+
+      if (isToday) {
+        // Record streak for today's puzzle
+        const streakResult = recordDailyCompletion(dailyDateRef.current, mistakesRef.current);
+        setStreakData({
+          currentStreak: streakResult.currentStreak,
+          bestStreak: streakResult.bestStreak,
+          lastCompletedDay: todayStr,
         });
+
+        // Submit score to PlayFab
+        playFabService
+          .submitDailyScore(
+            secondsElapsedRef.current,
+            mistakesRef.current,
+            dailyDateRef.current,
+            streakResult.currentStreak
+          )
+          .then((res) => {
+            if (res.submitted) {
+              console.log("PlayFab daily score submitted successfully!");
+              setLeaderboardRefreshKey((k) => k + 1);
+            } else if (res.reason === "already_submitted") {
+              console.log("Daily score already submitted for this day.");
+            } else if (res.reason === "older_level") {
+              console.log("Older level, skipping score submission.");
+            }
+          })
+          .catch((err) => {
+            console.warn("PlayFab score submission skipped or failed:", err);
+          });
+      }
     }
   }, [won]);
 
@@ -312,16 +361,24 @@ export function App() {
     }
     setIsLoadingDaily(true);
     setIsDailyMode(true);
+    setGameMode('daily');
     setDailyDate(targetDate);
     setCopiedShare(false);
 
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
-      url.searchParams.set('daily', targetDate);
+      if (targetDate < todayStr) {
+        url.searchParams.set('daily', targetDate);
+      } else {
+        url.searchParams.delete('daily');
+        url.searchParams.delete('date');
+      }
       url.searchParams.delete('testLevel');
       url.searchParams.delete('level');
       url.searchParams.delete('mode');
-      window.history.replaceState({}, '', url.toString());
+      const search = url.searchParams.toString();
+      const newUrl = url.pathname + (search ? `?${search}` : '') + url.hash;
+      window.history.replaceState({}, '', newUrl);
     }
 
     try {
@@ -360,14 +417,37 @@ export function App() {
     }
   };
 
-  const handleShare = () => {
-    const mistakesStr = mistakes === 0 ? "🏆 0 Mistakes" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`;
-    const timeStr = `⏱️ ${formatSolveTime(secondsElapsedRef.current)}`;
-    const text = `Liquidum Daily ${dailyDate}\n\n${dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}\n` : ''}${timeStr} • ${mistakesStr}\nhttps://store.steampowered.com/app/2690070/Liquidum/`;
+  const handleShare = async () => {
+    const text = generateDailyShareText({
+      dateStr: dailyDateRef.current,
+      seconds: secondsElapsedRef.current,
+      mistakes: mistakesRef.current,
+    });
+
     const markCopied = () => {
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 2500);
     };
+
+    const isMobile =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (navigator?.maxTouchPoints && navigator.maxTouchPoints > 0) ||
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator?.userAgent || ''));
+
+    if (isMobile && typeof navigator?.share === 'function') {
+      try {
+        await navigator.share({
+          title: "Liquidum",
+          text,
+        });
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === 'AbortError') {
+          return;
+        }
+      }
+    }
 
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(text).then(markCopied).catch(() => {
@@ -387,7 +467,20 @@ export function App() {
         }
       });
     } else {
-      markCopied();
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        markCopied();
+      } catch {
+        markCopied();
+      }
     }
   };
 
@@ -405,14 +498,19 @@ export function App() {
     const mode = params.get('mode');
 
     if (customLevel) {
+      setGameMode('custom');
       loadLevelFromString(customLevel);
-    } else if (dailyParam || mode === 'daily') {
+    } else if (dailyParam) {
       const todayStr = get_today_str();
-      const requestedDate = (dailyParam && dailyParam !== 'today') ? dailyParam : todayStr;
+      const requestedDate = dailyParam !== 'today' ? dailyParam : todayStr;
       const dateToLoad = requestedDate > todayStr ? todayStr : requestedDate;
       loadDailyLevel(dateToLoad);
     } else if (mode === 'test') {
+      setGameMode('test');
       loadLevel("Level 01/01");
+    } else if (mode === 'weekly') {
+      setGameMode('weekly');
+      loadDailyLevel();
     } else {
       loadDailyLevel();
     }
@@ -1067,6 +1165,17 @@ export function App() {
           <span>Shortcuts</span>
         </button>
 
+        {isDailyMode && (
+          <div
+            data-testid="daily-streak-badge"
+            class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-950/70 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
+            title={`Daily Streak: Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+          >
+            <span>🔥</span>
+            <span>{streakData.currentStreak}</span>
+          </div>
+        )}
+
         <button
           data-testid="btn-theme-toggle"
           onClick={() => setIsDarkMode(!isDarkMode)}
@@ -1089,6 +1198,16 @@ export function App() {
             <span class="opacity-80 text-sm">({dailyMeta.date})</span>
             <span class="text-xs opacity-75">— {dailyMeta.description}</span>
           </div>
+          {dailyDate === get_today_str() && (
+            <div
+              data-testid="daily-time-left-banner"
+              class="ml-auto hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono"
+              title="Time left today to solve the daily level"
+            >
+              <span>⏳</span>
+              <span data-testid="time-left-text">{formatTimeLeft(timeLeftSeconds)}</span>
+            </div>
+          )}
         </div>
       )}
 
@@ -1099,12 +1218,14 @@ export function App() {
               {isDailyMode ? `🎉 Daily Complete! 🎉` : `🎉 Level Complete! 🎉`}
             </div>
             {isDailyMode && (
-              <div class="text-sm font-semibold opacity-95 text-[var(--game-mint)] flex items-center justify-center gap-2">
+              <div class="text-sm font-semibold opacity-95 text-[var(--game-mint)] flex items-center justify-center gap-2 flex-wrap">
                 <span>{dailyMeta?.emoji} {dailyMeta?.flavorName}</span>
                 <span>•</span>
                 <span data-testid="win-time">⏱️ {formatSolveTime(secondsElapsed)}</span>
                 <span>•</span>
                 <span>{mistakes === 0 ? "🏆 0 Mistakes!" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`}</span>
+                <span>•</span>
+                <span data-testid="win-streak" title={`Daily Streak (Best: ${streakData.bestStreak})`}>🔥 Streak: {streakData.currentStreak}</span>
               </div>
             )}
             <div class="flex items-center gap-2 flex-wrap justify-center">
@@ -1133,7 +1254,7 @@ export function App() {
                     data-testid="btn-share-result"
                     onClick={handleShare}
                     class="btn-share"
-                    title="Copy share text to clipboard"
+                    title="Share result"
                   >
                     <span>{copiedShare ? "✓ Copied!" : "📋 Share Result"}</span>
                   </button>
@@ -1150,12 +1271,19 @@ export function App() {
                   </button>
                 )
               )}
+            </div>
+
+            {/* Steam Promo */}
+            <div class="flex flex-col items-center gap-1.5 mt-3 pt-2 border-t border-slate-700/40 w-full">
+              <span data-testid="steam-promo-text" class="text-xs text-slate-300 font-medium">
+                Want More? Download liquidum on Steam
+              </span>
               <a
                 data-testid="btn-steam-link"
                 href="https://store.steampowered.com/app/2690070/Liquidum/"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="btn-steam"
+                class="btn-steam flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs transition shadow-md w-full max-w-[280px]"
                 title="Play the full game on Steam"
               >
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -1180,15 +1308,37 @@ export function App() {
           {isDailyMode && !hasStarted && (
             <div
               data-testid="start-puzzle-overlay"
-              class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-md rounded-2xl p-6 text-center"
+              class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/70 backdrop-blur-md rounded-2xl p-6 text-center"
             >
-              <div class="text-5xl mb-3">{dailyMeta?.emoji || "🐟"}</div>
+              <div class="text-5xl mb-2">{dailyMeta?.emoji || "🐟"}</div>
               <h3 class="text-2xl font-bold text-cyan-300 mb-1">
                 {dailyMeta?.flavorName || "Daily Puzzle"}
               </h3>
-              <p class="text-xs text-slate-300 opacity-90 mb-6 max-w-xs">
+              <p class="text-xs text-slate-300 opacity-90 mb-4 max-w-xs">
                 {dailyMeta?.description || "Solve the daily puzzle as fast as you can with minimal mistakes!"}
               </p>
+
+              <div class="flex items-center gap-2.5 mb-5 flex-wrap justify-center">
+                {dailyDate === get_today_str() && (
+                  <div
+                    data-testid="daily-time-left"
+                    class="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono"
+                    title="Time remaining to solve today's daily puzzle"
+                  >
+                    <span>⏳</span>
+                    <span>{formatTimeLeft(timeLeftSeconds)}</span>
+                  </div>
+                )}
+                <div
+                  data-testid="daily-streak-display"
+                  class="flex items-center gap-1 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
+                  title={`Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+                >
+                  <span>🔥</span>
+                  <span>Streak: {streakData.currentStreak}</span>
+                </div>
+              </div>
+
               <button
                 data-testid="btn-start-puzzle"
                 onClick={() => setHasStarted(true)}

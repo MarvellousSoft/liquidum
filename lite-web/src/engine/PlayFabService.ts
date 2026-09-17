@@ -31,7 +31,7 @@ export interface LoginResultInfo {
 
 export interface SubmitScoreResult {
   submitted: boolean;
-  reason?: "already_submitted" | "error";
+  reason?: "already_submitted" | "older_level" | "error";
   error?: any;
 }
 
@@ -412,12 +412,18 @@ export class PlayFabService {
   public async submitDailyScore(
     seconds: number,
     mistakes: number,
-    dateOrVersion?: string | number
+    dateOrVersion?: string | number,
+    currentStreak?: number
   ): Promise<SubmitScoreResult> {
+    const todayVersion = getDailyLeaderboardVersion();
     const version =
       typeof dateOrVersion === "number"
         ? dateOrVersion
         : getDailyLeaderboardVersion(dateOrVersion);
+
+    if (version < todayVersion) {
+      return { submitted: false, reason: "older_level" };
+    }
 
     if (isDailyScoreSubmitted(version, this.storage || undefined)) {
       return { submitted: false, reason: "already_submitted" };
@@ -428,13 +434,22 @@ export class PlayFabService {
     const encodedValue = encodeDailyScore(seconds, mistakes);
 
     return new Promise<SubmitScoreResult>((resolve) => {
+      const statistics: Array<{ StatisticName: string; Value: number }> = [
+        {
+          StatisticName: DAILY_STATISTIC_NAME,
+          Value: encodedValue,
+        },
+      ];
+
+      if (typeof currentStreak === "number" && currentStreak >= 0) {
+        statistics.push({
+          StatisticName: "daily_current_streak",
+          Value: currentStreak,
+        });
+      }
+
       const request = {
-        Statistics: [
-          {
-            StatisticName: DAILY_STATISTIC_NAME,
-            Value: encodedValue,
-          },
-        ],
+        Statistics: statistics,
       };
 
       PlayFabClient.UpdatePlayerStatistics(request, (error, result) => {

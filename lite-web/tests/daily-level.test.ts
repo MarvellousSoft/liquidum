@@ -4,7 +4,10 @@ import {
   get_today_str,
   get_daily_meta,
   load_daily_level_data,
-  WEEKDAY_INFO
+  WEEKDAY_INFO,
+  getTimeLeftTodaySeconds,
+  formatTimeLeft,
+  generateDailyShareText,
 } from '../src/engine/DailyLevel';
 import { getDailiesForYear } from '../src/engine/DailiesDatabase';
 import { Content } from '../src/model/GridData';
@@ -81,5 +84,71 @@ describe('Daily Level Loading and Integration', () => {
 
     // Initial player state is not complete
     expect(engine.are_hints_satisfied()).toBe(false);
+  });
+
+  test('get_today_str rolls over at 00:00 UTC (9:00 PM Sao Paulo UTC-3)', () => {
+    // 2026-09-16 at 20:59:00 BRT (UTC-3) -> 23:59:00 UTC on 2026-09-16
+    const beforeReset = new Date('2026-09-16T23:59:00Z');
+    expect(get_today_str(beforeReset)).toBe('2026-09-16');
+
+    // 2026-09-16 at 21:00:00 BRT (UTC-3) -> 00:00:00 UTC on 2026-09-17
+    const atReset = new Date('2026-09-17T00:00:00Z');
+    expect(get_today_str(atReset)).toBe('2026-09-17');
+
+    // 2026-09-16 at 21:30:00 BRT (UTC-3) -> 00:30:00 UTC on 2026-09-17
+    const afterReset = new Date('2026-09-17T00:30:00Z');
+    expect(get_today_str(afterReset)).toBe('2026-09-17');
+  });
+
+  test('getTimeLeftTodaySeconds and formatTimeLeft calculate correct remaining duration', () => {
+    // 3 hours and 15 minutes before UTC midnight
+    const threeHoursLeft = new Date('2026-09-16T20:45:00Z');
+    const secs = getTimeLeftTodaySeconds(threeHoursLeft);
+    expect(secs).toBe(3 * 3600 + 15 * 60);
+
+    const formattedHours = formatTimeLeft(secs);
+    expect(formattedHours).toBe('3h left');
+
+    // 45 minutes before UTC midnight
+    const fortyFiveMins = 45 * 60;
+    expect(formatTimeLeft(fortyFiveMins)).toBe('45 minutes left');
+
+    // 1 minute before UTC midnight
+    expect(formatTimeLeft(60)).toBe('1 minute left');
+
+    // Under 1 minute
+    expect(formatTimeLeft(20)).toBe('< 1 minute left');
+  });
+
+  test('generateDailyShareText formats exact Godot parity result text', () => {
+    // Perfect solve (0 mistakes)
+    const share0 = generateDailyShareText({
+      dateStr: '2024-01-07', // Sunday
+      seconds: 85,
+      mistakes: 0,
+    });
+    expect(share0).toBe(
+      'I won #liquidum daily on 2024-01-07\n\n🐟 Aquarium Sunday\n🕑 01:25\n🏆 0 mistakes\nlinktr.ee/liquidum'
+    );
+
+    // 1 mistake
+    const share1 = generateDailyShareText({
+      dateStr: '2024-01-01', // Monday
+      seconds: 65,
+      mistakes: 1,
+    });
+    expect(share1).toBe(
+      'I won #liquidum daily on 2024-01-01\n\n💧 Basic Monday\n🕑 01:05\n❌ 1 mistake\nlinktr.ee/liquidum'
+    );
+
+    // 3 mistakes and > 1 hour
+    const share3 = generateDailyShareText({
+      dateStr: '2024-01-02', // Tuesday
+      seconds: 3665, // 1h 1m 5s
+      mistakes: 3,
+    });
+    expect(share3).toBe(
+      'I won #liquidum daily on 2024-01-02\n\n⛵ Secret Boat Tuesday\n🕑 1:01:05\n❌ 3 mistakes\nlinktr.ee/liquidum'
+    );
   });
 });

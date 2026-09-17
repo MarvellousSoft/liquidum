@@ -6,7 +6,7 @@ test.describe('Daily Level E2E Tests', () => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   });
 
-  test('loads daily level by default when visiting root url', async ({ page }) => {
+  test('loads daily level by default when visiting root url without appending date', async ({ page }) => {
     await page.goto('/');
 
     // Daily banner should be visible
@@ -17,6 +17,14 @@ test.describe('Daily Level E2E Tests', () => {
     await expect(page.locator('[data-testid="btn-prev-day"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="btn-next-day"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="daily-date-picker"]')).toHaveCount(0);
+
+    // Root URL should remain clean without auto-appending '?daily=...'
+    expect(page.url()).not.toContain('daily=');
+
+    // Time left and streak should be visible in start overlay and top bar
+    await expect(page.locator('[data-testid="daily-time-left"]')).toBeVisible();
+    await expect(page.locator('[data-testid="daily-streak-display"]')).toBeVisible();
+    await expect(page.locator('[data-testid="daily-streak-badge"]')).toBeVisible();
   });
 
   test('loads daily level via URL param ?daily=2024-01-07 for past date', async ({ page }) => {
@@ -144,6 +152,7 @@ test.describe('Daily Level E2E Tests', () => {
     await expect(page.locator('[data-testid="win-banner"]')).toBeVisible();
     await expect(page.locator('[data-testid="win-banner"]')).toContainText('Daily Complete');
     await expect(page.locator('[data-testid="win-time"]')).toBeVisible();
+    await expect(page.locator('[data-testid="win-streak"]')).toBeVisible();
     await expect(page.locator('[data-testid="btn-share-result"]')).toBeVisible();
     await expect(page.locator('[data-testid="btn-leaderboard-win"]')).toBeVisible();
 
@@ -151,14 +160,24 @@ test.describe('Daily Level E2E Tests', () => {
     await expect(page.locator('[data-testid="btn-next-day-win"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="btn-play-again"]')).toHaveCount(0);
 
-    // Steam link should be visible and link to Steam store
+    // Steam promo text and link should be visible and link to Steam store
+    const steamPromoText = page.locator('[data-testid="steam-promo-text"]');
+    await expect(steamPromoText).toBeVisible();
+    await expect(steamPromoText).toContainText('Want More? Download liquidum on Steam');
+
     const steamLink = page.locator('[data-testid="btn-steam-link"]');
     await expect(steamLink).toBeVisible();
     await expect(steamLink).toHaveAttribute('href', 'https://store.steampowered.com/app/2690070/Liquidum/');
 
-    // Click Share Result
+    // Click Share Result and verify clipboard contents
     await page.click('[data-testid="btn-share-result"]');
     await expect(page.locator('[data-testid="btn-share-result"]')).toContainText('Copied');
+
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardText).toContain('I won #liquidum daily on 2024-01-07');
+    expect(clipboardText).toContain('🐟 Aquarium Sunday');
+    expect(clipboardText).toContain('🏆 0 mistakes');
+    expect(clipboardText).toContain('linktr.ee/liquidum');
   });
 
 });
