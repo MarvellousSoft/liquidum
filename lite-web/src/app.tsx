@@ -99,6 +99,10 @@ export function App() {
   const showLevelsModalRef = useRef(showLevelsModal);
   showLevelsModalRef.current = showLevelsModal;
 
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const showSettingsRef = useRef(showSettings);
+  showSettingsRef.current = showSettings;
+
   const [showLeaderboardModal, setShowLeaderboardModal] = useState<boolean>(false);
   const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState<number>(0);
   const [hasStarted, setHasStarted] = useState<boolean>(false);
@@ -711,10 +715,11 @@ export function App() {
         return;
       }
 
-      // Escape closes shortcuts and levels modals
+      // Escape closes shortcuts, levels, and settings modals
       if (e.key === 'Escape') {
         setShowShortcuts(false);
         setShowLevelsModal(false);
+        setShowSettings(false);
         return;
       }
 
@@ -932,10 +937,12 @@ export function App() {
     (window as any).getShowShortcuts = () => showShortcutsRef.current;
     (window as any).setShowLevelsModal = (val: boolean) => setShowLevelsModal(val);
     (window as any).getShowLevelsModal = () => showLevelsModalRef.current;
+    (window as any).setShowSettings = (val: boolean) => setShowSettings(val);
+    (window as any).getShowSettings = () => showSettingsRef.current;
     (window as any).setHoveredCell = (r: number, c: number, corner: Corner = Corner.TopLeft) => {
       hoveredCellRef.current = { row: r, col: c, corner };
     };
-  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal]);
+  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -1221,57 +1228,8 @@ export function App() {
         Liquidum Lite
       </h1>
 
-      {/* 2. Daily / Test selector */}
-      {!isTestMode && (
-        <div class="level-picker">
-          <button
-            data-testid="btn-daily-mode"
-            onClick={() => {
-              if (!isDailyMode) {
-                loadDailyLevel();
-              }
-            }}
-            class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
-            title="Play Daily Level"
-          >
-            <span>📅 Daily Level</span>
-          </button>
-
-          {isDailyMode && (
-            <button
-              data-testid="btn-leaderboard"
-              onClick={() => setShowLeaderboardModal(true)}
-              class="level-btn lg:hidden"
-              title="View Daily Leaderboard"
-            >
-              <span>🏆 Leaderboard</span>
-            </button>
-          )}
-
-          <button
-            data-testid="btn-open-levels-modal"
-            onClick={() => setShowLevelsModal(true)}
-            class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
-            title="Fixed levels for testing"
-          >
-            <span>🧪 Test Levels {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
-          </button>
-        </div>
-      )}
-
-      {/* 3. Tools */}
+      {/* 2. Tools */}
       <div class="controls-toolbar">
-        <label class="toolbar-toggle">
-          <input
-            type="checkbox"
-            data-testid="auto-flood-air"
-            checked={autoFloodAir}
-            onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
-            class="checkbox-input"
-          />
-          <span>Auto-Flood Air (✕)</span>
-        </label>
-
         <div class="tool-selector">
           <button
             data-testid="tool-water"
@@ -1332,7 +1290,7 @@ export function App() {
               <path d="M3 7v6h6" />
               <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
             </svg>
-            <span>Undo</span>
+            <span class="btn-text">Undo</span>
           </button>
           <button
             data-testid="btn-redo"
@@ -1346,7 +1304,7 @@ export function App() {
               <path d="M21 7v6h-6" />
               <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" />
             </svg>
-            <span>Redo</span>
+            <span class="btn-text">Redo</span>
           </button>
         </div>
 
@@ -1370,18 +1328,31 @@ export function App() {
           aria-label="Shortcuts"
         >
           <span class="text-base">⌨️</span>
-          <span>Shortcuts</span>
+          <span class="btn-text">Shortcuts</span>
+        </button>
+
+        <button
+          data-testid="btn-settings"
+          onClick={() => setShowSettings(true)}
+          class="btn-shortcuts"
+          title="Settings"
+          aria-label="Settings"
+        >
+          <span class="text-base">⚙️</span>
+          <span class="btn-text">Settings</span>
         </button>
 
         {isDailyMode && (
-          <div
-            data-testid="daily-streak-badge"
-            class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-950/70 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
-            title={`Daily Streak: Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+          <button
+            data-testid="btn-leaderboard"
+            onClick={() => setShowLeaderboardModal(true)}
+            class="btn-shortcuts lg:hidden"
+            title="View Daily Leaderboard"
+            aria-label="Leaderboard"
           >
-            <span>🔥</span>
-            <span>{streakData.currentStreak}</span>
-          </div>
+            <span class="text-base">🏆</span>
+            <span class="btn-text">Leaderboard</span>
+          </button>
         )}
 
         <button
@@ -1487,7 +1458,145 @@ export function App() {
         </div>
       ) : gridData ? (
         <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto px-2">
-          <div class="relative flex flex-col items-center">
+          {/* Left on desktop, Below on narrow screens: Hints card */}
+          <div class={`order-2 lg:order-1 flex flex-col items-center lg:items-start w-full lg:w-60 xl:w-72 flex-shrink-0 transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
+            {/* Grid Hints Header */}
+            {(() => {
+              const hasTotalWater = gridData.grid_hints.total_water >= 0;
+              const hasTotalBoats = gridData.grid_hints.total_boats > 0;
+              const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
+                .filter(([_, v]) => v !== -1 && v >= 0)
+                .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
+              const hasAquariums = aquariumEntries.length > 0;
+
+              return (
+                <div class="grid-hints-card" data-testid="grid-hints-card">
+                  {/* Timer for Daily Mode */}
+                  {isDailyMode && (
+                    <div
+                      data-testid="hint-timer"
+                      class="hint-stat-card hint-stat-normal hint-stat-timer"
+                      title="Time elapsed"
+                    >
+                      <span class="hint-stat-icon">⏱️</span>
+                      <span class="hint-stat-label">Time</span>
+                      <span data-testid="timer-value" class="hint-stat-value godot-text-outline">
+                        {formatSolveTime(secondsElapsed)}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Mistake Counter */}
+                  <div
+                    data-testid="mistake-counter"
+                    class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
+                    title="Mistakes made"
+                  >
+                    <span class="hint-stat-icon">❌</span>
+                    <span class="hint-stat-label">Mistakes</span>
+                    <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
+                      {mistakes}
+                    </span>
+                  </div>
+
+                  {hasTotalWater && (
+                    <div
+                      data-testid="hint-water-counter"
+                      class={`hint-stat-card ${currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
+                        currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
+                          'hint-stat-normal'
+                        }`}
+                      title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
+                    >
+                      <span class="hint-stat-icon">💧</span>
+                      <span class="hint-stat-label">Water</span>
+                      <span class="hint-stat-value godot-text-outline">
+                        {currentWater} / {gridData.grid_hints.total_water}
+                      </span>
+                      {currentWater === gridData.grid_hints.total_water ? (
+                        <span class="hint-status-badge badge-satisfied">✓</span>
+                      ) : currentWater > gridData.grid_hints.total_water ? (
+                        <span class="hint-status-badge badge-over">⚠ Over</span>
+                      ) : null}
+                    </div>
+                  )}
+
+                  {hasTotalBoats && (
+                    <div
+                      data-testid="hint-boat-counter"
+                      class={`hint-stat-card ${currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
+                        currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
+                          'hint-stat-normal'
+                        }`}
+                      title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
+                    >
+                      <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
+                      <span class="hint-stat-label">Boats</span>
+                      <span class="hint-stat-value godot-text-outline">
+                        {currentBoats} / {gridData.grid_hints.total_boats}
+                      </span>
+                      {currentBoats === gridData.grid_hints.total_boats ? (
+                        <span class="hint-status-badge badge-satisfied">✓</span>
+                      ) : currentBoats > gridData.grid_hints.total_boats ? (
+                        <span class="hint-status-badge badge-over">⚠ Over</span>
+                      ) : null}
+                    </div>
+                  )}
+
+                  {hasAquariums && (
+                    <div class={`aquarium-section ${(hasTotalWater || hasTotalBoats) ? 'has-counters' : ''}`} data-testid="aquarium-section">
+                      <div class="aquarium-header">
+                        <span class="aquarium-icon">🌊</span>
+                        <span class="aquarium-label">Aquariums:</span>
+                      </div>
+                      <div class="aquarium-items">
+                        {aquariumEntries.map(([sizeStr, expectedCount]) => {
+                          const targetSize = parseFloat(sizeStr);
+                          const actualCount = getActualCount(targetSize);
+                          const isSatisfied = actualCount === expectedCount;
+                          const isOver = actualCount > expectedCount;
+                          const cardClass = isSatisfied ? 'aquarium-card-satisfied' : isOver ? 'aquarium-card-over' : 'aquarium-card-normal';
+                          return (
+                            <div
+                              key={sizeStr}
+                              data-testid={`aquarium-hint-${sizeStr}`}
+                              class={`aquarium-card ${cardClass}`}
+                              title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
+                            >
+                              <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
+                                {targetSize > 0 && (
+                                  <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
+                                )}
+                                {targetSize === 0.5 && (
+                                  <svg class="aq-diag-line">
+                                    <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--cell-wall)" stroke-width="2" />
+                                  </svg>
+                                )}
+                                <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>
+                                  {targetSize}
+                                </span>
+                              </div>
+                              <div class="aq-info">
+                                <span class={`aq-status-pill ${isSatisfied ? 'aq-pill-satisfied' :
+                                  isOver ? 'aq-pill-over' :
+                                    'aq-pill-normal'
+                                  }`}>
+                                  {isSatisfied ? `✓ ${actualCount}` : `${actualCount}/${expectedCount}`}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Center: The Grid */}
+          <div class="order-1 lg:order-2 relative flex flex-col items-center">
             {/* Start Puzzle Overlay for Daily Mode */}
             {isDailyMode && !hasStarted && (
               <div
@@ -1538,141 +1647,6 @@ export function App() {
             )}
 
             <div class={`flex flex-col items-center transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
-              {/* Grid Hints Header */}
-              {(() => {
-                const hasTotalWater = gridData.grid_hints.total_water >= 0;
-                const hasTotalBoats = gridData.grid_hints.total_boats > 0;
-                const aquariumEntries = Object.entries(gridData.grid_hints.expected_aquariums || {})
-                  .filter(([_, v]) => v !== -1 && v >= 0)
-                  .sort(([a], [b]) => parseFloat(a) - parseFloat(b));
-                const hasAquariums = aquariumEntries.length > 0;
-
-                return (
-                  <div class="grid-hints-card" data-testid="grid-hints-card">
-                    {/* Timer for Daily Mode */}
-                    {isDailyMode && (
-                      <div
-                        data-testid="hint-timer"
-                        class="hint-stat-card hint-stat-normal hint-stat-timer"
-                        title="Time elapsed"
-                      >
-                        <span class="hint-stat-icon">⏱️</span>
-                        <span class="hint-stat-label">Time</span>
-                        <span data-testid="timer-value" class="hint-stat-value godot-text-outline">
-                          {formatSolveTime(secondsElapsed)}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Mistake Counter */}
-                    <div
-                      data-testid="mistake-counter"
-                      class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
-                      title="Mistakes made"
-                    >
-                      <span class="hint-stat-icon">❌</span>
-                      <span class="hint-stat-label">Mistakes</span>
-                      <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
-                        {mistakes}
-                      </span>
-                    </div>
-
-                    {hasTotalWater && (
-                      <div
-                        data-testid="hint-water-counter"
-                        class={`hint-stat-card ${currentWater === gridData.grid_hints.total_water ? 'hint-stat-satisfied' :
-                          currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
-                            'hint-stat-normal'
-                          }`}
-                        title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
-                      >
-                        <span class="hint-stat-icon">💧</span>
-                        <span class="hint-stat-label">Water</span>
-                        <span class="hint-stat-value godot-text-outline">
-                          {currentWater} / {gridData.grid_hints.total_water}
-                        </span>
-                        {currentWater === gridData.grid_hints.total_water ? (
-                          <span class="hint-status-badge badge-satisfied">✓</span>
-                        ) : currentWater > gridData.grid_hints.total_water ? (
-                          <span class="hint-status-badge badge-over">⚠ Over</span>
-                        ) : null}
-                      </div>
-                    )}
-
-                    {hasTotalBoats && (
-                      <div
-                        data-testid="hint-boat-counter"
-                        class={`hint-stat-card ${currentBoats === gridData.grid_hints.total_boats ? 'hint-stat-satisfied' :
-                          currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
-                            'hint-stat-normal'
-                          }`}
-                        title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
-                      >
-                        <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
-                        <span class="hint-stat-label">Boats</span>
-                        <span class="hint-stat-value godot-text-outline">
-                          {currentBoats} / {gridData.grid_hints.total_boats}
-                        </span>
-                        {currentBoats === gridData.grid_hints.total_boats ? (
-                          <span class="hint-status-badge badge-satisfied">✓</span>
-                        ) : currentBoats > gridData.grid_hints.total_boats ? (
-                          <span class="hint-status-badge badge-over">⚠ Over</span>
-                        ) : null}
-                      </div>
-                    )}
-
-                    {hasAquariums && (
-                      <div class={`aquarium-section ${(hasTotalWater || hasTotalBoats) ? 'has-counters' : ''}`} data-testid="aquarium-section">
-                        <div class="aquarium-header">
-                          <span class="aquarium-icon">🌊</span>
-                          <span class="aquarium-label">Aquariums:</span>
-                        </div>
-                        <div class="aquarium-items">
-                          {aquariumEntries.map(([sizeStr, expectedCount]) => {
-                            const targetSize = parseFloat(sizeStr);
-                            const actualCount = getActualCount(targetSize);
-                            const isSatisfied = actualCount === expectedCount;
-                            const isOver = actualCount > expectedCount;
-                            const cardClass = isSatisfied ? 'aquarium-card-satisfied' : isOver ? 'aquarium-card-over' : 'aquarium-card-normal';
-                            return (
-                              <div
-                                key={sizeStr}
-                                data-testid={`aquarium-hint-${sizeStr}`}
-                                class={`aquarium-card ${cardClass}`}
-                                title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
-                              >
-                                <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
-                                  {targetSize > 0 && (
-                                    <div class={`aq-tank-water ${targetSize === 0.5 ? 'aq-tank-water-half' : ''}`} />
-                                  )}
-                                  {targetSize === 0.5 && (
-                                    <svg class="aq-diag-line">
-                                      <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--cell-wall)" stroke-width="2" />
-                                    </svg>
-                                  )}
-                                  <span class={`aq-tank-size ${targetSize === 0.5 ? 'aq-size-half' : ''}`}>
-                                    {targetSize}
-                                  </span>
-                                </div>
-                                <div class="aq-info">
-                                  <span class="aq-expected-count">×{expectedCount}</span>
-                                  <span class={`aq-status-pill ${isSatisfied ? 'aq-pill-satisfied' :
-                                    isOver ? 'aq-pill-over' :
-                                      'aq-pill-normal'
-                                    }`}>
-                                    {isSatisfied ? `✓ ${actualCount}` : `${actualCount}/${expectedCount}`}
-                                  </span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
-
               <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
                 <Grid
                   gridData={gridData}
@@ -1684,9 +1658,21 @@ export function App() {
                 />
               </div>
 
-              {/* Level name below the grid */}
-              <div data-testid="level-name-label" class="level-name-label">
-                {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}` : '') : currentLevelKey}
+              {/* Level name and streak counter below the grid */}
+              <div class="level-footer-info">
+                <div data-testid="level-name-label" class="level-name-label">
+                  {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}` : '') : currentLevelKey}
+                </div>
+                {isDailyMode && (
+                  <div
+                    data-testid="daily-streak-badge"
+                    class="daily-streak-badge"
+                    title={`Daily Streak: Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+                  >
+                    <span>🔥</span>
+                    <span>{streakData.currentStreak}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1695,7 +1681,7 @@ export function App() {
           {isDailyMode && (
             <div
               data-testid="desktop-leaderboard"
-              class="hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 self-stretch max-w-sm"
+              class="order-3 hidden lg:flex flex-col w-80 xl:w-96 flex-shrink-0 self-stretch max-w-sm"
             >
               <LeaderboardView
                 isSidePanel={true}
@@ -1706,6 +1692,83 @@ export function App() {
         </div>
       ) : (
         <p>Loading...</p>
+      )}
+
+      {/* Daily / Test selector at bottom */}
+      {!isTestMode && (
+        <div class="level-picker mt-8 mb-6">
+          <button
+            data-testid="btn-daily-mode"
+            onClick={() => {
+              if (!isDailyMode) {
+                loadDailyLevel();
+              }
+            }}
+            class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
+            title="Play Daily Level"
+          >
+            <span>📅 Daily Level</span>
+          </button>
+
+          <button
+            data-testid="btn-open-levels-modal"
+            onClick={() => setShowLevelsModal(true)}
+            class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
+            title="Fixed levels for testing"
+          >
+            <span>🧪 Test Levels {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
+          </button>
+        </div>
+      )}
+
+      {showSettings && (
+        <div
+          data-testid="settings-modal"
+          class="modal-backdrop"
+          onClick={() => setShowSettings(false)}
+        >
+          <div
+            class="shortcuts-dialog"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '440px' }}
+          >
+            <div class="shortcuts-header">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">⚙️</span>
+                <h2 class="shortcuts-title godot-text-outline">Settings</h2>
+              </div>
+              <button
+                data-testid="btn-close-settings"
+                onClick={() => setShowSettings(false)}
+                class="shortcuts-close-btn"
+                title="Close (Esc)"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="shortcuts-content">
+              <div class="setting-row">
+                <div class="setting-text">
+                  <span class="setting-title">Auto-Flood Air (✕)</span>
+                  <span class="setting-desc">
+                    Automatically mark remaining row/column cells with Air when count is satisfied
+                  </span>
+                </div>
+                <label class="setting-toggle">
+                  <input
+                    type="checkbox"
+                    data-testid="auto-flood-air"
+                    checked={autoFloodAir}
+                    onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
+                    class="checkbox-input"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {showShortcuts && (

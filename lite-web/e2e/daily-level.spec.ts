@@ -276,22 +276,24 @@ test.describe('Daily Level E2E Tests', () => {
     expect(clipboardText).toContain('linktr.ee/liquidum');
   });
 
-  test('verifies page layout order: logo, selector, tools, grid, and level name below grid', async ({ page }) => {
+  test('verifies page layout order: logo, tools, grid, and selector at bottom', async ({ page }) => {
     await page.goto('/?daily=2024-01-07');
 
     const logo = page.locator('.game-title');
-    const selector = page.locator('.level-picker');
     const tools = page.locator('.controls-toolbar');
     const gridHints = page.locator('[data-testid="grid-hints-card"]');
+    const gridBoard = page.locator('.grid-board-card');
     const sizeLabel = page.locator('[data-testid="grid-size-label"]');
     const levelName = page.locator('[data-testid="level-name-label"]');
+    const selector = page.locator('.level-picker');
 
     await expect(logo).toBeVisible();
-    await expect(selector).toBeVisible();
     await expect(tools).toBeVisible();
     await expect(gridHints).toBeVisible();
+    await expect(gridBoard).toBeVisible();
     await expect(sizeLabel).toBeVisible();
     await expect(levelName).toBeVisible();
+    await expect(selector).toBeVisible();
 
     // Verify NxM string format (e.g. 5x4)
     await expect(sizeLabel).toHaveText(/^\d+x\d+$/);
@@ -301,22 +303,54 @@ test.describe('Daily Level E2E Tests', () => {
     // Level name displays flavor name below grid against ambient background
     await expect(levelName).toContainText('Aquarium Sunday');
 
-    // Verify vertical layout ordering: Logo -> Selector -> Tools -> Grid
+    // Verify desktop layout ordering: Logo -> Tools -> Grid / Hints -> Selector at bottom
     const logoBox = await logo.boundingBox();
-    const selectorBox = await selector.boundingBox();
     const toolsBox = await tools.boundingBox();
-    const gridBox = await gridHints.boundingBox();
+    const gridHintsBox = await gridHints.boundingBox();
+    const gridBoardBox = await gridBoard.boundingBox();
     const sizeBox = await sizeLabel.boundingBox();
     const levelNameBox = await levelName.boundingBox();
+    const selectorBox = await selector.boundingBox();
 
-    expect(logoBox!.y).toBeLessThan(selectorBox!.y);
-    expect(selectorBox!.y).toBeLessThan(toolsBox!.y);
-    expect(toolsBox!.y).toBeLessThan(gridBox!.y);
+    expect(logoBox!.y).toBeLessThan(toolsBox!.y);
+    expect(toolsBox!.y).toBeLessThan(gridBoardBox!.y);
+    expect(toolsBox!.y).toBeLessThan(gridHintsBox!.y);
+
+    // On desktop, hints are to the left of the grid board
+    expect(gridHintsBox!.x).toBeLessThan(gridBoardBox!.x);
 
     // Size label should be at bottom of grid
-    expect(sizeBox!.y).toBeGreaterThan(gridBox!.y);
+    expect(sizeBox!.y).toBeGreaterThan(gridBoardBox!.y);
     // Level name should be below the grid
-    expect(levelNameBox!.y).toBeGreaterThan(gridBox!.y);
+    expect(levelNameBox!.y).toBeGreaterThan(gridBoardBox!.y);
+
+    // Selector is at the bottom of the page
+    expect(selectorBox!.y).toBeGreaterThan(levelNameBox!.y);
+  });
+
+  test('verifies mobile layout order: tools, grid, hints below grid, and selector at bottom', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/?daily=2024-01-07');
+
+    const tools = page.locator('.controls-toolbar');
+    const gridHints = page.locator('[data-testid="grid-hints-card"]');
+    const gridBoard = page.locator('.grid-board-card');
+    const selector = page.locator('.level-picker');
+
+    await expect(tools).toBeVisible();
+    await expect(gridBoard).toBeVisible();
+    await expect(gridHints).toBeVisible();
+    await expect(selector).toBeVisible();
+
+    const toolsBox = await tools.boundingBox();
+    const gridBoardBox = await gridBoard.boundingBox();
+    const gridHintsBox = await gridHints.boundingBox();
+    const selectorBox = await selector.boundingBox();
+
+    // On narrow screens: Tools -> Grid -> Hints below grid -> Selector at bottom
+    expect(toolsBox!.y).toBeLessThan(gridBoardBox!.y);
+    expect(gridBoardBox!.y).toBeLessThan(gridHintsBox!.y);
+    expect(gridHintsBox!.y).toBeLessThan(selectorBox!.y);
   });
 
 });

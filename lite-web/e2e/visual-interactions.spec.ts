@@ -528,19 +528,19 @@ L._.
     await expect(zeroAqHint.locator('.aq-tank-size')).toHaveText('0');
     // It should not render water texture inside the tank
     await expect(zeroAqHint.locator('.aq-tank-water')).toHaveCount(0);
-    // Expected count should be ×0
-    await expect(zeroAqHint.locator('.aq-expected-count')).toHaveText('×0');
+    // Status pill should reflect count (currently 4/0)
+    await expect(zeroAqHint.locator('.aq-status-pill')).toHaveText('4/0');
 
     // The other aquarium hints must also be visible
     const aq25 = page.locator('[data-testid="aquarium-hint-2.5"]');
     await expect(aq25).toBeVisible();
     await expect(aq25.locator('.aq-tank-size')).toHaveText('2.5');
-    await expect(aq25.locator('.aq-expected-count')).toHaveText('×1');
+    await expect(aq25.locator('.aq-status-pill')).toHaveText('0/1');
 
     const aq3 = page.locator('[data-testid="aquarium-hint-3"]');
     await expect(aq3).toBeVisible();
     await expect(aq3.locator('.aq-tank-size')).toHaveText('3');
-    await expect(aq3.locator('.aq-expected-count')).toHaveText('×1');
+    await expect(aq3.locator('.aq-status-pill')).toHaveText('0/1');
   });
 
   test('visual_test_undo_redo_buttons_and_reactive_states', async ({ page }) => {
