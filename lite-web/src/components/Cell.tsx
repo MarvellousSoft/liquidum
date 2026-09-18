@@ -275,11 +275,12 @@ export function Cell({
       onAuxClick={(e) => e.preventDefault()}
       onContextMenu={(e) => e.preventDefault()}
     >
+      {renderContent()}
+
       {/* Interior Grid Lines */}
       {!isRightEdge && !hasRightWall && <div class="cell-grid-line-v" />}
       {!isBottomEdge && !hasBottomWall && <div class="cell-grid-line-h" />}
 
-      {renderContent()}
       {renderErrorOverlay()}
       
       {/* Overlay Thick Walls */}

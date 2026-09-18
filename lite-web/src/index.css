@@ -16,7 +16,7 @@
    Design System Tokens (Authentic Godot Values)
    ========================================================================== */
 :root {
-  /* Default Aquatic Light Mode (from project Background.gd & Global.gd) */
+  /* Default Light Mode (from project Background.gd & Global.gd) */
   --bg-gradient-top: #31b0b0;
   --bg-gradient-bottom: #46cfb3;
   --game-navy: #000924;
@@ -28,7 +28,7 @@
   --game-teal-pressed: #0e4c5b;
   
   --cell-bg: rgba(0, 9, 36, 0.15);
-  --cell-border: rgba(0, 9, 36, 0.15);
+  --cell-border: rgba(0, 9, 36, 0.25);
   --cell-water: #00a2e8;
   --cell-foam: #abffd1;
   --cell-wall: #000924;
@@ -43,13 +43,14 @@
   --font-title: 'Comfortaa', cursive, system-ui, sans-serif;
 }
 
-/* Deep Ocean Dark Mode (from project Background.gd & Global.gd) */
+/* Dark Mode (from project Background.gd & Global.gd) */
 .theme-dark {
   --bg-gradient-top: #000924;
   --bg-gradient-bottom: #093659;
   --cell-bg: rgba(0, 9, 36, 0.45);
-  --cell-border: rgba(171, 255, 209, 0.2);
-  --cell-water: #0099cc;
+  --cell-border: rgba(171, 255, 209, 0.25);
+  --cell-water: #157399;
+  --cell-foam: #1c99ca;
   --cell-wall: #abffd1;
   --cell-block: #abffd1;
   --game-teal: #093659;
@@ -763,8 +764,14 @@ body {
 .aq-tank-water {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #38c2e0 0%, #0099d8 100%);
+  background-color: #0099d8;
+  background-image: radial-gradient(circle at 50% 0%, #38c2e0 0%, #0099d8 42%);
   box-shadow: inset 0 2.5px 0 var(--cell-foam);
+}
+
+.theme-dark .aq-tank-water {
+  background-color: #073f60;
+  background-image: radial-gradient(circle at 50% 0%, #157399 0%, #073f60 42%);
 }
 .aq-tank-water-half {
   clip-path: polygon(0 0, 100% 100%, 0 100%);
@@ -1021,12 +1028,21 @@ body {
 .cell-water {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #38c2e0 0%, #0099d8 100%);
+  background-color: #0099d8;
   border: none;
 }
 
 .cell-water.is-surface {
+  background-image: radial-gradient(circle at 50% 0%, #38c2e0 0%, #0099d8 42%);
   box-shadow: inset 0 2.5px 0 var(--cell-foam);
+}
+
+.theme-dark .cell-water {
+  background-color: #073f60;
+}
+
+.theme-dark .cell-water.is-surface {
+  background-image: radial-gradient(circle at 50% 0%, #157399 0%, #073f60 42%);
 }
 
 .cell-boat {
@@ -1035,6 +1051,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .cell-air {
@@ -1043,6 +1060,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .cell-sprite {
@@ -1070,6 +1088,7 @@ body {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  z-index: 10;
 }
 
 .maybeboat-wrap {
@@ -1134,7 +1153,7 @@ body {
   .align-bottom-left { padding-left: 5px; padding-bottom: 5px; }
 }
 
-/* Faint interior grid lines */
+/* Faint interior dashed grid lines */
 .cell-grid-line-v {
   position: absolute;
   top: 0;
@@ -1142,8 +1161,15 @@ body {
   right: 0;
   width: 1px;
   margin-right: -0.5px;
-  background-color: var(--cell-border);
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--cell-border) 0px,
+    var(--cell-border) 3px,
+    transparent 3px,
+    transparent 6px
+  );
   pointer-events: none;
+  z-index: 5;
 }
 
 .cell-grid-line-h {
@@ -1153,8 +1179,15 @@ body {
   right: 0;
   height: 1px;
   margin-bottom: -0.5px;
-  background-color: var(--cell-border);
+  background: repeating-linear-gradient(
+    to right,
+    var(--cell-border) 0px,
+    var(--cell-border) 3px,
+    transparent 3px,
+    transparent 6px
+  );
   pointer-events: none;
+  z-index: 5;
 }
 
 /* Thick overlay walls (Authentic Godot solid navy lines) */

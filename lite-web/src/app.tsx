@@ -1410,7 +1410,7 @@ export function App() {
           data-testid="btn-theme-toggle"
           onClick={() => setIsDarkMode(!isDarkMode)}
           class="btn-theme-toggle"
-          title={isDarkMode ? "Switch to Aquatic Light Mode" : "Switch to Deep Ocean Dark Mode"}
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
           <span>{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
