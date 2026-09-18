@@ -8,7 +8,9 @@ static func must_be_implemented() -> Variant:
 	return null
 
 class LineHint:
-	var water_count: float
+	var water_count: float:
+		get:
+			return -1.0 if water_alt_text != "" else water_count
 	var water_count_type: E.HintType
 	var water_alt_text: String
 	var boat_count: int

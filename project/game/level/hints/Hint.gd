@@ -94,7 +94,7 @@ func _process(dt):
 	if alt_text != "":
 		opt_highlight = false
 	Global.alpha_fade_node(dt, %Completed, not editor_mode and cur_status == E.HintStatus.Satisfied and allow_unknown and opt_highlight)
-	Global.alpha_fade_node(dt, HintsContainer, ToggleVisibility.is_pressed(), ALPHA_SPEED, false, 1.0, HIDE_ALPHA)
+	Global.alpha_fade_node(dt, HintsContainer, ToggleVisibility.is_pressed() or alt_text != "", ALPHA_SPEED, false, 1.0, HIDE_ALPHA)
 
 
 func update_dark_mode(is_dark : bool) -> void:
@@ -136,6 +136,13 @@ func set_value(new_value : float) -> void:
 
 func set_alt_text(new_text : String) -> void:
 	alt_text = new_text
+	if alt_text != "":
+		ToggleVisibility.set_pressed(true)
+		ToggleVisibility.hide()
+		Number.modulate = Color(0.7, 0.7, 1.0)
+	else:
+		ToggleVisibility.show()
+		Number.modulate = Color(1, 1, 1)
 	update_label()
 
 

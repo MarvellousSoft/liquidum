@@ -141,6 +141,8 @@ func export_data(grid: GridImpl) -> Dictionary:
 		wall_right: _export_grid(grid.wall_right, _export_bool),
 		grid_hints: _export_grid_hints(grid._grid_hints),
 	}
+	if not grid.rule_variants().is_empty():
+		data[variants] = grid.rule_variants().duplicate()
 	return data
 
 func _convert_keys_to_int(data_: Variant) -> Variant:
@@ -212,5 +214,6 @@ func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) 
 		grid.wall_bottom = _load_grid(data[wall_bottom], _load_bool)
 		grid.wall_right = _load_grid(data[wall_right], _load_bool)
 		grid._grid_hints = _load_grid_hints(data[grid_hints])
+		grid._rule_variants.assign(data.get(variants, []))
 	grid._finish_loading(load_mode)
 	return grid

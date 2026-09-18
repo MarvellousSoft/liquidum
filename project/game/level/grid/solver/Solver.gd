@@ -104,7 +104,8 @@ class RowStrategy extends Strategy:
 	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
-		var water_hint := SolverModel._row_hint(grid, i).water_count
+		var hint := SolverModel._row_hint(grid, i)
+		var water_hint := hint.water_count
 		if water_hint < 0:
 			return false
 		var dfs := RowDfs.new(i, grid)
@@ -170,8 +171,9 @@ class ColumnStrategy extends Strategy:
 	func _apply_strategy(_values: Array[ColComponent], _water_left: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(j: int) -> bool:
-		var hint := SolverModel._col_hint(grid, j).water_count
-		if hint < 0:
+		var hint := SolverModel._col_hint(grid, j)
+		var water_hint := hint.water_count
+		if water_hint < 0:
 			return false
 		var dfs := ColDfs.new(j, grid)
 		var last_seen := grid.last_seen
@@ -191,7 +193,7 @@ class ColumnStrategy extends Strategy:
 		var nothing_left := 0.
 		for i in grid.rows():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := hint - grid.count_water_col(j)
+		var water_left := water_hint - grid.count_water_col(j)
 		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
 			return false
 		return self._apply_strategy(comps, water_left, nothing_left)

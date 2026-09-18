@@ -1647,31 +1647,121 @@ func aquarium_hints_status() -> E.HintStatus:
 func rule_variants() -> Array[GridModel.RuleVariant]:
 	return _rule_variants
 
+func _liar_compare(liar_hint: float, value: float) -> E.HintStatus:
+	if value > liar_hint + 1:
+		return E.HintStatus.Wrong
+	elif value == liar_hint - 1 or value == liar_hint + 1:
+		return E.HintStatus.Satisfied
+	else:
+		return E.HintStatus.Normal
+
 func _liar_status() -> E.HintStatus:
-	return GridModel.must_be_implemented()
+	var st := E.HintStatus.Satisfied
+	for i in n:
+		var hint := _row_hints[i]
+		if hint.water_alt_text.is_valid_float():
+			st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_row(i)))
+		if hint.boat_alt_text.is_valid_float():
+			st = merge_status(st, _liar_compare(float(hint.boat_alt_text), count_boat_row(i)))
+	for j in m:
+		var hint := _col_hints[j]
+		if hint.water_alt_text.is_valid_float():
+			st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_col(j)))
+		if hint.boat_alt_text.is_valid_float():
+			st = merge_status(st, _liar_compare(float(hint.boat_alt_text), count_boat_col(j)))
+	for i in n:
+		for j in m:
+			var hint: CellHints = cell_hints[i][j]
+			if hint != null and hint.water_alt_text.is_valid_float():
+				st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_adj(i, j)))
+	return st
 
 func _snake_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
+func _sudoku_check19(getter : Callable) -> E.HintStatus:
+	var a: Array[float] = []
+	for i in 9:
+		a.append(getter.call(i))
+	a.sort()
+	var st := E.HintStatus.Satisfied
+	for i in 9:
+		if a[i] > i + 1:
+			return E.HintStatus.Wrong
+		elif a[i] < i + 1:
+			st = E.HintStatus.Normal
+	return st
+
 func _sudoku_status() -> E.HintStatus:
-	return GridModel.must_be_implemented()
+	var st := E.HintStatus.Satisfied
+	st = merge_status(st, _sudoku_check19(count_water_row))
+	st = merge_status(st, _sudoku_check19(count_water_col))
+	st = merge_status(st, _sudoku_check19(func(i: int):
+		var x := 10 + 3 * i
+		return count_water_adj(x % 9, x / 9)
+	))
+	return st
 
 func _symbols_status() -> E.HintStatus:
-	return GridModel.must_be_implemented()
+	var symbol_to_vals : Dictionary = {}
+	var nonsymbols : Array[float] = []
+	var for_symbol := func(s: String) -> Array[float]:
+		if s == "":
+			return nonsymbols
+		elif not symbol_to_vals.has(s):
+			symbol_to_vals[s] = []
+		return symbol_to_vals[s]
+	for i in n:
+		if _row_hints[i].water_alt_text != "":
+			for_symbol.call(_row_hints[i].water_alt_text).append(count_water_row(i))
+		if _row_hints[i].boat_alt_text != "":
+			for_symbol.call(_row_hints[i].boat_alt_text).append(count_boat_row(i))
+	for j in m:
+		if _col_hints[j].water_alt_text != "":
+			for_symbol.call(_col_hints[j].water_alt_text).append(count_water_col(j))
+		if _col_hints[j].boat_alt_text != "":
+			for_symbol.call(_col_hints[j].boat_alt_text).append(count_boat_col(j))
+	for i in n:
+		for j in m:
+			var hint: CellHints = cell_hints[i][j]
+			if hint != null and hint.water_alt_text != "":
+				for_symbol.call(hint.water_alt_text).append(count_water_adj(i, j))
+	var st := E.HintStatus.Satisfied
+	var vals : Array[float] = []
+	for symbol in symbol_to_vals:
+		var mn : float = 10000
+		var mx : float = -1
+		for val in symbol_to_vals[symbol]:
+			mn = min(mn, val)
+			mx = max(mx, val)
+		if mn != mx:
+			st = E.HintStatus.Normal
+		vals.append(mx)
+	vals.sort()
+	var mn_value := 0
+	for i in vals.size():
+		if vals[i] < mn_value:
+			st = E.HintStatus.Normal
+		else:
+			mn_value = vals[i]
+		if mn_value > 9 and mn_value > n and mn_value > m:
+			return E.HintStatus.Wrong
+		mn_value = mn_value + 0.5
+	return st
+
 
 func rule_variants_status() -> Array[E.HintStatus]:
-	var ret := []
+	var ret : Array[E.HintStatus] = []
 	for rule in _rule_variants:
-		if rule == GridModel.RuleVariant.Liar:
-			ret.append(_liar_status())
-		elif rule == GridModel.RuleVariant.Snake:
-			ret.append(_snake_status())
-		elif rule == GridModel.RuleVariant.Sudoku:
-			ret.append(_sudoku_status())
-		elif rule == GridModel.RuleVariant.Symbols:
-			ret.append(_symbols_status())
-		else:
-			push_warning("Unknown variant")
+		match rule:
+			GridModel.RuleVariant.Liar:
+				ret.append(_liar_status())
+			GridModel.RuleVariant.Snake:
+				ret.append(_snake_status())
+			GridModel.RuleVariant.Sudoku:
+				ret.append(_sudoku_status())
+			GridModel.RuleVariant.Symbols:
+				ret.append(_symbols_status())
 	return ret
 
 func count_nowater_row(i : int) -> float:
@@ -1803,6 +1893,8 @@ func all_hints_status() -> E.HintStatus:
 			#	print("cell %s %s" % [Vector2i(i, j), E.HintStatus.find_key(s)])
 			if s == E.HintStatus.Wrong:
 				return s
+	for st2 in rule_variants_status():
+		s = merge_status(s, st2)
 	return s
 
 func check_complete() -> bool:

@@ -459,3 +459,4 @@ TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de célula separadas,Dicas de célu
 TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de célula desconhecidas
 EDIT_ALT_TEXT_TITLE,Edit Alt Text,Editar texto alternativo,Editar texto alternativo
 EDIT_ALT_TEXT_EXPLANATION,This will show up instead of the actual hint. It may be any string. Set it as empty to clear.,,
+CONFIRM,Confirm,Confirmar,Confirmar
