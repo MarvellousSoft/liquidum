@@ -217,6 +217,13 @@ export function setupPlayFabFetchAdapter(): void {
   };
 }
 
+export interface PlayerProfileEvent {
+  playFabId: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+  flair: FlairInfo | null;
+}
+
 // Automatically setup adapter when module is loaded
 setupPlayFabFetchAdapter();
 
@@ -227,6 +234,7 @@ export class PlayFabService {
   private currentFlair: FlairInfo | null = null;
   private loginPromise: Promise<LoginResultInfo> | null = null;
   private storage: Storage | null = null;
+  private profileListeners: Set<(profile: PlayerProfileEvent) => void> = new Set();
 
   constructor(storage?: Storage) {
     this.storage = storage || (typeof localStorage !== "undefined" ? localStorage : null);
@@ -250,6 +258,33 @@ export class PlayFabService {
 
   public getFlair(): FlairInfo | null {
     return this.currentFlair;
+  }
+
+  public getCustomId(): string {
+    return getOrCreateCustomId(this.storage || undefined);
+  }
+
+  public onProfileChange(listener: (profile: PlayerProfileEvent) => void): () => void {
+    this.profileListeners.add(listener);
+    return () => {
+      this.profileListeners.delete(listener);
+    };
+  }
+
+  private notifyProfileChange(): void {
+    const event: PlayerProfileEvent = {
+      playFabId: this.currentPlayFabId,
+      displayName: this.currentDisplayName,
+      avatarUrl: this.currentAvatarUrl,
+      flair: this.currentFlair,
+    };
+    for (const listener of this.profileListeners) {
+      try {
+        listener(event);
+      } catch (err) {
+        console.error("Error in profile change listener:", err);
+      }
+    }
   }
 
   public isLoggedIn(): boolean {
@@ -303,6 +338,7 @@ export class PlayFabService {
         const profile = data.InfoResultPayload?.PlayerProfile;
         this.currentDisplayName = extractDisplayNameFromProfile(profile, this.currentPlayFabId || "");
         this.currentAvatarUrl = extractAvatarUrlFromProfile(profile);
+        this.notifyProfileChange();
 
         resolve({
           playFabId: this.currentPlayFabId || "",
@@ -483,9 +519,63 @@ export class PlayFabService {
 
         const newName = result.data.DisplayName || trimmed;
         this.currentDisplayName = newName;
+        this.notifyProfileChange();
         resolve(newName);
       });
     });
+  }
+
+  /**
+   * Updates or removes the player's avatar URL.
+   * If imageUrl is empty, it removes the existing avatar URL.
+   */
+  public async updateAvatarUrl(imageUrl: string): Promise<string | null> {
+    const trimmed = imageUrl.trim();
+
+    await this.login();
+
+    return new Promise<string | null>((resolve, reject) => {
+      PlayFabClient.UpdateAvatarUrl({ ImageUrl: trimmed }, (error, result) => {
+        if (error || !result || result.code !== 200) {
+          return reject(error || new Error("Failed to update avatar URL"));
+        }
+
+        this.currentAvatarUrl = trimmed !== "" ? trimmed : null;
+        this.notifyProfileChange();
+        resolve(this.currentAvatarUrl);
+      });
+    });
+  }
+
+  /**
+   * Switches the active account to a different recovery key (CustomID).
+   * Persists the new key to storage, resets session state, and logs in.
+   */
+  public async switchAccount(newCustomId: string): Promise<LoginResultInfo> {
+    const trimmedId = newCustomId.trim();
+    if (!trimmedId) {
+      throw new Error("Recovery key cannot be empty");
+    }
+
+    const store = this.storage || (typeof localStorage !== "undefined" ? localStorage : null);
+    if (store) {
+      store.setItem("liquidum_custom_id", trimmedId);
+    }
+
+    // Reset cached session ticket in PlayFab SDK internal settings
+    if ((PlayFab as any)._internalSettings) {
+      (PlayFab as any)._internalSettings.sessionTicket = null;
+      (PlayFab as any)._internalSettings.entityToken = null;
+    }
+    this.currentPlayFabId = null;
+    this.currentDisplayName = null;
+    this.currentAvatarUrl = null;
+    this.currentFlair = null;
+    this.loginPromise = null;
+
+    const res = await this.login(trimmedId);
+    this.notifyProfileChange();
+    return res;
   }
 }
 

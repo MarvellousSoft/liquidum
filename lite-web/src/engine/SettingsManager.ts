@@ -62,11 +62,6 @@ export function getSettings(): GameSettings {
     }
     const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (!raw) {
-      // Legacy theme check if exists
-      const legacyTheme = localStorage.getItem('liquidum_theme');
-      if (legacyTheme === 'light') {
-        return { ...DEFAULT_SETTINGS, dark_mode: false };
-      }
       return { ...DEFAULT_SETTINGS };
     }
     const parsed = JSON.parse(raw);
@@ -82,8 +77,6 @@ export function saveSettings(newSettings: Partial<GameSettings>): GameSettings {
   try {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updated));
-      // Keep legacy liquidum_theme in sync
-      localStorage.setItem('liquidum_theme', updated.dark_mode ? 'dark' : 'light');
     }
   } catch (err) {
     console.error('Failed to save settings to localStorage', err);

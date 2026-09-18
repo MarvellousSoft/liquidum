@@ -128,17 +128,18 @@ describe("PlayFabService - Mocked API Workflows", () => {
       const body = JSON.parse(options?.body || "{}");
 
       if (urlStr.includes("/Client/LoginWithCustomID")) {
+        const isSwitched = body.CustomId && body.CustomId.startsWith("KEY_");
         return new Response(
           JSON.stringify({
             code: 200,
             status: "OK",
             data: {
-              PlayFabId: "PLAYFAB_USER_123",
+              PlayFabId: isSwitched ? `PF_${body.CustomId}` : "PLAYFAB_USER_123",
               SessionTicket: "MOCK_SESSION_TICKET_ABC",
               NewlyCreated: true,
               InfoResultPayload: {
                 PlayerProfile: {
-                  DisplayName: "AquaMaster",
+                  DisplayName: isSwitched ? `User_${body.CustomId}` : "AquaMaster",
                 },
               },
             },
@@ -231,6 +232,17 @@ describe("PlayFabService - Mocked API Workflows", () => {
             data: {
               DisplayName: body.DisplayName,
             },
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (urlStr.includes("/Client/UpdateAvatarUrl")) {
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: {},
           }),
           { status: 200, headers: { "Content-Type": "application/json" } }
         );
@@ -404,6 +416,66 @@ describe("PlayFabService - Mocked API Workflows", () => {
 
     const failingService = new PlayFabService(createMockStorage());
     await expect(failingService.login()).rejects.toBeTruthy();
+  });
+
+  it("updates and removes player avatar URL", async () => {
+    await service.login();
+
+    // Set avatar
+    const newAvatar = await service.updateAvatarUrl("https://example.com/fish.png");
+    expect(newAvatar).toBe("https://example.com/fish.png");
+    expect(service.getAvatarUrl()).toBe("https://example.com/fish.png");
+
+    const updateCall = fetchSpy.mock.calls.find((c: any) =>
+      c[0].includes("/Client/UpdateAvatarUrl")
+    );
+    expect(updateCall).toBeTruthy();
+    const req = JSON.parse(updateCall[1].body);
+    expect(req.ImageUrl).toBe("https://example.com/fish.png");
+
+    // Remove avatar (empty string)
+    const cleared = await service.updateAvatarUrl("   ");
+    expect(cleared).toBeNull();
+    expect(service.getAvatarUrl()).toBeNull();
+  });
+
+  it("retrieves current customId recovery key", () => {
+    const key = service.getCustomId();
+    expect(key).toBeTruthy();
+    expect(mockStorage.getItem("liquidum_custom_id")).toBe(key);
+  });
+
+  it("notifies profile change listeners when name, avatar, or account changes", async () => {
+    const events: any[] = [];
+    const unsubscribe = service.onProfileChange((e) => {
+      events.push(e);
+    });
+
+    await service.login();
+    expect(events.length).toBeGreaterThanOrEqual(1);
+    expect(events[events.length - 1].displayName).toBe("AquaMaster");
+
+    await service.updateDisplayName("AquaCaptain");
+    expect(events[events.length - 1].displayName).toBe("AquaCaptain");
+
+    await service.updateAvatarUrl("https://example.com/pic.png");
+    expect(events[events.length - 1].avatarUrl).toBe("https://example.com/pic.png");
+
+    unsubscribe();
+    await service.updateDisplayName("AquaAdmiral");
+    // Should not receive further events after unsubscribe
+    expect(events[events.length - 1].displayName).toBe("AquaCaptain");
+  });
+
+  it("switches account using a recovery key and reloads identity", async () => {
+    await service.login();
+    expect(service.getPlayFabId()).toBe("PLAYFAB_USER_123");
+
+    const newResult = await service.switchAccount("KEY_RESTORED_999");
+    expect(newResult.playFabId).toBe("PF_KEY_RESTORED_999");
+    expect(service.getPlayFabId()).toBe("PF_KEY_RESTORED_999");
+    expect(service.getDisplayName()).toBe("User_KEY_RESTORED_999");
+    expect(mockStorage.getItem("liquidum_custom_id")).toBe("KEY_RESTORED_999");
   });
 });
 

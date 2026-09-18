@@ -27,11 +27,6 @@ describe('SettingsManager', () => {
     expect(settings).toEqual(DEFAULT_SETTINGS);
   });
 
-  it('honors legacy liquidum_theme if no settings saved yet', () => {
-    localStorage.setItem('liquidum_theme', 'light');
-    const settings = getSettings();
-    expect(settings.dark_mode).toBe(false);
-  });
 
   it('saves partial settings and keeps defaults for unspecified keys', () => {
     const updated = saveSettings({ line_info: 'missing', thicker_walls: true });

@@ -39,6 +39,7 @@ import {
 import type { StreakData } from './engine/StreakManager';
 import { LeaderboardModal } from './components/LeaderboardModal';
 import { LeaderboardView } from './components/LeaderboardView';
+import { AccountModal } from './components/AccountModal';
 import { playFabService } from './engine/PlayFabService';
 import {
   type GameSettings,
@@ -130,6 +131,35 @@ export function App() {
 
   const [showLeaderboardModal, setShowLeaderboardModal] = useState<boolean>(false);
   const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState<number>(0);
+
+  const [showAccountModal, setShowAccountModal] = useState<boolean>(false);
+  const showAccountModalRef = useRef(showAccountModal);
+  showAccountModalRef.current = showAccountModal;
+  const [userDisplayName, setUserDisplayName] = useState<string>(() => playFabService.getDisplayName() || "");
+  const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(() => playFabService.getAvatarUrl());
+  const [avatarLoadError, setAvatarLoadError] = useState<boolean>(false);
+
+  useEffect(() => {
+    playFabService
+      .login()
+      .then((info) => {
+        setUserDisplayName(info.displayName || "Anonymous");
+        setUserAvatarUrl(info.avatarUrl || null);
+        setAvatarLoadError(false);
+      })
+      .catch(() => {
+        // Offline / non-fatal
+      });
+
+    const unsubscribe = playFabService.onProfileChange((profile) => {
+      setUserDisplayName(profile.displayName || "Anonymous");
+      setUserAvatarUrl(profile.avatarUrl || null);
+      setAvatarLoadError(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const hasStartedRef = useRef(hasStarted);
   hasStartedRef.current = hasStarted;
@@ -730,11 +760,12 @@ export function App() {
         return;
       }
 
-      // Escape closes shortcuts, levels, and settings modals
+      // Escape closes shortcuts, levels, settings, and account modals
       if (e.key === 'Escape') {
         setShowShortcuts(false);
         setShowLevelsModal(false);
         setShowSettings(false);
+        setShowAccountModal(false);
         return;
       }
 
@@ -954,6 +985,8 @@ export function App() {
     (window as any).getShowLevelsModal = () => showLevelsModalRef.current;
     (window as any).setShowSettings = (val: boolean) => setShowSettings(val);
     (window as any).getShowSettings = () => showSettingsRef.current;
+    (window as any).setShowAccountModal = (val: boolean) => setShowAccountModal(val);
+    (window as any).getShowAccountModal = () => showAccountModalRef.current;
     (window as any).getSettings = () => settingsRef.current;
     (window as any).saveSettings = (val: Partial<GameSettings>) => saveSettings(val);
     (window as any).updateSetting = (k: any, v: any) => updateSetting(k, v);
@@ -961,7 +994,7 @@ export function App() {
       hoveredCellRef.current = { row: r, col: c, corner };
       setHoveredCell({ row: r, col: c, corner });
     };
-  }, [gridData, won, settings, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings]);
+  }, [gridData, won, settings, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings, showAccountModal]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -1422,6 +1455,26 @@ export function App() {
         >
           <span class="text-base">⚙️</span>
           <span class="btn-text">Settings</span>
+        </button>
+
+        <button
+          data-testid="btn-account"
+          onClick={() => setShowAccountModal(true)}
+          class="btn-shortcuts"
+          title="Player Account & Profile"
+          aria-label="Account"
+        >
+          {userAvatarUrl && !avatarLoadError ? (
+            <img
+              src={userAvatarUrl}
+              alt=""
+              class="w-5 h-5 rounded-full object-cover border border-cyan-400/60 shrink-0"
+              onError={() => setAvatarLoadError(true)}
+            />
+          ) : (
+            <span class="text-base">👤</span>
+          )}
+          <span class="btn-text max-w-[100px] truncate">{userDisplayName || "Account"}</span>
         </button>
 
         {isDailyMode && (
@@ -2309,6 +2362,12 @@ export function App() {
         isOpen={showLeaderboardModal}
         onClose={() => setShowLeaderboardModal(false)}
         refreshTrigger={leaderboardRefreshKey}
+      />
+
+      <AccountModal
+        isOpen={showAccountModal}
+        onClose={() => setShowAccountModal(false)}
+        onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
       />
     </div>
   );
