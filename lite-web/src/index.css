@@ -1875,4 +1875,265 @@ body {
   box-shadow: none;
 }
 
+/* ==========================================================================
+   Opposite Side Hints & Grid Spacers
+   ========================================================================== */
+.grid-corner-spacer-opposite {
+  width: 4rem;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .grid-corner-spacer-opposite { width: 5rem; }
+}
+@media (min-width: 768px) {
+  .grid-corner-spacer-opposite { width: 6rem; }
+}
+.has-dual-row-hints .grid-corner-spacer-opposite {
+  width: 6.5rem;
+}
+@media (min-width: 640px) {
+  .has-dual-row-hints .grid-corner-spacer-opposite {
+    width: 7.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .has-dual-row-hints .grid-corner-spacer-opposite {
+    width: 8.5rem;
+  }
+}
+
+.row-hint-opposite {
+  justify-content: flex-start !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0 !important;
+}
+
+.col-hint-opposite {
+  justify-content: flex-start !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   Hovered Line & Ghost Tool Preview
+   ========================================================================== */
+.cell-hovered-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  z-index: 12;
+}
+
+.theme-dark .cell-hovered-line::after {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.cell-hovered-active {
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.25);
+}
+
+.cell-preview {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 14;
+}
+
+.cell-preview-water {
+  background-color: rgba(0, 153, 216, 0.45);
+}
+.theme-dark .cell-preview-water {
+  background-color: rgba(7, 63, 96, 0.6);
+}
+
+.cell-preview-air,
+.cell-preview-boat,
+.cell-preview-maybeboat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.45;
+}
+
+.cell-preview-diagonal {
+  width: 30%;
+  height: 30%;
+  max-width: 1rem;
+  max-height: 1rem;
+  object-fit: contain;
+}
+
+/* ==========================================================================
+   Display & Accessibility Toggles
+   ========================================================================== */
+.bigger-hints .col-hint,
+.bigger-hints .row-hint,
+.bigger-hints .col-hint-opposite,
+.bigger-hints .row-hint-opposite {
+  font-size: 1.25rem !important;
+}
+@media (min-width: 640px) {
+  .bigger-hints .col-hint,
+  .bigger-hints .row-hint,
+  .bigger-hints .col-hint-opposite,
+  .bigger-hints .row-hint-opposite {
+    font-size: 1.4rem !important;
+  }
+}
+@media (min-width: 768px) {
+  .bigger-hints .col-hint,
+  .bigger-hints .row-hint,
+  .bigger-hints .col-hint-opposite,
+  .bigger-hints .row-hint-opposite {
+    font-size: 1.55rem !important;
+  }
+}
+.bigger-hints .aquarium-card {
+  font-size: 1.15rem !important;
+}
+
+.thicker-walls .cell-wall-top,
+.thicker-walls .cell-wall-bottom {
+  height: 5px !important;
+  margin-top: -2.5px !important;
+  margin-bottom: -2.5px !important;
+}
+.thicker-walls .cell-wall-left,
+.thicker-walls .cell-wall-right {
+  width: 5px !important;
+  margin-left: -2.5px !important;
+  margin-right: -2.5px !important;
+}
+.thicker-walls .diag-svg line {
+  stroke-width: 5 !important;
+}
+
+.no-bubbles .game-bg::before,
+.no-bubbles .game-bg::after {
+  display: none !important;
+}
+
+.no-bubbles .cell-water,
+.no-bubbles .cell-water.is-surface,
+.no-bubbles .aq-tank-water {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.skip-animations *,
+.skip-animations *::before,
+.skip-animations *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* ==========================================================================
+   Settings Modal Styling
+   ========================================================================== */
+.settings-dialog {
+  max-width: 36rem !important;
+}
+
+.settings-content {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.settings-section {
+  background: rgba(0, 9, 36, 0.25);
+  border: 1.5px solid rgba(217, 255, 226, 0.12);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.settings-section-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: var(--font-game);
+  color: var(--game-foam);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(217, 255, 226, 0.1);
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.setting-title {
+  font-family: var(--font-game);
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.setting-desc {
+  font-size: 0.75rem;
+  color: rgba(217, 255, 226, 0.7);
+  line-height: 1.3;
+}
+
+.setting-select {
+  font-family: var(--font-game);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--game-navy);
+  background-color: var(--game-teal);
+  color: var(--game-mint);
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--game-navy);
+}
+
+.setting-select:hover {
+  background-color: var(--game-teal-hover);
+}
+
+.setting-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #61fc89;
+  cursor: pointer;
+}
+
+
 

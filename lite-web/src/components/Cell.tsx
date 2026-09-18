@@ -21,6 +21,12 @@ interface CellProps {
   isSurface?: boolean;
   hasError?: boolean;
   errorCorner?: Corner | null;
+  isHoveredRow?: boolean;
+  isHoveredCol?: boolean;
+  isHoveredCell?: boolean;
+  hoveredCorner?: Corner | null;
+  previewTool?: Content | null;
+  previewCorners?: Partial<Record<Corner, Content>> | null;
   onPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onPointerMove?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
@@ -58,6 +64,12 @@ export function Cell({
   isSurface = true,
   hasError = false,
   errorCorner = null,
+  isHoveredRow = false,
+  isHoveredCol = false,
+  isHoveredCell = false,
+  hoveredCorner = null,
+  previewTool = null,
+  previewCorners = null,
   onPointerDown, onPointerEnter, onPointerMove, onPointerLeave, onPointerUp 
 }: CellProps) {
   const isWaterLeft = cell.c_left === Content.Water;
@@ -150,16 +162,79 @@ export function Cell({
     );
   };
 
+  const renderPreviewOverlay = (corner: Corner, clipPath?: string) => {
+    let tool: Content | null = null;
+    if (previewCorners && previewCorners[corner] !== undefined) {
+      tool = previewCorners[corner]!;
+    } else if (isHoveredCell && previewTool) {
+      const activeTargetCorner = hoveredCorner ?? (cell.type === CellType.Single ? Corner.TopLeft : corner);
+      if (corner === activeTargetCorner) {
+        tool = previewTool;
+      }
+    }
+
+    if (!tool) return null;
+
+    const isLeft = corner === Corner.TopLeft || corner === Corner.BottomLeft;
+    const currentVal = isLeft ? cell.c_left : cell.c_right;
+    
+    // For water preview, show over anything except already water or block
+    if (tool === Content.Water) {
+      if (currentVal === Content.Water || currentVal === Content.Block) return null;
+    } else {
+      if (currentVal !== Content.Nothing) return null;
+    }
+
+    const isDiagonal = Boolean(clipPath);
+    const alignment = getCornerAlignClass(corner, isDiagonal);
+
+    let previewEl = null;
+    if (tool === Content.Water) {
+      previewEl = <div class="cell-preview cell-preview-water" />;
+    } else if (tool === Content.NoWater) {
+      previewEl = (
+        <div class={`cell-preview cell-preview-air ${alignment}`}>
+          <img src="/icons/nowater.png" alt="preview air" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
+        </div>
+      );
+    } else if (tool === Content.Boat) {
+      previewEl = (
+        <div class={`cell-preview cell-preview-boat ${alignment}`}>
+          <img src="/icons/boat_small.png" alt="preview boat" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
+        </div>
+      );
+    } else if (tool === Content.NoBoat) {
+      previewEl = (
+        <div class={`cell-preview cell-preview-maybeboat ${alignment}`}>
+          <div class={`maybeboat-wrap opacity-45 ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`}>
+            <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
+            <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+          </div>
+        </div>
+      );
+    }
+
+    if (!previewEl) return null;
+    return clipPath ? <div class="cell-layer" style={{ clipPath }}>{previewEl}</div> : previewEl;
+  };
+
   const renderContent = () => {
     if (cell.type === CellType.Single) {
-      return renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, undefined, isSurface);
+      return (
+        <>
+          {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, undefined, isSurface)}
+          {renderPreviewOverlay(Corner.TopLeft)}
+        </>
+      );
     } 
     
     if (cell.type === CellType.IncDiag) {
       return (
         <div class="cell-content-layer">
           {renderHalf(Corner.TopLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, 'polygon(0 0, 100% 0, 0 100%)', isSurface)}
+          {renderPreviewOverlay(Corner.TopLeft, 'polygon(0 0, 100% 0, 0 100%)')}
           {renderHalf(Corner.BottomRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, isNoBoatRight, isNoBoatWaterRight, 'polygon(100% 0, 100% 100%, 0 100%)', false)}
+          {renderPreviewOverlay(Corner.BottomRight, 'polygon(100% 0, 100% 100%, 0 100%)')}
           {renderDiagonalLine(CellType.IncDiag)}
         </div>
       );
@@ -169,7 +244,9 @@ export function Cell({
       return (
         <div class="cell-content-layer">
           {renderHalf(Corner.TopRight, isWaterRight, isNoWaterRight, isBoatRight, isBlockRight, isNoBoatRight, isNoBoatWaterRight, 'polygon(0 0, 100% 0, 100% 100%)', isSurface)}
-          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, 'polygon(0 0, 100% 100%, 0 100%)', false)}
+          {renderPreviewOverlay(Corner.TopRight, 'polygon(0 0, 100% 0, 100% 100%)')}
+          {renderHalf(Corner.BottomLeft, isWaterLeft, isNoWaterLeft, isBoatLeft, isBlockLeft, isNoBoatLeft, isNoBoatWaterLeft, 'polygon(0 0, 0 100%, 100% 100%)', false)}
+          {renderPreviewOverlay(Corner.BottomLeft, 'polygon(0 0, 0 100%, 100% 100%)')}
           {renderDiagonalLine(CellType.DecDiag)}
         </div>
       );
@@ -243,6 +320,8 @@ export function Cell({
     return null;
   };
 
+  const isHoveredLine = (isHoveredRow || isHoveredCol) && !isHoveredCell;
+
   return (
     <div 
       data-testid={`cell-${row}-${col}`}
@@ -252,7 +331,7 @@ export function Cell({
       data-content-left={getContentName(cell.c_left)}
       data-content-right={getContentName(cell.c_right)}
       data-error={hasError ? "true" : undefined}
-      class={`cell ${isBlock ? 'cell-block-bg' : ''} ${hasError ? 'cell-error-active' : ''}`}
+      class={`cell ${isBlock ? 'cell-block-bg' : ''} ${hasError ? 'cell-error-active' : ''} ${isHoveredLine ? 'cell-hovered-line' : ''} ${isHoveredCell ? 'cell-hovered-active' : ''}`}
       onPointerDown={(e) => {
         if (e.button === 1) e.preventDefault();
         const corner = getCornerFromEvent(e, e.currentTarget as HTMLElement);

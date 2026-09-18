@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { useState, useEffect, useRef, useMemo } from 'preact/hooks';
 import { Grid } from './components/Grid';
 import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums, levelHasBoats } from './model/GridData';
 import type { GridModelData } from './model/GridData';
@@ -40,6 +40,12 @@ import type { StreakData } from './engine/StreakManager';
 import { LeaderboardModal } from './components/LeaderboardModal';
 import { LeaderboardView } from './components/LeaderboardView';
 import { playFabService } from './engine/PlayFabService';
+import {
+  type GameSettings,
+  getSettings,
+  saveSettings,
+  subscribeSettings,
+} from './engine/SettingsManager';
 
 export type GameMode = 'daily' | 'weekly' | 'custom' | 'test';
 
@@ -80,7 +86,26 @@ export function App() {
   const [mouseHoldStatus, setMouseHoldStatus] = useState<E.MouseDragState>(E.MouseDragState.None);
   const mouseHoldStatusRef = useRef<E.MouseDragState>(E.MouseDragState.None);
   const [won, setWon] = useState(false);
-  const [autoFloodAir, setAutoFloodAir] = useState(false);
+  const [settings, setSettings] = useState<GameSettings>(() => getSettings());
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
+
+  useEffect(() => {
+    return subscribeSettings((nextSettings) => {
+      setSettings(nextSettings);
+    });
+  }, []);
+
+  const updateSetting = <K extends keyof GameSettings>(key: K, value: GameSettings[K]) => {
+    saveSettings({ [key]: value });
+  };
+
+  const autoFloodAir = settings.auto_flood_air;
+  const setAutoFloodAir = (val: boolean) => updateSetting('auto_flood_air', val);
+  const isDarkMode = settings.dark_mode;
+  const setIsDarkMode = (val: boolean) => updateSetting('dark_mode', val);
+
+  const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number; corner: Corner } | null>(null);
   const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
   const [mistakes, setMistakes] = useState<number>(0);
   const mistakesRef = useRef(mistakes);
@@ -360,16 +385,6 @@ export function App() {
     }
   }, [hasBoats, selectedTool]);
 
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('liquidum_theme') === 'dark';
-  });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('liquidum_theme', isDarkMode ? 'dark' : 'light');
-    }
-  }, [isDarkMode]);
 
   const isTestMode = typeof window !== 'undefined' && (
     new URLSearchParams(window.location.search).get('mode') === 'test'
@@ -939,10 +954,14 @@ export function App() {
     (window as any).getShowLevelsModal = () => showLevelsModalRef.current;
     (window as any).setShowSettings = (val: boolean) => setShowSettings(val);
     (window as any).getShowSettings = () => showSettingsRef.current;
+    (window as any).getSettings = () => settingsRef.current;
+    (window as any).saveSettings = (val: Partial<GameSettings>) => saveSettings(val);
+    (window as any).updateSetting = (k: any, v: any) => updateSetting(k, v);
     (window as any).setHoveredCell = (r: number, c: number, corner: Corner = Corner.TopLeft) => {
       hoveredCellRef.current = { row: r, col: c, corner };
+      setHoveredCell({ row: r, col: c, corner });
     };
-  }, [gridData, won, isDarkMode, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings]);
+  }, [gridData, won, settings, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -1090,14 +1109,20 @@ export function App() {
     if (won) return;
     let status = E.MouseDragState.None;
 
-    if (e.button === 1) {
+    let button = e.button;
+    if (settingsRef.current.invert_mouse) {
+      if (button === 0) button = 2;
+      else if (button === 2) button = 0;
+    }
+
+    if (button === 1) {
       // Middle button (Auxiliary click): Put / Remove Boat - Port of Godot MOUSE_BUTTON_MIDDLE
       e.preventDefault();
       status = applyToolToCell(r, c, corner, Content.Boat, false);
-    } else if (e.button === 2) {
+    } else if (button === 2) {
       // Secondary button (Right Click) - Port of Godot cell_pressed_second_button
       status = applyToolToCell(r, c, corner, Content.NoWater, true);
-    } else if (e.button === 0) {
+    } else if (button === 0) {
       // Primary button (Left Click) - Port of Godot _process_click
       status = applyToolToCell(r, c, corner, selectedTool, false);
     } else {
@@ -1113,7 +1138,9 @@ export function App() {
 
   const handleCellEnter = (r: number, c: number, corner: Corner, e: PointerEvent) => {
     hoveredCellRef.current = { row: r, col: c, corner };
+    setHoveredCell({ row: r, col: c, corner });
     if (won) return;
+    if (!settingsRef.current.drag_content) return;
     const engine = engineRef.current;
     if (!engine) return;
 
@@ -1186,13 +1213,68 @@ export function App() {
 
   const handleCellMove = (r: number, c: number, corner: Corner) => {
     hoveredCellRef.current = { row: r, col: c, corner };
+    setHoveredCell({ row: r, col: c, corner });
   };
 
   const handleCellLeave = (r: number, c: number) => {
     if (hoveredCellRef.current?.row === r && hoveredCellRef.current?.col === c) {
       hoveredCellRef.current = null;
+      setHoveredCell(null);
     }
   };
+
+  // Compute multi-cell ghost water preview
+  const previewMap = useMemo(() => {
+    const map = new Map<string, Content>();
+    if (!settings.show_grid_preview || !hoveredCell || won) {
+      return map;
+    }
+    const engine = engineRef.current;
+    if (!engine) return map;
+
+    const { row: hr, col: hc, corner: hCorner } = hoveredCell;
+    if (hr < 0 || hr >= engine.rows() || hc < 0 || hc >= engine.cols()) {
+      return map;
+    }
+
+    const cell = engine.get_cell(hr, hc) as any;
+    if (!cell) return map;
+
+    const eCorner = toEngineCorner(hCorner);
+
+    if (selectedTool === Content.Water) {
+      const waterPositions = cell.water_would_flood_which(eCorner);
+      for (const wp of waterPositions) {
+        let corner: Corner;
+        if (wp.loc === E.Waters.Single) {
+          corner = Corner.TopLeft;
+        } else {
+          corner = wp.loc as unknown as Corner;
+        }
+        map.set(`${wp.i}-${wp.j}-${corner}`, Content.Water);
+      }
+    } else if (selectedTool === Content.Boat) {
+      if (cell.boat_possible(false) && !cell.has_boat()) {
+        map.set(`${hr}-${hc}-${Corner.TopLeft}`, Content.Boat);
+        const waterPositions = cell.boat_would_flood_which();
+        for (const wp of waterPositions) {
+          let corner: Corner;
+          if (wp.loc === E.Waters.Single) {
+            corner = Corner.TopLeft;
+          } else {
+            corner = wp.loc as unknown as Corner;
+          }
+          map.set(`${wp.i}-${wp.j}-${corner}`, Content.Water);
+        }
+      }
+    } else if (selectedTool === Content.NoWater || selectedTool === Content.NoBoat) {
+      if (cell.nothing_at(eCorner)) {
+        map.set(`${hr}-${hc}-${hCorner}`, selectedTool);
+      }
+    }
+
+    return map;
+  }, [hoveredCell, selectedTool, settings.show_grid_preview, gridData, won]);
 
   // Compute current stats for hints header
   let currentWater = 0;
@@ -1216,7 +1298,7 @@ export function App() {
 
   return (
     <div
-      class={`game-container ${isDarkMode ? 'theme-dark' : ''}`}
+      class={`game-container ${isDarkMode ? 'theme-dark' : ''} ${settings.bigger_hints_font ? 'bigger-hints' : ''} ${settings.thicker_walls ? 'thicker-walls' : ''} ${!settings.show_bubbles ? 'no-bubbles' : ''} ${settings.skip_animations ? 'skip-animations' : ''}`}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
       onContextMenu={(e) => e.preventDefault()}
@@ -1472,7 +1554,7 @@ export function App() {
               return (
                 <div class="grid-hints-card" data-testid="grid-hints-card">
                   {/* Timer for Daily Mode */}
-                  {isDailyMode && (
+                  {isDailyMode && settings.show_timer && (
                     <div
                       data-testid="hint-timer"
                       class="hint-stat-card hint-stat-normal hint-stat-timer"
@@ -1650,6 +1732,10 @@ export function App() {
               <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
                 <Grid
                   gridData={gridData}
+                  settings={settings}
+                  hoveredCell={hoveredCell}
+                  selectedTool={selectedTool}
+                  previewMap={previewMap}
                   blinkingCells={blinkingCells}
                   onCellPointerDown={handleCellDown}
                   onCellPointerEnter={handleCellEnter}
@@ -1728,9 +1814,8 @@ export function App() {
           onClick={() => setShowSettings(false)}
         >
           <div
-            class="shortcuts-dialog"
+            class="shortcuts-dialog settings-dialog"
             onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '440px' }}
           >
             <div class="shortcuts-header">
               <div class="flex items-center gap-2">
@@ -1748,23 +1833,289 @@ export function App() {
               </button>
             </div>
 
-            <div class="shortcuts-content">
-              <div class="setting-row">
-                <div class="setting-text">
-                  <span class="setting-title">Auto-Flood Air (✕)</span>
-                  <span class="setting-desc">
-                    Automatically mark remaining row/column cells with Air when count is satisfied
-                  </span>
+            <div class="settings-content">
+              {/* DISPLAY SECTION */}
+              <div class="settings-section">
+                <h3 class="settings-section-title">
+                  <span>🎨</span> Display
+                </h3>
+
+                {/* Dark Mode */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Dark mode</span>
+                    <span class="setting-desc">Toggle between dark and light themes</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-dark-mode"
+                      checked={settings.dark_mode}
+                      onChange={(e) => updateSetting('dark_mode', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
                 </div>
-                <label class="setting-toggle">
-                  <input
-                    type="checkbox"
-                    data-testid="auto-flood-air"
-                    checked={autoFloodAir}
-                    onChange={(e) => setAutoFloodAir(e.currentTarget.checked)}
-                    class="checkbox-input"
-                  />
-                </label>
+
+                {/* Show Bubbles */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Show bubbles in background</span>
+                    <span class="setting-desc">Render bubble gradients on water surfaces</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-show-bubbles"
+                      checked={settings.show_bubbles}
+                      onChange={(e) => updateSetting('show_bubbles', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* GAMEPLAY SECTION */}
+              <div class="settings-section">
+                <h3 class="settings-section-title">
+                  <span>🎮</span> Gameplay
+                </h3>
+
+                {/* Incomplete line info */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Incomplete line info</span>
+                    <span class="setting-desc">Display helper hints on opposite sides of the grid</span>
+                  </div>
+                  <select
+                    data-testid="setting-line-info"
+                    value={settings.line_info}
+                    onChange={(e) => updateSetting('line_info', e.currentTarget.value as any)}
+                    class="setting-select"
+                  >
+                    <option value="none">None</option>
+                    <option value="missing">Missing value</option>
+                    <option value="current">Current value</option>
+                  </select>
+                </div>
+
+                {/* Highlight finished rows/columns */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Highlight finished rows/columns</span>
+                    <span class="setting-desc">Highlight satisfied row and column clue numbers</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-highlight-hints"
+                      checked={settings.highlight_finished_row_col}
+                      onChange={(e) => updateSetting('highlight_finished_row_col', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Highlight hovered line */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Highlight hovered line</span>
+                    <span class="setting-desc">Highlight the active row and column under cursor</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-highlight-grid"
+                      checked={settings.highlight_grid}
+                      onChange={(e) => updateSetting('highlight_grid', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Show water preview */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Show water preview</span>
+                    <span class="setting-desc">Show a ghost preview of the tool on hover</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-show-preview"
+                      checked={settings.show_grid_preview}
+                      onChange={(e) => updateSetting('show_grid_preview', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Hide simple "?" hints */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Hide simple "?" hints</span>
+                    <span class="setting-desc">Hide clue numbers that are unknown ("?")</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-hide-unknown"
+                      checked={settings.hide_unknown}
+                      onChange={(e) => updateSetting('hide_unknown', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Color "?" hints */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Color "?" hints</span>
+                    <span class="setting-desc">Color unknown clues when in progress</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-progress-unknown"
+                      checked={settings.progress_on_unknown}
+                      onChange={(e) => updateSetting('progress_on_unknown', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Show timer */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Show timer</span>
+                    <span class="setting-desc">Display solving time in stats header</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-show-timer"
+                      checked={settings.show_timer}
+                      onChange={(e) => updateSetting('show_timer', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Skip animations */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Skip animations</span>
+                    <span class="setting-desc">Disable win and popup animations for instant feedback</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-skip-anims"
+                      checked={settings.skip_animations}
+                      onChange={(e) => updateSetting('skip_animations', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* ACCESSIBILITY SECTION */}
+              <div class="settings-section">
+                <h3 class="settings-section-title">
+                  <span>👓</span> Accessibility
+                </h3>
+
+                {/* Increase hints font size */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Increase hints' font size</span>
+                    <span class="setting-desc">Enlarge row, column, and aquarium clue text</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-bigger-hints"
+                      checked={settings.bigger_hints_font}
+                      onChange={(e) => updateSetting('bigger_hints_font', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Thicker walls */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Thicker walls</span>
+                    <span class="setting-desc">Increase borders between aquariums for contrast</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-thicker-walls"
+                      checked={settings.thicker_walls}
+                      onChange={(e) => updateSetting('thicker_walls', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* CONTROLS SECTION */}
+              <div class="settings-section">
+                <h3 class="settings-section-title">
+                  <span>🕹️</span> Controls
+                </h3>
+
+                {/* Fill with drag */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Fill with drag</span>
+                    <span class="setting-desc">Drag pointer across multiple cells to place tiles</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-drag-content"
+                      checked={settings.drag_content}
+                      onChange={(e) => updateSetting('drag_content', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Invert mouse buttons */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Invert mouse buttons</span>
+                    <span class="setting-desc">Swap primary (Left) and secondary (Right) buttons</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="setting-invert-mouse"
+                      checked={settings.invert_mouse}
+                      onChange={(e) => updateSetting('invert_mouse', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
+
+                {/* Auto-flood air */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">Auto-flood air</span>
+                    <span class="setting-desc">Automatically mark empty cells as air when lines are full</span>
+                  </div>
+                  <label class="setting-toggle">
+                    <input
+                      type="checkbox"
+                      data-testid="auto-flood-air"
+                      checked={settings.auto_flood_air}
+                      onChange={(e) => updateSetting('auto_flood_air', e.currentTarget.checked)}
+                      class="checkbox-input"
+                    />
+                  </label>
+                </div>
               </div>
             </div>
           </div>
