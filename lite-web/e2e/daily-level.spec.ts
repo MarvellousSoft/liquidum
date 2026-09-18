@@ -9,8 +9,8 @@ test.describe('Daily Level E2E Tests', () => {
   test('loads daily level by default when visiting root url without appending date', async ({ page }) => {
     await page.goto('/');
 
-    // Daily banner should be visible
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    // Level name label below grid should be visible
+    await expect(page.locator('[data-testid="level-name-label"]')).toBeVisible();
     await expect(page.locator('[data-testid="btn-daily-mode"]')).toHaveClass(/level-btn-daily-active/);
 
     // No next/prev buttons should exist
@@ -30,14 +30,17 @@ test.describe('Daily Level E2E Tests', () => {
   test('loads daily level via URL param ?daily=2024-01-07 for past date', async ({ page }) => {
     await page.goto('/?daily=2024-01-07');
 
-    // Daily banner should be visible
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    // Level name label below grid should be visible and show flavor name
+    const levelName = page.locator('[data-testid="level-name-label"]');
+    await expect(levelName).toBeVisible();
+    await expect(levelName).toContainText('Aquarium Sunday');
+    await expect(levelName).toContainText('🐟');
 
-    // Weekday info should show Sunday / Aquarium Sunday
-    const dailyInfo = page.locator('[data-testid="daily-info"]');
-    await expect(dailyInfo).toContainText('Aquarium Sunday');
-    await expect(dailyInfo).toContainText('2024-01-07');
-    await expect(dailyInfo).toContainText('🐟');
+    // Start overlay also shows the daily flavor name and description
+    const overlay = page.locator('[data-testid="start-puzzle-overlay"]');
+    await expect(overlay).toBeVisible();
+    await expect(overlay).toContainText('Aquarium Sunday');
+    await expect(overlay).toContainText('🐟');
 
     // Daily button in level picker should have active style
     const dailyBtn = page.locator('[data-testid="btn-daily-mode"]');
@@ -50,11 +53,11 @@ test.describe('Daily Level E2E Tests', () => {
   test('disallows future dates via URL and clamps to today', async ({ page }) => {
     await page.goto('/?daily=2099-01-01');
 
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    await expect(page.locator('[data-testid="level-name-label"]')).toBeVisible();
 
     // Info should NOT show 2099
-    const dailyInfo = page.locator('[data-testid="daily-info"]');
-    await expect(dailyInfo).not.toContainText('2099');
+    const levelName = page.locator('[data-testid="level-name-label"]');
+    await expect(levelName).not.toContainText('2099');
 
     // URL should not retain the future date
     expect(page.url()).not.toContain('2099-01-01');
@@ -76,13 +79,13 @@ test.describe('Daily Level E2E Tests', () => {
 
     // Modal closes and Level 01/01 is active
     await expect(page.locator('[data-testid="levels-modal"]')).toHaveCount(0);
-    await expect(page.locator('[data-testid="daily-banner"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="level-name-label"]')).toContainText('Level 01/01');
     await expect(page.locator('[data-testid="btn-daily-mode"]')).not.toHaveClass(/level-btn-daily-active/);
     await expect(page.locator('[data-testid="btn-open-levels-modal"]')).toContainText('Level 01/01');
 
     // Switch back to Daily Level
     await page.click('[data-testid="btn-daily-mode"]');
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    await expect(page.locator('[data-testid="level-name-label"]')).toBeVisible();
     await expect(page.locator('[data-testid="btn-daily-mode"]')).toHaveClass(/level-btn-daily-active/);
   });
 
@@ -108,7 +111,7 @@ test.describe('Daily Level E2E Tests', () => {
 
     // Cell should NOT be reset
     await expect(page.locator('[data-testid="cell-0-0"]')).toHaveAttribute('data-content-left', 'air');
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    await expect(page.locator('[data-testid="level-name-label"]')).toBeVisible();
   });
 
   test('persists level progress and timer across reloads using UserLevelSaveData', async ({ page }) => {
@@ -178,8 +181,7 @@ test.describe('Daily Level E2E Tests', () => {
     await page.goto('/?level=01/01');
 
     // Should load test level 01/01
-    await expect(page.locator('[data-testid="btn-open-levels-modal"]')).toContainText('Level 01/01');
-    await expect(page.locator('[data-testid="daily-banner"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="level-name-label"]')).toContainText('Level 01/01');
 
     // On test levels, leaderboard button should be removed
     await expect(page.locator('[data-testid="btn-leaderboard"]')).toHaveCount(0);
@@ -274,43 +276,47 @@ test.describe('Daily Level E2E Tests', () => {
     expect(clipboardText).toContain('linktr.ee/liquidum');
   });
 
-  test('verifies page layout order: logo, selector, daily description, tools, grid, and NxM size string', async ({ page }) => {
+  test('verifies page layout order: logo, selector, tools, grid, and level name below grid', async ({ page }) => {
     await page.goto('/?daily=2024-01-07');
 
     const logo = page.locator('.game-title');
     const selector = page.locator('.level-picker');
-    const description = page.locator('[data-testid="daily-banner"]');
     const tools = page.locator('.controls-toolbar');
     const gridHints = page.locator('[data-testid="grid-hints-card"]');
     const sizeLabel = page.locator('[data-testid="grid-size-label"]');
+    const levelName = page.locator('[data-testid="level-name-label"]');
 
     await expect(logo).toBeVisible();
     await expect(selector).toBeVisible();
-    await expect(description).toBeVisible();
     await expect(tools).toBeVisible();
     await expect(gridHints).toBeVisible();
     await expect(sizeLabel).toBeVisible();
+    await expect(levelName).toBeVisible();
 
-    // Verify NxM string format (e.g. 6x6)
+    // Verify NxM string format (e.g. 5x4)
     await expect(sizeLabel).toHaveText(/^\d+x\d+$/);
     const sizeText = await sizeLabel.textContent();
     expect(sizeText).toBe('5x4');
 
-    // Verify vertical layout ordering: Logo -> Selector -> Description -> Tools -> Grid
+    // Level name displays flavor name below grid against ambient background
+    await expect(levelName).toContainText('Aquarium Sunday');
+
+    // Verify vertical layout ordering: Logo -> Selector -> Tools -> Grid
     const logoBox = await logo.boundingBox();
     const selectorBox = await selector.boundingBox();
-    const descBox = await description.boundingBox();
     const toolsBox = await tools.boundingBox();
     const gridBox = await gridHints.boundingBox();
     const sizeBox = await sizeLabel.boundingBox();
+    const levelNameBox = await levelName.boundingBox();
 
     expect(logoBox!.y).toBeLessThan(selectorBox!.y);
-    expect(selectorBox!.y).toBeLessThan(descBox!.y);
-    expect(descBox!.y).toBeLessThan(toolsBox!.y);
+    expect(selectorBox!.y).toBeLessThan(toolsBox!.y);
     expect(toolsBox!.y).toBeLessThan(gridBox!.y);
 
     // Size label should be at bottom of grid
     expect(sizeBox!.y).toBeGreaterThan(gridBox!.y);
+    // Level name should be below the grid
+    expect(levelNameBox!.y).toBeGreaterThan(gridBox!.y);
   });
 
 });

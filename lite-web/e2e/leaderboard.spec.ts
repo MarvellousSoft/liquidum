@@ -467,7 +467,7 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
 
     // Switch back to daily level
     await page.click('[data-testid="btn-daily-mode"]');
-    await expect(page.locator('[data-testid="daily-banner"]')).toBeVisible();
+    await expect(page.locator('[data-testid="level-name-label"]')).toBeVisible();
     // Daily mode has desktop leaderboard (on desktop viewport)
     await expect(page.locator('[data-testid="desktop-leaderboard"]')).toBeVisible();
   });

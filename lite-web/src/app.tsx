@@ -1259,29 +1259,7 @@ export function App() {
         </div>
       )}
 
-      {/* 3. Daily level description */}
-      {isDailyMode && dailyMeta && (
-        <div class="daily-banner" data-testid="daily-banner">
-          <div class="daily-info" data-testid="daily-info">
-            <span class="daily-emoji">{dailyMeta.emoji}</span>
-            <span class="font-bold text-base text-[var(--game-mint)]">{dailyMeta.flavorName}</span>
-            <span class="opacity-80 text-sm">({dailyMeta.date})</span>
-            <span class="text-xs opacity-75">— {dailyMeta.description}</span>
-          </div>
-          {dailyDate === get_today_str() && (
-            <div
-              data-testid="daily-time-left-banner"
-              class="ml-auto hidden sm:flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono"
-              title="Time left today to solve the daily level"
-            >
-              <span>⏳</span>
-              <span data-testid="time-left-text">{formatTimeLeft(timeLeftSeconds)}</span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 4. Tools */}
+      {/* 3. Tools */}
       <div class="controls-toolbar">
         <label class="toolbar-toggle">
           <input
@@ -1704,6 +1682,11 @@ export function App() {
                   onCellPointerMove={handleCellMove}
                   onCellPointerLeave={handleCellLeave}
                 />
+              </div>
+
+              {/* Level name below the grid */}
+              <div data-testid="level-name-label" class="level-name-label">
+                {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}` : '') : currentLevelKey}
               </div>
             </div>
           </div>
