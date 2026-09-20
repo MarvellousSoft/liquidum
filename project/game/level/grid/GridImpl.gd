@@ -1097,6 +1097,71 @@ func _parse_extra_data(line: String) -> void:
 		"+aqua":
 			var sv := kv[1].split(":", false, 2)
 			_grid_hints.expected_aquariums[float(sv[0])] = int(sv[1])
+		"+variant", "+variants":
+			for v_str in kv[1].split(","):
+				match v_str.strip_edges().to_lower():
+					"liar":
+						if not _rule_variants.has(GridModel.RuleVariant.Liar):
+							_rule_variants.append(GridModel.RuleVariant.Liar)
+					"snake":
+						if not _rule_variants.has(GridModel.RuleVariant.Snake):
+							_rule_variants.append(GridModel.RuleVariant.Snake)
+					"sudoku":
+						if not _rule_variants.has(GridModel.RuleVariant.Sudoku):
+							_rule_variants.append(GridModel.RuleVariant.Sudoku)
+					"symbols":
+						if not _rule_variants.has(GridModel.RuleVariant.Symbols):
+							_rule_variants.append(GridModel.RuleVariant.Symbols)
+					_:
+						push_error("Unknown variant %s" % v_str)
+		"+row_alt", "+row_alt_text":
+			var sv := kv[1].split(":", false, 2)
+			var i := int(sv[0])
+			_row_hints[i].water_alt_text = sv[1]
+			_row_hints[i].water_count = -1.0
+		"+col_alt", "+col_alt_text":
+			var sv := kv[1].split(":", false, 2)
+			var j := int(sv[0])
+			_col_hints[j].water_alt_text = sv[1]
+			_col_hints[j].water_count = -1.0
+		"+row_boat_alt":
+			var sv := kv[1].split(":", false, 2)
+			var i := int(sv[0])
+			_row_hints[i].boat_alt_text = sv[1]
+			_row_hints[i].boat_count = -1
+		"+col_boat_alt":
+			var sv := kv[1].split(":", false, 2)
+			var j := int(sv[0])
+			_col_hints[j].boat_alt_text = sv[1]
+			_col_hints[j].boat_count = -1
+		"+cell_alt":
+			var sv := kv[1].split(":", false, 3)
+			var i := int(sv[0])
+			var j := int(sv[1])
+			if cell_hints[i][j] == null:
+				cell_hints[i][j] = CellHints.new()
+				cell_hints[i][j].adj_water_count = -1.0
+				cell_hints[i][j].adj_water_count_type = E.HintType.Hidden
+			cell_hints[i][j].water_alt_text = sv[2]
+		"+alt", "+alt_text":
+			var sv := kv[1].split(":", false, 3)
+			match sv[0].to_lower():
+				"row":
+					var i := int(sv[1])
+					_row_hints[i].water_alt_text = sv[2]
+					_row_hints[i].water_count = -1.0
+				"col":
+					var j := int(sv[1])
+					_col_hints[j].water_alt_text = sv[2]
+					_col_hints[j].water_count = -1.0
+				"cell":
+					var i := int(sv[1])
+					var j := int(sv[2])
+					if cell_hints[i][j] == null:
+						cell_hints[i][j] = CellHints.new()
+						cell_hints[i][j].adj_water_count = -1.0
+						cell_hints[i][j].adj_water_count_type = E.HintType.Hidden
+					cell_hints[i][j].water_alt_text = sv[3]
 		"+cellhint":
 			var sv := kv[1].split(":", false, 3)
 			var c := CellHints.new()
@@ -1125,18 +1190,30 @@ func load_from_str(s: String, load_mode := GridModel.LoadMode.Solution) -> void:
 	var hh := int(lines[hb][hb] == 'h')
 	if hb == 1 and not content_only:
 		for i in n:
-			_row_hints[i].boat_count = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
-			_row_hints[i].boat_count_type = _validate_hint_type(lines[2 * i + 2 + hh][0])
+			if _row_hints[i].boat_alt_text == "":
+				_row_hints[i].boat_count = _validate_hint(lines[2 * i + 1 + hh][0], lines[2 * i + 2 + hh][0])
+				_row_hints[i].boat_count_type = _validate_hint_type(lines[2 * i + 2 + hh][0])
+			else:
+				_row_hints[i].boat_count = -1
 		for j in m:
-			_col_hints[j].boat_count = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
-			_col_hints[j].boat_count_type = _validate_hint_type(lines[0][2 * j + 2 + hh])
+			if _col_hints[j].boat_alt_text == "":
+				_col_hints[j].boat_count = _validate_hint(lines[0][2 * j + 1 + hh], lines[0][2 * j + 2 + hh])
+				_col_hints[j].boat_count_type = _validate_hint_type(lines[0][2 * j + 2 + hh])
+			else:
+				_col_hints[j].boat_count = -1
 	if hh == 1 and not content_only:
 		for i in n:
-			_row_hints[i].water_count = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
-			_row_hints[i].water_count_type = _validate_hint_type(lines[2 * i + 2 + hb][hb])
+			if _row_hints[i].water_alt_text == "":
+				_row_hints[i].water_count = _validate_hint_float(lines[2 * i + 1 + hb][hb], lines[2 * i + 2 + hb][hb])
+				_row_hints[i].water_count_type = _validate_hint_type(lines[2 * i + 2 + hb][hb])
+			else:
+				_row_hints[i].water_count = -1.0
 		for j in m:
-			_col_hints[j].water_count = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
-			_col_hints[j].water_count_type = _validate_hint_type(lines[hb][2 * j + 2 + hb])
+			if _col_hints[j].water_alt_text == "":
+				_col_hints[j].water_count = _validate_hint_float(lines[hb][2 * j + 1 + hb], lines[hb][2 * j + 2 + hb])
+				_col_hints[j].water_count_type = _validate_hint_type(lines[hb][2 * j + 2 + hb])
+			else:
+				_col_hints[j].water_count = -1.0
 	var h := hb + hh
 	for i in n:
 		for j in m:
@@ -1227,6 +1304,18 @@ func to_str() -> String:
 		builder.append("+boats=%d\n" % _grid_hints.total_boats)
 	for sz in _grid_hints.expected_aquariums:
 		builder.append("+aqua=%.1f:%d\n" % [sz, _grid_hints.expected_aquariums[sz]])
+	for v in _rule_variants:
+		builder.append("+variant=%s\n" % GridModel.RuleVariant.keys()[v].to_lower())
+	for i in n:
+		if _row_hints[i].water_alt_text != "":
+			builder.append("+row_alt=%d:%s\n" % [i, _row_hints[i].water_alt_text])
+		if _row_hints[i].boat_alt_text != "":
+			builder.append("+row_boat_alt=%d:%s\n" % [i, _row_hints[i].boat_alt_text])
+	for j in m:
+		if _col_hints[j].water_alt_text != "":
+			builder.append("+col_alt=%d:%s\n" % [j, _col_hints[j].water_alt_text])
+		if _col_hints[j].boat_alt_text != "":
+			builder.append("+col_boat_alt=%d:%s\n" % [j, _col_hints[j].boat_alt_text])
 	for i in n:
 		for j in m:
 			var h := get_cell(i, j).hints()
@@ -1244,6 +1333,8 @@ func to_str() -> String:
 					i, j,
 					op, ("%.1f" % h.adj_water_count) if h.adj_water_count != -1 else "?", cl
 				])
+				if h.water_alt_text != "":
+					builder.append("+cell_alt=%d:%d:%s\n" % [i, j, h.water_alt_text])
 	var boat_hints := _row_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden) \
 		or _col_hints.any(func(h): return h.boat_count != -1 or h.boat_count_type != E.HintType.Hidden)
 	var hints := _row_hints.any(func(h): return h.water_count != -1. or h.water_count_type != E.HintType.Hidden) \
@@ -2127,10 +2218,14 @@ func _line_hint_eq(a: LineHint, b: LineHint) -> bool:
 		return false
 	if a.water_count != b.water_count or a.water_count_type != b.water_count_type:
 		return false
+	if a.water_alt_text != b.water_alt_text or a.boat_alt_text != b.boat_alt_text:
+		return false
 	return true
 
 func equal(other: GridImpl) -> bool:
 	if n != other.n or m != other.m:
+		return false
+	if _rule_variants != other._rule_variants:
 		return false
 	for i in n:
 		for j in m:

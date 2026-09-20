@@ -47,6 +47,22 @@ class Strategy:
 		return GridModel.must_be_implemented()
 	func description() -> String:
 		return "No description"
+	func _water_min(hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+		if grid.rule_variants().has(GridModel.RuleVariant.Liar) and hint.water_alt_text.is_valid_float():
+			var val := float(hint.water_alt_text) - 1.0
+			if val < cur_value:
+				return val + 2.0
+			else:
+				return val
+		return hint.water_count
+	func _water_max(hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+		if grid.rule_variants().has(GridModel.RuleVariant.Liar) and hint.water_alt_text.is_valid_float():
+			var val := float(hint.water_alt_text) + 1.0
+			if val > max_value:
+				return val - 2.0
+			else:
+				return val
+		return hint.water_count
 
 
 class FullPropagateNoWater extends Strategy:
@@ -101,12 +117,12 @@ class RowStrategy extends Strategy:
 	# are in the same aquarium. Each of the triangles in the component MUST be
 	# flooded all at once with water or nowater. Each distinct componene IS completely
 	# independent.
-	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left: float, _nothing_left: float) -> bool:
+	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left_min: float, _water_left_max: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(i: int) -> bool:
 		var hint := SolverModel._row_hint(grid, i)
-		var water_hint := hint.water_count
-		if water_hint < 0:
+
+		if hint.water_count < 0 and hint.water_alt_text == "":
 			return false
 		var dfs := RowDfs.new(i, grid)
 		var last_seen := grid.last_seen
@@ -123,10 +139,14 @@ class RowStrategy extends Strategy:
 		var nothing_left := 0.
 		for j in grid.cols():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := water_hint - grid.count_water_row(i)
-		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
+		var waters := grid.count_water_row(i)
+		var water_min := _water_min(hint, waters, waters + nothing_left)
+		var water_max := _water_max(hint, waters, waters + nothing_left)
+		var water_left_min := water_min - waters
+		var water_left_max := water_max - waters
+		if nothing_left == 0 or comps.size() == 0 or water_left_min > nothing_left or water_left_max < 0:
 			return false
-		return self._apply_strategy(i, comps, water_left, nothing_left)
+		return self._apply_strategy(i, comps, max(0.0, water_left_min), min(nothing_left, water_left_max), nothing_left)
 	func apply_any() -> bool:
 		var any := false
 		for i in grid.rows():
@@ -168,12 +188,11 @@ class ColumnStrategy extends Strategy:
 	# values is an array of component, that is, all triangles
 	# are in the same aquarium. Each of the triangles in the component MUST be
 	# flooded in order water or nowater. Each distinct componene MAY BE dependent.
-	func _apply_strategy(_values: Array[ColComponent], _water_left: float, _nothing_left: float) -> bool:
+	func _apply_strategy(_values: Array[ColComponent], _water_left_min: float, _water_left_max: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
 	func _apply(j: int) -> bool:
 		var hint := SolverModel._col_hint(grid, j)
-		var water_hint := hint.water_count
-		if water_hint < 0:
+		if hint.water_count < 0 and hint.water_alt_text == "":
 			return false
 		var dfs := ColDfs.new(j, grid)
 		var last_seen := grid.last_seen
@@ -193,10 +212,14 @@ class ColumnStrategy extends Strategy:
 		var nothing_left := 0.
 		for i in grid.rows():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
-		var water_left := water_hint - grid.count_water_col(j)
-		if nothing_left == 0 or comps.size() == 0 or water_left > nothing_left or water_left < 0:
+		var waters := grid.count_water_col(j)
+		var water_min := _water_min(hint, waters, waters + nothing_left)
+		var water_max := _water_max(hint, waters, waters + nothing_left)
+		var water_left_min := water_min - waters
+		var water_left_max := water_max - waters
+		if nothing_left == 0 or comps.size() == 0 or water_left_min > nothing_left or water_left_max < 0:
 			return false
-		return self._apply_strategy(comps, water_left, nothing_left)
+		return self._apply_strategy(comps, max(0.0, water_left_min), min(nothing_left, water_left_max), nothing_left)
 	func apply_any() -> bool:
 		var any := false
 		for j in grid.cols():
@@ -266,14 +289,14 @@ class BasicRowStrategy extends RowStrategy:
 		- Put nowater in components that are too big
 		- Put water everywhere if there's no more space for nowater
 		"""
-	func _apply_strategy(_i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
-		if water_left == nothing_left:
+	func _apply_strategy(_i: int, values: Array[RowComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
+		if water_left_min >= nothing_left:
 			for comp in values:
 				comp.put_water()
 			return true
 		var any := false
 		for comp in values:
-			if comp.size > water_left:
+			if comp.size > water_left_max:
 				comp.put_nowater()
 				any = true
 		return any
@@ -281,10 +304,10 @@ class BasicRowStrategy extends RowStrategy:
 class MediumRowStrategy extends RowStrategy:
 	func description() -> String:
 		return "If a component is so big it MUST be filled, fill it."
-	func _apply_strategy(_i: int, values: Array[RowComponent], water_left: float, nothing_left: float) -> bool:
+	func _apply_strategy(_i: int, values: Array[RowComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
-			if comp.size <= water_left and (nothing_left - comp.size) < water_left:
+			if comp.size <= water_left_max and (nothing_left - comp.size) < water_left_min:
 				comp.put_water()
 				any = true
 		return any
@@ -292,7 +315,11 @@ class MediumRowStrategy extends RowStrategy:
 class AdvancedRowStrategy extends RowStrategy:
 	func description() -> String:
 		return "Use subset sum to tell if some components MUST or CANT be present in the solution"
-	func _apply_strategy(_i:int, values: Array[RowComponent], water_left: float, _nothing_left: float) -> bool:
+	func _apply_strategy(_i:int, values: Array[RowComponent], water_left_min: float, water_left_max: float, _nothing_left: float) -> bool:
+		# DP works only for exact values
+		if water_left_min != water_left_max:
+			return false
+		var water_left := water_left_min
 		var numbers: Array[float] = []
 		var size_to_cmp: Dictionary = {}
 		for c in values:
@@ -317,6 +344,42 @@ class AdvancedRowStrategy extends RowStrategy:
 				any = true
 		return any
 
+class LiarRowStrategy extends RowStrategy:
+	func description() -> String:
+		return "Use subset sum to tell if some components MUST or CANT be present in the solution in Liar variant"
+	func apply_any() -> bool:
+		if grid.rule_variants().has(GridModel.RuleVariant.Liar):
+			return super.apply_any()
+		return false
+	func _apply_strategy(i:int, values: Array[RowComponent], water_left_min: float, water_left_max: float, _nothing_left: float) -> bool:
+		# Basically the same as AdvancedRowStrategy but we only do something if it must be done on
+		# both possibilities
+		if water_left_max != water_left_min + 2 or grid.row_hints()[i].water_alt_text == "":
+			return false
+		var numbers: Array[float] = []
+		var size_to_cmp: Dictionary = {}
+		for c in values:
+			numbers.append(c.size)
+			var cmps = size_to_cmp.get(c.size, [])
+			cmps.append(c)
+			size_to_cmp[c.size] = cmps
+		var any := false
+		for size in size_to_cmp:
+			var new = numbers.duplicate()
+			# Remove only one size
+			new.erase(size)
+			# If removing a single size made it impossible on both possibilities, all MUST be used
+			if not SubsetSum.can_be_solved(water_left_min, new) and not SubsetSum.can_be_solved(water_left_max, new):
+				for cmp in size_to_cmp[size]:
+					cmp.put_water()
+				any = true
+			# If using a single size made it impossible on both possibilities, all CANT be used
+			elif not SubsetSum.can_be_solved(water_left_min - size, new) and not SubsetSum.can_be_solved(water_left_max - size, new):
+				for cmp in size_to_cmp[size]:
+					cmp.put_nowater()
+				any = true
+		return any
+
 
 class BasicColStrategy extends ColumnStrategy:
 	func description() -> String:
@@ -324,30 +387,32 @@ class BasicColStrategy extends ColumnStrategy:
 		- Put nowater partially in components that are bigger than the hint
 		- Put water everywhere if there's no more space for non-water
 		"""
-	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
-		if water_left == nothing_left:
+	func _apply_strategy(values: Array[ColComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
+		if water_left_min >= nothing_left:
 			for comp in values:
 				comp.put_water_on(grid, comp.size)
 			return true
 		var any := false
 		for comp in values:
-			if comp.size > water_left:
-				comp.put_nowater_on(grid, comp.size - water_left)
+			if comp.size > water_left_max:
+				comp.put_nowater_on(grid, comp.size - water_left_max)
 				any = true
 		return any
 
 class MediumColStrategy extends ColumnStrategy:
 	func description() -> String:
 		return "If a component is so big it MUST be partially filled, fill it."
-	func _apply_strategy(values: Array[ColComponent], water_left: float, nothing_left: float) -> bool:
+	func _apply_strategy(values: Array[ColComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
-			if nothing_left - comp.size < water_left:
-				comp.put_water_on(grid, water_left - (nothing_left - comp.size))
+			if nothing_left - comp.size < water_left_min:
+				comp.put_water_on(grid, water_left_min - (nothing_left - comp.size))
 				any = true
 		return any
 
 class AdvancedColStrategy extends ColumnStrategy:
+	func description() -> String:
+		return "- If there's a single empty half-cell in the column, determine if it's water or nowater."
 	func _apply(j: int) -> bool:
 		var hint := SolverModel._col_hint(grid, j).water_count
 		if hint <= 0:
@@ -373,8 +438,6 @@ class AdvancedColStrategy extends ColumnStrategy:
 			else:
 				return grid.get_cell(single_i, j).put_nowater(single_corner, false, true)
 		return false
-	func description() -> String:
-		return "- If there's a single empty half-cell in the column, determine if it's water or nowater."
 
 
 static func _maybe_extra_boat_col(grid: GridImpl, j: int) -> bool:
@@ -1906,6 +1969,7 @@ static var STRATEGY_LIST := {
 	TwoCellAdvanced = func(grid): return TwoCellHints.new(grid, true),
 	BasicTogetherCellHints = func(grid): return BasicTogetherCellHintsStrategy.new(grid),
 	TogetherSeparateCellHints = func(grid): return TogetherSeparateCellHintsStrategy.new(grid),
+	LiarRowStrategy = func(grid): return LiarRowStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

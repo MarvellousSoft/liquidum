@@ -11,7 +11,9 @@ class LineHint:
 	var water_count: float:
 		get:
 			return -1.0 if water_alt_text != "" else water_count
-	var water_count_type: E.HintType
+	var water_count_type: E.HintType:
+		get:
+			return E.HintType.Hidden if water_alt_text != "" else water_count_type
 	var water_alt_text: String
 	var boat_count: int
 	# On columns this must always be Any

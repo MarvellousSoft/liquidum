@@ -35,7 +35,26 @@ enum Flavor {
 	CellHints2,
 	# Cellhints, and everything else.
 	CellHints3,
+	# Liar variant, simple rules
+	Liar,
 }
+
+static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
+	var up_pct = rng.randf_range(0.25, 0.75)
+	for i in grid.rows():
+		var w := grid.count_water_row(i)
+		var d := 1 if w <= grid.cols() - 2 and (w < 2 or rng.randf() < up_pct) else -1
+		grid.row_hints()[i].water_alt_text = str(w + d)
+	for j in grid.cols():
+		var w := grid.count_water_col(j)
+		var d := 1 if w <= grid.rows() - 2 and (w < 2 or rng.randf() < up_pct) else -1
+		grid.col_hints()[j].water_alt_text = str(grid.count_water_col(j) + d)
+	if not grid.rule_variants().has(GridModel.RuleVariant.Liar):
+		grid.rule_variants().append(GridModel.RuleVariant.Liar)
+
+static func _liar_size_gen(rng: RandomNumberGenerator) -> Vector2i:
+	return Vector2i(rng.randi_range(5, 8), rng.randi_range(5, 8))
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
@@ -248,6 +267,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate(rng, 5, 6, RandomFlavors._cellhints_together, RandomFlavors._cellhints2_builder, strategies, [], false)
 		Flavor.CellHints3:
 			return await l_gen.generate(rng, 5, 5, RandomFlavors._everything, _builder(b.with_cell_hints(0.3).with_diags().with_boats()), strategies, [], false)
+		Flavor.Liar:
+			return await l_gen.generate_with_size(rng, RandomFlavors._liar_size_gen, RandomFlavors._liar_hints, _builder(b), strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null

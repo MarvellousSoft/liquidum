@@ -1524,3 +1524,83 @@ func test_steam_details_encode_decode() -> void:
 		else:
 			assert(new_det.flair.id == f.id)
 			assert(new_det.flair.extra_flairs == f.extra_flairs)
+
+func test_liar_solver() -> void:
+	# BasicRow: component too large for max water
+	assert_apply_strategies("""
++variant=liar
++row_alt=0:1
+..XXXXww
+L.L._.L.
+""", "", ["BasicRow"])
+
+	# BasicRow: min water covers all remaining space
+	assert_apply_strategies("""
++variant=liar
++row_alt=0:3
+WWWWxxxx
+L._.L._.
+""", "", ["BasicRow"])
+
+	# MediumRow: component must be filled to reach min water
+	assert_apply_strategies("""
++variant=liar
++row_alt=0:3
+WWWWWW..
+L._._.L.
+""", "", ["MediumRow"])
+
+	# BasicCol: component too large for max water
+	assert_apply_strategies("""
++variant=liar
++col_alt=0:1
+XX
+|.
+..
+|.
+..
+L.
+""", "", ["BasicCol"])
+
+	# BasicCol: min water covers all remaining space
+	assert_apply_strategies("""
++variant=liar
++col_alt=0:3
+xx
+|.
+xx
+|.
+WW
+|.
+WW
+L.
+""", "", ["BasicCol"])
+
+	# MediumCol: component must be partially filled to reach min water
+	assert_apply_strategies("""
++variant=liar
++col_alt=0:3
+xx
+|.
+..
+|.
+WW
+L.
+..
+L.
+""", "", ["MediumCol"])
+
+	# LiarRowStrategy: Use subsetsum
+	assert_apply_strategies("""
++variant=liar
++row_alt=0:4
+WW........
+L.L._.L._.
+""", "", ["LiarRowStrategy"])
+	assert_apply_strategies("""
++variant=liar
++row_alt=0:3
+XX........
+L.L._.L._.
+""", "", ["LiarRowStrategy"])
+

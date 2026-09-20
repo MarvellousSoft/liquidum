@@ -171,8 +171,9 @@ func play_random_bgm(start_from_beginning := false):
 #SFX methods
 
 func play_sfx(sfx_name: String) -> AudioStreamPlayer:
-	if not SFXS.has(sfx_name):
+	if not SFXS or not SFXS.has(sfx_name):
 		push_error("Not a valid sfx name: " + sfx_name)
+		return
 	
 	
 	#Check if sfxs was just played, don't play it if thats the case
