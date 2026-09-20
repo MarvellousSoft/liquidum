@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect, useRef, useMemo } from 'preact/hooks';
 import { Grid } from './components/Grid';
+import { DrawingCanvas } from './components/DrawingCanvas';
 import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums, levelHasBoats } from './model/GridData';
 import type { GridModelData } from './model/GridData';
 
@@ -137,6 +138,24 @@ export function App() {
   const showAccountModalRef = useRef(showAccountModal);
   showAccountModalRef.current = showAccountModal;
   const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
+  const showHelpModalRef = useRef(showHelpModal);
+  showHelpModalRef.current = showHelpModal;
+
+  const DRAW_COLORS = ['#ff6a6a', '#3b82f6', '#facc15', '#3adc6b'];
+  const [isDrawingMode, setIsDrawingMode] = useState<boolean>(false);
+  const isDrawingModeRef = useRef(isDrawingMode);
+  isDrawingModeRef.current = isDrawingMode;
+
+  const [isEraserMode, setIsEraserMode] = useState<boolean>(false);
+  const isEraserModeRef = useRef(isEraserMode);
+  isEraserModeRef.current = isEraserMode;
+
+  const [drawColorIdx, setDrawColorIdx] = useState<number>(0);
+  const drawColorIdxRef = useRef(drawColorIdx);
+  drawColorIdxRef.current = drawColorIdx;
+
+  const [clearCanvasTrigger, setClearCanvasTrigger] = useState<number>(0);
+
   const [userDisplayName, setUserDisplayName] = useState<string>(() => playFabService.getDisplayName() || "");
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(() => playFabService.getAvatarUrl());
   const [avatarLoadError, setAvatarLoadError] = useState<boolean>(false);
@@ -466,6 +485,7 @@ export function App() {
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
+      setClearCanvasTrigger(c => c + 1);
     } catch (e) {
       console.error("Failed to load level from string", e);
     }
@@ -570,6 +590,7 @@ export function App() {
       setCanUndo(false);
       setCanRedo(false);
       setHasStarted(true);
+      setClearCanvasTrigger(c => c + 1);
     } catch (e) {
       console.error(e);
     }
@@ -644,6 +665,7 @@ export function App() {
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
+      setClearCanvasTrigger(c => c + 1);
     } catch (err) {
       console.error("Error loading daily level:", err);
     } finally {
@@ -653,6 +675,7 @@ export function App() {
 
   const handleRestart = () => {
     setSecondsElapsed(0);
+    setClearCanvasTrigger(c => c + 1);
     if (isDailyModeRef.current) {
       clearDailyLevelProgress();
       loadDailyLevel(dailyDateRef.current).then(() => {
@@ -781,13 +804,58 @@ export function App() {
         return;
       }
 
-      // Escape closes help, shortcuts, levels, settings, and account modals
+      // Escape closes help, shortcuts, levels, settings, and account modals, or exits drawing mode
       if (e.key === 'Escape') {
+        const modalOpen = showHelpModalRef.current || showShortcutsRef.current || showLevelsModalRef.current || showSettingsRef.current || showAccountModalRef.current;
         setShowHelpModal(false);
         setShowShortcuts(false);
         setShowLevelsModal(false);
         setShowSettings(false);
         setShowAccountModal(false);
+        if (!modalOpen && isDrawingModeRef.current) {
+          setIsDrawingMode(false);
+        }
+        return;
+      }
+
+      // Space toggles drawing mode (unless a modal is open)
+      if (e.code === 'Space' || e.key === ' ') {
+        const modalOpen = showHelpModalRef.current || showShortcutsRef.current || showLevelsModalRef.current || showSettingsRef.current || showAccountModalRef.current;
+        if (!modalOpen) {
+          e.preventDefault();
+          setIsDrawingMode((m) => !m);
+          return;
+        }
+      }
+
+      // When drawing mode is active, handle drawing-specific shortcuts
+      if (isDrawingModeRef.current) {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          setIsEraserMode((em) => !em);
+          return;
+        }
+        if (key === 'e') {
+          e.preventDefault();
+          setIsEraserMode((em) => !em);
+          return;
+        }
+        if (key === 'b' || key === 'p') {
+          e.preventDefault();
+          setIsEraserMode(false);
+          return;
+        }
+        if (key === 'c') {
+          e.preventDefault();
+          setDrawColorIdx((idx) => (idx + 1) % DRAW_COLORS.length);
+          return;
+        }
+        if (key === 'x' || e.key === 'Delete' || e.key === 'Backspace') {
+          e.preventDefault();
+          setClearCanvasTrigger((c) => c + 1);
+          return;
+        }
+        // Suppress puzzle tool shortcuts while drawing
         return;
       }
 
@@ -1023,7 +1091,13 @@ export function App() {
       hoveredCellRef.current = { row: r, col: c, corner };
       setHoveredCell({ row: r, col: c, corner });
     };
-  }, [gridData, won, settings, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings, showAccountModal]);
+    (window as any).isDrawingMode = () => isDrawingModeRef.current;
+    (window as any).setDrawingMode = (val: boolean) => setIsDrawingMode(val);
+    (window as any).isEraserMode = () => isEraserModeRef.current;
+    (window as any).setEraserMode = (val: boolean) => setIsEraserMode(val);
+    (window as any).getDrawColor = () => DRAW_COLORS[drawColorIdxRef.current];
+    (window as any).clearDrawing = () => setClearCanvasTrigger(c => c + 1);
+  }, [gridData, won, settings, mistakes, canUndo, canRedo, showShortcuts, showLevelsModal, showSettings, showAccountModal, isDrawingMode, isEraserMode, drawColorIdx]);
 
   const triggerMistake = (r: number, c: number, corner: Corner) => {
     setMistakes(m => m + 1);
@@ -1374,52 +1448,116 @@ export function App() {
 
       {/* 2. Tools */}
       <div class="controls-toolbar">
-        <div class="tool-selector">
-          <button
-            data-testid="tool-water"
-            onClick={() => setSelectedTool(Content.Water)}
-            class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
-            title="Water (1)"
-            aria-label="Water"
-          >
-            <span class="text-base leading-none">💧</span>
-          </button>
-          <button
-            data-testid="tool-air"
-            onClick={() => setSelectedTool(Content.NoWater)}
-            class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
-            title="Air (2)"
-            aria-label="Air"
-          >
-            <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
-          </button>
-          {hasBoats && (
-            <>
-              <button
-                data-testid="tool-boat"
-                onClick={() => setSelectedTool(Content.Boat)}
-                class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
-                title="Boat (3)"
-                aria-label="Boat"
-              >
-                <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
-              </button>
-              <button
-                data-testid="tool-maybeboat"
-                data-tool-id="noboat"
-                onClick={() => setSelectedTool(Content.NoBoat)}
-                class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
-                title="Maybe Boat (4)"
-                aria-label="Maybe Boat"
-              >
-                <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
-                  <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
-                  <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
-                </div>
-              </button>
-            </>
-          )}
-        </div>
+        {!isDrawingMode ? (
+          <div class="tool-selector">
+            <button
+              data-testid="tool-water"
+              onClick={() => setSelectedTool(Content.Water)}
+              class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
+              title="Water (1)"
+              aria-label="Water"
+            >
+              <span class="text-base leading-none">💧</span>
+            </button>
+            <button
+              data-testid="tool-air"
+              onClick={() => setSelectedTool(Content.NoWater)}
+              class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
+              title="Air (2)"
+              aria-label="Air"
+            >
+              <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
+            </button>
+            {hasBoats && (
+              <>
+                <button
+                  data-testid="tool-boat"
+                  onClick={() => setSelectedTool(Content.Boat)}
+                  class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
+                  title="Boat (3)"
+                  aria-label="Boat"
+                >
+                  <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+                </button>
+                <button
+                  data-testid="tool-maybeboat"
+                  data-tool-id="noboat"
+                  onClick={() => setSelectedTool(Content.NoBoat)}
+                  class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
+                  title="Maybe Boat (4)"
+                  aria-label="Maybe Boat"
+                >
+                  <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
+                    <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
+                    <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
+                  </div>
+                </button>
+              </>
+            )}
+            <div class="draw-divider" />
+            <button
+              data-testid="btn-draw-toggle"
+              onClick={() => setIsDrawingMode(true)}
+              class="tool-btn tool-btn-draw-inactive"
+              title="Drawing Mode (Space)"
+              aria-label="Draw"
+            >
+              <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="draw" />
+            </button>
+          </div>
+        ) : (
+          <div class="tool-selector draw-tool-selector">
+            <button
+              data-testid="draw-tool-pen"
+              onClick={() => setIsEraserMode(false)}
+              class={`tool-btn ${!isEraserMode ? 'tool-btn-draw-active' : 'tool-btn-draw-inactive'}`}
+              title="Paint Brush (P, B, or Tab) - Right-Click erases"
+              aria-label="Pen"
+            >
+              <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="pen" />
+            </button>
+            <button
+              data-testid="draw-tool-eraser"
+              onClick={() => setIsEraserMode(true)}
+              class={`tool-btn ${isEraserMode ? 'tool-btn-draw-active' : 'tool-btn-draw-inactive'}`}
+              title="Eraser (E or Tab) - Right-Click paints"
+              aria-label="Eraser"
+            >
+              <img src="/icons/eraser.png" class="w-4 h-4 object-contain" alt="eraser" />
+            </button>
+            <button
+              data-testid="draw-color-picker"
+              onClick={() => setDrawColorIdx((i) => (i + 1) % DRAW_COLORS.length)}
+              class="tool-btn tool-btn-draw-inactive"
+              title="Change Color (C)"
+              aria-label="Change Color"
+            >
+              <div
+                class="w-4 h-4 rounded-full border border-white/60 shadow"
+                style={{ backgroundColor: DRAW_COLORS[drawColorIdx] }}
+              />
+            </button>
+            <button
+              data-testid="draw-clear-all"
+              onClick={() => setClearCanvasTrigger((c) => c + 1)}
+              class="tool-btn tool-btn-draw-inactive"
+              title="Clear All (X or Del)"
+              aria-label="Clear All"
+            >
+              <img src="/icons/clear.png" class="w-4 h-4 object-contain" alt="clear" />
+            </button>
+            <div class="draw-divider" />
+            <button
+              data-testid="btn-draw-toggle"
+              onClick={() => setIsDrawingMode(false)}
+              class="tool-btn tool-btn-draw-active"
+              title="Exit Drawing Mode (Space)"
+              aria-label="Exit Drawing"
+            >
+              <span class="text-xs font-bold px-0.5">Done</span>
+            </button>
+          </div>
+        )}
 
         <div class="undo-redo-group">
           <button
@@ -1823,18 +1961,29 @@ export function App() {
 
             <div class={`flex flex-col items-center transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
               <div class={`grid-board-card ${won ? 'is-won pointer-events-none' : ''}`}>
-                <Grid
-                  gridData={gridData}
-                  settings={settings}
-                  hoveredCell={hoveredCell}
-                  selectedTool={selectedTool}
-                  previewMap={previewMap}
-                  blinkingCells={blinkingCells}
-                  onCellPointerDown={handleCellDown}
-                  onCellPointerEnter={handleCellEnter}
-                  onCellPointerMove={handleCellMove}
-                  onCellPointerLeave={handleCellLeave}
-                />
+                <div class="relative inline-block">
+                  <Grid
+                    gridData={gridData}
+                    settings={settings}
+                    hoveredCell={hoveredCell}
+                    selectedTool={selectedTool}
+                    previewMap={previewMap}
+                    blinkingCells={blinkingCells}
+                    onCellPointerDown={handleCellDown}
+                    onCellPointerEnter={handleCellEnter}
+                    onCellPointerMove={handleCellMove}
+                    onCellPointerLeave={handleCellLeave}
+                  />
+                  <DrawingCanvas
+                    isDrawingMode={isDrawingMode}
+                    isEraserMode={isEraserMode}
+                    drawColor={DRAW_COLORS[drawColorIdx]}
+                    drawWidth={settings.thicker_walls ? 6 : 4}
+                    eraserWidth={24}
+                    clearTrigger={clearCanvasTrigger}
+                    onToggleEraser={() => setIsEraserMode((e) => !e)}
+                  />
+                </div>
               </div>
 
               {/* Level name and streak counter below the grid */}
@@ -2334,6 +2483,37 @@ export function App() {
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">Esc</kbd> / <kbd class="kbd">?</kbd></div>
                     <span class="shortcut-desc">Toggle / close shortcuts popup</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Drawing / Marker Mode */}
+              <div class="shortcut-section">
+                <h3 class="shortcut-section-title">🎨 Drawing & Markers</h3>
+                <div class="shortcut-list">
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">Space</kbd></div>
+                    <span class="shortcut-desc">Toggle Drawing Mode</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">Tab</kbd> / <kbd class="kbd">E</kbd></div>
+                    <span class="shortcut-desc">Toggle between Paint Brush and Eraser</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <span class="shortcut-key">Right Click & Drag</span>
+                    <span class="shortcut-desc">Use opposite tool (Erase while in Brush, Paint while in Eraser)</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">B</kbd><kbd class="kbd">P</kbd></div>
+                    <span class="shortcut-desc">Pen mode</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">C</kbd></div>
+                    <span class="shortcut-desc">Cycle marker color</span>
+                  </div>
+                  <div class="shortcut-item">
+                    <div class="flex gap-1.5"><kbd class="kbd">X</kbd><kbd class="kbd">Del</kbd></div>
+                    <span class="shortcut-desc">Clear all drawings</span>
                   </div>
                 </div>
               </div>

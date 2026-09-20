@@ -8,7 +8,7 @@ export interface HelpModalProps {
 }
 
 export type MechanicKey =
-  | 'gravity'
+  | 'aquariums'
   | 'lineNumbers'
   | 'boats'
   | 'diagonals'
@@ -25,9 +25,9 @@ export interface MechanicInfo {
 
 export const ALL_MECHANICS: MechanicInfo[] = [
   {
-    key: 'gravity',
+    key: 'aquariums',
     icon: '💧',
-    name: 'Water & Gravity',
+    name: 'Aquariums & Gravity',
     description:
       'Thick borders divide the grid into separate aquariums. You fill cells with water, which falls according to gravity.',
   },
@@ -60,6 +60,13 @@ export const ALL_MECHANICS: MechanicInfo[] = [
       'These tell you how many aquariums with a certain amount of water are present in the level.',
   },
   {
+    key: 'unknownHints',
+    icon: '❓',
+    name: 'Unknown Hints (?)',
+    description:
+      'A question mark indicates a contiguous water group of unknown size (at least 1 cell).',
+  },
+  {
     key: 'togetherSeparate',
     icon: '↔️',
     name: 'Together & Separate Hints',
@@ -73,7 +80,7 @@ export const ALL_MECHANICS: MechanicInfo[] = [
  */
 export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> {
   // Aquariums & Row/Col numbers are base rules present in every puzzle
-  const active = new Set<MechanicKey>(['gravity', 'lineNumbers']);
+  const active = new Set<MechanicKey>(['aquariums', 'lineNumbers']);
 
   switch (weekday) {
     case 0: // Aquarium Sunday: Diagonals and many aquarium hints visible
@@ -84,6 +91,7 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
       break;
     case 2: // Secret Boat Tuesday: Boats have hidden hints
       active.add('boats');
+      active.add('unknownHints');
       break;
     case 3: // Diagonal Wednesday: Diagonals and no hidden hints
       active.add('diagonals');
@@ -96,6 +104,7 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
       active.add('boats');
       active.add('diagonals');
       active.add('aquariumHints');
+      active.add('unknownHints');
       active.add('togetherSeparate');
       break;
     case 6: // One Row Saturday: Only one row hint is visible
