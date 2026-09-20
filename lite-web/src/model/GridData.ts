@@ -523,3 +523,78 @@ export function levelHasBoats(gridData: GridModelData | null): boolean {
   return false;
 }
 
+/**
+ * Returns descriptive hover text for row and column hints.
+ */
+export function getHintHoverText(
+  count: number,
+  type: HintType,
+  isWater: boolean,
+  isRow: boolean
+): string {
+  const line = isRow ? 'row' : 'column';
+
+  if (isWater) {
+    if (count < 0) {
+      if (type === HintType.Together) {
+        return `The water cells in this ${line} are contiguous.`;
+      }
+      if (type === HintType.Separated) {
+        return `The water cells in this ${line} are not contiguous.`;
+      }
+      return `There is an unknown number of water cells in this ${line}.`;
+    }
+
+    if (count === 0 || type === HintType.Zero) {
+      return `There are no water cells in this ${line}.`;
+    }
+
+    if (count === 1) {
+      if (type === HintType.Together) {
+        return `There is 1 water cell in this ${line}. It is contiguous.`;
+      }
+      if (type === HintType.Separated) {
+        return `There is 1 water cell in this ${line}. It is not contiguous.`;
+      }
+      return `There is 1 water cell in this ${line}.`;
+    }
+
+    // count > 1 or fractional (e.g. 0.5, 1.5, 2, 3, 4)
+    if (type === HintType.Together) {
+      return `There are ${count} water cells in this ${line}. They are contiguous.`;
+    }
+    if (type === HintType.Separated) {
+      return `There are ${count} water cells in this ${line}. They are not contiguous.`;
+    }
+    return `There are ${count} water cells in this ${line}.`;
+  } else {
+    // Boat hint
+    if (count < 0) {
+      if (type === HintType.Together) {
+        return `The boats in this ${line} are contiguous.`;
+      }
+      if (type === HintType.Separated) {
+        return `The boats in this ${line} are not contiguous.`;
+      }
+      return `There is an unknown number of boats in this ${line}.`;
+    }
+
+    if (count === 0 || type === HintType.Zero) {
+      return `There are no boats in this ${line}.`;
+    }
+
+    if (count === 1) {
+      return `There is 1 boat in this ${line}.`;
+    }
+
+    if (type === HintType.Together) {
+      return `There are ${count} boats in this ${line}. They are contiguous.`;
+    }
+    if (type === HintType.Separated) {
+      return `There are ${count} boats in this ${line}. They are not contiguous.`;
+    }
+    return `There are ${count} boats in this ${line}.`;
+  }
+}
+
+

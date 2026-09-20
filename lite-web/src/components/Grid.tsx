@@ -1,5 +1,6 @@
 import { h } from 'preact';
-import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools } from '../model/GridData';
+import { useState } from 'preact/hooks';
+import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools, getHintHoverText } from '../model/GridData';
 import type { GridModelData } from '../model/GridData';
 import type { GameSettings } from '../engine/SettingsManager';
 import { Cell } from './Cell';
@@ -33,6 +34,9 @@ export function Grid({
 }: GridProps) {
   const rows = gridData.cells.length;
   const cols = rows > 0 ? gridData.cells[0].length : 0;
+
+  const [hoveredHint, setHoveredHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
+  const activeHoveredHint = hoveredCell ? null : hoveredHint;
 
   if (rows === 0 || cols === 0) return <div>Empty Grid</div>;
 
@@ -167,8 +171,7 @@ export function Grid({
   };
 
   const hasDualRowHints = gridData.row_hints.some(
-    h => (h.water_count >= 0 || h.water_count_type !== HintType.Hidden) &&
-         (h.boat_count >= 0 || h.boat_count_type !== HintType.Hidden)
+    h => h.boat_count >= 0 || h.boat_count_type !== HintType.Hidden
   );
 
   const renderOppositeRowHint = (r: number) => {
@@ -263,6 +266,78 @@ export function Grid({
     return null;
   };
 
+  const getOppositeRowHoverText = (r: number): string | undefined => {
+    if (!showOppositeHints) return undefined;
+    const hint = gridData.row_hints[r];
+    const wCount = countWaterRow(gridData, r);
+    const bCount = countBoatRow(gridData, r);
+
+    if (settings?.line_info === 'missing') {
+      const showWater = hint.water_count >= 0;
+      const missingWater = showWater ? Math.max(0, hint.water_count - wCount) : null;
+      const showBoat = hint.boat_count > 0;
+      const missingBoat = showBoat ? Math.max(0, hint.boat_count - bCount) : null;
+
+      if (missingWater === null && missingBoat === null) return undefined;
+
+      const parts: string[] = [];
+      if (missingWater !== null) {
+        parts.push(missingWater === 0 ? 'no missing water cells' : `${missingWater} missing water cell${missingWater === 1 ? '' : 's'}`);
+      }
+      if (missingBoat !== null) {
+        parts.push(missingBoat === 0 ? 'no missing boats' : `${missingBoat} missing boat${missingBoat === 1 ? '' : 's'}`);
+      }
+      return `Remaining in this row: ${parts.join(', ')}.`;
+    }
+
+    if (settings?.line_info === 'current') {
+      const parts: string[] = [];
+      parts.push(`${wCount} water cell${wCount === 1 ? '' : 's'}`);
+      if ((hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && bCount > 0) {
+        parts.push(`${bCount} boat${bCount === 1 ? '' : 's'}`);
+      }
+      return `Currently placed in this row: ${parts.join(', ')}.`;
+    }
+
+    return undefined;
+  };
+
+  const getOppositeColHoverText = (c: number): string | undefined => {
+    if (!showOppositeHints) return undefined;
+    const hint = gridData.col_hints[c];
+    const wCount = countWaterCol(gridData, c);
+    const bCount = countBoatCol(gridData, c);
+
+    if (settings?.line_info === 'missing') {
+      const showWater = hint.water_count >= 0;
+      const missingWater = showWater ? Math.max(0, hint.water_count - wCount) : null;
+      const showBoat = hint.boat_count > 0;
+      const missingBoat = showBoat ? Math.max(0, hint.boat_count - bCount) : null;
+
+      if (missingWater === null && missingBoat === null) return undefined;
+
+      const parts: string[] = [];
+      if (missingWater !== null) {
+        parts.push(missingWater === 0 ? 'no missing water cells' : `${missingWater} missing water cell${missingWater === 1 ? '' : 's'}`);
+      }
+      if (missingBoat !== null) {
+        parts.push(missingBoat === 0 ? 'no missing boats' : `${missingBoat} missing boat${missingBoat === 1 ? '' : 's'}`);
+      }
+      return `Remaining in this column: ${parts.join(', ')}.`;
+    }
+
+    if (settings?.line_info === 'current') {
+      const parts: string[] = [];
+      parts.push(`${wCount} water cell${wCount === 1 ? '' : 's'}`);
+      if ((hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && bCount > 0) {
+        parts.push(`${bCount} boat${bCount === 1 ? '' : 's'}`);
+      }
+      return `Currently placed in this column: ${parts.join(', ')}.`;
+    }
+
+    return undefined;
+  };
+
   const rootClasses = [
     'inline-block',
     'relative',
@@ -280,24 +355,49 @@ export function Grid({
         {/* Column hints */}
         <div class="flex" style={{ width: `calc(${cols} * var(--cell-size, 3rem))` }}>
           {gridData.col_hints.map((hint, c) => {
-             const wCount = countWaterCol(gridData, c);
-             const bCount = countBoatCol(gridData, c);
-             
-             const wBools = colBools(gridData, c, Content.Water);
-             const bBools = colBools(gridData, c, Content.Boat);
-             
-             return (
-              <div key={c} class="col-hint">
-                 {(hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && (
-                   <span class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}>
-                      {renderHint(hint.boat_count, hint.boat_count_type, false)}
-                   </span>
-                 )}
-                 {(!settings?.hide_unknown || hint.water_count >= 0 || (hint.water_count_type !== HintType.Hidden && hint.water_count_type !== HintType.Zero)) && (
-                   <span class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}>
-                      {renderHint(hint.water_count, hint.water_count_type, true)}
-                   </span>
-                 )}
+            const wCount = countWaterCol(gridData, c);
+            const bCount = countBoatCol(gridData, c);
+            
+            const wBools = colBools(gridData, c, Content.Water);
+            const bBools = colBools(gridData, c, Content.Boat);
+
+            const showBoatHint = hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden;
+            const showWaterHint = !settings?.hide_unknown || hint.water_count >= 0 || (hint.water_count_type !== HintType.Hidden && hint.water_count_type !== HintType.Zero);
+
+            const boatTitle = showBoatHint ? getHintHoverText(hint.boat_count, hint.boat_count_type, false, false) : undefined;
+            const waterTitle = showWaterHint ? getHintHoverText(hint.water_count, hint.water_count_type, true, false) : undefined;
+            const cellTitle = [boatTitle, waterTitle].filter(Boolean).join('\n') || undefined;
+
+            const isColHighlighted = (settings?.highlight_grid ?? true)
+              ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+              : false;
+
+            return (
+              <div
+                key={c}
+                data-testid={`col-hint-${c}`}
+                data-col={c}
+                class={`col-hint ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''}`}
+                title={cellTitle}
+                onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
+                onPointerLeave={() => setHoveredHint(null)}
+              >
+                {showBoatHint && (
+                  <span
+                    class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}
+                    title={boatTitle}
+                  >
+                    {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                  </span>
+                )}
+                {showWaterHint && (
+                  <span
+                    class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}
+                    title={waterTitle}
+                  >
+                    {renderHint(hint.water_count, hint.water_count_type, true)}
+                  </span>
+                )}
               </div>
             );
           })}
@@ -314,132 +414,189 @@ export function Grid({
         const wBools = rowBools(gridData, r, Content.Water);
         const bBools = rowBools(gridData, r, Content.Boat);
 
-        return (
-        <div key={r} class="flex">
-          {/* Row hint */}
-          <div class="row-hint">
-             {(gridData.row_hints[r].boat_count >= 0 || gridData.row_hints[r].boat_count_type !== HintType.Hidden) && (
-               <span class={getHintClass(bCountRow, gridData.row_hints[r].boat_count, false, gridData.row_hints[r].boat_count_type, bBools)}>
-                 {renderHint(gridData.row_hints[r].boat_count, gridData.row_hints[r].boat_count_type, false)}
-               </span>
-             )}
-             {(!settings?.hide_unknown || gridData.row_hints[r].water_count >= 0 || (gridData.row_hints[r].water_count_type !== HintType.Hidden && gridData.row_hints[r].water_count_type !== HintType.Zero)) && (
-               <span class={getHintClass(wCountRow, gridData.row_hints[r].water_count, true, gridData.row_hints[r].water_count_type, wBools)}>
-                 {renderHint(gridData.row_hints[r].water_count, gridData.row_hints[r].water_count_type, true)}
-               </span>
-             )}
-          </div>
-          {/* Row cells */}
-          <div class="flex">
-            {rowCells.map((cell, c) => {
-              const hasBottomWall = gridData.wall_bottom?.[r]?.[c] ?? false;
-              const hasRightWall = gridData.wall_right?.[r]?.[c] ?? false;
-              const hasTopWall = r > 0 ? (gridData.wall_bottom?.[r - 1]?.[c] ?? false) : false;
-              const hasLeftWall = c > 0 ? (gridData.wall_right?.[r]?.[c - 1] ?? false) : false;
-              
-              const isBlockTop = isBlockSide(r - 1, c, 'bottom');
-              const isBlockBottom = isBlockSide(r + 1, c, 'top');
-              const isBlockLeft = isBlockSide(r, c - 1, 'right');
-              const isBlockRight = isBlockSide(r, c + 1, 'left');
-              const isSurface = !isWaterAbove(r, c);
-              const errorInfo = blinkingCells?.get(`${r}-${c}`);
-              const hasError = Boolean(errorInfo);
-              const errorCorner = errorInfo?.corner ?? null;
+        const hint = gridData.row_hints[r];
+        const showBoatHint = hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden;
+        const showWaterHint = !settings?.hide_unknown || hint.water_count >= 0 || (hint.water_count_type !== HintType.Hidden && hint.water_count_type !== HintType.Zero);
 
-              const isHoveredRow = settings?.highlight_grid ? hoveredCell?.row === r : false;
-              const isHoveredCol = settings?.highlight_grid ? hoveredCell?.col === c : false;
-              const isHoveredCell = hoveredCell?.row === r && hoveredCell?.col === c;
-              const previewTool = (settings?.show_grid_preview && isHoveredCell) ? (selectedTool ?? null) : null;
-              
-              let previewCorners: Partial<Record<Corner, Content>> | null = null;
-              if (settings?.show_grid_preview && previewMap) {
-                if (cell.type === CellType.Single) {
-                  const t = previewMap.get(`${r}-${c}-${Corner.TopLeft}`);
-                  if (t !== undefined) {
-                    previewCorners = { [Corner.TopLeft]: t };
-                  }
-                } else if (cell.type === CellType.IncDiag) {
-                  const tl = previewMap.get(`${r}-${c}-${Corner.TopLeft}`);
-                  const br = previewMap.get(`${r}-${c}-${Corner.BottomRight}`);
-                  if (tl !== undefined || br !== undefined) {
-                    previewCorners = {};
-                    if (tl !== undefined) previewCorners[Corner.TopLeft] = tl;
-                    if (br !== undefined) previewCorners[Corner.BottomRight] = br;
-                  }
-                } else if (cell.type === CellType.DecDiag) {
-                  const tr = previewMap.get(`${r}-${c}-${Corner.TopRight}`);
-                  const bl = previewMap.get(`${r}-${c}-${Corner.BottomLeft}`);
-                  if (tr !== undefined || bl !== undefined) {
-                    previewCorners = {};
-                    if (tr !== undefined) previewCorners[Corner.TopRight] = tr;
-                    if (bl !== undefined) previewCorners[Corner.BottomLeft] = bl;
+        const boatTitle = showBoatHint ? getHintHoverText(hint.boat_count, hint.boat_count_type, false, true) : undefined;
+        const waterTitle = showWaterHint ? getHintHoverText(hint.water_count, hint.water_count_type, true, true) : undefined;
+        const cellTitle = [boatTitle, waterTitle].filter(Boolean).join('\n') || undefined;
+
+        const isRowHighlighted = (settings?.highlight_grid ?? true)
+          ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
+          : false;
+
+        return (
+          <div key={r} class="flex">
+            {/* Row hint */}
+            <div
+              data-testid={`row-hint-${r}`}
+              data-row={r}
+              class={`row-hint ${isRowHighlighted ? 'hint-hovered' : ''}`}
+              title={cellTitle}
+              onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
+              onPointerLeave={() => setHoveredHint(null)}
+            >
+              {hasDualRowHints ? (
+                <>
+                  <span class="row-hint-boat-slot">
+                    {showBoatHint && (
+                      <span
+                        class={`row-hint-boat ${getHintClass(bCountRow, hint.boat_count, false, hint.boat_count_type, bBools)}`}
+                        title={boatTitle}
+                      >
+                        {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                      </span>
+                    )}
+                  </span>
+                  <span class="row-hint-water-slot">
+                    {showWaterHint && (
+                      <span
+                        class={`row-hint-water ${getHintClass(wCountRow, hint.water_count, true, hint.water_count_type, wBools)}`}
+                        title={waterTitle}
+                      >
+                        {renderHint(hint.water_count, hint.water_count_type, true)}
+                      </span>
+                    )}
+                  </span>
+                </>
+              ) : (
+                showWaterHint && (
+                  <span
+                    class={getHintClass(wCountRow, hint.water_count, true, hint.water_count_type, wBools)}
+                    title={waterTitle}
+                  >
+                    {renderHint(hint.water_count, hint.water_count_type, true)}
+                  </span>
+                )
+              )}
+            </div>
+            {/* Row cells */}
+            <div class="flex">
+              {rowCells.map((cell, c) => {
+                const hasBottomWall = gridData.wall_bottom?.[r]?.[c] ?? false;
+                const hasRightWall = gridData.wall_right?.[r]?.[c] ?? false;
+                const hasTopWall = r > 0 ? (gridData.wall_bottom?.[r - 1]?.[c] ?? false) : false;
+                const hasLeftWall = c > 0 ? (gridData.wall_right?.[r]?.[c - 1] ?? false) : false;
+                
+                const isBlockTop = isBlockSide(r - 1, c, 'bottom');
+                const isBlockBottom = isBlockSide(r + 1, c, 'top');
+                const isBlockLeft = isBlockSide(r, c - 1, 'right');
+                const isBlockRight = isBlockSide(r, c + 1, 'left');
+                const isSurface = !isWaterAbove(r, c);
+                const errorInfo = blinkingCells?.get(`${r}-${c}`);
+                const hasError = Boolean(errorInfo);
+                const errorCorner = errorInfo?.corner ?? null;
+
+                const isHoveredRowCell = (settings?.highlight_grid ?? true)
+                  ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
+                  : false;
+                const isHoveredColCell = (settings?.highlight_grid ?? true)
+                  ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+                  : false;
+                const isHoveredCell = hoveredCell?.row === r && hoveredCell?.col === c;
+                const previewTool = (settings?.show_grid_preview && isHoveredCell) ? (selectedTool ?? null) : null;
+                
+                let previewCorners: Partial<Record<Corner, Content>> | null = null;
+                if (settings?.show_grid_preview && previewMap) {
+                  if (cell.type === CellType.Single) {
+                    const t = previewMap.get(`${r}-${c}-${Corner.TopLeft}`);
+                    if (t !== undefined) {
+                      previewCorners = { [Corner.TopLeft]: t };
+                    }
+                  } else if (cell.type === CellType.IncDiag) {
+                    const tl = previewMap.get(`${r}-${c}-${Corner.TopLeft}`);
+                    const br = previewMap.get(`${r}-${c}-${Corner.BottomRight}`);
+                    if (tl !== undefined || br !== undefined) {
+                      previewCorners = {};
+                      if (tl !== undefined) previewCorners[Corner.TopLeft] = tl;
+                      if (br !== undefined) previewCorners[Corner.BottomRight] = br;
+                    }
+                  } else if (cell.type === CellType.DecDiag) {
+                    const tr = previewMap.get(`${r}-${c}-${Corner.TopRight}`);
+                    const bl = previewMap.get(`${r}-${c}-${Corner.BottomLeft}`);
+                    if (tr !== undefined || bl !== undefined) {
+                      previewCorners = {};
+                      if (tr !== undefined) previewCorners[Corner.TopRight] = tr;
+                      if (bl !== undefined) previewCorners[Corner.BottomLeft] = bl;
+                    }
                   }
                 }
-              }
 
-              return (
-                <Cell 
-                  key={c}
-                  cell={cell} 
-                  row={r} 
-                  col={c} 
-                  hasBottomWall={hasBottomWall} 
-                  hasRightWall={hasRightWall}
-                  hasTopWall={hasTopWall}
-                  hasLeftWall={hasLeftWall}
-                  isBlockTopNeighbor={isBlockTop}
-                  isBlockBottomNeighbor={isBlockBottom}
-                  isBlockLeftNeighbor={isBlockLeft}
-                  isBlockRightNeighbor={isBlockRight}
-                  isTopEdge={r === 0}
-                  isLeftEdge={c === 0}
-                  isBottomEdge={r === rows - 1}
-                  isRightEdge={c === cols - 1}
-                  isSurface={isSurface}
-                  hasError={hasError}
-                  errorCorner={errorCorner}
-                  isHoveredRow={isHoveredRow}
-                  isHoveredCol={isHoveredCol}
-                  isHoveredCell={isHoveredCell}
-                  hoveredCorner={isHoveredCell ? (hoveredCell?.corner ?? null) : null}
-                  previewTool={previewTool}
-                  previewCorners={previewCorners}
-                  onPointerDown={onCellPointerDown}
-                  onPointerEnter={onCellPointerEnter}
-                  onPointerMove={onCellPointerMove}
-                  onPointerLeave={onCellPointerLeave}
-                  onPointerUp={onCellPointerUp}
-                />
-              );
-            })}
-          </div>
-          {/* Opposite row hint on the right */}
-          {showOppositeHints && (
-            <div
-              data-testid={`row-hint-opposite-${r}`}
-              class="row-hint row-hint-opposite flex items-center justify-center"
-            >
-              {renderOppositeRowHint(r)}
+                return (
+                  <Cell 
+                    key={c}
+                    cell={cell} 
+                    row={r} 
+                    col={c} 
+                    hasBottomWall={hasBottomWall} 
+                    hasRightWall={hasRightWall}
+                    hasTopWall={hasTopWall}
+                    hasLeftWall={hasLeftWall}
+                    isBlockTopNeighbor={isBlockTop}
+                    isBlockBottomNeighbor={isBlockBottom}
+                    isBlockLeftNeighbor={isBlockLeft}
+                    isBlockRightNeighbor={isBlockRight}
+                    isTopEdge={r === 0}
+                    isLeftEdge={c === 0}
+                    isBottomEdge={r === rows - 1}
+                    isRightEdge={c === cols - 1}
+                    isSurface={isSurface}
+                    hasError={hasError}
+                    errorCorner={errorCorner}
+                    isHoveredRow={isHoveredRowCell}
+                    isHoveredCol={isHoveredColCell}
+                    isHoveredCell={isHoveredCell}
+                    hoveredCorner={isHoveredCell ? (hoveredCell?.corner ?? null) : null}
+                    previewTool={previewTool}
+                    previewCorners={previewCorners}
+                    onPointerDown={onCellPointerDown}
+                    onPointerEnter={onCellPointerEnter}
+                    onPointerMove={onCellPointerMove}
+                    onPointerLeave={onCellPointerLeave}
+                    onPointerUp={onCellPointerUp}
+                  />
+                );
+              })}
             </div>
-          )}
-        </div>
-      );
-    })}
+            {/* Opposite row hint on the right */}
+            {showOppositeHints && (
+              <div
+                data-testid={`row-hint-opposite-${r}`}
+                class={`row-hint row-hint-opposite flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''}`}
+                title={getOppositeRowHoverText(r)}
+                onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
+                onPointerLeave={() => setHoveredHint(null)}
+              >
+                {renderOppositeRowHint(r)}
+              </div>
+            )}
+          </div>
+        );
+      })}
 
       {/* Bottom hints bar (opposite column hints) */}
       {showOppositeHints && (
         <div class="flex bottom-hints-bar">
           <div class="grid-corner-spacer" />
           <div class="flex" style={{ width: `calc(${cols} * var(--cell-size, 3rem))` }}>
-            {gridData.col_hints.map((hint, c) => (
-              <div
-                key={c}
-                data-testid={`col-hint-opposite-${c}`}
-                class="col-hint col-hint-opposite flex items-center justify-center"
-              >
-                {renderOppositeColHint(c)}
-              </div>
-            ))}
+            {gridData.col_hints.map((hint, c) => {
+              const isColHighlighted = (settings?.highlight_grid ?? true)
+                ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+                : false;
+              return (
+                <div
+                  key={c}
+                  data-testid={`col-hint-opposite-${c}`}
+                  class={`col-hint col-hint-opposite flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''}`}
+                  title={getOppositeColHoverText(c)}
+                  onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
+                  onPointerLeave={() => setHoveredHint(null)}
+                >
+                  {renderOppositeColHint(c)}
+                </div>
+              );
+            })}
           </div>
           <div class="grid-corner-spacer-opposite" />
         </div>
