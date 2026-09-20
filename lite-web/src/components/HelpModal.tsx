@@ -8,7 +8,7 @@ export interface HelpModalProps {
 }
 
 export type MechanicKey =
-  | 'aquariums'
+  | 'gravity'
   | 'lineNumbers'
   | 'boats'
   | 'diagonals'
@@ -25,53 +25,46 @@ export interface MechanicInfo {
 
 export const ALL_MECHANICS: MechanicInfo[] = [
   {
-    key: 'aquariums',
-    icon: '🌊',
-    name: 'Aquariums & Gravity',
+    key: 'gravity',
+    icon: '💧',
+    name: 'Water & Gravity',
     description:
-      'Thick borders divide the grid into separate aquariums. Water falls with gravity: water cannot float on top of air within the same tank column. Connected horizontal sections within an aquarium fill to the same water level.',
+      'Thick borders divide the grid into separate aquariums. You fill cells with water, which falls according to gravity.',
   },
   {
     key: 'lineNumbers',
     icon: '🔢',
-    name: 'Row & Column Numbers',
+    name: 'Row & Column Hints',
     description:
-      'Numbers outside the grid indicate the exact count of water cells required in that row or column.',
+      'Numbers outside the grid indicate the exact amount of water cells required in that row or column.',
   },
   {
     key: 'boats',
     icon: '⛵',
     name: 'Boats',
     description:
-      'Boats float on water. The cell containing a boat must be filled with water, and water cannot be placed directly above a boat. Numbers next to boat icons indicate how many boats belong in that line.',
+      'Boats float on top of water. The cell directly below a boat must have water.',
   },
   {
     key: 'diagonals',
     icon: '〽️',
-    name: 'Sloped Walls (Diagonals)',
+    name: 'Diagonals',
     description:
-      'Diagonal walls split a grid square into two triangular half-cells. Each filled half-cell counts as 0.5 towards water totals.',
+      'Diagonal walls split a cell into half-cells. Each filled half-cell counts as 0.5 waters.',
   },
   {
     key: 'aquariumHints',
     icon: '🐟',
     name: 'Aquarium Hints',
     description:
-      'A number shown inside an aquarium indicates the total amount of water cells that must be filled in that specific aquarium.',
-  },
-  {
-    key: 'unknownHints',
-    icon: '❓',
-    name: 'Unknown Hints (?)',
-    description:
-      'A question mark indicates a contiguous water group of unknown size (at least 1 cell).',
+      'These tell you how many aquariums with a certain amount of water are present in the level.',
   },
   {
     key: 'togetherSeparate',
     icon: '↔️',
     name: 'Together & Separate Hints',
     description:
-      'Multiple numbers in a row or column represent separate contiguous groups of water. Groups of the specified sizes must be separated by at least one air space.',
+      "{N} indicates that the water in that row/column are contiguous.\n-N- indicates that they are not (there is at least one empty cell in the middle).",
   },
 ];
 
@@ -80,7 +73,7 @@ export const ALL_MECHANICS: MechanicInfo[] = [
  */
 export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> {
   // Aquariums & Row/Col numbers are base rules present in every puzzle
-  const active = new Set<MechanicKey>(['aquariums', 'lineNumbers']);
+  const active = new Set<MechanicKey>(['gravity', 'lineNumbers']);
 
   switch (weekday) {
     case 0: // Aquarium Sunday: Diagonals and many aquarium hints visible
@@ -91,7 +84,6 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
       break;
     case 2: // Secret Boat Tuesday: Boats have hidden hints
       active.add('boats');
-      active.add('unknownHints');
       break;
     case 3: // Diagonal Wednesday: Diagonals and no hidden hints
       active.add('diagonals');
@@ -104,7 +96,6 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
       active.add('boats');
       active.add('diagonals');
       active.add('aquariumHints');
-      active.add('unknownHints');
       active.add('togetherSeparate');
       break;
     case 6: // One Row Saturday: Only one row hint is visible
@@ -153,21 +144,25 @@ export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
 
         {/* Content */}
         <div class="shortcuts-content overflow-y-auto space-y-4 pr-1">
-          {/* Today's theme summary banner */}
-          <div
-            data-testid="today-theme-banner"
-            class="p-3 rounded-lg border border-cyan-500/40 bg-cyan-950/30 flex items-start gap-2.5"
-          >
-            <span class="text-2xl shrink-0">{dayInfo.emoji}</span>
-            <div class="text-xs">
-              <div class="font-bold text-cyan-300 text-sm">{dayInfo.name}</div>
-              <div class="text-slate-300 opacity-90 mt-0.5">{dayInfo.desc}</div>
-            </div>
-          </div>
 
           {/* Objective */}
           <div class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
-            <span class="font-bold text-[var(--game-mint)]">Goal:</span> Fill cells with Water (💧) and mark empty cells with Air (✕) according to row, column, and aquarium constraints without making mistakes.
+            <span class="font-bold text-[var(--game-mint)]">Goal:</span> Fill cells with Water (💧) and Boats (⛵) according to row, column, and other hints without making mistakes. You can mark empty cells with Air (✕) if it helps.
+          </div>
+
+          {/* Today's theme summary banner */}
+          <div class="space-y-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Today's Puzzle</h3>
+            <div
+              data-testid="today-theme-banner"
+              class="p-3 rounded-lg border border-cyan-500/40 bg-cyan-950/30 flex items-start gap-2.5"
+            >
+              <span class="text-2xl shrink-0">{dayInfo.emoji}</span>
+              <div class="text-xs">
+                <div class="font-bold text-cyan-300 text-sm">{dayInfo.name}</div>
+                <div class="text-slate-300 opacity-90 mt-0.5">{dayInfo.desc}</div>
+              </div>
+            </div>
           </div>
 
           {/* Mechanics Grid */}
@@ -180,11 +175,10 @@ export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
                   <div
                     key={m.key}
                     data-testid={`mechanic-card-${m.key}`}
-                    class={`p-3 rounded-lg border transition-colors flex flex-col justify-between ${
-                      isToday
-                        ? 'border-cyan-400/80 bg-cyan-950/40 shadow-sm shadow-cyan-950'
-                        : 'border-slate-800 bg-slate-900/40 opacity-85'
-                    }`}
+                    class={`p-3 rounded-lg border transition-colors flex flex-col justify-between ${isToday
+                      ? 'border-cyan-400/80 bg-cyan-950/40 shadow-sm shadow-cyan-950'
+                      : 'border-slate-800 bg-slate-900/40 opacity-85'
+                      }`}
                   >
                     <div>
                       <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
@@ -201,7 +195,7 @@ export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
                           </span>
                         )}
                       </div>
-                      <p class="text-xs text-slate-300 leading-relaxed">{m.description}</p>
+                      <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">{m.description}</p>
                     </div>
                   </div>
                 );
@@ -215,19 +209,15 @@ export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
               <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
                 <div class="font-semibold text-slate-200">Left Click / Tap</div>
-                <div class="text-slate-400 text-[11px] mt-0.5">Place tool</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">Place Water (💧)</div>
               </div>
               <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
                 <div class="font-semibold text-slate-200">Right Click</div>
                 <div class="text-slate-400 text-[11px] mt-0.5">Place Air (✕)</div>
               </div>
               <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
-                <div class="font-semibold text-slate-200">Middle Click / B</div>
+                <div class="font-semibold text-slate-200">Middle Click</div>
                 <div class="text-slate-400 text-[11px] mt-0.5">Place Boat (⛵)</div>
-              </div>
-              <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
-                <div class="font-semibold text-slate-200">Click & Drag</div>
-                <div class="text-slate-400 text-[11px] mt-0.5">Draw / erase line</div>
               </div>
             </div>
           </div>
