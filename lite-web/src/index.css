@@ -1821,6 +1821,94 @@ body {
   box-shadow: 0 1px 0 var(--game-navy);
 }
 
+.btn-shortcuts:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 3px 0 var(--game-navy) !important;
+  filter: grayscale(0.5);
+}
+
+.game-input {
+  background: rgba(0, 9, 36, 0.6);
+  border: 1.5px solid rgba(171, 255, 209, 0.25);
+  border-radius: 0.6rem;
+  color: #ffffff;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.75rem;
+  transition: all 0.15s ease;
+  outline: none;
+}
+.game-input:focus {
+  border-color: var(--game-mint);
+  box-shadow: 0 0 0 2px rgba(171, 255, 209, 0.2);
+}
+.game-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--game-mint);
+  background: rgba(0, 9, 36, 0.5);
+  border: 1.5px solid rgba(171, 255, 209, 0.25);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.btn-secondary:hover {
+  background: rgba(0, 9, 36, 0.8);
+  border-color: var(--game-mint);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fca5a5;
+  background: rgba(90, 15, 15, 0.4);
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.btn-secondary-danger:hover {
+  background: rgba(220, 38, 38, 0.8);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.btn-secondary-danger:active {
+  transform: translateY(1px);
+}
+.btn-secondary-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* ==========================================================================
    Daily Level UI Styling
    ========================================================================== */

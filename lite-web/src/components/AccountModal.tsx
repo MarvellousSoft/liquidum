@@ -181,33 +181,35 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   return (
     <div
       data-testid="account-modal"
-      className="modal-backdrop fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      class="modal-backdrop"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl flex flex-col shadow-2xl overflow-hidden text-slate-100 max-h-[90vh]"
+        class="shortcuts-dialog max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="account-modal-title"
+        style={{ maxWidth: '540px' }}
       >
         {/* Header */}
-        <div className="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">👤</span>
+        <div class="shortcuts-header shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">👤</span>
             <div>
-              <h2 id="account-modal-title" className="text-lg font-bold text-cyan-400 leading-tight">
+              <h2 id="account-modal-title" class="shortcuts-title godot-text-outline">
                 Player Account & Profile
               </h2>
-              <p className="text-[11px] text-slate-400">
+              <p class="text-[11px] text-[rgba(217,255,226,0.7)]">
                 Manage your public name, avatar, and cloud recovery key
               </p>
             </div>
           </div>
           <button
             data-testid="btn-close-account"
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-lg leading-none w-7 h-7 flex items-center justify-center"
+            class="shortcuts-close-btn"
             onClick={onClose}
+            title="Close (Esc)"
             aria-label="Close"
           >
             ✕
@@ -215,37 +217,37 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto px-5 py-4 space-y-6 text-xs text-slate-200">
+        <div class="shortcuts-content overflow-y-auto space-y-4 pr-1">
           {/* SECTION 1: PROFILE PICTURE */}
-          <div className="bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-semibold text-cyan-300 flex items-center gap-1.5">
+          <div class="shortcut-section space-y-3">
+            <h3 class="shortcut-section-title">
               <span>🖼️</span> Profile Picture
             </h3>
 
-            <div className="flex items-center gap-4">
+            <div class="flex items-center gap-4">
               {/* Avatar Preview */}
-              <div className="w-14 h-14 rounded-full border-2 border-cyan-400/80 bg-slate-950 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+              <div class="w-14 h-14 rounded-full border-2 border-[var(--cell-wall)] bg-[rgba(0,9,36,0.7)] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
                 {avatarPreviewUrl && !previewError ? (
                   <img
                     src={avatarPreviewUrl}
                     alt="Avatar preview"
-                    className="w-full h-full object-cover"
+                    class="w-full h-full object-cover"
                     onError={() => setPreviewError(true)}
                   />
                 ) : (
-                  <span className="text-2xl select-none">🐟</span>
+                  <span class="text-2xl select-none">🐟</span>
                 )}
               </div>
 
-              <div className="flex-1 space-y-2">
-                <label className="block text-[11px] text-slate-400 font-medium">
+              <div class="flex-1 space-y-2">
+                <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                   Image URL (PNG or JPG)
                 </label>
-                <div className="flex items-center gap-2">
+                <div class="flex items-center gap-2">
                   <input
                     type="url"
                     data-testid="input-avatar-url"
-                    className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 flex-1 focus:outline-none focus:border-cyan-400 transition"
+                    class="game-input flex-1 text-xs"
                     placeholder="https://example.com/my-avatar.png"
                     value={avatarUrl}
                     onInput={(e: any) => {
@@ -257,7 +259,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                   />
                   <button
                     data-testid="btn-save-avatar"
-                    className="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 text-white rounded-lg font-medium transition disabled:opacity-50 shrink-0"
+                    class="btn-shortcuts text-xs shrink-0"
                     onClick={handleSaveAvatar}
                     disabled={avatarSaving}
                   >
@@ -266,7 +268,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                   {avatarUrl && (
                     <button
                       data-testid="btn-remove-avatar"
-                      className="px-2.5 py-1.5 bg-slate-800 hover:bg-red-950 hover:text-red-300 text-slate-400 border border-slate-700 rounded-lg transition disabled:opacity-50 shrink-0"
+                      class="btn-secondary-danger text-xs shrink-0"
                       onClick={handleRemoveAvatar}
                       disabled={avatarSaving}
                       title="Remove avatar"
@@ -281,7 +283,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             {avatarMessage && (
               <p
                 data-testid="avatar-message"
-                className={`text-[11px] mt-1 ${avatarMessage.type === "success" ? "text-emerald-400" : "text-rose-400"}`}
+                class={`text-[11px] mt-1 font-semibold ${avatarMessage.type === "success" ? "text-[var(--stat-satisfied)]" : "text-[var(--stat-error)]"}`}
               >
                 {avatarMessage.text}
               </p>
@@ -289,19 +291,19 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
           </div>
 
           {/* SECTION 2: DISPLAY NAME */}
-          <div className="bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-semibold text-cyan-300 flex items-center gap-1.5">
+          <div class="shortcut-section space-y-3">
+            <h3 class="shortcut-section-title">
               <span>🏷️</span> Display Name
             </h3>
-            <p className="text-[11px] text-slate-400">
+            <p class="shortcut-section-hint">
               Your name appears on the daily leaderboard. Must be between 3 and 25 characters.
             </p>
 
-            <div className="flex items-center gap-2">
+            <div class="flex items-center gap-2">
               <input
                 type="text"
                 data-testid="input-display-name"
-                className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 flex-1 focus:outline-none focus:border-cyan-400 transition"
+                class="game-input flex-1 text-xs"
                 placeholder="Enter player name"
                 value={displayName}
                 maxLength={25}
@@ -310,7 +312,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               />
               <button
                 data-testid="btn-save-display-name"
-                className="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 text-white rounded-lg font-medium transition disabled:opacity-50 shrink-0"
+                class="btn-shortcuts text-xs shrink-0"
                 onClick={handleSaveDisplayName}
                 disabled={nameSaving}
               >
@@ -321,7 +323,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             {nameMessage && (
               <p
                 data-testid="name-message"
-                className={`text-[11px] mt-1 ${nameMessage.type === "success" ? "text-emerald-400" : "text-rose-400"}`}
+                class={`text-[11px] mt-1 font-semibold ${nameMessage.type === "success" ? "text-[var(--stat-satisfied)]" : "text-[var(--stat-error)]"}`}
               >
                 {nameMessage.text}
               </p>
@@ -329,33 +331,33 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
           </div>
 
           {/* SECTION 3: ACCOUNT RECOVERY KEY */}
-          <div className="bg-slate-800/40 border border-slate-700/60 rounded-xl p-4 space-y-4">
+          <div class="shortcut-section space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-cyan-300 flex items-center gap-1.5">
+              <h3 class="shortcut-section-title">
                 <span>🔑</span> Account Recovery Key
               </h3>
-              <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+              <p class="shortcut-section-hint">
                 This secret key identifies your player profile on PlayFab. Save it to keep your leaderboard submissions and rank if you switch browsers or devices.
               </p>
             </div>
 
             {/* Current Key display + copy */}
-            <div className="space-y-1.5">
-              <label className="block text-[11px] text-slate-400 font-medium">
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                 Your Current Key
               </label>
-              <div className="flex items-center gap-2">
+              <div class="flex items-center gap-2">
                 <input
                   type={isKeyVisible ? "text" : "password"}
                   data-testid="input-recovery-key"
                   readOnly
                   value={recoveryKey}
-                  className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-300 flex-1 select-all focus:outline-none"
+                  class="game-input font-mono text-xs flex-1 select-all"
                 />
                 <button
                   type="button"
                   data-testid="btn-toggle-key-visibility"
-                  className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg transition shrink-0"
+                  class="btn-secondary text-xs shrink-0"
                   onClick={() => setIsKeyVisible(!isKeyVisible)}
                   title={isKeyVisible ? "Hide Key" : "Reveal Key"}
                 >
@@ -364,7 +366,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 <button
                   type="button"
                   data-testid="btn-copy-key"
-                  className="px-3.5 py-1.5 bg-cyan-700 hover:bg-cyan-600 active:bg-cyan-800 text-white rounded-lg font-medium transition shrink-0 flex items-center gap-1 shadow-sm"
+                  class="btn-shortcuts text-xs shrink-0 flex items-center gap-1"
                   onClick={handleCopyKey}
                 >
                   {copySuccess ? "✓ Copied!" : "📋 Copy Key"}
@@ -373,15 +375,15 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             </div>
 
             {/* Restore Account from Key */}
-            <div className="pt-3 border-t border-slate-700/50 space-y-2">
-              <label className="block text-[11px] text-slate-400 font-medium">
+            <div class="pt-3 border-t border-[rgba(217,255,226,0.12)] space-y-2">
+              <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                 Restore or Switch Account
               </label>
-              <div className="flex items-center gap-2">
+              <div class="flex items-center gap-2">
                 <input
                   type="text"
                   data-testid="input-restore-key"
-                  className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-100 flex-1 focus:outline-none focus:border-cyan-400 transition"
+                  class="game-input font-mono text-xs flex-1"
                   placeholder="Paste recovery key here..."
                   value={restoreKeyInput}
                   onInput={(e: any) => setRestoreKeyInput(e.target.value)}
@@ -390,7 +392,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 <button
                   type="button"
                   data-testid="btn-restore-key"
-                  className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg font-medium transition disabled:opacity-50 shrink-0 shadow-sm"
+                  class="btn-shortcuts text-xs shrink-0"
                   onClick={handleRestoreAccount}
                   disabled={isRestoring || !restoreKeyInput.trim()}
                 >
@@ -401,7 +403,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               {restoreMessage && (
                 <p
                   data-testid="restore-message"
-                  className={`text-[11px] mt-1 ${restoreMessage.type === "success" ? "text-emerald-400" : "text-rose-400"}`}
+                  class={`text-[11px] mt-1 font-semibold ${restoreMessage.type === "success" ? "text-[var(--stat-satisfied)]" : "text-[var(--stat-error)]"}`}
                 >
                   {restoreMessage.text}
                 </p>
@@ -411,9 +413,9 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-slate-800 bg-slate-950/40 flex justify-end">
+        <div class="px-5 py-3 border-t border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.2)] flex justify-end shrink-0">
           <button
-            className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-medium transition"
+            class="btn-secondary text-xs px-4 py-1.5"
             onClick={onClose}
           >
             Close
