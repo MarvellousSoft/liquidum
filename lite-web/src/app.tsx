@@ -40,6 +40,7 @@ import type { StreakData } from './engine/StreakManager';
 import { LeaderboardModal } from './components/LeaderboardModal';
 import { LeaderboardView } from './components/LeaderboardView';
 import { AccountModal } from './components/AccountModal';
+import { HelpModal } from './components/HelpModal';
 import { playFabService } from './engine/PlayFabService';
 import {
   type GameSettings,
@@ -135,9 +136,29 @@ export function App() {
   const [showAccountModal, setShowAccountModal] = useState<boolean>(false);
   const showAccountModalRef = useRef(showAccountModal);
   showAccountModalRef.current = showAccountModal;
+  const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
   const [userDisplayName, setUserDisplayName] = useState<string>(() => playFabService.getDisplayName() || "");
   const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(() => playFabService.getAvatarUrl());
   const [avatarLoadError, setAvatarLoadError] = useState<boolean>(false);
+
+  // Auto-open help modal on first time visitor (unless explicitly loading developer test mode)
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('mode') === 'test' || params.get('testLevel') || params.get('level')) {
+          return;
+        }
+      }
+      const seen = localStorage.getItem('liquidum_help_seen');
+      if (!seen) {
+        setShowHelpModal(true);
+        localStorage.setItem('liquidum_help_seen', 'true');
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
     playFabService
@@ -760,8 +781,9 @@ export function App() {
         return;
       }
 
-      // Escape closes shortcuts, levels, settings, and account modals
+      // Escape closes help, shortcuts, levels, settings, and account modals
       if (e.key === 'Escape') {
+        setShowHelpModal(false);
         setShowShortcuts(false);
         setShowLevelsModal(false);
         setShowSettings(false);
@@ -769,10 +791,17 @@ export function App() {
         return;
       }
 
-      // Help / shortcuts popup toggle
+      // Shortcuts modal toggle (?)
       if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
         e.preventDefault();
         setShowShortcuts(s => !s);
+        return;
+      }
+
+      // Help modal toggle (h or F1)
+      if (key === 'h' || e.key === 'F1') {
+        e.preventDefault();
+        setShowHelpModal(s => !s);
         return;
       }
 
@@ -1436,10 +1465,21 @@ export function App() {
         )}
 
         <button
+          data-testid="btn-help"
+          onClick={() => setShowHelpModal(true)}
+          class="btn-shortcuts"
+          title="How to Play / Rules (?)"
+          aria-label="How to Play"
+        >
+          <span class="text-base font-bold">❓</span>
+          <span class="btn-text">How to Play</span>
+        </button>
+
+        <button
           data-testid="btn-shortcuts"
           onClick={() => setShowShortcuts(true)}
           class="btn-shortcuts"
-          title="Shortcuts & Controls (?)"
+          title="Keyboard Shortcuts"
           aria-label="Shortcuts"
         >
           <span class="text-base">⌨️</span>
@@ -2368,6 +2408,12 @@ export function App() {
         isOpen={showAccountModal}
         onClose={() => setShowAccountModal(false)}
         onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
+      />
+
+      <HelpModal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
+        dailyDate={isDailyMode ? dailyDate : undefined}
       />
     </div>
   );

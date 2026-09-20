@@ -16,9 +16,10 @@ test.describe("Account Modal & Profile E2E Tests", () => {
       customId: "KEY_ORIGINAL_111",
     };
 
-    // Pre-populate custom ID in localStorage before page loads
+    // Pre-populate custom ID and mark help as seen before page loads
     await page.addInitScript((initKey) => {
       localStorage.setItem("liquidum_custom_id", initKey);
+      localStorage.setItem("liquidum_help_seen", "true");
     }, currentUser.customId);
 
     // Mock image requests to prevent broken image load errors

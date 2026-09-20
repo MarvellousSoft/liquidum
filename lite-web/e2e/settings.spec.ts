@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Settings Modal & Features E2E', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('liquidum_help_seen', 'true');
+    });
     await page.goto('/?mode=test');
     await page.waitForSelector('[data-testid="cell-0-0"]');
   });

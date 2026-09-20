@@ -433,7 +433,7 @@ body {
   box-shadow: 0 2px 0 var(--game-navy);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .btn-action .btn-text,
   .btn-shortcuts .btn-text {
     display: none;

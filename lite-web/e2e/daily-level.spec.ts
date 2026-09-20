@@ -2,8 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Daily Level E2E Tests', () => {
 
-  test.beforeEach(async ({ context }) => {
+  test.beforeEach(async ({ context, page }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.addInitScript(() => {
+      localStorage.setItem('liquidum_help_seen', 'true');
+    });
   });
 
   test('loads daily level by default when visiting root url without appending date', async ({ page }) => {

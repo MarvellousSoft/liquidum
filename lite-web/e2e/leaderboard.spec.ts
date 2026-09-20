@@ -2,6 +2,10 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Leaderboard & PlayFab E2E Tests", () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('liquidum_help_seen', 'true');
+    });
+
     // Intercept all PlayFab requests to guarantee ZERO live calls to production
     await page.route("**/*playfabapi.com/**", async (route) => {
       const url = route.request().url();
