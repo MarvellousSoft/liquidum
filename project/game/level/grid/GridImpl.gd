@@ -1811,10 +1811,10 @@ func _sudoku_check19(count_water : Callable, count_nothing: Callable) -> E.HintS
 		while not a.is_empty() and a.back().x <= i:
 			max_possible.append(a.back().x + a.back().y)
 			a.pop_back()
-		var m : float = max_possible.min()
-		if m < i:
+		var mn : float = max_possible.min()
+		if mn < i:
 			return E.HintStatus.Wrong
-		max_possible.erase(m)
+		max_possible.erase(mn)
 	return st
 
 func _sudoku_status() -> E.HintStatus:

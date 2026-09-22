@@ -59,7 +59,24 @@ static func _liar_size_gen(rng: RandomNumberGenerator) -> Vector2i:
 	return Vector2i(rng.randi_range(5, 8), rng.randi_range(5, 8))
 
 static func _sudoku_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
-	Level.HintVisibility.all_hidden(9, 9).apply_to_grid(grid)
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(-4, 5))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-1, 5))
+	var cellhints: Array[int] = []
+	for i in grid.rows():
+		for j in grid.cols():
+			if grid.get_cell(i, j).hints() != null:
+				cellhints.append(0)
+	RandomHub._vis_array_or(rng, cellhints, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(-4, 3))
+	RandomHub._vis_array_or(rng, cellhints, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-2, 4))
+	for i in grid.rows():
+		for j in grid.cols():
+			if grid.get_cell(i, j).hints() != null:
+				var v: int = cellhints.pop_back()
+				h.cells[Vector2i(i, j)] = v
+	RandomHub.hide_too_easy_hints(grid)
+	h.apply_to_grid(grid)
 	if not grid.rule_variants().has(GridModel.RuleVariant.Sudoku):
 		grid.rule_variants().append(GridModel.RuleVariant.Sudoku)
 

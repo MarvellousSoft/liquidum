@@ -105,7 +105,10 @@ func pop_random(arr: Array[Vector2i]) -> Vector2i:
 	arr.pop_back()
 	return val
 
-func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
+# Fixed waters, if non-empty, is a grid with 1 for water and 2 for X, and aquariums will be generated
+# respecting those waters.
+# Returns a grid of groups which are connected together
+func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule, fixed_waters : Array[Array] = []) -> Array[Array]:
 	var aqs: int
 	if opts.diagonals:
 		m *= 2
@@ -139,6 +142,8 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 	Global.shuffle(all_empty, rng)
 	while left > 0:
 		group += 1
+		var highest_W := 100000
+		var lowest_X := -1
 		var group_size: int = group_sizes.pop_back() + 1
 		if group_sizes.is_empty():
 			group_sizes.push_back(5)
@@ -147,18 +152,62 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule) -> Array[Array]:
 			all_empty.pop_back()
 		var cells: Array[Vector2i] = [all_empty.pop_back()]
 		g[cells[0].x][cells[0].y] = group
+		if not fixed_waters.is_empty():
+			if fixed_waters[cells[0].x][cells[0].y] == 1:
+				highest_W = min(highest_W, cells[0].x)
+			else:
+				lowest_X = max(lowest_X, cells[0].x)
 		var all_adj: Array[Vector2i] = adj_rule.all_adj(cells[0], opts.boats)
 		for _i in group_size:
-			var c := pop_random(all_adj)
-			while c != Vector2i(-1, -1) and (c.x < 0 or c.x >= n or c.y < 0 or c.y >= m or g[c.x][c.y] != 0):
+			var c: Vector2i
+			while true:
 				c = pop_random(all_adj)
+				if c == Vector2i(-1, -1):
+					break
+				if (c.x < 0 or c.x >= n or c.y < 0 or c.y >= m or g[c.x][c.y] != 0):
+					continue
+				if not fixed_waters.is_empty() and (highest_W <= c.x if fixed_waters[c.x][c.y] != 1 else c.x <= lowest_X):
+					continue
+				break
 			if c.x == -1:
 				break
+			if not fixed_waters.is_empty():
+				if fixed_waters[c.x][c.y] == 1:
+					highest_W = min(highest_W, c.x)
+				else:
+					lowest_X = max(lowest_X, c.x)
 			g[c.x][c.y] = group
 			cells.append(c)
 			all_adj.append_array(adj_rule.all_adj(c, opts.boats))
 			left -= 1
+	#if not fixed_waters.is_empty():
+	#	for i in n:
+	#		var sa : Array[String] = []
+	#		for j in m:
+	#			sa.append("[color=%s]%2d[/color]" % ["blue" if fixed_waters[i][j] == 1 else "white", g[i][j]])
+	#		print_rich(" ".join(sa))
 	return g
+
+func _apply_grid_groups(grid: GridModel, g: Array[Array], adj_rule: AdjacencyRule) -> void:
+	var n := grid.rows()
+	var m := grid.cols()
+	for i in n:
+		for j in m:
+			if opts.diagonals:
+				var diag_adj: DiagAdj = adj_rule as DiagAdj
+				if j < m - 1 and g[i][2 * j + 1] != g[i][2 * j + 2]:
+					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
+				var from := Vector2i(i, 2 * j) if diag_adj.dec_diag[i][j] else Vector2i(i, 2 * j + 1)
+				var bottom := diag_adj.third_adj(from)
+				if i < n - 1 and g[from.x][from.y] != g[bottom.x][bottom.y]:
+					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
+				if g[i][2 * j] != g[i][2 * j + 1]:
+					grid.get_cell(i, j).put_wall(E.Walls.DecDiag if diag_adj.dec_diag[i][j] else E.Walls.IncDiag, false, true)
+			else:
+				if j < m - 1 and g[i][j] != g[i][j + 1]:
+					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
+				if i < n - 1 and g[i][j] != g[i + 1][j]:
+					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
 
 func _all_cells(grid: GridModel) -> Array[Vector2i]:
 	var all_cells: Array[Vector2i] = []
@@ -228,18 +277,14 @@ static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel
 			expected[sz] = all_aqs[sz]
 
 func _random_perm(n: int = 9) -> Array[int]:
-	var a : Array[int]
+	var a : Array[int] = []
 	a.assign(range(1, n+1))
-	for i in range(n-1, -1, -1):
-		var j := rng.randi_range(0, i)
-		var tmp := a[i]
-		a[i] = a[j]
-		a[j] = tmp
+	Global.shuffle(a, rng)
 	return a
 
 func generate_sudoku(grid: GridModel) -> void:
 	var tries : int = 0
-	var g : Array[Array]
+	var g : Array[Array] = []
 	while true:
 		tries += 1
 		# When we assign rows and cols, the waters are fully determined
@@ -270,27 +315,20 @@ func generate_sudoku(grid: GridModel) -> void:
 				bad = true
 		if not bad:
 			break
-	# Not great walls, this just separates the waters.
-	# Copy the gen_grid_groups, but when generating a group keep track of the highest water and lowest x, and don't let these intersect each other
-	for i in 9:
-		for j in 9:
-			if i < 8 and g[i][j] == 1 and g[i+1][j] == 2:
-				grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
-			if j < 8 and g[i][j] == 1 and g[i][j+1] == 2:
-				grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
-			if j > 0 and g[i][j] == 1 and g[i][j-1] == 2:
-				grid.get_cell(i, j).put_wall(E.Walls.Left, false, true)
-			if i > 0 and g[i][j] == 1 and g[i-1][j] == 2:
-				var nbr_has_W_above := false
-				for j2 in 9:
-					if g[i][j2] == 1 and g[i-1][j2] == 2:
-						nbr_has_W_above = true
-				if nbr_has_W_above:
-					grid.get_cell(i, j).put_wall(E.Walls.Top, false, true)
+	var adj_rule := SquareAdj.new()
+	#print("Generating grid grops")
+	var grid_groups := _gen_grid_groups(9, 9, adj_rule, g)
+	#print("Applying grid grups")
+	_apply_grid_groups(grid, grid_groups, adj_rule)
+	#print("Putting water")
 	for i in 9:
 		for j in 9:
 			if g[i][j] == 1:
 				grid.get_cell(i, j).put_water(E.Corner.BottomLeft, false)
+	for i in 9:
+		grid.get_cell(1 + (i / 3) * 3, 1 + (i % 3) * 3).add_cell_hints(false)
+	#print(grid.to_str())
+	#print("\nok %s\n" % [grid._sudoku_status()])
 
 
 
@@ -312,23 +350,8 @@ func generate(n: int, m: int) -> GridModel:
 		adj_rule = SquareAdj.new()
 
 	var g := _gen_grid_groups(n, m, adj_rule)
-	for i in n:
-		for j in m:
-			if opts.diagonals:
-				var diag_adj: DiagAdj = adj_rule as DiagAdj
-				if j < m - 1 and g[i][2 * j + 1] != g[i][2 * j + 2]:
-					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
-				var from := Vector2i(i, 2 * j) if diag_adj.dec_diag[i][j] else Vector2i(i, 2 * j + 1)
-				var bottom := diag_adj.third_adj(from)
-				if i < n - 1 and g[from.x][from.y] != g[bottom.x][bottom.y]:
-					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
-				if g[i][2 * j] != g[i][2 * j + 1]:
-					grid.get_cell(i, j).put_wall(E.Walls.DecDiag if diag_adj.dec_diag[i][j] else E.Walls.IncDiag, false, true)
-			else:
-				if j < m - 1 and g[i][j] != g[i][j + 1]:
-					grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
-				if i < n - 1 and g[i][j] != g[i + 1][j]:
-					grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
+	_apply_grid_groups(grid, g, adj_rule)
+
 	if opts.boats:
 		randomize_boats(grid)
 	randomize_water(grid, false)

@@ -22,7 +22,12 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 	var total_gen := 0
 	var total_solve := 0
 	var tries := 0
+	var multiple_solutions := 0
+	var too_easy := 0
+	var too_hard := 0
 	for i in 1000:
+		if ((i+1) % 25) == 0:
+			print("Try %d: [too easy %d] [too hard %d] [multiple solutions %d]" % [i+1, too_easy, too_hard, multiple_solutions])
 		if cancel_gen:
 			break
 		success_state = rng.state
@@ -56,6 +61,16 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			var solve_result := solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S)
+			#print("Solve result %d" % [solve_result])
+			match solve_result:
+				SolverModel.SolveResult.Unsolvable:
+					push_error("Should not be unsolvable")
+				SolverModel.SolveResult.SolvedMultiple:
+					multiple_solutions +=1
+				SolverModel.SolveResult.SolvedUniqueNoGuess:
+					too_easy += 1
+				SolverModel.SolveResult.GaveUp:
+					too_hard += 1
 			if solve_result == SolverModel.SolveResult.SolvedUnique:
 				total_solve += Time.get_ticks_usec() - start_solve
 				g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.SolutionNoClear)

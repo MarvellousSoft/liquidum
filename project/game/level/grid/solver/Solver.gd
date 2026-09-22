@@ -2,8 +2,57 @@ class_name SolverModel
 
 const Content := GridImpl.Content
 
+# Similar to GridImpl::_sudoku_check19
+# If there's a 1-9 number that only idx can cover, return it, else -1.
+# This could be smarter, as there are other ways it could be the only one. But this is good enough
+# for a solver.
+static func _sudoku_forced(hints: Array[GridModel.LineHint], count_water : Callable, count_nothing: Callable, idx: int) -> int:
+	var W: Array[float] = [0,0,0,0,0,0,0,0,0]
+	var empty : Array[float] = [0,0,0,0,0,0,0,0,0]
+	var x_to_i : Array[Array] = [[],[],[],[],[],[],[],[],[]]
+	var i_to_x : Array[Array] = [[],[],[],[],[],[],[],[],[]]
+	var done_x : Array[int] = [0,0,0,0,0,0,0,0,0]
+	for i in 9:
+		if i != idx and hints[i].water_count >= 0:
+			W[i] = hints[i].water_count
+			empty[i] = 0
+		else:
+			W[i] = count_water.call(i)
+			empty[i] = count_nothing.call(i)
+		for x in range(maxi(ceili(W[i]), 1), floori(W[i]+empty[i]) + 1, 1):
+			x_to_i[x-1].append(i)
+			i_to_x[i].append(x)
+	for _tmp in 9:
+		var to_rem := -1
+		for x in 9:
+			if not done_x[x] and x_to_i[x].size() == 1:
+				if x_to_i[x][0] == idx:
+					return x+1
+				to_rem = x_to_i[x][0]
+				done_x[x] = 1
+				break
+		for i in 9:
+			if to_rem == -1 and i_to_x[i].size() == 1:
+				if i == idx:
+					return i_to_x[i][0]
+				to_rem = i
+				done_x[i_to_x[i][0]-1] = 1
+				break
+		if to_rem == -1:
+			break
+		i_to_x[to_rem].clear()
+		for x in 9:
+			x_to_i[x].erase(to_rem)
+	return -1
+
 static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], a: int, is_row: bool) -> GridModel.LineHint:
 	var h := hints[a]
+	if h.water_count == -1 and grid.rule_variants().has(GridModel.RuleVariant.Sudoku):
+		var forced := _sudoku_forced(hints, grid.count_water_row if is_row else grid.count_water_col, grid.count_nothing_row if is_row else grid.count_nothing_col, a)
+		if forced != -1:
+			h = h.duplicate()
+			h.water_count = forced
+			#print("Deduced hint ", forced, " at row ", is_row, " ", a)
 	if h.water_count == -1 and grid.grid_hints().total_water != -1:
 		var inferred := grid.grid_hints().total_water
 		for b in hints.size():
@@ -13,7 +62,8 @@ static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], 
 					break
 				inferred -= hints[b].water_count
 		if inferred != -1:
-			h = h.duplicate()
+			if h == hints[a]:
+				h = h.duplicate()
 			h.water_count = inferred
 	if h.boat_count == -1 and not is_row and h.boat_count_type == E.HintType.Together:
 		if h == hints[a]:
@@ -65,7 +115,7 @@ class Strategy:
 		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
 			var bm : int = grid._sudoku_bitmask(grid.count_water_row, grid.count_nothing_row) if rows else grid._sudoku_bitmask(grid.count_water_col, grid.count_nothing_col)
 			if bm < 0: return hint.water_count
-			for i in range(9, 9, -1):
+			for i in range(9, 0, -1):
 				if i <= max_value and ((bm >> i) & 1) == 0:
 					return i
 		if grid.rule_variants().has(GridModel.RuleVariant.Liar) and hint.water_alt_text.is_valid_float():
@@ -131,8 +181,8 @@ class RowStrategy extends Strategy:
 	# independent.
 	func _apply_strategy(_i: int, _values: Array[RowComponent], _water_left_min: float, _water_left_max: float, _nothing_left: float) -> bool:
 		return GridModel.must_be_implemented()
-	func _apply(i: int) -> bool:
-		var hint := SolverModel._row_hint(grid, i)
+	func _apply(i: int, override_hint: GridModel.LineHint = null) -> bool:
+		var hint := SolverModel._row_hint(grid, i) if override_hint == null else override_hint
 
 		if hint.water_count < 0 and hint.water_alt_text == "":
 			return false
@@ -459,8 +509,8 @@ static func _maybe_extra_boat_col(grid: GridImpl, j: int) -> bool:
 class BoatRowStrategy extends RowStrategy:
 	func description() -> String:
 		return "If hint is all possible boat locations, then put the boats"
-	func _apply(i: int) -> bool:
-		var full_hint := SolverModel._row_hint(grid, i)
+	func _apply(i: int, override_hint : GridModel.LineHint = null) -> bool:
+		var full_hint := SolverModel._row_hint(grid, i) if override_hint == null else override_hint
 		var hint := full_hint.boat_count
 		if hint == -1:
 			if full_hint.boat_count_type == E.HintType.Together:
@@ -1949,6 +1999,15 @@ class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 						any = true
 		return any
 
+class SudokuStrategy extends Strategy:
+	func apply_any() -> bool:
+		if not grid.rule_variants().has(GridModel.RuleVariant.Sudoku):
+			return false
+		var any := false
+		return any
+	func description() -> String:
+		return "If some row/column/cell needs to be fully filled or empty"
+
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
@@ -1982,6 +2041,7 @@ static var STRATEGY_LIST := {
 	BasicTogetherCellHints = func(grid): return BasicTogetherCellHintsStrategy.new(grid),
 	TogetherSeparateCellHints = func(grid): return TogetherSeparateCellHintsStrategy.new(grid),
 	LiarRowStrategy = func(grid): return LiarRowStrategy.new(grid),
+	SudokuStrategy = func(grid): return SudokuStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it
