@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools, getHintHoverText } from '../model/GridData';
 import type { GridModelData } from '../model/GridData';
 import type { GameSettings } from '../engine/SettingsManager';
@@ -12,6 +12,7 @@ interface GridProps {
   selectedTool?: Content;
   previewMap?: Map<string, Content> | null;
   blinkingCells?: Map<string, { corner: Corner, timestamp: number }>;
+  resetTrigger?: number;
   onCellPointerDown?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onCellPointerEnter?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
   onCellPointerMove?: (row: number, col: number, corner: Corner, e: PointerEvent) => void;
@@ -26,6 +27,7 @@ export function Grid({
   selectedTool,
   previewMap,
   blinkingCells,
+  resetTrigger,
   onCellPointerDown,
   onCellPointerEnter,
   onCellPointerMove,
@@ -38,9 +40,66 @@ export function Grid({
   const [hoveredHint, setHoveredHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
   const activeHoveredHint = hoveredCell ? null : hoveredHint;
 
+  const [dimmedHints, setDimmedHints] = useState<Set<string>>(new Set());
+
+  // Reset dimmed hints when level loads or restarts
+  useEffect(() => {
+    setDimmedHints(new Set());
+  }, [resetTrigger, rows, cols]);
+
   if (rows === 0 || cols === 0) return <div>Empty Grid</div>;
 
   const showOppositeHints = settings?.line_info === 'missing' || settings?.line_info === 'current';
+
+  const isRowBoatDimmed = (r: number) => dimmedHints.has(`row-${r}`) || dimmedHints.has(`row-${r}-boat`);
+  const isRowWaterDimmed = (r: number) => dimmedHints.has(`row-${r}`) || dimmedHints.has(`row-${r}-water`);
+  const isRowDimmed = (r: number) => dimmedHints.has(`row-${r}`) || (isRowBoatDimmed(r) && isRowWaterDimmed(r));
+
+  const isColBoatDimmed = (c: number) => dimmedHints.has(`col-${c}`) || dimmedHints.has(`col-${c}-boat`);
+  const isColWaterDimmed = (c: number) => dimmedHints.has(`col-${c}`) || dimmedHints.has(`col-${c}-water`);
+  const isColDimmed = (c: number) => dimmedHints.has(`col-${c}`) || (isColBoatDimmed(c) && isColWaterDimmed(c));
+
+  const toggleDim = (type: 'row' | 'col', index: number, part: 'all' | 'boat' | 'water' = 'all') => {
+    setDimmedHints(prev => {
+      const next = new Set(prev);
+      const mainKey = `${type}-${index}`;
+      const boatKey = `${type}-${index}-boat`;
+      const waterKey = `${type}-${index}-water`;
+
+      if (part === 'all') {
+        const currentlyDimmed = next.has(mainKey) || (next.has(boatKey) && next.has(waterKey));
+        if (currentlyDimmed) {
+          next.delete(mainKey);
+          next.delete(boatKey);
+          next.delete(waterKey);
+        } else {
+          next.add(mainKey);
+          next.delete(boatKey);
+          next.delete(waterKey);
+        }
+      } else if (part === 'boat') {
+        if (next.has(mainKey)) {
+          next.delete(mainKey);
+          next.add(waterKey);
+        } else if (next.has(boatKey)) {
+          next.delete(boatKey);
+        } else {
+          next.add(boatKey);
+        }
+      } else if (part === 'water') {
+        if (next.has(mainKey)) {
+          next.delete(mainKey);
+          next.add(boatKey);
+        } else if (next.has(waterKey)) {
+          next.delete(waterKey);
+        } else {
+          next.add(waterKey);
+        }
+      }
+      return next;
+    });
+  };
+
 
   const getHintClass = (current: number, target: number, isWater: boolean, targetType: HintType, bools: boolean[]) => {
     let colorClass = 'hint-normal';
@@ -372,28 +431,70 @@ export function Grid({
               ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
               : false;
 
+            const isDualCol = showBoatHint && showWaterHint;
+
             return (
               <div
                 key={c}
                 data-testid={`col-hint-${c}`}
                 data-col={c}
-                class={`col-hint ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''}`}
+                data-dimmed={isColDimmed(c) ? 'true' : 'false'}
+                class={`col-hint ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                 title={cellTitle}
                 onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
                 onPointerLeave={() => setHoveredHint(null)}
+                onPointerDown={(e) => {
+                  if (e.button === 2) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleDim('col', c, 'all');
+                }}
               >
                 {showBoatHint && (
                   <span
-                    class={getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)}
+                    class={`${getHintClass(bCount, hint.boat_count, false, hint.boat_count_type, bBools)} ${isColBoatDimmed(c) ? 'hint-dimmed' : ''}`}
                     title={boatTitle}
+                    data-dimmed={isColBoatDimmed(c) ? 'true' : 'false'}
+                    onPointerDown={(e) => {
+                      if (e.button === 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                    onContextMenu={(e) => {
+                      if (isDualCol) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleDim('col', c, 'boat');
+                      }
+                    }}
                   >
                     {renderHint(hint.boat_count, hint.boat_count_type, false)}
                   </span>
                 )}
                 {showWaterHint && (
                   <span
-                    class={getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)}
+                    class={`${getHintClass(wCount, hint.water_count, true, hint.water_count_type, wBools)} ${isColWaterDimmed(c) ? 'hint-dimmed' : ''}`}
                     title={waterTitle}
+                    data-dimmed={isColWaterDimmed(c) ? 'true' : 'false'}
+                    onPointerDown={(e) => {
+                      if (e.button === 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                    onContextMenu={(e) => {
+                      if (isDualCol) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleDim('col', c, 'water');
+                      }
+                    }}
                   >
                     {renderHint(hint.water_count, hint.water_count_type, true)}
                   </span>
@@ -432,14 +533,40 @@ export function Grid({
             <div
               data-testid={`row-hint-${r}`}
               data-row={r}
-              class={`row-hint ${isRowHighlighted ? 'hint-hovered' : ''}`}
+              data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
+              class={`row-hint ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
               title={cellTitle}
               onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
               onPointerLeave={() => setHoveredHint(null)}
+              onPointerDown={(e) => {
+                if (e.button === 2) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleDim('row', r, 'all');
+              }}
             >
               {hasDualRowHints ? (
                 <>
-                  <span class="row-hint-boat-slot">
+                  <span
+                    class={`row-hint-boat-slot ${isRowBoatDimmed(r) ? 'hint-dimmed' : ''}`}
+                    data-dimmed={isRowBoatDimmed(r) ? 'true' : 'false'}
+                    onPointerDown={(e) => {
+                      if (e.button === 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleDim('row', r, 'boat');
+                    }}
+                  >
                     {showBoatHint && (
                       <span
                         class={`row-hint-boat ${getHintClass(bCountRow, hint.boat_count, false, hint.boat_count_type, bBools)}`}
@@ -449,7 +576,21 @@ export function Grid({
                       </span>
                     )}
                   </span>
-                  <span class="row-hint-water-slot">
+                  <span
+                    class={`row-hint-water-slot ${isRowWaterDimmed(r) ? 'hint-dimmed' : ''}`}
+                    data-dimmed={isRowWaterDimmed(r) ? 'true' : 'false'}
+                    onPointerDown={(e) => {
+                      if (e.button === 2) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleDim('row', r, 'water');
+                    }}
+                  >
                     {showWaterHint && (
                       <span
                         class={`row-hint-water ${getHintClass(wCountRow, hint.water_count, true, hint.water_count_type, wBools)}`}
@@ -563,10 +704,22 @@ export function Grid({
             {showOppositeHints && (
               <div
                 data-testid={`row-hint-opposite-${r}`}
-                class={`row-hint row-hint-opposite flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''}`}
+                data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
+                class={`row-hint row-hint-opposite flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
                 title={getOppositeRowHoverText(r)}
                 onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
                 onPointerLeave={() => setHoveredHint(null)}
+                onPointerDown={(e) => {
+                  if (e.button === 2) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleDim('row', r, 'all');
+                }}
               >
                 {renderOppositeRowHint(r)}
               </div>
@@ -588,10 +741,22 @@ export function Grid({
                 <div
                   key={c}
                   data-testid={`col-hint-opposite-${c}`}
-                  class={`col-hint col-hint-opposite flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''}`}
+                  data-dimmed={isColDimmed(c) ? 'true' : 'false'}
+                  class={`col-hint col-hint-opposite flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                   title={getOppositeColHoverText(c)}
                   onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
                   onPointerLeave={() => setHoveredHint(null)}
+                  onPointerDown={(e) => {
+                    if (e.button === 2) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDim('col', c, 'all');
+                  }}
                 >
                   {renderOppositeColHint(c)}
                 </div>

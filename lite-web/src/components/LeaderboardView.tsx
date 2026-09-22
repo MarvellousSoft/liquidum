@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
+import { createPortal } from "preact/compat";
 import {
   playFabService,
   getDailyLeaderboardVersion,
@@ -48,11 +49,13 @@ export function LeaderboardView({
 
   const handleAvatarMouseEnter = (url: string, e: any) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const previewSize = 72;
+    const previewSize = 80;
     const placeLeft = rect.right + previewSize + 20 > window.innerWidth;
     const x = placeLeft ? rect.left - previewSize - 12 : rect.right + 12;
     const y = rect.top + rect.height / 2;
-    setPreviewAvatar({ url, x, y });
+    const clampedX = Math.max(8, x);
+    const clampedY = Math.max(previewSize / 2 + 8, Math.min(window.innerHeight - previewSize / 2 - 8, y));
+    setPreviewAvatar({ url, x: clampedX, y: clampedY });
   };
 
   const handleAvatarMouseLeave = () => {
@@ -109,29 +112,33 @@ export function LeaderboardView({
 
   return (
     <div
-      className={`bg-slate-900 border border-slate-700 rounded-2xl flex flex-col shadow-2xl overflow-hidden text-slate-100 ${
-        isSidePanel ? "h-full max-h-[640px] w-full" : "w-full max-w-lg max-h-[85vh]"
+      class={`${
+        isSidePanel
+          ? "leaderboard-panel h-full max-h-[640px] w-full"
+          : "shortcuts-dialog w-full max-w-lg max-h-[85vh]"
       } ${className}`}
       data-testid={isSidePanel ? "side-leaderboard-view" : "modal-leaderboard-view"}
     >
       {/* Header */}
-      <div className="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🏆</span>
+      <div class="shortcuts-header shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-xl select-none">🏆</span>
           <div>
-            <h2 id="leaderboard-title" className="text-lg font-bold text-cyan-400 leading-tight">
+            <h2 id="leaderboard-title" class="shortcuts-title godot-text-outline leading-tight">
               Daily Leaderboard
             </h2>
-            <p className="text-[11px] text-slate-400">
+            <p class="text-[11px] text-[rgba(217,255,226,0.7)]">
               {activeTab === "today" ? `Today • ${todayDate}` : `Yesterday • ${yesterdayDate}`}
             </p>
           </div>
         </div>
         {onClose && (
           <button
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-lg leading-none w-7 h-7 flex items-center justify-center"
+            data-testid="btn-close-leaderboard"
+            class="shortcuts-close-btn"
             onClick={onClose}
             aria-label="Close"
+            title="Close (Esc)"
           >
             ✕
           </button>
@@ -139,23 +146,15 @@ export function LeaderboardView({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 bg-slate-950/20">
+      <div class="leaderboard-tabs shrink-0">
         <button
-          className={`flex-1 py-2.5 text-xs font-semibold transition border-b-2 ${
-            activeTab === "today"
-              ? "border-cyan-400 text-cyan-400 bg-slate-800/40"
-              : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
+          class={`leaderboard-tab ${activeTab === "today" ? "active" : ""}`}
           onClick={() => setActiveTab("today")}
         >
           Today
         </button>
         <button
-          className={`flex-1 py-2.5 text-xs font-semibold transition border-b-2 ${
-            activeTab === "yesterday"
-              ? "border-cyan-400 text-cyan-400 bg-slate-800/40"
-              : "border-transparent text-slate-400 hover:text-slate-200"
-          }`}
+          class={`leaderboard-tab ${activeTab === "yesterday" ? "active" : ""}`}
           onClick={() => setActiveTab("yesterday")}
         >
           Yesterday
@@ -163,13 +162,13 @@ export function LeaderboardView({
       </div>
 
       {/* User Profile Bar */}
-      <div className="px-4 py-2.5 bg-slate-800/50 border-b border-slate-800/80 flex items-center justify-between text-xs">
+      <div class="leaderboard-user-bar shrink-0">
         {isEditingName ? (
-          <div className="flex flex-col gap-1 w-full">
-            <div className="flex items-center gap-2">
+          <div class="flex flex-col gap-1.5 w-full">
+            <div class="flex items-center gap-2">
               <input
                 type="text"
-                className="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-slate-100 text-xs flex-1 focus:outline-none focus:border-cyan-400"
+                class="game-input text-xs flex-1 py-1 px-2.5"
                 value={nameInput}
                 onInput={(e: any) => setNameInput(e.target.value)}
                 placeholder="Enter name (3-25 chars)"
@@ -177,14 +176,14 @@ export function LeaderboardView({
                 disabled={nameSaving}
               />
               <button
-                className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium disabled:opacity-50"
+                class="btn-shortcuts text-xs py-1 px-3"
                 onClick={handleSaveName}
                 disabled={nameSaving}
               >
                 {nameSaving ? "..." : "Save"}
               </button>
               <button
-                className="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded"
+                class="btn-secondary text-xs py-1 px-2.5"
                 onClick={() => {
                   setIsEditingName(false);
                   setNameError(null);
@@ -194,32 +193,34 @@ export function LeaderboardView({
                 Cancel
               </button>
             </div>
-            {nameError && <span className="text-red-400 text-[11px]">{nameError}</span>}
+            {nameError && (
+              <span class="text-[var(--stat-error)] text-[11px] font-semibold">{nameError}</span>
+            )}
           </div>
         ) : (
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
               {currentAvatarUrl ? (
                 <img
                   src={currentAvatarUrl}
                   alt=""
-                  className="w-6 h-6 rounded-full object-cover border border-cyan-400/50 cursor-pointer hover:scale-125 transition-transform duration-150"
+                  class="w-6 h-6 rounded-full object-cover border-2 border-[var(--cell-wall)] bg-[rgba(0,9,36,0.6)] cursor-pointer hover:scale-125 transition-transform duration-150 shrink-0 shadow-sm"
                   onMouseEnter={(e) => handleAvatarMouseEnter(currentAvatarUrl, e)}
                   onMouseLeave={handleAvatarMouseLeave}
                 />
               ) : (
-                <span className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-[11px]">
+                <span class="w-6 h-6 rounded-full bg-[rgba(0,9,36,0.6)] border-2 border-[var(--cell-wall)] flex items-center justify-center text-[11px] shrink-0 select-none">
                   🐟
                 </span>
               )}
-              <div className="flex items-center gap-1.5 leading-tight">
-                <span className="font-semibold text-slate-200 truncate max-w-[130px]">
+              <div class="flex items-center gap-1.5 leading-tight">
+                <span class="font-bold text-white truncate max-w-[130px] font-game text-xs">
                   {currentDisplayName || "Anonymous"}
                 </span>
                 {currentFlair && (
                   <span
                     data-testid="user-profile-flair"
-                    className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help"
+                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help"
                     style={{
                       color: currentFlair.color,
                       borderColor: `${currentFlair.color}66`,
@@ -229,13 +230,13 @@ export function LeaderboardView({
                   >
                     <span>{currentFlair.text}</span>
                     {currentFlair.extraFlairs > 0 && (
-                      <span className="text-[8px] opacity-80">+{currentFlair.extraFlairs}</span>
+                      <span class="text-[8px] opacity-80">+{currentFlair.extraFlairs}</span>
                     )}
                   </span>
                 )}
               </div>
               <button
-                className="text-cyan-400 hover:text-cyan-300 underline text-[11px] ml-0.5"
+                class="text-[var(--stat-satisfied)] hover:text-white underline text-[11px] font-game ml-0.5 cursor-pointer transition-colors"
                 onClick={() => {
                   setNameInput(currentDisplayName || "");
                   setNameError(null);
@@ -246,8 +247,8 @@ export function LeaderboardView({
               </button>
             </div>
             {userEntry && (
-              <div className="text-slate-300 text-[11px]">
-                Rank: <span className="font-bold text-cyan-400">#{userEntry.position}</span>
+              <div class="text-[rgba(217,255,226,0.8)] text-[11px] font-game">
+                Rank: <span class="font-bold text-[var(--stat-satisfied)]">#{userEntry.position}</span>
               </div>
             )}
           </div>
@@ -255,34 +256,34 @@ export function LeaderboardView({
       </div>
 
       {/* Content Table / States */}
-      <div className="p-3 flex-1 overflow-y-auto min-h-[160px]">
+      <div class="p-3 flex-1 overflow-y-auto min-h-[160px]">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-10 text-slate-400">
-            <span className="text-2xl animate-spin mb-2">⏳</span>
-            <p className="text-xs">Loading leaderboard...</p>
+          <div class="flex flex-col items-center justify-center py-10 text-[rgba(217,255,226,0.6)]">
+            <span class="text-2xl animate-spin mb-2 select-none">⏳</span>
+            <p class="text-xs font-game">Loading leaderboard...</p>
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <p className="text-xs text-red-400 mb-2">{error}</p>
+          <div class="flex flex-col items-center justify-center py-8 text-center">
+            <p class="text-xs text-[var(--stat-error)] font-semibold mb-2">{error}</p>
             <button
-              className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-md text-xs font-semibold"
+              class="btn-shortcuts text-xs py-1 px-3"
               onClick={loadLeaderboard}
             >
               🔄 Retry
             </button>
           </div>
         ) : entries.length === 0 ? (
-          <div className="text-center py-10 text-slate-400 text-xs">
+          <div class="text-center py-10 text-[rgba(217,255,226,0.6)] text-xs font-game">
             No scores recorded yet for this day.
           </div>
         ) : (
-          <table className="w-full text-left text-xs border-collapse">
+          <table class="leaderboard-table">
             <thead>
-              <tr className="text-slate-400 border-b border-slate-800 text-[11px]">
-                <th className="py-1.5 px-1.5 w-8 text-center">#</th>
-                <th className="py-1.5 px-2">Player</th>
-                <th className="py-1.5 px-2 text-center w-14">Mistakes</th>
-                <th className="py-1.5 px-2 text-right w-14">Time</th>
+              <tr>
+                <th class="py-2 px-1.5 w-8 text-center">#</th>
+                <th class="py-2 px-2">Player</th>
+                <th class="py-2 px-2 text-center w-16">Mistakes</th>
+                <th class="py-2 px-2 text-right w-16">Time</th>
               </tr>
             </thead>
             <tbody>
@@ -295,35 +296,31 @@ export function LeaderboardView({
                 return (
                   <tr
                     key={entry.playFabId + entry.position}
-                    className={`border-b border-slate-800/40 hover:bg-slate-800/30 transition ${
-                      entry.isCurrentUser
-                        ? "bg-cyan-950/40 text-cyan-300 font-semibold border-cyan-800/50"
-                        : "text-slate-200"
-                    }`}
+                    class={entry.isCurrentUser ? "is-current-user" : ""}
                   >
-                    <td className="py-1.5 px-1.5 text-center font-mono">
-                      {medal ? <span className="text-sm">{medal}</span> : entry.position}
+                    <td class="py-2 px-1.5 text-center font-mono">
+                      {medal ? <span class="text-sm select-none">{medal}</span> : entry.position}
                     </td>
-                    <td className="py-1.5 px-2">
-                      <div className="flex items-center gap-1.5 truncate max-w-[180px]">
+                    <td class="py-2 px-2">
+                      <div class="flex items-center gap-1.5 truncate max-w-[180px]">
                         {entry.avatarUrl ? (
                           <img
                             src={entry.avatarUrl}
                             alt=""
-                            className="w-4 h-4 rounded-full object-cover border border-slate-700 flex-shrink-0 cursor-pointer hover:scale-125 transition-transform duration-150"
+                            class="w-4 h-4 rounded-full object-cover border border-[rgba(217,255,226,0.3)] bg-[rgba(0,9,36,0.5)] flex-shrink-0 cursor-pointer hover:scale-125 transition-transform duration-150"
                             onMouseEnter={(e) => handleAvatarMouseEnter(entry.avatarUrl!, e)}
                             onMouseLeave={handleAvatarMouseLeave}
                           />
                         ) : (
-                          <span className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[9px] flex-shrink-0">
+                          <span class="w-4 h-4 rounded-full bg-[rgba(0,9,36,0.5)] border border-[rgba(217,255,226,0.2)] flex items-center justify-center text-[9px] flex-shrink-0 select-none">
                             🐟
                           </span>
                         )}
-                        <span className="truncate">{entry.displayName}</span>
+                        <span class="truncate font-game text-xs">{entry.displayName}</span>
                         {entry.flair && (
                           <span
                             data-testid={`flair-${entry.playFabId}`}
-                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help transition-transform hover:scale-105"
+                            class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border leading-none gap-0.5 flex-shrink-0 cursor-help transition-transform hover:scale-105"
                             style={{
                               color: entry.flair.color,
                               borderColor: `${entry.flair.color}66`,
@@ -333,24 +330,21 @@ export function LeaderboardView({
                           >
                             <span>{entry.flair.text}</span>
                             {entry.flair.extraFlairs > 0 && (
-                              <span className="text-[8px] opacity-80">+{entry.flair.extraFlairs}</span>
+                              <span class="text-[8px] opacity-80">+{entry.flair.extraFlairs}</span>
                             )}
                           </span>
                         )}
                         {entry.isCurrentUser && (
-                          <>
-                            {" "}
-                            <span className="text-[10px] text-cyan-400 font-normal flex-shrink-0">
-                              (You)
-                            </span>
-                          </>
+                          <span class="text-[10px] text-[var(--stat-satisfied)] font-semibold flex-shrink-0">
+                            (You)
+                          </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-1.5 px-2 text-center font-mono text-slate-300">
+                    <td class="py-2 px-2 text-center font-mono opacity-90">
                       {entry.mistakes}
                     </td>
-                    <td className="py-1.5 px-2 text-right font-mono text-slate-300">
+                    <td class="py-2 px-2 text-right font-mono opacity-90">
                       {formatTime(entry.seconds)}
                     </td>
                   </tr>
@@ -362,25 +356,26 @@ export function LeaderboardView({
       </div>
 
       {/* Floating avatar hover preview */}
-      {previewAvatar && (
+      {previewAvatar && typeof document !== "undefined" && createPortal(
         <div
           data-testid="avatar-preview-popover"
-          className="fixed z-[9999] pointer-events-none -translate-y-1/2 bg-slate-950/95 border-2 border-cyan-400/80 rounded-xl p-1.5 shadow-2xl backdrop-blur-md transition-all duration-150 flex flex-col items-center"
+          class="leaderboard-avatar-preview"
           style={{ left: `${previewAvatar.x}px`, top: `${previewAvatar.y}px` }}
         >
           <img
             src={previewAvatar.url}
             alt="Avatar preview"
-            className="w-16 h-16 rounded-lg object-cover shadow"
+            class="w-16 h-16 rounded-lg object-cover shadow"
           />
-        </div>
+        </div>,
+        document.querySelector(".game-container") || document.body
       )}
 
       {/* Footer (if in modal) */}
       {onClose && (
-        <div className="px-4 py-2.5 border-t border-slate-800 bg-slate-950/40 flex justify-end">
+        <div class="px-5 py-3 border-t-2 border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.25)] flex justify-end shrink-0">
           <button
-            className="px-3.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition"
+            class="btn-secondary"
             onClick={onClose}
           >
             Close

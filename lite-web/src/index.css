@@ -1116,6 +1116,31 @@ body {
   cursor: help;
 }
 
+/* Dimmed line hints (visual only right-click toggle) */
+.row-hint.hint-dimmed,
+.col-hint.hint-dimmed,
+.row-hint-boat-slot.hint-dimmed,
+.row-hint-water-slot.hint-dimmed,
+.col-hint > span.hint-dimmed {
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
+.row-hint.hint-dimmed .row-hint-boat-slot.hint-dimmed,
+.row-hint.hint-dimmed .row-hint-water-slot.hint-dimmed,
+.col-hint.hint-dimmed .hint-dimmed {
+  opacity: 1;
+}
+
+.row-hint.hint-dimmed:hover,
+.col-hint.hint-dimmed:hover,
+.row-hint-boat-slot.hint-dimmed:hover,
+.row-hint-water-slot.hint-dimmed:hover,
+.col-hint > span.hint-dimmed:hover {
+  opacity: 0.55;
+}
+
+
 .has-dual-row-hints .grid-corner-spacer,
 .has-dual-row-hints .row-hint {
   width: 6.5rem;
@@ -2444,6 +2469,142 @@ body {
   accent-color: #61fc89;
   cursor: pointer;
 }
+
+/* ==========================================================================
+   Leaderboard Styling (Matching Game & Modal Conventions)
+   ========================================================================== */
+.leaderboard-panel {
+  background: linear-gradient(135deg, rgba(29, 116, 135, 0.95) 0%, rgba(9, 54, 89, 0.95) 100%);
+  border: 3.5px solid var(--game-navy);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 0 var(--game-navy), 0 16px 36px rgba(0, 9, 36, 0.35);
+  color: var(--game-mint);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.theme-dark .leaderboard-panel {
+  background: linear-gradient(135deg, rgba(9, 54, 89, 0.95) 0%, rgba(0, 9, 36, 0.98) 100%);
+  border-color: var(--cell-wall);
+  box-shadow: 0 8px 0 rgba(0, 9, 36, 0.8), 0 16px 36px rgba(0, 0, 0, 0.8);
+}
+
+.leaderboard-tabs {
+  display: flex;
+  border-bottom: 2px solid rgba(217, 255, 226, 0.15);
+  background: rgba(0, 9, 36, 0.25);
+}
+
+.leaderboard-tab {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  font-family: var(--font-game);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(217, 255, 226, 0.6);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.leaderboard-tab:hover {
+  color: var(--game-mint);
+  background: rgba(217, 255, 226, 0.05);
+}
+
+.leaderboard-tab.active {
+  color: #ffffff;
+  border-bottom-color: var(--stat-satisfied);
+  background: rgba(0, 9, 36, 0.2);
+  text-shadow: 0 0 8px rgba(97, 252, 137, 0.4);
+}
+
+.leaderboard-user-bar {
+  padding: 0.65rem 1rem;
+  background: rgba(0, 9, 36, 0.35);
+  border-bottom: 1.5px solid rgba(217, 255, 226, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-family: var(--font-game);
+}
+
+.leaderboard-table {
+  width: 100%;
+  text-align: left;
+  font-size: 0.8rem;
+  border-collapse: collapse;
+}
+
+.leaderboard-table thead tr {
+  border-bottom: 2px solid rgba(217, 255, 226, 0.15);
+  color: rgba(217, 255, 226, 0.7);
+  font-family: var(--font-game);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.leaderboard-table tbody tr {
+  border-bottom: 1px solid rgba(217, 255, 226, 0.08);
+  color: var(--game-mint);
+  transition: background-color 0.15s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background-color: rgba(217, 255, 226, 0.06);
+}
+
+.leaderboard-table tbody tr.is-current-user {
+  background-color: rgba(97, 252, 137, 0.15);
+  border-bottom: 1.5px solid rgba(97, 252, 137, 0.4);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.leaderboard-table tbody tr.is-current-user:hover {
+  background-color: rgba(97, 252, 137, 0.22);
+}
+
+.leaderboard-avatar-preview {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  transform: translateY(-50%);
+  background: rgba(0, 9, 36, 0.95);
+  border: 2px solid var(--game-mint);
+  border-radius: 0.85rem;
+  padding: 0.375rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 4px 0 var(--game-navy);
+  backdrop-filter: blur(8px);
+  animation: popoverFadeIn 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.theme-dark .leaderboard-avatar-preview {
+  border-color: var(--cell-wall);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8), 0 4px 0 rgba(0, 9, 36, 0.8);
+}
+
 
 
 

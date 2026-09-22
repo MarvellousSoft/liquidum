@@ -1969,6 +1969,7 @@ export function App() {
                     selectedTool={selectedTool}
                     previewMap={previewMap}
                     blinkingCells={blinkingCells}
+                    resetTrigger={clearCanvasTrigger}
                     onCellPointerDown={handleCellDown}
                     onCellPointerEnter={handleCellEnter}
                     onCellPointerMove={handleCellMove}

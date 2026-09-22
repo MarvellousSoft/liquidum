@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { useEffect } from "preact/hooks";
 import { LeaderboardView } from "./LeaderboardView";
 
 interface LeaderboardModalProps {
@@ -10,14 +11,24 @@ interface LeaderboardModalProps {
 export function LeaderboardModal({ isOpen, onClose, refreshTrigger }: LeaderboardModalProps) {
   if (!isOpen) return null;
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   return (
     <div
       data-testid="leaderboard-modal"
-      className="modal-backdrop fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      class="modal-backdrop"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg"
+        class="w-full max-w-lg flex justify-center"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -32,3 +43,4 @@ export function LeaderboardModal({ isOpen, onClose, refreshTrigger }: Leaderboar
     </div>
   );
 }
+
