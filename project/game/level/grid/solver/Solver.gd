@@ -47,7 +47,13 @@ class Strategy:
 		return GridModel.must_be_implemented()
 	func description() -> String:
 		return "No description"
-	func _water_min(hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+	func _water_min(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
+			var bm : int = grid._sudoku_bitmask(grid.count_water_row, grid.count_nothing_row) if rows else grid._sudoku_bitmask(grid.count_water_col, grid.count_nothing_col)
+			if bm < 0: return -1
+			for i in range(1, 10):
+				if i >= cur_value and ((bm >> i) & 1) == 0:
+					return i
 		if grid.rule_variants().has(GridModel.RuleVariant.Liar) and hint.water_alt_text.is_valid_float():
 			var val := float(hint.water_alt_text) - 1.0
 			if val < cur_value:
@@ -55,7 +61,13 @@ class Strategy:
 			else:
 				return val
 		return hint.water_count
-	func _water_max(hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+	func _water_max(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
+		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
+			var bm : int = grid._sudoku_bitmask(grid.count_water_row, grid.count_nothing_row) if rows else grid._sudoku_bitmask(grid.count_water_col, grid.count_nothing_col)
+			if bm < 0: return hint.water_count
+			for i in range(9, 9, -1):
+				if i <= max_value and ((bm >> i) & 1) == 0:
+					return i
 		if grid.rule_variants().has(GridModel.RuleVariant.Liar) and hint.water_alt_text.is_valid_float():
 			var val := float(hint.water_alt_text) + 1.0
 			if val > max_value:
@@ -140,8 +152,8 @@ class RowStrategy extends Strategy:
 		for j in grid.cols():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
 		var waters := grid.count_water_row(i)
-		var water_min := _water_min(hint, waters, waters + nothing_left)
-		var water_max := _water_max(hint, waters, waters + nothing_left)
+		var water_min := _water_min(true, hint, waters, waters + nothing_left)
+		var water_max := _water_max(true, hint, waters, waters + nothing_left)
 		var water_left_min := water_min - waters
 		var water_left_max := water_max - waters
 		if nothing_left == 0 or comps.size() == 0 or water_left_min > nothing_left or water_left_max < 0:
@@ -213,8 +225,8 @@ class ColumnStrategy extends Strategy:
 		for i in grid.rows():
 			nothing_left += grid._pure_cell(i, j).nothing_count()
 		var waters := grid.count_water_col(j)
-		var water_min := _water_min(hint, waters, waters + nothing_left)
-		var water_max := _water_max(hint, waters, waters + nothing_left)
+		var water_min := _water_min(false, hint, waters, waters + nothing_left)
+		var water_max := _water_max(false, hint, waters, waters + nothing_left)
 		var water_left_min := water_min - waters
 		var water_left_max := water_max - waters
 		if nothing_left == 0 or comps.size() == 0 or water_left_min > nothing_left or water_left_max < 0:

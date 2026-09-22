@@ -43,6 +43,7 @@ func check(cond: bool) -> void:
 func fail_later_if(cond: bool) -> void:
 	if cond:
 		fail += 1
+		#print("failed")
 
 func assert_grid_eq(a: String, b: String) -> void:
 	a = a.dedent().strip_edges()
@@ -1530,7 +1531,7 @@ func test_liar_solver() -> void:
 	assert_apply_strategies("""
 +variant=liar
 +row_alt=0:1
-..XXXXww
+WWXXXXww
 L.L._.L.
 """, "", ["BasicRow"])
 
@@ -1546,7 +1547,7 @@ L._.L._.
 	assert_apply_strategies("""
 +variant=liar
 +row_alt=0:3
-WWWWWW..
+WWWWWWWW
 L._._.L.
 """, "", ["MediumRow"])
 
@@ -1604,3 +1605,34 @@ XX........
 L.L._.L._.
 """, "", ["LiarRowStrategy"])
 
+func test_sudoku_status() -> void:
+	var g := GridImpl.new(1, 1)
+	var w: Array[float] = []
+	var e: Array[float] = []
+	var get_w = func(i): return w[i]
+	var get_e = func(i): return e[i]
+	w.assign([1, 2, 3, 4, 5, 9, 8, 7, 6])
+	e.assign([0, 0, 0, 0, 0, 0, 0, 0, 0])
+	fail_later_if(g._sudoku_bitmask(get_w, get_e) != (1 << 11) - 2)
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Satisfied)
+	w.assign([1, 2, 3, 4, 5, 8, 8, 7, 6])
+	e.assign([0, 0, 7, 0, 0, 1, 1, 0, 2])
+	fail_later_if(g._sudoku_bitmask(get_w, get_e) != 2 | 4 | 16 | 32 | 128)
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)
+	w.assign([1, 2, 3, 4, 5, 8, 8, 7, 6])
+	e.assign([0, 0, 7, 0, 0, 0, 1, 0, 2])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)
+	w.assign([0, 1, 2, 0, 0, 0, 1, 1, 1])
+	e.assign([9, 8, 5, 3, 8, 9, 8, 7, 6])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)
+	w.assign([1, 2, 3, 4, 5, 8, 8, 8, 6])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Wrong)
+	w.assign([0, 0, 0, 2, 5, 6, 7, 8, 9])
+	e.assign([9, 9, 9, 0, 0, 0, 0, 0, 0])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)
+	w.assign([1, 2, 1, 4, 5, 6, 7, 8, 9])
+	e.assign([0, 0, 1, 0, 0, 0, 0, 0, 0])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Wrong)
+	w.assign([1, 2, 1, 4, 5, 6, 7, 8, 9])
+	e.assign([0, 1, 1, 0, 0, 0, 0, 0, 0])
+	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)

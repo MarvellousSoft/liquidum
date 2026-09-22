@@ -1,6 +1,7 @@
 class_name Generator
 
 class Options:
+	var sudoku: bool
 	var diagonals: bool
 	var boats: bool
 	# Just a hint, doesn't need to be strictly satisfied
@@ -22,6 +23,10 @@ class Options:
 		return self
 	func with_cell_hints(pct := 0.0) -> Options:
 		cell_hints = pct
+		return self
+	func with_sudoku() -> Options:
+		sudoku = true
+		min_water = 45
 		return self
 	func build(rseed: int) -> Generator:
 		return Generator.new(rseed, self)
@@ -222,19 +227,91 @@ static func randomize_aquarium_hints(rng: RandomNumberGenerator, grid: GridModel
 		if rng.randf() < aq_pct:
 			expected[sz] = all_aqs[sz]
 
+func _random_perm(n: int = 9) -> Array[int]:
+	var a : Array[int]
+	a.assign(range(1, n+1))
+	for i in range(n-1, -1, -1):
+		var j := rng.randi_range(0, i)
+		var tmp := a[i]
+		a[i] = a[j]
+		a[j] = tmp
+	return a
+
+func generate_sudoku(grid: GridModel) -> void:
+	var tries : int = 0
+	var g : Array[Array]
+	while true:
+		tries += 1
+		# When we assign rows and cols, the waters are fully determined
+		var rows := _random_perm()
+		var cols := _random_perm()
+		# 0 = nothing, 1 = water, 2 = X
+		g.clear()
+		for i in 9:
+			g.append([0, 0, 0, 0, 0, 0, 0, 0, 0])
+		for x in 9:
+			var i := rows[8-x]-1
+			for j in 9:
+				if g[i][j] == 0:
+					g[i][j] = 1
+			var j := cols[x]-1
+			for i2 in 9:
+				if g[i2][j] == 0:
+					g[i2][j] = 2
+		var ct : Array[int] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+		for i in 9:
+			for j in 9:
+				if g[i][j] == 1:
+					ct[(i / 3) * 3 + (j / 3)] += 1
+		ct.sort()
+		var bad := false
+		for i in 9:
+			if ct[i] != i + 1:
+				bad = true
+		if not bad:
+			break
+	# Not great walls, this just separates the waters.
+	# Copy the gen_grid_groups, but when generating a group keep track of the highest water and lowest x, and don't let these intersect each other
+	for i in 9:
+		for j in 9:
+			if i < 8 and g[i][j] == 1 and g[i+1][j] == 2:
+				grid.get_cell(i, j).put_wall(E.Walls.Bottom, false, true)
+			if j < 8 and g[i][j] == 1 and g[i][j+1] == 2:
+				grid.get_cell(i, j).put_wall(E.Walls.Right, false, true)
+			if j > 0 and g[i][j] == 1 and g[i][j-1] == 2:
+				grid.get_cell(i, j).put_wall(E.Walls.Left, false, true)
+			if i > 0 and g[i][j] == 1 and g[i-1][j] == 2:
+				var nbr_has_W_above := false
+				for j2 in 9:
+					if g[i][j2] == 1 and g[i-1][j2] == 2:
+						nbr_has_W_above = true
+				if nbr_has_W_above:
+					grid.get_cell(i, j).put_wall(E.Walls.Top, false, true)
+	for i in 9:
+		for j in 9:
+			if g[i][j] == 1:
+				grid.get_cell(i, j).put_water(E.Corner.BottomLeft, false)
+
+
+
 func generate(n: int, m: int) -> GridModel:
 	# Reset rng
 	rng.seed = rng.seed
+	var grid := GridImpl.empty_editor(n, m)
+	# Let's just update once in the end
+	grid.set_auto_update_hints(false)
+	if opts.sudoku:
+		assert(n == 9 and m == 9)
+		generate_sudoku(grid)
+		grid.set_auto_update_hints(true)
+		return grid
 	var adj_rule: AdjacencyRule
 	if opts.diagonals:
 		adj_rule = DiagAdj.new(rng, n, m)
 	else:
 		adj_rule = SquareAdj.new()
-	
+
 	var g := _gen_grid_groups(n, m, adj_rule)
-	var grid := GridImpl.empty_editor(n, m)
-	# Let's just update once in the end
-	grid.set_auto_update_hints(false)
 	for i in n:
 		for j in m:
 			if opts.diagonals:
@@ -260,3 +337,4 @@ func generate(n: int, m: int) -> GridModel:
 	# Necessary because we did unsafe updates
 	grid.set_auto_update_hints(true)
 	return grid
+

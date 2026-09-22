@@ -37,6 +37,8 @@ enum Flavor {
 	CellHints3,
 	# Liar variant, simple rules
 	Liar,
+	# Sudoku, simple rules
+	Sudoku,
 }
 
 static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -55,6 +57,11 @@ static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 
 static func _liar_size_gen(rng: RandomNumberGenerator) -> Vector2i:
 	return Vector2i(rng.randi_range(5, 8), rng.randi_range(5, 8))
+
+static func _sudoku_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	Level.HintVisibility.all_hidden(9, 9).apply_to_grid(grid)
+	if not grid.rule_variants().has(GridModel.RuleVariant.Sudoku):
+		grid.rule_variants().append(GridModel.RuleVariant.Sudoku)
 
 static func _simple_hints(_rng: RandomNumberGenerator, grid: GridModel) -> void:
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
@@ -269,6 +276,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate(rng, 5, 5, RandomFlavors._everything, _builder(b.with_cell_hints(0.3).with_diags().with_boats()), strategies, [], false)
 		Flavor.Liar:
 			return await l_gen.generate_with_size(rng, RandomFlavors._liar_size_gen, RandomFlavors._liar_hints, _builder(b), strategies, [], false)
+		Flavor.Sudoku:
+			return await l_gen.generate(rng, 9, 9, RandomFlavors._sudoku_hints, _builder(b.with_sudoku()), strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null

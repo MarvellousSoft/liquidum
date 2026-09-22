@@ -34,7 +34,10 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			continue
 		g.set_auto_update_hints(false)
 		apply_hints.call(rng, g)
-		assert(g.are_hints_satisfied())
+		if not g.are_hints_satisfied():
+			print("Weird, generated level is not satisfied")
+			print(g.to_str())
+			assert(false)
 		var start_solve := Time.get_ticks_usec()
 		tries += 1
 		if not forced_strategies.is_empty():
@@ -52,7 +55,8 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 		else:
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
-			if solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S) == SolverModel.SolveResult.SolvedUnique:
+			var solve_result := solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S)
+			if solve_result == SolverModel.SolveResult.SolvedUnique:
 				total_solve += Time.get_ticks_usec() - start_solve
 				g = GridImpl.import_data(g2.export_data(), GridModel.LoadMode.SolutionNoClear)
 				found = true

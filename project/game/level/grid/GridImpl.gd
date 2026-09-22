@@ -1016,7 +1016,9 @@ func maybe_update_hints() -> void:
 		_col_hints[j].water_count = count_water_col(j)
 		type = _is_together(_col_bools(j, Content.Water))
 		_col_hints[j].water_count_type = type
-	assert(are_hints_satisfied())
+	if not are_hints_satisfied():
+		print(to_str())
+		assert(false)
 
 func _validate(chr: String, possible: String) -> String:
 	assert(possible.contains(chr), "'%s' is not one of '%s'" % [chr, possible])
@@ -1770,26 +1772,58 @@ func _liar_status() -> E.HintStatus:
 func _snake_status() -> E.HintStatus:
 	return GridModel.must_be_implemented()
 
-func _sudoku_check19(getter : Callable) -> E.HintStatus:
-	var a: Array[float] = []
+
+func _sudoku_bitmask(count_water: Callable, count_nothing: Callable) -> int:
+	var bm : int = 0
 	for i in 9:
-		a.append(getter.call(i))
+		var w : float = count_water.call(i)
+		var empty : float = count_nothing.call(i)
+		if empty == 0:
+			if float(int(w)) != w:
+				# Fractional water
+				return -1
+			elif (bm >> int(w)) & 1:
+				# Two lines with the exact same value
+				return -1
+			else:
+				bm |= (1 << int(w))
+	return bm
+
+func _sudoku_check19(count_water : Callable, count_nothing: Callable) -> E.HintStatus:
+	if _sudoku_bitmask(count_water, count_nothing) < 0:
+		return E.HintStatus.Wrong
+	var a: Array[Vector2] = []
+	for i in 9:
+		var w: float = count_water.call(i)
+		var empty: float = count_nothing.call(i)
+		a.append(Vector2(w, empty))
 	a.sort()
 	var st := E.HintStatus.Satisfied
 	for i in 9:
-		if a[i] > i + 1:
+		if a[i].x > i + 1:
 			return E.HintStatus.Wrong
-		elif a[i] < i + 1:
+		elif a[i].x < i + 1:
 			st = E.HintStatus.Normal
+	a.reverse()
+	var max_possible: Array[float] = []
+	# Greedy algorithm to see if it's possible
+	for i in range(1, 10):
+		while not a.is_empty() and a.back().x <= i:
+			max_possible.append(a.back().x + a.back().y)
+			a.pop_back()
+		var m : float = max_possible.min()
+		if m < i:
+			return E.HintStatus.Wrong
+		max_possible.erase(m)
 	return st
 
 func _sudoku_status() -> E.HintStatus:
 	var st := E.HintStatus.Satisfied
-	st = merge_status(st, _sudoku_check19(count_water_row))
-	st = merge_status(st, _sudoku_check19(count_water_col))
+	st = merge_status(st, _sudoku_check19(count_water_row, count_nothing_row))
+	st = merge_status(st, _sudoku_check19(count_water_col, count_nothing_col))
 	st = merge_status(st, _sudoku_check19(func(i: int):
-		var x := 10 + 3 * i
-		return count_water_adj(x % 9, x / 9)
+		return count_water_adj((i / 3) * 3 + 1, (i % 3) * 3 + 1), func(i: int):
+		return count_nothing_adj((i / 3) * 3 + 1, (i % 3) * 3 + 1),
 	))
 	return st
 
@@ -1861,6 +1895,12 @@ func count_nowater_row(i : int) -> float:
 		count += _pure_cell(i, j).nowater_count()
 	return count
 
+func count_nothing_row(i: int) -> float:
+	var count: float = 0.
+	for j in m:
+		count += _pure_cell(i, j).nothing_count()
+	return count
+
 
 func count_water_row(i: int) -> float:
 	var count: float = 0.
@@ -1872,6 +1912,12 @@ func count_water_col(j: int) -> float:
 	var count: float = 0.
 	for i in n:
 		count += _pure_cell(i, j).water_count()
+	return count
+
+func count_nothing_col(j: int) -> float:
+	var count: float = 0.
+	for i in n:
+		count += _pure_cell(i, j).nothing_count()
 	return count
 
 func count_boat_row(i: int) -> int:
