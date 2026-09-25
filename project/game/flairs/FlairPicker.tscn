@@ -31,31 +31,19 @@ script = ExtResource("1_cr2h3")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 900.0
+offset_bottom = 596.0
 grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TopContainer"]
 layout_mode = 2
 theme_override_constants/separation = 120
 
-[node name="TitleContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="Title" type="Label" parent="TopContainer/VBoxContainer/TitleContainer"]
+[node name="Title" type="Label" parent="TopContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 60
 theme_override_font_sizes/font_size = 150
 text = "FLAIR_PICKER_TITLE"
-horizontal_alignment = 1
-
-[node name="Explanation" type="Label" parent="TopContainer/VBoxContainer/TitleContainer"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 30
-theme_override_font_sizes/font_size = 75
-text = "FLAIR_EXPLANATION"
 horizontal_alignment = 1
 
 [node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer"]
@@ -157,46 +145,6 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Flairs" type="ScrollContainer" parent="."]
-layout_mode = 0
-offset_left = 235.0
-offset_top = 1000.0
-offset_right = 3035.0
-offset_bottom = 2049.0
-horizontal_scroll_mode = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="Flairs"]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-theme_override_constants/margin_left = 600
-theme_override_constants/margin_right = 600
-
-[node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 55
-
-[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
-layout_mode = 2
-
-[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
-layout_mode = 2
-
-[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
-layout_mode = 2
-
-[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
-layout_mode = 2
-
-[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
-layout_mode = 2
-
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 0
 offset_left = 115.0
@@ -205,6 +153,166 @@ offset_right = 373.0
 offset_bottom = 220.0
 focus_mode = 0
 text = "BACK"
+
+[node name="BottomContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.4
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer"]
+layout_mode = 2
+theme_override_constants/separation = 200
+
+[node name="Flairs" type="VBoxContainer" parent="BottomContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/Flairs"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 100
+text = "FLAIRS"
+horizontal_alignment = 1
+
+[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/Flairs"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 30
+text = "FLAIR_EXPLANATION"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="BottomContainer/HBoxContainer/Flairs"]
+custom_minimum_size = Vector2(0, 900)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="FlairList" type="VBoxContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="FlairButton" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+layout_mode = 2
+
+[node name="FlairButton2" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+layout_mode = 2
+
+[node name="FlairButton3" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+layout_mode = 2
+
+[node name="FlairButton4" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+layout_mode = 2
+
+[node name="FlairButton5" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+layout_mode = 2
+
+[node name="RecoveryKey" type="VBoxContainer" parent="BottomContainer/HBoxContainer"]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 30
+theme_override_font_sizes/font_size = 100
+text = "RECOVERY_KEY"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 30
+text = "RECOVERY_EXPLANATION"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="CurrentKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 35
+text = "CURRENT_KEY"
+horizontal_alignment = 1
+
+[node name="CopyKey" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="CopyKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+placeholder_text = "********************************"
+editable = false
+select_all_on_focus = true
+
+[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "COPY_KEY_BUTTON"
+
+[node name="RestoreKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 35
+text = "RESTORE_KEY"
+horizontal_alignment = 1
+
+[node name="RestoreKeyB" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="RestoreKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+max_length = 50
+clear_button_enabled = true
+select_all_on_focus = true
+
+[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "RESTORE_KEY_BUTTON"
+
+[node name="KeyRestored" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 35
+text = "KEY_RESTORED_SUCCESS"
+horizontal_alignment = 1
 
 [connection signal="mouse_entered" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/NameEdit" to="." method="_on_button_mouse_entered"]
 [connection signal="text_submitted" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/NameEdit" to="." method="_on_name_edit_text_submitted"]
@@ -216,3 +324,7 @@ text = "BACK"
 [connection signal="pressed" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" to="." method="_on_upload_name_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey/Button" to="." method="_on_copy_key_pressed"]
+[connection signal="mouse_entered" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB/Button" to="." method="_on_restore_key_pressed"]

@@ -7,37 +7,41 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hnex5"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 expand_margin_top = 10.0
 expand_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iw5xt"]
 
 [node name="FlairButton" type="Control"]
-custom_minimum_size = Vector2(2000, 300)
+custom_minimum_size = Vector2(600, 80)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 2000.0
-offset_bottom = 300.0
+offset_right = 500.0
+offset_bottom = 80.0
 script = ExtResource("1_0ug31")
 
 [node name="FlairContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_right = 600.0
+offset_bottom = 40.0
 grow_vertical = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 10
 
 [node name="Flair" type="Label" parent="FlairContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 140
+theme_override_font_sizes/font_size = 30
 text = "  dev  "
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BG" type="Panel" parent="FlairContainer/Flair"]
@@ -56,8 +60,8 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
-theme_override_constants/outline_size = 60
-theme_override_font_sizes/font_size = 100
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 30
 text = "  This is a big reason why you have this flair"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -66,11 +70,8 @@ autowrap_mode = 2
 [node name="Button" type="Button" parent="."]
 show_behind_parent = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 600.0
+offset_bottom = 80.0
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_iw5xt")
 theme_override_styles/hover = ExtResource("2_cc6ns")

@@ -38,7 +38,7 @@ YOUR_LEVELS,Your levels,Seus níveis,Seus níveis
 PROFILE,Profile,Perfil,Perfil
 CHANGE_PROFILE,Change Profile,Trocar Perfil,Mudar perfil
 CLICK_TO_CUSTOMIZE_FLAIR,Click to customize,Clique para personalizar,Clique para personalizar
-FLAIR_PICKER_TITLE,Customize,Personalizar,Personalizar
+FLAIR_PICKER_TITLE,Account,Conta,Conta
 FLAIR_EXPLANATION,Flairs appear next to your name in leaderboards.\nComplete challenges to earn more flairs!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!,Emblemas aparecem ao lado de seu nome em placares.\nComplete desafios para desbloquear mais!
 CONFIRM_DELETE_PROFILE,Are you sure you want to delete this profile?,Tem certeza que quer apagar este perfil?,Tem certeza de que deseja excluir este perfil?
 CONFIRM_RESET_LEVEL,Are you sure you want to reset the level?,Tem certeza que quer resetar este nível?,Tem certeza que quer resetar este nível?
@@ -460,3 +460,11 @@ TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de c�
 EDIT_ALT_TEXT_TITLE,Edit Alt Text,Editar texto alternativo,Editar texto alternativo
 EDIT_ALT_TEXT_EXPLANATION,This will show up instead of the actual hint. It may be any string. Set it as empty to clear.,,
 CONFIRM,Confirm,Confirmar,Confirmar
+FLAIRS,Flairs,Emblemas,Emblemas
+RECOVERY_KEY,Account Recovery Key,,
+RECOVERY_EXPLANATION,This secret key identifies your player profile on PlayFab. Copy it to share streaks with Liquidum Lite on Web.,,
+CURRENT_KEY,Your Current Key,,
+RESTORE_KEY,Restore Account,,
+COPY_KEY_BUTTON,Show & Copy Key,,
+RESTORE_KEY_BUTTON,Restore Key,,
+KEY_RESTORED,Key restored! ✓,,

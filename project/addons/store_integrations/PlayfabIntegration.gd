@@ -3,6 +3,7 @@ class_name PlayFabIntegration
 extends StoreIntegration
 
 signal uploaded_leaderboard()
+signal display_name_changed(name: String)
 
 var playfab: PlayFab
 
@@ -107,6 +108,7 @@ func _try_authenticate() -> void:
 		else:
 			print("PlayFab is not sure how to authenticate.")
 	else:
+		var v := PlayFabManager.client_config
 		if current_display_name() == "":
 			_reload_display_name()
 		fetch_cloud_streaks()
@@ -366,14 +368,14 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 		data.entries.append(entry)
 	return data
 
-signal display_name_change(success: bool)
+signal display_name_change_call(success: bool)
 
 func _on_display_name_call(res, new_name: String) -> void:
 	if not res is Dictionary or res.status != "OK":
 		print("Invalid response: %s" % [res])
-		display_name_change.emit(false)
+		display_name_change_call.emit(false)
 	else:
-		display_name_change.emit(res.data.DisplayName == new_name)
+		display_name_change_call.emit(res.data.DisplayName == new_name)
 		_update_cached_display_name(res.data.DisplayName)
 
 # Returns whether the name change was successful
@@ -386,7 +388,7 @@ func change_display_name(new_name: String) -> bool:
 		PlayFab.AUTH_TYPE.SESSION_TICKET,
 		_on_display_name_call.bind(new_name),
 	)
-	return await display_name_change
+	return await display_name_change_call
 
 func current_display_name() -> String:
 	return UserData.current().display_name
@@ -396,6 +398,7 @@ func _update_cached_display_name(display_name: String) -> void:
 	if display_name != "" and user_data.display_name != display_name:
 		user_data.display_name = display_name
 		UserData.save(false)
+		display_name_changed.emit(display_name)
 
 func _get_profile_call(res) -> void:
 	if not res is Dictionary or res.status != "OK":
@@ -474,3 +477,87 @@ func upload_streaks() -> bool:
 	else:
 		print("Playfab streaks upload failure: %s" % [res])
 		return false
+
+func get_custom_id() -> String:
+	var user_data := UserData.current()
+	if user_data.playfab_custom_id == "":
+		var id := "%x-%04x" % [Time.get_unix_time_from_system(), randi() % 0xffff]
+		var cb := AwaitCallback.new()
+		playfab.post_dict_auth(
+			{
+				CustomId = id,
+				ForceLink = false
+			},
+			"/Client/LinkCustomID",
+			PlayFab.AUTH_TYPE.SESSION_TICKET,
+			cb.callback
+		)
+		var res = await cb.called
+		if res is Dictionary and res.get("status", "") == "OK":
+			print("Successfully registered PlayFab custom id: %s" % [id])
+		else:
+			print("Playfab registering custom id %s failed: %s" % [id, res])
+			return ""
+		# Update playfab
+		user_data.playfab_custom_id = id
+		UserData.save(false)
+	return user_data.playfab_custom_id
+
+# Tries to merge with the given id
+func restore_custom_id(id: String) -> bool:
+	# Let's get ticket before, because failing here is fine
+	var ticket: Dictionary = SteamManager.steam.getAuthSessionTicket()
+	var res_ticket: Array = await SteamManager.steam.get_auth_session_ticket_response
+	assert(res_ticket[0] == ticket.id)
+	if res_ticket[1] != SteamManager.steam.RESULT_OK:
+		print("Failed to get ticket: %s" % [res_ticket])
+		return false
+
+	var login_cb := AwaitCallback.new()
+	playfab.post_dict({
+			TitleId = PlayFabManager.title_id,
+			CreateAccount = false,
+			CustomId = id,
+			InfoRequestParameters = {
+				GetPlayerProfile = true,
+				GetUserData = true,
+				UserDataKeys = ["streaks"],
+				ProfileConstraints = {
+					ShowDisplayName = true,
+					ShowLinkedAccounts = true,
+				},
+			},
+		},
+		"/Client/LoginWithCustomId",
+		login_cb.callback
+	)
+	var res_login = await login_cb.called
+	if not res_login is Dictionary or res_login.get("status", "") != "OK":
+		print("Failed to login with new id")
+		SteamManager.steam.cancelAuthTicket(ticket.id)
+		return false
+	var link_cb := AwaitCallback.new()
+	var buffer: PackedByteArray = ticket.buffer
+	buffer.resize(ticket.size)
+	playfab.post_dict_auth({
+			ForceLink = true,
+			SteamTicket = buffer.hex_encode(),
+			TicketIsServiceSpecific = false,
+		},
+		"/Client/LinkSteamAccount",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		link_cb.callback
+	)
+	var res_link = await link_cb.called
+	SteamManager.steam.cancelAuthTicket(ticket.id)
+	if not res_link is Dictionary or res_link.get("status", "") != "OK":
+		# This is kind of a bad state, because the account will reset on the next login
+		print("Failed to link new account with Steam, it will reset on next login.")
+		return false
+	var user_data := UserData.current()
+	user_data.playfab_custom_id = id
+	UserData.save(false)
+	# Hacking the response a little bit so it looks like a login
+	res_link.data = res_login.data
+	_on_simple_login(res_link, null)
+	return true

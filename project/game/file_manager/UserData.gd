@@ -43,6 +43,8 @@ var display_name: String
 var allow_streak_skip_this_one_time: bool
 # ld completion uploads to do later
 var pending_ld_uploads: Array[PendingUpload]
+# custom id used to login to Playfab
+var playfab_custom_id: String
 
 class PendingUpload:
 	var first_failed_unixtime: int
@@ -70,7 +72,7 @@ class PendingUpload:
 	static func from_data(data: Dictionary) -> PendingUpload:
 		return PendingUpload.new(int(data.first_failed), int(data.times_failed), String(data.ld_id), float(data.time), int(data.mistakes), data.keep_best == "true")
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload]) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload], playfab_custom_id_: String) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	endless_completed = endless_completed_
@@ -87,6 +89,7 @@ func _init(random_levels_completed_: Array[int], random_levels_created_: Array[i
 	display_name = display_name_
 	allow_streak_skip_this_one_time = allow_streak_skip_this_one_time_
 	pending_ld_uploads = pending_ld_uploads_
+	playfab_custom_id = playfab_custom_id_
 
 func get_data() -> Dictionary:
 	var d := {
@@ -108,6 +111,8 @@ func get_data() -> Dictionary:
 	}
 	if display_name != "":
 		d.display_name = display_name
+	if playfab_custom_id != "":
+		d.playfab_custom_id = playfab_custom_id
 	return d
 
 func save_stats() -> void:
@@ -313,7 +318,7 @@ static func load_data(data_: Variant) -> UserData:
 			endless.append(0)
 			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a, {}, "", false, pending_ld)
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a, {}, "", false, pending_ld, "")
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -359,4 +364,4 @@ static func load_data(data_: Variant) -> UserData:
 	replay_completed_a.assign(data.replay_completed)
 	for up in data.pending_ld_uploads:
 		pending_ld.append(PendingUpload.from_data(up))
-	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a, data.ld_uploads, data.get("display_name", ""), allow_streak_skip, pending_ld)
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a, data.ld_uploads, data.get("display_name", ""), allow_streak_skip, pending_ld, data.get("playfab_custom_id", ""))

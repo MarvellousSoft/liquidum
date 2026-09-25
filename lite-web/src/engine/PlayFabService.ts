@@ -105,11 +105,9 @@ export function getOrCreateCustomId(storage?: Storage): string {
   const KEY = "liquidum_custom_id";
   let id = store ? store.getItem(KEY) : null;
   if (!id) {
-    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-      id = crypto.randomUUID();
-    } else {
-      id = "web_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    }
+    const unixTime = Math.floor(Date.now() / 1000).toString(16);
+    const randHex = Math.floor(Math.random() * 0x10000).toString(16).padStart(4, "0");
+    id = `${unixTime}-${randHex}`;
     if (store) {
       store.setItem(KEY, id);
     }

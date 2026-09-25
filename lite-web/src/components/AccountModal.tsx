@@ -337,7 +337,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 <span>🔑</span> Account Recovery Key
               </h3>
               <p class="shortcut-section-hint">
-                This secret key identifies your player profile on PlayFab. Save it to keep your leaderboard submissions and rank if you switch browsers or devices.
+                This secret key identifies your player profile on PlayFab. Save it to keep your leaderboard submissions, rank and streak if you switch browsers or devices. Restore the key from the Steam version to share the streak.
               </p>
             </div>
 
