@@ -1613,7 +1613,7 @@ func test_sudoku_status() -> void:
 	var get_e = func(i): return e[i]
 	w.assign([1, 2, 3, 4, 5, 9, 8, 7, 6])
 	e.assign([0, 0, 0, 0, 0, 0, 0, 0, 0])
-	fail_later_if(g._sudoku_bitmask(get_w, get_e) != (1 << 11) - 2)
+	fail_later_if(g._sudoku_bitmask(get_w, get_e) != (1 << 10) - 2)
 	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Satisfied)
 	w.assign([1, 2, 3, 4, 5, 8, 8, 7, 6])
 	e.assign([0, 0, 7, 0, 0, 1, 1, 0, 2])
@@ -1636,3 +1636,182 @@ func test_sudoku_status() -> void:
 	w.assign([1, 2, 1, 4, 5, 6, 7, 8, 9])
 	e.assign([0, 1, 1, 0, 0, 0, 0, 0, 0])
 	fail_later_if(g._sudoku_check19(get_w, get_e) != E.HintStatus.Normal)
+
+func test_streak_reconcile_fresh_device() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 0
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 0
+	user_data.last_day[RecurringMarathon.Type.Daily] = ""
+
+	var today := DailyButton._today()
+	var cloud := {
+		"daily": { "cur": 7, "best": 12, "last": today }
+	}
+
+	var cloud_needs_update := user_data.reconcile_streaks(cloud)
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 7)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 12)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Daily] != today)
+	fail_later_if(cloud_needs_update != false)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)
+
+func test_streak_reconcile_offline_progress() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	var today := DailyButton._today()
+	var yesterday := DailyButton._yesterday()
+
+	# Local played today offline
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 6
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 10
+	user_data.last_day[RecurringMarathon.Type.Daily] = today
+
+	# Cloud had yesterday's streak
+	var cloud := {
+		"daily": { "cur": 5, "best": 10, "last": yesterday }
+	}
+
+	var cloud_needs_update := user_data.reconcile_streaks(cloud)
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 6)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 10)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Daily] != today)
+	fail_later_if(cloud_needs_update != true)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)
+
+func test_streak_reconcile_cloud_newer() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	var today := DailyButton._today()
+	var yesterday := DailyButton._yesterday()
+
+	# Local was last played yesterday
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 5
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 10
+	user_data.last_day[RecurringMarathon.Type.Daily] = yesterday
+
+	# Cloud played today on another device
+	var cloud := {
+		"daily": { "cur": 6, "best": 10, "last": today }
+	}
+
+	var cloud_needs_update := user_data.reconcile_streaks(cloud)
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 6)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 10)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Daily] != today)
+	fail_later_if(cloud_needs_update != false)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)
+
+func test_streak_reconcile_tie_break_same_day() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	var today := DailyButton._today()
+
+	# Local failed on replay or broke streak
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 0
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 8
+	user_data.last_day[RecurringMarathon.Type.Daily] = today
+
+	# Cloud completed with win on another device
+	var cloud := {
+		"daily": { "cur": 4, "best": 15, "last": today }
+	}
+
+	var cloud_needs_update := user_data.reconcile_streaks(cloud)
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 4)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 15)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Daily] != today)
+	fail_later_if(cloud_needs_update != false)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)
+
+func test_streak_reconcile_preserves_weekly_marathon() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	var today := DailyButton._today()
+	var curr_monday := WeeklyButton.get_curr_fst_day()
+
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 3
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 5
+	user_data.last_day[RecurringMarathon.Type.Daily] = today
+
+	user_data.current_streak[RecurringMarathon.Type.Weekly] = 1
+	user_data.best_streak[RecurringMarathon.Type.Weekly] = 2
+	user_data.last_day[RecurringMarathon.Type.Weekly] = WeeklyButton.get_prev_fst_day()
+
+	var cloud := {
+		"daily": { "cur": 3, "best": 5, "last": today },
+		"weekly": { "cur": 4, "best": 8, "last": curr_monday }
+	}
+
+	var cloud_needs_update := user_data.reconcile_streaks(cloud)
+	# Daily matches
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 3)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 5)
+	# Weekly should adopt newer cloud weekly streak
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Weekly] != 4)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Weekly] != 8)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Weekly] != curr_monday)
+	fail_later_if(cloud_needs_update != false)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)
+
+func test_streak_reconcile_resets_if_missed_days() -> void:
+	var user_data := UserData.current()
+	var orig_cur = user_data.current_streak.duplicate()
+	var orig_best = user_data.best_streak.duplicate()
+	var orig_last = user_data.last_day.duplicate()
+
+	# 4 days ago
+	var four_days_ago := DailyButton._today(4 * 24 * 60 * 60)
+
+	user_data.current_streak[RecurringMarathon.Type.Daily] = 10
+	user_data.best_streak[RecurringMarathon.Type.Daily] = 10
+	user_data.last_day[RecurringMarathon.Type.Daily] = four_days_ago
+
+	var cloud := {
+		"daily": { "cur": 10, "best": 10, "last": four_days_ago }
+	}
+
+	user_data.reconcile_streaks(cloud)
+	fail_later_if(user_data.current_streak[RecurringMarathon.Type.Daily] != 0)
+	fail_later_if(user_data.best_streak[RecurringMarathon.Type.Daily] != 10)
+	fail_later_if(user_data.last_day[RecurringMarathon.Type.Daily] != four_days_ago)
+
+	user_data.current_streak = orig_cur
+	user_data.best_streak = orig_best
+	user_data.last_day = orig_last
+	UserData.save(false)

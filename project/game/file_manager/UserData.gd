@@ -121,6 +121,111 @@ func save_stats() -> void:
 	for type in RecurringMarathon.Type.values():
 		await stats.set_recurring_streak(type, current_streak[type], best_streak[type])
 
+func get_streak_dict() -> Dictionary:
+	var d := {}
+	for type in RecurringMarathon.Type.values():
+		var type_name := RecurringMarathon.type_name(type)
+		d[type_name] = {
+			"cur": current_streak[type],
+			"best": best_streak[type],
+			"last": last_day[type],
+		}
+	return d
+
+func apply_streak_dict(data: Dictionary) -> void:
+	for type in RecurringMarathon.Type.values():
+		var type_name := RecurringMarathon.type_name(type)
+		if data.has(type_name) and data[type_name] is Dictionary:
+			var entry: Dictionary = data[type_name]
+			current_streak[type] = int(entry.get("cur", 0))
+			best_streak[type] = int(entry.get("best", 0))
+			last_day[type] = str(entry.get("last", ""))
+	UserData.save(false)
+
+func reconcile_streaks(cloud_dict: Dictionary) -> bool:
+	var cloud_needs_update := false
+	var local_changed := false
+
+	for type in RecurringMarathon.Type.values():
+		var type_name := RecurringMarathon.type_name(type)
+		var cloud_entry = cloud_dict.get(type_name, null)
+
+		var today_p := RecurringMarathon.get_current_period_for_type(type)
+		var prev_p := RecurringMarathon.get_previous_period_for_type(type)
+
+		# Local streak expiry normalization
+		var local_last := last_day[type]
+		var local_cur := current_streak[type]
+		var local_active := local_last in [today_p, prev_p]
+		var eff_local_cur := local_cur if local_active else 0
+
+		# Cloud streak expiry normalization
+		var cloud_last := ""
+		var cloud_cur := 0
+		var cloud_best := 0
+		if cloud_entry is Dictionary:
+			cloud_last = str(cloud_entry.get("last", ""))
+			cloud_cur = int(cloud_entry.get("cur", 0))
+			cloud_best = int(cloud_entry.get("best", 0))
+
+		var cloud_active := cloud_last in [today_p, prev_p]
+		var eff_cloud_cur := cloud_cur if cloud_active else 0
+
+		# Best streak is strictly monotonic
+		var merged_best := maxi(best_streak[type], cloud_best)
+		if best_streak[type] != merged_best:
+			best_streak[type] = merged_best
+			local_changed = true
+		if cloud_best != merged_best:
+			cloud_needs_update = true
+
+		var has_cloud := cloud_entry != null and cloud_last.strip_edges() != ""
+		var has_local := local_last.strip_edges() != ""
+
+		var merged_cur := 0
+		var merged_last := ""
+
+		if not has_cloud and not has_local:
+			merged_cur = 0
+			merged_last = ""
+		elif not has_cloud:
+			merged_cur = eff_local_cur
+			merged_last = local_last
+			cloud_needs_update = true
+		elif not has_local:
+			merged_cur = eff_cloud_cur
+			merged_last = cloud_last
+			local_changed = true
+		else:
+			if local_last > cloud_last:
+				# Local played more recently (e.g. offline)
+				merged_cur = eff_local_cur
+				merged_last = local_last
+				cloud_needs_update = true
+			elif cloud_last > local_last:
+				# Cloud played more recently (e.g. on another device)
+				merged_cur = eff_cloud_cur
+				merged_last = cloud_last
+				local_changed = true
+			else:
+				# Same period completed on both devices
+				merged_last = local_last
+				merged_cur = maxi(eff_local_cur, eff_cloud_cur)
+				if current_streak[type] != merged_cur:
+					local_changed = true
+				if eff_cloud_cur != merged_cur:
+					cloud_needs_update = true
+
+		if current_streak[type] != merged_cur or last_day[type] != merged_last:
+			current_streak[type] = merged_cur
+			last_day[type] = merged_last
+			local_changed = true
+
+	if local_changed:
+		UserData.save(false)
+
+	return cloud_needs_update
+
 func bump_endless_completed(section: int) -> void:
 	while endless_completed.size() < section:
 		endless_completed.append(0)

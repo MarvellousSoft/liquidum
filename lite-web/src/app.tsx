@@ -191,13 +191,20 @@ export function App() {
         // Offline / non-fatal
       });
 
-    const unsubscribe = playFabService.onProfileChange((profile) => {
+    const unsubscribeProfile = playFabService.onProfileChange((profile) => {
       setUserDisplayName(profile.displayName || "Anonymous");
       setUserAvatarUrl(profile.avatarUrl || null);
       setAvatarLoadError(false);
     });
 
-    return () => unsubscribe();
+    const unsubscribeStreak = playFabService.onStreakChange((streak) => {
+      setStreakData(streak);
+    });
+
+    return () => {
+      unsubscribeProfile();
+      unsubscribeStreak();
+    };
   }, []);
 
   const [hasStarted, setHasStarted] = useState<boolean>(false);
@@ -358,11 +365,19 @@ export function App() {
       if (isToday) {
         // Record streak for today's puzzle
         const streakResult = recordDailyCompletion(dailyDateRef.current, mistakesRef.current);
-        setStreakData({
+        const newStreak: StreakData = {
           currentStreak: streakResult.currentStreak,
           bestStreak: streakResult.bestStreak,
           lastCompletedDay: todayStr,
-        });
+        };
+        setStreakData(newStreak);
+
+        // Synchronize streak to PlayFab UserData if streak changed
+        if (streakResult.streakIncreased || streakResult.streakBroken) {
+          playFabService.updateDailyStreak(newStreak, dailyDateRef.current).catch((err) => {
+            console.warn("PlayFab daily streak sync skipped or failed:", err);
+          });
+        }
 
         // Submit score to PlayFab
         playFabService

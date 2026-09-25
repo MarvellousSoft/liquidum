@@ -46,6 +46,20 @@ static func _timezone_bias_secs() -> int:
 static func _unixtime_ok_timezone() -> int:
 	return _unixtime() + _timezone_bias_secs()
 
+static func get_current_period_for_type(t: Type) -> String:
+	if t == Type.Daily:
+		return DailyButton._today()
+	elif t == Type.Weekly:
+		return WeeklyButton.get_curr_fst_day()
+	return ""
+
+static func get_previous_period_for_type(t: Type) -> String:
+	if t == Type.Daily:
+		return DailyButton._yesterday()
+	elif t == Type.Weekly:
+		return WeeklyButton.get_prev_fst_day()
+	return ""
+
 static func is_unlocked() -> bool:
 	return not Global.is_demo and (Global.is_dev_mode() or Profile.get_option("unlock_everything") or CampaignLevelLister.section_complete(4))
 
@@ -378,9 +392,13 @@ func level_completed(info: Level.WinInfo, level: Level, marathon_i: int, is_repl
 		if info.total_marathon_mistakes == 0:
 			await stats.unlock_recurring_no_mistakes(id)
 	else:
-		if current_period() != data.last_day[id] and data.current_streak[id] > 0:
-			data.current_streak[id] = 0
+		if current_period() != data.last_day[id]:
+			if data.current_streak[id] > 0:
+				data.current_streak[id] = 0
+			data.last_day[id] = current_period()
 			UserData.save()
+	if PlayFabIntegration.available() and StoreIntegrations.playfab != null:
+		StoreIntegrations.playfab.upload_streaks()
 	if not already_uploaded:
 		await RecurringMarathon.upload_leaderboard(steam_current_leaderboard(), info, false)
 		if SteamManager.enabled:

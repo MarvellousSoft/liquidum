@@ -29,13 +29,27 @@ func _process(dt):
 		custom_minimum_size = lerp(custom_minimum_size, $CenterContainer/VBox.size, factor) 
 
 
+static func get_curr_fst_day() -> String:
+	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
+	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
+	var weekday_reset := Time.WEEKDAY_MONDAY
+	var days_back_till_fst_day: int = (now_dict.weekday - weekday_reset + 7) % 7
+	return WeeklyButton._day_strip_time(now_unix_ok_tz - days_back_till_fst_day * 24 * 60 * 60)
+
+static func get_prev_fst_day() -> String:
+	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
+	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
+	var weekday_reset := Time.WEEKDAY_MONDAY
+	var days_back_till_fst_day: int = (now_dict.weekday - weekday_reset + 7) % 7
+	return WeeklyButton._day_strip_time(now_unix_ok_tz - (days_back_till_fst_day + 7) * 24 * 60 * 60)
+
 func _update() -> void:
 	var now_unix_ok_tz := RecurringMarathon._unixtime_ok_timezone()
 	var now_dict := Time.get_datetime_dict_from_unix_time(now_unix_ok_tz)
 	var weekday_reset := Time.WEEKDAY_MONDAY
 	var days_back_till_fst_day: int = (now_dict.weekday - weekday_reset + 7) % 7
-	curr_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - days_back_till_fst_day * 24 * 60 * 60)
-	prev_fst_day = WeeklyButton._day_strip_time(now_unix_ok_tz - (days_back_till_fst_day + 7) * 24 * 60 * 60)
+	curr_fst_day = WeeklyButton.get_curr_fst_day()
+	prev_fst_day = WeeklyButton.get_prev_fst_day()
 	deadline_str = WeeklyButton._day_strip_time(now_unix_ok_tz + (-days_back_till_fst_day + 6) * 24 * 60 * 60)
 	deadline_str += "T23:59:59"
 	super()

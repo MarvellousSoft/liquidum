@@ -115,11 +115,13 @@ describe("PlayFabService - Local Storage Tracking", () => {
 
 describe("PlayFabService - Mocked API Workflows", () => {
   let mockStorage: Storage;
+  let mockUserData: Record<string, { Value: string }> = {};
   let service: PlayFabService;
   let fetchSpy: any;
 
   beforeEach(() => {
     mockStorage = createMockStorage();
+    mockUserData = {};
     service = new PlayFabService(mockStorage);
 
     // Safeguard: mock fetch completely so NO real network requests ever go out
@@ -141,6 +143,7 @@ describe("PlayFabService - Mocked API Workflows", () => {
                 PlayerProfile: {
                   DisplayName: isSwitched ? `User_${body.CustomId}` : "AquaMaster",
                 },
+                UserData: mockUserData,
               },
             },
           }),
@@ -243,6 +246,35 @@ describe("PlayFabService - Mocked API Workflows", () => {
             code: 200,
             status: "OK",
             data: {},
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (urlStr.includes("/Client/GetUserData")) {
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: {
+              Data: mockUserData,
+            },
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (urlStr.includes("/Client/UpdateUserData")) {
+        if (body.Data) {
+          for (const [k, v] of Object.entries(body.Data)) {
+            mockUserData[k] = { Value: String(v) };
+          }
+        }
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: { DataVersion: 1 },
           }),
           { status: 200, headers: { "Content-Type": "application/json" } }
         );
@@ -476,6 +508,62 @@ describe("PlayFabService - Mocked API Workflows", () => {
     expect(service.getPlayFabId()).toBe("PF_KEY_RESTORED_999");
     expect(service.getDisplayName()).toBe("User_KEY_RESTORED_999");
     expect(mockStorage.getItem("liquidum_custom_id")).toBe("KEY_RESTORED_999");
+  });
+
+  describe("PlayFabService - Cloud Streak Synchronization", () => {
+    it("retrieves streaks from UserData during login and updates local storage", async () => {
+      const today = "2026-09-24";
+      mockUserData["streaks"] = {
+        Value: JSON.stringify({
+          daily: { cur: 5, best: 10, last: today },
+          weekly: { cur: 3, best: 6, last: "2026-09-21" },
+        }),
+      };
+
+      let listenerNotifiedStreak: any = null;
+      service.onStreakChange((streak) => {
+        listenerNotifiedStreak = streak;
+      });
+
+      await service.login();
+
+      expect(listenerNotifiedStreak).toEqual({
+        currentStreak: 5,
+        bestStreak: 10,
+        lastCompletedDay: today,
+      });
+
+      const cached = service.getCachedCloudStreaks();
+      expect(cached?.daily).toEqual({ cur: 5, best: 10, last: today });
+      expect(cached?.weekly).toEqual({ cur: 3, best: 6, last: "2026-09-21" });
+    });
+
+    it("updates daily streak while preserving weekly marathon streak", async () => {
+      mockUserData["streaks"] = {
+        Value: JSON.stringify({
+          daily: { cur: 2, best: 5, last: "2026-09-23" },
+          weekly: { cur: 4, best: 7, last: "2026-09-21" },
+        }),
+      };
+
+      await service.login();
+
+      const ok = await service.updateDailyStreak(
+        {
+          currentStreak: 3,
+          bestStreak: 5,
+          lastCompletedDay: "2026-09-24",
+        },
+        "2026-09-24"
+      );
+
+      expect(ok).toBe(true);
+
+      const parsedCloud = JSON.parse(mockUserData["streaks"].Value);
+      expect(parsedCloud.daily).toEqual({ cur: 3, best: 5, last: "2026-09-24" });
+      // Weekly streak must remain untouched!
+      expect(parsedCloud.weekly).toEqual({ cur: 4, best: 7, last: "2026-09-21" });
+    });
   });
 });
 

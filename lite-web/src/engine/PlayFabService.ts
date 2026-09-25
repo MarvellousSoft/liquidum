@@ -5,6 +5,13 @@ import {
   createFlair,
   decodeFlairFromInt,
 } from "./FlairManager";
+import {
+  type CloudStreakMap,
+  type StreakData,
+  parseCloudStreakMap,
+  serializeCloudStreakMap,
+  syncLocalWithCloudStreaks,
+} from "./StreakManager";
 
 export const PLAYFAB_TITLE_ID = "3D3A0";
 export const DAILY_STATISTIC_NAME = "daily";
@@ -235,6 +242,8 @@ export class PlayFabService {
   private loginPromise: Promise<LoginResultInfo> | null = null;
   private storage: Storage | null = null;
   private profileListeners: Set<(profile: PlayerProfileEvent) => void> = new Set();
+  private streakListeners: Set<(streak: StreakData) => void> = new Set();
+  private cachedCloudStreaks: CloudStreakMap | null = null;
 
   constructor(storage?: Storage) {
     this.storage = storage || (typeof localStorage !== "undefined" ? localStorage : null);
@@ -271,6 +280,13 @@ export class PlayFabService {
     };
   }
 
+  public onStreakChange(listener: (streak: StreakData) => void): () => void {
+    this.streakListeners.add(listener);
+    return () => {
+      this.streakListeners.delete(listener);
+    };
+  }
+
   private notifyProfileChange(): void {
     const event: PlayerProfileEvent = {
       playFabId: this.currentPlayFabId,
@@ -283,6 +299,16 @@ export class PlayFabService {
         listener(event);
       } catch (err) {
         console.error("Error in profile change listener:", err);
+      }
+    }
+  }
+
+  private notifyStreakChange(streak: StreakData): void {
+    for (const listener of this.streakListeners) {
+      try {
+        listener(streak);
+      } catch (err) {
+        console.error("Error in streak change listener:", err);
       }
     }
   }
@@ -319,6 +345,8 @@ export class PlayFabService {
         CreateAccount: true,
         InfoRequestParameters: {
           GetPlayerProfile: true,
+          GetUserData: true,
+          UserDataKeys: ["streaks"],
           ProfileConstraints: {
             ShowLinkedAccounts: true,
             ShowAvatarUrl: true,
@@ -339,6 +367,22 @@ export class PlayFabService {
         this.currentDisplayName = extractDisplayNameFromProfile(profile, this.currentPlayFabId || "");
         this.currentAvatarUrl = extractAvatarUrlFromProfile(profile);
         this.notifyProfileChange();
+
+        // Parse UserData streaks and reconcile with local storage
+        const userData = data.InfoResultPayload?.UserData;
+        const rawStreaks = userData?.streaks?.Value;
+        this.cachedCloudStreaks = parseCloudStreakMap(rawStreaks);
+        const syncRes = syncLocalWithCloudStreaks(this.cachedCloudStreaks, this.storage);
+        this.cachedCloudStreaks = syncRes.updatedCloudMap;
+
+        // If local had newer progress (e.g. played offline), push to cloud in background
+        if (syncRes.cloudNeedsUpdate) {
+          this.updateCloudStreaks(this.cachedCloudStreaks).catch((err) => {
+            console.warn("Failed to push reconciled streak to PlayFab:", err);
+          });
+        }
+
+        this.notifyStreakChange(syncRes.mergedData);
 
         resolve({
           playFabId: this.currentPlayFabId || "",
@@ -548,6 +592,75 @@ export class PlayFabService {
   }
 
   /**
+   * Retrieves the currently cached cloud streaks map.
+   */
+  public getCachedCloudStreaks(): CloudStreakMap | null {
+    return this.cachedCloudStreaks;
+  }
+
+  /**
+   * Explicitly fetches cloud streaks from PlayFab UserData.
+   */
+  public async fetchCloudStreaks(): Promise<CloudStreakMap> {
+    await this.login();
+
+    return new Promise<CloudStreakMap>((resolve) => {
+      PlayFabClient.GetUserData({ Keys: ["streaks"] }, (error, result) => {
+        if (error || !result || result.code !== 200) {
+          return resolve(this.cachedCloudStreaks || {});
+        }
+
+        const raw = result.data?.Data?.streaks?.Value;
+        this.cachedCloudStreaks = parseCloudStreakMap(raw);
+        resolve(this.cachedCloudStreaks);
+      });
+    });
+  }
+
+  /**
+   * Updates PlayFab UserData with the full CloudStreakMap.
+   * Preserves any existing keys (e.g. 'weekly') while writing.
+   */
+  public async updateCloudStreaks(streaks: CloudStreakMap): Promise<boolean> {
+    await this.login();
+
+    this.cachedCloudStreaks = { ...streaks };
+
+    return new Promise<boolean>((resolve) => {
+      PlayFabClient.UpdateUserData(
+        {
+          Data: {
+            streaks: serializeCloudStreakMap(streaks),
+          },
+        },
+        (error, result) => {
+          if (error || !result || result.code !== 200) {
+            return resolve(false);
+          }
+          resolve(true);
+        }
+      );
+    });
+  }
+
+  /**
+   * Updates the daily streak in PlayFab UserData.
+   * Non-destructive: merges into existing cached cloud streaks (e.g. preserving 'weekly').
+   */
+  public async updateDailyStreak(streak: StreakData, dateStr?: string): Promise<boolean> {
+    await this.login();
+
+    const currentMap: CloudStreakMap = this.cachedCloudStreaks ? { ...this.cachedCloudStreaks } : {};
+    currentMap["daily"] = {
+      cur: streak.currentStreak,
+      best: streak.bestStreak,
+      last: streak.lastCompletedDay || dateStr || "",
+    };
+
+    return this.updateCloudStreaks(currentMap);
+  }
+
+  /**
    * Switches the active account to a different recovery key (CustomID).
    * Persists the new key to storage, resets session state, and logs in.
    */
@@ -571,6 +684,7 @@ export class PlayFabService {
     this.currentDisplayName = null;
     this.currentAvatarUrl = null;
     this.currentFlair = null;
+    this.cachedCloudStreaks = null;
     this.loginPromise = null;
 
     const res = await this.login(trimmedId);

@@ -8,6 +8,7 @@ var playfab: PlayFab
 
 var ld_mapping := {}
 var sort_method := {}
+var cached_cloud_streaks: Dictionary = {}
 
 static func available() -> bool:
 	if Global.is_demo:
@@ -21,6 +22,8 @@ func _try_authenticate() -> void:
 			CreateAccount = true,
 			InfoRequestParameters = {
 				GetPlayerProfile = true,
+				GetUserData = true,
+				UserDataKeys = ["streaks"],
 				ProfileConstraints = {
 					ShowDisplayName = true,
 					ShowLinkedAccounts = true,
@@ -106,6 +109,7 @@ func _try_authenticate() -> void:
 	else:
 		if current_display_name() == "":
 			_reload_display_name()
+		fetch_cloud_streaks()
 		print("Playfab login already saved")
 
 func _ready() -> void:
@@ -156,11 +160,18 @@ func _on_simple_login(result, display_name_getter) -> void:
 		print("Extracted display name: %s" % [display_name])
 		var user_data := UserData.current()
 		if display_name == "":
-			if UserData.current().display_name != "":
-				return
-			_reload_display_name()
+			if UserData.current().display_name == "":
+				_reload_display_name()
 		else:
 			_update_cached_display_name(display_name)
+		print(result.data)
+		var user_data_payload = result.data.get("InfoResultPayload", {}).get("UserData", {})
+		var streaks_record = user_data_payload.get("streaks", null)
+		var streaks_val: String = ""
+		print(streaks_record)
+		if streaks_record is Dictionary:
+			streaks_val = str(streaks_record.get("Value", ""))
+		sync_streaks_from_payload(streaks_val)
 	else:
 		print("Weird login result: %s" % [result])
 
@@ -407,3 +418,60 @@ func _reload_display_name() -> void:
 		PlayFab.AUTH_TYPE.SESSION_TICKET,
 		_get_profile_call,
 	)
+
+func sync_streaks_from_payload(payload_str: String) -> void:
+	var cloud_dict := {}
+	if payload_str != "":
+		var parsed = JSON.parse_string(payload_str)
+		if parsed is Dictionary:
+			cloud_dict = parsed
+	cached_cloud_streaks = cloud_dict
+	var user_data := UserData.current()
+	var cloud_needs_update: bool = user_data.reconcile_streaks(cloud_dict)
+	if cloud_needs_update:
+		upload_streaks()
+
+func fetch_cloud_streaks() -> void:
+	if not authenticated():
+		return
+	var cb := AwaitCallback.new()
+	playfab.post_dict_auth(
+		{
+			Keys = ["streaks"]
+		},
+		"/Client/GetUserData",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		cb.callback,
+	)
+	var res = await cb.called
+	if res is Dictionary and res.get("status", "") == "OK":
+		var raw = res.get("data", {}).get("Data", {}).get("streaks", {}).get("Value", "")
+		sync_streaks_from_payload(str(raw))
+
+func upload_streaks() -> bool:
+	if not authenticated():
+		return false
+	var user_data := UserData.current()
+	var payload := cached_cloud_streaks.duplicate(true)
+	var local_streaks := user_data.get_streak_dict()
+	for k in local_streaks:
+		payload[k] = local_streaks[k]
+	cached_cloud_streaks = payload
+	var cb := AwaitCallback.new()
+	playfab.post_dict_auth(
+		{
+			Data = {
+				"streaks": JSON.stringify(payload)
+			}
+		},
+		"/Client/UpdateUserData",
+		PlayFab.AUTH_TYPE.SESSION_TICKET,
+		cb.callback,
+	)
+	var res = await cb.called
+	if res is Dictionary and res.get("status", "") == "OK":
+		print("Playfab streaks upload success")
+		return true
+	else:
+		print("Playfab streaks upload failure: %s" % [res])
+		return false
