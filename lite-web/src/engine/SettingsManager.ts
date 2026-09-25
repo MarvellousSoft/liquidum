@@ -1,7 +1,10 @@
+import { type LanguageSetting, setLanguage } from '../i18n';
+
 export type LineInfoMode = 'none' | 'missing' | 'current';
 
 export interface GameSettings {
   // Display
+  language: LanguageSetting;
   dark_mode: boolean;
   show_bubbles: boolean;
 
@@ -27,6 +30,7 @@ export interface GameSettings {
 
 export const DEFAULT_SETTINGS: GameSettings = {
   // Display
+  language: 'system',
   dark_mode: true,
   show_bubbles: true,
 
@@ -74,6 +78,9 @@ export function getSettings(): GameSettings {
 export function saveSettings(newSettings: Partial<GameSettings>): GameSettings {
   const current = getSettings();
   const updated: GameSettings = { ...current, ...newSettings };
+  if (newSettings.language !== undefined) {
+    setLanguage(updated.language);
+  }
   try {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updated));
@@ -90,4 +97,11 @@ export function subscribeSettings(listener: SettingsListener): () => void {
   return () => {
     listeners.delete(listener);
   };
+}
+
+// Sync i18n language with current stored settings on startup
+try {
+  setLanguage(getSettings().language);
+} catch {
+  // Ignore in SSR / non-browser test environments
 }

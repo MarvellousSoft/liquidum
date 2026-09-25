@@ -49,6 +49,9 @@ import {
   saveSettings,
   subscribeSettings,
 } from './engine/SettingsManager';
+import { useTranslation } from './i18n';
+
+const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 
 export type GameMode = 'daily' | 'weekly' | 'custom' | 'test';
 
@@ -69,6 +72,7 @@ function toEngineCorner(c: Corner | E.Corner): E.Corner {
 }
 
 export function App() {
+  const { t } = useTranslation();
   const [gridData, setGridData] = useState<GridModelData | null>(null);
   const [currentLevelKey, setCurrentLevelKey] = useState<string>("Level 01/01");
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set());
@@ -1469,8 +1473,8 @@ export function App() {
               data-testid="tool-water"
               onClick={() => setSelectedTool(Content.Water)}
               class={`tool-btn ${selectedTool === Content.Water ? 'tool-btn-water-active' : 'tool-btn-water-inactive'}`}
-              title="Water (1)"
-              aria-label="Water"
+              title={`${t('toolbar.water')} (1)`}
+              aria-label={t('toolbar.water')}
             >
               <span class="text-base leading-none">💧</span>
             </button>
@@ -1478,8 +1482,8 @@ export function App() {
               data-testid="tool-air"
               onClick={() => setSelectedTool(Content.NoWater)}
               class={`tool-btn ${selectedTool === Content.NoWater ? 'tool-btn-air-active' : 'tool-btn-air-inactive'}`}
-              title="Air (2)"
-              aria-label="Air"
+              title={`${t('toolbar.air')} (2)`}
+              aria-label={t('toolbar.air')}
             >
               <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
             </button>
@@ -1489,8 +1493,8 @@ export function App() {
                   data-testid="tool-boat"
                   onClick={() => setSelectedTool(Content.Boat)}
                   class={`tool-btn ${selectedTool === Content.Boat ? 'tool-btn-boat-active' : 'tool-btn-boat-inactive'}`}
-                  title="Boat (3)"
-                  aria-label="Boat"
+                  title={`${t('toolbar.boat')} (3)`}
+                  aria-label={t('toolbar.boat')}
                 >
                   <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
                 </button>
@@ -1499,8 +1503,8 @@ export function App() {
                   data-tool-id="noboat"
                   onClick={() => setSelectedTool(Content.NoBoat)}
                   class={`tool-btn ${selectedTool === Content.NoBoat ? 'tool-btn-maybeboat-active' : 'tool-btn-maybeboat-inactive'}`}
-                  title="Maybe Boat (4)"
-                  aria-label="Maybe Boat"
+                  title={`${t('toolbar.maybe_boat')} (4)`}
+                  aria-label={t('toolbar.maybe_boat')}
                 >
                   <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
                     <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
@@ -1514,8 +1518,8 @@ export function App() {
               data-testid="btn-draw-toggle"
               onClick={() => setIsDrawingMode(true)}
               class="tool-btn tool-btn-draw-inactive"
-              title="Drawing Mode (Space)"
-              aria-label="Draw"
+              title={`${t('toolbar.draw')} (Space)`}
+              aria-label={t('toolbar.draw')}
             >
               <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="draw" />
             </button>
@@ -1526,8 +1530,8 @@ export function App() {
               data-testid="draw-tool-pen"
               onClick={() => setIsEraserMode(false)}
               class={`tool-btn ${!isEraserMode ? 'tool-btn-draw-active' : 'tool-btn-draw-inactive'}`}
-              title="Paint Brush (P, B, or Tab) - Right-Click erases"
-              aria-label="Pen"
+              title={`${t('toolbar.pen')} (P, B, Tab)`}
+              aria-label={t('toolbar.pen')}
             >
               <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="pen" />
             </button>
@@ -1535,8 +1539,8 @@ export function App() {
               data-testid="draw-tool-eraser"
               onClick={() => setIsEraserMode(true)}
               class={`tool-btn ${isEraserMode ? 'tool-btn-draw-active' : 'tool-btn-draw-inactive'}`}
-              title="Eraser (E or Tab) - Right-Click paints"
-              aria-label="Eraser"
+              title={`${t('toolbar.eraser')} (E, Tab)`}
+              aria-label={t('toolbar.eraser')}
             >
               <img src="/icons/eraser.png" class="w-4 h-4 object-contain" alt="eraser" />
             </button>
@@ -1544,8 +1548,8 @@ export function App() {
               data-testid="draw-color-picker"
               onClick={() => setDrawColorIdx((i) => (i + 1) % DRAW_COLORS.length)}
               class="tool-btn tool-btn-draw-inactive"
-              title="Change Color (C)"
-              aria-label="Change Color"
+              title={`${t('toolbar.change_color')} (C)`}
+              aria-label={t('toolbar.change_color')}
             >
               <div
                 class="w-4 h-4 rounded-full border border-white/60 shadow"
@@ -1556,8 +1560,8 @@ export function App() {
               data-testid="draw-clear-all"
               onClick={() => setClearCanvasTrigger((c) => c + 1)}
               class="tool-btn tool-btn-draw-inactive"
-              title="Clear All (X or Del)"
-              aria-label="Clear All"
+              title={`${t('toolbar.clear_all')} (X, Del)`}
+              aria-label={t('toolbar.clear_all')}
             >
               <img src="/icons/clear.png" class="w-4 h-4 object-contain" alt="clear" />
             </button>
@@ -1566,10 +1570,10 @@ export function App() {
               data-testid="btn-draw-toggle"
               onClick={() => setIsDrawingMode(false)}
               class="tool-btn tool-btn-draw-active"
-              title="Exit Drawing Mode (Space)"
-              aria-label="Exit Drawing"
+              title={`${t('toolbar.done')} (Space)`}
+              aria-label={t('toolbar.done')}
             >
-              <span class="text-xs font-bold px-0.5">Done</span>
+              <span class="text-xs font-bold px-0.5">{t('toolbar.done')}</span>
             </button>
           </div>
         )}
@@ -1579,29 +1583,29 @@ export function App() {
             data-testid="btn-undo"
             onClick={handleUndo}
             class={`btn-action btn-undo ${!canUndo ? 'btn-disabled' : ''}`}
-            title="Undo (Z or Ctrl+Z)"
-            aria-label="Undo"
+            title={`${t('toolbar.undo')} (Z)`}
+            aria-label={t('toolbar.undo')}
             disabled={!canUndo}
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 7v6h6" />
               <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
             </svg>
-            <span class="btn-text">Undo</span>
+            <span class="btn-text">{t('toolbar.undo')}</span>
           </button>
           <button
             data-testid="btn-redo"
             onClick={handleRedo}
             class={`btn-action btn-redo ${!canRedo ? 'btn-disabled' : ''}`}
-            title="Redo (Y or Ctrl+Y)"
-            aria-label="Redo"
+            title={`${t('toolbar.redo')} (Y)`}
+            aria-label={t('toolbar.redo')}
             disabled={!canRedo}
           >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 7v6h-6" />
               <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" />
             </svg>
-            <span class="btn-text">Redo</span>
+            <span class="btn-text">{t('toolbar.redo')}</span>
           </button>
         </div>
 
@@ -1610,10 +1614,10 @@ export function App() {
             data-testid="btn-restart"
             onClick={handleRestart}
             class="btn-restart"
-            title="Restart Level (R)"
+            title={`${t('toolbar.restart')} (R)`}
           >
             <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
-            <span>Restart</span>
+            <span>{t('toolbar.restart')}</span>
           </button>
         )}
 
@@ -1621,41 +1625,41 @@ export function App() {
           data-testid="btn-help"
           onClick={() => setShowHelpModal(true)}
           class="btn-shortcuts"
-          title="How to Play / Rules (?)"
-          aria-label="How to Play"
+          title={`${t('toolbar.how_to_play')} (?)`}
+          aria-label={t('toolbar.how_to_play')}
         >
           <span class="text-base font-bold">❓</span>
-          <span class="btn-text">How to Play</span>
+          <span class="btn-text">{t('toolbar.how_to_play')}</span>
         </button>
 
         <button
           data-testid="btn-shortcuts"
           onClick={() => setShowShortcuts(true)}
           class="btn-shortcuts"
-          title="Keyboard Shortcuts"
-          aria-label="Shortcuts"
+          title={t('toolbar.shortcuts')}
+          aria-label={t('toolbar.shortcuts')}
         >
           <span class="text-base">⌨️</span>
-          <span class="btn-text">Shortcuts</span>
+          <span class="btn-text">{t('toolbar.shortcuts')}</span>
         </button>
 
         <button
           data-testid="btn-settings"
           onClick={() => setShowSettings(true)}
           class="btn-shortcuts"
-          title="Settings"
-          aria-label="Settings"
+          title={t('toolbar.settings')}
+          aria-label={t('toolbar.settings')}
         >
           <span class="text-base">⚙️</span>
-          <span class="btn-text">Settings</span>
+          <span class="btn-text">{t('toolbar.settings')}</span>
         </button>
 
         <button
           data-testid="btn-account"
           onClick={() => setShowAccountModal(true)}
           class="btn-shortcuts"
-          title="Player Account & Profile"
-          aria-label="Account"
+          title={t('account.title')}
+          aria-label={t('toolbar.account')}
         >
           {userAvatarUrl && !avatarLoadError ? (
             <img
@@ -1667,7 +1671,7 @@ export function App() {
           ) : (
             <span class="text-base">👤</span>
           )}
-          <span class="btn-text max-w-[100px] truncate">{userDisplayName || "Account"}</span>
+          <span class="btn-text max-w-[100px] truncate">{userDisplayName || t('toolbar.account')}</span>
         </button>
 
         {isDailyMode && (
@@ -1675,11 +1679,11 @@ export function App() {
             data-testid="btn-leaderboard"
             onClick={() => setShowLeaderboardModal(true)}
             class="btn-shortcuts lg:hidden"
-            title="View Daily Leaderboard"
-            aria-label="Leaderboard"
+            title={t('toolbar.leaderboard')}
+            aria-label={t('toolbar.leaderboard')}
           >
             <span class="text-base">🏆</span>
-            <span class="btn-text">Leaderboard</span>
+            <span class="btn-text">{t('toolbar.leaderboard')}</span>
           </button>
         )}
 
@@ -1687,7 +1691,7 @@ export function App() {
           data-testid="btn-theme-toggle"
           onClick={() => setIsDarkMode(!isDarkMode)}
           class="btn-theme-toggle"
-          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          title={isDarkMode ? t('toolbar.switch_light') : t('toolbar.switch_dark')}
         >
           <span>{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
@@ -1698,17 +1702,17 @@ export function App() {
         {won && (
           <div data-testid="win-banner" class="win-banner">
             <div class="win-title">
-              {isDailyMode ? `🎉 Daily Complete! 🎉` : `🎉 Level Complete! 🎉`}
+              {isDailyMode ? t('victory.daily_title') : t('victory.title')}
             </div>
             {isDailyMode && (
               <div class="text-sm font-semibold opacity-95 text-[var(--game-mint)] flex items-center justify-center gap-2 flex-wrap">
-                <span>{dailyMeta?.emoji} {dailyMeta?.flavorName}</span>
+                <span>{dailyMeta ? `${dailyMeta.emoji} ${t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`)}` : ''}</span>
                 <span>•</span>
                 <span data-testid="win-time">⏱️ {formatSolveTime(secondsElapsed)}</span>
                 <span>•</span>
-                <span>{mistakes === 0 ? "🏆 0 Mistakes!" : `❌ ${mistakes} ${mistakes === 1 ? 'Mistake' : 'Mistakes'}`}</span>
+                <span>{mistakes === 0 ? t('victory.zero_mistakes') : mistakes === 1 ? t('victory.one_mistake') : t('victory.many_mistakes', { count: mistakes })}</span>
                 <span>•</span>
-                <span data-testid="win-streak" title={`Daily Streak (Best: ${streakData.bestStreak})`}>🔥 Streak: {streakData.currentStreak}</span>
+                <span data-testid="win-streak" title={t('toolbar.streak_tooltip', { best: streakData.bestStreak })}>🔥 {t('victory.streak')} {streakData.currentStreak}</span>
               </div>
             )}
             <div class="flex items-center gap-2 flex-wrap justify-center">
@@ -1719,7 +1723,7 @@ export function App() {
                   class="win-btn-again"
                 >
                   <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
-                  <span>Play Again</span>
+                  <span>{t('victory.play_again')}</span>
                 </button>
               )}
               {isDailyMode ? (
@@ -1728,18 +1732,18 @@ export function App() {
                     data-testid="btn-leaderboard-win"
                     onClick={() => setShowLeaderboardModal(true)}
                     class="level-btn flex items-center gap-1.5"
-                    title="View Daily Leaderboard"
+                    title={t('toolbar.leaderboard')}
                   >
                     <span>🏆</span>
-                    <span>Leaderboard</span>
+                    <span>{t('toolbar.leaderboard')}</span>
                   </button>
                   <button
                     data-testid="btn-share-result"
                     onClick={handleShare}
                     class="btn-share"
-                    title="Share result"
+                    title={t('victory.share')}
                   >
-                    <span>{copiedShare ? "✓ Copied!" : "📋 Share Result"}</span>
+                    <span>{copiedShare ? t('victory.share_copied') : `📋 ${t('victory.share')}`}</span>
                   </button>
                 </>
               ) : (
@@ -1749,7 +1753,7 @@ export function App() {
                     onClick={() => loadLevel(nextLevelKey)}
                     class="win-btn-next"
                   >
-                    <span>Next Level ({nextLevelKey})</span>
+                    <span>{t('victory.next_level')} ({nextLevelKey})</span>
                     <span>→</span>
                   </button>
                 )
@@ -1818,10 +1822,10 @@ export function App() {
                   <div
                     data-testid="mistake-counter"
                     class={`hint-stat-card hint-stat-mistake ${mistakePulse ? 'hint-stat-mistake-bump' : ''}`}
-                    title="Mistakes made"
+                    title={t('toolbar.mistakes_tooltip')}
                   >
                     <span class="hint-stat-icon">❌</span>
-                    <span class="hint-stat-label">Mistakes</span>
+                    <span class="hint-stat-label">{t('toolbar.mistakes')}</span>
                     <span data-testid="mistake-count" class="hint-stat-value godot-text-outline">
                       {mistakes}
                     </span>
@@ -1933,10 +1937,10 @@ export function App() {
               >
                 <div class="text-5xl mb-2">{dailyMeta?.emoji || "🐟"}</div>
                 <h3 class="text-2xl font-bold text-cyan-300 mb-1">
-                  {dailyMeta?.flavorName || "Daily Puzzle"}
+                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`) : "Daily Puzzle"}
                 </h3>
                 <p class="text-xs text-slate-300 opacity-90 mb-4 max-w-xs">
-                  {dailyMeta?.description || "Solve the daily puzzle as fast as you can with minimal mistakes!"}
+                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.desc`) : "Solve the daily puzzle as fast as you can with minimal mistakes!"}
                 </p>
 
                 <div class="flex items-center gap-2.5 mb-5 flex-wrap justify-center">
@@ -1953,10 +1957,10 @@ export function App() {
                   <div
                     data-testid="daily-streak-display"
                     class="flex items-center gap-1 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-semibold cursor-help"
-                    title={`Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+                    title={t('toolbar.streak_tooltip', { best: streakData.bestStreak })}
                   >
                     <span>🔥</span>
-                    <span>Streak: {streakData.currentStreak}</span>
+                    <span>{t('victory.streak')} {streakData.currentStreak}</span>
                   </div>
                 </div>
 
@@ -1969,7 +1973,7 @@ export function App() {
                   }}
                   class="btn-start-puzzle"
                 >
-                  <span>▶ Start Puzzle</span>
+                  <span>{t('toolbar.start_puzzle')}</span>
                 </button>
               </div>
             )}
@@ -2005,13 +2009,13 @@ export function App() {
               {/* Level name and streak counter below the grid */}
               <div class="level-footer-info">
                 <div data-testid="level-name-label" class="level-name-label">
-                  {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${dailyMeta.flavorName}` : '') : currentLevelKey}
+                  {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`)}` : '') : currentLevelKey}
                 </div>
                 {isDailyMode && (
                   <div
                     data-testid="daily-streak-badge"
                     class="daily-streak-badge"
-                    title={`Daily Streak: Consecutive daily levels with at most 2 mistakes (Best: ${streakData.bestStreak})`}
+                    title={t('toolbar.streak_tooltip', { best: streakData.bestStreak })}
                   >
                     <span>🔥</span>
                     <span>{streakData.currentStreak}</span>
@@ -2078,14 +2082,14 @@ export function App() {
             <div class="shortcuts-header">
               <div class="flex items-center gap-2">
                 <span class="text-xl">⚙️</span>
-                <h2 class="shortcuts-title godot-text-outline">Settings</h2>
+                <h2 class="shortcuts-title godot-text-outline">{t('settings.title')}</h2>
               </div>
               <button
                 data-testid="btn-close-settings"
                 onClick={() => setShowSettings(false)}
                 class="shortcuts-close-btn"
-                title="Close (Esc)"
-                aria-label="Close"
+                title={t('account.close')}
+                aria-label={t('account.close')}
               >
                 ✕
               </button>
@@ -2095,14 +2099,32 @@ export function App() {
               {/* DISPLAY SECTION */}
               <div class="settings-section">
                 <h3 class="settings-section-title">
-                  <span>🎨</span> Display
+                  <span>🎨</span> {t('settings.section_display')}
                 </h3>
+
+                {/* Language */}
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-title">{t('settings.language_title')}</span>
+                    <span class="setting-desc">{t('settings.language_desc')}</span>
+                  </div>
+                  <select
+                    data-testid="setting-language"
+                    value={settings.language || 'system'}
+                    onChange={(e) => updateSetting('language', e.currentTarget.value as any)}
+                    class="setting-select"
+                  >
+                    <option value="system">{t('settings.lang_system')}</option>
+                    <option value="en">{t('settings.lang_en')}</option>
+                    <option value="pt-BR">{t('settings.lang_pt_br')}</option>
+                  </select>
+                </div>
 
                 {/* Dark Mode */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Dark mode</span>
-                    <span class="setting-desc">Toggle between dark and light themes</span>
+                    <span class="setting-title">{t('settings.dark_mode_title')}</span>
+                    <span class="setting-desc">{t('settings.dark_mode_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2118,8 +2140,8 @@ export function App() {
                 {/* Show Bubbles */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Show bubbles in background</span>
-                    <span class="setting-desc">Render bubble gradients on water surfaces</span>
+                    <span class="setting-title">{t('settings.show_bubbles_title')}</span>
+                    <span class="setting-desc">{t('settings.show_bubbles_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2136,14 +2158,14 @@ export function App() {
               {/* GAMEPLAY SECTION */}
               <div class="settings-section">
                 <h3 class="settings-section-title">
-                  <span>🎮</span> Gameplay
+                  <span>🎮</span> {t('settings.section_gameplay')}
                 </h3>
 
                 {/* Incomplete line info */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Incomplete line info</span>
-                    <span class="setting-desc">Display helper numbers on opposite sides of the grid</span>
+                    <span class="setting-title">{t('settings.line_info_title')}</span>
+                    <span class="setting-desc">{t('settings.line_info_desc')}</span>
                   </div>
                   <select
                     data-testid="setting-line-info"
@@ -2151,17 +2173,17 @@ export function App() {
                     onChange={(e) => updateSetting('line_info', e.currentTarget.value as any)}
                     class="setting-select"
                   >
-                    <option value="none">None</option>
-                    <option value="missing">Missing value</option>
-                    <option value="current">Current value</option>
+                    <option value="none">{t('settings.line_info_none')}</option>
+                    <option value="missing">{t('settings.line_info_missing')}</option>
+                    <option value="current">{t('settings.line_info_current')}</option>
                   </select>
                 </div>
 
                 {/* Highlight finished rows/columns */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Highlight finished rows/columns</span>
-                    <span class="setting-desc">Highlight satisfied row and column clue numbers</span>
+                    <span class="setting-title">{t('settings.highlight_hints_title')}</span>
+                    <span class="setting-desc">{t('settings.highlight_hints_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2177,8 +2199,8 @@ export function App() {
                 {/* Highlight hovered line */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Highlight hovered line</span>
-                    <span class="setting-desc">Highlight the active row and column under cursor</span>
+                    <span class="setting-title">{t('settings.highlight_grid_title')}</span>
+                    <span class="setting-desc">{t('settings.highlight_grid_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2194,8 +2216,8 @@ export function App() {
                 {/* Show water preview */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Show water preview</span>
-                    <span class="setting-desc">Show a ghost preview of the tool on hover</span>
+                    <span class="setting-title">{t('settings.show_preview_title')}</span>
+                    <span class="setting-desc">{t('settings.show_preview_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2211,8 +2233,8 @@ export function App() {
                 {/* Hide simple "?" hints */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Hide simple "?" hints</span>
-                    <span class="setting-desc">Hide clue numbers that are unknown ("?")</span>
+                    <span class="setting-title">{t('settings.hide_unknown_title')}</span>
+                    <span class="setting-desc">{t('settings.hide_unknown_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2228,8 +2250,8 @@ export function App() {
                 {/* Color "?" hints */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Color "?" hints</span>
-                    <span class="setting-desc">Color unknown clues when in progress</span>
+                    <span class="setting-title">{t('settings.progress_on_unknown_title')}</span>
+                    <span class="setting-desc">{t('settings.progress_on_unknown_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2245,8 +2267,8 @@ export function App() {
                 {/* Show timer */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Show timer</span>
-                    <span class="setting-desc">Display solving time in stats header</span>
+                    <span class="setting-title">{t('settings.show_timer_title')}</span>
+                    <span class="setting-desc">{t('settings.show_timer_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2262,8 +2284,8 @@ export function App() {
                 {/* Skip animations */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Skip animations</span>
-                    <span class="setting-desc">Disable win and popup animations for instant feedback</span>
+                    <span class="setting-title">{t('settings.skip_anims_title')}</span>
+                    <span class="setting-desc">{t('settings.skip_anims_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2280,14 +2302,14 @@ export function App() {
               {/* ACCESSIBILITY SECTION */}
               <div class="settings-section">
                 <h3 class="settings-section-title">
-                  <span>👓</span> Accessibility
+                  <span>👓</span> {t('settings.section_accessibility')}
                 </h3>
 
                 {/* Increase hints font size */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Increase hints' font size</span>
-                    <span class="setting-desc">Enlarge row, column, and aquarium clue text</span>
+                    <span class="setting-title">{t('settings.bigger_hints_title')}</span>
+                    <span class="setting-desc">{t('settings.bigger_hints_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2303,8 +2325,8 @@ export function App() {
                 {/* Thicker walls */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Thicker walls</span>
-                    <span class="setting-desc">Increase borders between aquariums for contrast</span>
+                    <span class="setting-title">{t('settings.thicker_walls_title')}</span>
+                    <span class="setting-desc">{t('settings.thicker_walls_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2321,14 +2343,14 @@ export function App() {
               {/* CONTROLS SECTION */}
               <div class="settings-section">
                 <h3 class="settings-section-title">
-                  <span>🕹️</span> Controls
+                  <span>🕹️</span> {t('settings.section_controls')}
                 </h3>
 
                 {/* Fill with drag */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Fill with drag</span>
-                    <span class="setting-desc">Drag pointer across multiple cells to place tiles</span>
+                    <span class="setting-title">{t('settings.drag_content_title')}</span>
+                    <span class="setting-desc">{t('settings.drag_content_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2344,8 +2366,8 @@ export function App() {
                 {/* Invert mouse buttons */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Invert mouse buttons</span>
-                    <span class="setting-desc">Swap primary (Left) and secondary (Right) buttons</span>
+                    <span class="setting-title">{t('settings.invert_mouse_title')}</span>
+                    <span class="setting-desc">{t('settings.invert_mouse_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2361,8 +2383,8 @@ export function App() {
                 {/* Auto-flood air */}
                 <div class="setting-item">
                   <div class="setting-info">
-                    <span class="setting-title">Auto-flood air</span>
-                    <span class="setting-desc">Automatically mark empty cells as air when lines are full</span>
+                    <span class="setting-title">{t('settings.auto_flood_air_title')}</span>
+                    <span class="setting-desc">{t('settings.auto_flood_air_desc')}</span>
                   </div>
                   <label class="setting-toggle">
                     <input
@@ -2393,14 +2415,14 @@ export function App() {
             <div class="shortcuts-header">
               <div class="flex items-center gap-2">
                 <span class="text-xl">⌨️</span>
-                <h2 class="shortcuts-title godot-text-outline">Controls & Shortcuts</h2>
+                <h2 class="shortcuts-title godot-text-outline">{t('shortcuts.title')}</h2>
               </div>
               <button
                 data-testid="btn-close-shortcuts"
                 onClick={() => setShowShortcuts(false)}
                 class="shortcuts-close-btn"
-                title="Close (Esc)"
-                aria-label="Close"
+                title={t('account.close')}
+                aria-label={t('account.close')}
               >
                 ✕
               </button>
@@ -2409,54 +2431,54 @@ export function App() {
             <div class="shortcuts-content">
               {/* Mouse & Touch */}
               <div class="shortcut-section">
-                <h3 class="shortcut-section-title">🖱️ Mouse & Touch Controls</h3>
+                <h3 class="shortcut-section-title">{t('shortcuts.sec_mouse')}</h3>
                 <div class="shortcut-list">
                   <div class="shortcut-item">
-                    <span class="shortcut-key">Tap / Left Click</span>
-                    <span class="shortcut-desc">Place selected tool (or clear matching content)</span>
+                    <span class="shortcut-key">{t('shortcuts.tap_click')}</span>
+                    <span class="shortcut-desc">{t('shortcuts.tap_click_desc')}</span>
                   </div>
                   <div class="shortcut-item">
-                    <span class="shortcut-key">Right Click</span>
-                    <span class="shortcut-desc">Air (✕) / clear pencil marks</span>
+                    <span class="shortcut-key">{t('shortcuts.right_click')}</span>
+                    <span class="shortcut-desc">{t('shortcuts.right_click_desc')}</span>
                   </div>
                   <div class="shortcut-item">
-                    <span class="shortcut-key">Middle Click</span>
-                    <span class="shortcut-desc">Place / remove Boat (⛵)</span>
+                    <span class="shortcut-key">{t('shortcuts.middle_click')}</span>
+                    <span class="shortcut-desc">{t('shortcuts.middle_click_desc')}</span>
                   </div>
                   <div class="shortcut-item">
-                    <span class="shortcut-key">Click & Drag</span>
-                    <span class="shortcut-desc">Draw or erase across multiple cells</span>
+                    <span class="shortcut-key">{t('shortcuts.drag')}</span>
+                    <span class="shortcut-desc">{t('shortcuts.drag_desc')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Hover Keys */}
               <div class="shortcut-section">
-                <h3 class="shortcut-section-title">✨ Quick Hover Keys</h3>
-                <p class="shortcut-section-hint">Hover mouse over any cell and press or hold:</p>
+                <h3 class="shortcut-section-title">{t('shortcuts.sec_hover')}</h3>
+                <p class="shortcut-section-hint">{t('shortcuts.hover_hint')}</p>
                 <div class="shortcut-list">
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">W</kbd></div>
-                    <span class="shortcut-desc">Place or remove Water (💧)</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_w_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">X</kbd></div>
-                    <span class="shortcut-desc">Place or remove Air (✕)</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_x_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">B</kbd></div>
-                    <span class="shortcut-desc">Place or remove Boat (⛵)</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_b_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">N</kbd></div>
-                    <span class="shortcut-desc">Place or remove Maybe Boat (?)</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_n_desc')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Tool Selection */}
               <div class="shortcut-section">
-                <h3 class="shortcut-section-title">🎯 Tool Selection</h3>
+                <h3 class="shortcut-section-title">{t('shortcuts.sec_tools')}</h3>
                 <div class="shortcut-list">
                   <div class="shortcut-item">
                     <div class="flex gap-1.5">
@@ -2465,71 +2487,71 @@ export function App() {
                       <kbd class="kbd">3</kbd>
                       <kbd class="kbd">4</kbd>
                     </div>
-                    <span class="shortcut-desc">Select Water, Air, Boat, Maybe Boat</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_14_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5">
                       <kbd class="kbd">Tab</kbd> / <kbd class="kbd">Shift+Tab</kbd>
                     </div>
-                    <span class="shortcut-desc">Next / Previous tool</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_tab_desc')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Actions & Game */}
               <div class="shortcut-section">
-                <h3 class="shortcut-section-title">⚡ Game Actions</h3>
+                <h3 class="shortcut-section-title">{t('shortcuts.sec_actions')}</h3>
                 <div class="shortcut-list">
                   <div class="shortcut-item">
                     <div class="flex gap-1.5">
                       <kbd class="kbd">Z</kbd> / <kbd class="kbd">Ctrl+Z</kbd>
                     </div>
-                    <span class="shortcut-desc">Undo last move</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_undo_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5">
                       <kbd class="kbd">Y</kbd> / <kbd class="kbd">Ctrl+Y</kbd>
                     </div>
-                    <span class="shortcut-desc">Redo move</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_redo_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">R</kbd></div>
-                    <span class="shortcut-desc">Restart current level</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_restart_desc')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">Esc</kbd> / <kbd class="kbd">?</kbd></div>
-                    <span class="shortcut-desc">Toggle / close shortcuts popup</span>
+                    <span class="shortcut-desc">{t('shortcuts.key_shortcuts_desc')}</span>
                   </div>
                 </div>
               </div>
 
               {/* Drawing / Marker Mode */}
               <div class="shortcut-section">
-                <h3 class="shortcut-section-title">🎨 Drawing & Markers</h3>
+                <h3 class="shortcut-section-title">{t('shortcuts.sec_drawing')}</h3>
                 <div class="shortcut-list">
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">Space</kbd></div>
-                    <span class="shortcut-desc">Toggle Drawing Mode</span>
+                    <span class="shortcut-desc">{t('shortcuts.toggle_draw')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">Tab</kbd> / <kbd class="kbd">E</kbd></div>
-                    <span class="shortcut-desc">Toggle between Paint Brush and Eraser</span>
+                    <span class="shortcut-desc">{t('shortcuts.toggle_eraser')}</span>
                   </div>
                   <div class="shortcut-item">
-                    <span class="shortcut-key">Right Click & Drag</span>
-                    <span class="shortcut-desc">Use opposite tool (Erase while in Brush, Paint while in Eraser)</span>
+                    <span class="shortcut-key">{t('shortcuts.right_click')} & Drag</span>
+                    <span class="shortcut-desc">{t('shortcuts.opposite_tool')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">B</kbd><kbd class="kbd">P</kbd></div>
-                    <span class="shortcut-desc">Pen mode</span>
+                    <span class="shortcut-desc">{t('shortcuts.pen_mode')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">C</kbd></div>
-                    <span class="shortcut-desc">Cycle marker color</span>
+                    <span class="shortcut-desc">{t('shortcuts.cycle_color')}</span>
                   </div>
                   <div class="shortcut-item">
                     <div class="flex gap-1.5"><kbd class="kbd">X</kbd><kbd class="kbd">Del</kbd></div>
-                    <span class="shortcut-desc">Clear all drawings</span>
+                    <span class="shortcut-desc">{t('shortcuts.clear_drawings')}</span>
                   </div>
                 </div>
               </div>

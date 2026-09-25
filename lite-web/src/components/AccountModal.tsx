@@ -1,6 +1,7 @@
 import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { playFabService, type PlayerProfileEvent } from "../engine/PlayFabService";
+import { useTranslation } from "../i18n";
 
 interface AccountModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface AccountModalProps {
 export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModalProps) {
   if (!isOpen) return null;
 
+  const { t } = useTranslation();
   const [displayName, setDisplayName] = useState<string>(playFabService.getDisplayName() || "Anonymous");
   const [avatarUrl, setAvatarUrl] = useState<string>(playFabService.getAvatarUrl() || "");
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>(playFabService.getAvatarUrl() || "");
@@ -66,7 +68,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   const handleSaveDisplayName = async () => {
     const trimmed = displayName.trim();
     if (trimmed.length < 3 || trimmed.length > 25) {
-      setNameMessage({ type: "error", text: "Display name must be between 3 and 25 characters" });
+      setNameMessage({ type: "error", text: t("account.err_name_length") });
       return;
     }
     setNameSaving(true);
@@ -74,7 +76,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     try {
       const updated = await playFabService.updateDisplayName(trimmed);
       setDisplayName(updated);
-      setNameMessage({ type: "success", text: "Name updated successfully!" });
+      setNameMessage({ type: "success", text: t("account.msg_name_updated") });
       onAccountUpdated?.();
     } catch (err: any) {
       setNameMessage({
@@ -97,7 +99,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
       setAvatarPreviewUrl(updated || "");
       setAvatarMessage({
         type: "success",
-        text: updated ? "Avatar updated successfully!" : "Avatar removed.",
+        text: updated ? t("account.msg_avatar_saved") : t("account.msg_avatar_removed"),
       });
       onAccountUpdated?.();
     } catch (err: any) {
@@ -118,7 +120,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
       await playFabService.updateAvatarUrl("");
       setAvatarUrl("");
       setAvatarPreviewUrl("");
-      setAvatarMessage({ type: "success", text: "Avatar removed." });
+      setAvatarMessage({ type: "success", text: t("account.msg_avatar_removed") });
       onAccountUpdated?.();
     } catch (err: any) {
       setAvatarMessage({
@@ -143,17 +145,17 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   const handleRestoreAccount = async () => {
     const cleanKey = restoreKeyInput.trim();
     if (!cleanKey) {
-      setRestoreMessage({ type: "error", text: "Please enter a valid recovery key" });
+      setRestoreMessage({ type: "error", text: t("account.err_empty_key") });
       return;
     }
 
     if (cleanKey === recoveryKey) {
-      setRestoreMessage({ type: "error", text: "This is already the currently active account key" });
+      setRestoreMessage({ type: "error", text: t("account.err_same_key") });
       return;
     }
 
     const confirmed = window.confirm(
-      "Restoring this key will switch your browser session to that account. Continue?"
+      t("account.confirm_restore")
     );
     if (!confirmed) return;
 
@@ -165,7 +167,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
       setAvatarUrl(res.avatarUrl || "");
       setAvatarPreviewUrl(res.avatarUrl || "");
       setRecoveryKey(cleanKey);
-      setRestoreMessage({ type: "success", text: `Account restored! Welcome, ${res.displayName || "Player"}.` });
+      setRestoreMessage({ type: "success", text: t("account.msg_restored", { name: res.displayName || "Player" }) });
       setRestoreKeyInput("");
       onAccountUpdated?.();
     } catch (err: any) {
@@ -198,10 +200,10 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             <span class="text-xl">👤</span>
             <div>
               <h2 id="account-modal-title" class="shortcuts-title godot-text-outline">
-                Player Account & Profile
+                {t("account.title")}
               </h2>
               <p class="text-[11px] text-[rgba(217,255,226,0.7)]">
-                Manage your public name, avatar, and cloud recovery key
+                {t("account.subtitle")}
               </p>
             </div>
           </div>
@@ -209,8 +211,8 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             data-testid="btn-close-account"
             class="shortcuts-close-btn"
             onClick={onClose}
-            title="Close (Esc)"
-            aria-label="Close"
+            title={t("account.close")}
+            aria-label={t("account.close")}
           >
             ✕
           </button>
@@ -221,7 +223,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
           {/* SECTION 1: PROFILE PICTURE */}
           <div class="shortcut-section space-y-3">
             <h3 class="shortcut-section-title">
-              <span>🖼️</span> Profile Picture
+              <span>🖼️</span> {t("account.profile_picture")}
             </h3>
 
             <div class="flex items-center gap-4">
@@ -241,14 +243,14 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
 
               <div class="flex-1 space-y-2">
                 <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
-                  Image URL (PNG or JPG)
+                  {t("account.avatar_url_label")}
                 </label>
                 <div class="flex items-center gap-2">
                   <input
                     type="url"
                     data-testid="input-avatar-url"
                     class="game-input flex-1 text-xs"
-                    placeholder="https://example.com/my-avatar.png"
+                    placeholder={t("account.avatar_url_placeholder")}
                     value={avatarUrl}
                     onInput={(e: any) => {
                       setAvatarUrl(e.target.value);
@@ -263,7 +265,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                     onClick={handleSaveAvatar}
                     disabled={avatarSaving}
                   >
-                    {avatarSaving ? "..." : "Save"}
+                    {avatarSaving ? "..." : t("account.save")}
                   </button>
                   {avatarUrl && (
                     <button
@@ -271,9 +273,9 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                       class="btn-secondary-danger text-xs shrink-0"
                       onClick={handleRemoveAvatar}
                       disabled={avatarSaving}
-                      title="Remove avatar"
+                      title={t("account.clear")}
                     >
-                      Clear
+                      {t("account.clear")}
                     </button>
                   )}
                 </div>
@@ -293,10 +295,10 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
           {/* SECTION 2: DISPLAY NAME */}
           <div class="shortcut-section space-y-3">
             <h3 class="shortcut-section-title">
-              <span>🏷️</span> Display Name
+              <span>🏷️</span> {t("account.display_name")}
             </h3>
             <p class="shortcut-section-hint">
-              Your name appears on the daily leaderboard. Must be between 3 and 25 characters.
+              {t("account.display_name_hint")}
             </p>
 
             <div class="flex items-center gap-2">
@@ -304,7 +306,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 type="text"
                 data-testid="input-display-name"
                 class="game-input flex-1 text-xs"
-                placeholder="Enter player name"
+                placeholder={t("account.name_placeholder")}
                 value={displayName}
                 maxLength={25}
                 onInput={(e: any) => setDisplayName(e.target.value)}
@@ -316,7 +318,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 onClick={handleSaveDisplayName}
                 disabled={nameSaving}
               >
-                {nameSaving ? "Saving..." : "Save Name"}
+                {nameSaving ? t("account.saving") : t("account.save_name")}
               </button>
             </div>
 
@@ -334,17 +336,17 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
           <div class="shortcut-section space-y-4">
             <div>
               <h3 class="shortcut-section-title">
-                <span>🔑</span> Account Recovery Key
+                <span>🔑</span> {t("account.recovery_key_title")}
               </h3>
               <p class="shortcut-section-hint">
-                This secret key identifies your player profile on PlayFab. Save it to keep your leaderboard submissions, rank and streak if you switch browsers or devices. Restore the key from the Steam version to share the streak.
+                {t("account.recovery_key_desc")}
               </p>
             </div>
 
             {/* Current Key display + copy */}
             <div class="space-y-1.5">
               <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
-                Your Current Key
+                {t("account.current_key")}
               </label>
               <div class="flex items-center gap-2">
                 <input
@@ -359,9 +361,9 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                   data-testid="btn-toggle-key-visibility"
                   class="btn-secondary text-xs shrink-0"
                   onClick={() => setIsKeyVisible(!isKeyVisible)}
-                  title={isKeyVisible ? "Hide Key" : "Reveal Key"}
+                  title={isKeyVisible ? t("account.hide_key") : t("account.show_key")}
                 >
-                  {isKeyVisible ? "🙈 Hide" : "👁️ Show"}
+                  {isKeyVisible ? t("account.hide_key") : t("account.show_key")}
                 </button>
                 <button
                   type="button"
@@ -369,7 +371,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                   class="btn-shortcuts text-xs shrink-0 flex items-center gap-1"
                   onClick={handleCopyKey}
                 >
-                  {copySuccess ? "✓ Copied!" : "📋 Copy Key"}
+                  {copySuccess ? t("account.copied") : t("account.copy_key")}
                 </button>
               </div>
             </div>
@@ -377,14 +379,14 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             {/* Restore Account from Key */}
             <div class="pt-3 border-t border-[rgba(217,255,226,0.12)] space-y-2">
               <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
-                Restore Account
+                {t("account.restore_title")}
               </label>
               <div class="flex items-center gap-2">
                 <input
                   type="text"
                   data-testid="input-restore-key"
                   class="game-input font-mono text-xs flex-1"
-                  placeholder="Paste recovery key here..."
+                  placeholder={t("account.restore_placeholder")}
                   value={restoreKeyInput}
                   onInput={(e: any) => setRestoreKeyInput(e.target.value)}
                   disabled={isRestoring}
@@ -396,7 +398,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                   onClick={handleRestoreAccount}
                   disabled={isRestoring || !restoreKeyInput.trim()}
                 >
-                  {isRestoring ? "Restoring..." : "Restore Account"}
+                  {isRestoring ? t("account.restoring") : t("account.restore_btn")}
                 </button>
               </div>
 
@@ -418,7 +420,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             class="btn-secondary text-xs px-4 py-1.5"
             onClick={onClose}
           >
-            Close
+            {t("account.close")}
           </button>
         </div>
       </div>

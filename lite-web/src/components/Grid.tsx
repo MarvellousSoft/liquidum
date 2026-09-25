@@ -3,6 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools, getHintHoverText } from '../model/GridData';
 import type { GridModelData } from '../model/GridData';
 import type { GameSettings } from '../engine/SettingsManager';
+import { t } from '../i18n';
 import { Cell } from './Cell';
 
 interface GridProps {
@@ -330,6 +331,7 @@ export function Grid({
     const hint = gridData.row_hints[r];
     const wCount = countWaterRow(gridData, r);
     const bCount = countBoatRow(gridData, r);
+    const line = t('hints.line_row');
 
     if (settings?.line_info === 'missing') {
       const showWater = hint.water_count >= 0;
@@ -341,21 +343,33 @@ export function Grid({
 
       const parts: string[] = [];
       if (missingWater !== null) {
-        parts.push(missingWater === 0 ? 'no missing water cells' : `${missingWater} missing water cell${missingWater === 1 ? '' : 's'}`);
+        parts.push(
+          missingWater === 0
+            ? t('hints.opp_no_missing_water')
+            : missingWater === 1
+            ? t('hints.opp_missing_water_one')
+            : t('hints.opp_missing_water_many', { count: missingWater })
+        );
       }
       if (missingBoat !== null) {
-        parts.push(missingBoat === 0 ? 'no missing boats' : `${missingBoat} missing boat${missingBoat === 1 ? '' : 's'}`);
+        parts.push(
+          missingBoat === 0
+            ? t('hints.opp_no_missing_boats')
+            : missingBoat === 1
+            ? t('hints.opp_missing_boats_one')
+            : t('hints.opp_missing_boats_many', { count: missingBoat })
+        );
       }
-      return `Remaining in this row: ${parts.join(', ')}.`;
+      return t('hints.opp_remaining', { line, parts: parts.join(', ') });
     }
 
     if (settings?.line_info === 'current') {
       const parts: string[] = [];
-      parts.push(`${wCount} water cell${wCount === 1 ? '' : 's'}`);
+      parts.push(wCount === 1 ? t('hints.opp_water_one') : t('hints.opp_water_many', { count: wCount }));
       if ((hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && bCount > 0) {
-        parts.push(`${bCount} boat${bCount === 1 ? '' : 's'}`);
+        parts.push(bCount === 1 ? t('hints.opp_boat_one') : t('hints.opp_boat_many', { count: bCount }));
       }
-      return `Currently placed in this row: ${parts.join(', ')}.`;
+      return t('hints.opp_placed', { line, parts: parts.join(', ') });
     }
 
     return undefined;
@@ -366,6 +380,7 @@ export function Grid({
     const hint = gridData.col_hints[c];
     const wCount = countWaterCol(gridData, c);
     const bCount = countBoatCol(gridData, c);
+    const line = t('hints.line_col');
 
     if (settings?.line_info === 'missing') {
       const showWater = hint.water_count >= 0;
@@ -377,21 +392,33 @@ export function Grid({
 
       const parts: string[] = [];
       if (missingWater !== null) {
-        parts.push(missingWater === 0 ? 'no missing water cells' : `${missingWater} missing water cell${missingWater === 1 ? '' : 's'}`);
+        parts.push(
+          missingWater === 0
+            ? t('hints.opp_no_missing_water')
+            : missingWater === 1
+            ? t('hints.opp_missing_water_one')
+            : t('hints.opp_missing_water_many', { count: missingWater })
+        );
       }
       if (missingBoat !== null) {
-        parts.push(missingBoat === 0 ? 'no missing boats' : `${missingBoat} missing boat${missingBoat === 1 ? '' : 's'}`);
+        parts.push(
+          missingBoat === 0
+            ? t('hints.opp_no_missing_boats')
+            : missingBoat === 1
+            ? t('hints.opp_missing_boats_one')
+            : t('hints.opp_missing_boats_many', { count: missingBoat })
+        );
       }
-      return `Remaining in this column: ${parts.join(', ')}.`;
+      return t('hints.opp_remaining', { line, parts: parts.join(', ') });
     }
 
     if (settings?.line_info === 'current') {
       const parts: string[] = [];
-      parts.push(`${wCount} water cell${wCount === 1 ? '' : 's'}`);
+      parts.push(wCount === 1 ? t('hints.opp_water_one') : t('hints.opp_water_many', { count: wCount }));
       if ((hint.boat_count >= 0 || hint.boat_count_type !== HintType.Hidden) && bCount > 0) {
-        parts.push(`${bCount} boat${bCount === 1 ? '' : 's'}`);
+        parts.push(bCount === 1 ? t('hints.opp_boat_one') : t('hints.opp_boat_many', { count: bCount }));
       }
-      return `Currently placed in this column: ${parts.join(', ')}.`;
+      return t('hints.opp_placed', { line, parts: parts.join(', ') });
     }
 
     return undefined;

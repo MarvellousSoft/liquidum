@@ -1,3 +1,5 @@
+import { t } from '../i18n';
+
 export const SAVE_VERSION = 2;
 
 export enum ExportFields {
@@ -532,68 +534,68 @@ export function getHintHoverText(
   isWater: boolean,
   isRow: boolean
 ): string {
-  const line = isRow ? 'row' : 'column';
+  const line = isRow ? t('hints.line_row') : t('hints.line_col');
 
   if (isWater) {
     if (count < 0) {
       if (type === HintType.Together) {
-        return `The water cells in this ${line} are contiguous.`;
+        return t('hints.water_unknown_together', { line });
       }
       if (type === HintType.Separated) {
-        return `The water cells in this ${line} are not contiguous.`;
+        return t('hints.water_unknown_separated', { line });
       }
-      return `There is an unknown number of water cells in this ${line}.`;
+      return t('hints.water_unknown', { line });
     }
 
     if (count === 0 || type === HintType.Zero) {
-      return `There are no water cells in this ${line}.`;
+      return t('hints.water_zero', { line });
     }
 
     if (count === 1) {
       if (type === HintType.Together) {
-        return `There is 1 water cell in this ${line}. It is contiguous.`;
+        return t('hints.water_one_together', { line });
       }
       if (type === HintType.Separated) {
-        return `There is 1 water cell in this ${line}. It is not contiguous.`;
+        return t('hints.water_one_separated', { line });
       }
-      return `There is 1 water cell in this ${line}.`;
+      return t('hints.water_one', { line });
     }
 
     // count > 1 or fractional (e.g. 0.5, 1.5, 2, 3, 4)
     if (type === HintType.Together) {
-      return `There are ${count} water cells in this ${line}. They are contiguous.`;
+      return t('hints.water_count_together', { count, line });
     }
     if (type === HintType.Separated) {
-      return `There are ${count} water cells in this ${line}. They are not contiguous.`;
+      return t('hints.water_count_separated', { count, line });
     }
-    return `There are ${count} water cells in this ${line}.`;
+    return t('hints.water_count', { count, line });
   } else {
     // Boat hint
     if (count < 0) {
       if (type === HintType.Together) {
-        return `The boats in this ${line} are contiguous.`;
+        return t('hints.boat_together', { line });
       }
       if (type === HintType.Separated) {
-        return `The boats in this ${line} are not contiguous.`;
+        return t('hints.boat_separated', { line });
       }
-      return `There is an unknown number of boats in this ${line}.`;
+      return t('hints.boat_unknown', { line });
     }
 
     if (count === 0 || type === HintType.Zero) {
-      return `There are no boats in this ${line}.`;
+      return t('hints.boat_zero', { line });
     }
 
     if (count === 1) {
-      return `There is 1 boat in this ${line}.`;
+      return t('hints.boat_one', { line });
     }
 
     if (type === HintType.Together) {
-      return `There are ${count} boats in this ${line}. They are contiguous.`;
+      return t('hints.boat_count_together', { count, line });
     }
     if (type === HintType.Separated) {
-      return `There are ${count} boats in this ${line}. They are not contiguous.`;
+      return t('hints.boat_count_separated', { count, line });
     }
-    return `There are ${count} boats in this ${line}.`;
+    return t('hints.boat_count', { count, line });
   }
 }
 

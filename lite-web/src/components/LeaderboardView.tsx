@@ -8,6 +8,7 @@ import {
   type LeaderboardEntry,
 } from "../engine/PlayFabService";
 import type { FlairInfo } from "../engine/FlairManager";
+import { useTranslation } from "../i18n";
 
 export interface LeaderboardViewProps {
   onClose?: () => void;
@@ -30,6 +31,7 @@ export function LeaderboardView({
   className = "",
   refreshTrigger = 0,
 }: LeaderboardViewProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("today");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -91,7 +93,7 @@ export function LeaderboardView({
   const handleSaveName = async () => {
     const trimmed = nameInput.trim();
     if (trimmed.length < 3 || trimmed.length > 25) {
-      setNameError("Name must be between 3 and 25 characters");
+      setNameError(t("account.err_name_length"));
       return;
     }
     setNameSaving(true);
@@ -125,10 +127,12 @@ export function LeaderboardView({
           <span class="text-xl select-none">🏆</span>
           <div>
             <h2 id="leaderboard-title" class="shortcuts-title godot-text-outline leading-tight">
-              Daily Leaderboard
+              {t("leaderboard.title")}
             </h2>
             <p class="text-[11px] text-[rgba(217,255,226,0.7)]">
-              {activeTab === "today" ? `Today • ${todayDate}` : `Yesterday • ${yesterdayDate}`}
+              {activeTab === "today"
+                ? t("leaderboard.subtitle_today", { date: todayDate })
+                : t("leaderboard.subtitle_yesterday", { date: yesterdayDate })}
             </p>
           </div>
         </div>
@@ -137,8 +141,8 @@ export function LeaderboardView({
             data-testid="btn-close-leaderboard"
             class="shortcuts-close-btn"
             onClick={onClose}
-            aria-label="Close"
-            title="Close (Esc)"
+            aria-label={t("leaderboard.close")}
+            title={t("leaderboard.close")}
           >
             ✕
           </button>
@@ -151,13 +155,13 @@ export function LeaderboardView({
           class={`leaderboard-tab ${activeTab === "today" ? "active" : ""}`}
           onClick={() => setActiveTab("today")}
         >
-          Today
+          {t("leaderboard.tab_today")}
         </button>
         <button
           class={`leaderboard-tab ${activeTab === "yesterday" ? "active" : ""}`}
           onClick={() => setActiveTab("yesterday")}
         >
-          Yesterday
+          {t("leaderboard.tab_yesterday")}
         </button>
       </div>
 
@@ -171,7 +175,7 @@ export function LeaderboardView({
                 class="game-input text-xs flex-1 py-1 px-2.5"
                 value={nameInput}
                 onInput={(e: any) => setNameInput(e.target.value)}
-                placeholder="Enter name (3-25 chars)"
+                placeholder={t("leaderboard.name_placeholder")}
                 maxLength={25}
                 disabled={nameSaving}
               />
@@ -180,7 +184,7 @@ export function LeaderboardView({
                 onClick={handleSaveName}
                 disabled={nameSaving}
               >
-                {nameSaving ? "..." : "Save"}
+                {nameSaving ? "..." : t("leaderboard.save")}
               </button>
               <button
                 class="btn-secondary text-xs py-1 px-2.5"
@@ -190,7 +194,7 @@ export function LeaderboardView({
                 }}
                 disabled={nameSaving}
               >
-                Cancel
+                {t("leaderboard.cancel")}
               </button>
             </div>
             {nameError && (
@@ -243,12 +247,12 @@ export function LeaderboardView({
                   setIsEditingName(true);
                 }}
               >
-                Edit Name
+                {t("leaderboard.edit_name")}
               </button>
             </div>
             {userEntry && (
               <div class="text-[rgba(217,255,226,0.8)] text-[11px] font-game">
-                Rank: <span class="font-bold text-[var(--stat-satisfied)]">#{userEntry.position}</span>
+                {t("leaderboard.rank_prefix")} <span class="font-bold text-[var(--stat-satisfied)]">#{userEntry.position}</span>
               </div>
             )}
           </div>
@@ -260,7 +264,7 @@ export function LeaderboardView({
         {loading ? (
           <div class="flex flex-col items-center justify-center py-10 text-[rgba(217,255,226,0.6)]">
             <span class="text-2xl animate-spin mb-2 select-none">⏳</span>
-            <p class="text-xs font-game">Loading leaderboard...</p>
+            <p class="text-xs font-game">{t("leaderboard.loading")}</p>
           </div>
         ) : error ? (
           <div class="flex flex-col items-center justify-center py-8 text-center">
@@ -269,21 +273,21 @@ export function LeaderboardView({
               class="btn-shortcuts text-xs py-1 px-3"
               onClick={loadLeaderboard}
             >
-              🔄 Retry
+              {t("leaderboard.retry")}
             </button>
           </div>
         ) : entries.length === 0 ? (
           <div class="text-center py-10 text-[rgba(217,255,226,0.6)] text-xs font-game">
-            No scores recorded yet for this day.
+            {t("leaderboard.no_scores")}
           </div>
         ) : (
           <table class="leaderboard-table">
             <thead>
               <tr>
-                <th class="py-2 px-1.5 w-8 text-center">#</th>
-                <th class="py-2 px-2">Player</th>
-                <th class="py-2 px-2 text-center w-16">Mistakes</th>
-                <th class="py-2 px-2 text-right w-16">Time</th>
+                <th class="py-2 px-1.5 w-8 text-center">{t("leaderboard.col_rank")}</th>
+                <th class="py-2 px-2">{t("leaderboard.col_player")}</th>
+                <th class="py-2 px-2 text-center w-16">{t("leaderboard.col_mistakes")}</th>
+                <th class="py-2 px-2 text-right w-16">{t("leaderboard.col_time")}</th>
               </tr>
             </thead>
             <tbody>
@@ -336,7 +340,7 @@ export function LeaderboardView({
                         )}
                         {entry.isCurrentUser && (
                           <span class="text-[10px] text-[var(--stat-satisfied)] font-semibold flex-shrink-0">
-                            (You)
+                            {t("leaderboard.you")}
                           </span>
                         )}
                       </div>
@@ -378,7 +382,7 @@ export function LeaderboardView({
             class="btn-secondary"
             onClick={onClose}
           >
-            Close
+            {t("leaderboard.close")}
           </button>
         </div>
       )}

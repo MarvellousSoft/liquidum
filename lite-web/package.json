@@ -13,6 +13,7 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
+    "i18next": "^26.4.2",
     "playfab-sdk": "^2.187.251205",
     "playfab-web-sdk": "^1.205.251205",
     "preact": "^10.29.8"
