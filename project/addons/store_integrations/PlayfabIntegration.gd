@@ -164,11 +164,10 @@ func _on_simple_login(result, display_name_getter) -> void:
 				_reload_display_name()
 		else:
 			_update_cached_display_name(display_name)
-		print(result.data)
 		var user_data_payload = result.data.get("InfoResultPayload", {}).get("UserData", {})
 		var streaks_record = user_data_payload.get("streaks", null)
 		var streaks_val: String = ""
-		print(streaks_record)
+
 		if streaks_record is Dictionary:
 			streaks_val = str(streaks_record.get("Value", ""))
 		sync_streaks_from_payload(streaks_val)
