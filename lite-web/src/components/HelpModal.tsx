@@ -5,6 +5,7 @@ export interface HelpModalProps {
   isOpen: boolean;
   onClose: () => void;
   dailyDate?: string;
+  onOpenAccount?: () => void;
 }
 
 export type MechanicKey =
@@ -114,7 +115,7 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
   return active;
 }
 
-export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
+export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpModalProps) {
   if (!isOpen) return null;
 
   const dateStr = dailyDate || get_today_str();
@@ -229,6 +230,26 @@ export function HelpModal({ isOpen, onClose, dailyDate }: HelpModalProps) {
                 <div class="text-slate-400 text-[11px] mt-0.5">Place Boat (⛵)</div>
               </div>
             </div>
+          </div>
+
+          {/* Account / Cross-device note */}
+          <div
+            data-testid="help-recovery-note"
+            class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-700/50"
+          >
+            <span class="font-bold text-[var(--game-mint)]">Note:</span> If you also play on Steam or are moving from another browser, copy its Account Recovery Key from Account Settings and restore it{' '}
+            <button
+              type="button"
+              data-testid="link-open-account"
+              onClick={() => {
+                onClose();
+                onOpenAccount?.();
+              }}
+              class="text-cyan-300 hover:text-white underline font-semibold cursor-pointer inline p-0 bg-transparent border-none text-xs"
+            >
+              here
+            </button>{' '}
+            to keep your leaderboard presence and streak.
           </div>
         </div>
 

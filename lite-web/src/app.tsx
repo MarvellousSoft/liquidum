@@ -2143,7 +2143,7 @@ export function App() {
                 <div class="setting-item">
                   <div class="setting-info">
                     <span class="setting-title">Incomplete line info</span>
-                    <span class="setting-desc">Display helper hints on opposite sides of the grid</span>
+                    <span class="setting-desc">Display helper numbers on opposite sides of the grid</span>
                   </div>
                   <select
                     data-testid="setting-line-info"
@@ -2610,6 +2610,7 @@ export function App() {
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}
         dailyDate={isDailyMode ? dailyDate : undefined}
+        onOpenAccount={() => setShowAccountModal(true)}
       />
     </div>
   );

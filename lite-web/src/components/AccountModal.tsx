@@ -139,7 +139,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     }
   };
 
-  // 5. Restore / Switch Account from Key
+  // 5. Restore Account from Key
   const handleRestoreAccount = async () => {
     const cleanKey = restoreKeyInput.trim();
     if (!cleanKey) {
@@ -377,7 +377,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
             {/* Restore Account from Key */}
             <div class="pt-3 border-t border-[rgba(217,255,226,0.12)] space-y-2">
               <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
-                Restore or Switch Account
+                Restore Account
               </label>
               <div class="flex items-center gap-2">
                 <input

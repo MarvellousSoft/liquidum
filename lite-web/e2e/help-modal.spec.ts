@@ -105,4 +105,29 @@ test.describe('Help Modal & Game Mechanics E2E Tests', () => {
     await helpBtn.click();
     await expect(page.locator('[data-testid="help-modal"]')).toBeVisible();
   });
+
+  test('displays account recovery key note and links to account modal', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('liquidum_help_seen', 'true');
+    });
+
+    await page.goto('/');
+    const helpBtn = page.locator('[data-testid="btn-help"]');
+    await helpBtn.click();
+
+    const note = page.locator('[data-testid="help-recovery-note"]');
+    await expect(note).toBeVisible();
+    await expect(note).toContainText('restore it here to keep your leaderboard presence and streak.');
+
+    const hereLink = note.locator('[data-testid="link-open-account"]');
+    await expect(hereLink).toBeVisible();
+    await expect(hereLink).toHaveText('here');
+
+    // Click "here" link
+    await hereLink.click();
+
+    // Help modal should close and Account modal should open
+    await expect(page.locator('[data-testid="help-modal"]')).toBeHidden();
+    await expect(page.locator('[data-testid="account-modal"]')).toBeVisible();
+  });
 });
