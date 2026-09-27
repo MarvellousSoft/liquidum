@@ -20,6 +20,7 @@ import {
   createFlair,
   FlairId,
 } from "../src/engine/FlairManager";
+import { get_today_str } from "../src/engine/DailyLevel";
 
 // Helper in-memory storage for testing
 function createMockStorage(): Storage {
@@ -512,7 +513,7 @@ describe("PlayFabService - Mocked API Workflows", () => {
 
   describe("PlayFabService - Cloud Streak Synchronization", () => {
     it("retrieves streaks from UserData during login and updates local storage", async () => {
-      const today = "2026-09-24";
+      const today = get_today_str();
       mockUserData["streaks"] = {
         Value: JSON.stringify({
           daily: { cur: 5, best: 10, last: today },

@@ -4,6 +4,7 @@ import { Grid } from './components/Grid';
 import { DrawingCanvas } from './components/DrawingCanvas';
 import { parseGridData, Content, CellType, Corner, isLevelComplete, countWaterRow, countBoatRow, getAquariums, levelHasBoats } from './model/GridData';
 import type { GridModelData } from './model/GridData';
+import { iconUrl } from './utils/assets';
 
 import {
   TEST_LEVEL_KEYS,
@@ -93,6 +94,15 @@ export function App() {
   const [mouseHoldStatus, setMouseHoldStatus] = useState<E.MouseDragState>(E.MouseDragState.None);
   const mouseHoldStatusRef = useRef<E.MouseDragState>(E.MouseDragState.None);
   const [won, setWon] = useState(false);
+  const pendingTouchRef = useRef<{
+    row: number;
+    col: number;
+    corner: Corner;
+    startX: number;
+    startY: number;
+  } | null>(null);
+  const touchHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isTouchHoldActiveRef = useRef<boolean>(false);
   const [settings, setSettings] = useState<GameSettings>(() => getSettings());
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
@@ -451,6 +461,20 @@ export function App() {
   handleRedoRef.current = handleRedo;
 
   const handlePointerUp = () => {
+    if (touchHoldTimerRef.current) {
+      clearTimeout(touchHoldTimerRef.current);
+      touchHoldTimerRef.current = null;
+    }
+
+    if (pendingTouchRef.current) {
+      const pt = pendingTouchRef.current;
+      pendingTouchRef.current = null;
+      applyToolToCellRef.current?.(pt.row, pt.col, pt.corner, selectedTool, false);
+    }
+
+    isTouchHoldActiveRef.current = false;
+    pendingTouchRef.current = null;
+
     setIsPointerDown(false);
     mouseHoldStatusRef.current = E.MouseDragState.None;
     setMouseHoldStatus(E.MouseDragState.None);
@@ -1262,6 +1286,44 @@ export function App() {
 
   const handleCellDown = (r: number, c: number, corner: Corner, e: PointerEvent) => {
     if (won) return;
+
+    if (e.pointerType === 'touch') {
+      hoveredCellRef.current = null;
+      setHoveredCell(null);
+
+      if (touchHoldTimerRef.current) {
+        clearTimeout(touchHoldTimerRef.current);
+        touchHoldTimerRef.current = null;
+      }
+      isTouchHoldActiveRef.current = false;
+
+      pendingTouchRef.current = {
+        row: r,
+        col: c,
+        corner,
+        startX: e.clientX,
+        startY: e.clientY,
+      };
+
+      touchHoldTimerRef.current = setTimeout(() => {
+        touchHoldTimerRef.current = null;
+        if (!pendingTouchRef.current) return;
+        const pt = pendingTouchRef.current;
+        pendingTouchRef.current = null;
+        isTouchHoldActiveRef.current = true;
+
+        // Holding a cell while on touch places X (NoWater) and allows dragging X
+        const status = applyToolToCell(pt.row, pt.col, pt.corner, Content.NoWater, true);
+        if (status !== E.MouseDragState.None) {
+          mouseHoldStatusRef.current = status;
+          setMouseHoldStatus(status);
+          setIsPointerDown(true);
+        }
+      }, 400);
+
+      return;
+    }
+
     let status = E.MouseDragState.None;
 
     let button = e.button;
@@ -1292,9 +1354,33 @@ export function App() {
   };
 
   const handleCellEnter = (r: number, c: number, corner: Corner, e: PointerEvent) => {
-    hoveredCellRef.current = { row: r, col: c, corner };
-    setHoveredCell({ row: r, col: c, corner });
+    if (e.pointerType !== 'touch') {
+      hoveredCellRef.current = { row: r, col: c, corner };
+      setHoveredCell({ row: r, col: c, corner });
+    } else {
+      hoveredCellRef.current = null;
+      setHoveredCell(null);
+    }
+
     if (won) return;
+
+    if (pendingTouchRef.current && e.pointerType === 'touch') {
+      const pt = pendingTouchRef.current;
+      if (pt.row !== r || pt.col !== c) {
+        if (touchHoldTimerRef.current) {
+          clearTimeout(touchHoldTimerRef.current);
+          touchHoldTimerRef.current = null;
+        }
+        pendingTouchRef.current = null;
+        const status = applyToolToCell(pt.row, pt.col, pt.corner, selectedTool, false);
+        if (status !== E.MouseDragState.None) {
+          mouseHoldStatusRef.current = status;
+          setMouseHoldStatus(status);
+          setIsPointerDown(true);
+        }
+      }
+    }
+
     if (!settingsRef.current.drag_content) return;
     const engine = engineRef.current;
     if (!engine) return;
@@ -1366,9 +1452,29 @@ export function App() {
     }
   };
 
-  const handleCellMove = (r: number, c: number, corner: Corner) => {
-    hoveredCellRef.current = { row: r, col: c, corner };
-    setHoveredCell({ row: r, col: c, corner });
+  const handleCellMove = (r: number, c: number, corner: Corner, e?: PointerEvent) => {
+    if (e?.pointerType !== 'touch') {
+      hoveredCellRef.current = { row: r, col: c, corner };
+      setHoveredCell({ row: r, col: c, corner });
+    }
+
+    if (pendingTouchRef.current && e?.pointerType === 'touch') {
+      const pt = pendingTouchRef.current;
+      const dist = Math.hypot(e.clientX - pt.startX, e.clientY - pt.startY);
+      if (dist > 14) {
+        if (touchHoldTimerRef.current) {
+          clearTimeout(touchHoldTimerRef.current);
+          touchHoldTimerRef.current = null;
+        }
+        pendingTouchRef.current = null;
+        const status = applyToolToCell(pt.row, pt.col, pt.corner, selectedTool, false);
+        if (status !== E.MouseDragState.None) {
+          mouseHoldStatusRef.current = status;
+          setMouseHoldStatus(status);
+          setIsPointerDown(true);
+        }
+      }
+    }
   };
 
   const handleCellLeave = (r: number, c: number) => {
@@ -1485,7 +1591,7 @@ export function App() {
               title={`${t('toolbar.air')} (2)`}
               aria-label={t('toolbar.air')}
             >
-              <img src="/icons/nowater.png" class="w-4 h-4 object-contain" alt="air" />
+              <img src={iconUrl('nowater.png')} class="w-4 h-4 object-contain" alt="air" />
             </button>
             {hasBoats && (
               <>
@@ -1496,7 +1602,7 @@ export function App() {
                   title={`${t('toolbar.boat')} (3)`}
                   aria-label={t('toolbar.boat')}
                 >
-                  <img src="/icons/boat_small.png" class="w-4 h-4 object-contain" alt="boat" />
+                  <img src={iconUrl('boat_small.png')} class="w-4 h-4 object-contain" alt="boat" />
                 </button>
                 <button
                   data-testid="tool-maybeboat"
@@ -1507,8 +1613,8 @@ export function App() {
                   aria-label={t('toolbar.maybe_boat')}
                 >
                   <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
-                    <img src="/icons/boat_small.png" class="w-full h-full object-contain" alt="maybe boat" />
-                    <img src="/icons/question_mark.png" class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
+                    <img src={iconUrl('boat_small.png')} class="w-full h-full object-contain" alt="maybe boat" />
+                    <img src={iconUrl('question_mark.png')} class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
                   </div>
                 </button>
               </>
@@ -1521,7 +1627,7 @@ export function App() {
               title={`${t('toolbar.draw')} (Space)`}
               aria-label={t('toolbar.draw')}
             >
-              <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="draw" />
+              <img src={iconUrl('brush.png')} class="w-4 h-4 object-contain" alt="draw" />
             </button>
           </div>
         ) : (
@@ -1533,7 +1639,7 @@ export function App() {
               title={`${t('toolbar.pen')} (P, B, Tab)`}
               aria-label={t('toolbar.pen')}
             >
-              <img src="/icons/brush.png" class="w-4 h-4 object-contain" alt="pen" />
+              <img src={iconUrl('brush.png')} class="w-4 h-4 object-contain" alt="pen" />
             </button>
             <button
               data-testid="draw-tool-eraser"
@@ -1542,7 +1648,7 @@ export function App() {
               title={`${t('toolbar.eraser')} (E, Tab)`}
               aria-label={t('toolbar.eraser')}
             >
-              <img src="/icons/eraser.png" class="w-4 h-4 object-contain" alt="eraser" />
+              <img src={iconUrl('eraser.png')} class="w-4 h-4 object-contain" alt="eraser" />
             </button>
             <button
               data-testid="draw-color-picker"
@@ -1563,7 +1669,7 @@ export function App() {
               title={`${t('toolbar.clear_all')} (X, Del)`}
               aria-label={t('toolbar.clear_all')}
             >
-              <img src="/icons/clear.png" class="w-4 h-4 object-contain" alt="clear" />
+              <img src={iconUrl('clear.png')} class="w-4 h-4 object-contain" alt="clear" />
             </button>
             <div class="draw-divider" />
             <button
@@ -1573,7 +1679,7 @@ export function App() {
               title={`${t('toolbar.done')} (Space)`}
               aria-label={t('toolbar.done')}
             >
-              <span class="text-xs font-bold px-0.5">{t('toolbar.done')}</span>
+              <img src={iconUrl('checkmark.png')} class="w-4 h-4 object-contain" alt="" />
             </button>
           </div>
         )}
@@ -1616,8 +1722,8 @@ export function App() {
             class="btn-restart"
             title={`${t('toolbar.restart')} (R)`}
           >
-            <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
-            <span>{t('toolbar.restart')}</span>
+            <img src={iconUrl('restart_normal.png')} class="w-4 h-4 object-contain" alt="restart" />
+            <span class="btn-text">{t('toolbar.restart')}</span>
           </button>
         )}
 
@@ -1722,7 +1828,7 @@ export function App() {
                   onClick={handleRestart}
                   class="win-btn-again"
                 >
-                  <img src="/icons/restart_normal.png" class="w-4 h-4 object-contain" alt="restart" />
+                  <img src={iconUrl('restart_normal.png')} class="w-4 h-4 object-contain" alt="restart" />
                   <span>{t('victory.play_again')}</span>
                 </button>
               )}
@@ -1862,7 +1968,7 @@ export function App() {
                         }`}
                       title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
                     >
-                      <img src="/icons/boat_small.png" class="hint-boat-img" alt="boat" />
+                      <img src={iconUrl('boat_small.png')} class="hint-boat-img" alt="boat" />
                       <span class="hint-stat-label">Boats</span>
                       <span class="hint-stat-value godot-text-outline">
                         {currentBoats} / {gridData.grid_hints.total_boats}
@@ -2605,7 +2711,7 @@ export function App() {
                       }}
                       class={`level-btn ${statusClass} justify-center w-full`}
                     >
-                      {isDone && <img src="/icons/checkmark.png" class="w-3.5 h-3.5 object-contain" alt="done" />}
+                      {isDone && <img src={iconUrl('checkmark.png')} class="w-3.5 h-3.5 object-contain" alt="done" />}
                       <span>{key}</span>
                     </button>
                   );

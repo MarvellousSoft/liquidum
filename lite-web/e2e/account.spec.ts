@@ -122,6 +122,7 @@ test.describe("Account Modal & Profile E2E Tests", () => {
 
     await page.goto("/?mode=daily");
     await page.waitForLoadState("domcontentloaded");
+    await expect(page.locator('[data-testid="btn-account"]')).toContainText("AquaPlayer");
   });
 
   test("displays account button with avatar and display name in toolbar", async ({ page }) => {

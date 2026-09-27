@@ -5,6 +5,7 @@ import type { GridModelData } from '../model/GridData';
 import type { GameSettings } from '../engine/SettingsManager';
 import { t } from '../i18n';
 import { Cell } from './Cell';
+import { iconUrl } from '../utils/assets';
 
 interface GridProps {
   gridData: GridModelData;
@@ -154,7 +155,7 @@ export function Grid({
       return '';
     }
 
-    const boatImg = isWater ? null : <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />;
+    const boatImg = isWater ? null : <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />;
     const boatChar = isWater ? '' : '⛵';
     if (count >= 0) {
       if (type === HintType.Together) {
@@ -234,6 +235,40 @@ export function Grid({
     h => h.boat_count >= 0 || h.boat_count_type !== HintType.Hidden
   );
 
+  // Responsive cell size calculation for mobile viewports (< 640px)
+  const [viewportWidth, setViewportWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 1024));
+  const [viewportHeight, setViewportHeight] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 768));
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth);
+      setViewportHeight(window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const dynamicCellSize = (() => {
+    if (typeof window === 'undefined' || cols === 0 || rows === 0) return undefined;
+    if (viewportWidth < 640) {
+      // In CSS on mobile (< 640px): dual row hint = 5rem (80px), single = 3.25rem (52px)
+      const rowHintWidth = hasDualRowHints ? 80 : 52;
+      const oppHintWidth = showOppositeHints ? 52 : 0;
+      // 36px accounts for page px-2 (16px) + card padding (16px) + border (4px)
+      const availableWidth = Math.max(160, viewportWidth - 36 - rowHintWidth - oppHintWidth);
+      const widthPerCol = Math.floor(availableWidth / cols);
+
+      // Height check: leave room for header, tools, level name, and navigation
+      const availableHeight = Math.max(200, viewportHeight - 220);
+      const heightPerRow = Math.floor(availableHeight / (rows + 1));
+
+      // Choose largest size that fits both dimensions, clamped between 34px and 56px
+      const targetSize = Math.max(34, Math.min(widthPerCol, heightPerRow, 56));
+      return `${targetSize}px`;
+    }
+    return undefined;
+  })();
+
   const renderOppositeRowHint = (r: number) => {
     const hint = gridData.row_hints[r];
     const wCount = countWaterRow(gridData, r);
@@ -251,7 +286,7 @@ export function Grid({
         <span class="inline-flex items-center gap-1 opacity-60 godot-text-outline font-bold text-sm">
           {missingBoat !== null && (
             <span class="inline-flex items-center">
-              <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />
+              <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />
               {missingBoat}
             </span>
           )}
@@ -268,7 +303,7 @@ export function Grid({
         <span class="inline-flex items-center gap-1 opacity-60 godot-text-outline font-bold text-sm">
           {showBoat && (
             <span class="inline-flex items-center">
-              <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />
+              <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />
               {bCount}
             </span>
           )}
@@ -297,7 +332,7 @@ export function Grid({
         <span class="inline-flex items-center gap-1 opacity-60 godot-text-outline font-bold text-sm">
           {missingBoat !== null && (
             <span class="inline-flex items-center">
-              <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />
+              <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />
               {missingBoat}
             </span>
           )}
@@ -314,7 +349,7 @@ export function Grid({
         <span class="inline-flex items-center gap-1 opacity-60 godot-text-outline font-bold text-sm">
           {showBoat && (
             <span class="inline-flex items-center">
-              <img src="/icons/boat_small.png" class="hint-boat-icon" alt="boat" />
+              <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />
               {bCount}
             </span>
           )}
@@ -433,13 +468,40 @@ export function Grid({
   ].filter(Boolean).join(' ');
 
   return (
-    <div class={rootClasses}>
+    <div
+      class={rootClasses}
+      style={{
+        touchAction: 'none',
+        ...(dynamicCellSize ? { ['--cell-size' as any]: dynamicCellSize } : {}),
+      }}
+      onPointerMove={(e) => {
+        if (e.pointerType !== 'touch') return;
+        const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+        const cellEl = target?.closest('[data-row]') as HTMLElement | null;
+        if (!cellEl) return;
+        const rStr = cellEl.getAttribute('data-row');
+        const cStr = cellEl.getAttribute('data-col');
+        if (rStr !== null && cStr !== null) {
+          const r = parseInt(rStr, 10);
+          const c = parseInt(cStr, 10);
+          const rect = cellEl.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          let corner = Corner.TopLeft;
+          if (x >= rect.width / 2 && y < rect.height / 2) corner = Corner.TopRight;
+          else if (x < rect.width / 2 && y >= rect.height / 2) corner = Corner.BottomLeft;
+          else if (x >= rect.width / 2 && y >= rect.height / 2) corner = Corner.BottomRight;
+          onCellPointerEnter?.(r, c, corner, e);
+          onCellPointerMove?.(r, c, corner, e);
+        }
+      }}
+    >
       {/* Column Hints Header */}
       <div class="flex">
         {/* Empty top-left corner */}
         <div class="grid-corner-spacer" />
         {/* Column hints */}
-        <div class="flex" style={{ width: `calc(${cols} * var(--cell-size, 3rem))` }}>
+        <div class="flex">
           {gridData.col_hints.map((hint, c) => {
             const wCount = countWaterCol(gridData, c);
             const bCount = countBoatCol(gridData, c);
@@ -468,9 +530,12 @@ export function Grid({
                 data-dimmed={isColDimmed(c) ? 'true' : 'false'}
                 class={`col-hint ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                 title={cellTitle}
-                onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
+                onPointerEnter={(e) => {
+                  if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
+                }}
                 onPointerLeave={() => setHoveredHint(null)}
                 onPointerDown={(e) => {
+                  if (e.pointerType === 'touch') setHoveredHint(null);
                   if (e.button === 2) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -563,9 +628,12 @@ export function Grid({
               data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
               class={`row-hint ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
               title={cellTitle}
-              onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
+              onPointerEnter={(e) => {
+                if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
+              }}
               onPointerLeave={() => setHoveredHint(null)}
               onPointerDown={(e) => {
+                if (e.pointerType === 'touch') setHoveredHint(null);
                 if (e.button === 2) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -734,9 +802,12 @@ export function Grid({
                 data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
                 class={`row-hint row-hint-opposite flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
                 title={getOppositeRowHoverText(r)}
-                onPointerEnter={() => setHoveredHint({ type: 'row', index: r })}
+                onPointerEnter={(e) => {
+                  if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
+                }}
                 onPointerLeave={() => setHoveredHint(null)}
                 onPointerDown={(e) => {
+                  if (e.pointerType === 'touch') setHoveredHint(null);
                   if (e.button === 2) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -759,7 +830,7 @@ export function Grid({
       {showOppositeHints && (
         <div class="flex bottom-hints-bar">
           <div class="grid-corner-spacer" />
-          <div class="flex" style={{ width: `calc(${cols} * var(--cell-size, 3rem))` }}>
+          <div class="flex">
             {gridData.col_hints.map((hint, c) => {
               const isColHighlighted = (settings?.highlight_grid ?? true)
                 ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
@@ -771,9 +842,12 @@ export function Grid({
                   data-dimmed={isColDimmed(c) ? 'true' : 'false'}
                   class={`col-hint col-hint-opposite flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                   title={getOppositeColHoverText(c)}
-                  onPointerEnter={() => setHoveredHint({ type: 'col', index: c })}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
+                  }}
                   onPointerLeave={() => setHoveredHint(null)}
                   onPointerDown={(e) => {
+                    if (e.pointerType === 'touch') setHoveredHint(null);
                     if (e.button === 2) {
                       e.preventDefault();
                       e.stopPropagation();

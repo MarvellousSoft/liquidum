@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { CellType, Content, Corner } from '../model/GridData';
 import type { PureCell } from '../model/GridData';
+import { iconUrl } from '../utils/assets';
 
 interface CellProps {
   cell: PureCell;
@@ -109,15 +110,15 @@ export function Cell({
     else if (isWater) content = <div class={`cell-water ${halfIsSurface ? 'is-surface' : ''}`} />;
     else if (isBoat) content = (
       <div class={`cell-boat ${alignment}`}>
-        <img src="/icons/boat_small.png" alt="boat" class={`cell-sprite boat-sprite ${isDiagonal ? 'cell-sprite-diagonal' : ''}`} />
+        <img src={iconUrl('boat_small.png')} alt="boat" class={`cell-sprite boat-sprite ${isDiagonal ? 'cell-sprite-diagonal' : ''}`} />
         <span class="sr-only">⛵</span>
       </div>
     );
     else if (isNoBoat) content = (
       <div class={`cell-maybeboat ${alignment}`}>
         <div class={`maybeboat-wrap ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`}>
-          <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
-          <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+          <img src={iconUrl('boat_small.png')} alt="maybe boat" class="maybeboat-boat" />
+          <img src={iconUrl('question_mark.png')} alt="?" class="maybeboat-question" />
         </div>
         <span class="sr-only">?</span>
       </div>
@@ -125,10 +126,10 @@ export function Cell({
     else if (isNoBoatWater) content = (
       <div class={`cell-maybeboat ${alignment}`}>
         <div class="flex items-center justify-center gap-0.5">
-          <img src="/icons/nowater.png" alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} style={{ maxWidth: '40%', maxHeight: '40%' }} />
+          <img src={iconUrl('nowater.png')} alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} style={{ maxWidth: '40%', maxHeight: '40%' }} />
           <div class={`maybeboat-wrap ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`} style={{ maxWidth: '40%', maxHeight: '40%' }}>
-            <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
-            <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+            <img src={iconUrl('boat_small.png')} alt="maybe boat" class="maybeboat-boat" />
+            <img src={iconUrl('question_mark.png')} alt="?" class="maybeboat-question" />
           </div>
         </div>
         <span class="sr-only">✕?</span>
@@ -136,7 +137,7 @@ export function Cell({
     );
     else if (isNoWater) content = (
       <div class={`cell-air ${alignment}`}>
-        <img src="/icons/nowater.png" alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} />
+        <img src={iconUrl('nowater.png')} alt="air" class={`cell-sprite air-sprite ${isDiagonal ? 'air-sprite-diagonal' : ''}`} />
         <span class="sr-only">✕</span>
       </div>
     );
@@ -194,21 +195,21 @@ export function Cell({
     } else if (tool === Content.NoWater) {
       previewEl = (
         <div class={`cell-preview cell-preview-air ${alignment}`}>
-          <img src="/icons/nowater.png" alt="preview air" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
+          <img src={iconUrl('nowater.png')} alt="preview air" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
         </div>
       );
     } else if (tool === Content.Boat) {
       previewEl = (
         <div class={`cell-preview cell-preview-boat ${alignment}`}>
-          <img src="/icons/boat_small.png" alt="preview boat" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
+          <img src={iconUrl('boat_small.png')} alt="preview boat" class={`cell-preview-img ${isDiagonal ? 'cell-preview-diagonal' : ''}`} />
         </div>
       );
     } else if (tool === Content.NoBoat) {
       previewEl = (
         <div class={`cell-preview cell-preview-maybeboat ${alignment}`}>
           <div class={`maybeboat-wrap opacity-45 ${isDiagonal ? 'maybeboat-wrap-diagonal' : ''}`}>
-            <img src="/icons/boat_small.png" alt="maybe boat" class="maybeboat-boat" />
-            <img src="/icons/question_mark.png" alt="?" class="maybeboat-question" />
+            <img src={iconUrl('boat_small.png')} alt="maybe boat" class="maybeboat-boat" />
+            <img src={iconUrl('question_mark.png')} alt="?" class="maybeboat-question" />
           </div>
         </div>
       );
@@ -273,7 +274,7 @@ export function Cell({
     if (cell.type === CellType.Single) {
       return (
         <div data-testid="cell-error" class="cell-error-overlay cell-error-single">
-          <img src="/icons/error_single.png" alt="error" class="cell-error-img" />
+          <img src={iconUrl('error_single.png')} alt="error" class="cell-error-img" />
         </div>
       );
     }
@@ -290,7 +291,7 @@ export function Cell({
           }}
         >
           <img 
-            src={isTopLeft ? '/icons/error_topleft.png' : '/icons/error_bottomright.png'} 
+            src={isTopLeft ? iconUrl('error_topleft.png') : iconUrl('error_bottomright.png')} 
             alt="error" 
             class="cell-error-img" 
           />
@@ -310,7 +311,7 @@ export function Cell({
           }}
         >
           <img 
-            src={isTopRight ? '/icons/error_topright.png' : '/icons/error_bottomleft.png'} 
+            src={isTopRight ? iconUrl('error_topright.png') : iconUrl('error_bottomleft.png')} 
             alt="error" 
             class="cell-error-img" 
           />
