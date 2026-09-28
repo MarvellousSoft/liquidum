@@ -46,7 +46,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
       >
         <div class="shortcuts-header shrink-0">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="text-xl shrink-0">{viewMode === 'touch' ? '👆' : '⌨️'}</span>
+            <span class="text-xl shrink-0">{viewMode === 'touch' ? '📱' : '🖱️⌨️'}</span>
             <h2 class="shortcuts-title godot-text-outline truncate">
               {t('shortcuts.title')}
             </h2>
@@ -70,7 +70,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
             class={`modal-tab ${viewMode === 'touch' ? 'active' : ''}`}
             onClick={() => setViewMode('touch')}
           >
-            👆 {t('shortcuts.tab_touch')}
+            {t('shortcuts.tab_touch')}
           </button>
           <button
             type="button"
@@ -78,7 +78,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
             class={`modal-tab ${viewMode === 'keyboard' ? 'active' : ''}`}
             onClick={() => setViewMode('keyboard')}
           >
-            ⌨️ {t('shortcuts.tab_keyboard')}
+            {t('shortcuts.tab_keyboard')}
           </button>
         </div>
 
@@ -247,10 +247,6 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
                 <div class="shortcut-item">
                   <div class="flex gap-1.5"><kbd class="kbd">R</kbd></div>
                   <span class="shortcut-desc">{t('shortcuts.key_restart_desc')}</span>
-                </div>
-                <div class="shortcut-item">
-                  <div class="flex gap-1.5"><kbd class="kbd">Esc</kbd> / <kbd class="kbd">?</kbd></div>
-                  <span class="shortcut-desc">{t('shortcuts.key_shortcuts_desc')}</span>
                 </div>
               </div>
             </div>

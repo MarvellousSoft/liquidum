@@ -9,6 +9,7 @@ export interface HelpModalProps {
   onClose: () => void;
   dailyDate?: string;
   onOpenAccount?: () => void;
+  onOpenControls?: () => void;
 }
 
 export type MechanicKey =
@@ -24,7 +25,6 @@ export interface MechanicInfo {
   key: MechanicKey;
   icon: string;
   name: string;
-  description: string;
 }
 
 export const ALL_MECHANICS: MechanicInfo[] = [
@@ -32,50 +32,36 @@ export const ALL_MECHANICS: MechanicInfo[] = [
     key: 'aquariums',
     icon: '💧',
     name: 'Aquariums & Gravity',
-    description:
-      'Thick borders divide the grid into separate aquariums. You fill cells with water, which falls according to gravity.',
   },
   {
     key: 'lineNumbers',
     icon: '🔢',
     name: 'Row & Column Hints',
-    description:
-      'Numbers outside the grid indicate the exact amount of water cells required in that row or column.',
   },
   {
     key: 'boats',
     icon: '⛵',
     name: 'Boats',
-    description:
-      'Boats float on top of water. The cell directly below a boat must have water.',
   },
   {
     key: 'diagonals',
     icon: '〽️',
     name: 'Diagonals',
-    description:
-      'Diagonal walls split a cell into half-cells. Each filled half-cell counts as 0.5 waters.',
-  },
-  {
-    key: 'aquariumHints',
-    icon: '🐟',
-    name: 'Aquarium Hints',
-    description:
-      'These tell you how many aquariums with a certain amount of water are present in the level.',
   },
   {
     key: 'unknownHints',
     icon: '❓',
     name: 'Unknown Hints (?)',
-    description:
-      'A question mark indicates a contiguous water group of unknown size (at least 1 cell).',
   },
   {
     key: 'togetherSeparate',
     icon: '↔️',
     name: 'Together & Separate Hints',
-    description:
-      "{N} indicates that the water in that row/column are contiguous.\n-N- indicates that they are not (there is at least one empty cell in the middle).",
+  },
+  {
+    key: 'aquariumHints',
+    icon: '🐟',
+    name: 'Aquarium Hints',
   },
 ];
 
@@ -120,7 +106,7 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
   return active;
 }
 
-export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpModalProps) {
+export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount, onOpenControls }: HelpModalProps) {
   useModalScrollLock(isOpen);
 
   if (!isOpen) return null;
@@ -219,7 +205,7 @@ export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpMod
                           </span>
                         )}
                       </div>
-                      <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">{t(`mechanics.${m.key}.desc`, m.description)}</p>
+                      <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">{t(`mechanics.${m.key}.desc`)}</p>
                     </div>
                   </div>
                 );
@@ -243,6 +229,23 @@ export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpMod
                 <div class="font-semibold text-slate-200">{t('help.ctrl_mid')}</div>
                 <div class="text-slate-400 text-[11px] mt-0.5">{t('help.ctrl_mid_desc')}</div>
               </div>
+              {onOpenControls && (
+                <button
+                  type="button"
+                  data-testid="card-open-controls"
+                  onClick={() => {
+                    onClose();
+                    onOpenControls();
+                  }}
+                  class="p-2 rounded bg-cyan-950/30 hover:bg-cyan-900/40 border border-cyan-500/30 hover:border-cyan-400/60 transition flex flex-col justify-center items-start text-left cursor-pointer group"
+                >
+                  <div class="font-semibold text-cyan-300 group-hover:text-white flex items-center gap-1">
+                    <span class="underline">{t('help.view_controls')}</span>
+                    <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                  </div>
+                  <div class="text-slate-400 text-[11px] mt-0.5">{t('help.view_controls_desc')}</div>
+                </button>
+              )}
             </div>
           </div>
 

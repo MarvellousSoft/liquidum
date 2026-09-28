@@ -905,13 +905,6 @@ export function App() {
         return;
       }
 
-      // Shortcuts modal toggle (?)
-      if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
-        e.preventDefault();
-        setShowShortcuts(s => !s);
-        return;
-      }
-
       // Help modal toggle (h or F1)
       if (key === 'h' || e.key === 'F1') {
         e.preventDefault();
@@ -2218,6 +2211,7 @@ export function App() {
         onClose={() => setShowHelpModal(false)}
         dailyDate={isDailyMode ? dailyDate : undefined}
         onOpenAccount={() => setShowAccountModal(true)}
+        onOpenControls={() => setShowShortcuts(true)}
       />
     </div>
   );
