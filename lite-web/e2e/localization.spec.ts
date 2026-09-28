@@ -26,7 +26,7 @@ test.describe('Internationalization (i18n) & pt-BR Localization', () => {
     await expect(helpBtn.locator('.btn-text')).toHaveText('Como Jogar');
 
     const shortcutsBtn = page.locator('[data-testid="btn-shortcuts"]');
-    await expect(shortcutsBtn.locator('.btn-text')).toHaveText('Atalhos');
+    await expect(shortcutsBtn.locator('.btn-text')).toHaveText('Controles');
 
     const settingsBtn = page.locator('[data-testid="btn-settings"]');
     await expect(settingsBtn.locator('.btn-text')).toHaveText('Opções');

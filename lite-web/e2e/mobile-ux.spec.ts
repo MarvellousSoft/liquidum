@@ -102,7 +102,7 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     await expect(touchContent).toBeVisible();
     await expect(shortcutsModal).toContainText("Touch");
     await expect(shortcutsModal).toContainText("Tap");
-    await expect(shortcutsModal).toContainText("Long Press");
+    await expect(shortcutsModal).toContainText("Long Tap");
     await expect(shortcutsModal).toContainText("Drag");
 
     // Click Keyboard tab

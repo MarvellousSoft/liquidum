@@ -14,7 +14,7 @@ describe('HelpModal mechanics mapping', () => {
     expect(keys).toContain('togetherSeparate');
   });
 
-  it('maps Sunday (0) to Aquariums, Row/Col numbers, Diagonals, and Aquarium Hints', () => {
+  it('maps Sunday (0) to Aquariums, Row/Col numbers, Diagonals, Aquarium Hints', () => {
     const active = getActiveMechanicsForWeekday(0);
     expect(active.has('aquariums')).toBe(true);
     expect(active.has('lineNumbers')).toBe(true);

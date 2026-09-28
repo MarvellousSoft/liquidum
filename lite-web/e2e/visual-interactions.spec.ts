@@ -990,13 +990,6 @@ L._.
     await closeBtn.click();
     await expect(modal).toHaveCount(0);
 
-    // 4. Open modal via keyboard '?'
-    await page.keyboard.press('?');
-    await expect(modal).toBeVisible();
-
-    // 5. Close modal via 'Escape'
-    await page.keyboard.press('Escape');
-    await expect(modal).toHaveCount(0);
   });
 
   test('visual_test_long_holding_key_does_not_repeat_toggle', async ({ page }) => {

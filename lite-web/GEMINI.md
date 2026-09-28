@@ -68,3 +68,18 @@ npm run test:e2e -- -g "visual_test_only_show_relevant_tools_for_current_level"
 # Start Vite dev server
 npm run dev
 ```
+
+
+## Hint Types & Mechanics
+
+1. **Line Hints (Row/Column Hints)**: Numbers on outer edges used in Daily Levels. 
+   - `3`: Exactly 3 waters in this line.
+   - `{3}` (Together): Exactly 3 waters, and they must all be connected in a single contiguous block (no air between them).
+   - `-3-` (Separate): Exactly 3 waters, but they must NOT be all in a single block (there must be at least one air separating them).
+   - `?`: The number of waters is unknown, but must satisfy all other game rules (gravity, etc).
+   - `{?}`: Unknown amount of water, but all water in this line must be contiguous.
+   - `-?-`: Unknown amount of water, but they must be separated by air.
+2. **Diagonals**: Cells can be split diagonally (`/` or `\`). These cells only hold 0.5 water. Water in a diagonal cell acts like a triangle filling the bottom half of the split.
+3. **Aquarium Hints (Global)**: Total count of aquariums of a certain size across the grid (e.g. "There is 1 aquarium with exactly 3 waters"). Rendered as small aquarium cards in the top UI. Used in Daily Levels.
+4. **Cell Hints**: Numbers inside a cell indicating water count in 9 adjacent cells (Minesweeper style). **NOT** used in daily levels.
+5. **Total Stats**: Global water/boat counts.
