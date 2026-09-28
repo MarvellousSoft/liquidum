@@ -102,7 +102,7 @@ test.describe('Internationalization (i18n) & pt-BR Localization', () => {
     await accountBtn.click();
     const accountModal = page.locator('[data-testid="account-modal"]');
     await expect(accountModal).toBeVisible();
-    await expect(accountModal.locator('#account-modal-title')).toHaveText('Conta de Jogador & Perfil');
+    await expect(accountModal.locator('#account-modal-title')).toHaveText('Perfil');
     await expect(page.locator('[data-testid="btn-save-display-name"]')).toHaveText('Salvar Nome');
     await expect(page.locator('[data-testid="btn-copy-key"]')).toContainText('Copiar Chave');
 

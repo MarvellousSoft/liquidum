@@ -112,7 +112,7 @@ describe('resolveLanguage and setLanguage', () => {
     expect(getHintHoverText(1, HintType.Together, false, false)).toBe('There is 1 boat in this column.');
 
     setLanguage('pt-BR');
-    expect(getHintHoverText(0, HintType.Zero, true, true)).toBe('Não há células de água nesta linha.');
+    expect(getHintHoverText(0, HintType.Zero, true, true)).toBe('Não há água nesta linha.');
     expect(getHintHoverText(1, HintType.Together, false, false)).toBe('Há 1 barco nesta coluna.');
 
     // Cleanup

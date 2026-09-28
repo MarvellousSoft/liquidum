@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import type { GameSettings } from '../engine/SettingsManager';
 import { useTranslation } from '../i18n';
-import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
+import { useModalScrollLock } from '../utils/scrollLock';
 
 export interface SettingsModalProps {
   isOpen: boolean;
@@ -12,16 +12,10 @@ export interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose, settings, updateSetting }: SettingsModalProps) {
+  useModalScrollLock(isOpen);
   const { t } = useTranslation();
 
   if (!isOpen) return null;
-
-  useEffect(() => {
-    lockBodyScroll();
-    return () => {
-      unlockBodyScroll();
-    };
-  }, []);
 
   return (
     <div

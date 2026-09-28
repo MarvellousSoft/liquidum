@@ -164,6 +164,9 @@ test.describe('Settings Modal & Features E2E', () => {
   });
 
   test('toggles simple ? hints visibility and displays opposite line info correctly for ? rows', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('liquidum_settings', JSON.stringify({ hide_unknown: false }));
+    });
     // Navigate to Level 01/03 which has simple ? hints on rows 1, 2, 3
     await page.goto('/?level=Level 01/03');
     await page.waitForSelector('[data-testid="cell-0-0"]');

@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { useTranslation } from '../i18n';
-import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
+import { useModalScrollLock } from '../utils/scrollLock';
 
 export interface ShortcutsModalProps {
   isOpen: boolean;
@@ -9,6 +9,7 @@ export interface ShortcutsModalProps {
 }
 
 export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
+  useModalScrollLock(isOpen);
   const { t } = useTranslation();
 
   const isMobileOrTouch = () => {
@@ -22,11 +23,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
 
   useEffect(() => {
     if (isOpen) {
-      lockBodyScroll();
       setViewMode(isMobileOrTouch() ? 'touch' : 'keyboard');
-      return () => {
-        unlockBodyScroll();
-      };
     }
   }, [isOpen]);
 
@@ -47,51 +44,42 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
         class="shortcuts-dialog"
         onClick={(e) => e.stopPropagation()}
       >
-        <div class="shortcuts-header flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">{viewMode === 'touch' ? '👆' : '⌨️'}</span>
-            <h2 class="shortcuts-title godot-text-outline">
-              {viewMode === 'touch' ? t('shortcuts.touch_title') : t('shortcuts.title')}
+        <div class="shortcuts-header shrink-0">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-xl shrink-0">{viewMode === 'touch' ? '👆' : '⌨️'}</span>
+            <h2 class="shortcuts-title godot-text-outline truncate">
+              {t('shortcuts.title')}
             </h2>
           </div>
+          <button
+            data-testid="btn-close-shortcuts"
+            onClick={onClose}
+            class="shortcuts-close-btn shrink-0"
+            title={t('account.close')}
+            aria-label={t('account.close')}
+          >
+            ✕
+          </button>
+        </div>
 
-          <div class="flex items-center gap-2">
-            {/* View Mode Toggle Buttons */}
-            <div class="flex items-center bg-[rgba(0,9,36,0.4)] p-0.5 rounded-lg border border-[rgba(217,255,226,0.2)]">
-              <button
-                type="button"
-                data-testid="tab-shortcuts-touch"
-                class={`px-2.5 py-1 text-xs rounded-md font-medium transition cursor-pointer ${viewMode === 'touch'
-                  ? 'bg-[var(--game-teal)] text-white shadow font-bold'
-                  : 'text-[rgba(217,255,226,0.7)] hover:text-white'
-                  }`}
-                onClick={() => setViewMode('touch')}
-              >
-                📱 {t('shortcuts.tab_touch')}
-              </button>
-              <button
-                type="button"
-                data-testid="tab-shortcuts-keyboard"
-                class={`px-2.5 py-1 text-xs rounded-md font-medium transition cursor-pointer ${viewMode === 'keyboard'
-                  ? 'bg-[var(--game-teal)] text-white shadow font-bold'
-                  : 'text-[rgba(217,255,226,0.7)] hover:text-white'
-                  }`}
-                onClick={() => setViewMode('keyboard')}
-              >
-                ⌨️ {t('shortcuts.tab_keyboard')}
-              </button>
-            </div>
-
-            <button
-              data-testid="btn-close-shortcuts"
-              onClick={onClose}
-              class="shortcuts-close-btn"
-              title={t('account.close')}
-              aria-label={t('account.close')}
-            >
-              ✕
-            </button>
-          </div>
+        {/* View Mode Tabs */}
+        <div class="modal-tabs shrink-0">
+          <button
+            type="button"
+            data-testid="tab-shortcuts-touch"
+            class={`modal-tab ${viewMode === 'touch' ? 'active' : ''}`}
+            onClick={() => setViewMode('touch')}
+          >
+            👆 {t('shortcuts.tab_touch')}
+          </button>
+          <button
+            type="button"
+            data-testid="tab-shortcuts-keyboard"
+            class={`modal-tab ${viewMode === 'keyboard' ? 'active' : ''}`}
+            onClick={() => setViewMode('keyboard')}
+          >
+            ⌨️ {t('shortcuts.tab_keyboard')}
+          </button>
         </div>
 
         {viewMode === 'touch' ? (
@@ -106,7 +94,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
                 </div>
                 <div class="shortcut-item">
                   <span class="shortcut-key">{t('shortcuts.touch_hold')}</span>
-                  <span class="shortcut-desc">{t('shortcuts.touch_hold_desc')}</span>
+                  <span class="shortcut-desc">{t('shortcuts.right_click_desc')}</span>
                 </div>
                 <div class="shortcut-item">
                   <span class="shortcut-key">{t('shortcuts.touch_drag')}</span>
@@ -136,7 +124,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
                   <span class="shortcut-desc">{t('shortcuts.touch_undo_desc')}</span>
                 </div>
                 <div class="shortcut-item">
-                  <span class="shortcut-key">{t('shortcuts.touch_restart')}</span>
+                  <span class="shortcut-key">{t('toolbar.restart')}</span>
                   <span class="shortcut-desc">{t('shortcuts.touch_restart_desc')}</span>
                 </div>
               </div>
@@ -147,11 +135,11 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
               <h3 class="shortcut-section-title">{t('shortcuts.sec_touch_drawing')}</h3>
               <div class="shortcut-list">
                 <div class="shortcut-item">
-                  <span class="shortcut-key">{t('shortcuts.touch_pen')}</span>
+                  <span class="shortcut-key">{t('toolbar.pen')}</span>
                   <span class="shortcut-desc">{t('shortcuts.touch_pen_desc')}</span>
                 </div>
                 <div class="shortcut-item">
-                  <span class="shortcut-key">{t('shortcuts.touch_eraser')}</span>
+                  <span class="shortcut-key">{t('toolbar.eraser')}</span>
                   <span class="shortcut-desc">{t('shortcuts.touch_eraser_desc')}</span>
                 </div>
                 <div class="shortcut-item">
@@ -159,7 +147,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
                   <span class="shortcut-desc">{t('shortcuts.touch_color_desc')}</span>
                 </div>
                 <div class="shortcut-item">
-                  <span class="shortcut-key">{t('shortcuts.touch_clear')}</span>
+                  <span class="shortcut-key">{t('toolbar.clear_all')}</span>
                   <span class="shortcut-desc">{t('shortcuts.touch_clear_desc')}</span>
                 </div>
               </div>

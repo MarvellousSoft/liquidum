@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useTranslation } from '../i18n';
-import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
+import { useModalScrollLock } from '../utils/scrollLock';
 
 export interface LevelSelectModalProps {
   isOpen: boolean;
@@ -24,16 +24,10 @@ export function LevelSelectModal({
   onSelectLevel,
   iconUrl,
 }: LevelSelectModalProps) {
+  useModalScrollLock(isOpen);
   const { t } = useTranslation();
 
   if (!isOpen) return null;
-
-  useEffect(() => {
-    lockBodyScroll();
-    return () => {
-      unlockBodyScroll();
-    };
-  }, []);
 
   return (
     <div

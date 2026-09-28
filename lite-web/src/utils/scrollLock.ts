@@ -1,3 +1,5 @@
+import { useEffect } from 'preact/hooks';
+
 /**
  * Utility to manage body scroll locking when modals are displayed.
  * Uses a reference counter so nested or multiple modals don't prematurely unlock the body.
@@ -22,4 +24,15 @@ export function unlockBodyScroll(): void {
     document.body.style.overflow = '';
     document.body.style.overscrollBehavior = '';
   }
+}
+
+export function useModalScrollLock(isOpen: boolean): void {
+  useEffect(() => {
+    if (isOpen) {
+      lockBodyScroll();
+      return () => {
+        unlockBodyScroll();
+      };
+    }
+  }, [isOpen]);
 }

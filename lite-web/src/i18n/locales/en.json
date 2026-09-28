@@ -79,7 +79,7 @@
     "progress_on_unknown_title": "Color \"?\" hints",
     "progress_on_unknown_desc": "Color unknown clues when in progress",
     "show_timer_title": "Show timer",
-    "show_timer_desc": "Display solving time in stats header",
+    "show_timer_desc": "Display solving time",
     "skip_anims_title": "Skip animations",
     "skip_anims_desc": "Disable win and popup animations for instant feedback",
     "bigger_hints_title": "Increase hints' font size",
@@ -89,9 +89,9 @@
     "drag_content_title": "Fill with drag",
     "drag_content_desc": "Drag pointer across multiple cells to place tiles",
     "invert_mouse_title": "Invert mouse buttons",
-    "invert_mouse_desc": "Swap primary (Left) and secondary (Right) buttons",
+    "invert_mouse_desc": "Swap left and right mouse buttons",
     "auto_flood_air_title": "Auto-flood air",
-    "auto_flood_air_desc": "Automatically mark empty cells as air when lines are full"
+    "auto_flood_air_desc": "When placing Air, auto place air in cells above in the same aquarium"
   },
   "help": {
     "title": "How to Play",
@@ -103,12 +103,12 @@
     "controls": "Controls",
     "ctrl_left": "Left Click / Tap",
     "ctrl_left_desc": "Place Water (💧)",
-    "ctrl_right": "Right Click",
+    "ctrl_right": "Right Click / Long Tap",
     "ctrl_right_desc": "Place Air (✕)",
     "ctrl_mid": "Middle Click",
     "ctrl_mid_desc": "Place Boat (⛵)",
     "note_label": "Note:",
-    "recovery_note_before": "If you also play on Steam or are moving from another browser, copy its Account Recovery Key from Account Settings and restore it",
+    "recovery_note_before": "If you also play on Steam or are moving from another browser, copy its Recovery Key from Account Settings and restore it",
     "recovery_note_link": "here",
     "recovery_note_after": "to keep your leaderboard presence and streak.",
     "got_it": "Got it"
@@ -116,11 +116,11 @@
   "mechanics": {
     "aquariums": {
       "name": "Aquariums & Gravity",
-      "desc": "Thick borders divide the grid into separate aquariums. You fill cells with water, which falls according to gravity."
+      "desc": "Thick borders divide the grid into aquariums. You fill cells with water, which flows with gravity."
     },
     "lineNumbers": {
       "name": "Row & Column Hints",
-      "desc": "Numbers outside the grid indicate the exact amount of water cells required in that row or column."
+      "desc": "Numbers outside the grid indicate the exact amount of water required in that row or column."
     },
     "boats": {
       "name": "Boats",
@@ -135,8 +135,8 @@
       "desc": "These tell you how many aquariums with a certain amount of water are present in the level."
     },
     "unknownHints": {
-      "name": "Unknown Hints (?)",
-      "desc": "A question mark indicates a contiguous water group of unknown size (at least 1 cell)."
+      "name": "Hidden Hints (?)",
+      "desc": "A question mark tells you nothing about the amount of water in a row or column."
     },
     "togetherSeparate": {
       "name": "Together & Separate Hints",
@@ -174,8 +174,8 @@
     }
   },
   "account": {
-    "title": "Player Account & Profile",
-    "subtitle": "Manage your public name, avatar, and cloud recovery key",
+    "title": "Profile",
+    "subtitle": "Manage your public name, avatar, and recovery key",
     "profile_picture": "Profile Picture",
     "avatar_url_label": "Image URL (PNG or JPG)",
     "avatar_url_placeholder": "https://example.com/my-avatar.png",
@@ -186,7 +186,7 @@
     "name_placeholder": "Enter player name",
     "save_name": "Save Name",
     "saving": "Saving...",
-    "recovery_key_title": "Account Recovery Key",
+    "recovery_key_title": "Recovery Key",
     "recovery_key_desc": "This secret key identifies your player profile on PlayFab. Save it to keep your leaderboard submissions, rank and streak if you switch browsers or devices. Restore the key from the Steam version to share the streak.",
     "current_key": "Your Current Key",
     "show_key": "👁️ Show",
@@ -231,18 +231,18 @@
   },
   "shortcuts": {
     "title": "Controls & Shortcuts",
-    "sec_mouse": "🖱️ Mouse & Touch Controls",
+    "sec_mouse": "🖱️ Mouse Controls",
     "tap_click": "Left Click",
-    "tap_click_desc": "Place selected tool (or clear matching content)",
+    "tap_click_desc": "Place or clear selected tool",
     "right_click": "Right Click",
-    "right_click_desc": "Air (✕) / clear pencil marks",
+    "right_click_desc": "Air (✕)",
     "middle_click": "Middle Click",
     "middle_click_desc": "Place / remove Boat (⛵)",
     "drag": "Click & Drag",
     "drag_desc": "Draw or erase across multiple cells",
     "right_click_hint": "Right Click Hint",
     "right_click_hint_desc": "Dim row or column hint",
-    "sec_hover": "✨ Quick Hover Keys",
+    "sec_hover": "✨ Keyboard Shortcuts",
     "hover_hint": "Hover mouse over any cell and press or hold:",
     "key_w_desc": "Place or remove Water (💧)",
     "key_x_desc": "Place or remove Air (✕)",
@@ -255,41 +255,35 @@
     "key_undo_desc": "Undo last move",
     "key_redo_desc": "Redo move",
     "key_restart_desc": "Restart current level",
-    "key_shortcuts_desc": "Toggle / close shortcuts popup",
-    "sec_drawing": "🎨 Drawing & Markers",
+    "key_shortcuts_desc": "Open / close shortcuts popup",
+    "sec_drawing": "🎨 Drawing",
     "toggle_draw": "Toggle Drawing Mode",
     "toggle_eraser": "Toggle between Paint Brush and Eraser",
     "opposite_tool": "Use opposite tool (Erase while in Brush, Paint while in Eraser)",
     "pen_mode": "Pen mode",
-    "cycle_color": "Cycle marker color",
+    "cycle_color": "Cycle pen color",
     "clear_drawings": "Clear all drawings",
-    "touch_title": "Touch Controls",
     "tab_touch": "Touch",
     "tab_keyboard": "Keyboard",
-    "sec_touch_gestures": "👆 Board Gestures",
-    "touch_tap": "Tap Cell",
-    "touch_hold": "Long Press",
-    "touch_hold_desc": "Quick-place Air (✕)",
-    "touch_drag": "Drag Finger",
+    "sec_touch_gestures": "👆 Touch",
+    "touch_tap": "Tap",
+    "touch_hold": "Long Tap",
+    "touch_drag": "Drag",
     "touch_hints": "Tap Hint",
     "touch_hints_desc": "Highlight row or column",
-    "hold_hints": "Long Press Hint",
+    "hold_hints": "Long Tap Hint",
     "sec_touch_tools": "🛠️ Toolbar Controls",
     "touch_tools": "Tool Selector",
     "touch_tools_desc": "Tap Water, Air, Boat, or ?Boat? to switch your active tool",
     "touch_undo": "Undo & Redo",
     "touch_undo_desc": "Tap ↶ to step backward or ↷ to redo your previous moves",
-    "touch_restart": "Restart Level",
     "touch_restart_desc": "Tap 🔄 to reset the entire puzzle board",
-    "sec_touch_drawing": "🎨 Drawing & Notes",
-    "touch_pen": "Paint Brush",
-    "touch_pen_desc": "Draw custom paths or notes over the grid with your finger",
-    "touch_eraser": "Eraser",
-    "touch_eraser_desc": "Switch to eraser to wipe specific marker strokes",
-    "touch_color": "Marker Color",
-    "touch_color_desc": "Tap color circle to cycle through marker colors",
-    "touch_clear": "Clear Drawings",
-    "touch_clear_desc": "Tap to wipe all canvas drawings at once"
+    "sec_touch_drawing": "🎨 Drawing",
+    "touch_pen_desc": "Draw over the grid",
+    "touch_eraser_desc": "Wipe specific strokes",
+    "touch_color": "Color",
+    "touch_color_desc": "Tap color circle to cycle through pen colors",
+    "touch_clear_desc": "Tap to wipe all drawings"
   },
   "hints": {
     "line_row": "row",

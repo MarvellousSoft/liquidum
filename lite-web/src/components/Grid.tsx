@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import { Corner, Content, CellType, HintType, countWaterRow, countWaterCol, countBoatRow, countBoatCol, isTogether, rowBools, colBools, getHintHoverText } from '../model/GridData';
 import type { GridModelData } from '../model/GridData';
 import type { GameSettings } from '../engine/SettingsManager';
@@ -40,13 +40,34 @@ export function Grid({
   const cols = rows > 0 ? gridData.cells[0].length : 0;
 
   const [hoveredHint, setHoveredHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
-  const activeHoveredHint = hoveredCell ? null : hoveredHint;
+  const [pinnedHint, setPinnedHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
+  const lastContextMenuTimeRef = useRef<number>(0);
+  const activeHoveredHint = hoveredCell ? null : (pinnedHint ?? hoveredHint);
+
+  useEffect(() => {
+    if (!pinnedHint) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest?.('.row-hint, .col-hint')) {
+        return;
+      }
+      setPinnedHint(null);
+    };
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => window.removeEventListener('pointerdown', handlePointerDown);
+  }, [pinnedHint]);
+
+  const handleHintClick = (type: 'row' | 'col', index: number) => {
+    if (Date.now() - lastContextMenuTimeRef.current < 300) return;
+    setPinnedHint(prev => (prev?.type === type && prev.index === index ? null : { type, index }));
+  };
 
   const [dimmedHints, setDimmedHints] = useState<Set<string>>(new Set());
 
   // Reset dimmed hints when level loads or restarts
   useEffect(() => {
     setDimmedHints(new Set());
+    setPinnedHint(null);
   }, [resetTrigger, rows, cols]);
 
   if (rows === 0 || cols === 0) return <div>Empty Grid</div>;
@@ -107,17 +128,15 @@ export function Grid({
     let colorClass = 'hint-normal';
 
     const allowHighlight = settings?.highlight_finished_row_col ?? true;
-    const progressOnUnknown = settings?.progress_on_unknown ?? true;
+    const progressOnUnknown = settings?.progress_on_unknown ?? false;
 
     if (target < 0) {
-      if (targetType !== HintType.Hidden && targetType !== HintType.Zero) {
-        if (isTogether(bools) === targetType) {
-          if (allowHighlight) {
+      if (progressOnUnknown && allowHighlight) {
+        if (targetType !== HintType.Hidden && targetType !== HintType.Zero) {
+          if (isTogether(bools) === targetType) {
             colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
           }
-        }
-      } else if (progressOnUnknown && current > 0) {
-        if (allowHighlight) {
+        } else {
           colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
         }
       }
@@ -516,9 +535,11 @@ export function Grid({
             const waterTitle = showWaterHint ? getHintHoverText(hint.water_count, hint.water_count_type, true, false) : undefined;
             const cellTitle = [boatTitle, waterTitle].filter(Boolean).join('\n') || undefined;
 
-            const isColHighlighted = (settings?.highlight_grid ?? true)
-              ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
-              : false;
+            const isColHighlighted = (pinnedHint?.type === 'col' && pinnedHint.index === c) || (
+              (settings?.highlight_grid ?? true)
+                ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+                : false
+            );
 
             const isDualCol = showBoatHint && showWaterHint;
 
@@ -528,8 +549,12 @@ export function Grid({
                 data-testid={`col-hint-${c}`}
                 data-col={c}
                 data-dimmed={isColDimmed(c) ? 'true' : 'false'}
-                class={`col-hint ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
+                class={`col-hint cursor-pointer ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                 title={cellTitle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleHintClick('col', c);
+                }}
                 onPointerEnter={(e) => {
                   if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
                 }}
@@ -544,6 +569,7 @@ export function Grid({
                 onContextMenu={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  lastContextMenuTimeRef.current = Date.now();
                   toggleDim('col', c, 'all');
                 }}
               >
@@ -615,9 +641,11 @@ export function Grid({
         const waterTitle = showWaterHint ? getHintHoverText(hint.water_count, hint.water_count_type, true, true) : undefined;
         const cellTitle = [boatTitle, waterTitle].filter(Boolean).join('\n') || undefined;
 
-        const isRowHighlighted = (settings?.highlight_grid ?? true)
-          ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
-          : false;
+        const isRowHighlighted = (pinnedHint?.type === 'row' && pinnedHint.index === r) || (
+          (settings?.highlight_grid ?? true)
+            ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
+            : false
+        );
 
         return (
           <div key={r} class="flex">
@@ -626,8 +654,12 @@ export function Grid({
               data-testid={`row-hint-${r}`}
               data-row={r}
               data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
-              class={`row-hint ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
+              class={`row-hint cursor-pointer ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
               title={cellTitle}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleHintClick('row', r);
+              }}
               onPointerEnter={(e) => {
                 if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
               }}
@@ -642,6 +674,7 @@ export function Grid({
               onContextMenu={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                lastContextMenuTimeRef.current = Date.now();
                 toggleDim('row', r, 'all');
               }}
             >
@@ -724,12 +757,16 @@ export function Grid({
                 const hasError = Boolean(errorInfo);
                 const errorCorner = errorInfo?.corner ?? null;
 
-                const isHoveredRowCell = (settings?.highlight_grid ?? true)
-                  ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
-                  : false;
-                const isHoveredColCell = (settings?.highlight_grid ?? true)
-                  ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
-                  : false;
+                const isHoveredRowCell = (pinnedHint?.type === 'row' && pinnedHint.index === r) || (
+                  (settings?.highlight_grid ?? true)
+                    ? (hoveredCell?.row === r || (activeHoveredHint?.type === 'row' && activeHoveredHint.index === r))
+                    : false
+                );
+                const isHoveredColCell = (pinnedHint?.type === 'col' && pinnedHint.index === c) || (
+                  (settings?.highlight_grid ?? true)
+                    ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+                    : false
+                );
                 const isHoveredCell = hoveredCell?.row === r && hoveredCell?.col === c;
                 const previewTool = (settings?.show_grid_preview && isHoveredCell) ? (selectedTool ?? null) : null;
                 
@@ -800,8 +837,12 @@ export function Grid({
               <div
                 data-testid={`row-hint-opposite-${r}`}
                 data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
-                class={`row-hint row-hint-opposite flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
+                class={`row-hint row-hint-opposite cursor-pointer flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
                 title={getOppositeRowHoverText(r)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleHintClick('row', r);
+                }}
                 onPointerEnter={(e) => {
                   if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
                 }}
@@ -816,6 +857,7 @@ export function Grid({
                 onContextMenu={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  lastContextMenuTimeRef.current = Date.now();
                   toggleDim('row', r, 'all');
                 }}
               >
@@ -832,16 +874,22 @@ export function Grid({
           <div class="grid-corner-spacer" />
           <div class="flex">
             {gridData.col_hints.map((hint, c) => {
-              const isColHighlighted = (settings?.highlight_grid ?? true)
-                ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
-                : false;
+              const isColHighlighted = (pinnedHint?.type === 'col' && pinnedHint.index === c) || (
+                (settings?.highlight_grid ?? true)
+                  ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
+                  : false
+              );
               return (
                 <div
                   key={c}
                   data-testid={`col-hint-opposite-${c}`}
                   data-dimmed={isColDimmed(c) ? 'true' : 'false'}
-                  class={`col-hint col-hint-opposite flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
+                  class={`col-hint col-hint-opposite cursor-pointer flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
                   title={getOppositeColHoverText(c)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleHintClick('col', c);
+                  }}
                   onPointerEnter={(e) => {
                     if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
                   }}
@@ -856,6 +904,7 @@ export function Grid({
                   onContextMenu={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    lastContextMenuTimeRef.current = Date.now();
                     toggleDim('col', c, 'all');
                   }}
                 >

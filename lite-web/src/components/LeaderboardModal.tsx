@@ -1,7 +1,7 @@
 import { h } from "preact";
 import { useEffect } from "preact/hooks";
 import { LeaderboardView } from "./LeaderboardView";
-import { lockBodyScroll, unlockBodyScroll } from "../utils/scrollLock";
+import { useModalScrollLock } from "../utils/scrollLock";
 
 interface LeaderboardModalProps {
   isOpen: boolean;
@@ -10,13 +10,7 @@ interface LeaderboardModalProps {
 }
 
 export function LeaderboardModal({ isOpen, onClose, refreshTrigger }: LeaderboardModalProps) {
-  useEffect(() => {
-    if (!isOpen) return;
-    lockBodyScroll();
-    return () => {
-      unlockBodyScroll();
-    };
-  }, [isOpen]);
+  useModalScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;

@@ -2559,13 +2559,15 @@ body.modal-open {
   box-shadow: 0 8px 0 rgba(0, 9, 36, 0.8), 0 16px 36px rgba(0, 0, 0, 0.8);
 }
 
-.leaderboard-tabs {
+.leaderboard-tabs,
+.modal-tabs {
   display: flex;
   border-bottom: 2px solid rgba(217, 255, 226, 0.15);
   background: rgba(0, 9, 36, 0.25);
 }
 
-.leaderboard-tab {
+.leaderboard-tab,
+.modal-tab {
   flex: 1;
   padding: 0.65rem 0.5rem;
   font-family: var(--font-game);
@@ -2580,12 +2582,14 @@ body.modal-open {
   transition: all 0.15s ease;
 }
 
-.leaderboard-tab:hover {
+.leaderboard-tab:hover,
+.modal-tab:hover {
   color: var(--game-mint);
   background: rgba(217, 255, 226, 0.05);
 }
 
-.leaderboard-tab.active {
+.leaderboard-tab.active,
+.modal-tab.active {
   color: #ffffff;
   border-bottom-color: var(--stat-satisfied);
   background: rgba(0, 9, 36, 0.2);

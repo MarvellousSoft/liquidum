@@ -2,7 +2,7 @@ import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { playFabService, type PlayerProfileEvent } from "../engine/PlayFabService";
 import { useTranslation } from "../i18n";
-import { lockBodyScroll, unlockBodyScroll } from "../utils/scrollLock";
+import { useModalScrollLock } from "../utils/scrollLock";
 
 interface AccountModalProps {
   isOpen: boolean;
@@ -11,16 +11,9 @@ interface AccountModalProps {
 }
 
 export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModalProps) {
-  if (!isOpen) return null;
+  useModalScrollLock(isOpen);
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    lockBodyScroll();
-    return () => {
-      unlockBodyScroll();
-    };
-  }, []);
   const [displayName, setDisplayName] = useState<string>(playFabService.getDisplayName() || "Anonymous");
   const [avatarUrl, setAvatarUrl] = useState<string>(playFabService.getAvatarUrl() || "");
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>(playFabService.getAvatarUrl() || "");
@@ -224,6 +217,8 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
       setIsRestoring(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div

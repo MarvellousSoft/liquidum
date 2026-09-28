@@ -142,7 +142,7 @@ test.describe("Account Modal & Profile E2E Tests", () => {
 
     const modal = page.locator('[data-testid="account-modal"]');
     await expect(modal).toBeVisible();
-    await expect(modal.locator("#account-modal-title")).toContainText("Player Account & Profile");
+    await expect(modal.locator("#account-modal-title")).toContainText("Profile");
 
     // Close via close button
     const closeBtn = page.locator('[data-testid="btn-close-account"]');

@@ -976,12 +976,12 @@ L._.
     await expect(modal).toBeVisible();
 
     // Verify modal content documents controls
-    await expect(modal).toContainText('Mouse & Touch Controls');
-    await expect(modal).toContainText('Tap / Left Click');
+    await expect(modal).toContainText('Mouse Controls');
+    await expect(modal).toContainText('Left Click');
     await expect(modal).toContainText('Right Click');
     await expect(modal).toContainText('Middle Click');
     await expect(modal).toContainText('Place / remove Boat');
-    await expect(modal).toContainText('Quick Hover Keys');
+    await expect(modal).toContainText('Keyboard Shortcuts');
     await expect(modal).toContainText('Tool Selection');
     await expect(modal).toContainText('Game Actions');
 

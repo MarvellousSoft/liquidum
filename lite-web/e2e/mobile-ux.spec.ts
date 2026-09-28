@@ -100,10 +100,10 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     // On mobile, it should default to Touch tab
     const touchContent = shortcutsModal.locator('[data-testid="shortcuts-touch-content"]');
     await expect(touchContent).toBeVisible();
-    await expect(shortcutsModal).toContainText("Board Gestures");
-    await expect(shortcutsModal).toContainText("Tap Cell");
-    await expect(shortcutsModal).toContainText("Hold Cell (Long Press)");
-    await expect(shortcutsModal).toContainText("Drag Finger");
+    await expect(shortcutsModal).toContainText("Touch");
+    await expect(shortcutsModal).toContainText("Tap");
+    await expect(shortcutsModal).toContainText("Long Press");
+    await expect(shortcutsModal).toContainText("Drag");
 
     // Click Keyboard tab
     const keyboardTab = page.locator('[data-testid="tab-shortcuts-keyboard"]');
@@ -113,12 +113,72 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     // Should now show keyboard shortcuts
     const keyboardContent = shortcutsModal.locator('[data-testid="shortcuts-keyboard-content"]');
     await expect(keyboardContent).toBeVisible();
-    await expect(shortcutsModal).toContainText("Quick Hover Keys");
+    await expect(shortcutsModal).toContainText("Keyboard Shortcuts");
     await expect(shortcutsModal).toContainText("Tool Selection");
 
     // Click back to Touch tab
     const touchTab = page.locator('[data-testid="tab-shortcuts-touch"]');
     await touchTab.click();
     await expect(touchContent).toBeVisible();
+  });
+
+  test("opening and closing help modal restores body scroll properly on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+
+    // Open Help modal
+    const btnHelp = page.locator('[data-testid="btn-help"]');
+    await expect(btnHelp).toBeVisible();
+    await btnHelp.click();
+
+    const helpModal = page.locator('[data-testid="help-modal"]');
+    await expect(helpModal).toBeVisible();
+
+    // Body should be locked
+    const isLockedWhenOpen = await page.evaluate(() => {
+      return document.body.classList.contains("modal-open") && document.body.style.overflow === "hidden";
+    });
+    expect(isLockedWhenOpen).toBe(true);
+
+    // Close Help Modal
+    const btnClose = page.locator('[data-testid="btn-close-help"]');
+    await btnClose.click();
+    await expect(helpModal).toHaveCount(0);
+
+    // Body lock must be completely cleared
+    await expect(page.locator("body")).not.toHaveClass(/modal-open/);
+    const bodyOverflow = await page.evaluate(() => document.body.style.overflow);
+    expect(bodyOverflow).not.toBe("hidden");
+  });
+
+  test("tapping row hint pins row highlight until clicking elsewhere on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+
+    const startBtn = page.locator('[data-testid="btn-start-puzzle"]');
+    if (await startBtn.isVisible()) {
+      await startBtn.click();
+    }
+
+    const rowHint0 = page.locator('[data-testid="row-hint-0"]');
+    await expect(rowHint0).toBeVisible();
+
+    // Initially not highlighted
+    await expect(rowHint0).not.toHaveClass(/hint-hovered/);
+
+    // Tap row hint 0
+    await rowHint0.click();
+
+    // Row hint 0 and its cells should now be highlighted
+    await expect(rowHint0).toHaveClass(/hint-hovered/);
+    const cell00 = page.locator('[data-testid="cell-0-0"]');
+    await expect(cell00).toHaveClass(/cell-hovered-line/);
+
+    // Tap somewhere else (e.g. cell in row 1)
+    const cell10 = page.locator('[data-testid="cell-1-0"]');
+    await cell10.click();
+
+    // Highlight should now be unpinned from row 0
+    await expect(rowHint0).not.toHaveClass(/hint-hovered/);
   });
 });

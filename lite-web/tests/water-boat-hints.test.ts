@@ -330,4 +330,97 @@ describe('Water and Boat Hint Satisfiability & Level 04/05', () => {
     expect(zeroWaterAqs.length).toBe(0);
     expect(isLevelComplete(parsed)).toBe(true);
   });
+
+  describe('Progress on Unknown Hint Coloring (?, {?}, -?-) Consistency', () => {
+    // Helper mimicking getHintClass logic
+    function computeHintClass(
+      current: number,
+      target: number,
+      isWater: boolean,
+      targetType: HintType,
+      bools: boolean[],
+      settings: { progress_on_unknown: boolean; highlight_finished_row_col: boolean }
+    ) {
+      let colorClass = 'hint-normal';
+      const allowHighlight = settings.highlight_finished_row_col;
+      const progressOnUnknown = settings.progress_on_unknown;
+
+      if (target < 0) {
+        if (progressOnUnknown && allowHighlight) {
+          if (targetType !== HintType.Hidden && targetType !== HintType.Zero) {
+            if (isTogether(bools) === targetType) {
+              colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+            }
+          } else {
+            colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+          }
+        }
+      } else {
+        const countOk = current === target;
+        const typeOk = targetType === HintType.Hidden || isTogether(bools) === targetType;
+        if (countOk && typeOk) {
+          if (allowHighlight) {
+            colorClass = isWater ? 'hint-satisfied-water' : 'hint-satisfied-boat';
+          }
+        } else if (current > target) {
+          colorClass = 'hint-over';
+        }
+      }
+      return colorClass;
+    }
+
+    it('simple "?" hint is colored satisfied always when progress_on_unknown is true, even with 0 water', () => {
+      const emptyBools = [false, false, false, false];
+      const withWaterBools = [true, false, false, false];
+
+      // With progress_on_unknown: true -> always satisfied (even with 0 water placed)
+      expect(computeHintClass(0, -1, true, HintType.Hidden, emptyBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-satisfied-water');
+      expect(computeHintClass(1, -1, true, HintType.Hidden, withWaterBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-satisfied-water');
+
+      // With progress_on_unknown: false -> never satisfied
+      expect(computeHintClass(0, -1, true, HintType.Hidden, emptyBools, { progress_on_unknown: false, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+      expect(computeHintClass(1, -1, true, HintType.Hidden, withWaterBools, { progress_on_unknown: false, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+    });
+
+    it('"{?}" together hint is satisfied only when water forms a contiguous block and progress_on_unknown is true', () => {
+      const emptyBools = [false, false, false, false];
+      const togetherBools = [true, true, false, false];
+      const separatedBools = [true, false, true, false];
+
+      // With progress_on_unknown: true
+      expect(computeHintClass(0, -1, true, HintType.Together, emptyBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+      expect(computeHintClass(2, -1, true, HintType.Together, togetherBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-satisfied-water');
+      expect(computeHintClass(2, -1, true, HintType.Together, separatedBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+
+      // With progress_on_unknown: false -> never satisfied even if together
+      expect(computeHintClass(2, -1, true, HintType.Together, togetherBools, { progress_on_unknown: false, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+    });
+
+    it('"-?-" separated hint is satisfied only when water is separated and progress_on_unknown is true', () => {
+      const emptyBools = [false, false, false, false];
+      const togetherBools = [true, true, false, false];
+      const separatedBools = [true, false, true, false];
+
+      // With progress_on_unknown: true
+      expect(computeHintClass(0, -1, true, HintType.Separated, emptyBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+      expect(computeHintClass(2, -1, true, HintType.Separated, togetherBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+      expect(computeHintClass(2, -1, true, HintType.Separated, separatedBools, { progress_on_unknown: true, highlight_finished_row_col: true }))
+        .toBe('hint-satisfied-water');
+
+      // With progress_on_unknown: false -> never satisfied even if separated
+      expect(computeHintClass(2, -1, true, HintType.Separated, separatedBools, { progress_on_unknown: false, highlight_finished_row_col: true }))
+        .toBe('hint-normal');
+    });
+  });
 });
+
