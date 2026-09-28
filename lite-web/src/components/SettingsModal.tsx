@@ -351,6 +351,17 @@ export function SettingsModal({ isOpen, onClose, settings, updateSetting }: Sett
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <div class="px-5 py-3 border-t border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.2)] flex justify-end shrink-0">
+          <button
+            data-testid="btn-settings-close"
+            class="btn-secondary text-xs px-4 py-1.5"
+            onClick={onClose}
+          >
+            {t("account.close")}
+          </button>
+        </div>
       </div>
     </div>
   );

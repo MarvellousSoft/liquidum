@@ -377,12 +377,12 @@ export function LeaderboardView({
 
       {/* Footer (if in modal) */}
       {onClose && (
-        <div class="px-5 py-3 border-t-2 border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.25)] flex justify-end shrink-0">
+        <div class="px-5 py-3 border-t border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.2)] flex justify-end shrink-0">
           <button
-            class="btn-secondary"
+            class="btn-secondary text-xs px-4 py-1.5"
             onClick={onClose}
           >
-            {t("leaderboard.close")}
+            {t("account.close")}
           </button>
         </div>
       )}
