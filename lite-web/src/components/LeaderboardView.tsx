@@ -260,7 +260,7 @@ export function LeaderboardView({
       </div>
 
       {/* Content Table / States */}
-      <div class="p-3 flex-1 overflow-y-auto min-h-[160px]">
+      <div class="p-3 flex-1 overflow-y-auto min-h-[160px] overscroll-contain">
         {loading ? (
           <div class="flex flex-col items-center justify-center py-10 text-[rgba(217,255,226,0.6)]">
             <span class="text-2xl animate-spin mb-2 select-none">⏳</span>

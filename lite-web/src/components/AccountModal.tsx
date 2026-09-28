@@ -2,6 +2,7 @@ import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { playFabService, type PlayerProfileEvent } from "../engine/PlayFabService";
 import { useTranslation } from "../i18n";
+import { lockBodyScroll, unlockBodyScroll } from "../utils/scrollLock";
 
 interface AccountModalProps {
   isOpen: boolean;
@@ -13,6 +14,13 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   if (!isOpen) return null;
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    lockBodyScroll();
+    return () => {
+      unlockBodyScroll();
+    };
+  }, []);
   const [displayName, setDisplayName] = useState<string>(playFabService.getDisplayName() || "Anonymous");
   const [avatarUrl, setAvatarUrl] = useState<string>(playFabService.getAvatarUrl() || "");
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>(playFabService.getAvatarUrl() || "");
@@ -222,6 +230,11 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
       data-testid="account-modal"
       class="modal-backdrop"
       onClick={onClose}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
         class="shortcuts-dialog max-h-[85vh] flex flex-col"
@@ -256,14 +269,14 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
         </div>
 
         {/* Scrollable Content */}
-        <div class="shortcuts-content overflow-y-auto space-y-4 pr-1">
+        <div class="shortcuts-content overflow-y-auto overscroll-contain space-y-4 pr-1">
           {/* SECTION 1: PROFILE PICTURE */}
           <div class="shortcut-section space-y-3">
             <h3 class="shortcut-section-title">
               <span>🖼️</span> {t("account.profile_picture")}
             </h3>
 
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
               {/* Avatar Preview */}
               <div class="w-14 h-14 rounded-full border-2 border-[var(--cell-wall)] bg-[rgba(0,9,36,0.7)] flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
                 {avatarPreviewUrl && !previewError ? (
@@ -278,15 +291,15 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 )}
               </div>
 
-              <div class="flex-1 space-y-2">
+              <div class="w-full sm:flex-1 space-y-2">
                 <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                   {t("account.avatar_url_label")}
                 </label>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <input
                     type="url"
                     data-testid="input-avatar-url"
-                    class="game-input flex-1 text-xs"
+                    class="game-input w-full sm:flex-1 text-xs"
                     placeholder={t("account.avatar_url_placeholder")}
                     value={avatarUrl}
                     onInput={(e: any) => {
@@ -296,25 +309,27 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                     }}
                     disabled={avatarSaving}
                   />
-                  <button
-                    data-testid="btn-save-avatar"
-                    class="btn-shortcuts text-xs shrink-0"
-                    onClick={handleSaveAvatar}
-                    disabled={avatarSaving}
-                  >
-                    {avatarSaving ? "..." : t("account.save")}
-                  </button>
-                  {avatarUrl && (
+                  <div class="flex items-center gap-2 shrink-0">
                     <button
-                      data-testid="btn-remove-avatar"
-                      class="btn-secondary-danger text-xs shrink-0"
-                      onClick={handleRemoveAvatar}
+                      data-testid="btn-save-avatar"
+                      class="btn-shortcuts text-xs flex-1 sm:flex-none justify-center"
+                      onClick={handleSaveAvatar}
                       disabled={avatarSaving}
-                      title={t("account.clear")}
                     >
-                      {t("account.clear")}
+                      {avatarSaving ? "..." : t("account.save")}
                     </button>
-                  )}
+                    {avatarUrl && (
+                      <button
+                        data-testid="btn-remove-avatar"
+                        class="btn-secondary-danger text-xs flex-1 sm:flex-none justify-center"
+                        onClick={handleRemoveAvatar}
+                        disabled={avatarSaving}
+                        title={t("account.clear")}
+                      >
+                        {t("account.clear")}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -338,11 +353,11 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               {t("account.display_name_hint")}
             </p>
 
-            <div class="flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <input
                 type="text"
                 data-testid="input-display-name"
-                class="game-input flex-1 text-xs"
+                class="game-input w-full sm:flex-1 text-xs"
                 placeholder={t("account.name_placeholder")}
                 value={displayName}
                 maxLength={25}
@@ -351,7 +366,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               />
               <button
                 data-testid="btn-save-display-name"
-                class="btn-shortcuts text-xs shrink-0"
+                class="btn-shortcuts text-xs w-full sm:w-auto shrink-0 justify-center"
                 onClick={handleSaveDisplayName}
                 disabled={nameSaving}
               >
@@ -385,31 +400,33 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                 {t("account.current_key")}
               </label>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <input
                   type={isKeyVisible ? "text" : "password"}
                   data-testid="input-recovery-key"
                   readOnly
                   value={recoveryKey}
-                  class="game-input font-mono text-xs flex-1 select-all"
+                  class="game-input font-mono text-xs w-full sm:flex-1 select-all"
                 />
-                <button
-                  type="button"
-                  data-testid="btn-toggle-key-visibility"
-                  class="btn-secondary text-xs shrink-0"
-                  onClick={() => setIsKeyVisible(!isKeyVisible)}
-                  title={isKeyVisible ? t("account.hide_key") : t("account.show_key")}
-                >
-                  {isKeyVisible ? t("account.hide_key") : t("account.show_key")}
-                </button>
-                <button
-                  type="button"
-                  data-testid="btn-copy-key"
-                  class="btn-shortcuts text-xs shrink-0 flex items-center gap-1"
-                  onClick={handleCopyKey}
-                >
-                  {copySuccess ? t("account.copied") : t("account.copy_key")}
-                </button>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    data-testid="btn-toggle-key-visibility"
+                    class="btn-secondary text-xs flex-1 sm:flex-none justify-center"
+                    onClick={() => setIsKeyVisible(!isKeyVisible)}
+                    title={isKeyVisible ? t("account.hide_key") : t("account.show_key")}
+                  >
+                    {isKeyVisible ? t("account.hide_key") : t("account.show_key")}
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="btn-copy-key"
+                    class="btn-shortcuts text-xs flex-1 sm:flex-none justify-center flex items-center gap-1"
+                    onClick={handleCopyKey}
+                  >
+                    {copySuccess ? t("account.copied") : t("account.copy_key")}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -418,11 +435,11 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
               <label class="block text-[11px] font-medium text-[rgba(217,255,226,0.7)]">
                 {t("account.restore_title")}
               </label>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <input
                   type="text"
                   data-testid="input-restore-key"
-                  class="game-input font-mono text-xs flex-1"
+                  class="game-input font-mono text-xs w-full sm:flex-1"
                   placeholder={t("account.restore_placeholder")}
                   value={restoreKeyInput}
                   onInput={(e: any) => setRestoreKeyInput(e.target.value)}
@@ -431,7 +448,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
                 <button
                   type="button"
                   data-testid="btn-restore-key"
-                  class="btn-shortcuts text-xs shrink-0"
+                  class="btn-shortcuts text-xs w-full sm:w-auto shrink-0 justify-center"
                   onClick={handleRestoreAccount}
                   disabled={isRestoring || !restoreKeyInput.trim()}
                 >

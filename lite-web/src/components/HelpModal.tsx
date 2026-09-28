@@ -1,6 +1,8 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { get_today_str, WEEKDAY_INFO } from '../engine/DailyLevel';
 import { useTranslation } from '../i18n';
+import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
 
 export interface HelpModalProps {
   isOpen: boolean;
@@ -121,6 +123,13 @@ export function getActiveMechanicsForWeekday(weekday: number): Set<MechanicKey> 
 export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpModalProps) {
   if (!isOpen) return null;
 
+  useEffect(() => {
+    lockBodyScroll();
+    return () => {
+      unlockBodyScroll();
+    };
+  }, []);
+
   const { t } = useTranslation();
   const dateStr = dailyDate || get_today_str();
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -134,6 +143,11 @@ export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount }: HelpMod
       data-testid="help-modal"
       class="modal-backdrop"
       onClick={onClose}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
         class="shortcuts-dialog max-w-2xl max-h-[85vh] flex flex-col"

@@ -1,5 +1,7 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { useTranslation } from '../i18n';
+import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
 
 export interface LevelSelectModalProps {
   isOpen: boolean;
@@ -26,11 +28,23 @@ export function LevelSelectModal({
 
   if (!isOpen) return null;
 
+  useEffect(() => {
+    lockBodyScroll();
+    return () => {
+      unlockBodyScroll();
+    };
+  }, []);
+
   return (
     <div
       data-testid="levels-modal"
       class="modal-backdrop"
       onClick={onClose}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
         class="shortcuts-dialog"

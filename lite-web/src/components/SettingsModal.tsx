@@ -1,6 +1,8 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import type { GameSettings } from '../engine/SettingsManager';
 import { useTranslation } from '../i18n';
+import { lockBodyScroll, unlockBodyScroll } from '../utils/scrollLock';
 
 export interface SettingsModalProps {
   isOpen: boolean;
@@ -14,11 +16,23 @@ export function SettingsModal({ isOpen, onClose, settings, updateSetting }: Sett
 
   if (!isOpen) return null;
 
+  useEffect(() => {
+    lockBodyScroll();
+    return () => {
+      unlockBodyScroll();
+    };
+  }, []);
+
   return (
     <div
       data-testid="settings-modal"
       class="modal-backdrop"
       onClick={onClose}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
         class="shortcuts-dialog settings-dialog"

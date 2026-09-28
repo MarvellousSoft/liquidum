@@ -31,7 +31,7 @@ export interface GameSettings {
 export const DEFAULT_SETTINGS: GameSettings = {
   // Display
   language: 'system',
-  dark_mode: true,
+  dark_mode: false,
   show_bubbles: true,
 
   // Gameplay
@@ -39,8 +39,8 @@ export const DEFAULT_SETTINGS: GameSettings = {
   highlight_finished_row_col: true,
   highlight_grid: true,
   show_grid_preview: true,
-  hide_unknown: false,
-  progress_on_unknown: true,
+  hide_unknown: true,
+  progress_on_unknown: false,
   show_timer: true,
   skip_animations: false,
 
