@@ -37,16 +37,20 @@ import type { DailyLevelMeta } from './engine/DailyLevel';
 import {
   getStreakData,
   recordDailyCompletion,
+  type StreakData,
 } from './engine/StreakManager';
-import type { StreakData } from './engine/StreakManager';
-import { LeaderboardModal } from './components/LeaderboardModal';
-import { LeaderboardView } from './components/LeaderboardView';
-import { AccountModal } from './components/AccountModal';
-import { HelpModal } from './components/HelpModal';
-import { SettingsModal } from './components/SettingsModal';
-import { ShortcutsModal } from './components/ShortcutsModal';
-import { LevelSelectModal } from './components/LevelSelectModal';
 import { playFabService } from './engine/PlayFabService';
+import { lazy, Suspense } from 'preact/compat';
+import { LeaderboardView } from './components/LeaderboardView';
+
+const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })));
+const ShortcutsModal = lazy(() => import('./components/ShortcutsModal').then(m => ({ default: m.ShortcutsModal })));
+const LevelSelectModal = lazy(() => import('./components/LevelSelectModal').then(m => ({ default: m.LevelSelectModal })));
+const LeaderboardModal = lazy(() => import('./components/LeaderboardModal').then(m => ({ default: m.LeaderboardModal })));
+const AccountModal = lazy(() => import('./components/AccountModal').then(m => ({ default: m.AccountModal })));
+const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
+
+
 import {
   type GameSettings,
   getSettings,
@@ -2145,7 +2149,7 @@ export function App() {
       )}
 
       {/* Daily / Test selector at bottom */}
-      {!isTestMode && (
+      {!isTestMode && import.meta.env.DEV && (
         <div class="level-picker mt-8 mb-6">
           <button
             data-testid="btn-daily-mode"
@@ -2171,48 +2175,63 @@ export function App() {
         </div>
       )}
 
-      <SettingsModal
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
-        settings={settings}
-        updateSetting={updateSetting}
-      />
+      <Suspense fallback={null}>
+        {showSettings && (
+          <SettingsModal
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+            settings={settings}
+            updateSetting={updateSetting}
+          />
+        )}
 
-      <ShortcutsModal
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-      />
+        {showShortcuts && (
+          <ShortcutsModal
+            isOpen={showShortcuts}
+            onClose={() => setShowShortcuts(false)}
+          />
+        )}
 
-      <LevelSelectModal
-        isOpen={showLevelsModal}
-        onClose={() => setShowLevelsModal(false)}
-        levelKeys={levelKeys}
-        currentLevelKey={currentLevelKey}
-        isDailyMode={isDailyMode}
-        completedLevels={completedLevels}
-        onSelectLevel={loadLevel}
-        iconUrl={iconUrl}
-      />
+        {showLevelsModal && (
+          <LevelSelectModal
+            isOpen={showLevelsModal}
+            onClose={() => setShowLevelsModal(false)}
+            levelKeys={levelKeys}
+            currentLevelKey={currentLevelKey}
+            isDailyMode={isDailyMode}
+            completedLevels={completedLevels}
+            onSelectLevel={loadLevel}
+            iconUrl={iconUrl}
+          />
+        )}
 
-      <LeaderboardModal
-        isOpen={showLeaderboardModal}
-        onClose={() => setShowLeaderboardModal(false)}
-        refreshTrigger={leaderboardRefreshKey}
-      />
+        {showLeaderboardModal && (
+          <LeaderboardModal
+            isOpen={showLeaderboardModal}
+            onClose={() => setShowLeaderboardModal(false)}
+            refreshTrigger={leaderboardRefreshKey}
+          />
+        )}
 
-      <AccountModal
-        isOpen={showAccountModal}
-        onClose={() => setShowAccountModal(false)}
-        onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
-      />
+        {showAccountModal && (
+          <AccountModal
+            isOpen={showAccountModal}
+            onClose={() => setShowAccountModal(false)}
+            onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
+          />
+        )}
 
-      <HelpModal
-        isOpen={showHelpModal}
-        onClose={() => setShowHelpModal(false)}
-        dailyDate={isDailyMode ? dailyDate : undefined}
-        onOpenAccount={() => setShowAccountModal(true)}
-        onOpenControls={() => setShowShortcuts(true)}
-      />
+        {showHelpModal && (
+          <HelpModal
+            isOpen={showHelpModal}
+            onClose={() => setShowHelpModal(false)}
+            dailyDate={isDailyMode ? dailyDate : undefined}
+            onOpenAccount={() => setShowAccountModal(true)}
+            onOpenControls={() => setShowShortcuts(true)}
+          />
+        )}
+      </Suspense>
+
     </div>
   );
 }

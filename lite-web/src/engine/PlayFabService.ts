@@ -1,4 +1,14 @@
-import { PlayFab, PlayFabClient } from "playfab-sdk";
+/// <reference path="../../node_modules/playfab-sdk/Scripts/typings/PlayFab/PlayFab.d.ts" />
+/// <reference path="../../node_modules/playfab-sdk/Scripts/typings/PlayFab/PlayFabClient.d.ts" />
+// Direct deep imports avoid bundling 250+ KB of unused PlayFab Admin/Server/Multiplayer modules
+// @ts-expect-error - CJS deep import
+import _PlayFab from "playfab-sdk/Scripts/PlayFab/PlayFab.js";
+// @ts-expect-error - CJS deep import
+import _PlayFabClient from "playfab-sdk/Scripts/PlayFab/PlayFabClient.js";
+
+const PlayFab = _PlayFab as PlayFabModule.IPlayFab;
+const PlayFabClient = _PlayFabClient as PlayFabClientModule.IPlayFabClient;
+
 import { getGeneratedName } from "./NameGenerator";
 import {
   type FlairInfo,

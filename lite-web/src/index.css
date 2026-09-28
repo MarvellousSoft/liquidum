@@ -1553,7 +1553,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 20;
-  overflow: visible;
+  overflow: hidden;
 }
 .diag-svg line {
   stroke: var(--cell-wall);
