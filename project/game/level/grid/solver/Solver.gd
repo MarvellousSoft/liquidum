@@ -464,7 +464,7 @@ class BasicColStrategy extends ColumnStrategy:
 class MediumColStrategy extends ColumnStrategy:
 	func description() -> String:
 		return "If a component is so big it MUST be partially filled, fill it."
-	func _apply_strategy(values: Array[ColComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
+	func _apply_strategy(values: Array[ColComponent], water_left_min: float, _water_left_max: float, nothing_left: float) -> bool:
 		var any := false
 		for comp in values:
 			if nothing_left - comp.size < water_left_min:
@@ -2008,6 +2008,26 @@ class SudokuStrategy extends Strategy:
 	func description() -> String:
 		return "If some row/column/cell needs to be fully filled or empty"
 
+class KnightStrategy extends Strategy:
+	func description() -> String:
+		return "Mark X on cells in knight's move from water."
+	# Mark X on all cells that can't have water
+	static func knight_mark_x(grid: GridModel) -> bool:
+		var any := false
+		for i in grid.rows():
+			for j in grid.cols():
+				if grid.get_cell(i, j).water_full():
+					for d in GridImpl.KNIGHT_MOVES:
+						var c2 := grid.get_cell(i + d[0], j + d[1])
+						if not c2.out_of_bounds() and c2.nothing_full():
+							c2.put_nowater(E.Corner.TopLeft, false, true)
+							any = true
+		return any
+	func apply_any() -> bool:
+		if not grid.rule_variants().has(GridModel.RuleVariant.Knight):
+			return false
+		return KnightStrategy.knight_mark_x(grid)
+
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
@@ -2042,6 +2062,7 @@ static var STRATEGY_LIST := {
 	TogetherSeparateCellHints = func(grid): return TogetherSeparateCellHintsStrategy.new(grid),
 	LiarRowStrategy = func(grid): return LiarRowStrategy.new(grid),
 	SudokuStrategy = func(grid): return SudokuStrategy.new(grid),
+	KnightStrategy = func(grid): return KnightStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

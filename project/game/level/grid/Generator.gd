@@ -2,6 +2,7 @@ class_name Generator
 
 class Options:
 	var sudoku: bool
+	var knights: bool
 	var diagonals: bool
 	var boats: bool
 	# Just a hint, doesn't need to be strictly satisfied
@@ -27,6 +28,10 @@ class Options:
 	func with_sudoku() -> Options:
 		sudoku = true
 		min_water = 45
+		return self
+	func with_knights() -> Options:
+		knights = true
+		diagonals = false
 		return self
 	func build(rseed: int) -> Generator:
 		return Generator.new(rseed, self)
@@ -251,6 +256,18 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	var water_wanted: float = min_water - grid.count_waters()
 	if water_wanted < 0:
 		return
+	# Put X everywhere where putting a knight would automatically fail
+	if opts.knights:
+		assert(not opts.diagonals)
+		for i in grid.rows():
+			for j in grid.cols():
+				var c := grid.get_cell(i, j)
+				if c.nothing_full():
+					c.put_water(E.Corner.TopLeft, true)
+					var knight_status := (grid as GridImpl)._knight_status()
+					grid.undo()
+					if knight_status == E.HintStatus.Wrong:
+						c.put_nowater(E.Corner.TopLeft, false, true)
 	var all_cells := _all_cells(grid)
 	while not all_cells.is_empty():
 		var idx: Vector2i = pop_random(all_cells)
@@ -258,6 +275,9 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 		for corner in c.corners():
 			if c.nothing_at(corner):
 				water_wanted -= c.put_water(corner, false)
+				if opts.knights:
+					SolverModel.KnightStrategy.knight_mark_x(grid)
+					assert((grid as GridImpl)._knight_status() == E.HintStatus.Satisfied)
 				if water_wanted <= 0:
 					return
 

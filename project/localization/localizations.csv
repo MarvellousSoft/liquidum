@@ -153,7 +153,7 @@ DAYS_LEFT,{n}d {m}h left,{n}d {m}h restantes,{n}d {m}h restantes
 MINUTES_LEFT,{n} minute{s} left,{n} minuto{s} restante{s},{n} minuto{s} restante{s}
 MONDAY_LEVEL,Basic Monday,Segunda Simples,Segunda Simples
 MONDAY_LEVEL_DESC,No special rules.,Sem regras especiais.,Sem regras especiais.
-TUESDAY_LEVEL,Secret Boat Tuesday,Terça Naval Secreta,Terça do Barco Escondido
+TUESDAY_LEVEL,Secret Boat Tuesday,Terça Naval Secreta,Terça Naval Secreta
 TUESDAY_LEVEL_DESC,Boats have hidden hints.,Barcos com dicas escondidas.,Barcos com dicas escondidas.
 WEDNESDAY_LEVEL,Diagonal Wednesday,Quarta Diagonal,Quarta Diagonal
 WEDNESDAY_LEVEL_DESC,Diagonals and no hidden hints.,Diagonais e nenhuma dica escondida.,Diagonais e nenhuma dica escondida.
@@ -300,7 +300,7 @@ EXTRA_01_07,Wrong & Right,Wrong & Right,Wrong & Right
 EXTRA_01_08,Black & White,Black & White,Black & White
 EXTRA_01_09,Fight & Break up,Fight & Break up,Fight & Break up
 EXTRA_01_10,Kiss & Make up,Kiss & Make up,Kiss & Make up
-MIRROR_LEVEL_DESC,All water and boats cells are horizontally mirrored in the grid.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.,Todos espaços com água ou barcos estão espelhados horizontalmente na grelha.
+MIRROR_LEVEL_DESC,All water and boats cells are horizontally mirrored in the grid.,Todos espaços com água ou barcos estão espelhados horizontalmente na grade.,Todos espaços com água ou barcos estão espelhados horizontalmente na grade.
 DLC2_NAME,Mirrors,Espelhos,Espelhos
 EXTRA_02_01,Mirrors,Espelhos,Espelhos
 EXTRA_02_02,Clones,Clones,Clones
@@ -362,11 +362,11 @@ EXTRA_07_06,Revonoc,Revonoc,Revonoc
 EXTRA_07_07,USS Proteus,USS Proteus,USS Proteus
 EXTRA_07_08,Witchcraft,Witchcraft,Witchcraft
 DLC5_NAME,PANDORA,PANDORA,PANDORA
-SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrid 3x3 tem um valor único de água de 1-9"
+SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrade 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrade 3x3 tem um valor único de água de 1-9"
 LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
 SNAKE_RULES,"""Snake"" Rules - Water cells form a single continuous snake. The snake may not touch itself orthogonally.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente."
 SYMBOLS_RULES,"""Symbols"" Rules - Same symbol hints represent the same value of water cells. Different symbols must represent different values.","Regra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes.","Regra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes."
-KNIGHT_RULES,"""Anti-Knight"" Rules - Two cells separated by a chess knight's move cannot both contain water.","Regra ""Anti-Cavalo"" - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água.","Regra ""Anti-Cavalo"" - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água."
+KNIGHT_RULES,Knight Rules - Two cells separated by a chess knight's move cannot both contain water.,Regra Cavalo - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água.,Regra Cavalo - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água.
 IMPOSTOR_RULES,"Regras do ""Impostor"" – Exatamente uma das dicas fornecidas é uma mentira completa.","Regra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira.","Regra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira."
 EXTRA_08_01,Liar 1,Liar 1,Liar 1
 EXTRA_08_02,Level,,
@@ -461,7 +461,7 @@ EDIT_ALT_TEXT_TITLE,Edit Alt Text,Editar texto alternativo,Editar texto alternat
 EDIT_ALT_TEXT_EXPLANATION,This will show up instead of the actual hint. It may be any string. Set it as empty to clear.,,
 CONFIRM,Confirm,Confirmar,Confirmar
 FLAIRS,Flairs,Emblemas,Emblemas
-RECOVERY_KEY,Account Recovery Key,,
+RECOVERY_KEY,Recovery Key,,
 RECOVERY_EXPLANATION,This secret key identifies your player profile on PlayFab. Copy it to share streaks with Liquidum Lite on Web.,,
 CURRENT_KEY,Your Current Key,,
 RESTORE_KEY,Restore Account,,

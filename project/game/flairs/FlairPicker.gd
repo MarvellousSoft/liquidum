@@ -9,7 +9,7 @@ func _ready():
 	populate_flairs()
 	update_info()
 	update_flair()
-	StoreIntegrations.playfab.display_name_changed.connect(func(name: String):
+	StoreIntegrations.playfab.display_name_changed.connect(func(_name: String):
 		update_info())
 	
 

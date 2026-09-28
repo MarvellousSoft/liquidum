@@ -316,6 +316,15 @@ class PureCell:
 				return [E.Corner.TopLeft, E.Corner.BottomRight]
 		push_error("Unknown type %d" % type)
 		return []
+	# Includes both corners in the case of a Single cell
+	func all_corners() -> Array[E.Corner]:
+		match type:
+			E.CellType.DecDiag:
+				return [E.Corner.BottomLeft, E.Corner.TopRight]
+			_:
+				return [E.Corner.TopLeft, E.Corner.BottomRight]
+		push_error("Unknown type %d" % type)
+		return []
 	func waters() -> Array[E.Waters]:
 		match type:
 			E.CellType.Single:
@@ -447,6 +456,8 @@ class CellWithLoc extends GridModel.CellModel:
 		self.i = i_
 		self.j = j_
 		self.grid = grid_
+	func out_of_bounds() -> bool:
+		return i < 0 or j < 0 or i >= grid.rows() or j >= grid.cols()
 	func pure() -> PureCell:
 		return grid._pure_cell(i, j)
 	func water_full() -> bool:
@@ -1101,21 +1112,9 @@ func _parse_extra_data(line: String) -> void:
 			_grid_hints.expected_aquariums[float(sv[0])] = int(sv[1])
 		"+variant", "+variants":
 			for v_str in kv[1].split(","):
-				match v_str.strip_edges().to_lower():
-					"liar":
-						if not _rule_variants.has(GridModel.RuleVariant.Liar):
-							_rule_variants.append(GridModel.RuleVariant.Liar)
-					"snake":
-						if not _rule_variants.has(GridModel.RuleVariant.Snake):
-							_rule_variants.append(GridModel.RuleVariant.Snake)
-					"sudoku":
-						if not _rule_variants.has(GridModel.RuleVariant.Sudoku):
-							_rule_variants.append(GridModel.RuleVariant.Sudoku)
-					"symbols":
-						if not _rule_variants.has(GridModel.RuleVariant.Symbols):
-							_rule_variants.append(GridModel.RuleVariant.Symbols)
-					_:
-						push_error("Unknown variant %s" % v_str)
+				var variant : GridModel.RuleVariant = GridModel.RuleVariant[v_str.strip_edges().capitalize()]
+				if not _rule_variants.has(variant):
+					_rule_variants.append(variant)
 		"+row_alt", "+row_alt_text":
 			var sv := kv[1].split(":", false, 2)
 			var i := int(sv[0])
@@ -1875,6 +1874,25 @@ func _symbols_status() -> E.HintStatus:
 	return st
 
 
+const KNIGHT_MOVES: Array[Vector2i] = [
+	Vector2i(2, 1), Vector2i(2, -1), Vector2i(-2, 1), Vector2i(-2, -1),
+	Vector2i(1, 2), Vector2i(1, -2), Vector2i(-1, 2), Vector2i(-1, -2),
+]
+func _knight_status() -> E.HintStatus:
+	for i in n:
+		for j in m:
+			var c := _pure_cell(i, j)
+			for co in c.all_corners():
+				if c.water_at(co):
+					for d in KNIGHT_MOVES:
+						var c2 := get_cell(i + d[0], j + d[1])
+						if not c2.out_of_bounds():
+							var c2p := _pure_cell(i + d[0], j + d[1])
+							var has_water: bool = c2p.water_at(co) if c2p._valid_corner(co) else c2p.water_count() > 0
+							if has_water:
+								return E.HintStatus.Wrong
+	return E.HintStatus.Satisfied
+
 func rule_variants_status() -> Array[E.HintStatus]:
 	var ret : Array[E.HintStatus] = []
 	for rule in _rule_variants:
@@ -1887,6 +1905,8 @@ func rule_variants_status() -> Array[E.HintStatus]:
 				ret.append(_sudoku_status())
 			GridModel.RuleVariant.Symbols:
 				ret.append(_symbols_status())
+			GridModel.RuleVariant.Knight:
+				ret.append(_knight_status())
 	return ret
 
 func count_nowater_row(i : int) -> float:

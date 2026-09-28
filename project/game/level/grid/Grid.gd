@@ -68,6 +68,8 @@ class CellHints:
 	var water_alt_text: String
 
 class CellModel:
+	func out_of_bounds() -> bool:
+		return GridModel.must_be_implemented()
 	func water_full() -> bool:
 		return GridModel.must_be_implemented()
 	# If full of water, all Corners return true
@@ -261,7 +263,8 @@ enum RuleVariant {
 	Liar,
 	Snake,
 	Sudoku,
-	Symbols
+	Symbols,
+	Knight,
 }
 
 func rule_variants() -> Array[RuleVariant]:

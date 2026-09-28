@@ -396,7 +396,6 @@ func _inner_col_status(j: int, content: E.HintContent, incomplete_info := false)
 		return E.HintStatus.Normal
 	# If the other side is ? we should never be green
 	if incomplete_info and not Profile.get_option("progress_on_unknown"):
-		var hints := grid_logic.col_hints()
 		var val := float(hint_j.boat_count) if content == E.HintContent.Boat else hint_j.water_count
 		if val == -1:
 			return E.HintStatus.Normal
