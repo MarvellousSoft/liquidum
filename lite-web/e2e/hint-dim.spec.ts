@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Hint Dimming QoL Feature (Right-Click Toggle)', () => {
   test.beforeEach(async ({ page }) => {

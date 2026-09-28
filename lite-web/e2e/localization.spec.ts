@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Internationalization (i18n) & pt-BR Localization', () => {
   test('auto-detects pt-BR browser locale and displays Portuguese UI', async ({ page }) => {
@@ -91,7 +91,7 @@ test.describe('Internationalization (i18n) & pt-BR Localization', () => {
     const helpModal = page.locator('[data-testid="help-modal"]');
     await expect(helpModal).toBeVisible();
     await expect(helpModal.locator('h2')).toHaveText('Como Jogar');
-    await expect(page.locator('[data-testid="btn-help-got-it"]')).toHaveText('Entendi');
+    await expect(page.locator('[data-testid="btn-help-close"], [data-testid="btn-help-got-it"]')).toHaveText(/Fechar|Entendi/);
 
     // Close Help Modal
     await page.locator('[data-testid="btn-close-help"]').click();

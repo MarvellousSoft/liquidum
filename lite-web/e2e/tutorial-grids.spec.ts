@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Tutorial Grids Visual Snapshots', () => {
   test('matches visual snapshots for all tutorial grids', async ({ page }) => {

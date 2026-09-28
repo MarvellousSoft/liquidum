@@ -12,6 +12,8 @@ import {
   PlayFabService,
   PLAYFAB_TITLE_ID,
   DAILY_STATISTIC_NAME,
+  DEFAULT_TEST_CUSTOM_ID,
+  isDevOrTestEnv,
 } from "../src/engine/PlayFabService";
 import { getGeneratedName } from "../src/engine/NameGenerator";
 import {
@@ -99,6 +101,30 @@ describe("PlayFabService - Local Storage Tracking", () => {
     // Subsequent retrieval returns the same ID
     const id2 = getOrCreateCustomId(storage);
     expect(id2).toBe(id1);
+  });
+
+  it("defaults to testing-id when in dev or test mode", () => {
+    const storage = createMockStorage();
+    expect(isDevOrTestEnv()).toBe(true);
+    const id = getOrCreateCustomId(storage);
+    expect(id).toBe(DEFAULT_TEST_CUSTOM_ID);
+    expect(id).toBe("testing-id");
+    expect(storage.getItem("liquidum_custom_id")).toBe("testing-id");
+  });
+
+  it("generates random hex ID when running in production mode", () => {
+    const storage = createMockStorage();
+    const id = getOrCreateCustomId(storage, false);
+    expect(id).not.toBe(DEFAULT_TEST_CUSTOM_ID);
+    expect(id).toMatch(/^[0-9a-f]+-[0-9a-f]{4}$/i);
+    expect(storage.getItem("liquidum_custom_id")).toBe(id);
+  });
+
+  it("respects manually stored custom ID in storage without overriding it", () => {
+    const storage = createMockStorage();
+    storage.setItem("liquidum_custom_id", "EXISTING_USER_KEY");
+    const id = getOrCreateCustomId(storage);
+    expect(id).toBe("EXISTING_USER_KEY");
   });
 
   it("tracks whether a daily score has been submitted", () => {

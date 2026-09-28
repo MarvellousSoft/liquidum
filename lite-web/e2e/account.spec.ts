@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("Account Modal & Profile E2E Tests", () => {
   let currentUser = {

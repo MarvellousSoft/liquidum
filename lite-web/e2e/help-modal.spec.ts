@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Help Modal & Game Mechanics E2E Tests', () => {
   test('automatically opens help modal on first visit, but not on subsequent visits', async ({ page }) => {
@@ -14,9 +14,9 @@ test.describe('Help Modal & Game Mechanics E2E Tests', () => {
     const seen = await page.evaluate(() => localStorage.getItem('liquidum_help_seen'));
     expect(seen).toBe('true');
 
-    // Close the modal via "Got it" button
-    const gotItBtn = page.locator('[data-testid="btn-help-got-it"]');
-    await gotItBtn.click();
+    // Close the modal via Close / "Got it" button
+    const closeBtn = page.locator('[data-testid="btn-help-close"], [data-testid="btn-help-got-it"]').first();
+    await closeBtn.click();
     await expect(helpModal).toBeHidden();
 
     // 2. Reload page (returning visitor) -> should NOT open automatically

@@ -107,17 +107,68 @@ export function decodeDailyScore(encodedScore: number): { seconds: number; mista
   return { seconds, mistakes };
 }
 
+export const DEFAULT_TEST_CUSTOM_ID = "testing-id";
+
+/**
+ * Determines whether the current environment is dev or test mode.
+ */
+export function isDevOrTestEnv(): boolean {
+  try {
+    if (typeof import.meta !== "undefined" && import.meta.env) {
+      if (import.meta.env.DEV || import.meta.env.MODE === "test" || import.meta.env.MODE === "development") {
+        return true;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  try {
+    const proc = (globalThis as any).process;
+    if (proc && proc.env) {
+      if (proc.env.NODE_ENV === "test" || proc.env.NODE_ENV === "development" || proc.env.VITEST) {
+        return true;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  try {
+    if (typeof window !== "undefined" && window.location) {
+      const search = window.location.search;
+      if (search && (search.includes("mode=test") || new URLSearchParams(search).get("mode") === "test")) {
+        return true;
+      }
+      const hostname = window.location.hostname;
+      if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]") {
+        return true;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  return false;
+}
+
 /**
  * Retrieves or generates a persistent anonymous UUID for browser login.
+ * In dev or test environments, defaults to DEFAULT_TEST_CUSTOM_ID ("testing-id").
  */
-export function getOrCreateCustomId(storage?: Storage): string {
+export function getOrCreateCustomId(storage?: Storage, forceDevOrTest?: boolean): string {
   const store = storage || (typeof localStorage !== "undefined" ? localStorage : null);
   const KEY = "liquidum_custom_id";
   let id = store ? store.getItem(KEY) : null;
   if (!id) {
-    const unixTime = Math.floor(Date.now() / 1000).toString(16);
-    const randHex = Math.floor(Math.random() * 0x10000).toString(16).padStart(4, "0");
-    id = `${unixTime}-${randHex}`;
+    const isDev = forceDevOrTest !== undefined ? forceDevOrTest : isDevOrTestEnv();
+    if (isDev) {
+      id = DEFAULT_TEST_CUSTOM_ID;
+    } else {
+      const unixTime = Math.floor(Date.now() / 1000).toString(16);
+      const randHex = Math.floor(Math.random() * 0x10000).toString(16).padStart(4, "0");
+      id = `${unixTime}-${randHex}`;
+    }
     if (store) {
       store.setItem(KEY, id);
     }

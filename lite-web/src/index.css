@@ -44,6 +44,11 @@
 
   /* Cell & Grid baseline sizing */
   --cell-size: 2.75rem;
+
+  /* Custom Scrollbar Tokens (Light Theme) */
+  --scrollbar-track: rgba(0, 9, 36, 0.08);
+  --scrollbar-thumb: rgba(0, 9, 36, 0.28);
+  --scrollbar-thumb-hover: rgba(0, 9, 36, 0.48);
 }
 
 @media (min-width: 640px) {
@@ -71,6 +76,11 @@
   --game-teal: #093659;
   --game-teal-hover: #144f7e;
   --game-teal-pressed: #051e33;
+
+  /* Custom Scrollbar Tokens (Dark Theme) */
+  --scrollbar-track: rgba(0, 9, 36, 0.4);
+  --scrollbar-thumb: rgba(171, 255, 209, 0.28);
+  --scrollbar-thumb-hover: rgba(171, 255, 209, 0.5);
 }
 
 body {
@@ -91,6 +101,69 @@ body {
   min-height: 100vh;
   box-sizing: border-box;
 }
+
+/* ==========================================================================
+   Aquatic Custom Scrollbars (Light & Dark Theme)
+   ========================================================================== */
+/* Standard W3C Scrollbar */
+html,
+body,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* WebKit / Chromium / Edge / Safari custom rounded styling */
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+/* Dialogs & Panels: Deep aquatic navy backgrounds use soft mint/foam thumbs */
+.shortcuts-dialog,
+.modal-backdrop,
+.leaderboard-view,
+.settings-dialog {
+  --scrollbar-track: rgba(0, 9, 36, 0.25);
+  --scrollbar-thumb: rgba(217, 255, 226, 0.32);
+  --scrollbar-thumb-hover: rgba(217, 255, 226, 0.55);
+}
+
+.theme-dark .shortcuts-dialog,
+.theme-dark .modal-backdrop,
+.theme-dark .leaderboard-view,
+.theme-dark .settings-dialog {
+  --scrollbar-track: rgba(0, 9, 36, 0.45);
+  --scrollbar-thumb: rgba(171, 255, 209, 0.28);
+  --scrollbar-thumb-hover: rgba(171, 255, 209, 0.55);
+}
+
 
 /* ==========================================================================
    Godot Signature Text Outline Effect (Crisp Vector Outline)
