@@ -43,7 +43,10 @@
     "zero_mistakes": "🏆 0 Erros!",
     "one_mistake": "1 Erro",
     "many_mistakes": "{{count}} Erros",
-    "share_text": "Ganhei o #liquidum diário de {{date}} com {{mistakes}} em {{time}}!"
+    "share_text": "Ganhei o #liquidum diário de {{date}} com {{mistakes}} em {{time}}!",
+    "steam_promo": "Quer mais? Baixe Liquidum no Steam",
+    "steam_link_title": "Jogue o jogo completo no Steam",
+    "steam_button": "Liquidum no Steam"
   },
   "settings": {
     "title": "Opções",
@@ -291,6 +294,23 @@
     "opp_water_one": "1 célula de água",
     "opp_water_many": "{{count}} células de água",
     "opp_boat_one": "1 barco",
-    "opp_boat_many": "{{count}} barcos"
+    "opp_boat_many": "{{count}} barcos",
+    "stat_time": "Tempo",
+    "stat_time_tooltip": "Tempo decorrido",
+    "stat_water": "Água",
+    "stat_water_tooltip": "Total de água: {{current}} / {{total}} colocados",
+    "stat_boats": "Barcos",
+    "stat_boat_tooltip": "Total de barcos: {{current}} / {{total}} colocados",
+    "stat_over": "⚠ Acima",
+    "aquariums_label": "Aquários:"
+  },
+  "game": {
+    "generating_daily": "Gerando Nível Diário para {{date}}...",
+    "loading": "Carregando...",
+    "daily_level": "📅 Nível Diário",
+    "play_daily_title": "Jogar Nível Diário",
+    "test_levels": "🧪 Níveis de Teste",
+    "test_levels_title": "Níveis fixos para teste",
+    "test_levels_desc": "Níveis fixos para teste (serão removidos futuramente):"
   }
 }

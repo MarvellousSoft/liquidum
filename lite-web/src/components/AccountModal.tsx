@@ -135,9 +135,46 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   // 4. Copy Recovery Key
   const handleCopyKey = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(recoveryKey);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2500);
+      navigator.clipboard
+        .writeText(recoveryKey)
+        .then(() => {
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2500);
+        })
+        .catch(() => {
+          // Fallback copy using hidden textarea
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = recoveryKey;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2500);
+          } catch {
+            setCopySuccess(false);
+          }
+        });
+    } else {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = recoveryKey;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2500);
+      } catch {
+        setCopySuccess(false);
+      }
     }
   };
 

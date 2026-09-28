@@ -43,7 +43,10 @@
     "zero_mistakes": "🏆 0 Mistakes!",
     "one_mistake": "1 Mistake",
     "many_mistakes": "{{count}} Mistakes",
-    "share_text": "I won #liquidum daily on {{date}} with {{mistakes}} in {{time}}!"
+    "share_text": "I won #liquidum daily on {{date}} with {{mistakes}} in {{time}}!",
+    "steam_promo": "Want More? Download liquidum on Steam",
+    "steam_link_title": "Play the full game on Steam",
+    "steam_button": "Liquidum on Steam"
   },
   "settings": {
     "title": "Settings",
@@ -291,6 +294,23 @@
     "opp_water_one": "1 water cell",
     "opp_water_many": "{{count}} water cells",
     "opp_boat_one": "1 boat",
-    "opp_boat_many": "{{count}} boats"
+    "opp_boat_many": "{{count}} boats",
+    "stat_time": "Time",
+    "stat_time_tooltip": "Time elapsed",
+    "stat_water": "Water",
+    "stat_water_tooltip": "Total water: {{current}} / {{total}} placed",
+    "stat_boats": "Boats",
+    "stat_boat_tooltip": "Total boats: {{current}} / {{total}} placed",
+    "stat_over": "⚠ Over",
+    "aquariums_label": "Aquariums:"
+  },
+  "game": {
+    "generating_daily": "Generating Daily Level for {{date}}...",
+    "loading": "Loading...",
+    "daily_level": "📅 Daily Level",
+    "play_daily_title": "Play Daily Level",
+    "test_levels": "🧪 Test Levels",
+    "test_levels_title": "Fixed levels for testing",
+    "test_levels_desc": "Fixed levels for testing (will be removed later):"
   }
 }

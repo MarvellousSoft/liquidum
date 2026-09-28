@@ -43,6 +43,9 @@ import { LeaderboardModal } from './components/LeaderboardModal';
 import { LeaderboardView } from './components/LeaderboardView';
 import { AccountModal } from './components/AccountModal';
 import { HelpModal } from './components/HelpModal';
+import { SettingsModal } from './components/SettingsModal';
+import { ShortcutsModal } from './components/ShortcutsModal';
+import { LevelSelectModal } from './components/LevelSelectModal';
 import { playFabService } from './engine/PlayFabService';
 import {
   type GameSettings,
@@ -1869,7 +1872,7 @@ export function App() {
             {/* Steam Promo */}
             <div class="flex flex-col items-center gap-1.5 mt-3 pt-2 border-t border-slate-700/40 w-full">
               <span data-testid="steam-promo-text" class="text-xs text-slate-300 font-medium">
-                Want More? Download liquidum on Steam
+                {t('victory.steam_promo')}
               </span>
               <a
                 data-testid="btn-steam-link"
@@ -1877,12 +1880,12 @@ export function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn-steam flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs transition shadow-md w-full max-w-[280px]"
-                title="Play the full game on Steam"
+                title={t('victory.steam_link_title')}
               >
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                   <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z" />
                 </svg>
-                <span>Liquidum on Steam</span>
+                <span>{t('victory.steam_button')}</span>
               </a>
             </div>
           </div>
@@ -1892,7 +1895,7 @@ export function App() {
       {isLoadingDaily ? (
         <div class="daily-loading" data-testid="daily-loading">
           <div class="loading-spinner" />
-          <span>Generating Daily Level for {dailyDate}...</span>
+          <span>{t('game.generating_daily', { date: dailyDate })}</span>
         </div>
       ) : gridData ? (
         <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto px-2">
@@ -1914,10 +1917,10 @@ export function App() {
                     <div
                       data-testid="hint-timer"
                       class="hint-stat-card hint-stat-normal hint-stat-timer"
-                      title="Time elapsed"
+                      title={t('hints.stat_time_tooltip')}
                     >
                       <span class="hint-stat-icon">⏱️</span>
-                      <span class="hint-stat-label">Time</span>
+                      <span class="hint-stat-label">{t('hints.stat_time')}</span>
                       <span data-testid="timer-value" class="hint-stat-value godot-text-outline">
                         {formatSolveTime(secondsElapsed)}
                       </span>
@@ -1944,17 +1947,17 @@ export function App() {
                         currentWater > gridData.grid_hints.total_water ? 'hint-stat-over' :
                           'hint-stat-normal'
                         }`}
-                      title={`Total water: ${currentWater} / ${gridData.grid_hints.total_water} placed`}
+                      title={t('hints.stat_water_tooltip', { current: currentWater, total: gridData.grid_hints.total_water })}
                     >
                       <span class="hint-stat-icon">💧</span>
-                      <span class="hint-stat-label">Water</span>
+                      <span class="hint-stat-label">{t('hints.stat_water')}</span>
                       <span class="hint-stat-value godot-text-outline">
                         {currentWater} / {gridData.grid_hints.total_water}
                       </span>
                       {currentWater === gridData.grid_hints.total_water ? (
                         <span class="hint-status-badge badge-satisfied">✓</span>
                       ) : currentWater > gridData.grid_hints.total_water ? (
-                        <span class="hint-status-badge badge-over">⚠ Over</span>
+                        <span class="hint-status-badge badge-over">{t('hints.stat_over')}</span>
                       ) : null}
                     </div>
                   )}
@@ -1966,17 +1969,17 @@ export function App() {
                         currentBoats > gridData.grid_hints.total_boats ? 'hint-stat-over' :
                           'hint-stat-normal'
                         }`}
-                      title={`Total boats: ${currentBoats} / ${gridData.grid_hints.total_boats} placed`}
+                      title={t('hints.stat_boat_tooltip', { current: currentBoats, total: gridData.grid_hints.total_boats })}
                     >
                       <img src={iconUrl('boat_small.png')} class="hint-boat-img" alt="boat" />
-                      <span class="hint-stat-label">Boats</span>
+                      <span class="hint-stat-label">{t('hints.stat_boats')}</span>
                       <span class="hint-stat-value godot-text-outline">
                         {currentBoats} / {gridData.grid_hints.total_boats}
                       </span>
                       {currentBoats === gridData.grid_hints.total_boats ? (
                         <span class="hint-status-badge badge-satisfied">✓</span>
                       ) : currentBoats > gridData.grid_hints.total_boats ? (
-                        <span class="hint-status-badge badge-over">⚠ Over</span>
+                        <span class="hint-status-badge badge-over">{t('hints.stat_over')}</span>
                       ) : null}
                     </div>
                   )}
@@ -1985,7 +1988,7 @@ export function App() {
                     <div class={`aquarium-section ${(hasTotalWater || hasTotalBoats) ? 'has-counters' : ''}`} data-testid="aquarium-section">
                       <div class="aquarium-header">
                         <span class="aquarium-icon">🌊</span>
-                        <span class="aquarium-label">Aquariums:</span>
+                        <span class="aquarium-label">{t('hints.aquariums_label')}</span>
                       </div>
                       <div class="aquarium-items">
                         {aquariumEntries.map(([sizeStr, expectedCount]) => {
@@ -2145,7 +2148,7 @@ export function App() {
           )}
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>{t('game.loading')}</p>
       )}
 
       {/* Daily / Test selector at bottom */}
@@ -2159,568 +2162,44 @@ export function App() {
               }
             }}
             class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
-            title="Play Daily Level"
+            title={t('game.play_daily_title')}
           >
-            <span>📅 Daily Level</span>
+            <span>{t('game.daily_level')}</span>
           </button>
 
           <button
             data-testid="btn-open-levels-modal"
             onClick={() => setShowLevelsModal(true)}
             class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
-            title="Fixed levels for testing"
+            title={t('game.test_levels_title')}
           >
-            <span>🧪 Test Levels {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
+            <span>{t('game.test_levels')} {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
           </button>
         </div>
       )}
 
-      {showSettings && (
-        <div
-          data-testid="settings-modal"
-          class="modal-backdrop"
-          onClick={() => setShowSettings(false)}
-        >
-          <div
-            class="shortcuts-dialog settings-dialog"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div class="shortcuts-header">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">⚙️</span>
-                <h2 class="shortcuts-title godot-text-outline">{t('settings.title')}</h2>
-              </div>
-              <button
-                data-testid="btn-close-settings"
-                onClick={() => setShowSettings(false)}
-                class="shortcuts-close-btn"
-                title={t('account.close')}
-                aria-label={t('account.close')}
-              >
-                ✕
-              </button>
-            </div>
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        settings={settings}
+        updateSetting={updateSetting}
+      />
 
-            <div class="settings-content">
-              {/* DISPLAY SECTION */}
-              <div class="settings-section">
-                <h3 class="settings-section-title">
-                  <span>🎨</span> {t('settings.section_display')}
-                </h3>
+      <ShortcutsModal
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+      />
 
-                {/* Language */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.language_title')}</span>
-                    <span class="setting-desc">{t('settings.language_desc')}</span>
-                  </div>
-                  <select
-                    data-testid="setting-language"
-                    value={settings.language || 'system'}
-                    onChange={(e) => updateSetting('language', e.currentTarget.value as any)}
-                    class="setting-select"
-                  >
-                    <option value="system">{t('settings.lang_system')}</option>
-                    <option value="en">{t('settings.lang_en')}</option>
-                    <option value="pt-BR">{t('settings.lang_pt_br')}</option>
-                  </select>
-                </div>
-
-                {/* Dark Mode */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.dark_mode_title')}</span>
-                    <span class="setting-desc">{t('settings.dark_mode_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-dark-mode"
-                      checked={settings.dark_mode}
-                      onChange={(e) => updateSetting('dark_mode', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Show Bubbles */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.show_bubbles_title')}</span>
-                    <span class="setting-desc">{t('settings.show_bubbles_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-show-bubbles"
-                      checked={settings.show_bubbles}
-                      onChange={(e) => updateSetting('show_bubbles', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              {/* GAMEPLAY SECTION */}
-              <div class="settings-section">
-                <h3 class="settings-section-title">
-                  <span>🎮</span> {t('settings.section_gameplay')}
-                </h3>
-
-                {/* Incomplete line info */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.line_info_title')}</span>
-                    <span class="setting-desc">{t('settings.line_info_desc')}</span>
-                  </div>
-                  <select
-                    data-testid="setting-line-info"
-                    value={settings.line_info}
-                    onChange={(e) => updateSetting('line_info', e.currentTarget.value as any)}
-                    class="setting-select"
-                  >
-                    <option value="none">{t('settings.line_info_none')}</option>
-                    <option value="missing">{t('settings.line_info_missing')}</option>
-                    <option value="current">{t('settings.line_info_current')}</option>
-                  </select>
-                </div>
-
-                {/* Highlight finished rows/columns */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.highlight_hints_title')}</span>
-                    <span class="setting-desc">{t('settings.highlight_hints_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-highlight-hints"
-                      checked={settings.highlight_finished_row_col}
-                      onChange={(e) => updateSetting('highlight_finished_row_col', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Highlight hovered line */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.highlight_grid_title')}</span>
-                    <span class="setting-desc">{t('settings.highlight_grid_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-highlight-grid"
-                      checked={settings.highlight_grid}
-                      onChange={(e) => updateSetting('highlight_grid', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Show water preview */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.show_preview_title')}</span>
-                    <span class="setting-desc">{t('settings.show_preview_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-show-preview"
-                      checked={settings.show_grid_preview}
-                      onChange={(e) => updateSetting('show_grid_preview', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Hide simple "?" hints */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.hide_unknown_title')}</span>
-                    <span class="setting-desc">{t('settings.hide_unknown_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-hide-unknown"
-                      checked={settings.hide_unknown}
-                      onChange={(e) => updateSetting('hide_unknown', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Color "?" hints */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.progress_on_unknown_title')}</span>
-                    <span class="setting-desc">{t('settings.progress_on_unknown_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-progress-unknown"
-                      checked={settings.progress_on_unknown}
-                      onChange={(e) => updateSetting('progress_on_unknown', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Show timer */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.show_timer_title')}</span>
-                    <span class="setting-desc">{t('settings.show_timer_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-show-timer"
-                      checked={settings.show_timer}
-                      onChange={(e) => updateSetting('show_timer', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Skip animations */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.skip_anims_title')}</span>
-                    <span class="setting-desc">{t('settings.skip_anims_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-skip-anims"
-                      checked={settings.skip_animations}
-                      onChange={(e) => updateSetting('skip_animations', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              {/* ACCESSIBILITY SECTION */}
-              <div class="settings-section">
-                <h3 class="settings-section-title">
-                  <span>👓</span> {t('settings.section_accessibility')}
-                </h3>
-
-                {/* Increase hints font size */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.bigger_hints_title')}</span>
-                    <span class="setting-desc">{t('settings.bigger_hints_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-bigger-hints"
-                      checked={settings.bigger_hints_font}
-                      onChange={(e) => updateSetting('bigger_hints_font', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Thicker walls */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.thicker_walls_title')}</span>
-                    <span class="setting-desc">{t('settings.thicker_walls_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-thicker-walls"
-                      checked={settings.thicker_walls}
-                      onChange={(e) => updateSetting('thicker_walls', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              {/* CONTROLS SECTION */}
-              <div class="settings-section">
-                <h3 class="settings-section-title">
-                  <span>🕹️</span> {t('settings.section_controls')}
-                </h3>
-
-                {/* Fill with drag */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.drag_content_title')}</span>
-                    <span class="setting-desc">{t('settings.drag_content_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-drag-content"
-                      checked={settings.drag_content}
-                      onChange={(e) => updateSetting('drag_content', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Invert mouse buttons */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.invert_mouse_title')}</span>
-                    <span class="setting-desc">{t('settings.invert_mouse_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="setting-invert-mouse"
-                      checked={settings.invert_mouse}
-                      onChange={(e) => updateSetting('invert_mouse', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-
-                {/* Auto-flood air */}
-                <div class="setting-item">
-                  <div class="setting-info">
-                    <span class="setting-title">{t('settings.auto_flood_air_title')}</span>
-                    <span class="setting-desc">{t('settings.auto_flood_air_desc')}</span>
-                  </div>
-                  <label class="setting-toggle">
-                    <input
-                      type="checkbox"
-                      data-testid="auto-flood-air"
-                      checked={settings.auto_flood_air}
-                      onChange={(e) => updateSetting('auto_flood_air', e.currentTarget.checked)}
-                      class="checkbox-input"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showShortcuts && (
-        <div
-          data-testid="shortcuts-modal"
-          class="modal-backdrop"
-          onClick={() => setShowShortcuts(false)}
-        >
-          <div
-            class="shortcuts-dialog"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div class="shortcuts-header">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">⌨️</span>
-                <h2 class="shortcuts-title godot-text-outline">{t('shortcuts.title')}</h2>
-              </div>
-              <button
-                data-testid="btn-close-shortcuts"
-                onClick={() => setShowShortcuts(false)}
-                class="shortcuts-close-btn"
-                title={t('account.close')}
-                aria-label={t('account.close')}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div class="shortcuts-content">
-              {/* Mouse & Touch */}
-              <div class="shortcut-section">
-                <h3 class="shortcut-section-title">{t('shortcuts.sec_mouse')}</h3>
-                <div class="shortcut-list">
-                  <div class="shortcut-item">
-                    <span class="shortcut-key">{t('shortcuts.tap_click')}</span>
-                    <span class="shortcut-desc">{t('shortcuts.tap_click_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <span class="shortcut-key">{t('shortcuts.right_click')}</span>
-                    <span class="shortcut-desc">{t('shortcuts.right_click_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <span class="shortcut-key">{t('shortcuts.middle_click')}</span>
-                    <span class="shortcut-desc">{t('shortcuts.middle_click_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <span class="shortcut-key">{t('shortcuts.drag')}</span>
-                    <span class="shortcut-desc">{t('shortcuts.drag_desc')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hover Keys */}
-              <div class="shortcut-section">
-                <h3 class="shortcut-section-title">{t('shortcuts.sec_hover')}</h3>
-                <p class="shortcut-section-hint">{t('shortcuts.hover_hint')}</p>
-                <div class="shortcut-list">
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">W</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_w_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">X</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_x_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">B</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_b_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">N</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_n_desc')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tool Selection */}
-              <div class="shortcut-section">
-                <h3 class="shortcut-section-title">{t('shortcuts.sec_tools')}</h3>
-                <div class="shortcut-list">
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5">
-                      <kbd class="kbd">1</kbd>
-                      <kbd class="kbd">2</kbd>
-                      <kbd class="kbd">3</kbd>
-                      <kbd class="kbd">4</kbd>
-                    </div>
-                    <span class="shortcut-desc">{t('shortcuts.key_14_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5">
-                      <kbd class="kbd">Tab</kbd> / <kbd class="kbd">Shift+Tab</kbd>
-                    </div>
-                    <span class="shortcut-desc">{t('shortcuts.key_tab_desc')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions & Game */}
-              <div class="shortcut-section">
-                <h3 class="shortcut-section-title">{t('shortcuts.sec_actions')}</h3>
-                <div class="shortcut-list">
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5">
-                      <kbd class="kbd">Z</kbd> / <kbd class="kbd">Ctrl+Z</kbd>
-                    </div>
-                    <span class="shortcut-desc">{t('shortcuts.key_undo_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5">
-                      <kbd class="kbd">Y</kbd> / <kbd class="kbd">Ctrl+Y</kbd>
-                    </div>
-                    <span class="shortcut-desc">{t('shortcuts.key_redo_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">R</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_restart_desc')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">Esc</kbd> / <kbd class="kbd">?</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.key_shortcuts_desc')}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Drawing / Marker Mode */}
-              <div class="shortcut-section">
-                <h3 class="shortcut-section-title">{t('shortcuts.sec_drawing')}</h3>
-                <div class="shortcut-list">
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">Space</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.toggle_draw')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">Tab</kbd> / <kbd class="kbd">E</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.toggle_eraser')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <span class="shortcut-key">{t('shortcuts.right_click')} & Drag</span>
-                    <span class="shortcut-desc">{t('shortcuts.opposite_tool')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">B</kbd><kbd class="kbd">P</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.pen_mode')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">C</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.cycle_color')}</span>
-                  </div>
-                  <div class="shortcut-item">
-                    <div class="flex gap-1.5"><kbd class="kbd">X</kbd><kbd class="kbd">Del</kbd></div>
-                    <span class="shortcut-desc">{t('shortcuts.clear_drawings')}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showLevelsModal && (
-        <div
-          data-testid="levels-modal"
-          class="modal-backdrop"
-          onClick={() => setShowLevelsModal(false)}
-        >
-          <div
-            class="shortcuts-dialog"
-            onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '440px' }}
-          >
-            <div class="shortcuts-header">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">🧪</span>
-                <h2 class="shortcuts-title godot-text-outline">Test Levels</h2>
-              </div>
-              <button
-                data-testid="btn-close-levels-modal"
-                onClick={() => setShowLevelsModal(false)}
-                class="shortcuts-close-btn"
-                title="Close (Esc)"
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div class="shortcuts-content">
-              <p class="text-xs opacity-75 mb-3 text-[var(--game-mint)]">
-                Fixed levels for testing (will be removed later):
-              </p>
-              <div class="grid grid-cols-2 gap-2">
-                {levelKeys.map(key => {
-                  const isCurrent = !isDailyMode && key === currentLevelKey;
-                  const isDone = completedLevels.has(key);
-                  const statusClass = isCurrent ? 'level-btn-current' : isDone ? 'level-btn-done' : 'level-btn-unsolved';
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        loadLevel(key);
-                        setShowLevelsModal(false);
-                      }}
-                      class={`level-btn ${statusClass} justify-center w-full`}
-                    >
-                      {isDone && <img src={iconUrl('checkmark.png')} class="w-3.5 h-3.5 object-contain" alt="done" />}
-                      <span>{key}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <LevelSelectModal
+        isOpen={showLevelsModal}
+        onClose={() => setShowLevelsModal(false)}
+        levelKeys={levelKeys}
+        currentLevelKey={currentLevelKey}
+        isDailyMode={isDailyMode}
+        completedLevels={completedLevels}
+        onSelectLevel={loadLevel}
+        iconUrl={iconUrl}
+      />
 
       <LeaderboardModal
         isOpen={showLeaderboardModal}
