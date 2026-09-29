@@ -76,11 +76,11 @@ export function LeaderboardView({
     try {
       const data = await playFabService.getLeaderboard(activeVersion);
       setEntries(data);
-      setCurrentDisplayName(playFabService.getDisplayName() || "Anonymous");
+      setCurrentDisplayName(playFabService.getDisplayName() || t("leaderboard.anonymous"));
       setCurrentAvatarUrl(playFabService.getAvatarUrl());
       setCurrentFlair(playFabService.getFlair());
     } catch (err: any) {
-      setError(err?.errorMessage || err?.message || "Failed to load leaderboard");
+      setError(err?.errorMessage || err?.message || t("leaderboard.err_load"));
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ export function LeaderboardView({
       setIsEditingName(false);
       loadLeaderboard();
     } catch (err: any) {
-      setNameError(err?.errorMessage || err?.message || "Failed to update name");
+      setNameError(err?.errorMessage || err?.message || t("leaderboard.err_update_name"));
     } finally {
       setNameSaving(false);
     }
@@ -219,7 +219,7 @@ export function LeaderboardView({
               )}
               <div class="flex items-center gap-1.5 leading-tight">
                 <span class="font-bold text-white truncate max-w-[130px] font-game text-xs">
-                  {currentDisplayName || "Anonymous"}
+                  {currentDisplayName || t("leaderboard.anonymous")}
                 </span>
                 {currentFlair && (
                   <span

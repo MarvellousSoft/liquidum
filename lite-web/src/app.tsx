@@ -1902,8 +1902,8 @@ export function App() {
           data-testid="btn-hamburger"
           onClick={() => setShowMobileSidebar(true)}
           class="btn-hamburger"
-          title="Menu"
-          aria-label="Menu"
+          title={t('toolbar.menu')}
+          aria-label={t('toolbar.menu')}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="6" x2="21" y2="6" />
@@ -1918,11 +1918,11 @@ export function App() {
         <div class="mobile-sidebar-backdrop" onClick={() => setShowMobileSidebar(false)}>
           <div class="mobile-sidebar" onClick={(e) => e.stopPropagation()}>
             <div class="mobile-sidebar-header">
-              <span class="mobile-sidebar-title">Menu</span>
+              <span class="mobile-sidebar-title">{t('toolbar.menu')}</span>
               <button
                 class="mobile-sidebar-close"
                 onClick={() => setShowMobileSidebar(false)}
-                aria-label="Close menu"
+                aria-label={t('toolbar.close_menu')}
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -2203,7 +2203,7 @@ export function App() {
                               key={sizeStr}
                               data-testid={`aquarium-hint-${sizeStr}`}
                               class={`aquarium-card ${cardClass}`}
-                              title={`Aquarium of size ${targetSize}: ${actualCount} / ${expectedCount} placed`}
+                              title={t('hints.aquarium_tooltip', { size: targetSize, actual: actualCount, expected: expectedCount })}
                             >
                               <div class={`aq-tank ${targetSize === 0.5 ? 'aq-tank-half' : ''}`}>
                                 {targetSize > 0 && (
@@ -2247,10 +2247,10 @@ export function App() {
               >
                 <div class="text-5xl mb-2">{dailyMeta?.emoji || "🐟"}</div>
                 <h3 class="text-2xl font-bold text-cyan-300 mb-1">
-                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`) : "Daily Puzzle"}
+                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`) : t('game.daily_fallback_title')}
                 </h3>
                 <p class="text-xs text-slate-300 opacity-90 mb-4 max-w-xs">
-                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.desc`) : "Solve the daily puzzle as fast as you can with minimal mistakes!"}
+                  {dailyMeta ? t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.desc`) : t('game.daily_fallback_desc')}
                 </p>
 
                 <div class="flex items-center gap-2.5 mb-5 flex-wrap justify-center">
@@ -2258,7 +2258,7 @@ export function App() {
                     <div
                       data-testid="daily-time-left"
                       class="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono"
-                      title="Time remaining to solve today's daily puzzle"
+                      title={t('game.daily_time_left_tooltip')}
                     >
                       <span>⏳</span>
                       <span>{formatTimeLeft(timeLeftSeconds)}</span>

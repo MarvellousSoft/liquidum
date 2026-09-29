@@ -31,7 +31,9 @@
     "start_puzzle": "▶ Start Puzzle",
     "done": "Done",
     "clear_all": "Clear All",
-    "change_color": "Change Color"
+    "change_color": "Change Color",
+    "menu": "Menu",
+    "close_menu": "Close menu"
   },
   "victory": {
     "title": "🎉 Level Complete! 🎉",
@@ -118,7 +120,9 @@
     "recovery_note_before": "If you also play on Steam or are moving from another browser, copy its Recovery Key from Account Settings and restore it",
     "recovery_note_link": "here",
     "recovery_note_after": "to keep your leaderboard presence and streak.",
-    "got_it": "Got it"
+    "got_it": "Got it",
+    "close": "Close",
+    "close_esc": "Close (Esc)"
   },
   "mechanics": {
     "aquariums": {
@@ -213,7 +217,17 @@
     "err_name_length": "Display name must be between 3 and 25 characters",
     "err_empty_key": "Please enter a valid recovery key",
     "err_same_key": "This is already the currently active account key",
-    "confirm_restore": "Restoring this key will switch your browser session to that account. Continue?"
+    "confirm_restore": "Restoring this key will switch your browser session to that account. Continue?",
+    "sync_steam_title": "Sync Steam Account",
+    "sync_steam_desc": "Do you want to switch to your Steam account? This will link your leaderboard scores and streak with the Steam version.",
+    "sync_steam_confirm": "Switch to Steam Account",
+    "sync_steam_cancel": "Keep Current Account",
+    "default_display_name": "Anonymous",
+    "default_player_name": "Player",
+    "err_update_name": "Failed to update display name",
+    "err_update_avatar": "Failed to update avatar URL",
+    "err_remove_avatar": "Failed to remove avatar",
+    "err_restore_key": "Failed to restore account from key"
   },
   "leaderboard": {
     "title": "Daily Leaderboard",
@@ -234,7 +248,10 @@
     "col_mistakes": "Mistakes",
     "col_time": "Time",
     "you": "(You)",
-    "close": "Close"
+    "close": "Close",
+    "anonymous": "Anonymous",
+    "err_load": "Failed to load leaderboard",
+    "err_update_name": "Failed to update name"
   },
   "shortcuts": {
     "title": "Controls",
@@ -247,6 +264,7 @@
     "middle_click_desc": "Place / remove Boat (⛵)",
     "drag": "Click & Drag",
     "drag_desc": "Draw or erase across multiple cells",
+    "right_click_drag": "Right Click & Drag",
     "right_click_hint": "Right Click Hint",
     "right_click_hint_desc": "Dim row or column hint",
     "sec_hover": "✨ Keyboard Shortcuts",
@@ -331,7 +349,8 @@
     "stat_boats": "Boats",
     "stat_boat_tooltip": "Total boats: {{current}} / {{total}} placed",
     "stat_over": "⚠ Over",
-    "aquariums_label": "Aquariums:"
+    "aquariums_label": "Aquariums:",
+    "aquarium_tooltip": "Aquarium of size {{size}}: {{actual}} / {{expected}} placed"
   },
   "game": {
     "generating_daily": "Generating Daily Level for {{date}}...",
@@ -340,6 +359,9 @@
     "play_daily_title": "Play Daily Level",
     "test_levels": "🧪 Test Levels",
     "test_levels_title": "Fixed levels for testing",
-    "test_levels_desc": "Fixed levels for testing (will be removed later):"
+    "test_levels_desc": "Fixed levels for testing (will be removed later):",
+    "daily_time_left_tooltip": "Time remaining to solve today's daily puzzle",
+    "daily_fallback_title": "Daily Puzzle",
+    "daily_fallback_desc": "Solve the daily puzzle as fast as you can with minimal mistakes!"
   }
 }

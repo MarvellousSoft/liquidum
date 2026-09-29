@@ -14,7 +14,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
   useModalScrollLock(isOpen);
 
   const { t } = useTranslation();
-  const [displayName, setDisplayName] = useState<string>(playFabService.getDisplayName() || "Anonymous");
+  const [displayName, setDisplayName] = useState<string>(() => playFabService.getDisplayName() || t("account.default_display_name"));
   const [avatarUrl, setAvatarUrl] = useState<string>(playFabService.getAvatarUrl() || "");
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string>(playFabService.getAvatarUrl() || "");
   const [previewError, setPreviewError] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
 
   // Sync profile data on open or when profile events fire
   useEffect(() => {
-    setDisplayName(playFabService.getDisplayName() || "Anonymous");
+    setDisplayName(playFabService.getDisplayName() || t("account.default_display_name"));
     const currentAvatar = playFabService.getAvatarUrl() || "";
     setAvatarUrl(currentAvatar);
     setAvatarPreviewUrl(currentAvatar);
@@ -82,7 +82,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     } catch (err: any) {
       setNameMessage({
         type: "error",
-        text: err?.errorMessage || err?.message || "Failed to update display name",
+        text: err?.errorMessage || err?.message || t("account.err_update_name"),
       });
     } finally {
       setNameSaving(false);
@@ -106,7 +106,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     } catch (err: any) {
       setAvatarMessage({
         type: "error",
-        text: err?.errorMessage || err?.message || "Failed to update avatar URL",
+        text: err?.errorMessage || err?.message || t("account.err_update_avatar"),
       });
     } finally {
       setAvatarSaving(false);
@@ -126,7 +126,7 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     } catch (err: any) {
       setAvatarMessage({
         type: "error",
-        text: err?.errorMessage || err?.message || "Failed to remove avatar",
+        text: err?.errorMessage || err?.message || t("account.err_remove_avatar"),
       });
     } finally {
       setAvatarSaving(false);
@@ -201,17 +201,17 @@ export function AccountModal({ isOpen, onClose, onAccountUpdated }: AccountModal
     setRestoreMessage(null);
     try {
       const res = await playFabService.switchAccount(cleanKey);
-      setDisplayName(res.displayName || "Anonymous");
+      setDisplayName(res.displayName || t("account.default_display_name"));
       setAvatarUrl(res.avatarUrl || "");
       setAvatarPreviewUrl(res.avatarUrl || "");
       setRecoveryKey(cleanKey);
-      setRestoreMessage({ type: "success", text: t("account.msg_restored", { name: res.displayName || "Player" }) });
+      setRestoreMessage({ type: "success", text: t("account.msg_restored", { name: res.displayName || t("account.default_player_name") }) });
       setRestoreKeyInput("");
       onAccountUpdated?.();
     } catch (err: any) {
       setRestoreMessage({
         type: "error",
-        text: err?.errorMessage || err?.message || "Failed to restore account from key",
+        text: err?.errorMessage || err?.message || t("account.err_restore_key"),
       });
     } finally {
       setIsRestoring(false);

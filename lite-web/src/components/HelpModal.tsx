@@ -251,8 +251,8 @@ export function HelpModal({ isOpen, onClose, dailyDate, onOpenAccount, onOpenCon
             data-testid="btn-close-help"
             onClick={onClose}
             class="shortcuts-close-btn"
-            title="Close (Esc)"
-            aria-label="Close"
+            title={t('help.close_esc')}
+            aria-label={t('help.close')}
           >
             ✕
           </button>

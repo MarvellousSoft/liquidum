@@ -31,7 +31,9 @@
     "start_puzzle": "▶ Iniciar Nível",
     "done": "Concluir",
     "clear_all": "Limpar Tudo",
-    "change_color": "Mudar Cor"
+    "change_color": "Mudar Cor",
+    "menu": "Menu",
+    "close_menu": "Fechar menu"
   },
   "victory": {
     "title": "🎉 Nível Concluído! 🎉",
@@ -118,7 +120,9 @@
     "recovery_note_before": "Se você também joga na Steam ou está mudando de navegador, copie sua Chave de Recuperação nas Configurações de Conta e restaure-a",
     "recovery_note_link": "aqui",
     "recovery_note_after": "para manter sua presença no ranking e sequência de vitórias.",
-    "got_it": "Entendi"
+    "got_it": "Entendi",
+    "close": "Fechar",
+    "close_esc": "Fechar (Esc)"
   },
   "mechanics": {
     "aquariums": {
@@ -213,7 +217,17 @@
     "err_name_length": "O nome de exibição deve ter entre 3 e 25 caracteres",
     "err_empty_key": "Insira uma chave de recuperação válida",
     "err_same_key": "Esta já é a chave da conta atualmente ativa",
-    "confirm_restore": "Restaurar esta chave alternará sua sessão do navegador para essa conta. Continuar?"
+    "confirm_restore": "Restaurar esta chave alternará sua sessão do navegador para essa conta. Continuar?",
+    "sync_steam_title": "Sincronizar Conta Steam",
+    "sync_steam_desc": "Deseja mudar para a sua conta Steam? Isso conectará suas pontuações no ranking e sequência de vitórias com a versão Steam.",
+    "sync_steam_confirm": "Mudar para Conta Steam",
+    "sync_steam_cancel": "Manter Conta Atual",
+    "default_display_name": "Anônimo",
+    "default_player_name": "Jogador",
+    "err_update_name": "Falha ao atualizar nome de exibição",
+    "err_update_avatar": "Falha ao atualizar URL do avatar",
+    "err_remove_avatar": "Falha ao remover avatar",
+    "err_restore_key": "Falha ao restaurar conta da chave"
   },
   "leaderboard": {
     "title": "Ranking Diário",
@@ -234,7 +248,10 @@
     "col_mistakes": "Erros",
     "col_time": "Tempo",
     "you": "(Você)",
-    "close": "Fechar"
+    "close": "Fechar",
+    "anonymous": "Anônimo",
+    "err_load": "Falha ao carregar o ranking",
+    "err_update_name": "Falha ao atualizar o nome"
   },
   "shortcuts": {
     "title": "Controles",
@@ -247,6 +264,7 @@
     "middle_click_desc": "Colocar / remover Barco (⛵)",
     "drag": "Clicar & Arrastar",
     "drag_desc": "Desenhar ou apagar várias células",
+    "right_click_drag": "Botão Direito & Arrastar",
     "right_click_hint": "Botão Direito nas Dicas",
     "right_click_hint_desc": "Esconde a dica da linha ou coluna",
     "sec_hover": "✨ Atalhos de Teclado",
@@ -331,7 +349,8 @@
     "stat_boats": "Barcos",
     "stat_boat_tooltip": "Total de barcos: {{current}} / {{total}} colocados",
     "stat_over": "⚠ Acima",
-    "aquariums_label": "Aquários:"
+    "aquariums_label": "Aquários:",
+    "aquarium_tooltip": "Aquário de tamanho {{size}}: {{actual}} / {{expected}} posicionados"
   },
   "game": {
     "generating_daily": "Gerando Nível Diário para {{date}}...",
@@ -340,6 +359,9 @@
     "play_daily_title": "Jogar Nível Diário",
     "test_levels": "🧪 Níveis de Teste",
     "test_levels_title": "Níveis fixos para teste",
-    "test_levels_desc": "Níveis fixos para teste (serão removidos futuramente):"
+    "test_levels_desc": "Níveis fixos para teste (serão removidos futuramente):",
+    "daily_time_left_tooltip": "Tempo restante para resolver o desafio diário de hoje",
+    "daily_fallback_title": "Desafio Diário",
+    "daily_fallback_desc": "Resolva o desafio diário o mais rápido que puder com o mínimo de erros!"
   }
 }

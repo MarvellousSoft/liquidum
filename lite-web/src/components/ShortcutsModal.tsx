@@ -264,7 +264,7 @@ export function ShortcutsModal({ isOpen, onClose }: ShortcutsModalProps) {
                   <span class="shortcut-desc">{t('shortcuts.toggle_eraser')}</span>
                 </div>
                 <div class="shortcut-item">
-                  <span class="shortcut-key">{t('shortcuts.right_click')} & Drag</span>
+                  <span class="shortcut-key">{t('shortcuts.right_click_drag')}</span>
                   <span class="shortcut-desc">{t('shortcuts.opposite_tool')}</span>
                 </div>
                 <div class="shortcut-item">
