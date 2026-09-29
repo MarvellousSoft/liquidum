@@ -296,7 +296,7 @@ func setup(try_load := true) -> void:
 	if not grid.editor_mode():
 		grid.prettify_hints(is_procedurally_generated())
 	if not Global.is_mobile:
-		%DevButtons.setup(grid.editor_mode())
+		%DevButtons.setup(grid)
 	else:
 		if section_number == 5 and level_number == 1:
 			%AquariumButton/FingerAnim.show()
@@ -854,6 +854,14 @@ func _on_dev_buttons_load_grid(g: GridModel) -> void:
 	GridNode.update()
 	_apply_visibility(visibility)
 	scale_grid()
+
+func _on_dev_buttons_set_variant(variant: GridModel.RuleVariant, val: bool) -> void:
+	if val:
+		if not GridNode.grid_logic.rule_variants().has(variant):
+			GridNode.grid_logic.rule_variants().append(variant)
+	else:
+		GridNode.grid_logic.rule_variants().erase(variant)
+	print("Changed variants to: ", GridNode.grid_logic.rule_variants())
 
 
 func _on_button_mouse_entered() -> void:

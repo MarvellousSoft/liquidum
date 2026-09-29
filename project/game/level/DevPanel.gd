@@ -11,10 +11,12 @@ signal copy_to_editor()
 signal rotate_clock()
 signal mirror_horizontal()
 signal mirror_vertical()
+signal set_variant(variant: GridModel.RuleVariant, val: bool)
 
 
 @onready var StrategyList: MenuButton = $StrategyList
 @onready var ForcedStrategyList: MenuButton = $ForcedStrategyList
+@onready var Variants: MenuButton = $Variants
 @onready var Guesses: SpinBox = $Guesses
 @onready var FlavorOptions: OptionButton = $FlavorOptions
 @onready var CancelSolve: Button = %CancelSolve
@@ -45,7 +47,17 @@ func _ready() -> void:
 		FlavorOptions.add_item(flavor)
 	FlavorOptions.add_item("No flavor", 1000)
 	FlavorOptions.selected = RandomFlavors.Flavor.size()
+	# Add options to variants
+	popup = Variants.get_popup()
+	popup.hide_on_checkable_item_selection = false
+	popup.index_pressed.connect(_variant_toggled)
+	for variant in GridModel.RuleVariant:
+		popup.add_check_item(variant, GridModel.RuleVariant[variant])
 
+func _variant_toggled(index: int) -> void:
+	AudioManager.play_sfx("button_pressed")
+	Variants.get_popup().toggle_item_checked(index)
+	set_variant.emit(index as GridModel.RuleVariant, Variants.get_popup().is_item_checked(index))
 
 func _toggled_item(index: int, button: MenuButton) -> void:
 	AudioManager.play_sfx("button_pressed")
@@ -135,15 +147,22 @@ func selected_strategies() -> Array:
 func selected_forced_strategies() -> Array:
 	return _checked_items(ForcedStrategyList.get_popup())
 
-func setup(editor_mode: bool) -> void:
+func _reload_variants(grid: GridModel) -> void:
+	var popup := Variants.get_popup()
+	for variant in GridModel.RuleVariant.values():
+		popup.set_item_checked(variant, grid.rule_variants().has(variant))
+
+func setup(grid: GridModel) -> void:
+	var editor_mode := grid.editor_mode()
 	for node in [$Strategies, $GodMode]:
 		node.visible = not editor_mode
-	for node in [$Generate, $Interesting, $Seed, $Diags, $Boats, $Aquariums, $CellHintsLabel, $CellHintsSlider, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions, $RotateClock, $MirrorH, $MirrorV]:
+	for node in [Variants, $Generate, $Interesting, $Seed, $Diags, $Boats, $Aquariums, $CellHintsLabel, $CellHintsSlider, KeepWalls, KeepWater, KeepVis, $Paste, FlavorOptions, $RotateClock, $MirrorH, $MirrorV]:
 		node.visible = editor_mode
 	if editor_mode:
 		_on_keep_walls_toggled(KeepWalls.button_pressed)
 		_on_keep_water_toggled(KeepWater.button_pressed)
 		_on_keep_vis_toggled(KeepVis.button_pressed)
+		_reload_variants(grid)
 
 
 func gen_level(cur_grid: GridModel, cur_hints: Level.HintVisibility) -> GridModel:
@@ -151,6 +170,7 @@ func gen_level(cur_grid: GridModel, cur_hints: Level.HintVisibility) -> GridMode
 	var g := await _gen_puzzle(cur_grid, cur_hints)
 	if g != null:
 		$FullSolveType.text = ""
+		_reload_variants(g)
 	$Generate.disabled = false
 	return g
 
@@ -206,6 +226,7 @@ func _on_paste_pressed():
 		g = GridImpl.import_data(data, GridModel.LoadMode.Testing)
 	else:
 		g = GridImpl.from_str(txt, GridModel.LoadMode.Testing)
+	_reload_variants(g)
 	load_grid.emit(g)
 
 
@@ -237,7 +258,7 @@ func do_copy_to_editor(grid: GridModel, hints: Level.HintVisibility) -> void:
 		g = GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Testing)
 		hints.apply_to_grid(g)
 	assert(g.are_hints_satisfied())
-	EditorHub.save_to_editor("Copied from DevPanel", g)
+	EditorHub.save_to_editor("Copied via DevPanel", g)
 
 
 func _on_keep_walls_toggled(on: bool) -> void:

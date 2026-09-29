@@ -917,6 +917,7 @@ unique_name_in_owner = true
 [connection signal="mirror_vertical" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_mirror_vertical"]
 [connection signal="rotate_clock" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_rotate_clock"]
 [connection signal="save" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_save"]
+[connection signal="set_variant" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_set_variant"]
 [connection signal="use_strategies" from="DevContainer/MarginContainer/DevButtons" to="." method="_on_dev_buttons_use_strategies"]
 [connection signal="mouse_entered" from="PlaytestButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlaytestButton" to="." method="_on_playtest_button_pressed"]
