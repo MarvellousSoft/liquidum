@@ -69,6 +69,12 @@ function formatSolveTime(totalSeconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
+export function trackEvent(eventName: string, params: Record<string, any> = {}) {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', eventName, params);
+  }
+}
+
 function toEngineCorner(c: Corner | E.Corner): E.Corner {
   switch (c) {
     case Corner.TopLeft: return E.Corner.TopLeft;
@@ -122,6 +128,7 @@ export function App() {
 
   const updateSetting = <K extends keyof GameSettings>(key: K, value: GameSettings[K]) => {
     saveSettings({ [key]: value });
+    trackEvent('setting_changed', { setting_name: key, new_value: value });
   };
 
   const autoFloodAir = settings.auto_flood_air;
@@ -130,7 +137,14 @@ export function App() {
   const setIsDarkMode = (val: boolean) => updateSetting('dark_mode', val);
 
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number; corner: Corner } | null>(null);
-  const [selectedTool, setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
+  const [selectedTool, _setSelectedTool] = useState<Content.Water | Content.Boat | Content.NoWater | Content.NoBoat>(Content.Water);
+  
+  const setSelectedTool = (tool: Content.Water | Content.Boat | Content.NoWater | Content.NoBoat) => {
+    _setSelectedTool(tool);
+    const toolName = tool === Content.Water ? 'water' : tool === Content.NoWater ? 'air' : tool === Content.Boat ? 'boat' : 'maybe_boat';
+    trackEvent('tool_used', { tool_name: toolName });
+  };
+  
   const [mistakes, setMistakes] = useState<number>(0);
   const mistakesRef = useRef(mistakes);
   mistakesRef.current = mistakes;
@@ -208,7 +222,16 @@ export function App() {
   }, []);
 
   const DRAW_COLORS = ['#ff6a6a', '#3b82f6', '#facc15', '#3adc6b'];
-  const [isDrawingMode, setIsDrawingMode] = useState<boolean>(false);
+  const [isDrawingMode, _setIsDrawingMode] = useState<boolean>(false);
+  const setIsDrawingMode = (val: boolean | ((prev: boolean) => boolean)) => {
+    _setIsDrawingMode((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      if (next && !prev) {
+        trackEvent('tool_used', { tool_name: 'draw_mode' });
+      }
+      return next;
+    });
+  };
   const isDrawingModeRef = useRef(isDrawingMode);
   isDrawingModeRef.current = isDrawingMode;
 
@@ -445,6 +468,14 @@ export function App() {
           });
         }
 
+        // Google Analytics Custom Event
+        trackEvent('daily_completed', {
+          'event_category': 'gameplay',
+          'event_label': dailyDateRef.current,
+          'streak': streakResult.currentStreak,
+          'mistakes': mistakesRef.current
+        });
+
         // Submit score to PlayFab
         playFabService
           .submitDailyScore(
@@ -472,6 +503,7 @@ export function App() {
   }, [won]);
 
   const handleUndo = () => {
+    trackEvent('tool_used', { tool_name: 'undo' });
     const engine = engineRef.current;
     if (!engine) return;
     if (engine.undo()) {
@@ -490,6 +522,7 @@ export function App() {
   };
 
   const handleRedo = () => {
+    trackEvent('tool_used', { tool_name: 'redo' });
     const engine = engineRef.current;
     if (!engine) return;
     if (engine.redo()) {
@@ -681,6 +714,8 @@ export function App() {
         setSecondsElapsed(0);
       }
 
+      trackEvent('level_started', { level_type: 'practice', level_id: canonicalKey });
+
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
@@ -757,6 +792,8 @@ export function App() {
         setHasStarted(false);
       }
 
+      trackEvent('level_started', { level_type: 'daily', level_id: targetDate });
+
       setBlinkingCells(new Map());
       setCanUndo(false);
       setCanRedo(false);
@@ -769,6 +806,11 @@ export function App() {
   };
 
   const handleRestart = () => {
+    trackEvent('level_restarted', {
+      level_type: isDailyModeRef.current ? 'daily' : 'practice',
+      time_spent: secondsElapsedRef.current,
+      current_mistakes: mistakesRef.current
+    });
     setSecondsElapsed(0);
     setClearCanvasTrigger(c => c + 1);
     if (isDailyModeRef.current) {
@@ -785,6 +827,11 @@ export function App() {
   };
 
   const handleShare = async () => {
+    trackEvent('share_clicked', {
+      level_type: isDailyModeRef.current ? 'daily' : 'practice',
+      streak: streakData.currentStreak
+    });
+
     const text = generateDailyShareText({
       dateStr: dailyDateRef.current,
       seconds: secondsElapsedRef.current,
@@ -2021,6 +2068,7 @@ export function App() {
                 rel="noopener noreferrer"
                 class="btn-steam flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs transition shadow-md w-full max-w-[280px]"
                 title={t('victory.steam_link_title')}
+                onClick={() => trackEvent('steam_promo_clicked', { source: 'victory_screen' })}
               >
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                   <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z" />
