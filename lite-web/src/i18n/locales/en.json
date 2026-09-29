@@ -1,4 +1,9 @@
 {
+  "share": {
+    "daily_prefix": "I won #liquidum daily on",
+    "mistake": "mistake",
+    "mistakes": "mistakes"
+  },
   "toolbar": {
     "water": "Water",
     "air": "Air",

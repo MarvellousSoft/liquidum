@@ -28,6 +28,17 @@ export const WEEKDAY_INFO: Record<number, { name: string; desc: string; emoji: s
     6: { name: "One Row Saturday", desc: "Only one row hint is visible.", emoji: "1️⃣" },
 };
 
+/** Maps weekday index (0=Sun) to its i18n key suffix under `daily_theme.*` */
+export const WEEKDAY_I18N_KEY: Record<number, string> = {
+    0: "sun",
+    1: "mon",
+    2: "tue",
+    3: "wed",
+    4: "thu",
+    5: "fri",
+    6: "sat",
+};
+
 export function get_today_str(d: Date = new Date()): string {
     const y = d.getUTCFullYear();
     const m = String(d.getUTCMonth() + 1).padStart(2, '0');
@@ -85,11 +96,14 @@ export function formatSolveTimeGodot(secs: number): string {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
-export function formatMistakesStr(mistakes: number): string {
+/** Translator function signature compatible with i18next's `t`. */
+export type TranslatorFn = (key: string) => string;
+
+export function formatMistakesStr(mistakes: number, t: TranslatorFn): string {
     if (mistakes === 0) {
-        return "🏆 0 mistakes";
+        return `🏆 0 ${t('share.mistakes')}`;
     }
-    return `❌ ${mistakes} ${mistakes > 1 ? "mistakes" : "mistake"}`;
+    return `❌ ${mistakes} ${t(mistakes > 1 ? 'share.mistakes' : 'share.mistake')}`;
 }
 
 export const SHARE_LINK = "linktr.ee/liquidum";
@@ -98,12 +112,14 @@ export function generateDailyShareText(opts: {
     dateStr: string;
     seconds: number;
     mistakes: number;
+    t: TranslatorFn;
 }): string {
     const { weekday } = parse_date(opts.dateStr);
-    const info = WEEKDAY_INFO[weekday] || { name: "Daily Level", emoji: "🐟" };
+    const info = WEEKDAY_INFO[weekday] || { emoji: "🐟" };
+    const i18nKey = WEEKDAY_I18N_KEY[weekday] || 'mon';
     const timeStr = formatSolveTimeGodot(opts.seconds);
-    const mistakesStr = formatMistakesStr(opts.mistakes);
-    return `I won #liquidum daily on ${opts.dateStr}\n\n${info.emoji} ${info.name}\n🕑 ${timeStr}\n${mistakesStr}\n${SHARE_LINK}`;
+    const mistakesStr = formatMistakesStr(opts.mistakes, opts.t);
+    return `${opts.t('share.daily_prefix')} ${opts.dateStr}\n\n${info.emoji} ${opts.t(`daily_theme.${i18nKey}.name`)}\n🕑 ${timeStr}\n${mistakesStr}\n${SHARE_LINK}`;
 }
 
 export function parse_date(date_str: string): { year: number; month: number; day: number; weekday: number } {

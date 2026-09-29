@@ -1,4 +1,5 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, beforeAll } from 'vitest';
+import i18next from '../src/i18n';
 import {
   parse_date,
   get_today_str,
@@ -13,6 +14,10 @@ import { getDailiesForYear } from '../src/engine/DailiesDatabase';
 import { Content } from '../src/model/GridData';
 
 describe('Daily Level Loading and Integration', () => {
+  beforeAll(async () => {
+    await i18next.changeLanguage('en');
+  });
+
   test('parse_date parses ISO date strings correctly', () => {
     const d1 = parse_date('2024-01-01');
     expect(d1.year).toBe(2024);
@@ -121,11 +126,14 @@ describe('Daily Level Loading and Integration', () => {
   });
 
   test('generateDailyShareText formats exact Godot parity result text', () => {
+    const t = i18next.t.bind(i18next);
+
     // Perfect solve (0 mistakes)
     const share0 = generateDailyShareText({
       dateStr: '2024-01-07', // Sunday
       seconds: 85,
       mistakes: 0,
+      t,
     });
     expect(share0).toBe(
       'I won #liquidum daily on 2024-01-07\n\n🐟 Aquarium Sunday\n🕑 01:25\n🏆 0 mistakes\nlinktr.ee/liquidum'
@@ -136,6 +144,7 @@ describe('Daily Level Loading and Integration', () => {
       dateStr: '2024-01-01', // Monday
       seconds: 65,
       mistakes: 1,
+      t,
     });
     expect(share1).toBe(
       'I won #liquidum daily on 2024-01-01\n\n💧 Basic Monday\n🕑 01:05\n❌ 1 mistake\nlinktr.ee/liquidum'
@@ -146,6 +155,7 @@ describe('Daily Level Loading and Integration', () => {
       dateStr: '2024-01-02', // Tuesday
       seconds: 3665, // 1h 1m 5s
       mistakes: 3,
+      t,
     });
     expect(share3).toBe(
       'I won #liquidum daily on 2024-01-02\n\n⛵ Secret Boat Tuesday\n🕑 1:01:05\n❌ 3 mistakes\nlinktr.ee/liquidum'

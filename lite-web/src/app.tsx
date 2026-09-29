@@ -837,6 +837,7 @@ export function App() {
       dateStr: dailyDateRef.current,
       seconds: secondsElapsedRef.current,
       mistakes: mistakesRef.current,
+      t,
     });
 
     const markCopied = () => {
