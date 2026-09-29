@@ -58,6 +58,7 @@ import {
   subscribeSettings,
 } from './engine/SettingsManager';
 import { useTranslation } from './i18n';
+import { SteamIcon } from './components/SteamIcon';
 
 const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 
@@ -1989,6 +1990,19 @@ export function App() {
               <span class="mobile-sidebar-icon">{isDarkMode ? '☀️' : '🌙'}</span>
               <span>{isDarkMode ? t('toolbar.switch_light') : t('toolbar.switch_dark')}</span>
             </button>
+
+            <div class="mobile-sidebar-divider" />
+            
+            <a
+              href="https://store.steampowered.com/app/2716690/Liquidum?utm_source=liteweb_persistent"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mobile-sidebar-item text-[#66c0f4]"
+              onClick={() => trackEvent('steam_promo_clicked', { source: 'sidebar' })}
+            >
+              <SteamIcon class="mobile-sidebar-icon w-5 h-5 shrink-0" />
+              <span>{t('victory.steam_button')}</span>
+            </a>
           </div>
         </div>
       )}
@@ -2070,9 +2084,7 @@ export function App() {
                 title={t('victory.steam_link_title')}
                 onClick={() => trackEvent('steam_promo_clicked', { source: 'victory_screen' })}
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M12 2a10 10 0 0 0-9.98 9.24l5.36 2.22a2.86 2.86 0 0 1 2.22-.55l2.48-3.6a3.86 3.86 0 0 1-.08-.71 3.9 3.9 0 1 1 3.9 3.9c-.24 0-.48-.03-.7-.08l-3.58 2.5a2.86 2.86 0 0 1-.58 2.2l2.22 5.38A10 10 0 1 0 12 2zm3.9 7.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8z" />
-                </svg>
+                <SteamIcon class="w-4 h-4" />
                 <span>{t('victory.steam_button')}</span>
               </a>
             </div>
@@ -2435,6 +2447,19 @@ export function App() {
           {mobileTooltip}
         </div>
       )}
+
+      {/* Persistent Desktop Steam Link */}
+      <a 
+        href="https://store.steampowered.com/app/2716690/Liquidum?utm_source=liteweb_persistent" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="fixed bottom-6 right-6 z-50 hidden lg:flex items-center gap-2 px-4 py-2 bg-[#1b2838]/90 hover:bg-[#2a475e] text-white font-semibold text-sm rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.5)] transition-colors border border-[#66c0f4]/30 hover:border-[#66c0f4] backdrop-blur-sm"
+        title={t('victory.steam_link_title')}
+        onClick={() => trackEvent('steam_promo_clicked', { source: 'persistent_desktop' })}
+      >
+        <SteamIcon class="w-5 h-5" />
+        <span>{t('victory.steam_button')}</span>
+      </a>
 
     </div>
   );
