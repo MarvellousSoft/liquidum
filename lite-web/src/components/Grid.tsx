@@ -169,18 +169,20 @@ export function Grid({
     return false;
   };
   
-  const renderHint = (count: number, type: HintType, isWater: boolean) => {
+  const renderHint = (count: number, type: HintType, isWater: boolean, isDual: boolean = false) => {
     if (settings?.hide_unknown && count === -1 && (type === HintType.Hidden || type === HintType.Zero) && isWater) {
       return '';
     }
 
     const boatImg = isWater ? null : <img src={iconUrl('boat_small.png')} class="hint-boat-icon" alt="boat" />;
+    const waterIcon = (isWater && isDual) ? <span class="text-base leading-none mr-0.5">💧</span> : null;
     const boatChar = isWater ? '' : '⛵';
+    
     if (count >= 0) {
       if (type === HintType.Together) {
         return (
           <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-            {boatImg}{`{ ${count} }`}
+            {boatImg}{waterIcon}{`{${count}}`}
             <span class="sr-only">{boatChar}{count}</span>
           </span>
         );
@@ -188,14 +190,14 @@ export function Grid({
       if (type === HintType.Separated) {
         return (
           <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-            {boatImg}{`- ${count} -`}
+            {boatImg}{waterIcon}{`-${count}-`}
             <span class="sr-only">{boatChar}{count}</span>
           </span>
         );
       }
       return (
         <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-          {boatImg}{count}
+          {boatImg}{waterIcon}{count}
           <span class="sr-only">{boatChar}{count}</span>
         </span>
       );
@@ -203,7 +205,7 @@ export function Grid({
     if (type === HintType.Together) {
       return (
         <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-          {boatImg}{`{ ? }`}
+          {boatImg}{waterIcon}{`{?}`}
           <span class="sr-only">{boatChar}{'{?}'}</span>
         </span>
       );
@@ -211,7 +213,7 @@ export function Grid({
     if (type === HintType.Separated) {
       return (
         <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-          {boatImg}{`- ? -`}
+          {boatImg}{waterIcon}{`-?-`}
           <span class="sr-only">{boatChar}{'-?-'}</span>
         </span>
       );
@@ -219,14 +221,14 @@ export function Grid({
     if (type === HintType.Zero) {
       return (
         <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-          {boatImg}0
+          {boatImg}{waterIcon}0
           <span class="sr-only">{boatChar}0</span>
         </span>
       );
     }
     return (
       <span class="inline-flex items-center whitespace-nowrap flex-nowrap">
-        {boatImg}?
+        {boatImg}{waterIcon}?
         <span class="sr-only">{boatChar}?</span>
       </span>
     );
@@ -542,6 +544,7 @@ export function Grid({
             );
 
             const isDualCol = showBoatHint && showWaterHint;
+            const isLastCol = c === gridData.cells[0].length - 1;
 
             return (
               <div
@@ -549,7 +552,7 @@ export function Grid({
                 data-testid={`col-hint-${c}`}
                 data-col={c}
                 data-dimmed={isColDimmed(c) ? 'true' : 'false'}
-                class={`col-hint cursor-pointer ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
+                class={`col-hint cursor-pointer ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''} ${isLastCol ? 'is-last-col' : ''}`}
                 title={cellTitle}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -592,7 +595,7 @@ export function Grid({
                       }
                     }}
                   >
-                    {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                    {renderHint(hint.boat_count, hint.boat_count_type, false, isDualCol)}
                   </span>
                 )}
                 {showWaterHint && (
@@ -614,7 +617,7 @@ export function Grid({
                       }
                     }}
                   >
-                    {renderHint(hint.water_count, hint.water_count_type, true)}
+                    {renderHint(hint.water_count, hint.water_count_type, true, isDualCol)}
                   </span>
                 )}
               </div>
@@ -647,6 +650,8 @@ export function Grid({
             : false
         );
 
+        const isLastRow = r === gridData.cells.length - 1;
+
         return (
           <div key={r} class="flex">
             {/* Row hint */}
@@ -654,7 +659,7 @@ export function Grid({
               data-testid={`row-hint-${r}`}
               data-row={r}
               data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
-              class={`row-hint cursor-pointer ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
+              class={`row-hint cursor-pointer ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''} ${isLastRow ? 'is-last-row' : ''}`}
               title={cellTitle}
               onClick={(e) => {
                 e.stopPropagation();
@@ -700,7 +705,7 @@ export function Grid({
                         class={`row-hint-boat ${getHintClass(bCountRow, hint.boat_count, false, hint.boat_count_type, bBools)}`}
                         title={boatTitle}
                       >
-                        {renderHint(hint.boat_count, hint.boat_count_type, false)}
+                        {renderHint(hint.boat_count, hint.boat_count_type, false, hasDualRowHints)}
                       </span>
                     )}
                   </span>
@@ -724,7 +729,7 @@ export function Grid({
                         class={`row-hint-water ${getHintClass(wCountRow, hint.water_count, true, hint.water_count_type, wBools)}`}
                         title={waterTitle}
                       >
-                        {renderHint(hint.water_count, hint.water_count_type, true)}
+                        {renderHint(hint.water_count, hint.water_count_type, true, hasDualRowHints)}
                       </span>
                     )}
                   </span>
@@ -735,7 +740,7 @@ export function Grid({
                     class={getHintClass(wCountRow, hint.water_count, true, hint.water_count_type, wBools)}
                     title={waterTitle}
                   >
-                    {renderHint(hint.water_count, hint.water_count_type, true)}
+                    {renderHint(hint.water_count, hint.water_count_type, true, hasDualRowHints)}
                   </span>
                 )
               )}
@@ -837,7 +842,7 @@ export function Grid({
               <div
                 data-testid={`row-hint-opposite-${r}`}
                 data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
-                class={`row-hint row-hint-opposite cursor-pointer flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''}`}
+                class={`row-hint row-hint-opposite cursor-pointer flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''} ${isLastRow ? 'is-last-row' : ''}`}
                 title={getOppositeRowHoverText(r)}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -879,12 +884,13 @@ export function Grid({
                   ? (hoveredCell?.col === c || (activeHoveredHint?.type === 'col' && activeHoveredHint.index === c))
                   : false
               );
+              const isLastCol = c === gridData.cells[0].length - 1;
               return (
                 <div
                   key={c}
                   data-testid={`col-hint-opposite-${c}`}
                   data-dimmed={isColDimmed(c) ? 'true' : 'false'}
-                  class={`col-hint col-hint-opposite cursor-pointer flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''}`}
+                  class={`col-hint col-hint-opposite cursor-pointer flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''} ${isLastCol ? 'is-last-col' : ''}`}
                   title={getOppositeColHoverText(c)}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -918,13 +924,14 @@ export function Grid({
       )}
 
       {/* Bottom right grid size indicator like in original Godot game */}
-      <div class="flex justify-end items-center mt-2 pr-1 select-none pointer-events-none">
+      <div class="flex justify-end items-center mt-1 pr-1 select-none pointer-events-none">
         <span
           data-testid="grid-size-label"
           class="grid-size-label godot-text-outline"
         >
           {rows}x{cols}
         </span>
+        {showOppositeHints && <div class="grid-corner-spacer-opposite" />}
       </div>
     </div>
   );

@@ -1562,6 +1562,45 @@ body,
   z-index: 5;
 }
 
+/* Extend dashed lines to hints */
+.col-hint:not(.is-last-col)::after,
+.col-hint-opposite:not(.is-last-col)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  margin-right: -0.5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--cell-border) 0px,
+    var(--cell-border) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  pointer-events: none;
+}
+
+.row-hint:not(.is-last-row)::after,
+.row-hint-opposite:not(.is-last-row)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  margin-bottom: -0.5px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--cell-border) 0px,
+    var(--cell-border) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  pointer-events: none;
+}
+
 /* Thick overlay walls (Authentic Godot solid navy lines) */
 .cell-wall {
   position: absolute;
@@ -2763,4 +2802,344 @@ body.modal-open {
 
 
 
+/* ==========================================================================
+   Mobile Sidebar & Hamburger Menu
+   ========================================================================== */
 
+/* Hamburger button: hidden on desktop, shown on mobile */
+.btn-hamburger {
+  display: none;
+}
+
+/* Desktop buttons wrapper: shown on desktop, hidden on mobile */
+.toolbar-desktop-buttons {
+  display: contents;
+}
+
+@media (max-width: 768px) {
+  /* ---- Top Bar: squarer on mobile ---- */
+  .controls-toolbar {
+    border-radius: 0.75rem;
+    padding: 0.45rem 0.65rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Hide desktop menu buttons on mobile */
+  .toolbar-desktop-buttons {
+    display: none;
+  }
+
+  /* Hide undo/redo on mobile */
+  .toolbar-undo-redo {
+    display: none;
+  }
+
+  /* Show hamburger on mobile */
+  .btn-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 9, 36, 0.25);
+    color: var(--game-mint);
+    border: 1.5px solid rgba(217, 255, 226, 0.3);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-hamburger:hover {
+    background-color: rgba(0, 9, 36, 0.45);
+  }
+  .btn-hamburger:active {
+    background-color: rgba(0, 9, 36, 0.6);
+    transform: scale(0.95);
+  }
+}
+
+/* Mobile sidebar backdrop */
+.mobile-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: sidebarBackdropIn 0.2s ease;
+}
+
+@keyframes sidebarBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Mobile sidebar panel */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(280px, 80vw);
+  z-index: 9001;
+  background: linear-gradient(180deg, var(--bg-gradient-top) 0%, var(--bg-gradient-bottom) 100%);
+  border-left: 2.5px solid var(--game-navy);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  animation: sidebarSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.theme-dark .mobile-sidebar {
+  background: linear-gradient(180deg, rgba(0, 9, 36, 0.98) 0%, rgba(5, 30, 51, 0.99) 100%);
+  border-left-color: rgba(171, 255, 209, 0.2);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes sidebarSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.mobile-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.15rem;
+  border-bottom: 1.5px solid rgba(0, 9, 36, 0.2);
+}
+
+.theme-dark .mobile-sidebar-header {
+  border-bottom-color: rgba(217, 255, 226, 0.15);
+}
+
+.mobile-sidebar-title {
+  font-family: var(--font-game);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--game-navy);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.theme-dark .mobile-sidebar-title {
+  color: var(--game-mint);
+  text-shadow: none;
+}
+
+.mobile-sidebar-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 9, 36, 0.12);
+  border: 1px solid rgba(0, 9, 36, 0.2);
+  color: var(--game-navy);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mobile-sidebar-close:hover {
+  background: rgba(0, 9, 36, 0.2);
+}
+
+.theme-dark .mobile-sidebar-close {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(217, 255, 226, 0.2);
+  color: var(--game-mint);
+}
+.theme-dark .mobile-sidebar-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mobile-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: none;
+  border: none;
+  color: var(--game-navy);
+  font-family: var(--font-game);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s;
+  text-align: left;
+}
+.mobile-sidebar-item:hover,
+.mobile-sidebar-item:active {
+  background-color: rgba(0, 9, 36, 0.1);
+}
+
+.theme-dark .mobile-sidebar-item {
+  color: var(--game-mint);
+}
+.theme-dark .mobile-sidebar-item:hover,
+.theme-dark .mobile-sidebar-item:active {
+  background-color: rgba(217, 255, 226, 0.08);
+}
+
+.mobile-sidebar-icon {
+  font-size: 1.2rem;
+  width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.mobile-sidebar-divider {
+  height: 1px;
+  margin: 0.35rem 1rem;
+  background-color: rgba(0, 9, 36, 0.15);
+}
+
+.theme-dark .mobile-sidebar-divider {
+  background-color: rgba(217, 255, 226, 0.12);
+}
+
+
+/* ==========================================================================
+   Mobile Bottom Bar (Grid Hints Card) Optimization
+   ========================================================================== */
+@media (max-width: 768px) {
+  .grid-hints-card {
+    border-radius: 0.75rem;
+    padding: 0.45rem 0.5rem;
+    gap: 0.4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    max-height: none;
+    overflow: visible;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Timer and mistake counter side-by-side */
+  .grid-hints-card .hint-stat-card {
+    padding: 0.3rem 0.55rem;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .grid-hints-card .hint-stat-timer {
+    min-width: 0;
+  }
+
+  .grid-hints-card .hint-stat-icon {
+    font-size: 1rem;
+  }
+
+  .grid-hints-card .hint-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+
+  .grid-hints-card .hint-stat-value {
+    font-size: 0.9rem;
+  }
+
+  .grid-hints-card .hint-status-badge {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+  }
+
+  /* Aquarium section: span full width */
+  .grid-hints-card .aquarium-section {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding-top: 0.3rem;
+  }
+
+  .grid-hints-card .aquarium-section.has-counters {
+    border-top: 1.5px solid rgba(217, 255, 226, 0.2);
+    border-left: none;
+    padding-left: 0;
+    padding-top: 0.4rem;
+  }
+
+  /* When aquarium section has too many items, allow a compact scroll with indicator */
+  .grid-hints-card .aquarium-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    justify-content: center;
+    max-height: 5.5rem;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .grid-hints-card .aquarium-card {
+    padding: 0.25rem 0.5rem;
+    gap: 0.4rem;
+    border-radius: 0.5rem;
+  }
+
+  .grid-hints-card .aquarium-header {
+    justify-content: center;
+  }
+
+  .grid-hints-card .aquarium-label {
+    font-size: 0.75rem;
+  }
+
+  /* Boat image in stat card */
+  .grid-hints-card .hint-boat-img {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Aquarium mini tank */
+  .grid-hints-card .aq-tank {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .grid-hints-card .aq-tank-size {
+    font-size: 0.7rem;
+  }
+
+  .grid-hints-card .aq-status-pill {
+    font-size: 0.7rem;
+    padding: 0.08rem 0.4rem;
+  }
+}
+
+/* Scroll fade indicator for aquarium items on mobile */
+@media (max-width: 768px) {
+  .grid-hints-card .aquarium-items {
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.5rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, black calc(100% - 1.5rem), transparent 100%);
+  }
+
+  /* Remove mask when content fits without scrolling */
+  .grid-hints-card .aquarium-items:not([style*="overflow"]) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.mobile-tooltip-anim {
+  animation: tooltipFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes simpleFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: simpleFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -162,6 +162,51 @@ export function App() {
   const showHelpModalRef = useRef(showHelpModal);
   showHelpModalRef.current = showHelpModal;
 
+  const [showMobileSidebar, setShowMobileSidebar] = useState<boolean>(false);
+  const [mobileTooltip, setMobileTooltip] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    let timeoutId: number;
+    const handlePointerDown = (e: PointerEvent) => {
+      // Only handle touch
+      if (e.pointerType === 'mouse') return;
+
+      const target = e.target as HTMLElement;
+      const titleEl = target.closest('[title]');
+      
+      if (titleEl) {
+        const title = titleEl.getAttribute('title');
+        if (title) {
+          // Remove trailing keyboard shortcuts like " (1)" or " (Space)"
+          // Only matches uppercase letters, digits, Space, Tab, Esc, Del, commas, and ?
+          const cleanTitle = title.replace(/\s*\((?:[A-Z0-9?]|Space|Tab|Esc|Del|,\s*)+\)$/, '');
+          
+          // Ignore trivial tooltips on mobile
+          const ignoreList = ['menu', 'close', 'close menu', 'close modal', 'fechar'];
+          if (ignoreList.includes(cleanTitle.trim().toLowerCase())) {
+            setMobileTooltip(null);
+          } else {
+            setMobileTooltip(cleanTitle);
+            if (timeoutId) clearTimeout(timeoutId);
+            timeoutId = window.setTimeout(() => {
+              setMobileTooltip(null);
+            }, 3000);
+          }
+        }
+      } else {
+        setMobileTooltip(null);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
+
   const DRAW_COLORS = ['#ff6a6a', '#3b82f6', '#facc15', '#3adc6b'];
   const [isDrawingMode, setIsDrawingMode] = useState<boolean>(false);
   const isDrawingModeRef = useRef(isDrawingMode);
@@ -1682,7 +1727,7 @@ export function App() {
           </div>
         )}
 
-        <div class="undo-redo-group">
+        <div class="undo-redo-group toolbar-undo-redo">
           <button
             data-testid="btn-undo"
             onClick={handleUndo}
@@ -1725,81 +1770,181 @@ export function App() {
           </button>
         )}
 
-        <button
-          data-testid="btn-help"
-          onClick={() => setShowHelpModal(true)}
-          class="btn-shortcuts"
-          title={`${t('toolbar.how_to_play')} (?)`}
-          aria-label={t('toolbar.how_to_play')}
-        >
-          <span class="text-base font-bold">❓</span>
-          <span class="btn-text">{t('toolbar.how_to_play')}</span>
-        </button>
-
-        <button
-          data-testid="btn-shortcuts"
-          onClick={() => setShowShortcuts(true)}
-          class="btn-shortcuts"
-          title={t('toolbar.shortcuts')}
-          aria-label={t('toolbar.shortcuts')}
-        >
-          <span class="text-base">⌨️</span>
-          <span class="btn-text">{t('toolbar.shortcuts')}</span>
-        </button>
-
-        <button
-          data-testid="btn-settings"
-          onClick={() => setShowSettings(true)}
-          class="btn-shortcuts"
-          title={t('toolbar.settings')}
-          aria-label={t('toolbar.settings')}
-        >
-          <span class="text-base">⚙️</span>
-          <span class="btn-text">{t('toolbar.settings')}</span>
-        </button>
-
-        <button
-          data-testid="btn-account"
-          onClick={() => setShowAccountModal(true)}
-          class="btn-shortcuts"
-          title={t('account.title')}
-          aria-label={t('toolbar.account')}
-        >
-          {userAvatarUrl && !avatarLoadError ? (
-            <img
-              src={userAvatarUrl}
-              alt=""
-              class="w-5 h-5 rounded-full object-cover border border-cyan-400/60 shrink-0"
-              onError={() => setAvatarLoadError(true)}
-            />
-          ) : (
-            <span class="text-base">👤</span>
-          )}
-          <span class="btn-text max-w-[100px] truncate">{userDisplayName || t('toolbar.account')}</span>
-        </button>
-
-        {isDailyMode && (
+        {/* Desktop-only: individual menu buttons */}
+        <div class="toolbar-desktop-buttons">
           <button
-            data-testid="btn-leaderboard"
-            onClick={() => setShowLeaderboardModal(true)}
-            class="btn-shortcuts lg:hidden"
-            title={t('toolbar.leaderboard')}
-            aria-label={t('toolbar.leaderboard')}
+            data-testid="btn-help"
+            onClick={() => setShowHelpModal(true)}
+            class="btn-shortcuts"
+            title={`${t('toolbar.how_to_play')} (?)`}
+            aria-label={t('toolbar.how_to_play')}
           >
-            <span class="text-base">🏆</span>
-            <span class="btn-text">{t('toolbar.leaderboard')}</span>
+            <span class="text-base font-bold">❓</span>
+            <span class="btn-text">{t('toolbar.how_to_play')}</span>
           </button>
-        )}
 
+          <button
+            data-testid="btn-shortcuts"
+            onClick={() => setShowShortcuts(true)}
+            class="btn-shortcuts"
+            title={t('toolbar.shortcuts')}
+            aria-label={t('toolbar.shortcuts')}
+          >
+            <span class="text-base">⌨️</span>
+            <span class="btn-text">{t('toolbar.shortcuts')}</span>
+          </button>
+
+          <button
+            data-testid="btn-settings"
+            onClick={() => setShowSettings(true)}
+            class="btn-shortcuts"
+            title={t('toolbar.settings')}
+            aria-label={t('toolbar.settings')}
+          >
+            <span class="text-base">⚙️</span>
+            <span class="btn-text">{t('toolbar.settings')}</span>
+          </button>
+
+          <button
+            data-testid="btn-account"
+            onClick={() => setShowAccountModal(true)}
+            class="btn-shortcuts"
+            title={t('account.title')}
+            aria-label={t('toolbar.account')}
+          >
+            {userAvatarUrl && !avatarLoadError ? (
+              <img
+                src={userAvatarUrl}
+                alt=""
+                class="w-5 h-5 rounded-full object-cover border border-cyan-400/60 shrink-0"
+                onError={() => setAvatarLoadError(true)}
+              />
+            ) : (
+              <span class="text-base">👤</span>
+            )}
+            <span class="btn-text max-w-[100px] truncate">{userDisplayName || t('toolbar.account')}</span>
+          </button>
+
+          {isDailyMode && (
+            <button
+              data-testid="btn-leaderboard"
+              onClick={() => setShowLeaderboardModal(true)}
+              class="btn-shortcuts lg:hidden"
+              title={t('toolbar.leaderboard')}
+              aria-label={t('toolbar.leaderboard')}
+            >
+              <span class="text-base">🏆</span>
+              <span class="btn-text">{t('toolbar.leaderboard')}</span>
+            </button>
+          )}
+
+          <button
+            data-testid="btn-theme-toggle"
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            class="btn-theme-toggle"
+            title={isDarkMode ? t('toolbar.switch_light') : t('toolbar.switch_dark')}
+          >
+            <span>{isDarkMode ? '☀️' : '🌙'}</span>
+          </button>
+        </div>
+
+        {/* Mobile-only: hamburger menu button */}
         <button
-          data-testid="btn-theme-toggle"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          class="btn-theme-toggle"
-          title={isDarkMode ? t('toolbar.switch_light') : t('toolbar.switch_dark')}
+          data-testid="btn-hamburger"
+          onClick={() => setShowMobileSidebar(true)}
+          class="btn-hamburger"
+          title="Menu"
+          aria-label="Menu"
         >
-          <span>{isDarkMode ? '☀️' : '🌙'}</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
         </button>
       </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {showMobileSidebar && (
+        <div class="mobile-sidebar-backdrop" onClick={() => setShowMobileSidebar(false)}>
+          <div class="mobile-sidebar" onClick={(e) => e.stopPropagation()}>
+            <div class="mobile-sidebar-header">
+              <span class="mobile-sidebar-title">Menu</span>
+              <button
+                class="mobile-sidebar-close"
+                onClick={() => setShowMobileSidebar(false)}
+                aria-label="Close menu"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <button
+              class="mobile-sidebar-item"
+              onClick={() => { setShowHelpModal(true); setShowMobileSidebar(false); }}
+            >
+              <span class="mobile-sidebar-icon">❓</span>
+              <span>{t('toolbar.how_to_play')}</span>
+            </button>
+
+            <button
+              class="mobile-sidebar-item"
+              onClick={() => { setShowShortcuts(true); setShowMobileSidebar(false); }}
+            >
+              <span class="mobile-sidebar-icon">⌨️</span>
+              <span>{t('toolbar.shortcuts')}</span>
+            </button>
+
+            <button
+              class="mobile-sidebar-item"
+              onClick={() => { setShowSettings(true); setShowMobileSidebar(false); }}
+            >
+              <span class="mobile-sidebar-icon">⚙️</span>
+              <span>{t('toolbar.settings')}</span>
+            </button>
+
+            <button
+              class="mobile-sidebar-item"
+              onClick={() => { setShowAccountModal(true); setShowMobileSidebar(false); }}
+            >
+              {userAvatarUrl && !avatarLoadError ? (
+                <img
+                  src={userAvatarUrl}
+                  alt=""
+                  class="w-5 h-5 rounded-full object-cover border border-cyan-400/60 shrink-0 mobile-sidebar-icon"
+                  onError={() => setAvatarLoadError(true)}
+                />
+              ) : (
+                <span class="mobile-sidebar-icon">👤</span>
+              )}
+              <span>{userDisplayName || t('toolbar.account')}</span>
+            </button>
+
+            {isDailyMode && (
+              <button
+                class="mobile-sidebar-item"
+                onClick={() => { setShowLeaderboardModal(true); setShowMobileSidebar(false); }}
+              >
+                <span class="mobile-sidebar-icon">🏆</span>
+                <span>{t('toolbar.leaderboard')}</span>
+              </button>
+            )}
+
+            <div class="mobile-sidebar-divider" />
+
+            <button
+              class="mobile-sidebar-item"
+              onClick={() => { setIsDarkMode(!isDarkMode); }}
+            >
+              <span class="mobile-sidebar-icon">{isDarkMode ? '☀️' : '🌙'}</span>
+              <span>{isDarkMode ? t('toolbar.switch_light') : t('toolbar.switch_dark')}</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 5. The Grid and banners */}
       <div class="banner-slot">
@@ -1893,7 +2038,7 @@ export function App() {
           <span>{t('game.generating_daily', { date: dailyDate })}</span>
         </div>
       ) : gridData ? (
-        <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto px-2">
+        <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2 lg:gap-6 w-full max-w-7xl mx-auto px-2">
           {/* Left on desktop, Below on narrow screens: Hints card */}
           <div class={`order-2 lg:order-1 flex flex-col items-center lg:items-start w-full lg:w-60 xl:w-72 flex-shrink-0 transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
             {/* Grid Hints Header */}
@@ -2173,7 +2318,14 @@ export function App() {
         </div>
       )}
 
-      <Suspense fallback={null}>
+      <Suspense fallback={
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(0,9,36,0.3)] backdrop-blur-[2px] animate-fade-in">
+          <div class="flex flex-col items-center gap-3 p-6 bg-[rgba(0,9,36,0.85)] border border-[rgba(217,255,226,0.3)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            <div class="loading-spinner"></div>
+            <span class="godot-text-outline text-[var(--game-mint)] text-lg">{t('game.loading')}</span>
+          </div>
+        </div>
+      }>
         {showSettings && (
           <SettingsModal
             isOpen={showSettings}
@@ -2229,6 +2381,12 @@ export function App() {
           />
         )}
       </Suspense>
+
+      {mobileTooltip && (
+        <div class="fixed bottom-24 left-1/2 z-[10000] bg-[rgba(0,9,36,0.95)] border border-[rgba(217,255,226,0.3)] text-[var(--game-mint)] px-4 py-2.5 rounded-xl text-sm shadow-[0_8px_32px_rgba(0,0,0,0.5)] max-w-[90vw] text-center pointer-events-none mobile-tooltip-anim font-game whitespace-pre-wrap lg:hidden">
+          {mobileTooltip}
+        </div>
+      )}
 
     </div>
   );
