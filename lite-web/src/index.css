@@ -481,7 +481,7 @@ body,
   cursor: crosshair;
 }
 .drawing-canvas.is-active.is-eraser {
-  cursor: url("/icons/eraser-cursor.png") 3 28, auto;
+  cursor: cell;
 }
 .drawing-canvas.is-inactive {
   pointer-events: none;

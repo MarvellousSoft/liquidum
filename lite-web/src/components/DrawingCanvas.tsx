@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'preact/hooks';
+import { iconUrl } from '../utils/assets';
 
 export interface DrawingCanvasProps {
   isDrawingMode: boolean;
@@ -235,6 +236,7 @@ export function DrawingCanvas({
       ref={canvasRef}
       data-testid="drawing-canvas"
       class={`drawing-canvas ${isDrawingMode ? 'is-active' : 'is-inactive'} ${isEraserCursor ? 'is-eraser' : ''}`}
+      style={isDrawingMode && isEraserCursor ? { cursor: `url("${iconUrl('eraser-cursor.png')}") 3 28, auto` } : undefined}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
