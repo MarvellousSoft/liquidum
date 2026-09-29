@@ -266,7 +266,7 @@ test.describe('Daily Level E2E Tests', () => {
 
     const steamLink = page.locator('[data-testid="btn-steam-link"]');
     await expect(steamLink).toBeVisible();
-    await expect(steamLink).toHaveAttribute('href', 'https://store.steampowered.com/app/2690070/Liquidum/');
+    await expect(steamLink).toHaveAttribute('href', 'https://store.steampowered.com/app/2716690/Liquidum/?utm_source=liteweb');
 
     // Click Share Result and verify clipboard contents
     await page.click('[data-testid="btn-share-result"]');

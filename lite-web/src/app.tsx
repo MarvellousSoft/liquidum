@@ -167,7 +167,7 @@ export function App() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     let timeoutId: number;
     const handlePointerDown = (e: PointerEvent) => {
       // Only handle touch
@@ -175,14 +175,14 @@ export function App() {
 
       const target = e.target as HTMLElement;
       const titleEl = target.closest('[title]');
-      
+
       if (titleEl) {
         const title = titleEl.getAttribute('title');
         if (title) {
           // Remove trailing keyboard shortcuts like " (1)" or " (Space)"
           // Only matches uppercase letters, digits, Space, Tab, Esc, Del, commas, and ?
           const cleanTitle = title.replace(/\s*\((?:[A-Z0-9?]|Space|Tab|Esc|Del|,\s*)+\)$/, '');
-          
+
           // Ignore trivial tooltips on mobile
           const ignoreList = ['menu', 'close', 'close menu', 'close modal', 'fechar'];
           if (ignoreList.includes(cleanTitle.trim().toLowerCase())) {
@@ -2016,7 +2016,7 @@ export function App() {
               </span>
               <a
                 data-testid="btn-steam-link"
-                href="https://store.steampowered.com/app/2690070/Liquidum/"
+                href="https://store.steampowered.com/app/2716690/Liquidum?utm_source=liteweb"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn-steam flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs transition shadow-md w-full max-w-[280px]"
