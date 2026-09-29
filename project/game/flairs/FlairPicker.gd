@@ -158,3 +158,13 @@ func _on_restore_key_pressed() -> void:
 	else:
 		AudioManager.play_sfx("error")
 	KeyRestored.show()
+
+
+func _on_open_web_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	var key := await StoreIntegrations.playfab.get_custom_id()
+	var url := "https://marvelloussoft.github.io/liquidum/"
+	if key != "":
+		url += "?id=" + key.uri_encode()
+	OS.shell_open(url)
+

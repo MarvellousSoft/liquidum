@@ -49,6 +49,8 @@ const LevelSelectModal = lazy(() => import('./components/LevelSelectModal').then
 const LeaderboardModal = lazy(() => import('./components/LeaderboardModal').then(m => ({ default: m.LeaderboardModal })));
 const AccountModal = lazy(() => import('./components/AccountModal').then(m => ({ default: m.AccountModal })));
 const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
+const SteamSyncModal = lazy(() => import('./components/SteamSyncModal').then(m => ({ default: m.SteamSyncModal })));
+import { removeQueryParam } from './utils/url';
 
 
 import {
@@ -176,6 +178,7 @@ export function App() {
   const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
   const showHelpModalRef = useRef(showHelpModal);
   showHelpModalRef.current = showHelpModal;
+  const [steamSyncPromptId, setSteamSyncPromptId] = useState<string | null>(null);
 
   const [showMobileSidebar, setShowMobileSidebar] = useState<boolean>(false);
   const [mobileTooltip, setMobileTooltip] = useState<string | null>(null);
@@ -270,6 +273,38 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    let incomingId: string | null = null;
+    let isFirstTime = false;
+
+    if (typeof window !== 'undefined' && window.location) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        incomingId = params.get('id');
+        if (incomingId) {
+          incomingId = incomingId.trim();
+        }
+        const existingCustomId = localStorage.getItem('liquidum_custom_id');
+        isFirstTime = existingCustomId === null;
+
+        if (incomingId) {
+          if (isFirstTime) {
+            // First time opening the game: directly adopt the received id
+            localStorage.setItem('liquidum_custom_id', incomingId);
+            removeQueryParam('id');
+          } else if (existingCustomId === incomingId) {
+            // Same ID as already saved: ignore and clean URL
+            removeQueryParam('id');
+            incomingId = null;
+          } else {
+            // Different ID and game was opened before: prompt user to confirm
+            setSteamSyncPromptId(incomingId);
+          }
+        }
+      } catch (err) {
+        console.warn('Error reading id parameter from URL:', err);
+      }
+    }
+
     playFabService
       .login()
       .then((info) => {
@@ -2439,6 +2474,28 @@ export function App() {
             dailyDate={isDailyMode ? dailyDate : undefined}
             onOpenAccount={() => setShowAccountModal(true)}
             onOpenControls={() => setShowShortcuts(true)}
+          />
+        )}
+
+        {steamSyncPromptId && (
+          <SteamSyncModal
+            isOpen={Boolean(steamSyncPromptId)}
+            incomingId={steamSyncPromptId}
+            onConfirm={async () => {
+              const targetId = steamSyncPromptId;
+              setSteamSyncPromptId(null);
+              removeQueryParam('id');
+              try {
+                await playFabService.switchAccount(targetId);
+                setLeaderboardRefreshKey((k) => k + 1);
+              } catch (err) {
+                console.error('Failed to switch to Steam account:', err);
+              }
+            }}
+            onCancel={() => {
+              setSteamSyncPromptId(null);
+              removeQueryParam('id');
+            }}
           />
         )}
       </Suspense>

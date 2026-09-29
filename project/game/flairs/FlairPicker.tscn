@@ -242,9 +242,30 @@ text = "RECOVERY_EXPLANATION"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="WebButton" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 35
+text = "SYNC_TO_WEB"
+
+[node name="HSeparator" type="HSeparator" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 30
+
+[node name="AdvancedTitle" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 70
+text = "ADVANCED"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+layout_mode = 2
+theme_override_constants/separation = 25
 
 [node name="CurrentKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
 layout_mode = 2
@@ -252,7 +273,6 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
 theme_override_font_sizes/font_size = 35
 text = "CURRENT_KEY"
-horizontal_alignment = 1
 
 [node name="CopyKey" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
 layout_mode = 2
@@ -281,7 +301,6 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
 theme_override_font_sizes/font_size = 35
 text = "RESTORE_KEY"
-horizontal_alignment = 1
 
 [node name="RestoreKeyB" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
 layout_mode = 2
@@ -324,6 +343,8 @@ horizontal_alignment = 1
 [connection signal="pressed" from="TopContainer/VBoxContainer/LeaderboardExampleContainer/UploadButton" to="." method="_on_upload_name_pressed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="mouse_entered" from="BottomContainer/HBoxContainer/RecoveryKey/WebButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="BottomContainer/HBoxContainer/RecoveryKey/WebButton" to="." method="_on_open_web_pressed"]
 [connection signal="mouse_entered" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey/Button" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey/Button" to="." method="_on_copy_key_pressed"]
 [connection signal="mouse_entered" from="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB/Button" to="." method="_on_button_mouse_entered"]

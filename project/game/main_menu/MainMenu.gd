@@ -57,7 +57,7 @@ func _ready():
 	UserData.current().try_pending_uploads()
 	
 	if Global.is_demo:
-		%MobileHBox.hide()
+		%WebButton.hide()
 		assert(not Global.is_mobile)
 		for but in [%ExtraLevelsButton, %RandomButton, %Workshop, %EditorButton]:
 			but.disabled = true
@@ -263,3 +263,13 @@ func _on_player_display_button_pressed():
 func _on_buy_full_game_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	SteamManager.overlay_or_browser("https://store.steampowered.com/app/2716690/Liquidum?utm_source=demo")
+
+
+func _on_web_button_pressed() -> void:
+	AudioManager.play_sfx("button_pressed")
+	var key := await StoreIntegrations.playfab.get_custom_id()
+	var url := "https://marvelloussoft.github.io/liquidum/"
+	if key != "":
+		url += "?id=" + key.uri_encode()
+	OS.shell_open(url)
+

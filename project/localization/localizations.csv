@@ -461,13 +461,18 @@ TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de célula juntas,Dicas de célula 
 TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de célula separadas,Dicas de célula separadas
 TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de célula desconhecidas
 EDIT_ALT_TEXT_TITLE,Edit Alt Text,Editar texto alternativo,Editar texto alternativo
-EDIT_ALT_TEXT_EXPLANATION,This will show up instead of the actual hint. It may be any string. Set it as empty to clear.,,
+EDIT_ALT_TEXT_EXPLANATION,This text will show up instead of the actual hint. It may be any string. Set it as empty to clear.,Esse texto vai aparecer ao invés da dica. Pode ser qualquer texto. Deixe vazio para limpar.,Esse texto vai aparecer ao invés da dica. Pode ser qualquer texto. Deixe vazio para limpar.
 CONFIRM,Confirm,Confirmar,Confirmar
 FLAIRS,Flairs,Emblemas,Emblemas
-RECOVERY_KEY,Recovery Key,,
-RECOVERY_EXPLANATION,This secret key identifies your player profile on PlayFab. Copy it to share streaks with Liquidum Lite on Web.,,
-CURRENT_KEY,Your Current Key,,
-RESTORE_KEY,Restore Account,,
-COPY_KEY_BUTTON,Show & Copy Key,,
-RESTORE_KEY_BUTTON,Restore Key,,
-KEY_RESTORED,Key restored! ✓,,
+RECOVERY_KEY,Recovery Key,Chave de Recuperação,Chave de Recuperação
+RECOVERY_EXPLANATION,Sync your leaderboards and streak between Steam and Liquidum Lite on the Web.,Sincronize seus placares e sequência de vitórias entre a Steam e o Liquidum Lite na Web.,Sincronize seus placares e sequência de vitórias entre a Steam e o Liquidum Lite na Web.
+CURRENT_KEY,Your Current Key,Sua Chave Atual,Sua Chave Atual
+RESTORE_KEY,Restore Account,Restaurar Conta,Restaurar Conta
+COPY_KEY_BUTTON,Show & Copy Key,Mostrar e Copiar Chave,Mostrar e Copiar Chave
+RESTORE_KEY_BUTTON,Restore Key,Restaurar Chave,Restaurar Chave
+KEY_RESTORED,Key restored! ✓,Chave restaurada! ✓,Chave restaurada! ✓
+PLAY_ON_WEB,Play on Web,Jogar na Web,Jogar na Web
+LIQUIDUM_LITE_TITLE,Liquidum Lite,Liquidum Lite,Liquidum Lite
+OPEN_LIQUIDUM_LITE,Open Liquidum Lite,Abrir Liquidum Lite,Abrir Liquidum Lite
+ADVANCED,Advanced,Avançado,Avançado
+SYNC_TO_WEB,Sync to Web,Sincronizar com Web,Sincronizar com Web
