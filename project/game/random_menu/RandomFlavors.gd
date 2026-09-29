@@ -41,7 +41,20 @@ enum Flavor {
 	Sudoku,
 	# Knight variant, simple rules
 	Knight,
+	# Snake variant, simple rules
+	Snake,
 }
+
+static func _snake_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	#h.total_water = rng.randf() < 0.4
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(1, a.size()/2))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(1, a.size()*.75))
+	h.apply_to_grid(grid)
+	RandomHub.hide_too_easy_hints(grid)
+	if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
+		grid.rule_variants().append(GridModel.RuleVariant.Snake)
 
 static func _knight_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
@@ -313,6 +326,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate(rng, 9, 9, RandomFlavors._sudoku_hints, _builder(b.with_sudoku()), strategies, [], false)
 		Flavor.Knight:
 			return await l_gen.generate_with_size(rng, RandomFlavors._knight_size_gen, RandomFlavors._knight_hints, _builder(b.with_knights()), strategies, [], false)
+		Flavor.Snake:
+			return await l_gen.generate_with_size(rng, RandomFlavors._knight_size_gen, RandomFlavors._snake_hints, _builder(b.with_snake()), strategies, []) 
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null

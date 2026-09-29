@@ -283,7 +283,7 @@ static func hide_too_easy_hints(grid: GridModel, rows := true, cols := true) -> 
 	var has_diags := false
 	for i in grid.rows():
 		if not has_diags:
-			for j in grid.rows():
+			for j in grid.cols():
 				if grid.get_cell(i, j).cell_type() != E.CellType.Single:
 					has_diags = true
 					break

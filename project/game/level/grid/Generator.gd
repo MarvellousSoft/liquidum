@@ -5,6 +5,7 @@ class Options:
 	var knights: bool
 	var diagonals: bool
 	var boats: bool
+	var snake: bool
 	# Just a hint, doesn't need to be strictly satisfied
 	var aquarium_count: int = 0
 	#
@@ -31,6 +32,10 @@ class Options:
 		return self
 	func with_knights() -> Options:
 		knights = true
+		diagonals = false
+		return self
+	func with_snake() -> Options:
+		snake = true
 		diagonals = false
 		return self
 	func build(rseed: int) -> Generator:
@@ -350,6 +355,73 @@ func generate_sudoku(grid: GridModel) -> void:
 	#print(grid.to_str())
 	#print("\nok %s\n" % [grid._sudoku_status()])
 
+const DIRS = [Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(0, 1)]
+func generate_snake(grid: GridModel) -> void:
+	var tries : int = 0
+	var g : Array[Array] = []
+	var snake: Array[Vector2i] = []
+	var desired_size := rng.randi_range((grid.rows() + grid.cols()), 2 * (grid.rows() + grid.cols()))
+	var keep_going := rng.randi_range(1, 100) <= 50
+	while true:
+		tries += 1
+		# When we assign rows and cols, the waters are fully determined
+		var head := Vector2i(rng.randi_range(0, grid.rows() - 1), rng.randi_range(0, grid.cols() - 1))
+		var cols := _random_perm()
+		# 0 = nothing, 1 = water, 2 = X
+		g.clear()
+		for i in grid.rows():
+			g.append([])
+			g[i].resize(grid.cols())
+			g[i].fill(0)
+		snake.clear()
+		snake.append(head)
+		g[head.x][head.y] = 1
+		while snake.size() < desired_size:
+			var prev_size := snake.size()
+			var dirs : Array = range(4)
+			Global.shuffle(dirs, rng)
+			for d in dirs:
+				var nh := Vector2i(head)
+				var how_much := 0
+				while true:
+					nh += DIRS[d]
+					var c := grid.get_cell(nh.x, nh.y)
+					if c.out_of_bounds() or g[nh.x][nh.y] == 1:
+						break
+					var bad := false
+					for d2 in 4:
+						var neighbor : Vector2i = nh + DIRS[d2]
+						var c2 := grid.get_cell(neighbor.x, neighbor.y)
+						# Cell right next to this direction, snake touches itself
+						if DIRS[d2] != -DIRS[d] and not c2.out_of_bounds() and g[neighbor.x][neighbor.y] == 1:
+							bad = true
+							break
+					if bad:
+						break
+					how_much += 1
+				if how_much > 0:
+					how_much = rng.randi_range(1, how_much)
+					for i in how_much:
+						head += DIRS[d]
+						snake.append(head)
+						g[head.x][head.y] = 1
+					break
+			if prev_size != snake.size() and keep_going:
+				continue
+			if prev_size == snake.size():
+				break
+		if snake.size() >= desired_size:
+			break
+	#print("Generated a snake with size %d after %d tries" % [snake.size(), tries])
+	var adj_rule := SquareAdj.new()
+	#print("Generating grid grops")
+	var grid_groups := _gen_grid_groups(grid.rows(), grid.cols(), adj_rule, g)
+	#print("Applying grid grups")
+	_apply_grid_groups(grid, grid_groups, adj_rule)
+	#print("Putting water")
+	for ij in snake:
+		grid.get_cell(ij.x, ij.y).put_water(E.Corner.TopLeft, false)
+	#print(grid.to_str())
 
 
 func generate(n: int, m: int) -> GridModel:
@@ -361,6 +433,10 @@ func generate(n: int, m: int) -> GridModel:
 	if opts.sudoku:
 		assert(n == 9 and m == 9)
 		generate_sudoku(grid)
+		grid.set_auto_update_hints(true)
+		return grid
+	elif opts.snake:
+		generate_snake(grid)
 		grid.set_auto_update_hints(true)
 		return grid
 	var adj_rule: AdjacencyRule

@@ -2028,6 +2028,146 @@ class KnightStrategy extends Strategy:
 			return false
 		return KnightStrategy.knight_mark_x(grid)
 
+class MakeSureSnakeTogetherDfs:
+	var grid: GridImpl
+	var water_count : int = 0
+	var nothing_cells : Array[Vector2i] = []
+	
+	func _init(grid_: GridImpl) -> void:
+		grid = grid_
+		# "Clears" DFS lazily so we make sure we don't visit the same thing twice
+		grid.last_seen += 1
+	func _cell_logic(i: int, j: int, cell: GridImpl.PureCell) -> bool:
+		if cell.water_full():
+			water_count += 1
+		elif cell.nothing_full():
+			nothing_cells.append(Vector2i(i,j))
+		elif cell.nowater_full():
+			return false
+		return true
+	func flood(i: int, j: int) -> void:
+		if grid.get_cell(i,j).out_of_bounds():
+			return
+		var cell := grid._pure_cell(i, j)
+		if cell.last_seen(E.Corner.TopLeft) >= grid.last_seen:
+			return
+		cell.set_last_seen(E.Corner.TopLeft, grid.last_seen)
+		var keep_going := self._cell_logic(i, j, cell)
+		if not keep_going:
+			return
+		flood(i, j - 1)
+		flood(i, j + 1)
+		flood(i + 1, j)
+		flood(i - 1, j)
+
+class SnakeStrategy extends Strategy:
+	func description() -> String:
+		return """
+		- Disallow 2x2 water grids and Ts.
+		- Put water if snake must grow that way.
+		- Mark X if cell is disconnected from current snake."""
+	func _put_x_on_2x2_and_Ts() -> bool:
+		var any := false
+		for i in grid.rows():
+			for j in grid.cols():
+				assert(grid.get_cell(i, j).cell_type() == E.CellType.Single)
+				var c := grid.get_cell(i, j)
+				# Case 1: A 2x2 grid almost full, put a X
+				if i < grid.rows() - 1 and j < grid.cols() - 1:
+					var ct := 0
+					for di in 2:
+						for dj in 2:
+							ct += 1 if grid.get_cell(i, j).water_full() else 0
+					if ct == 3:
+						for di in 2:
+							for dj in 2:
+								if grid.get_cell(i+di, j+dj).nothing_full():
+									any = true
+									grid.get_cell(i+di, j+dj).put_nowater(E.Corner.TopLeft, false, true)
+				# Case 2: A T almost full, put a X on the center
+				if grid._snake_nbhs(Vector2i(i, j)) >= 3 and c.nothing_full():
+					any = true
+					c.put_nowater(E.Corner.TopLeft, false, true)
+				# Case 3: Putting water here creates a simple 2x2, put a X 
+				if not c.wall_at(E.Walls.Right) and not c.wall_at(E.Walls.Bottom) and not grid.get_cell(i,j+1).wall_at(E.Walls.Bottom):
+					for dj in 2:
+						var c2 := grid.get_cell(i, j+dj)
+						if c2.nothing_full():
+							any = true
+							c2.put_nowater(E.Corner.TopLeft, false, true)
+				# Case 4: Putting water here creates a T, put a X
+				if c.nothing_full() and not c.wall_at(E.Walls.Left) and not c.wall_at(E.Walls.Right) and not c.wall_at(E.Walls.Bottom):
+					any = true
+					c.put_nowater(E.Corner.TopLeft, false, true)
+				# Case 5: Putting water here creates an upside down T, put a X
+				if c.nothing_full() and not c.wall_at(E.Walls.Bottom):
+					var c2 := grid.get_cell(i+1, j)
+					if not c2.wall_at(E.Walls.Left) and not c2.wall_at(E.Walls.Right):
+						any = true
+						c.put_nowater(E.Corner.TopLeft, false, true)
+				# Case 6: This has water and 2 neighbors, mark the others as X
+				if c.water_full() and grid._snake_nbhs(Vector2i(i,j)) >= 2:
+					for d in GridImpl.DIRS:
+						var c2 := grid.get_cellv(Vector2i(i,j) + d)
+						if not c2.out_of_bounds() and c2.nothing_full():
+							any = true
+							c2.put_nowater(E.Corner.TopLeft, false, true)
+		return any
+	func water_adj_possible(ij: Vector2i) -> Array[Vector2i]:
+		var pos: Array[Vector2i] = []
+		for d in GridImpl.DIRS:
+			var c := grid.get_cellv(ij + d)
+			if not c.out_of_bounds() and c.nothing_full():
+				pos.append(ij+d)
+		return pos
+	func check_paths() -> bool:
+		if grid.are_hints_satisfied():
+			return false
+		var any := false
+		# If a path or a single cell has a single location to grow to, do that
+		for i in grid.rows():
+			for j in grid.cols():
+				var ij := Vector2i(i,j)
+				if grid.get_cell(i,j).water_full():
+					var nbh := grid._snake_nbhs(ij)
+					if nbh <= 1:
+						var possible := water_adj_possible(ij)
+						if nbh == 1:
+							var ret := grid._snake_dfs(ij, ij)
+							possible.append_array(water_adj_possible(Vector2i(ret.y, ret.z)))
+						if possible.size() == 1:
+							grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false)
+							# Putting two waters here might create inconsistencies
+							return true
+		return any
+	func make_sure_snake_together() -> bool:
+		if grid.count_waters() == 0:
+			return false
+		var any := false
+		var dfs := MakeSureSnakeTogetherDfs.new(grid)
+		for i in grid.rows():
+			for j in grid.cols():
+				dfs.flood(i, j)
+				if dfs.water_count > 0 or dfs.nothing_cells.size() > 0:
+					if dfs.water_count == 0:
+						for ij in dfs.nothing_cells:
+							any = true
+							grid.get_cellv(ij).put_nowater(E.Corner.TopLeft, false, true)
+					else:
+						dfs.water_count = 0
+					dfs.nothing_cells.clear()
+		return any
+	func apply_any() -> bool:
+		if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
+			return false
+		assert(grid._snake_status() != E.HintStatus.Wrong)
+		var any := _put_x_on_2x2_and_Ts()
+		if check_paths():
+			any = true
+		if make_sure_snake_together():
+			any = true
+		return any
+
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
@@ -2063,6 +2203,7 @@ static var STRATEGY_LIST := {
 	LiarRowStrategy = func(grid): return LiarRowStrategy.new(grid),
 	SudokuStrategy = func(grid): return SudokuStrategy.new(grid),
 	KnightStrategy = func(grid): return KnightStrategy.new(grid),
+	SnakeStrategy = func(grid): return SnakeStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it

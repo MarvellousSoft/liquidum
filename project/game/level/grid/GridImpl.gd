@@ -701,6 +701,9 @@ func _pure_cell(i: int, j: int) -> PureCell:
 func get_cell(i: int, j: int) -> CellModel:
 	return CellWithLoc.new(i, j, self)
 
+func get_cellv(ij: Vector2i) -> CellModel:
+	return CellWithLoc.new(ij.x, ij.y, self)
+
 func _do_add_row(row: Array[PureCell], hints: Array[CellHints], new_wall_bottom: Array[bool], new_wall_right: Array[bool], new_line_hint: LineHint) -> AddRowChange:
 	assert(editor_mode())
 	if row.is_empty():
@@ -1768,9 +1771,49 @@ func _liar_status() -> E.HintStatus:
 				st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_adj(i, j)))
 	return st
 
-func _snake_status() -> E.HintStatus:
-	return GridModel.must_be_implemented()
+const DIRS = [Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(0, 1)]
+func _snake_nbhs(ij: Vector2i) -> int:
+	var ct := 0
+	for d in DIRS:
+		var c := get_cellv(ij + d)
+		ct += 1 if not c.out_of_bounds() and c.water_full() else 0
+	return ct
 
+# Returns (size, last cell i, last cell j)
+func _snake_dfs(ij: Vector2i, pij: Vector2i) -> Vector3i:
+	assert(get_cellv(ij).water_full())
+	for d in DIRS:
+		var c := get_cellv(ij + d)
+		if ij + d != pij and not c.out_of_bounds() and c.water_full():
+			return _snake_dfs(ij + d, ij) + Vector3i(1, 0, 0)
+	return Vector3i(1, ij.x, ij.y)
+func _snake_status() -> E.HintStatus:
+	var deg_1s : Array[Vector2i] = []
+	var deg_0s := 0
+	var water_count := 0
+	for i in n:
+		for j in m:
+			assert(get_cell(i, j).cell_type() == E.CellType.Single)
+			if get_cell(i, j).water_full():
+				water_count += 1
+				var ct := _snake_nbhs(Vector2i(i, j))
+				if ct == 0:
+					deg_0s += 1
+				elif ct == 1:
+					deg_1s.append(Vector2i(i, j))
+				elif ct > 2:
+					return E.HintStatus.Wrong
+	if water_count == 1:
+		return E.HintStatus.Satisfied # Single cell, kinda dumb but ok
+	var in_paths := 2 * deg_0s
+	for ij in deg_1s:
+		in_paths += _snake_dfs(ij, ij).x
+	if in_paths != water_count * 2:
+		return E.HintStatus.Wrong # There is a cycle
+	elif deg_1s.size() != 2 or deg_0s > 0:
+		return E.HintStatus.Normal # A bunch of paths, can still be completed
+	else:
+		return E.HintStatus.Satisfied
 
 func _sudoku_bitmask(count_water: Callable, count_nothing: Callable) -> int:
 	var bm : int = 0
