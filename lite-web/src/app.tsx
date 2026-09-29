@@ -1591,7 +1591,7 @@ export function App() {
               title={`${t('toolbar.air')} (2)`}
               aria-label={t('toolbar.air')}
             >
-              <img src={iconUrl('nowater.png')} class="w-4 h-4 object-contain" alt="air" />
+              <img src={iconUrl('nowater.png')} class="w-5 h-5 object-contain" alt="air" />
             </button>
             {hasBoats && (
               <>
@@ -1602,7 +1602,7 @@ export function App() {
                   title={`${t('toolbar.boat')} (3)`}
                   aria-label={t('toolbar.boat')}
                 >
-                  <img src={iconUrl('boat_small.png')} class="w-4 h-4 object-contain" alt="boat" />
+                  <img src={iconUrl('boat.png')} class="w-5 h-5 object-contain" alt="boat" />
                 </button>
                 <button
                   data-testid="tool-maybeboat"
@@ -1612,11 +1612,9 @@ export function App() {
                   title={`${t('toolbar.maybe_boat')} (4)`}
                   aria-label={t('toolbar.maybe_boat')}
                 >
-                  <div class="relative w-4 h-4 flex items-center justify-center pointer-events-none">
-                    <img src={iconUrl('boat_small.png')} class="w-full h-full object-contain" alt="maybe boat" />
-                    <img src={iconUrl('question_mark.png')} class="absolute inset-0 w-full h-full object-contain filter-mint" alt="?" />
-                  </div>
+                  <img src={iconUrl('maybeboat.png')} class="w-5 h-5 object-contain" alt="maybe boat" />
                 </button>
+
               </>
             )}
             <div class="draw-divider" />
@@ -1627,7 +1625,7 @@ export function App() {
               title={`${t('toolbar.draw')} (Space)`}
               aria-label={t('toolbar.draw')}
             >
-              <img src={iconUrl('brush.png')} class="w-4 h-4 object-contain" alt="draw" />
+              <img src={iconUrl('brush.png')} class="w-5 h-5 object-contain" alt="draw" />
             </button>
           </div>
         ) : (
@@ -1639,7 +1637,7 @@ export function App() {
               title={`${t('toolbar.pen')} (P, B, Tab)`}
               aria-label={t('toolbar.pen')}
             >
-              <img src={iconUrl('brush.png')} class="w-4 h-4 object-contain" alt="pen" />
+              <img src={iconUrl('brush.png')} class="w-5 h-5 object-contain" alt="pen" />
             </button>
             <button
               data-testid="draw-tool-eraser"
@@ -1648,7 +1646,7 @@ export function App() {
               title={`${t('toolbar.eraser')} (E, Tab)`}
               aria-label={t('toolbar.eraser')}
             >
-              <img src={iconUrl('eraser.png')} class="w-4 h-4 object-contain" alt="eraser" />
+              <img src={iconUrl('eraser.png')} class="w-5 h-5 object-contain" alt="eraser" />
             </button>
             <button
               data-testid="draw-color-picker"
@@ -1658,7 +1656,7 @@ export function App() {
               aria-label={t('toolbar.change_color')}
             >
               <div
-                class="w-4 h-4 rounded-full border border-white/60 shadow"
+                class="w-5 h-5 rounded-full border border-white/60 shadow"
                 style={{ backgroundColor: DRAW_COLORS[drawColorIdx] }}
               />
             </button>
@@ -1669,7 +1667,7 @@ export function App() {
               title={`${t('toolbar.clear_all')} (X, Del)`}
               aria-label={t('toolbar.clear_all')}
             >
-              <img src={iconUrl('clear.png')} class="w-4 h-4 object-contain" alt="clear" />
+              <img src={iconUrl('clear.png')} class="w-5 h-5 object-contain" alt="clear" />
             </button>
             <div class="draw-divider" />
             <button
@@ -1679,7 +1677,7 @@ export function App() {
               title={`${t('toolbar.done')} (Space)`}
               aria-label={t('toolbar.done')}
             >
-              <img src={iconUrl('checkmark.png')} class="w-4 h-4 object-contain" alt="" />
+              <img src={iconUrl('checkmark.png')} class="w-5 h-5 object-contain" alt="" />
             </button>
           </div>
         )}
