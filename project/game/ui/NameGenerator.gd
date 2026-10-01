@@ -140,7 +140,7 @@ const ANIMALS: Array[String] = [
   "hermit crab",
 ]
 
-static func get_name(rng: RandomNumberGenerator, seed_: String) -> String:
+static func gen_name(rng: RandomNumberGenerator, seed_: String) -> String:
 	rng.seed = RandomHub.consistent_hash(seed_)
 	return "%s %s" % [
 		ADJECTIVES[rng.randi_range(0, ADJECTIVES.size() - 1)],

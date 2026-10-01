@@ -97,6 +97,55 @@ class Strategy:
 		return GridModel.must_be_implemented()
 	func description() -> String:
 		return "No description"
+	# Returns (min, mx)
+	func _symbol_infer(s: String, cur_value: float, max_value: float) -> Vector2:
+		assert(s != "")
+		var any_diags := false
+		for i in grid.rows():
+			for j in grid.cols():
+				any_diags = any_diags or (grid.get_cell(i,j).cell_type() != E.CellType.Single)
+		var d: float = 0.5 if any_diags else 1
+		# Innefficient to compute this every time... but oh well, I won't optimize this now
+		var s_vals := grid._symbols_values()
+		var fixed_values := {}
+		# For each symbol, which range it could take
+		var s_to_range := {}
+		var forced_values := {}
+		for s2 in s_vals:
+			var mn_possible : float = -10000
+			var mx_possible : float = 10000
+			for val in s_vals[s2]:
+				mn_possible = max(mn_possible, val.x)
+				mx_possible = min(mx_possible, val.y)
+			if mn_possible == mx_possible:
+				forced_values[mn_possible] = true
+				if s == s2:
+					return Vector2(mn_possible, mx_possible)
+			else:
+				s_to_range[s2] = Vector2(mn_possible, mx_possible)
+		while true:
+			var any_change := false
+			for s2 in s_to_range.keys():
+				var s2_range : Vector2 = s_to_range[s2]
+				while forced_values.has(s2_range.x):
+					any_change = true
+					s2_range.x += d
+				while forced_values.has(s2_range.y):
+					any_change = true
+					s2_range.y -= d
+				if s2_range.x > s2_range.y:
+					# Something invalid
+					return Vector2(cur_value, max_value)
+				if s2_range.x == s2_range.y:
+					if s2 == s:
+						return s2_range
+					forced_values[s2_range.x] = true
+					s_to_range.erase(s2)
+				else:
+					s_to_range[s2] = s2_range
+			if not any_change:
+				break
+		return s_to_range[s]
 	func _water_min(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
 		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
 			var bm : int = grid._sudoku_bitmask(grid.count_water_row, grid.count_nothing_row) if rows else grid._sudoku_bitmask(grid.count_water_col, grid.count_nothing_col)
@@ -110,6 +159,8 @@ class Strategy:
 				return val + 2.0
 			else:
 				return val
+		if hint.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+			return maxf(cur_value, _symbol_infer(hint.water_alt_text, cur_value, max_value).x)
 		return hint.water_count
 	func _water_max(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
 		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
@@ -124,6 +175,8 @@ class Strategy:
 				return val - 2.0
 			else:
 				return val
+		if hint.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+			return minf(max_value, _symbol_infer(hint.water_alt_text, cur_value, max_value).y)
 		return hint.water_count
 
 
@@ -1447,26 +1500,31 @@ class CellHintsStrategy extends Strategy:
 		for i in grid.rows():
 			for j in grid.cols():
 				var c := grid.get_cell(i, j).hints()
-				if c != null and _apply(i, j, c):
-					any = true
+				if c != null:
+					var vals := Vector2(c.adj_water_count, c.adj_water_count)
+					if c.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+						var cur := grid.count_water_adj(i, j)
+						vals = _symbol_infer(c.water_alt_text, cur, cur + grid.count_nothing_adj(i, j))
+					if _apply(i, j, c, vals.x, vals.y):
+						any = true
 		return any
-	func _apply(_i: int, _j: int, _hint: GridModel.CellHints) -> bool:
+	func _apply(_i: int, _j: int, _hint: GridModel.CellHints, _water_hint_min: float, _water_hint_max: float) -> bool:
 		return GridModel.must_be_implemented()
 
 class CellHintsBasic extends CellHintsStrategy:
 	func description() -> String:
 		return "If the hint are must have ALL waters, or can't have ANY, fill it accordingly"
-	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
-		if hint.adj_water_count < 0:
+	func _apply(i: int, j: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
+		if water_hint_min < 0:
 			return false
 		var nothing_adj := grid.count_nothing_adj(i, j)
 		if nothing_adj == 0:
 			return false
-		var water_adj := grid.count_water_adj(i, j)
+		var waters_adj := grid.count_water_adj(i, j)
 		var fill_with: GridImpl.Content
-		if water_adj == hint.adj_water_count:
+		if water_hint_max == waters_adj:
 			fill_with = GridImpl.Content.NoWater
-		elif water_adj + nothing_adj == hint.adj_water_count:
+		elif waters_adj + nothing_adj == water_hint_min:
 			fill_with = GridImpl.Content.Water
 		else:
 			return false
@@ -1487,7 +1545,7 @@ class CellHintsBasic extends CellHintsStrategy:
 		assert(any, "Should have added something")
 		return any
 
-static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, area_check: GridImpl.AreaCheck) -> bool:
+static func generic_solve(grid: GridImpl, advanced: bool, water_hint_min: float, water_hint_max: float, area_check: GridImpl.AreaCheck) -> bool:
 	# These are not necessarily full aquariums and MAY be in the same aquarium if
 	# we consider the whole grid, but we only consider the 3x3 part
 	var rect_aqs: Array[GridImpl.AquariumInfo] = []
@@ -1515,7 +1573,7 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 				total_empty += dfs.info.total_empty
 				total_water += dfs.info.total_water
 				any_pools = any_pools or dfs.info.has_pool
-	if water_hint < total_water or total_empty == 0:
+	if water_hint_max < total_water or total_empty == 0:
 		return false
 	var any := false
 	if not advanced:
@@ -1526,7 +1584,7 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 			for di in aq.empty_at_height.size():
 				if aq.empty_at_height[di] == 0:
 					continue
-				if total_empty - aq.total_empty < water_hint - total_water:
+				if total_empty - aq.total_empty < water_hint_min - total_water:
 					any = true
 					for pos in aq.cells_at_height[di]:
 						SolverModel._put_water(grid, pos)
@@ -1541,7 +1599,7 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 			for di in range(aq.empty_at_height.size() - 1, -1, -1):
 				if aq.empty_at_height[di] == 0:
 					continue
-				if aq.total_empty > water_hint - total_water:
+				if aq.total_empty > water_hint_max - total_water:
 					any = true
 					for pos in aq.cells_at_height[di]:
 						SolverModel._put_nowater(grid, pos)
@@ -1565,7 +1623,10 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint: float, are
 				opt_to_aq[opt] = aq
 				options.append(opt)
 			options.sort()
-			var water_needed := water_hint - total_water
+			# This next part needs an exact number
+			if water_hint_min != water_hint_max:
+				return false
+			var water_needed := water_hint_min - total_water
 			if not OptionsSum.can_be_solved(water_needed, options):
 				return false
 			for idx in options.size():
@@ -1625,10 +1686,10 @@ class CellHintsMore extends CellHintsStrategy:
 	func _init(grid_: GridImpl, advanced_: bool) -> void:
 		super(grid_)
 		advanced = advanced_
-	func _apply(i: int, j: int, hint: GridModel.CellHints) -> bool:
+	func _apply(i: int, j: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
 		if hint.adj_water_count < 0.0 or grid.count_nothing_adj(i, j) == 0:
 			return false
-		return SolverModel.generic_solve(grid, advanced, hint.adj_water_count, GridImpl.RectAreaCheck.new(Rect2i(i - 1, j - 1, 3, 3)))
+		return SolverModel.generic_solve(grid, advanced, water_hint_min, water_hint_max, GridImpl.RectAreaCheck.new(Rect2i(i - 1, j - 1, 3, 3)))
 
 class RectWithExclusionArea extends GridImpl.AreaCheck:
 	var include_rect: Rect2i
@@ -1673,19 +1734,31 @@ class TwoCellHints extends Strategy:
 		for i in grid.rows():
 			for j in grid.cols():
 				var c := grid.get_cell(i, j).hints()
-				if c == null or c.adj_water_count <= 0.0:
+				if c == null:
+					continue
+				var cwater_hint := Vector2(c.adj_water_count, c.adj_water_count)
+				if c.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+					var cur := grid.count_water_adj(i, j)
+					cwater_hint = _symbol_infer(c.water_alt_text, cur, cur + grid.count_nothing_adj(i, j))
+				if cwater_hint.x <= 0:
 					continue
 				for di in range(-2, 3):
 					for dj in range(-2, 3):
 						if (di == 0 and dj == 0) or not rect.has_point(Vector2i(i + di, j + dj)):
 							continue
 						var d := grid.get_cell(i + di, j + dj).hints()
-						if d == null or d.adj_water_count <= 0.0:
+						if d == null:
+							continue
+						var dwater_hint := Vector2(d.adj_water_count, d.adj_water_count)
+						if d.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+							var cur := grid.count_water_adj(i+di, j+dj)
+							dwater_hint = _symbol_infer(d.water_alt_text, cur, cur + grid.count_nothing_adj(i+di, j+dj))
+						if dwater_hint.x <= 0:
 							continue
 						var extra := _fixed_water_outside_intersection(i, j, di, dj)
 						if extra == -1:
 							continue
-						if SolverModel.generic_solve(grid, advanced, d.adj_water_count - (c.adj_water_count - extra), RectWithExclusionArea.new(Rect2i(i + di - 1, j + dj - 1, 3, 3), Rect2i(i - 1, j - 1, 3, 3))):
+						if SolverModel.generic_solve(grid, advanced, dwater_hint.x - (cwater_hint.y - extra), dwater_hint.y - (cwater_hint.x - extra), RectWithExclusionArea.new(Rect2i(i + di - 1, j + dj - 1, 3, 3), Rect2i(i - 1, j - 1, 3, 3))):
 							any = true
 		return any
 
@@ -1726,7 +1799,7 @@ class CellHintTogetherToDo:
 		for filled in result:
 			tot += Ij2.size(grid, filled)
 		return tot
-	func mark_far_away_nowaters(grid: GridImpl, ci: int, cj: int, waters_left: float) -> void:
+	func mark_far_away_nowaters(grid: GridImpl, ci: int, cj: int, waters_left_min: float, waters_left_max: float) -> void:
 		var start_positions: Array[Vector2i] = []
 		# Get one cell from each water component
 		var wdfs := GridImpl.WaterAdjDfs.new(grid, ci, cj)
@@ -1768,7 +1841,7 @@ class CellHintTogetherToDo:
 								filled.append(npos)
 						var cost := get_fill_cost(grid, filled)
 						# Can't get there
-						if cur_dist + cost > waters_left:
+						if cur_dist + cost > waters_left_max:
 							continue
 						for npos in filled:
 							if cost == 0:
@@ -1778,7 +1851,7 @@ class CellHintTogetherToDo:
 							else:
 								dist_2_pos[cur_dist + cost].append(npos)
 				cur_dist += 0.5
-			if total_new_water_visited < waters_left:
+			if total_new_water_visited < waters_left_min:
 				impossible = true
 			for other_spos in start_positions:
 				# Can't connect two components
@@ -1796,22 +1869,22 @@ class CellHintTogetherToDo:
 					match c._content_at(E.waters_to_corner(loc)):
 						Content.Nothing, Content.NoBoat:
 							to_mark_nowater.append(wpos)
-	static func create(grid: GridImpl, ci: int, cj: int, expected_together_waters: float) -> CellHintTogetherToDo:
+	static func create(grid: GridImpl, ci: int, cj: int, expected_together_waters_min: float, expected_together_waters_max: float) -> CellHintTogetherToDo:
 		var todo := CellHintTogetherToDo.new()
 		var dfs := ComponentAdjDfs.new(grid, ci, cj)
 		var empty_cmps: Array[GridImpl.ComponentInfo] = []
 		var any_water := false
-		var waters_left := expected_together_waters
+		var waters_used : float = 0
 		for i in range(ci - 1, ci + 2):
 			for j2 in range(2 * cj - 2, 2 * cj + 4):
 				if dfs.flood(i, j2):
 					if dfs.info.total_water > 0:
-						waters_left -= dfs.info.total_water
+						waters_used += dfs.info.total_water
 						if any_water:
 							# >1 component with water
 							todo.impossible = true
 						# This component is not big enough
-						if expected_together_waters >= 0 and dfs.info.total_water + dfs.info.total_empty < expected_together_waters:
+						if expected_together_waters_min >= 0 and dfs.info.total_water + dfs.info.total_empty < expected_together_waters_min:
 							todo.impossible = true
 						any_water = true
 					elif dfs.info.total_empty > 0:
@@ -1819,7 +1892,7 @@ class CellHintTogetherToDo:
 						# We could also use OptionsSum and aquarium decomposition to
 						# see if it could actually fit exactly N waters, but I don't
 						# think that would make it much better.
-						if expected_together_waters > dfs.info.total_empty:
+						if expected_together_waters_min > dfs.info.total_empty:
 							todo.to_mark_nowater.append_array(dfs.info.empties)
 						else:
 							empty_cmps.append(dfs.info)
@@ -1827,8 +1900,8 @@ class CellHintTogetherToDo:
 		if any_water:
 			for cmp in empty_cmps:
 				todo.to_mark_nowater.append_array(cmp.empties)
-			if waters_left > 0:
-				todo.mark_far_away_nowaters(grid, ci, cj, waters_left)
+			if expected_together_waters_max - waters_used > 0:
+				todo.mark_far_away_nowaters(grid, ci, cj, max(0, expected_together_waters_min - waters_used), expected_together_waters_max - waters_used)
 		elif empty_cmps.is_empty():
 			# No component big enough
 			todo.impossible = true
@@ -1837,10 +1910,10 @@ class CellHintTogetherToDo:
 class BasicTogetherCellHintsStrategy extends CellHintsStrategy:
 	func description() -> String:
 		return "Put X on small components, and if there's a water, put X on all other components and far away cells."
-	func _apply(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+	func _apply(ci: int, cj: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
 		if hint.adj_water_count_type != E.HintType.Together:
 			return false
-		var todo := CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count)
+		var todo := CellHintTogetherToDo.create(grid, ci, cj, water_hint_min, water_hint_max)
 		if todo.impossible:
 			return false
 		var any := false
@@ -1874,10 +1947,10 @@ static func can_separate_aqs(l: GridImpl.AquariumInfo, r: GridImpl.AquariumInfo)
 		return true
 	
 
-static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, hint: GridModel.CellHints) -> bool:
-	if hint.adj_water_count >= 0 and grid.count_water_adj(ci, cj) == hint.adj_water_count:
+static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, water_hint_min: float, water_hint_max: float) -> bool:
+	if water_hint_max >= 0 and grid.count_water_adj(ci, cj) == water_hint_max:
 		# Impossible if it is already full and together
-		return grid.together_waters_adj(hint.adj_water_count, ci, cj) == E.HintType.Together
+		return grid.together_waters_adj(water_hint_max, ci, cj) == E.HintType.Together
 	var dfs := ComponentAdjDfs.new(grid, ci, cj)
 	var cmp: GridImpl.ComponentInfo = null
 	for i in range(ci - 1, ci + 2):
@@ -1890,7 +1963,7 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 	if cmp == null:
 		return true
 	# No space to make a separation
-	if hint.adj_water_count >= 0 and hint.adj_water_count >= cmp.total_water + cmp.total_empty:
+	if water_hint_min >= 0 and water_hint_min >= cmp.total_water + cmp.total_empty:
 		return true
 	var wdfs := GridImpl.WaterAdjDfs.new(grid, ci, cj)
 	wdfs.calc_component_info()
@@ -1957,31 +2030,31 @@ static func is_cellhint_separated_impossible(grid: GridImpl, ci: int, cj: int, h
 class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 	func description() -> String:
 		return "Try puttin water and no water on each place and see if satisfying the cellhint becomes impossible."
-	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+	func hint_now_invalid(ci: int, cj: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
 		if hint.adj_water_count_type == E.HintType.Separated:
-			return SolverModel.is_cellhint_separated_impossible(grid, ci, cj, hint)
+			return SolverModel.is_cellhint_separated_impossible(grid, ci, cj, water_hint_min, water_hint_max)
 		if hint.adj_water_count_type == E.HintType.Together:
-			return CellHintTogetherToDo.create(grid, ci, cj, hint.adj_water_count).impossible
+			return CellHintTogetherToDo.create(grid, ci, cj, water_hint_min, water_hint_max).impossible
 		return false
-	func try_water_nowater(ci: int, cj: int, hint: GridModel.CellHints, i: int, j: int, waters: E.Waters) -> bool:
+	func try_water_nowater(ci: int, cj: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float, i: int, j: int, waters: E.Waters) -> bool:
 		var c := grid.get_cell(i, j)
 		var corner := E.waters_to_corner(waters)
 		var content := grid._pure_cell(i, j)._content_at(corner)
 		if content == Content.Nothing or content == Content.NoBoat:
 			c.put_water(corner, true)
-			if hint_now_invalid(ci, cj, hint):
+			if hint_now_invalid(ci, cj, hint, water_hint_min, water_hint_max):
 				grid.undo()
 				SolverModel._put_nowater(grid, GridModel.WaterPosition.new(i, j, waters))
 				return true
 			grid.undo()
 			c.put_nowater(corner, true, true)
-			if hint_now_invalid(ci, cj, hint):
+			if hint_now_invalid(ci, cj, hint, water_hint_min, water_hint_max):
 				grid.undo()
 				SolverModel._put_water(grid, GridModel.WaterPosition.new(i, j, waters))
 				return true
 			grid.undo()
 		return false
-	func _apply(ci: int, cj: int, hint: GridModel.CellHints) -> bool:
+	func _apply(ci: int, cj: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
 		if hint.adj_water_count_type in [E.HintType.Hidden, E.HintType.Zero]:
 			return false
 		var any := false
@@ -1992,10 +2065,10 @@ class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 				var c := grid.get_cell(i, j)
 				var waters := c.waters()
 				if j == cj - 1 or grid.wall_at(i, j, E.Side.Left):
-					if try_water_nowater(ci, cj, hint, i, j, waters[0]):
+					if try_water_nowater(ci, cj, hint, water_hint_min, water_hint_max, i, j, waters[0]):
 						any = true
 				if waters.size() > 1:
-					if try_water_nowater(ci, cj, hint, i, j, waters[1]):
+					if try_water_nowater(ci, cj, hint, water_hint_min, water_hint_max, i, j, waters[1]):
 						any = true
 		return any
 
@@ -2168,6 +2241,15 @@ class SnakeStrategy extends Strategy:
 			any = true
 		return any
 
+class SymbolsStrategy extends Strategy:
+	func apply_any() -> bool:
+		if not grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+			return false
+		var any := false
+		return any
+	func description() -> String:
+		return "If some row/column/cell needs to be fully filled or empty"
+
 # We need these func's because of a Godot internal issue on release builds
 # https://github.com/godotengine/godot/issues/80526
 static var STRATEGY_LIST := {
@@ -2319,21 +2401,27 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 				var c := grid.get_cell(i, j)
 				if c.nothing_at(corner):
 					# New undo stack
+					#print("Try water at (%d, %d) corner %d" % [i, j, corner])
 					c.put_water(corner, true)
 					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, look_for_multiple)
 					grid.undo()
+					#print("Undoing")
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
+						#print("Water at (%d, %d) was unsolvable, definitely nowater" % [i, j])
 						c.put_nowater(corner, false)
 						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple))
 					elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
+						#print("Actually redoing water on (%d, %d)" % [i, j])
 						grid.redo()
 						return r1
+					#print("No instead try nowater at (%d, %d) corner %d" % [i, j, corner])
 					# Otherwise we need to try to solve with nowater
 					c.put_nowater(corner, true, true)
 					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false)
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
+						#print("Nowater at (%d, %d) was unsolvable, do water" % [i, j])
 						grid.undo()
 						c.put_water(corner, false)
 						# TODO: Maybe here we could store the undo stack and reuse it

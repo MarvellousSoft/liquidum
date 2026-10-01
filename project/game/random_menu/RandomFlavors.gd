@@ -39,13 +39,91 @@ enum Flavor {
 	Liar,
 	# Sudoku, simple rules
 	Sudoku,
-	# Knight variant, simple rules
+	# Knight variant with {-
 	Knight,
-	# Snake variant, simple rules
+	# Snake variant with {-
 	Snake,
+	# Symbols variant, simple rules
+	Symbols,
 }
 
+static func _symbols_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	var opts := Generator.builder().with_min_water(10) 
+	if rng.randf() < 0.6:
+		opts.with_cell_hints(rng.randf_range(0.01, 0.3))
+	if rng.randf() < 0.35:
+		opts.with_diags()
+	return opts
+
+static func _symbols_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	if not grid.rule_variants().has(GridModel.RuleVariant.Symbols):
+		grid.rule_variants().append(GridModel.RuleVariant.Symbols)
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.apply_to_grid(grid)
+	# for each number, how many times it appears
+	var count : Dictionary = {}
+	var will_use : Dictionary = {}
+	var total_hints := grid.rows() + grid.cols()
+	for i in grid.rows():
+		var w := grid.count_water_row(i)
+		count[w] = count.get(w, 0) + 1
+		for j in grid.cols():
+			var ch := grid.get_cell(i, j).hints()
+			if ch != null:
+				w = grid.count_water_adj(i, j)
+				count[w] = count.get(w, 0) + 1
+				total_hints += 1
+	for j in grid.cols():
+		var w := grid.count_water_col(j)
+		count[w] = count.get(w, 0) + 1
+	var hints := count.keys()
+	hints.sort_custom(func(a, b): return count[a] > count[b])
+	var min_hints_to_remove := rng.randi_range(floori(total_hints * 0.25), floori(total_hints * 0.75))
+	while hints.size() > 3 and (min_hints_to_remove > 0 or (hints.size() > 1 and count[hints[hints.size()-2]] == 1)):
+		min_hints_to_remove -= count[hints.back()]
+		hints.pop_back()
+	for hi in hints:
+		var has_hints: int = count[hi]
+		if has_hints > 2:
+			has_hints = mini(has_hints, rng.randi_range(2, has_hints + 2))
+		will_use[hi] = has_hints
+	Global.shuffle(hints, rng)
+	var hint_symbol : Dictionary = {}
+	for i in hints.size():
+		# Not all occurrences might have symbols
+		var symbols : Array[String] = []
+		symbols.resize(will_use[hints[i]])
+		symbols.fill(String.chr(65 + i))
+		if will_use[hints[i]] < count[hints[i]]:
+			for _i in (count[hints[i]] - will_use[hints[i]]):
+				symbols.append("")
+			Global.shuffle(symbols, rng)
+		hint_symbol[hints[i]] = symbols
+	var get_symbol := func(ct: float):
+		var symbols = hint_symbol.get(ct)
+		var s := ""
+		if symbols != null:
+			s = symbols.back()
+			symbols.pop_back()
+		return s
+	for i in grid.rows():
+		grid.row_hints()[i].water_alt_text = get_symbol.call(grid.count_water_row(i))
+		for j in grid.cols():
+			var ch := grid.get_cell(i, j).hints()
+			if ch != null:
+				ch.water_alt_text = get_symbol.call(grid.count_water_adj(i, j))
+				if ch.water_alt_text == "":
+					# Kinda cheating to remove it here, but fine
+					grid.get_cell(i,j).rem_cell_hints(false)
+	for j in grid.cols():
+		grid.col_hints()[j].water_alt_text = get_symbol.call(grid.count_water_col(j))
+
+static func _symbols_size_gen(rng: RandomNumberGenerator) -> Vector2i:
+	return Vector2i(rng.randi_range(4, 7), rng.randi_range(4, 7))
+
 static func _snake_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
+		grid.rule_variants().append(GridModel.RuleVariant.Snake)
 	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
 	#h.total_water = rng.randf() < 0.4
 	for a in [h.row, h.col]:
@@ -53,10 +131,10 @@ static func _snake_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(1, a.size()*.75))
 	h.apply_to_grid(grid)
 	RandomHub.hide_too_easy_hints(grid)
-	if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
-		grid.rule_variants().append(GridModel.RuleVariant.Snake)
 
 static func _knight_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	if not grid.rule_variants().has(GridModel.RuleVariant.Knight):
+		grid.rule_variants().append(GridModel.RuleVariant.Knight)
 	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
 	h.total_water = rng.randf() < 0.4
 	for a in [h.row, h.col]:
@@ -64,13 +142,13 @@ static func _knight_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(0, a.size()/2))
 	h.apply_to_grid(grid)
 	RandomHub.hide_too_easy_hints(grid)
-	if not grid.rule_variants().has(GridModel.RuleVariant.Knight):
-		grid.rule_variants().append(GridModel.RuleVariant.Knight)
 
 static func _knight_size_gen(rng: RandomNumberGenerator) -> Vector2i:
 	return Vector2i(rng.randi_range(6, 9), rng.randi_range(6, 9))
 
 static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	if not grid.rule_variants().has(GridModel.RuleVariant.Liar):
+		grid.rule_variants().append(GridModel.RuleVariant.Liar)
 	Level.HintVisibility.default(grid.rows(), grid.cols()).apply_to_grid(grid)
 	var up_pct = rng.randf_range(0.25, 0.75)
 	for i in grid.rows():
@@ -81,8 +159,6 @@ static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 		var w := grid.count_water_col(j)
 		var d := 1 if w <= grid.rows() - 2 and (w < 2 or rng.randf() < up_pct) else -1
 		grid.col_hints()[j].water_alt_text = str(grid.count_water_col(j) + d)
-	if not grid.rule_variants().has(GridModel.RuleVariant.Liar):
-		grid.rule_variants().append(GridModel.RuleVariant.Liar)
 
 static func _liar_size_gen(rng: RandomNumberGenerator) -> Vector2i:
 	return Vector2i(rng.randi_range(5, 8), rng.randi_range(5, 8))
@@ -328,6 +404,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate_with_size(rng, RandomFlavors._knight_size_gen, RandomFlavors._knight_hints, _builder(b.with_knights()), strategies, [], false)
 		Flavor.Snake:
 			return await l_gen.generate_with_size(rng, RandomFlavors._knight_size_gen, RandomFlavors._snake_hints, _builder(b.with_snake()), strategies, []) 
+		Flavor.Symbols:
+			return await l_gen.generate_with_size(rng, RandomFlavors._symbols_size_gen, RandomFlavors._symbols_hints, RandomFlavors._symbols_builder, strategies, []) 
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null

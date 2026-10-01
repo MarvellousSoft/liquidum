@@ -1869,51 +1869,76 @@ func _sudoku_status() -> E.HintStatus:
 	))
 	return st
 
-func _symbols_status() -> E.HintStatus:
+# Returns Dict of String -> Array[Vector2]
+# For each symbol, for all its occurrences, the amount of water in it
+# and the maximum amount of water (not counting obstacles and X)"
+func _symbols_values() -> Dictionary:
 	var symbol_to_vals : Dictionary = {}
-	var nonsymbols : Array[float] = []
-	var for_symbol := func(s: String) -> Array[float]:
+	var add_occ := func(s: String, cur: float, empty: float) -> void:
 		if s == "":
-			return nonsymbols
+			return
 		elif not symbol_to_vals.has(s):
 			symbol_to_vals[s] = []
-		return symbol_to_vals[s]
+		symbol_to_vals[s].append(Vector2(cur, cur + empty))
 	for i in n:
-		if _row_hints[i].water_alt_text != "":
-			for_symbol.call(_row_hints[i].water_alt_text).append(count_water_row(i))
-		if _row_hints[i].boat_alt_text != "":
-			for_symbol.call(_row_hints[i].boat_alt_text).append(count_boat_row(i))
+		add_occ.call(_row_hints[i].water_alt_text, count_water_row(i), count_nothing_row(i))
+		# If we're actually doing boats, improve this to "possible boat positions"
+		add_occ.call(_row_hints[i].boat_alt_text, count_boat_row(i), count_nothing_row(i))
+		for j in m:
+			var ch := get_cell(i, j).hints()
+			if ch != null:
+				add_occ.call(ch.water_alt_text, count_water_adj(i, j), count_nothing_adj(i, j))
 	for j in m:
-		if _col_hints[j].water_alt_text != "":
-			for_symbol.call(_col_hints[j].water_alt_text).append(count_water_col(j))
-		if _col_hints[j].boat_alt_text != "":
-			for_symbol.call(_col_hints[j].boat_alt_text).append(count_boat_col(j))
+		add_occ.call(_col_hints[j].water_alt_text, count_water_col(j), count_nothing_col(j))
+		add_occ.call(_col_hints[j].boat_alt_text, count_boat_col(j), count_nothing_col(j))
+	return symbol_to_vals
+
+func _symbols_status() -> E.HintStatus:
+	var any_cellhint := false
+	var any_diags := false
 	for i in n:
 		for j in m:
-			var hint: CellHints = cell_hints[i][j]
-			if hint != null and hint.water_alt_text != "":
-				for_symbol.call(hint.water_alt_text).append(count_water_adj(i, j))
+			any_cellhint = any_cellhint or (cell_hints[i][j] != null)
+			any_diags = any_diags or (get_cell(i,j).cell_type() != E.CellType.Single)
+	var symbol_to_vals := _symbols_values()
 	var st := E.HintStatus.Satisfied
-	var vals : Array[float] = []
+	var vals : Array[Vector2] = []
 	for symbol in symbol_to_vals:
-		var mn : float = 10000
-		var mx : float = -1
+		var mn_cur : float = 10000
+		var mx_cur : float = -10000
+		var mx_possible : float = 10000
 		for val in symbol_to_vals[symbol]:
-			mn = min(mn, val)
-			mx = max(mx, val)
-		if mn != mx:
+			mn_cur = min(mn_cur, val.x)
+			mx_cur = max(mx_cur, val.x)
+			mx_possible = min(mx_possible, val.y)
+		if mn_cur != mx_cur:
+			# Some symbol has different water quantities
 			st = E.HintStatus.Normal
-		vals.append(mx)
-	vals.sort()
-	var mn_value := 0
-	for i in vals.size():
-		if vals[i] < mn_value:
-			st = E.HintStatus.Normal
-		else:
-			mn_value = vals[i]
-		if mn_value > 9 and mn_value > n and mn_value > m:
+		if mx_cur > mx_possible:
+			# Already for some symbol some row can't reach the min required
 			return E.HintStatus.Wrong
-		mn_value = mn_value + 0.5
+		vals.append(Vector2(mx_cur, mx_possible))
+	var unassigned := vals.duplicate()
+	var p : float = 0.0
+	var step : float = 0.5 if any_diags else 1.0
+	var max_p : float = 9.0 if any_cellhint else float(max(n, m))
+	while not unassigned.is_empty():
+		var best_idx := -1
+		var best_r : float = 10000.0
+		for idx in unassigned.size():
+			var intv : Vector2 = unassigned[idx]
+			if intv.y < p:
+				# Exceeded the upper bound of an unassigned symbol -> impossible
+				return E.HintStatus.Wrong
+			if intv.x <= p and intv.y >= p:
+				if intv.y < best_r:
+					best_r = intv.y
+					best_idx = idx
+		if best_idx != -1:
+			unassigned.remove_at(best_idx)
+		p += step
+		if p > max_p and not unassigned.is_empty():
+			return E.HintStatus.Wrong
 	return st
 
 
@@ -1936,6 +1961,23 @@ func _knight_status() -> E.HintStatus:
 								return E.HintStatus.Wrong
 	return E.HintStatus.Satisfied
 
+func _quad_status() -> E.HintStatus:
+	var st := E.HintStatus.Satisfied
+	for i in (n - 1):
+		for j in (m - 1):
+			var any_w := false
+			var any_empty := false
+			for di in 2:
+				for dj in 2:
+					any_w = any_w or (_pure_cell(i+di,j+dj).water_count() > 0)
+					any_empty = any_empty or (_pure_cell(i+di,j+dj).nothing_count() > 0)
+			if not any_w:
+				st = E.HintStatus.Normal
+				if not any_empty:
+					return E.HintStatus.Wrong
+	return st
+
+
 func rule_variants_status() -> Array[E.HintStatus]:
 	var ret : Array[E.HintStatus] = []
 	for rule in _rule_variants:
@@ -1950,6 +1992,8 @@ func rule_variants_status() -> Array[E.HintStatus]:
 				ret.append(_symbols_status())
 			GridModel.RuleVariant.Knight:
 				ret.append(_knight_status())
+			GridModel.RuleVariant.Quad:
+				ret.append(_quad_status())
 	return ret
 
 func count_nowater_row(i : int) -> float:

@@ -862,6 +862,7 @@ func _on_dev_buttons_set_variant(variant: GridModel.RuleVariant, val: bool) -> v
 	else:
 		GridNode.grid_logic.rule_variants().erase(variant)
 	print("Changed variants to: ", GridNode.grid_logic.rule_variants())
+	print("Solvable: ", GridNode.grid_logic.all_hints_status())
 
 
 func _on_button_mouse_entered() -> void:

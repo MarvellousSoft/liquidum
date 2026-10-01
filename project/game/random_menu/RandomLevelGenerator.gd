@@ -93,7 +93,7 @@ func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable,
 func generate_with_size(rng: RandomNumberGenerator, gen_size: Callable, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	cancel_gen = false
 	# Uncomment this to force same thread, which improves the debug experience
-	#return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)
+	return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)
 	gen_thread.start(func(): return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats))
 	return await Global.wait_for_thread(gen_thread)
 

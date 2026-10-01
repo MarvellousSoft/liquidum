@@ -363,7 +363,7 @@ func leaderboard_download_completion(leaderboard_id: String, start: int, count: 
 				entry.extra_data["ios_game_center_id"] = acc.PlatformUserId
 		var display_name := _display_from_profile(raw_entry.Profile)
 		if display_name == "":
-			display_name = NameGenerator.get_name(rng, str(raw_entry.PlayFabId))
+			display_name = NameGenerator.gen_name(rng, str(raw_entry.PlayFabId))
 		entry.display_name = display_name
 		data.entries.append(entry)
 	return data
