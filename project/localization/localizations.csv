@@ -369,6 +369,7 @@ SYMBOLS_RULES,"""Symbols"" Rules - Same symbol hints represent the same value of
 KNIGHT_RULES,"""Knight"" Rules - Two cells separated by a chess knight's move cannot both contain water.","Regra ""Cavalo"" - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água.","Regra ""Cavalo"" - Duas células separadas por um movimento de cavalo do xadrez não podem ambas conter água."
 IMPOSTOR_RULES,"""Impostor"" Rules - Exactly one given number hint is a complete lie.","Regra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira.","Regra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira."
 POOL_RULES,"""Pools"" Rules - Cell hints describe the amount of orthogonaly connected water cells they are a part of.","Regra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte.","Regra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte."
+QUAD_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água."
 EXTRA_08_01,Liar 1,Liar 1,Liar 1
 EXTRA_08_02,Level,,
 EXTRA_08_03,Level,,
