@@ -388,13 +388,12 @@ func _on_dark_mode_changed(is_dark : bool):
 func _on_button_mouse_entered():
 	AudioManager.play_sfx("button_hover")
 
-func _on_marathon_button_pressed() -> void:
-	AudioManager.play_sfx("button_pressed")
-	%Marathon/Button.hide()
-	%Marathon/Slider.value = 10
-	%Marathon/Slider.show()
-	_update_contents()
-
 
 func _on_marathon_value_changed(_value: float) -> void:
 	_update_contents()
+
+
+func _on_button_marathon_count_pressed(count: int) -> void:
+	if count != %Marathon/Slider.value:
+		%Marathon/Slider.value = count
+		_update_contents()
