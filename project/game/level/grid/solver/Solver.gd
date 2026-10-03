@@ -98,16 +98,25 @@ class Strategy:
 	func description() -> String:
 		return "No description"
 	# Returns (min, mx)
-	func _symbol_infer(s: String, cur_value: float, max_value: float) -> Vector2:
+	var _cached_grid_str: String = ""
+	var _cached_inferred_symbols: Dictionary = {}
+	func _fill_nowater(i: int, j: int) -> void:
+		var c := grid.get_cell(i, j)
+		if not c.out_of_bounds():
+			for co in c.corners():
+				if c.nothing_at(co):
+					c.put_nowater(co, false, true)
+	func _symbol_infer(s: String) -> Vector2:
 		assert(s != "")
+		# Let's try some dummy memoizing, but it should be done better
+		if _cached_grid_str == grid.to_str():
+			return _cached_inferred_symbols[s]
 		var any_diags := false
 		for i in grid.rows():
 			for j in grid.cols():
 				any_diags = any_diags or (grid.get_cell(i,j).cell_type() != E.CellType.Single)
-		var d: float = 0.5 if any_diags else 1
-		# Innefficient to compute this every time... but oh well, I won't optimize this now
+		var d: float = 0.5 if any_diags else 1.0
 		var s_vals := grid._symbols_values()
-		var fixed_values := {}
 		# For each symbol, which range it could take
 		var s_to_range := {}
 		var forced_values := {}
@@ -119,32 +128,45 @@ class Strategy:
 				mx_possible = min(mx_possible, val.y)
 			if mn_possible == mx_possible:
 				forced_values[mn_possible] = true
-				if s == s2:
-					return Vector2(mn_possible, mx_possible)
-			else:
-				s_to_range[s2] = Vector2(mn_possible, mx_possible)
+			elif mn_possible == 0:
+				# Let's try to check if 0 is not possible
+				# A very simple test, we could definitely do better
+				grid.push_empty_undo()
+				for i in grid.rows():
+					if grid.row_hints()[i].water_alt_text == s2:
+						for j in grid.cols():
+							_fill_nowater(i, j)
+					for j in grid.cols():
+						var ch := grid.get_cell(i, j).hints()
+						if ch != null and ch.water_alt_text == s2:
+							_fill_nowater(i, j)
+				for j in grid.cols():
+					if grid.col_hints()[j].water_alt_text == s2:
+						for i in grid.rows():
+							_fill_nowater(i, j)
+				if grid.all_hints_status() == E.HintStatus.Wrong:
+					mn_possible = 0.5 if any_diags else 1.0
+				grid.undo()
+			s_to_range[s2] = Vector2(mn_possible, mx_possible)
 		while true:
 			var any_change := false
 			for s2 in s_to_range.keys():
 				var s2_range : Vector2 = s_to_range[s2]
-				while forced_values.has(s2_range.x):
+				if s2_range.x == s2_range.y:
+					continue
+				while s2_range.x < s2_range.y and forced_values.has(s2_range.x):
 					any_change = true
 					s2_range.x += d
-				while forced_values.has(s2_range.y):
+				while s2_range.y > s2_range.x and forced_values.has(s2_range.y):
 					any_change = true
 					s2_range.y -= d
-				if s2_range.x > s2_range.y:
-					# Something invalid
-					return Vector2(cur_value, max_value)
 				if s2_range.x == s2_range.y:
-					if s2 == s:
-						return s2_range
 					forced_values[s2_range.x] = true
-					s_to_range.erase(s2)
-				else:
-					s_to_range[s2] = s2_range
+				s_to_range[s2] = s2_range
 			if not any_change:
 				break
+		_cached_grid_str = grid.to_str()
+		_cached_inferred_symbols = s_to_range
 		return s_to_range[s]
 	func _water_min(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
 		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
@@ -160,7 +182,7 @@ class Strategy:
 			else:
 				return val
 		if hint.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
-			return maxf(cur_value, _symbol_infer(hint.water_alt_text, cur_value, max_value).x)
+			return maxf(cur_value, _symbol_infer(hint.water_alt_text).x)
 		return hint.water_count
 	func _water_max(rows: bool, hint: GridModel.LineHint, cur_value: float, max_value: float) -> float:
 		if grid.rule_variants().has(GridModel.RuleVariant.Sudoku) and max_value > cur_value and hint.water_count < 0:
@@ -176,7 +198,7 @@ class Strategy:
 			else:
 				return val
 		if hint.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
-			return minf(max_value, _symbol_infer(hint.water_alt_text, cur_value, max_value).y)
+			return minf(max_value, _symbol_infer(hint.water_alt_text).y)
 		return hint.water_count
 
 
@@ -1503,8 +1525,7 @@ class CellHintsStrategy extends Strategy:
 				if c != null:
 					var vals := Vector2(c.adj_water_count, c.adj_water_count)
 					if c.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
-						var cur := grid.count_water_adj(i, j)
-						vals = _symbol_infer(c.water_alt_text, cur, cur + grid.count_nothing_adj(i, j))
+						vals = _symbol_infer(c.water_alt_text)
 					if _apply(i, j, c, vals.x, vals.y):
 						any = true
 		return any
@@ -1514,7 +1535,7 @@ class CellHintsStrategy extends Strategy:
 class CellHintsBasic extends CellHintsStrategy:
 	func description() -> String:
 		return "If the hint are must have ALL waters, or can't have ANY, fill it accordingly"
-	func _apply(i: int, j: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
+	func _apply(i: int, j: int, _hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
 		if water_hint_min < 0:
 			return false
 		var nothing_adj := grid.count_nothing_adj(i, j)
@@ -1738,8 +1759,7 @@ class TwoCellHints extends Strategy:
 					continue
 				var cwater_hint := Vector2(c.adj_water_count, c.adj_water_count)
 				if c.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
-					var cur := grid.count_water_adj(i, j)
-					cwater_hint = _symbol_infer(c.water_alt_text, cur, cur + grid.count_nothing_adj(i, j))
+					cwater_hint = _symbol_infer(c.water_alt_text)
 				if cwater_hint.x <= 0:
 					continue
 				for di in range(-2, 3):
@@ -1751,8 +1771,7 @@ class TwoCellHints extends Strategy:
 							continue
 						var dwater_hint := Vector2(d.adj_water_count, d.adj_water_count)
 						if d.water_alt_text != "" and grid.rule_variants().has(GridModel.RuleVariant.Symbols):
-							var cur := grid.count_water_adj(i+di, j+dj)
-							dwater_hint = _symbol_infer(d.water_alt_text, cur, cur + grid.count_nothing_adj(i+di, j+dj))
+							dwater_hint = _symbol_infer(d.water_alt_text)
 						if dwater_hint.x <= 0:
 							continue
 						var extra := _fixed_water_outside_intersection(i, j, di, dj)
@@ -2085,6 +2104,7 @@ class KnightStrategy extends Strategy:
 	func description() -> String:
 		return "Mark X on cells in knight's move from water."
 	# Mark X on all cells that can't have water
+	@warning_ignore("shadowed_variable")
 	static func knight_mark_x(grid: GridModel) -> bool:
 		var any := false
 		for i in grid.rows():

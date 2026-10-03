@@ -323,8 +323,6 @@ class PureCell:
 				return [E.Corner.BottomLeft, E.Corner.TopRight]
 			_:
 				return [E.Corner.TopLeft, E.Corner.BottomRight]
-		push_error("Unknown type %d" % type)
-		return []
 	func waters() -> Array[E.Waters]:
 		match type:
 			E.CellType.Single:

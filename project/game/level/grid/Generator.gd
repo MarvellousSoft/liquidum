@@ -308,10 +308,10 @@ func _random_perm(n: int = 9) -> Array[int]:
 	return a
 
 func generate_sudoku(grid: GridModel) -> void:
-	var tries : int = 0
+	var _tries : int = 0
 	var g : Array[Array] = []
 	while true:
-		tries += 1
+		_tries += 1
 		# When we assign rows and cols, the waters are fully determined
 		var rows := _random_perm()
 		var cols := _random_perm()
@@ -357,13 +357,13 @@ func generate_sudoku(grid: GridModel) -> void:
 
 const DIRS = [Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(0, 1)]
 func generate_snake(grid: GridModel) -> void:
-	var tries : int = 0
+	var _tries : int = 0
 	var g : Array[Array] = []
 	var snake: Array[Vector2i] = []
 	var desired_size := rng.randi_range((grid.rows() + grid.cols()), 2 * (grid.rows() + grid.cols()))
 	var keep_going := rng.randi_range(1, 100) <= 50
 	while true:
-		tries += 1
+		_tries += 1
 		# When we assign rows and cols, the waters are fully determined
 		var head := Vector2i(rng.randi_range(0, grid.rows() - 1), rng.randi_range(0, grid.cols() - 1))
 		var cols := _random_perm()

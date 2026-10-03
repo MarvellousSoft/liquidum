@@ -48,7 +48,7 @@ enum Flavor {
 }
 
 static func _symbols_builder(rng: RandomNumberGenerator) -> Generator.Options:
-	var opts := Generator.builder().with_min_water(10) 
+	var opts := Generator.builder().with_min_water(12)
 	if rng.randf() < 0.6:
 		opts.with_cell_hints(rng.randf_range(0.01, 0.3))
 	if rng.randf() < 0.35:
