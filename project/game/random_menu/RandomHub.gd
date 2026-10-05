@@ -8,6 +8,23 @@ const RANDOM := "random"
 @onready var Completed: VBoxContainer = %CompletedCount
 
 var gen := RandomLevelGenerator.new()
+var _bg_gen := RandomLevelGenerator.new()
+
+signal _bg_generation_finished
+
+var _cached_data: LevelData = null
+var _cached_dif: int = -1
+var _cached_marathon_left: int = -1
+var _cached_marathon_total: int = -1
+var _cached_seed_str: String = ""
+var _cached_manually_seeded: bool = false
+
+var _bg_task_in_progress := false
+var _bg_dif: int = -1
+var _bg_marathon_left: int = -1
+var _bg_marathon_total: int = -1
+var _bg_seed_str: String = ""
+var _bg_manually_seeded: bool = false
 
 # Do not change the model difficulty names, at most the user displayed ones
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
@@ -68,8 +85,92 @@ func _get_tracking(data: LevelData) -> Array[String]:
 		tracking.append("marathon")
 	return tracking
 
-func _generate_grid(rng: RandomNumberGenerator, mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> GridModel:
-	return await RandomHub.gen_from_difficulty(gen, rng, mode)
+func _generate_grid(rng: RandomNumberGenerator, mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String, l_gen: RandomLevelGenerator = gen) -> GridModel:
+	return await RandomHub.gen_from_difficulty(l_gen, rng, mode)
+
+func _is_cached_level_match(dif: int, marathon_left: int, marathon_total: int, seed_str: String, manually_seeded: bool) -> bool:
+	return _cached_data != null \
+		and _cached_dif == dif \
+		and _cached_marathon_left == marathon_left \
+		and _cached_marathon_total == marathon_total \
+		and _cached_seed_str == seed_str \
+		and _cached_manually_seeded == manually_seeded
+
+func _is_bg_task_match(dif: int, marathon_left: int, marathon_total: int, seed_str: String, manually_seeded: bool) -> bool:
+	return _bg_task_in_progress \
+		and _bg_dif == dif \
+		and _bg_marathon_left == marathon_left \
+		and _bg_marathon_total == marathon_total \
+		and _bg_seed_str == seed_str \
+		and _bg_manually_seeded == manually_seeded
+
+func _clear_cache() -> void:
+	_cached_data = null
+	_cached_dif = -1
+	_cached_marathon_left = -1
+	_cached_marathon_total = -1
+	_cached_seed_str = ""
+	_cached_manually_seeded = false
+
+func _cancel_background_generation() -> void:
+	_clear_cache()
+	if _bg_task_in_progress:
+		_bg_task_in_progress = false
+		_bg_gen.cancel()
+		print("Cancelled background generation")
+		_bg_generation_finished.emit()
+
+func _start_background_generation(dif: int, seed_str: String, manually_seeded: bool, next_left: int, total: int, current_left: int) -> void:
+	if _is_cached_level_match(dif, next_left, total, seed_str, manually_seeded):
+		return
+	if _is_bg_task_match(dif, next_left, total, seed_str, manually_seeded):
+		return
+	_cancel_background_generation()
+	_bg_generation_coroutine(dif, seed_str, manually_seeded, next_left, total, current_left)
+
+func _bg_generation_coroutine(dif: int, seed_str: String, manually_seeded: bool, next_left: int, total: int, current_left: int) -> void:
+	_bg_task_in_progress = true
+	_bg_dif = dif
+	_bg_marathon_left = next_left
+	_bg_marathon_total = total
+	_bg_seed_str = seed_str
+	_bg_manually_seeded = manually_seeded
+
+	if _bg_gen.running():
+		_bg_gen.cancel()
+		print("Waiting for previous background generation to end")
+		while _bg_gen.running():
+			await Global.wait(0.05)
+
+	if not _bg_task_in_progress or _bg_marathon_left != next_left:
+		return
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = RandomHub.consistent_hash("%s-%d" % [seed_str, current_left])
+	print("Started background level generation")
+	var g := await _generate_grid(rng, dif, next_left, total, seed_str, _bg_gen)
+
+	if not _bg_task_in_progress or _bg_marathon_left != next_left:
+		return
+
+	if g != null:
+		var data := LevelData.new(_dif_name(dif, next_left, total), "", g.export_data(), "")
+		data.difficulty = dif
+		data.marathon_left = next_left
+		data.marathon_total = total
+		data.seed_str = seed_str
+		data.manually_seeded = manually_seeded
+		_setup_level_data(data, dif, next_left, total, seed_str)
+		_cached_data = data
+		_cached_dif = dif
+		_cached_marathon_left = next_left
+		_cached_marathon_total = total
+		_cached_seed_str = seed_str
+		_cached_manually_seeded = manually_seeded
+
+	print("Finished generating level in the background and cached it")
+	_bg_task_in_progress = false
+	_bg_generation_finished.emit()
 
 func _setup_level_data(_data: LevelData, _mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> void:
 	pass
@@ -91,6 +192,10 @@ func _back_logic() -> void:
 func _notification(what: int) -> void:
 	if what == Node.NOTIFICATION_WM_GO_BACK_REQUEST:
 		_back_logic()
+	elif what == NOTIFICATION_PREDELETE:
+		_cancel_background_generation()
+		if is_instance_valid(_bg_gen) and _bg_gen.gen_thread.is_started():
+			_bg_gen.gen_thread.wait_to_finish()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"return"):
@@ -112,6 +217,7 @@ func _exit_tree() -> void:
 	Profile.unlock_everything_changed.disconnect(_on_unlock_changed)
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	Profile.dark_mode_toggled.disconnect(_on_dark_mode_changed)
+	_cancel_background_generation()
 
 func _dif_name(dif: int, marathon_left: int, marathon_total: int) -> String:
 	var dif_name := _mode_button_text(dif)
@@ -206,6 +312,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 
 func continue_marathon(dif: int, left: int, total: int, seed_str: String, manually_seeded: bool, change_scene: bool, start_time: float, start_mistakes: int) -> void:
 	if left == 0:
+		_cancel_background_generation()
 		TransitionManager.pop_scene()
 		return
 	var rng := RandomNumberGenerator.new()
@@ -217,24 +324,42 @@ func continue_marathon(dif: int, left: int, total: int, seed_str: String, manual
 	Global.play_new_dif_again = -1
 
 func gen_and_play(rng: RandomNumberGenerator, dif: int, seed_str: String, manually_seeded: bool, marathon_left: int, marathon_total: int, marathon_time: float, marathon_mistakes: int) -> void:
-	if gen.running():
-		return
-	GeneratingLevel.enable()
-	var g := await _generate_grid(rng, dif, marathon_left, marathon_total, seed_str)
-	GeneratingLevel.disable()
-	if g == null:
-		if Global.play_new_dif_again != -1:
-			TransitionManager.pop_scene()
-		return
-	# There may be an existing level save
+	var data: LevelData = null
+	if _is_cached_level_match(dif, marathon_left, marathon_total, seed_str, manually_seeded):
+		print("Using generated level from cache")
+		data = _cached_data
+		_clear_cache()
+	elif _is_bg_task_match(dif, marathon_left, marathon_total, seed_str, manually_seeded):
+		print("Continuing in-progress background generation")
+		GeneratingLevel.enable()
+		while _bg_task_in_progress:
+			await _bg_generation_finished
+		GeneratingLevel.disable()
+		if _is_cached_level_match(dif, marathon_left, marathon_total, seed_str, manually_seeded):
+			data = _cached_data
+			_clear_cache()
+
+	if data == null:
+		if gen.running():
+			return
+		print("Starting new level generation")
+		GeneratingLevel.enable()
+		var g := await _generate_grid(rng, dif, marathon_left, marathon_total, seed_str)
+		GeneratingLevel.disable()
+		if g == null:
+			if Global.play_new_dif_again != -1:
+				TransitionManager.pop_scene()
+			return
+		# There may be an existing level save
+		data = LevelData.new(_dif_name(dif, marathon_left, marathon_total), "", g.export_data(), "")
+		data.difficulty = dif
+		data.marathon_left = marathon_left
+		data.marathon_total = marathon_total
+		data.seed_str = seed_str
+		data.manually_seeded = manually_seeded
+		_setup_level_data(data, dif, marathon_left, marathon_total, seed_str)
+
 	FileManager.clear_level(_save_level_name())
-	var data := LevelData.new(_dif_name(dif, marathon_left, marathon_total), "", g.export_data(), "")
-	data.difficulty = dif
-	data.marathon_left = marathon_left
-	data.marathon_total = marathon_total
-	data.seed_str = seed_str
-	data.manually_seeded = manually_seeded
-	_setup_level_data(data, dif, marathon_left, marathon_total, seed_str)
 	_save_level_data(data)
 	load_existing(marathon_time, marathon_mistakes)
 
@@ -273,6 +398,8 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		TransitionManager.push_scene(level)
 	await level.ready
 	_setup_level_leaderboard(level, data)
+	if data.marathon_left > 0:
+		_start_background_generation(data.difficulty, data.seed_str, data.manually_seeded, data.marathon_left - 1, data.marathon_total, data.marathon_left)
 
 func _setup_level_leaderboard(level: Level, data: LevelData) -> void:
 	if SteamManager.enabled and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
@@ -420,6 +547,7 @@ static func consistent_hash(x: String) -> int:
 func _on_dif_pressed(dif: int) -> void:
 	if not await _confirm_new_level():
 		return
+	_cancel_background_generation()
 	var rng := RandomNumberGenerator.new()
 	var seed_str: String = $Seed.text if has_node("Seed") else ""
 	var marathon := floori(%Marathon/Slider.value if has_node(^"%Marathon") else 1.0)

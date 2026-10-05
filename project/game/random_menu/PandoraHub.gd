@@ -85,7 +85,7 @@ func _mode_to_flavor(mode: int) -> RandomFlavors.Flavor:
 		_:
 			return RandomFlavors.Flavor.Snake
 
-func _generate_grid(rng: RandomNumberGenerator, mode: int, marathon_left: int, marathon_total: int, seed_str: String) -> GridModel:
+func _generate_grid(rng: RandomNumberGenerator, mode: int, marathon_left: int, marathon_total: int, seed_str: String, l_gen: RandomLevelGenerator = gen) -> GridModel:
 	var flavor: RandomFlavors.Flavor
 	if mode == Mode.Pandora:
 		if marathon_total > 1:
@@ -103,7 +103,7 @@ func _generate_grid(rng: RandomNumberGenerator, mode: int, marathon_left: int, m
 		flavor = _mode_to_flavor(mode)
 	
 	_current_flavor = flavor
-	return await RandomFlavors.gen(gen, rng, flavor)
+	return await RandomFlavors.gen(l_gen, rng, flavor)
 
 func _setup_level_data(data: LevelData, mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> void:
 	data.flavor = _current_flavor

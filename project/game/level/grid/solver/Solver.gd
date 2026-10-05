@@ -2153,6 +2153,16 @@ class MakeSureSnakeTogetherDfs:
 		flood(i + 1, j)
 		flood(i - 1, j)
 
+# Goes through all connected "nothing" stopping at waters and nowaters boundaries
+# Note here water_count is just the waters at the boundaries
+class FloodNothingDfs extends MakeSureSnakeTogetherDfs:
+	func _cell_logic(_i: int, _j: int, cell: GridImpl.PureCell) -> bool:
+		if cell.nothing_full():
+			return true
+		elif cell.water_full():
+			water_count += 1
+		return false
+
 class SnakeStrategy extends Strategy:
 	func description() -> String:
 		return """
@@ -2216,6 +2226,7 @@ class SnakeStrategy extends Strategy:
 	func check_paths() -> bool:
 		if grid.are_hints_satisfied():
 			return false
+		# If at least one hint is not satisfied, it means we need to add some water
 		var any := false
 		# If a path or a single cell has a single location to grow to, do that
 		for i in grid.rows():
@@ -2225,9 +2236,22 @@ class SnakeStrategy extends Strategy:
 					var nbh := grid._snake_nbhs(ij)
 					if nbh <= 1:
 						var possible := water_adj_possible(ij)
+						if possible.size() > 1:
+							continue
 						if nbh == 1:
 							var ret := grid._snake_dfs(ij, ij)
-							possible.append_array(water_adj_possible(Vector2i(ret.y, ret.z)))
+							var other_end := Vector2i(ret.y, ret.z)
+							if possible.size() == 1:
+								var dfs := FloodNothingDfs.new(grid)
+								dfs.flood(possible[0].x, possible[0].y)
+								assert(dfs.water_count >= 1)
+								# There's another water in this direction, but we cannot reach
+								# the other end of the path, so we must always grow, even if the
+								# other end could reach something
+								if dfs.water_count > 1 and grid._pure_cell(other_end.x, other_end.y).last_seen(E.Corner.TopLeft) < grid.last_seen:
+									grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false)
+									return true
+							possible.append_array(water_adj_possible(other_end))
 						if possible.size() == 1:
 							grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false)
 							# Putting two waters here might create inconsistencies
@@ -2253,7 +2277,10 @@ class SnakeStrategy extends Strategy:
 	func apply_any() -> bool:
 		if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
 			return false
-		assert(grid._snake_status() != E.HintStatus.Wrong)
+		# Already bad, let's not add anything
+		if grid._snake_status() == E.HintStatus.Wrong:
+			return false
+		# We can now assume the water is a bunch of paths
 		var any := _put_x_on_2x2_and_Ts()
 		if check_paths():
 			any = true
