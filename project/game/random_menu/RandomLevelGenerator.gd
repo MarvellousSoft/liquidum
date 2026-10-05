@@ -61,10 +61,14 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			var solve_result := solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S)
-			#print("Solve result %d" % [solve_result])
+			#print("Solve result %s" % [SolverModel.SolveResult.find_key(solve_result)])
 			match solve_result:
 				SolverModel.SolveResult.Unsolvable:
-					push_error("Should not be unsolvable")
+					# Strategies should ALWAYS just do valid moves, and never "drop" any valid solution
+					# Otherwise the uniqueness testing won't work properly
+					push_error("Got to unsolvable state, weird. This probably means some strategy is doing an invalid move.")
+					g2.clear_content()
+					print(JSON.stringify(g2.export_data()))
 				SolverModel.SolveResult.SolvedMultiple:
 					multiple_solutions +=1
 				SolverModel.SolveResult.SolvedUniqueNoGuess:

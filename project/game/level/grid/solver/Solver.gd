@@ -2156,11 +2156,14 @@ class MakeSureSnakeTogetherDfs:
 # Goes through all connected "nothing" stopping at waters and nowaters boundaries
 # Note here water_count is just the waters at the boundaries
 class FloodNothingDfs extends MakeSureSnakeTogetherDfs:
-	func _cell_logic(_i: int, _j: int, cell: GridImpl.PureCell) -> bool:
+	var disallowed_water: Vector2i
+	func _cell_logic(i: int, j: int, cell: GridImpl.PureCell) -> bool:
 		if cell.nothing_full():
 			return true
 		elif cell.water_full():
 			water_count += 1
+			if Vector2i(i, j) != disallowed_water:
+				return true
 		return false
 
 class SnakeStrategy extends Strategy:
@@ -2243,6 +2246,7 @@ class SnakeStrategy extends Strategy:
 							var other_end := Vector2i(ret.y, ret.z)
 							if possible.size() == 1:
 								var dfs := FloodNothingDfs.new(grid)
+								dfs.disallowed_water = ij
 								dfs.flood(possible[0].x, possible[0].y)
 								assert(dfs.water_count >= 1)
 								# There's another water in this direction, but we cannot reach
@@ -2452,7 +2456,7 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 					c.put_water(corner, true)
 					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, look_for_multiple)
 					grid.undo()
-					#print("Undoing")
+					#print("Undoing, got %s" % [SolverModel.SolveResult.find_key(r1)])
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
 						#print("Water at (%d, %d) was unsolvable, definitely nowater" % [i, j])
@@ -2466,6 +2470,7 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 					# Otherwise we need to try to solve with nowater
 					c.put_nowater(corner, true, true)
 					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false)
+					#print("Solved with nowater at (%d, %d) and got %s" % [i, j, SolverModel.SolveResult.find_key(r2)])
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
 						#print("Nowater at (%d, %d) was unsolvable, do water" % [i, j])

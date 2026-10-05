@@ -1289,6 +1289,8 @@ func _row_hint1(h: int) -> String:
 		return "%d" % h
 
 func _row_hint2(h: int, type: E.HintType) -> String:
+	if type in [E.HintType.Separated, E.HintType.Together] and h >= 10:
+		push_warning("Can't generate string of grid with together/separate and a hint of >= 10")
 	if type == E.HintType.Separated:
 		return "-"
 	elif type == E.HintType.Together:
