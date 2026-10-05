@@ -99,6 +99,8 @@ var last_saved: int
 var last_saved_ago: int = -1
 # Used only for rich presence
 var difficulty := -1
+var difficulty_name := ""
+var flavor := -1
 var marathon_left := -1
 var marathon_total := -1
 var seed_str := ""
@@ -535,7 +537,7 @@ func maybe_save(delete_solution := false) -> void:
 			grid_logic.set_auto_update_hints(true)
 		else:
 			if delete_solution:
-				if level_name == RandomHub.RANDOM or level_name.begins_with("endless_"):
+				if level_name in [RandomHub.RANDOM, "pandora"] or level_name.begins_with("endless_"):
 					FileManager.clear_level(level_name)
 					return
 				grid.clear_content()
@@ -564,7 +566,9 @@ func update_play_again_button_label() -> void:
 			%PlayAgainButton.hide()
 	elif marathon_left == -1:
 		var new_name: String
-		if difficulty != -1:
+		if not difficulty_name.is_empty():
+			new_name = difficulty_name
+		elif difficulty != -1 and difficulty < DIFFICULTY_NAMES.size():
 			new_name = DIFFICULTY_NAMES[difficulty]
 		else:
 			new_name = "ENDLESS"

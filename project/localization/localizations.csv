@@ -476,3 +476,17 @@ LIQUIDUM_LITE_TITLE,Liquidum Lite,Liquidum Lite,Liquidum Lite
 OPEN_LIQUIDUM_LITE,Open Liquidum Lite,Abrir Liquidum Lite,Abrir Liquidum Lite
 ADVANCED,Advanced,Avançado,Avançado
 SYNC_TO_WEB,Sync to Web,Sincronizar com Web,Sincronizar com Web
+PANDORA_TITLE,Pandora's Box,Caixa de Pandora,Caixa de Pandora
+SNAKE_BUTTON,Snake,Cobra,Cobra
+SUDOKU_BUTTON,Sudoku,Sudoku,Sudoku
+KNIGHT_BUTTON,Knight,Cavalo,Cavalo
+LIAR_BUTTON,Liar,Mentirosa,Mentirosa
+SYMBOLS_BUTTON,Symbols,Símbolos,Símbolos
+PANDORA_BUTTON,Pandora's Box,Caixa de Pandora,Caixa de Pandora
+SNAKE_TOOLTIP,Snake levels,Níveis de cobra,Níveis de cobra
+SUDOKU_TOOLTIP,Sudoku levels,Níveis de sudoku,Níveis de sudoku
+KNIGHT_TOOLTIP,Knight levels,Níveis de cavalo,Níveis de cavalo
+LIAR_TOOLTIP,Liar levels,Níveis de mentirosa,Níveis de mentirosa
+SYMBOLS_TOOLTIP,Symbols levels,Níveis de símbolos,Níveis de símbolos
+PANDORA_TOOLTIP,Pandora's Box levels,Níveis de caixa de Pandora,Níveis de caixa de Pandora
+

@@ -86,10 +86,15 @@ func setup(section : int, level: int, active : bool, is_disabled_section: bool, 
 	if active:
 		enable()
 		if my_level == -1:
-			data = ExtraLevelLister.get_endless_user_save(section)
+			if ExtraLevelLister.is_pandora_section(my_section):
+				data = FileManager.load_level("pandora")
+				change_style_boxes(UserData.current().has_completed_any_pandora() or (data and data.is_completed()))
+			else:
+				data = ExtraLevelLister.get_endless_user_save(section)
+				change_style_boxes(data and data.is_completed())
 		else:
 			data = lister.get_level_user_save(section, my_level)
-		change_style_boxes(data and data.is_completed())
+			change_style_boxes(data and data.is_completed())
 		set_ongoing_solution(data and not data.is_solution_empty())
 	else:
 		set_ongoing_solution(false)
@@ -212,6 +217,9 @@ func _on_button_pressed():
 		TransitionManager.push_scene(level_node)
 	elif my_level == -1 and my_section != -1:
 		assert(extra_level())
+		if ExtraLevelLister.is_pandora_section(my_section):
+			TransitionManager.push_scene(Global.load_mobile_compat("res://game/random_menu/PandoraHub").instantiate())
+			return
 		var has_endless_level := (ExtraLevelLister.get_endless_user_save(my_section) != null)
 		if has_endless_level:
 			if ConfirmationScreen.start_confirmation(&"CONFIRMATION_NEW_ENDLESS", &"ENDLESS_CONTINUE", &"ENDLESS_NEW"):

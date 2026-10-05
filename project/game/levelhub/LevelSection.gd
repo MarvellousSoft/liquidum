@@ -156,11 +156,11 @@ func setup(hub_ref, section: int, unlocked_levels: int, extra_: bool) -> void:
 	
 	Levels.scale = LEVELS_SCALE.mobile if Global.is_mobile else LEVELS_SCALE.desktop
 	
-	var flavor := ExtraLevelLister.section_endless_flavor(section) if extra else -1
+	var has_endless := extra and ExtraLevelLister.section_has_endless(section)
 	for i in range(1, total_levels + 1):
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
-		position_level_button(button, total_levels + int(flavor != -1), i)
+		position_level_button(button, total_levels + int(has_endless), i)
 		var has_unlock_anim = (my_section == hub.section_to_unlock and i == hub.level_to_unlock)
 		button.setup(my_section, i, force_unlocked.has(i) or (i <= unlocked_levels and not has_unlock_anim), not force_unlocked.is_empty(), extra)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
@@ -168,7 +168,7 @@ func setup(hub_ref, section: int, unlocked_levels: int, extra_: bool) -> void:
 		button.had_first_win.connect(_on_level_first_win)
 		any_hard = any_hard or (not button.disabled and button.HardIcon.visible)
 	
-	if flavor != -1:
+	if has_endless:
 		assert(extra)
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
@@ -248,9 +248,14 @@ func show_level_info(level_name: String, completed: bool, time: float, mistakes:
 
 func show_endless_info() -> void:
 	showing_level_info = true
-	%LevelName.text = "ENDLESS"
 	var data := UserData.current()
-	var completed := data.get_endless_completed(my_section)
+	var completed := 0
+	if ExtraLevelLister.is_pandora_section(my_section):
+		%LevelName.text = "PANDORA_TITLE"
+		completed = data.total_pandora_completed()
+	else:
+		%LevelName.text = "ENDLESS"
+		completed = data.get_endless_completed(my_section)
 	if completed > 0:
 		%Completed.text = tr("TIMES_COMPLETED") % [completed]
 	else:

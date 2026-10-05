@@ -12,6 +12,73 @@ var gen := RandomLevelGenerator.new()
 # Do not change the model difficulty names, at most the user displayed ones
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
+var save_level_name: String = RANDOM
+
+func _save_level_name() -> String:
+	return save_level_name
+
+func _load_level_data() -> LevelData:
+	return FileManager.load_random_level()
+
+func _save_level_data(data: LevelData) -> void:
+	FileManager.save_random_level(data)
+
+func _get_modes() -> Array[int]:
+	var modes: Array[int] = []
+	for dif in Difficulty.values():
+		modes.append(dif)
+	return modes
+
+func _mode_name(mode: int) -> String:
+	return Difficulty.find_key(mode)
+
+func _mode_button_key(mode: int) -> String:
+	return "%s_BUTTON" % _mode_name(mode).to_upper()
+
+func _mode_button_text(mode: int) -> String:
+	return tr(_mode_button_key(mode))
+
+func _get_mode_button(mode: int) -> Button:
+	var name_str := _mode_name(mode)
+	if has_node("Difficulties/VBox"):
+		return $Difficulties/VBox.get_node_or_null(name_str)
+	return null
+
+func _get_completed_node(mode: int) -> Node:
+	if Completed == null:
+		return null
+	return Completed.get_node_or_null(_mode_name(mode))
+
+func _get_completed_count(mode: int) -> int:
+	return UserData.current().random_levels_completed[mode]
+
+func _bump_created_count(mode: int) -> int:
+	var data := UserData.current()
+	data.random_levels_created[mode] += 1
+	UserData.save()
+	return data.random_levels_created[mode]
+
+func _get_preprocessed_state(mode: int, seed_int: int) -> int:
+	return PreprocessedDifficulty.current(mode).success_state(seed_int)
+
+func _confirm_new_text() -> StringName:
+	return &"CONFIRM_NEW_RANDOM"
+
+func _get_tracking(data: LevelData) -> Array[String]:
+	var tracking: Array[String] = ["random", "random_%s" % _mode_name(data.difficulty).to_lower()]
+	if data.marathon_left != -1:
+		tracking.append("marathon")
+	return tracking
+
+func _generate_grid(rng: RandomNumberGenerator, mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> GridModel:
+	return await RandomHub.gen_from_difficulty(gen, rng, mode)
+
+func _setup_level_data(_data: LevelData, _mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> void:
+	pass
+
+func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
+	_level_completed(info, level, data.difficulty, data.manually_seeded, data.marathon_left, data.marathon_total)
+
 func _ready() -> void:
 	%Version.text = "v" + Profile.VERSION
 	%Version.visible = Profile.SHOW_VERSION
@@ -48,15 +115,16 @@ func _exit_tree() -> void:
 	Global.dev_mode_toggled.disconnect(_on_unlock_changed)
 	Profile.dark_mode_toggled.disconnect(_on_dark_mode_changed)
 
-func _dif_name(dif: Difficulty, marathon_left: int, marathon_total: int) -> String:
-	var dif_name := tr("%s_BUTTON" % Difficulty.find_key(dif).to_upper())
+func _dif_name(dif: int, marathon_left: int, marathon_total: int) -> String:
+	var dif_name := _mode_button_text(dif)
 	if marathon_left != -1:
 		dif_name += " (%d⁄%d)" % [marathon_total - marathon_left, marathon_total]
 	return dif_name
 
 func _update_unlocked() -> void:
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
-	$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
+	if has_node("Difficulties/VBox/Easy"):
+		$Difficulties/VBox/Easy.tooltip_text = "EASY_TOOLTIP"
 	# Unlock difficulty after unlocking this section
 	var difs := {
 		medium = 2,
@@ -67,13 +135,15 @@ func _update_unlocked() -> void:
 	}
 	for dif in difs:
 		var dif_name: String = dif
-		var button: Button = $Difficulties/VBox.get_node(dif_name.capitalize())
+		var button: Button = $Difficulties/VBox.get_node_or_null(dif_name.capitalize())
+		if button == null:
+			continue
 		var open := CampaignLevelLister.section_complete(difs[dif] - 1)
 		if dif == "insane":
 			open = open and CampaignLevelLister.all_campaign_levels_completed()
 		open = open or Global.is_dev_mode() or Profile.get_option("unlock_everything")
 		open = open and not Global.is_demo
-		if dif == "insane" and Global.is_mobile:
+		if dif == "insane" and Global.is_mobile and has_node("%UnlockText"):
 			%UnlockText.visible = not open
 		button.disabled = not open
 		if open:
@@ -83,30 +153,30 @@ func _update_unlocked() -> void:
 	_update_contents()
 
 func _update_contents() -> void:
-	var has_random_level := (FileManager.load_level(RANDOM) != null and FileManager.load_random_level() != null)
-	Continue.visible = has_random_level
-	ContinueSeparator.visible = has_random_level and not Global.is_mobile
-	if has_random_level:
-		var data := FileManager.load_random_level()
+	var has_saved_level := (FileManager.load_level(_save_level_name()) != null and _load_level_data() != null)
+	Continue.visible = has_saved_level
+	ContinueSeparator.visible = has_saved_level and not Global.is_mobile
+	if has_saved_level:
+		var data := _load_level_data()
 		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]
-	for dif in Difficulty:
-		var but: Button = $Difficulties/VBox.get_node(dif)
-		var dif_tr := "%s_BUTTON" % [dif.to_upper()]
-		but.text = dif_tr
-		if not but.disabled and has_node("%Marathon"):
-			var val: int = int(%Marathon/Slider.value)
-			if val > 1:
-				but.text = _dif_name(Difficulty[dif], val, val)
-			
-		var cont: Node = Completed.get_node(dif)
-		cont.visible = not but.disabled
-		cont.get_node(^"HBox/Count").text = "%d" % UserData.current().random_levels_completed[Difficulty[dif]]
+	for mode in _get_modes():
+		var but: Button = _get_mode_button(mode)
+		if but != null:
+			but.text = _mode_button_text(mode)
+			if not but.disabled and has_node("%Marathon"):
+				var val: int = int(%Marathon/Slider.value)
+				if val > 1:
+					but.text = _dif_name(mode, val, val)
+		var cont: Node = _get_completed_node(mode)
+		if cont != null:
+			cont.visible = (but == null or not but.disabled)
+			cont.get_node(^"HBox/Count").text = "%d" % _get_completed_count(mode)
 
 
 func _play_new_level_again():
 	assert(Global.play_new_dif_again != -1)
 	if Global.play_new_dif_again != -1:
-		if not Global.is_mobile:
+		if not Global.is_mobile and has_node("Seed"):
 			$Seed.text = ""
 		await _on_dif_pressed(Global.play_new_dif_again)
 		Global.play_new_dif_again = -1
@@ -136,7 +206,7 @@ static func gen_from_difficulty(l_gen: RandomLevelGenerator, rng: RandomNumberGe
 			return null
 
 
-func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String, manually_seeded: bool, change_scene: bool, start_time: float, start_mistakes: int) -> void:
+func continue_marathon(dif: int, left: int, total: int, seed_str: String, manually_seeded: bool, change_scene: bool, start_time: float, start_mistakes: int) -> void:
 	if left == 0:
 		TransitionManager.pop_scene()
 		return
@@ -148,47 +218,49 @@ func continue_marathon(dif: Difficulty, left: int, total: int, seed_str: String,
 	await gen_and_play(rng, dif, seed_str, manually_seeded, left - 1, total, start_time, start_mistakes)
 	Global.play_new_dif_again = -1
 
-func gen_and_play(rng: RandomNumberGenerator, dif: Difficulty, seed_str: String, manually_seeded: bool, marathon_left: int, marathon_total: int, marathon_time: float, marathon_mistakes: int) -> void:
+func gen_and_play(rng: RandomNumberGenerator, dif: int, seed_str: String, manually_seeded: bool, marathon_left: int, marathon_total: int, marathon_time: float, marathon_mistakes: int) -> void:
 	if gen.running():
 		return
 	GeneratingLevel.enable()
-	var g := await RandomHub.gen_from_difficulty(gen, rng, dif)
+	var g := await _generate_grid(rng, dif, marathon_left, marathon_total, seed_str)
 	GeneratingLevel.disable()
 	if g == null:
 		if Global.play_new_dif_again != -1:
 			TransitionManager.pop_scene()
 		return
 	# There may be an existing level save
-	FileManager.clear_level(RANDOM)
+	FileManager.clear_level(_save_level_name())
 	var data := LevelData.new(_dif_name(dif, marathon_left, marathon_total), "", g.export_data(), "")
 	data.difficulty = dif
 	data.marathon_left = marathon_left
 	data.marathon_total = marathon_total
 	data.seed_str = seed_str
 	data.manually_seeded = manually_seeded
-	FileManager.save_random_level(data)
+	_setup_level_data(data, dif, marathon_left, marathon_total, seed_str)
+	_save_level_data(data)
 	load_existing(marathon_time, marathon_mistakes)
 
-func _speedrun_key(marathon_total: int, dif: Difficulty) -> String:
+func _speedrun_key(marathon_total: int, dif: int) -> String:
 	const M_10 := ["n2ylrv1d-p85ykw3l.qyzxwj21", "n2ylrv1d-p85ykw3l.ln8yozjl", "n2ylrv1d-p85ykw3l.10v5dw2l", "n2ylrv1d-p85ykw3l.qj7z8x3q", "n2ylrv1d-p85ykw3l.q654ezjl"]
 	const M_100 := ["5dw3qq52-p85ykw3l.qyzxwj21", "5dw3qq52-p85ykw3l.ln8yozjl", "5dw3qq52-p85ykw3l.10v5dw2l", "5dw3qq52-p85ykw3l.qj7z8x3q", "5dw3qq52-p85ykw3l.q654ezjl"]
-	if marathon_total == 10:
-		return M_10[dif]
-	elif marathon_total == 100:
-		return M_100[dif]
+	if dif >= 0 and dif < M_10.size():
+		if marathon_total == 10:
+			return M_10[dif]
+		elif marathon_total == 100:
+			return M_100[dif]
 	return ""
 
 func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
-	var data := FileManager.load_random_level()
+	var data := _load_level_data()
 	if data == null:
 		return
-	var tracking: Array[String] = ["random", "random_%s" % (Difficulty.find_key(data.difficulty) as String).to_lower()]
-	if data.marathon_left != -1:
-		tracking.append("marathon")
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), RANDOM, data.full_name, "", tracking)
+	var tracking: Array[String] = _get_tracking(data)
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), _save_level_name(), data.full_name, "", tracking)
 	level.difficulty = data.difficulty
 	level.seed_str = data.seed_str
 	level.manually_seeded = data.manually_seeded
+	level.flavor = data.flavor
+	level.difficulty_name = data.difficulty_name
 	if data.marathon_left != -1:
 		level.marathon_left = data.marathon_left
 		level.marathon_total = data.marathon_total
@@ -196,36 +268,37 @@ func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 		level.reset_mistakes_on_reset = false
 		level.running_time = marathon_time
 		level.initial_mistakes = marathon_mistakes
-	level.won.connect(_level_completed.bind(level, data.difficulty, data.manually_seeded, data.marathon_left, data.marathon_total))
+	level.won.connect(_on_level_won.bind(level, data))
 	if Global.play_new_dif_again != -1:
 		TransitionManager.change_scene(level)
 	else:
 		TransitionManager.push_scene(level)
 	await level.ready
+	_setup_level_leaderboard(level, data)
+
+func _setup_level_leaderboard(level: Level, data: LevelData) -> void:
 	if SteamManager.enabled and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
 		var l_id := marathon_leaderboard(data.marathon_total, data.difficulty)
 		await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
 		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 		if not l_data.is_empty():
 			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
-			var dif_name := tr("%s_BUTTON" % [Difficulty.find_key(data.difficulty).to_upper()]).to_lower()
+			var dif_name := _mode_button_text(data.difficulty).to_lower()
 			display.display(l_data, "%d %s" % [data.marathon_total, dif_name], [], "")
-		
-
 
 func _confirm_new_level() -> bool:
 	AudioManager.play_sfx("button_pressed")
-	if Global.play_new_dif_again == -1 and Continue.visible and ConfirmationScreen.start_confirmation(&"CONFIRM_NEW_RANDOM"):
+	if Global.play_new_dif_again == -1 and Continue.visible and ConfirmationScreen.start_confirmation(_confirm_new_text()):
 		return await ConfirmationScreen.pressed
 	return true
 
-func marathon_leaderboard(marathon_size: int, dif: Difficulty) -> String:
-	return "%s_marathon_%d" % [Difficulty.find_key(dif).to_lower(), marathon_size]
+func marathon_leaderboard(marathon_size: int, dif: int) -> String:
+	return "%s_marathon_%d" % [_mode_name(dif).to_lower(), marathon_size]
 
 func shows_marathon_leaderboards(marathon_total: int, manually_seeded: bool) -> bool:
 	return not manually_seeded and marathon_total >= 5 and marathon_total <= 100 and (marathon_total % 5) == 0
 
-func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
+func _level_completed(info: Level.WinInfo, level: Level, dif: int, manually_seeded: bool, marathon_left: int, marathon_total: int) -> void:
 	# Save was already deleted
 	UserData.current().random_levels_completed[dif] += 1
 	UserData.save()
@@ -237,7 +310,7 @@ func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manual
 		if info.total_marathon_mistakes == 0:
 			await stats.unlock_flawless_marathon(dif)
 		const MAX_MINUTES: Array[int] = [3, 5, 9, 11, 20]
-		if info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
+		if dif >= 0 and dif < MAX_MINUTES.size() and info.total_marathon_mistakes <= 5 and info.time_secs <= MAX_MINUTES[dif] * 60:
 			await stats.unlock_fast_marathon(dif)
 	if marathon_left == 0 and shows_marathon_leaderboards(marathon_total, manually_seeded):
 		await RecurringMarathon.upload_leaderboard(marathon_leaderboard(marathon_total, dif), info, true)
@@ -247,7 +320,7 @@ func _level_completed(info: Level.WinInfo, level: Level, dif: Difficulty, manual
 			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if not l_data.is_empty():
 				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
-				var dif_name :=  tr("%s_BUTTON" % [Difficulty.find_key(dif).to_upper()]).to_lower()
+				var dif_name := _mode_button_text(dif).to_lower()
 				display.display(l_data, "%d %s" % [marathon_total, dif_name], [], "")
 		
 
@@ -346,7 +419,7 @@ static func consistent_hash(x: String) -> int:
 	return x.sha1_buffer().decode_s64(0)
 
 
-func _on_dif_pressed(dif: Difficulty) -> void:
+func _on_dif_pressed(dif: int) -> void:
 	if not await _confirm_new_level():
 		return
 	var rng := RandomNumberGenerator.new()
@@ -359,13 +432,10 @@ func _on_dif_pressed(dif: Difficulty) -> void:
 		await continue_marathon(dif, marathon, marathon, seed_str, manually_seeded, false, 0, 0)
 		return
 	if seed_str.is_empty():
-		var data := UserData.current()
-		data.random_levels_created[dif] += 1
-		var i := data.random_levels_created[dif]
+		var i := _bump_created_count(dif)
 		seed_str = str(i)
 		rng.seed = RandomHub.consistent_hash(seed_str)
-		UserData.save()
-		var success_state := PreprocessedDifficulty.current(dif).success_state(i)
+		var success_state := _get_preprocessed_state(dif, i)
 		if success_state != 0:
 			rng.state = success_state
 	else:
@@ -397,3 +467,10 @@ func _on_button_marathon_count_pressed(count: int) -> void:
 	if count != %Marathon/Slider.value:
 		%Marathon/Slider.value = count
 		_update_contents()
+
+func _on_marathon_button_pressed() -> void:
+	if has_node("%Marathon/Button"):
+		%Marathon/Button.hide()
+	if has_node("%Marathon/Slider"):
+		%Marathon/Slider.show()
+

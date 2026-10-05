@@ -8,6 +8,8 @@ var grid_data: Dictionary
 var tutorial: String
 # Only used for levels created from the random hub. It's either RandomHub.Difficulty or -1
 var difficulty: int = -1
+var difficulty_name: String = ""
+var flavor: int = -1
 var seed_str := ""
 var manually_seeded := false
 # If not -1, we're in the middle of a marathon
@@ -39,6 +41,10 @@ func get_data() -> Dictionary:
 		if marathon_left != -1:
 			data.marathon_left = marathon_left
 			data.marathon_total = marathon_total
+	if not difficulty_name.is_empty():
+		data.difficulty_name = difficulty_name
+	if flavor != -1:
+		data.flavor = flavor
 	return data
 
 static func load_data(data_: Variant) -> LevelData:
@@ -49,6 +55,8 @@ static func load_data(data_: Variant) -> LevelData:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	var level_data := LevelData.new(data.full_name, data.get("description", ""), data.grid_data, data.get("tutorial", ""))
 	level_data.difficulty = data.get("difficulty", -1)
+	level_data.difficulty_name = data.get("difficulty_name", "")
+	level_data.flavor = data.get("flavor", -1)
 	level_data.marathon_left = data.get("marathon_left", -1)
 	level_data.marathon_total = data.get("marathon_total", -1)
 	level_data.seed_str = data.get("seed_str", "")

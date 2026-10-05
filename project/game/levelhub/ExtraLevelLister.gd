@@ -124,6 +124,12 @@ func section_endless_flavor(section: int) -> int:
 	else:
 		return RandomFlavors.Flavor.get(flavor_name, -1)
 
+func is_pandora_section(section: int) -> bool:
+	return section_name(section) == "DLC5_NAME" or _config(section).get_value("section", "endless_flavor", "") == "Pandora"
+
+func section_has_endless(section: int) -> bool:
+	return section_endless_flavor(section) != -1 or is_pandora_section(section)
+
 func is_hard(section: int, level: int) -> bool:
 	return level == -1 or level in _config(section).get_value("section", "hard_levels", [])
 

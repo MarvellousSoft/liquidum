@@ -212,6 +212,19 @@ func save_random_level(data: LevelData) -> void:
 	_no_tutorial(data)
 	_save_json_data(_level_dir(), RANDOM, data.get_data())
 
+const PANDORA := "pandora.json"
+
+func load_pandora_level() -> LevelData:
+	var data := LevelData.load_data(_load_json_data(_level_dir(), PANDORA))
+	_has_difficulty(data)
+	_no_tutorial(data)
+	return data
+
+func save_pandora_level(data: LevelData) -> void:
+	_has_difficulty(data)
+	_no_tutorial(data)
+	_save_json_data(_level_dir(), PANDORA, data.get_data())
+
 func _endless_json(section: int) -> String:
 	return ExtraLevelLister.endless_level_name(section) + JSON_EXT
 
@@ -300,6 +313,20 @@ func load_preprocessed_difficulty(dif: RandomHub.Difficulty) -> PreprocessedDiff
 
 func save_preprocessed_difficulty(data: PreprocessedDifficulty) -> void:
 	_save_json_data(RANDOM_DIR, _dif_filename(data.difficulty), data.get_data())
+
+const PANDORA_DIR := "res://database/pandora"
+
+func _pandora_filename(mode: int) -> String:
+	const PANDORA_FILES := ["snake", "sudoku", "knight", "liar", "symbols", "pandora"]
+	if mode >= 0 and mode < PANDORA_FILES.size():
+		return PANDORA_FILES[mode] + JSON_EXT
+	return "mode_%d%s" % [mode, JSON_EXT]
+
+func load_preprocessed_pandora(mode: int) -> PreprocessedPandora:
+	return PreprocessedPandora.load_data(mode, _load_json_data(PANDORA_DIR, _pandora_filename(mode)))
+
+func save_preprocessed_pandora(data: PreprocessedPandora) -> void:
+	_save_json_data(PANDORA_DIR, _pandora_filename(data.mode), data.get_data())
 
 func load_preprocessed_endless(section: int) -> PreprocessedEndless:
 	return PreprocessedEndless.load_data(_load_json_data(_extra_level_data_dir(section), PREPROCESSED_JSON))

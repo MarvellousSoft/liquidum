@@ -15,11 +15,13 @@ static func save(also_stats := true) -> void:
 		data.save_stats()
 	FileManager._save_user_data(data)
 
-const VERSION := 9
+const VERSION := 10
 
 var random_levels_completed: Array[int]
 # Used to generate random levels in some order
 var random_levels_created: Array[int]
+var pandora_levels_completed: Array[int]
+var pandora_levels_created: Array[int]
 var endless_completed: Array[int]
 var endless_good: Array[int]
 var endless_created: Array[int]
@@ -72,9 +74,15 @@ class PendingUpload:
 	static func from_data(data: Dictionary) -> PendingUpload:
 		return PendingUpload.new(int(data.first_failed), int(data.times_failed), String(data.ld_id), float(data.time), int(data.mistakes), data.keep_best == "true")
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload], playfab_custom_id_: String) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload], playfab_custom_id_: String, pandora_levels_completed_: Array[int] = [], pandora_levels_created_: Array[int] = []) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
+	pandora_levels_completed = pandora_levels_completed_
+	while pandora_levels_completed.size() < 5:
+		pandora_levels_completed.append(0)
+	pandora_levels_created = pandora_levels_created_
+	while pandora_levels_created.size() < 6:
+		pandora_levels_created.append(0)
 	endless_completed = endless_completed_
 	endless_good = endless_good_
 	endless_created = endless_created_
@@ -96,6 +104,8 @@ func get_data() -> Dictionary:
 		version = VERSION,
 		random_levels_completed = random_levels_completed,
 		random_levels_created = random_levels_created,
+		pandora_levels_completed = pandora_levels_completed,
+		pandora_levels_created = pandora_levels_created,
 		endless_completed = endless_completed,
 		endless_good = endless_good,
 		endless_created = endless_created,
@@ -310,15 +320,21 @@ static func load_data(data_: Variant) -> UserData:
 	var replay_completed_a: Array[int] = [0, 0]
 	var allow_streak_skip := false
 	var pending_ld: Array[PendingUpload] = []
+	var pandora_completed: Array[int] = []
+	var pandora_created: Array[int] = []
 	if data_ == null:
 		for i in RandomHub.Difficulty.size():
 			completed.append(0)
 			created.append(0)
+		for i in 5:
+			pandora_completed.append(0)
+		for i in 6:
+			pandora_created.append(0)
 		for i in ExtraLevelLister.count_all_game_sections(true):
 			endless.append(0)
 			endless_g.append(0)
 			endless_c.append(0)
-		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a, {}, "", false, pending_ld, "")
+		return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, -1, 0, replay_completed_a, {}, "", false, pending_ld, "", pandora_completed, pandora_created)
 	var data: Dictionary = data_
 	if data.version < 2:
 		data.version = 2
@@ -350,10 +366,16 @@ static func load_data(data_: Variant) -> UserData:
 	if data.version < 9:
 		data.version = 9
 		data.pending_ld_uploads = []
+	if data.version < 10:
+		data.version = 10
+		data.pandora_levels_completed = [0, 0, 0, 0, 0]
+		data.pandora_levels_created = [0, 0, 0, 0, 0, 0]
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)
 	created.assign(data.random_levels_created)
+	pandora_completed.assign(data.get("pandora_levels_completed", [0, 0, 0, 0, 0]))
+	pandora_created.assign(data.get("pandora_levels_created", [0, 0, 0, 0, 0, 0]))
 	endless.assign(data.endless_completed)
 	endless_g.assign(data.endless_good)
 	endless_c.assign(data.get("endless_created", []))
@@ -364,4 +386,62 @@ static func load_data(data_: Variant) -> UserData:
 	replay_completed_a.assign(data.replay_completed)
 	for up in data.pending_ld_uploads:
 		pending_ld.append(PendingUpload.from_data(up))
-	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a, data.ld_uploads, data.get("display_name", ""), allow_streak_skip, pending_ld, data.get("playfab_custom_id", ""))
+	return UserData.new(completed, created, endless, endless_g, endless_c, best_streak_a, cur_streak_a, last_day_a, monthly, int(data.selected_flair), data.insane_good_levels, replay_completed_a, data.ld_uploads, data.get("display_name", ""), allow_streak_skip, pending_ld, data.get("playfab_custom_id", ""), pandora_completed, pandora_created)
+
+func get_pandora_completed(flavor_or_idx: int) -> int:
+	var idx := _pandora_variant_idx(flavor_or_idx)
+	if idx < 0 or idx >= pandora_levels_completed.size():
+		return 0
+	return pandora_levels_completed[idx]
+
+func bump_pandora_completed(flavor_or_idx: int) -> int:
+	var idx := _pandora_variant_idx(flavor_or_idx)
+	if idx < 0:
+		return 0
+	while pandora_levels_completed.size() <= idx:
+		pandora_levels_completed.append(0)
+	pandora_levels_completed[idx] += 1
+	return pandora_levels_completed[idx]
+
+func get_pandora_created(mode: int) -> int:
+	if mode < 0 or mode >= pandora_levels_created.size():
+		return 0
+	return pandora_levels_created[mode]
+
+func bump_pandora_created(mode: int) -> int:
+	if mode < 0:
+		return 0
+	while pandora_levels_created.size() <= mode:
+		pandora_levels_created.append(0)
+	pandora_levels_created[mode] += 1
+	return pandora_levels_created[mode]
+
+func has_completed_any_pandora() -> bool:
+	for c in pandora_levels_completed:
+		if c > 0:
+			return true
+	return false
+
+func total_pandora_completed() -> int:
+	var total := 0
+	for c in pandora_levels_completed:
+		total += c
+	return total
+
+func _pandora_variant_idx(flavor_or_idx: int) -> int:
+	match flavor_or_idx:
+		RandomFlavors.Flavor.Snake:
+			return 0
+		RandomFlavors.Flavor.Sudoku:
+			return 1
+		RandomFlavors.Flavor.Knight:
+			return 2
+		RandomFlavors.Flavor.Liar:
+			return 3
+		RandomFlavors.Flavor.Symbols:
+			return 4
+		_:
+			if flavor_or_idx >= 0 and flavor_or_idx < 5:
+				return flavor_or_idx
+			return -1
+

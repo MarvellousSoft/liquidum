@@ -1,0 +1,360 @@
+[gd_scene load_steps=6 format=3 uid="uid://da2wrnq33ve1k"]
+
+[ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
+[ext_resource type="Script" path="res://game/random_menu/PandoraHub.gd" id="2_1yoql"]
+[ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
+[ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_jxjxy"]
+[ext_resource type="Texture2D" uid="uid://yb7nehpgxv4m" path="res://assets/images/ui/spinbox_arrows.png" id="5_xxff2"]
+
+[node name="PandoraHub" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7k2d0")
+script = ExtResource("2_1yoql")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.2
+offset_bottom = 95.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 150
+text = "PANDORA_TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Difficulties" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="Difficulties"]
+layout_mode = 2
+theme_override_constants/separation = 55
+alignment = 1
+
+[node name="Continue" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+auto_translate = false
+localize_numeral_system = false
+focus_mode = 0
+text = "CONTINUE - SNAKE_BUTTON"
+
+[node name="ContinueSeparator" type="HSeparator" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Snake" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "SNAKE_BUTTON"
+
+[node name="Sudoku" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "SUDOKU_BUTTON"
+
+[node name="Knight" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "KNIGHT_BUTTON"
+
+[node name="Liar" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "LIAR_BUTTON"
+
+[node name="Symbols" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "SYMBOLS_BUTTON"
+
+[node name="Pandora" type="Button" parent="Difficulties/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "PANDORA_BUTTON"
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 75.0
+offset_top = 75.0
+focus_mode = 0
+text = "BACK"
+
+[node name="CustomSeedButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3790.0
+offset_top = -109.0
+offset_right = -3379.0
+offset_bottom = -49.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "USE_CUSTOM_SEED"
+
+[node name="Seed" type="LineEdit" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3780.0
+offset_top = -126.0
+offset_right = -3495.0
+offset_bottom = -49.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 60
+placeholder_text = "SEED"
+max_length = 10
+virtual_keyboard_type = 2
+deselect_on_focus_loss_enabled = false
+select_all_on_focus = true
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+grow_vertical = 2
+theme = ExtResource("4_jxjxy")
+metadata/_edit_group_ = true
+
+[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+text = "RANDOM_COMPLETED"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Snake" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Snake"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "SNAKE_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Sudoku" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Sudoku"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "SUDOKU_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Knight" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Knight"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "KNIGHT_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Liar" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Liar"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "LIAR_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="Symbols" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Symbols"]
+layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 70
+text = "SYMBOLS_BUTTON"
+
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "999
+"
+horizontal_alignment = 2
+
+[node name="MarathonLabel" type="Label" parent="."]
+layout_mode = 2
+offset_left = 2746.0
+offset_top = 1850.0
+offset_right = 3804.0
+offset_bottom = 1982.0
+theme_override_font_sizes/font_size = 50
+text = "MARATHON_TEXT"
+horizontal_alignment = 2
+vertical_alignment = 2
+autowrap_mode = 3
+
+[node name="Marathon" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -435.0
+offset_bottom = -43.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 70
+
+[node name="Button1" type="Button" parent="Marathon"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "1"
+
+[node name="Button10" type="Button" parent="Marathon"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "10"
+
+[node name="Button100" type="Button" parent="Marathon"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "100"
+
+[node name="Slider" type="SpinBox" parent="Marathon"]
+layout_mode = 2
+theme_override_icons/updown = ExtResource("5_xxff2")
+min_value = 1.0
+value = 1.0
+alignment = 1
+update_on_text_changed = true
+select_all_on_focus = true
+
+[node name="Version" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 0
+offset_left = 1623.0
+offset_top = 2048.0
+offset_right = 2223.0
+offset_bottom = 2125.0
+theme_override_font_sizes/font_size = 64
+text = "VERSION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
+
+[connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]
+[connection signal="mouse_entered" from="Difficulties/VBox/Snake" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Snake" to="." method="_on_dif_pressed" binds= [0]]
+[connection signal="mouse_entered" from="Difficulties/VBox/Sudoku" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Sudoku" to="." method="_on_dif_pressed" binds= [1]]
+[connection signal="mouse_entered" from="Difficulties/VBox/Knight" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Knight" to="." method="_on_dif_pressed" binds= [2]]
+[connection signal="mouse_entered" from="Difficulties/VBox/Liar" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Liar" to="." method="_on_dif_pressed" binds= [3]]
+[connection signal="mouse_entered" from="Difficulties/VBox/Symbols" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Symbols" to="." method="_on_dif_pressed" binds= [4]]
+[connection signal="mouse_entered" from="Difficulties/VBox/Pandora" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Difficulties/VBox/Pandora" to="." method="_on_dif_pressed" binds= [5]]
+[connection signal="mouse_entered" from="Back" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="mouse_entered" from="CustomSeedButton" to="." method="_on_button_mouse_entered"]
+[connection signal="pressed" from="CustomSeedButton" to="." method="_on_custom_seed_button_pressed"]
+[connection signal="pressed" from="Marathon/Button1" to="." method="_on_button_marathon_count_pressed" binds= [1]]
+[connection signal="pressed" from="Marathon/Button10" to="." method="_on_button_marathon_count_pressed" binds= [10]]
+[connection signal="pressed" from="Marathon/Button100" to="." method="_on_button_marathon_count_pressed" binds= [100]]
+[connection signal="value_changed" from="Marathon/Slider" to="." method="_on_marathon_value_changed"]
