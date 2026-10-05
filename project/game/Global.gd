@@ -364,3 +364,8 @@ func get_contrast_background(color) -> Color:
 	var colors = WATER_COLORS.normal
 	var c = colors.bg if get_best_contrast(color) else colors.dark
 	return c
+
+func hint_to_str(hint: float) -> String:
+	if int(hint) == hint:
+		return String.num(hint, 0)
+	return String.num(hint, 1)

@@ -20,7 +20,7 @@ signal leaderboards_loaded(leaderboard)
 # Players
 signal players_current_loaded(player)
 signal players_friends_loaded(friends)
-signal players_searched(player)
+#signal players_searched(player)
 
 # Sign In
 signal sign_in_user_authenticated(is_authenticated)
@@ -108,9 +108,10 @@ func _ready() -> void:
 	print("Google play services lib initialized.")
 
 func _read_ids() -> void:
-	var root := XML.parse_file("res://game/mobile/game-ids.xml").root
-	for id in root.children:
-		ids[id.attributes.name] = id.content
+	pass # Uncomment if we want to support mobile again
+	#var root := XML.parse_file("res://game/mobile/game-ids.xml").root
+	#for id in root.children:
+	#	ids[id.attributes.name] = id.content
 
 # Public methods
 # Achievements

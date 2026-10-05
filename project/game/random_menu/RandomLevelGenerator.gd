@@ -118,7 +118,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 	return g if found else null
 
 # Change to true to ease debugging
-var direct_thread := true
+var direct_thread := false
 
 func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	return await generate_with_size(rng, func(_rng): return Vector2i(n, m), apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)

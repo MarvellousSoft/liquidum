@@ -68,9 +68,9 @@ func update_campaign_stats() -> void:
 		var section_levels := CampaignLevelLister.count_section_levels(section)
 		if section > 1:
 			GooglePlayGameServices.achievements_unlock(GooglePlayGameServices.ids["achievement_section_%d_unlocked" % section])
-		var completed: String = GooglePlayGameServices.ids["achievement_section_%d_completed" % section]
-		if id_to_cur_steps.has(completed) and completed_levels > id_to_cur_steps[completed]:
-			GooglePlayGameServices.achievements_increment(completed, completed_levels - id_to_cur_steps[completed])
+		var completed_: String = GooglePlayGameServices.ids["achievement_section_%d_completed" % section]
+		if id_to_cur_steps.has(completed_) and completed_levels > id_to_cur_steps[completed_]:
+			GooglePlayGameServices.achievements_increment(completed_, completed_levels - id_to_cur_steps[completed_])
 		if section_levels - completed_levels > CampaignLevelLister.MAX_UNSOLVED_LEVELS:
 			break
 		section += 1

@@ -172,7 +172,8 @@ func play_random_bgm(start_from_beginning := false):
 
 func play_sfx(sfx_name: String) -> AudioStreamPlayer:
 	if not SFXS or not SFXS.has(sfx_name):
-		push_error("Not a valid sfx name: " + sfx_name)
+		if not TestRunner.running:
+			push_error("Not a valid sfx name: " + sfx_name)
 		return
 	
 	

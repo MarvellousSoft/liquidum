@@ -31,7 +31,7 @@ const FADE_SPEED = 2.0
 @onready var ToggleVisibility: TextureButton = $VBoxContainer/EditorButtons/ToggleVisibility
 @onready var EditAltText: TextureButton = $VBoxContainer/EditorButtons/EditAltText
 @onready var HintsContainer = $VBoxContainer/HintsContainer
-@onready var Number = %Number
+@onready var Number: RichTextLabel = %Number
 @onready var Boat = %Boat
 @onready var DummyLabel = %DummyLabel
 @onready var Highlight = %Highlight
@@ -177,7 +177,7 @@ func can_be_hidden() -> bool:
 func update_label() -> void:
 	Number.text = ""
 	
-	var value = str(hint_value) if hint_value != -1 else "?"
+	var value = Global.hint_to_str(hint_value) if hint_value != -1 else "?"
 	if alt_text != "":
 		value = alt_text
 	else:

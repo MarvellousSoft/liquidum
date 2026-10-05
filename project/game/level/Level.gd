@@ -230,7 +230,7 @@ func _exit_tree() -> void:
 	if workshop_id != -1 and SteamManager.enabled:
 		SteamManager.steam.stopPlaytimeTracking([workshop_id])
 	# Cancel solve if it still exists
-	if not Global.is_mobile and %CancelUniqCheck != null:
+	if not Global.is_mobile and has_node("%CancelUniqCheck"):
 		%CancelUniqCheck.button_pressed = true
 
 

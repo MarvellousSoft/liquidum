@@ -4,7 +4,7 @@ signal overlay_toggled(on: bool)
 
 var enabled := true
 const APP_ID := 2716690
-var steam = null
+var steam := Steam
 # This is used to globally wipe stats if necessary. Use with care.
 const STATS_VERSION := 1
 
@@ -25,9 +25,9 @@ func _ready() -> void:
 	if enabled:
 		OS.set_environment("SteamAppId", str(APP_ID))
 		OS.set_environment("SteamGameId", str(APP_ID))
-		var res: Dictionary = SteamManager.steam.steamInit()
+		var res = SteamManager.steam.steamInit()
 		print("Steam init: %s" % res)
-		if res.status != SteamManager.steam.RESULT_OK:
+		if not res:
 			print("Steam running: %s" % SteamManager.steam.isSteamRunning())
 			enabled = false
 	if not enabled:
@@ -36,14 +36,16 @@ func _ready() -> void:
 		return
 	Global.is_demo = not steam.isSubscribedApp(2716690) or ProjectSettings.get_setting("liquidum/force_demo")
 	SteamManager.steam.dlc_installed.connect(_on_dlc_installed)
-	SteamManager.steam.current_stats_received.connect(_stats_received)
+	#SteamManager.steam.current_stats_received.connect(_stats_received)
+	# Stats are now received automatically
+	call_deferred("_stats_received")
 	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
-	SteamManager.steam.requestCurrentStats()
+	#SteamManager.steam.requestCurrentStats()
 	# False mobile on computer
 	if Global.is_mobile:
 		enabled = false
 
-func _stats_received(game: int, result: int, user: int) -> void:
+func _stats_received() -> void:
 	if stats_received:
 		return
 	if STATS_VERSION != SteamManager.steam.getStatInt("version"):
@@ -52,9 +54,8 @@ func _stats_received(game: int, result: int, user: int) -> void:
 		SteamManager.steam.setStatInt("version", STATS_VERSION)
 		SteamManager.steam.storeStats()
 		await SteamManager.steam.user_stats_stored
-		SteamManager.steam.requestCurrentStats()
+		#SteamManager.steam.:()
 		return
-	print("Steam stats received! (result = %d, game = %d, user = %d)" % [result, game, user])
 	stats_received = true
 	await StatsTracker.instance().update_campaign_stats()
 
@@ -62,7 +63,7 @@ func store_stats() -> void:
 	if not SteamManager.enabled:
 		return
 	if not stats_received:
-		SteamManager.steam.requestCurrentStats()
+		#SteamManager.steam.requestCurrentStats()
 		return
 	print("Storing steam stats")
 	SteamManager.steam.storeStats()
@@ -181,4 +182,4 @@ func upload_leaderboard_score(l_id: int, score: int, keep_best: bool, details: L
 		print("Did upload to leaderboard %d" % [l_id])
 
 func is_steam_deck() -> bool:
-	return enabled and steam.isSteamRunningOnSteamDeck()
+	return enabled and steam.isRunningOnSteamHardware() and steam.getSteamHardwareDefaultConfig() == steam.SteamHardwareDefaultConfig.STEAM_HARDWARE_DEFAULT_CONFIG_STEAM_DECK

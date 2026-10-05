@@ -72,7 +72,7 @@ func set_unknown():
 
 
 func update_label() -> void:
-	Counter.text = str(count)
+	Counter.text = Global.hint_to_str(count)
 	if is_mistake_counter() and not Global.is_mobile:
 		AnimPlayer.play("update_counter_big")
 	elif Global.is_mobile:

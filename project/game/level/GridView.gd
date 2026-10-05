@@ -1155,4 +1155,3 @@ func _on_hint_bar_left_left_clicked_hint(idx):
 	if disabled:
 		return
 	try_to_fill_row_with_air(idx)
-

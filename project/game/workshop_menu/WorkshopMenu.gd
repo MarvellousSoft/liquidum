@@ -53,7 +53,7 @@ func reload_all_levels() -> void:
 		await Buttons.get_child(idx).get_vote()
 
 
-func _item_installed(app_id: int, _id: int) -> void:
+func _item_installed(app_id: int, _id: int, _legacy_content, _manifest_id) -> void:
 	if app_id == SteamManager.APP_ID:
 		reload_all_levels()
 

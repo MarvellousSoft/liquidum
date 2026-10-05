@@ -1,6 +1,6 @@
-[gd_scene load_steps=33 format=3 uid="uid://ifggb1m1apqi"]
+[gd_scene format=3 uid="uid://ifggb1m1apqi"]
 
-[ext_resource type="Script" path="res://game/level/Level.gd" id="2_wvis2"]
+[ext_resource type="Script" uid="uid://ukhecoq5uui0" path="res://game/level/Level.gd" id="2_wvis2"]
 [ext_resource type="PackedScene" uid="uid://bde14y8dr2ugg" path="res://game/level/GridView.tscn" id="2_yywdk"]
 [ext_resource type="Texture2D" uid="uid://blssr82fp4wuy" path="res://assets/images/ui/icons/restart_normal.png" id="3_2xjqf"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="3_ceab8"]
@@ -147,8 +147,8 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
 _data = {
-"RESET": SubResource("Animation_72efb"),
-"show": SubResource("Animation_aqku1")
+&"RESET": SubResource("Animation_72efb"),
+&"show": SubResource("Animation_aqku1")
 }
 
 [sub_resource type="Animation" id="Animation_1qr1w"]
@@ -304,11 +304,11 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
 _data = {
-"RESET": SubResource("Animation_1qr1w"),
-"startup": SubResource("Animation_4ayxj")
+&"RESET": SubResource("Animation_1qr1w"),
+&"startup": SubResource("Animation_4ayxj")
 }
 
-[node name="Level" type="Control"]
+[node name="Level" type="Control" unique_id=1970618906]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -318,7 +318,7 @@ grow_vertical = 2
 theme = ExtResource("3_ceab8")
 script = ExtResource("2_wvis2")
 
-[node name="Seed" type="Label" parent="."]
+[node name="Seed" type="Label" parent="." unique_id=333610068]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -333,33 +333,32 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 70
 text = "Seed: 123"
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1481425504]
 layout_mode = 0
 offset_top = 432.0
 offset_right = 3840.0
 offset_bottom = 2038.0
 
-[node name="GridView" parent="CenterContainer" instance=ExtResource("2_yywdk")]
+[node name="GridView" parent="CenterContainer" unique_id=498751088 instance=ExtResource("2_yywdk")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TopInfo" type="Control" parent="."]
+[node name="TopInfo" type="Control" parent="." unique_id=1046639537]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 3
 anchors_preset = 0
 offset_left = 587.0
 offset_top = 71.0
 offset_right = 587.0
 offset_bottom = 71.0
 
-[node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo"]
+[node name="LevelNameContainer" type="HBoxContainer" parent="TopInfo" unique_id=650287960]
 layout_mode = 0
 offset_left = -90.0
 offset_right = 797.0
 offset_bottom = 115.0
 theme_override_constants/separation = 36
 
-[node name="SectionNumber" type="Label" parent="TopInfo/LevelNameContainer"]
+[node name="SectionNumber" type="Label" parent="TopInfo/LevelNameContainer" unique_id=824065212]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -368,7 +367,7 @@ theme_override_constants/outline_size = 36
 theme_override_font_sizes/font_size = 70
 text = "0 - 0"
 
-[node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer"]
+[node name="LevelLabel" type="Label" parent="TopInfo/LevelNameContainer" unique_id=1735587105]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(680, 0)
 layout_mode = 2
@@ -378,7 +377,7 @@ theme_override_font_sizes/font_size = 90
 text = "LEVELNAM"
 autowrap_mode = 3
 
-[node name="AuthorLabel" type="Label" parent="TopInfo/LevelNameContainer/LevelLabel"]
+[node name="AuthorLabel" type="Label" parent="TopInfo/LevelNameContainer/LevelLabel" unique_id=1613303555]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -394,17 +393,17 @@ theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 60
 text = "BY_AUTHOR"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopInfo"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopInfo" unique_id=467205049]
 layout_mode = 0
 offset_left = 1989.0
 offset_right = 2707.0
 offset_bottom = 274.0
 
-[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/VBoxContainer"]
+[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/VBoxContainer" unique_id=1614573610]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TimerIcon" type="TextureRect" parent="TopInfo/VBoxContainer/TimerContainer"]
+[node name="TimerIcon" type="TextureRect" parent="TopInfo/VBoxContainer/TimerContainer" unique_id=938924237]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
@@ -412,7 +411,7 @@ size_flags_vertical = 4
 texture = ExtResource("8_hu2r6")
 expand_mode = 1
 
-[node name="TimerLabel" type="Label" parent="TopInfo/VBoxContainer/TimerContainer"]
+[node name="TimerLabel" type="Label" parent="TopInfo/VBoxContainer/TimerContainer" unique_id=345849592]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -424,7 +423,7 @@ theme_override_font_sizes/font_size = 80
 text = "00:00"
 vertical_alignment = 2
 
-[node name="MistakeCounter" parent="TopInfo/VBoxContainer" instance=ExtResource("4_m6y7y")]
+[node name="MistakeCounter" parent="TopInfo/VBoxContainer" unique_id=1742615630 instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
 check_for_satisfied = false
@@ -443,12 +442,12 @@ autowrap_mode = 0
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
-[node name="MistakesAreCounted" type="MarginContainer" parent="TopInfo/VBoxContainer"]
+[node name="MistakesAreCounted" type="MarginContainer" parent="TopInfo/VBoxContainer" unique_id=962415361]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_top = 20
 
-[node name="Label" type="Label" parent="TopInfo/VBoxContainer/MistakesAreCounted"]
+[node name="Label" type="Label" parent="TopInfo/VBoxContainer/MistakesAreCounted" unique_id=1156953035]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 15
@@ -456,7 +455,7 @@ theme_override_font_sizes/font_size = 50
 text = "MISTAKES_LEADERBOARDS"
 autowrap_mode = 3
 
-[node name="HintsContainer" type="VBoxContainer" parent="."]
+[node name="HintsContainer" type="VBoxContainer" parent="." unique_id=1957995675]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = 2929.0
@@ -467,48 +466,51 @@ mouse_filter = 2
 theme_override_constants/separation = 60
 alignment = 1
 
-[node name="CountersPanel" type="PanelContainer" parent="HintsContainer"]
+[node name="CountersPanel" type="PanelContainer" parent="HintsContainer" unique_id=526444486]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="HintsContainer/CountersPanel" unique_id=1493025474]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 10
 
-[node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer"]
+[node name="Counters" type="VBoxContainer" parent="HintsContainer/CountersPanel/MarginContainer" unique_id=942167747]
 layout_mode = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+[node name="WaterCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" unique_id=1519594827 instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "WATERS_COUNTER"
 
-[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" instance=ExtResource("4_m6y7y")]
+[node name="BoatCounter" parent="HintsContainer/CountersPanel/MarginContainer/Counters" unique_id=134833686 instance=ExtResource("4_m6y7y")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="AquariumHintContainer" parent="HintsContainer" instance=ExtResource("6_dltj2")]
+[node name="AquariumHintContainer" parent="HintsContainer" unique_id=64024000 instance=ExtResource("6_dltj2")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme = null
 
-[node name="BrushPicker" parent="." instance=ExtResource("3_gfx50")]
+[node name="BrushPicker" parent="." unique_id=1081596643 instance=ExtResource("3_gfx50")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_bottom = 0.0
 
-[node name="ResetButton" type="TextureButton" parent="."]
+[node name="AnimationPlayer" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images/NoWater/FingerAnim" index="0"]
+autoplay = &"idle"
+
+[node name="ResetButton" type="TextureButton" parent="." unique_id=1008255317]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 3335.0
 offset_top = 49.0
 offset_right = 3535.0
@@ -519,7 +521,7 @@ texture_hover = ExtResource("5_c2kft")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="UniquenessCheck" type="PanelContainer" parent="."]
+[node name="UniquenessCheck" type="PanelContainer" parent="." unique_id=1939500377]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -530,51 +532,51 @@ offset_left = 50.0
 grow_vertical = 2
 theme = ExtResource("12_myc3a")
 
-[node name="MarginContainer" type="MarginContainer" parent="UniquenessCheck"]
+[node name="MarginContainer" type="MarginContainer" parent="UniquenessCheck" unique_id=715849403]
 layout_mode = 2
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="VBox" type="VBoxContainer" parent="UniquenessCheck/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="UniquenessCheck/MarginContainer" unique_id=1242356517]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="HasUnique" type="Label" parent="UniquenessCheck/MarginContainer/VBox"]
+[node name="HasUnique" type="Label" parent="UniquenessCheck/MarginContainer/VBox" unique_id=1141836163]
 layout_mode = 2
 text = "HAS_UNIQUE"
 
-[node name="Center" type="CenterContainer" parent="UniquenessCheck/MarginContainer/VBox"]
+[node name="Center" type="CenterContainer" parent="UniquenessCheck/MarginContainer/VBox" unique_id=661411573]
 layout_mode = 2
 
-[node name="UniqResult" type="Label" parent="UniquenessCheck/MarginContainer/VBox/Center"]
+[node name="UniqResult" type="Label" parent="UniquenessCheck/MarginContainer/VBox/Center" unique_id=1920313972]
 unique_name_in_owner = true
 layout_mode = 2
 text = "UNKNOWN"
 
-[node name="UniqOngoing" parent="UniquenessCheck/MarginContainer/VBox/Center" instance=ExtResource("12_xpik2")]
+[node name="UniqOngoing" parent="UniquenessCheck/MarginContainer/VBox/Center" unique_id=1173223317 instance=ExtResource("12_xpik2")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="UniquenessCheck/MarginContainer/VBox"]
+[node name="HSeparator" type="HSeparator" parent="UniquenessCheck/MarginContainer/VBox" unique_id=554391706]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UniquenessCheck/MarginContainer/VBox"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="UniquenessCheck/MarginContainer/VBox" unique_id=714088777]
 layout_mode = 2
 theme_override_constants/separation = 120
 alignment = 1
 
-[node name="CheckUniqueness" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2"]
+[node name="CheckUniqueness" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2" unique_id=1219939905]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "CHECK"
 
-[node name="CancelUniqCheck" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2"]
+[node name="CancelUniqCheck" type="Button" parent="UniquenessCheck/MarginContainer/VBox/HBoxContainer2" unique_id=160846373]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -582,7 +584,7 @@ disabled = true
 toggle_mode = true
 text = "CANCEL"
 
-[node name="DevContainer" type="ScrollContainer" parent="."]
+[node name="DevContainer" type="ScrollContainer" parent="." unique_id=1945251393]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
@@ -596,22 +598,22 @@ mouse_force_pass_scroll_events = false
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="DevContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="DevContainer" unique_id=357082912]
 layout_mode = 2
 theme_override_constants/margin_left = 120
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="DevButtons" parent="DevContainer/MarginContainer" instance=ExtResource("7_q4003")]
+[node name="DevButtons" parent="DevContainer/MarginContainer" unique_id=17786750 instance=ExtResource("7_q4003")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="PlaytestButton" type="Button" parent="."]
+[node name="PlaytestButton" type="Button" parent="." unique_id=1987572786]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 100.0
 offset_top = 290.0
 offset_right = 827.0
@@ -619,10 +621,10 @@ offset_bottom = 415.0
 focus_mode = 0
 text = "PLAYTEST"
 
-[node name="TutorialButton" type="Button" parent="."]
+[node name="TutorialButton" type="Button" parent="." unique_id=837677814]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(140, 140)
-layout_mode = 2
+layout_mode = 0
 offset_left = 99.0
 offset_top = 252.0
 offset_right = 239.0
@@ -635,7 +637,7 @@ icon = ExtResource("13_3t8tl")
 icon_alignment = 1
 expand_icon = true
 
-[node name="TutorialContainer" type="MarginContainer" parent="."]
+[node name="TutorialContainer" type="MarginContainer" parent="." unique_id=942658641]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
@@ -645,25 +647,25 @@ offset_right = 1015.0
 offset_bottom = 2160.0
 mouse_filter = 2
 
-[node name="TutorialPanelContainer" type="PanelContainer" parent="TutorialContainer"]
+[node name="TutorialPanelContainer" type="PanelContainer" parent="TutorialContainer" unique_id=1808934136]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = ExtResource("16_y0h4x")
 
-[node name="MarginContainer" type="MarginContainer" parent="TutorialContainer/TutorialPanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TutorialContainer/TutorialPanelContainer" unique_id=1616407905]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TutorialContainer/TutorialPanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TutorialContainer/TutorialPanelContainer/MarginContainer" unique_id=786982344]
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="Icon" type="TextureRect" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer"]
+[node name="Icon" type="TextureRect" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer" unique_id=778393873]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
@@ -671,16 +673,16 @@ size_flags_horizontal = 0
 texture = ExtResource("13_3t8tl")
 expand_mode = 3
 
-[node name="TutorialCenterContainer" type="CenterContainer" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer"]
+[node name="TutorialCenterContainer" type="CenterContainer" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer" unique_id=679646389]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TogetherSeparate" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("13_kx7dw")]
+[node name="TogetherSeparate" parent="TutorialContainer/TutorialPanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" unique_id=36199421 instance=ExtResource("13_kx7dw")]
 layout_mode = 2
 
-[node name="BackAndTimeSaved" type="HBoxContainer" parent="."]
+[node name="BackAndTimeSaved" type="HBoxContainer" parent="." unique_id=508849294]
 layout_mode = 0
 offset_left = 100.0
 offset_top = 63.0
@@ -688,33 +690,33 @@ offset_right = 140.0
 offset_bottom = 103.0
 theme_override_constants/separation = 75
 
-[node name="BackButton" type="Button" parent="BackAndTimeSaved"]
+[node name="BackButton" type="Button" parent="BackAndTimeSaved" unique_id=2007696515]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "BACK"
 
-[node name="LastSaved" type="HBoxContainer" parent="BackAndTimeSaved"]
+[node name="LastSaved" type="HBoxContainer" parent="BackAndTimeSaved" unique_id=824245070]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="LastSaved" type="Label" parent="BackAndTimeSaved/LastSaved"]
+[node name="LastSaved" type="Label" parent="BackAndTimeSaved/LastSaved" unique_id=1249276526]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "LAST_SAVED"
 
-[node name="Time" type="Label" parent="BackAndTimeSaved/LastSaved"]
+[node name="Time" type="Label" parent="BackAndTimeSaved/LastSaved" unique_id=1769576695]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = " 10s "
 
-[node name="Ago" type="Label" parent="BackAndTimeSaved/LastSaved"]
+[node name="Ago" type="Label" parent="BackAndTimeSaved/LastSaved" unique_id=640508482]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "AGO"
 
-[node name="Description" type="MarginContainer" parent="."]
+[node name="Description" type="MarginContainer" parent="." unique_id=227180596]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 12
@@ -729,7 +731,7 @@ theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="Edit" type="TextEdit" parent="Description"]
+[node name="Edit" type="TextEdit" parent="Description" unique_id=921821236]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -737,14 +739,14 @@ mouse_force_pass_scroll_events = false
 placeholder_text = "LEVEL_DESCRIPTION_PLACEHOLDER"
 wrap_mode = 1
 
-[node name="Scroll" type="ScrollContainer" parent="Description"]
+[node name="Scroll" type="ScrollContainer" parent="Description" unique_id=288760160]
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 mouse_filter = 2
 follow_focus = true
 horizontal_scroll_mode = 3
 
-[node name="Label" type="Label" parent="Description/Scroll"]
+[node name="Label" type="Label" parent="Description/Scroll" unique_id=884415289]
 custom_minimum_size = Vector2(3760, 140)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -756,12 +758,12 @@ text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Title" type="Control" parent="."]
+[node name="Title" type="Control" parent="." unique_id=1260741838]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TitleBanner" type="PanelContainer" parent="Title"]
+[node name="TitleBanner" type="PanelContainer" parent="Title" unique_id=1248393107]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_3453y")
 layout_mode = 1
@@ -778,7 +780,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c876g")
 
-[node name="Label" type="Label" parent="Title/TitleBanner"]
+[node name="Label" type="Label" parent="Title/TitleBanner" unique_id=260346089]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 0.32549)
 theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
@@ -790,7 +792,7 @@ text = "Level title"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="Edit" type="LineEdit" parent="Title"]
+[node name="Edit" type="LineEdit" parent="Title" unique_id=34841217]
 visible = false
 layout_mode = 0
 offset_left = 74.0
@@ -801,27 +803,27 @@ placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
 caret_blink = true
 
-[node name="TutorialDisplayContainer" type="CenterContainer" parent="."]
+[node name="TutorialDisplayContainer" type="CenterContainer" parent="." unique_id=878877331]
 z_index = 2
 layout_mode = 0
 offset_right = 3840.0
 offset_bottom = 2160.0
 mouse_filter = 2
 
-[node name="TutorialDisplayBG" type="ColorRect" parent="TutorialDisplayContainer"]
+[node name="TutorialDisplayBG" type="ColorRect" parent="TutorialDisplayContainer" unique_id=1064803618]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(3840, 2160)
 layout_mode = 2
 color = Color(0, 0.0352941, 0.141176, 0.886275)
 
-[node name="TutorialDisplay" parent="TutorialDisplayContainer" instance=ExtResource("15_nwo8g")]
+[node name="TutorialDisplay" parent="TutorialDisplayContainer" unique_id=951779730 instance=ExtResource("15_nwo8g")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="ContinueContainer" type="HBoxContainer" parent="."]
+[node name="ContinueContainer" type="HBoxContainer" parent="." unique_id=1688882485]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -839,56 +841,52 @@ grow_vertical = 0
 theme_override_constants/separation = 125
 alignment = 2
 
-[node name="ShareButton" type="Button" parent="ContinueContainer"]
+[node name="ShareButton" type="Button" parent="ContinueContainer" unique_id=1859260819]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 0
 text = "SHARE"
 
-[node name="ContinueButton" type="Button" parent="ContinueContainer"]
+[node name="ContinueButton" type="Button" parent="ContinueContainer" unique_id=1870484461]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "CONTINUE"
 
-[node name="PlayAgainButton" type="Button" parent="ContinueContainer"]
+[node name="PlayAgainButton" type="Button" parent="ContinueContainer" unique_id=1590833596]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "PLAY_AGAIN_NEW_LEVEL"
 
-[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
+[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer" unique_id=795178444]
 unique_name_in_owner = true
 root_node = NodePath("../ContinueButton")
-libraries = {
-"": SubResource("AnimationLibrary_dnqfm")
-}
+libraries/ = SubResource("AnimationLibrary_dnqfm")
 
-[node name="WaveLayer" type="CanvasLayer" parent="."]
+[node name="WaveLayer" type="CanvasLayer" parent="." unique_id=1739990705]
 layer = 2
 
-[node name="WaveEffect" parent="WaveLayer" instance=ExtResource("13_4gky1")]
+[node name="WaveEffect" parent="WaveLayer" unique_id=995388342 instance=ExtResource("13_4gky1")]
 unique_name_in_owner = true
 
-[node name="SettingsScreen" parent="." instance=ExtResource("5_1j60w")]
+[node name="SettingsScreen" parent="." unique_id=730078767 instance=ExtResource("5_1j60w")]
 unique_name_in_owner = true
 layer = 3
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_b8al2")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=79386858]
+libraries/ = SubResource("AnimationLibrary_b8al2")
 
-[node name="Autosaver" type="Timer" parent="."]
+[node name="Autosaver" type="Timer" parent="." unique_id=813079800]
 wait_time = 30.0
 autostart = true
 
-[node name="SteamPlaytimeTracker" parent="." instance=ExtResource("16_78sh5")]
+[node name="SteamPlaytimeTracker" parent="." unique_id=1572691077 instance=ExtResource("16_78sh5")]
 
-[node name="SteamRichPresence" parent="." instance=ExtResource("21_s7rk0")]
+[node name="SteamRichPresence" parent="." unique_id=137126638 instance=ExtResource("21_s7rk0")]
 
-[node name="PaintManager" parent="." instance=ExtResource("23_pqssh")]
+[node name="PaintManager" parent="." unique_id=766356191 instance=ExtResource("23_pqssh")]
 unique_name_in_owner = true
 
 [connection signal="theme_changed" from="." to="." method="_on_theme_changed"]

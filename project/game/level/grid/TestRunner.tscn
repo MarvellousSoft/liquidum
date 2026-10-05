@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqieg2p6bsmfi"]
+[gd_scene format=3 uid="uid://dqieg2p6bsmfi"]
 
-[ext_resource type="Script" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
+[ext_resource type="Script" uid="uid://8wh23wj878n8" path="res://game/level/grid/TestRunner.gd" id="1_xrxil"]
 [ext_resource type="PackedScene" uid="uid://bde14y8dr2ugg" path="res://game/level/GridView.tscn" id="2_ojaat"]
 [ext_resource type="PackedScene" uid="uid://b66jv6csdnca5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
-[ext_resource type="Script" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
+[ext_resource type="Script" uid="uid://cpqow361bfjrs" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
-[node name="TestRunner" type="Control"]
+[node name="TestRunner" type="Control" unique_id=744724043]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,8 +14,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xrxil")
 
-[node name="Grid1" parent="." instance=ExtResource("2_ojaat")]
-layout_mode = 2
+[node name="Grid1" parent="." unique_id=281769485 instance=ExtResource("2_ojaat")]
+layout_mode = 0
 anchors_preset = 0
 anchor_left = -0.0817708
 anchor_top = 0.182407
@@ -25,10 +25,12 @@ offset_left = 846.0
 offset_top = 345.0
 offset_right = 846.0
 offset_bottom = 345.0
+grow_horizontal = 1
+grow_vertical = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Grid2" parent="." instance=ExtResource("2_ojaat")]
-layout_mode = 2
+[node name="Grid2" parent="." unique_id=1302811992 instance=ExtResource("2_ojaat")]
+layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.335417
 anchor_top = 0.158333
@@ -38,14 +40,17 @@ offset_left = 846.0
 offset_top = 371.0
 offset_right = 846.0
 offset_bottom = 371.0
+grow_horizontal = 1
+grow_vertical = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="BrushPicker" parent="." instance=ExtResource("3_1jrm3")]
+[node name="BrushPicker" parent="." unique_id=1188016573 instance=ExtResource("3_1jrm3")]
+layout_mode = 0
 
-[node name="Tests" type="Node" parent="."]
+[node name="Tests" type="Node" parent="." unique_id=1861924037]
 script = ExtResource("3_ftgq8")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=560327123]
 clip_contents = false
 layout_mode = 0
 offset_left = 47.0
@@ -53,26 +58,26 @@ offset_top = 67.0
 offset_right = 1359.0
 offset_bottom = 2092.0
 
-[node name="Buttons" type="VBoxContainer" parent="ScrollContainer"]
+[node name="Buttons" type="VBoxContainer" parent="ScrollContainer" unique_id=1233336492]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Run" type="Button" parent="ScrollContainer/Buttons"]
+[node name="Run" type="Button" parent="ScrollContainer/Buttons" unique_id=923407253]
 layout_mode = 2
 focus_mode = 0
 text = "Run tests"
 
-[node name="InfiniteGenHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+[node name="InfiniteGenHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=1820088962]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="InfiniteGenButton" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+[node name="InfiniteGenButton" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=942654235]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Infinite Generator Test"
 
-[node name="InfiniteGenCancel" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+[node name="InfiniteGenCancel" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=69229656]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -80,63 +85,63 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="InfiniteGenStatus" type="Label" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+[node name="InfiniteGenStatus" type="Label" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=1207610858]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AutoSolve" type="Button" parent="ScrollContainer/Buttons"]
+[node name="AutoSolve" type="Button" parent="ScrollContainer/Buttons" unique_id=1379976968]
 layout_mode = 2
 focus_mode = 0
 text = "Simple Solve"
 
-[node name="GodMode" type="CheckButton" parent="ScrollContainer/Buttons"]
+[node name="GodMode" type="CheckButton" parent="ScrollContainer/Buttons" unique_id=350891454]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "God mode"
 
-[node name="Paste" type="Button" parent="ScrollContainer/Buttons"]
+[node name="Paste" type="Button" parent="ScrollContainer/Buttons" unique_id=1115644524]
 layout_mode = 2
 focus_mode = 0
 text = "Paste from clipboard"
 
-[node name="FullSolve" type="Button" parent="ScrollContainer/Buttons"]
+[node name="FullSolve" type="Button" parent="ScrollContainer/Buttons" unique_id=1450786140]
 layout_mode = 2
 focus_mode = 0
 text = "Full solve"
 
-[node name="SolvedType" type="Label" parent="ScrollContainer/Buttons"]
+[node name="SolvedType" type="Label" parent="ScrollContainer/Buttons" unique_id=1687766763]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PrintLocalStats" type="Button" parent="ScrollContainer/Buttons"]
+[node name="PrintLocalStats" type="Button" parent="ScrollContainer/Buttons" unique_id=1082780112]
 layout_mode = 2
 focus_mode = 0
 text = "Print local stats"
 
-[node name="PrintGlobalStats" type="Button" parent="ScrollContainer/Buttons"]
+[node name="PrintGlobalStats" type="Button" parent="ScrollContainer/Buttons" unique_id=1316865028]
 layout_mode = 2
 focus_mode = 0
 text = "Print global stats
 "
 
-[node name="ResetStats" type="Button" parent="ScrollContainer/Buttons"]
+[node name="ResetStats" type="Button" parent="ScrollContainer/Buttons" unique_id=243804578]
 layout_mode = 2
 focus_mode = 0
 text = "Reset stats & achievements"
 
-[node name="DailiesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+[node name="DailiesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=199176699]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="DailiesButton" type="Button" parent="ScrollContainer/Buttons/DailiesHBox"]
+[node name="DailiesButton" type="Button" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=134850806]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Preprocess Dailies"
 
-[node name="DailiesYear" type="SpinBox" parent="ScrollContainer/Buttons/DailiesHBox"]
+[node name="DailiesYear" type="SpinBox" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=1503613620]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 2024.0
@@ -144,7 +149,7 @@ max_value = 2040.0
 value = 2024.0
 rounded = true
 
-[node name="DailiesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DailiesHBox"]
+[node name="DailiesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=401011969]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(500, 0)
@@ -153,7 +158,7 @@ size_flags_vertical = 4
 max_value = 365.0
 step = 1.0
 
-[node name="DailiesCancel" type="Button" parent="ScrollContainer/Buttons/DailiesHBox"]
+[node name="DailiesCancel" type="Button" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=1375655545]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -161,16 +166,16 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="DifHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+[node name="DifHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=574766392]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="DifOptions" type="OptionButton" parent="ScrollContainer/Buttons/DifHBox"]
+[node name="DifOptions" type="OptionButton" parent="ScrollContainer/Buttons/DifHBox" unique_id=206295764]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-item_count = 5
 selected = 0
+item_count = 5
 popup/item_0/text = "Easy"
 popup/item_0/id = 0
 popup/item_1/text = "Medium"
@@ -182,14 +187,14 @@ popup/item_3/id = 3
 popup/item_4/text = "Insane"
 popup/item_4/id = 4
 
-[node name="DifButton" type="Button" parent="ScrollContainer/Buttons/DifHBox"]
+[node name="DifButton" type="Button" parent="ScrollContainer/Buttons/DifHBox" unique_id=1477590397]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 focus_mode = 0
 text = "Preprocess"
 
-[node name="DifProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DifHBox"]
+[node name="DifProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DifHBox" unique_id=1433742168]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(500, 0)
@@ -198,7 +203,7 @@ size_flags_vertical = 4
 max_value = 1000.0
 step = 1.0
 
-[node name="DifCancel" type="Button" parent="ScrollContainer/Buttons/DifHBox"]
+[node name="DifCancel" type="Button" parent="ScrollContainer/Buttons/DifHBox" unique_id=422264039]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -206,23 +211,23 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="EndlessHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+[node name="EndlessHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=1908396866]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="EndlessOptions" type="OptionButton" parent="ScrollContainer/Buttons/EndlessHBox"]
+[node name="EndlessOptions" type="OptionButton" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=911378450]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 
-[node name="EndlessButton" type="Button" parent="ScrollContainer/Buttons/EndlessHBox"]
+[node name="EndlessButton" type="Button" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=1498216778]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 focus_mode = 0
 text = "Preprocess"
 
-[node name="EndlessProgress" type="ProgressBar" parent="ScrollContainer/Buttons/EndlessHBox"]
+[node name="EndlessProgress" type="ProgressBar" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=779065718]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(500, 0)
@@ -231,7 +236,7 @@ size_flags_vertical = 4
 max_value = 1000.0
 step = 1.0
 
-[node name="EndlessCancel" type="Button" parent="ScrollContainer/Buttons/EndlessHBox"]
+[node name="EndlessCancel" type="Button" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=1118752455]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -239,17 +244,17 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="WeekliesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+[node name="WeekliesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=813627393]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="WeekliesButton" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox"]
+[node name="WeekliesButton" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1431774682]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Preprocess Weeklies"
 
-[node name="WeekliesYear" type="SpinBox" parent="ScrollContainer/Buttons/WeekliesHBox"]
+[node name="WeekliesYear" type="SpinBox" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1054428602]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 2024.0
@@ -257,7 +262,7 @@ max_value = 2040.0
 value = 2024.0
 rounded = true
 
-[node name="WeekliesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/WeekliesHBox"]
+[node name="WeekliesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1032454275]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(500, 0)
@@ -266,7 +271,7 @@ size_flags_vertical = 4
 max_value = 53.0
 step = 1.0
 
-[node name="WeekliesCancel" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox"]
+[node name="WeekliesCancel" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=2030522101]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -274,7 +279,7 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="PrepCheck" type="CheckBox" parent="ScrollContainer/Buttons"]
+[node name="PrepCheck" type="CheckBox" parent="ScrollContainer/Buttons" unique_id=1331118975]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

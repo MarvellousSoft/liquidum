@@ -1,6 +1,9 @@
+class_name TestRunner
 extends Control
 
 const DESIRED_W := 780.0
+
+static var running: bool = false
 
 @onready var g1: GridView = $Grid1
 @onready var g2: GridView = $Grid2
@@ -8,10 +11,14 @@ const DESIRED_W := 780.0
 # Runs tests, in the future, we can make this more extendable, test classes
 # and stuffs. But for now, this is enough.
 
+
 const PANDORA_OPTION_OFFSET := 100
 
 var _infinite_gen_running := false
 var _active_test_tasks: Dictionary = {}
+
+func _init() -> void:
+	TestRunner.running = true
 
 func _exit_tree() -> void:
 	_infinite_gen_running = false
@@ -288,7 +295,7 @@ func _on_endless_button_pressed() -> void:
 
 func _on_reset_stats_pressed():
 	SteamManager.steam.resetAllStats(true)
-	SteamManager.steam.requestCurrentStats()
+	#SteamManager.steam.requestCurrentStats()
 
 
 func _on_preprocess_weeklies_pressed() -> void:

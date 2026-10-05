@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dd45tm53xriwj"]
+[gd_scene format=3 uid="uid://dd45tm53xriwj"]
 
-[ext_resource type="Script" path="res://game/splash/Splash.gd" id="1_05bbx"]
+[ext_resource type="Script" uid="uid://dhv8sa3wc158k" path="res://game/splash/Splash.gd" id="1_05bbx"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_emwgs"]
 [ext_resource type="Texture2D" uid="uid://c6ai8pq54uyhi" path="res://assets/images/ui/credits/Marvellous Soft.png" id="3_ogpb8"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="4_7k6dn"]
@@ -79,11 +79,11 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k5d25"]
 _data = {
-"RESET": SubResource("Animation_ghptg"),
-"intro": SubResource("Animation_0opli")
+&"RESET": SubResource("Animation_ghptg"),
+&"intro": SubResource("Animation_0opli")
 }
 
-[node name="Splash" type="Control"]
+[node name="Splash" type="Control" unique_id=922140993]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -93,7 +93,7 @@ grow_vertical = 2
 theme = ExtResource("1_emwgs")
 script = ExtResource("1_05bbx")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1022386260]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -108,7 +108,7 @@ text = "SPLASH_LOADING"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Marvellous" type="TextureRect" parent="."]
+[node name="Marvellous" type="TextureRect" parent="." unique_id=1800706590]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -118,13 +118,11 @@ grow_vertical = 2
 texture = ExtResource("3_ogpb8")
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "intro"
-libraries = {
-"": SubResource("AnimationLibrary_k5d25")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1530444926]
+libraries/ = SubResource("AnimationLibrary_k5d25")
+autoplay = &"intro"
 
-[node name="Boat" type="TextureRect" parent="."]
+[node name="Boat" type="TextureRect" parent="." unique_id=783965188]
 modulate = Color(0.0156863, 0.105882, 0.219608, 1)
 custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 1

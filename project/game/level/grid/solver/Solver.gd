@@ -309,7 +309,7 @@ class RowStrategy extends Strategy:
 class RowComponent:
 	var size := 0.
 	var first: GridImpl.CellWithLoc
-	var corner: E.Corner
+	var corner: E.Corner = E.Corner.TopLeft
 	var all_js: Array[int] = []
 	# Initial cell accessed, not necessarily all corners
 	var all_corners: Array[E.Corner] = []
@@ -389,7 +389,7 @@ class ColumnStrategy extends Strategy:
 class CellPosition:
 	var i: int
 	var j: int
-	var corner: E.Corner
+	var corner: E.Corner = E.Corner.TopLeft
 	func _init(i_: int, j_: int, corner_: E.Corner) -> void:
 		i = i_
 		j = j_
@@ -2167,7 +2167,7 @@ class KnightStrategy extends Strategy:
 	func description() -> String:
 		return "Mark X on cells in knight's move from water."
 	# Mark X on all cells that can't have water
-	@warning_ignore("shadowed_variable")
+	@warning_ignore("shadowed_variable_base_class")
 	static func knight_mark_x(grid: GridModel) -> bool:
 		var any := false
 		for i in grid.rows():

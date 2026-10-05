@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=30 format=3 uid="uid://bjysepqligucr"]
+[gd_resource type="Theme" format=3 uid="uid://bjysepqligucr"]
 
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="1_x6xj1"]
 [ext_resource type="StyleBox" path="res://assets/ui/ButtonDisabledStyle.tres" id="2_fwtui"]

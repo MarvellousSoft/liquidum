@@ -6,8 +6,6 @@ const MAX_TIME := 100000
 const DEV_IDS := {76561198046896163: true, 76561198046336325: true}
 const SHARE_LINK := "linktr.ee/liquidum"
 
-signal streak_opened
-
 enum Type { Daily = 0, Weekly = 1 }
 
 # Initialise these on the constructor
@@ -16,7 +14,7 @@ var marathon_size: int
 var streak_max_mistakes: int
 var copied_tween: Tween = null
 
-
+signal streak_opened
 
 @onready var MainButton: Button = %MainButton
 @onready var TimeLeft: Label = %TimeLeft

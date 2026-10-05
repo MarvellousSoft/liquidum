@@ -1591,19 +1591,19 @@ L.
 L.
 """, "", ["MediumCol"])
 
-	# LiarRowStrategy: Use subsetsum
+	# LiarRow: Use subsetsum
 	assert_apply_strategies("""
 +variant=liar
 +row_alt=0:4
 WW........
 L.L._.L._.
-""", "", ["LiarRowStrategy"])
+""", "", ["LiarRow"])
 	assert_apply_strategies("""
 +variant=liar
 +row_alt=0:3
 XX........
 L.L._.L._.
-""", "", ["LiarRowStrategy"])
+""", "", ["LiarRow"])
 
 func test_sudoku_status() -> void:
 	var g := GridImpl.new(1, 1)
