@@ -263,7 +263,9 @@ func _on_button_mouse_exited():
 
 
 func _on_dark_mode_changed(_is_dark : bool):
-	if data:
+	if my_level == -1 and ExtraLevelLister.is_pandora_section(my_section):
+		change_style_boxes(UserData.current().has_completed_any_pandora() or (data and data.is_completed()))
+	elif data:
 		change_style_boxes(data.is_completed())
 	else:
 		change_style_boxes(false)

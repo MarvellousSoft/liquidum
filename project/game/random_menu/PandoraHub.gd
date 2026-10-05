@@ -22,9 +22,6 @@ const PANDORA_FLAVORS: Array[RandomFlavors.Flavor] = [
 
 var _current_flavor: int = -1
 
-func _init() -> void:
-	save_level_name = PANDORA
-
 func _save_level_name() -> String:
 	return PANDORA
 
@@ -36,8 +33,7 @@ func _save_level_data(data: LevelData) -> void:
 
 func _get_modes() -> Array[int]:
 	var modes: Array[int] = []
-	for m in Mode.values():
-		modes.append(m)
+	modes.assign(Mode.values())
 	return modes
 
 func _mode_name(mode: int) -> String:
@@ -117,9 +113,15 @@ func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
 	var flavor_solved: int = data.flavor
 	if flavor_solved == -1 and data.difficulty != Mode.Pandora:
 		flavor_solved = data.difficulty
+	var u_data := UserData.current()
 	if flavor_solved != -1:
-		UserData.current().bump_pandora_completed(flavor_solved)
-		UserData.save()
+		u_data.bump_pandora_completed(flavor_solved)
+	var p_section := ExtraLevelLister.pandora_section()
+	if p_section != -1:
+		u_data.bump_endless_completed(p_section)
+		if info.mistakes < 3:
+			u_data.bump_endless_good(p_section)
+	UserData.save()
 	var stats := StatsTracker.instance()
 	stats.increment_random_any()
 	if data.marathon_left == 0 and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
@@ -129,11 +131,15 @@ func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
 			await StoreIntegrations.leaderboard_create_if_not_exists(l_id, StoreIntegrations.SortMethod.SmallestFirst)
 			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if not l_data.is_empty():
-				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
+				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
 				var mode_name := _mode_button_text(data.difficulty).to_lower()
 				display.display(l_data, "%d %s" % [data.marathon_total, mode_name], [], "")
 
-func _speedrun_key(_marathon_total: int, _mode: int) -> String:
+func _speedrun_key(marathon_total: int, mode: int) -> String:
+	if marathon_total == 10 and mode == Mode.Pandora:
+		return "n2ylrv1d-p85ykw3l.qj7mgjgq"
+	elif marathon_total == 100 and mode == Mode.Pandora:
+		return "5dw3qq52-p85ykw3l.qj7mgjgq"
 	return ""
 
 func _update_unlocked() -> void:

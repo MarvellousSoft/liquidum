@@ -323,7 +323,7 @@ func _pandora_filename(mode: int) -> String:
 	return "mode_%d%s" % [mode, JSON_EXT]
 
 func load_preprocessed_pandora(mode: int) -> PreprocessedPandora:
-	return PreprocessedPandora.load_data(mode, _load_json_data(PANDORA_DIR, _pandora_filename(mode)))
+	return PreprocessedPandora.load_data(mode, _load_json_data(PANDORA_DIR, _pandora_filename(mode), false))
 
 func save_preprocessed_pandora(data: PreprocessedPandora) -> void:
 	_save_json_data(PANDORA_DIR, _pandora_filename(data.mode), data.get_data())

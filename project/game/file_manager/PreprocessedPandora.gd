@@ -2,6 +2,7 @@ class_name PreprocessedPandora
 
 static var _current: Array[PreprocessedPandora] = []
 
+@warning_ignore("shadowed_variable")
 static func current(mode: int) -> PreprocessedPandora:
 	while _current.size() <= mode:
 		_current.append(null)
@@ -26,7 +27,7 @@ func get_data() -> Variant:
 	return _success_states.map(func(x): return String.num_int64(x))
 
 func success_state(idx: int) -> int:
-	return _success_states[idx] if idx < _success_states.size() else 0
+	return _success_states[idx] if idx >= 0 and idx < _success_states.size() else 0
 
 func set_success_state(idx: int, state: int) -> void:
 	while idx >= _success_states.size():

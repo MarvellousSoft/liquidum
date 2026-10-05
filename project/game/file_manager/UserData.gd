@@ -15,7 +15,7 @@ static func save(also_stats := true) -> void:
 		data.save_stats()
 	FileManager._save_user_data(data)
 
-const VERSION := 10
+const VERSION := 9
 
 var random_levels_completed: Array[int]
 # Used to generate random levels in some order
@@ -74,15 +74,11 @@ class PendingUpload:
 	static func from_data(data: Dictionary) -> PendingUpload:
 		return PendingUpload.new(int(data.first_failed), int(data.times_failed), String(data.ld_id), float(data.time), int(data.mistakes), data.keep_best == "true")
 
-func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload], playfab_custom_id_: String, pandora_levels_completed_: Array[int] = [], pandora_levels_created_: Array[int] = []) -> void:
+func _init(random_levels_completed_: Array[int], random_levels_created_: Array[int], endless_completed_: Array[int], endless_good_: Array[int], endless_created_: Array[int], best_streak_: Array[int], current_streak_: Array[int], last_day_: Array[String], monthly_good_dailies_: Array[int], selected_flair_: int, insane_good_levels_: int, replay_completed_: Array[int], ld_uploads_: Dictionary, display_name_: String, allow_streak_skip_this_one_time_: bool, pending_ld_uploads_: Array[PendingUpload], playfab_custom_id_: String, pandora_levels_completed_: Array[int], pandora_levels_created_: Array[int]) -> void:
 	random_levels_completed = random_levels_completed_
 	random_levels_created = random_levels_created_
 	pandora_levels_completed = pandora_levels_completed_
-	while pandora_levels_completed.size() < 5:
-		pandora_levels_completed.append(0)
 	pandora_levels_created = pandora_levels_created_
-	while pandora_levels_created.size() < 6:
-		pandora_levels_created.append(0)
 	endless_completed = endless_completed_
 	endless_good = endless_good_
 	endless_created = endless_created_
@@ -366,10 +362,6 @@ static func load_data(data_: Variant) -> UserData:
 	if data.version < 9:
 		data.version = 9
 		data.pending_ld_uploads = []
-	if data.version < 10:
-		data.version = 10
-		data.pandora_levels_completed = [0, 0, 0, 0, 0]
-		data.pandora_levels_created = [0, 0, 0, 0, 0, 0]
 	if data.version != VERSION:
 		push_error("Invalid version %s, expected %d" % [data.version, VERSION])
 	completed.assign(data.random_levels_completed)

@@ -248,14 +248,8 @@ func show_level_info(level_name: String, completed: bool, time: float, mistakes:
 
 func show_endless_info() -> void:
 	showing_level_info = true
-	var data := UserData.current()
-	var completed := 0
-	if ExtraLevelLister.is_pandora_section(my_section):
-		%LevelName.text = "PANDORA_TITLE"
-		completed = data.total_pandora_completed()
-	else:
-		%LevelName.text = "ENDLESS"
-		completed = data.get_endless_completed(my_section)
+	var completed := ExtraLevelLister.endless_completed(my_section)
+	%LevelName.text = ExtraLevelLister.endless_title(my_section)
 	if completed > 0:
 		%Completed.text = tr("TIMES_COMPLETED") % [completed]
 	else:

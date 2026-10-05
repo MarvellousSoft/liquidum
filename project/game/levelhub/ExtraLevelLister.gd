@@ -100,6 +100,9 @@ func ios_payment(section: int) -> String:
 func steam_dlc(section: int) -> int:
 	return _config(section).get_value("section", "dlc", -1)
 
+func endless_title(section: int) -> String:
+	return _config(section).get_value("section", "endless_title", "ENDLESS")
+
 func section_disabled(section: int) -> bool:
 	if Global.is_demo:
 		return true
@@ -124,14 +127,24 @@ func section_endless_flavor(section: int) -> int:
 	else:
 		return RandomFlavors.Flavor.get(flavor_name, -1)
 
+const PANDORA_SECTION := 8
 func is_pandora_section(section: int) -> bool:
-	return section_name(section) == "DLC5_NAME" or _config(section).get_value("section", "endless_flavor", "") == "Pandora"
+	return section == PANDORA_SECTION
+
+func pandora_section() -> int:
+	return PANDORA_SECTION
 
 func section_has_endless(section: int) -> bool:
 	return section_endless_flavor(section) != -1 or is_pandora_section(section)
 
 func is_hard(section: int, level: int) -> bool:
 	return level == -1 or level in _config(section).get_value("section", "hard_levels", [])
+
+func endless_completed(section: int) -> int:
+	if is_pandora_section(section):
+		return maxi(UserData.current().total_pandora_completed(), UserData.current().get_endless_completed(section))
+	else:
+		return UserData.current().get_endless_completed(section)
 
 func is_free(section: int) -> bool:
 	return android_payment(section) == ""

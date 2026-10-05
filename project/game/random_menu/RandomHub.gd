@@ -12,10 +12,8 @@ var gen := RandomLevelGenerator.new()
 # Do not change the model difficulty names, at most the user displayed ones
 enum Difficulty { Easy = 0, Medium, Hard, Expert, Insane }
 
-var save_level_name: String = RANDOM
-
 func _save_level_name() -> String:
-	return save_level_name
+	return RANDOM
 
 func _load_level_data() -> LevelData:
 	return FileManager.load_random_level()

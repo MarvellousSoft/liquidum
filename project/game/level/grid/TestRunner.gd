@@ -8,11 +8,16 @@ const DESIRED_W := 780.0
 # Runs tests, in the future, we can make this more extendable, test classes
 # and stuffs. But for now, this is enough.
 
+const PANDORA_OPTION_OFFSET := 100
+
 func _ready() -> void:
 	$BrushPicker.setup(true, true)
 	for section in range(1, ExtraLevelLister.count_all_game_sections(true) + 1):
 		if ExtraLevelLister.section_endless_flavor(section) != -1:
 			%EndlessOptions.add_item(ExtraLevelLister.section_name(section), section)
+	for mode in PandoraHub.Mode.values():
+		var mode_name: String = PandoraHub.Mode.find_key(mode)
+		%EndlessOptions.add_item("Pandora's Box - %s" % mode_name, PANDORA_OPTION_OFFSET + mode)
 
 func _on_run_pressed():
 	$Tests.run_all_tests()
@@ -38,7 +43,7 @@ func _on_auto_solve_pressed():
 
 
 func _on_grid_2_updated():
-	if $Buttons/GodMode.button_pressed:
+	if %GodMode.button_pressed:
 		g2.apply_strategies(all_strategies(), false, false)
 
 
@@ -51,7 +56,7 @@ func _on_full_solve_pressed():
 	var r := g2.full_solve(all_strategies())
 	var solve_type: String = SolverModel.SolveResult.find_key(r)
 	print("Level is %s" % solve_type)
-	$Buttons/SolvedType.text = solve_type
+	%SolvedType.text = solve_type
 
 const PLAYED_STATS := ["daily2", "editor", "playtest", "random"]
 const INT_STATS := ["daily_all_levels", "random_all_levels", "random_insane_levels", "random_insane_good_levels"]
@@ -102,7 +107,7 @@ func _on_preprocess_dailies_pressed() -> void:
 		if prep.success_state(dict) == 0:
 			await DailyButton.gen_level(gen, date)
 			prep.set_success_state(dict, gen.success_state)
-		elif $Buttons/PrepCheck.button_pressed:
+		elif %PrepCheck.button_pressed:
 			# Check it is correct
 			await DailyButton.gen_level(gen, date)
 		if watch.elapsed() > 60.:
@@ -136,7 +141,7 @@ func _on_dif_button_pressed():
 		if prep.success_state(i) == 0:
 			await RandomHub.gen_from_difficulty(gen, rng, dif)
 			prep.set_success_state(i, gen.success_state)
-		elif $Buttons/PrepCheck.button_pressed:
+		elif %PrepCheck.button_pressed:
 			# Check it is correct
 			rng.state = prep.success_state(i)
 			await RandomHub.gen_from_difficulty(gen, rng, dif)
@@ -152,11 +157,27 @@ func _on_dif_button_pressed():
 	FileManager.save_preprocessed_difficulty(prep)
 
 func _on_endless_button_pressed() -> void:
-	var section: int = %EndlessOptions.get_selected_id()
-	var prep := FileManager.load_preprocessed_endless(section)
+	var selected_id: int = %EndlessOptions.get_selected_id()
+	var is_pandora := selected_id >= PANDORA_OPTION_OFFSET
+	var mode := selected_id - PANDORA_OPTION_OFFSET if is_pandora else -1
+	var section := selected_id if not is_pandora else -1
+
+	var prep_pandora: PreprocessedPandora = null
+	var prep_endless: PreprocessedEndless = null
+	var endless_flavor: RandomFlavors.Flavor
+	var count: int
+
+	if is_pandora:
+		prep_pandora = FileManager.load_preprocessed_pandora(mode)
+		count = 1001
+	else:
+		prep_endless = FileManager.load_preprocessed_endless(section)
+		endless_flavor = ExtraLevelLister.section_endless_flavor(section) as RandomFlavors.Flavor
+		count = 1000
+
 	var gen := RandomLevelGenerator.new()
-	var flavor := ExtraLevelLister.section_endless_flavor(section) as RandomFlavors.Flavor
 	%EndlessProgress.value = 0
+	%EndlessProgress.max_value = count
 	%EndlessProgress.visible = true
 	%EndlessOptions.disabled = true
 	%EndlessButton.visible = false
@@ -164,27 +185,49 @@ func _on_endless_button_pressed() -> void:
 	%EndlessCancel.button_pressed = false
 	var watch := Stopwatch.new()
 	var rng := RandomNumberGenerator.new()
-	for i in 1000:
+	for i in count:
 		if %EndlessCancel.button_pressed:
 			break
-		rng.seed = RandomHub.consistent_hash(str(i))
-		if prep.success_state(i) == 0:
+		var seed_str := str(i)
+		var flavor: RandomFlavors.Flavor
+		if is_pandora:
+			if mode == PandoraHub.Mode.Pandora:
+				var flavor_rng := RandomNumberGenerator.new()
+				flavor_rng.seed = RandomHub.consistent_hash(seed_str + "-flavor")
+				flavor = PandoraHub.PANDORA_FLAVORS[flavor_rng.randi() % PandoraHub.PANDORA_FLAVORS.size()]
+			else:
+				flavor = PandoraHub.PANDORA_FLAVORS[mode]
+		else:
+			flavor = endless_flavor
+
+		rng.seed = RandomHub.consistent_hash(seed_str)
+		var current_state := prep_pandora.success_state(i) if is_pandora else prep_endless.success_state(i)
+		if current_state == 0:
 			await RandomFlavors.gen(gen, rng, flavor)
-			prep.set_success_state(i, gen.success_state)
-		elif $Buttons/PrepCheck.button_pressed:
+			if is_pandora:
+				prep_pandora.set_success_state(i, gen.success_state)
+			else:
+				prep_endless.set_success_state(i, gen.success_state)
+		elif %PrepCheck.button_pressed:
 			# Check it is correct
-			rng.state = prep.success_state(i)
+			rng.state = current_state
 			await RandomFlavors.gen(gen, rng, flavor)
-			assert(gen.success_state == prep.success_state(i))
+			assert(gen.success_state == current_state)
 		if watch.elapsed() > 30.:
 			watch.elapsed_reset()
-			FileManager.save_preprocessed_endless(section, prep)
+			if is_pandora:
+				FileManager.save_preprocessed_pandora(prep_pandora)
+			else:
+				FileManager.save_preprocessed_endless(section, prep_endless)
 		%EndlessProgress.value += 1
 	%EndlessCancel.visible = false
 	%EndlessProgress.visible = false
 	%EndlessButton.visible = true
 	%EndlessOptions.disabled = false
-	FileManager.save_preprocessed_endless(section, prep)
+	if is_pandora:
+		FileManager.save_preprocessed_pandora(prep_pandora)
+	else:
+		FileManager.save_preprocessed_endless(section, prep_endless)
 
 func _on_reset_stats_pressed():
 	SteamManager.steam.resetAllStats(true)
@@ -216,7 +259,7 @@ func _on_preprocess_weeklies_pressed() -> void:
 			if prep.success_state(monday, i) == 0:
 				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
 				prep.set_success_state(monday, i, gen.success_state)
-			elif $Buttons/PrepCheck.button_pressed:
+			elif %PrepCheck.button_pressed:
 				# Check it is correct
 				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
 			if watch.elapsed() > 30.:
