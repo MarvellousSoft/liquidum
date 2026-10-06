@@ -55,6 +55,11 @@ icon = ExtResource("5_a8glg")
 icon_alignment = 1
 expand_icon = true
 
+[node name="VSeparator2" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
 [connection signal="mouse_entered" from="PlayButton" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="mouse_entered" from="EditButton" to="." method="_on_button_mouse_entered"]
