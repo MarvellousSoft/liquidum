@@ -62,6 +62,29 @@ layout_mode = 2
 focus_mode = 0
 text = "Run tests"
 
+[node name="InfiniteGenHBox" type="HBoxContainer" parent="ScrollContainer/Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="InfiniteGenButton" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Infinite Generator Test"
+
+[node name="InfiniteGenCancel" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "Cancel"
+
+[node name="InfiniteGenStatus" type="Label" parent="ScrollContainer/Buttons/InfiniteGenHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="AutoSolve" type="Button" parent="ScrollContainer/Buttons"]
 layout_mode = 2
 focus_mode = 0
@@ -261,6 +284,8 @@ text = "Check prep is correct"
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
 [connection signal="pressed" from="ScrollContainer/Buttons/Run" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenButton" to="." method="_on_infinite_gen_button_pressed"]
+[connection signal="pressed" from="ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenCancel" to="." method="_on_infinite_gen_cancel_pressed"]
 [connection signal="pressed" from="ScrollContainer/Buttons/AutoSolve" to="." method="_on_auto_solve_pressed"]
 [connection signal="pressed" from="ScrollContainer/Buttons/Paste" to="." method="_on_paste_pressed"]
 [connection signal="pressed" from="ScrollContainer/Buttons/FullSolve" to="." method="_on_full_solve_pressed"]

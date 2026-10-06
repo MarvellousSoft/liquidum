@@ -914,8 +914,8 @@ func _on_dev_buttons_save():
 	if editor_mode():
 		g.set_auto_update_hints(false)
 		_hint_visibility().apply_to_grid(g)
-	else:
-		assert(g.are_hints_satisfied())
+	elif not g.are_hints_satisfied():
+		push_warning("Saving, but the current water is not the solution")
 	FileManager._save_json_data("res://", "%s.json" % level_name, LevelData.new(full_name, description, g.export_data(), "").get_data())
 	if editor_mode():
 		g.set_auto_update_hints(true)

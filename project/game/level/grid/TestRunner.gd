@@ -10,6 +10,18 @@ const DESIRED_W := 780.0
 
 const PANDORA_OPTION_OFFSET := 100
 
+var _infinite_gen_running := false
+var _active_test_tasks: Dictionary = {}
+
+func _exit_tree() -> void:
+	_infinite_gen_running = false
+	for task_id in _active_test_tasks.keys():
+		var data: Dictionary = _active_test_tasks[task_id]
+		if data.has("gen_instance") and data["gen_instance"] != null:
+			data["gen_instance"].cancel()
+		WorkerThreadPool.wait_for_task_completion(task_id)
+	_active_test_tasks.clear()
+
 func _ready() -> void:
 	$BrushPicker.setup(true, true)
 	for section in range(1, ExtraLevelLister.count_all_game_sections(true) + 1):
@@ -86,8 +98,11 @@ func _on_print_local_stats_pressed():
 		print("%s = %d" % [int_stat, SteamManager.steam.getStatInt(int_stat)])
 
 
-func _on_preprocess_dailies_pressed() -> void:
-	var year: int = int(%DailiesYear.value)
+func _on_preprocess_dailies_pressed(year: int = -1) -> void:
+	if year == -1:
+		year = int(%DailiesYear.value)
+	print("Generating Dailies for %d" % [year])
+	%DailiesYear.value = year
 	var prep := FileManager.load_dailies(year)
 	var unixtime := Time.get_unix_time_from_datetime_string("%s-01-01" % year)
 	var gen := RandomLevelGenerator.new()
@@ -98,28 +113,34 @@ func _on_preprocess_dailies_pressed() -> void:
 	%DailiesCancel.visible = true
 	%DailiesCancel.button_pressed = false
 	var watch := Stopwatch.new()
+	var today := Time.get_datetime_string_from_system(true)
+	today = today.substr(0, today.find("T"))
 	while true:
 		var date := Time.get_datetime_string_from_unix_time(unixtime)
 		date = date.substr(0, date.find("T"))
-		if not date.begins_with(str(year)) or %DailiesCancel.button_pressed:
-			break
-		var dict := Time.get_datetime_dict_from_datetime_string(date, false)
-		if prep.success_state(dict) == 0:
-			await DailyButton.gen_level(gen, date)
-			prep.set_success_state(dict, gen.success_state)
-		elif %PrepCheck.button_pressed:
-			# Check it is correct
-			await DailyButton.gen_level(gen, date)
-		if watch.elapsed() > 60.:
-			watch.elapsed_reset()
-			FileManager.save_dailies(year, prep)
+		if date >= today:
+			if not date.begins_with(str(year)) or %DailiesCancel.button_pressed:
+				break
+			var dict := Time.get_datetime_dict_from_datetime_string(date, false)
+			if prep.success_state(dict) == 0:
+				await DailyButton.gen_level(gen, date)
+				prep.set_success_state(dict, gen.success_state)
+			elif %PrepCheck.button_pressed:
+				# Check it is correct
+				await DailyButton.gen_level(gen, date)
+			if watch.elapsed() > 60.:
+				watch.elapsed_reset()
+				FileManager.save_dailies(year, prep)
 		%DailiesProgress.value += 1
 		unixtime += 24 * 60 * 60
-	%DailiesProgress.visible = false
-	%DailiesYear.visible = true
-	%DailiesButton.visible = true
-	%DailiesCancel.visible = false
 	FileManager.save_dailies(year, prep)
+	if not %DailiesCancel.button_pressed:
+		_on_preprocess_dailies_pressed(year + 1)
+	else:
+		%DailiesProgress.visible = false
+		%DailiesYear.visible = true
+		%DailiesButton.visible = true
+		%DailiesCancel.visible = false
 
 
 func _on_dif_button_pressed():
@@ -272,3 +293,186 @@ func _on_preprocess_weeklies_pressed() -> void:
 	%WeekliesButton.visible = true
 	%WeekliesCancel.visible = false
 	FileManager.save_preprocessed_weeklies(2024, prep)
+
+func _on_infinite_gen_button_pressed() -> void:
+	if _infinite_gen_running:
+		return
+	run_infinite_generator_test()
+
+func _on_infinite_gen_cancel_pressed() -> void:
+	if _infinite_gen_running:
+		_infinite_gen_running = false
+		%InfiniteGenStatus.text = "Cancelling..."
+		for data in _active_test_tasks.values():
+			if data.has("gen_instance") and data["gen_instance"] != null:
+				data["gen_instance"].cancel()
+
+func _execute_test_item(item: Dictionary, cycle: int, seed_val: int, gen: RandomLevelGenerator) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_val
+	var start_time := Time.get_ticks_usec()
+	var item_name: String = item["name"]
+
+	var grid: GridModel = null
+	if item["type"] == "difficulty":
+		grid = await RandomHub.gen_from_difficulty(gen, rng, item["id"])
+	else:
+		grid = await RandomFlavors.gen(gen, rng, item["id"])
+
+	if not _infinite_gen_running:
+		return {}
+
+	# 1. Generator crash / failure / null check
+	if grid == null:
+		if gen.tries >= gen.MAX_TRIES:
+			return {"status": "too_many_tries", "item_name": item_name, "cycle": cycle, "seed": seed_val, "tries": gen.tries, "grid": null}
+		return {"status": "error", "error": "Generator failed or returned null", "item_name": item_name, "cycle": cycle, "seed": seed_val, "grid": null}
+
+	# 2. Check if generator encountered Unsolvable during candidate generation
+	if gen.had_unsolvable_error:
+		return {"status": "error", "error": "Generator encountered Unsolvable state during candidate generation", "item_name": item_name, "cycle": cycle, "seed": seed_val, "grid": grid}
+
+	# 3. Check if hints are satisfied with generated solution
+	if not grid.are_hints_satisfied():
+		return {"status": "error", "error": "Generated grid solution does not satisfy hints", "item_name": item_name, "cycle": cycle, "seed": seed_val, "grid": grid}
+
+	# 4. Run solver on generated level (testing grid)
+	var test_g := GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Testing)
+	test_g.clear_content()
+	var solver := SolverModel.new()
+	var solve_result := solver.full_solve(test_g, SolverModel.STRATEGY_LIST.keys(), func(): return not _infinite_gen_running)
+
+	if not _infinite_gen_running:
+		return {}
+
+	if solve_result == SolverModel.SolveResult.Unsolvable:
+		return {"status": "error", "error": "Solver returned Unsolvable for generated level", "item_name": item_name, "cycle": cycle, "seed": seed_val, "grid": grid}
+
+	var elapsed_s := (Time.get_ticks_usec() - start_time) / 1000000.0
+	var solve_name: String = SolverModel.SolveResult.find_key(solve_result)
+	return {"status": "ok", "solve_name": solve_name, "elapsed_s": elapsed_s, "item_name": item_name, "cycle": cycle, "seed": seed_val, "grid": grid}
+
+func run_infinite_generator_test() -> void:
+	_infinite_gen_running = true
+	%InfiniteGenButton.visible = false
+	%InfiniteGenCancel.visible = true
+	%InfiniteGenCancel.button_pressed = false
+	%InfiniteGenStatus.text = "Starting infinite generator test with WorkerThreadPool..."
+	print("--- Starting Infinite Generator Test (WorkerThreadPool) ---")
+
+	# Build ordered test list: all difficulties in order, then all flavors in order
+	var test_items: Array[Dictionary] = []
+	for dif in RandomHub.Difficulty.values():
+		test_items.append({
+			"type": "difficulty",
+			"id": dif,
+			"name": "Difficulty.%s" % RandomHub.Difficulty.find_key(dif),
+		})
+	for flavor in RandomFlavors.Flavor.values():
+		test_items.append({
+			"type": "flavor",
+			"id": flavor,
+			"name": "Flavor.%s" % RandomFlavors.Flavor.find_key(flavor),
+		})
+
+	var num_workers := maxi(2, OS.get_processor_count() - 1)
+	print("Running infinite tests with %d worker threads in WorkerThreadPool" % num_workers)
+
+	var cycle := 1
+	var item_index := 0
+	var total_tested := 0
+	_active_test_tasks.clear()
+
+	while _infinite_gen_running and not %InfiniteGenCancel.button_pressed:
+		# Queue tasks up to num_workers
+		while _active_test_tasks.size() < num_workers and _infinite_gen_running and not %InfiniteGenCancel.button_pressed:
+			var item: Dictionary = test_items[item_index]
+			var rng := RandomNumberGenerator.new()
+			rng.randomize()
+			var current_seed := rng.seed
+			var gen := RandomLevelGenerator.new()
+			gen.direct_thread = true
+
+			var task_data := {
+				"item": item,
+				"cycle": cycle,
+				"seed": current_seed,
+				"gen_instance": gen,
+				"result": {},
+			}
+
+			var task_id := WorkerThreadPool.add_task(func():
+				task_data["result"] = await _execute_test_item(task_data["item"], task_data["cycle"], task_data["seed"], task_data["gen_instance"])
+			)
+			_active_test_tasks[task_id] = task_data
+
+			item_index += 1
+			if item_index >= test_items.size():
+				item_index = 0
+				cycle += 1
+
+		# Yield to let main thread handle UI and frame updates
+		await get_tree().process_frame
+
+		# Process finished tasks
+		var finished_ids: Array = []
+		for task_id in _active_test_tasks.keys():
+			if WorkerThreadPool.is_task_completed(task_id):
+				finished_ids.append(task_id)
+
+		for task_id in finished_ids:
+			WorkerThreadPool.wait_for_task_completion(task_id)
+			var data: Dictionary = _active_test_tasks[task_id]
+			_active_test_tasks.erase(task_id)
+
+			var res: Dictionary = data["result"]
+			if res.is_empty():
+				continue
+
+			if res["status"] == "too_many_tries":
+				print("[Cycle %d] %s too many tries (%d), which is bad but not a fail." % [res["cycle"], res["item_name"], res["tries"]])
+			elif res["status"] == "error":
+				_infinite_gen_fail("[Cycle %d] %s for %s (seed: %d)" % [res["cycle"], res["error"], res["item_name"], res["seed"]], res["grid"])
+				for remaining_id in _active_test_tasks.keys():
+					_active_test_tasks[remaining_id]["gen_instance"].cancel()
+					WorkerThreadPool.wait_for_task_completion(remaining_id)
+				_active_test_tasks.clear()
+				return
+			elif res["status"] == "ok":
+				total_tested += 1
+				%InfiniteGenStatus.text = "[Cycle %d | #%d] %s OK" % [res["cycle"], total_tested, res["item_name"]]
+				print("[Cycle %d | #%d] %s OK (%s in %.1fs)" % [res["cycle"], total_tested, res["item_name"], res["solve_name"], res["elapsed_s"]])
+
+	# Clean up on cancellation
+	_infinite_gen_running = false
+	for remaining_id in _active_test_tasks.keys():
+		_active_test_tasks[remaining_id]["gen_instance"].cancel()
+		WorkerThreadPool.wait_for_task_completion(remaining_id)
+	_active_test_tasks.clear()
+
+	%InfiniteGenCancel.visible = false
+	%InfiniteGenButton.visible = true
+	%InfiniteGenStatus.text = "Stopped. Successfully verified %d levels without errors." % total_tested
+	print("--- Infinite Generator Test Stopped (%d levels verified) ---" % total_tested)
+
+func _infinite_gen_fail(msg: String, grid: GridModel = null) -> void:
+	_infinite_gen_running = false
+	for data in _active_test_tasks.values():
+		if data.has("gen_instance") and data["gen_instance"] != null:
+			data["gen_instance"].cancel()
+	push_error("INFINITE GEN TEST FAILED: " + msg)
+	print("==================================================")
+	print("INFINITE GEN TEST FAILED: ", msg)
+	if grid != null:
+		print("Grid content:")
+		print(grid.to_str())
+		print("Grid export:")
+		print(JSON.stringify(grid.export_data()))
+		g1.setup(GridImpl.import_data(grid.export_data(), GridModel.LoadMode.SolutionNoClear))
+		g2.setup(GridImpl.import_data(grid.export_data(), GridModel.LoadMode.Testing))
+		scale_grids()
+	print("==================================================")
+	%InfiniteGenStatus.text = "FAILED: " + msg
+	%InfiniteGenCancel.visible = false
+	%InfiniteGenButton.visible = true
+	assert(false, "Infinite Gen Test failed: " + msg)

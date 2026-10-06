@@ -271,8 +271,10 @@ func shuffle(a: Array, rng: RandomNumberGenerator) -> void:
 
 
 func wait_for_thread(t: Thread) -> Variant:
+	var wait_time := 0.05
 	while t.is_started() and t.is_alive():
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(wait_time).timeout
+		wait_time = minf(wait_time * 2, 0.5)
 	return t.wait_to_finish()
 
 func wait(secs: float) -> void:

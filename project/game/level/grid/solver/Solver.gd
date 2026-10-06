@@ -236,8 +236,8 @@ class AddNoWaterThroughDips extends GridImpl.Dfs:
 		match c:
 			Content.Nothing, Content.NoBoat:
 				if i <= min_i:
-					cell.put_nowater(corner, false)
-					any = true
+					if cell.put_nowater(corner, false):
+						any = true
 			Content.Block, Content.Boat, Content.NoWater, Content.NoBoatWater, Content.Water:
 				pass
 			_:
@@ -298,10 +298,10 @@ class RowComponent:
 	func _init(first_: GridImpl.CellWithLoc, corner_: E.Corner) -> void:
 		first = first_
 		corner = corner_
-	func put_water() -> void:
-		first.put_water(corner, false)
-	func put_nowater() -> void:
-		first.put_nowater(corner, false, true)
+	func put_water() -> bool:
+		return first.put_water(corner, false) > 0
+	func put_nowater() -> bool:
+		return first.put_nowater(corner, false, true)
 
 class RowDfs extends GridImpl.Dfs:
 	var row_i: int
@@ -310,7 +310,7 @@ class RowDfs extends GridImpl.Dfs:
 		super(grid_)
 		row_i = i
 	func _cell_logic(i: int, _j: int, corner: E.Corner, cell: PureCell) -> bool:
-		if cell.block_at(corner) or cell.nowater_at(corner):
+		if cell.block_at(corner) or cell.nowater_at(corner) or cell._has_boat():
 			return false
 		if i == row_i and !cell.water_at(corner):
 			comp.size += (1 + int(cell.type == E.Single)) * 0.5
@@ -377,23 +377,29 @@ class ColComponent:
 	var size := 0.
 	# Must be filled with water from left to right and nowater from right to left
 	var cells: Array[CellPosition]
-	func put_water_on(grid: GridImpl, count: float) -> void:
+	func put_water_on(grid: GridImpl, count: float) -> bool:
+		var any := false
 		for c in cells:
 			count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
-				grid.get_cell(c.i, c.j).put_water(c.corner, false)
-				return
-	func put_nowater_on(grid: GridImpl, count: float) -> void:
+				if grid.get_cell(c.i, c.j).put_water(c.corner, false):
+					any = true
+				return any
+		return any
+	func put_nowater_on(grid: GridImpl, count: float) -> bool:
+		var any := false
 		for i in cells.size():
 			var c: CellPosition = cells[-1 - i]
 			count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner)
 			if count < -0.5:
 				push_error("Something's bad")
 			if count <= 0:
-				(grid.get_cell(c.i, c.j) as GridImpl.CellWithLoc).put_nowater(c.corner, false, true)
-				return
+				if (grid.get_cell(c.i, c.j) as GridImpl.CellWithLoc).put_nowater(c.corner, false, true):
+					any = true
+				return any
+		return any
 
 class ColDfs extends GridImpl.Dfs:
 	var col_j: int
@@ -427,15 +433,16 @@ class BasicRowStrategy extends RowStrategy:
 		- Put water everywhere if there's no more space for nowater
 		"""
 	func _apply_strategy(_i: int, values: Array[RowComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
+		var any := false
 		if water_left_min >= nothing_left:
 			for comp in values:
-				comp.put_water()
-			return true
-		var any := false
+				if comp.put_water():
+					any = true
+			return any
 		for comp in values:
 			if comp.size > water_left_max:
-				comp.put_nowater()
-				any = true
+				if comp.put_nowater():
+					any = true
 		return any
 
 class MediumRowStrategy extends RowStrategy:
@@ -445,8 +452,8 @@ class MediumRowStrategy extends RowStrategy:
 		var any := false
 		for comp in values:
 			if comp.size <= water_left_max and (nothing_left - comp.size) < water_left_min:
-				comp.put_water()
-				any = true
+				if comp.put_water():
+					any = true
 		return any
 
 class AdvancedRowStrategy extends RowStrategy:
@@ -472,13 +479,13 @@ class AdvancedRowStrategy extends RowStrategy:
 			# If removing a single size made it impossible, all MUST be used
 			if not SubsetSum.can_be_solved(water_left, new):
 				for cmp in size_to_cmp[size]:
-					cmp.put_water()
-				any = true
+					if cmp.put_water():
+						any = true
 			# If using a single size made it impossible, all CANT be used
 			elif not SubsetSum.can_be_solved(water_left - size, new):
 				for cmp in size_to_cmp[size]:
-					cmp.put_nowater()
-				any = true
+					if cmp.put_nowater():
+						any = true
 		return any
 
 class LiarRowStrategy extends RowStrategy:
@@ -508,13 +515,13 @@ class LiarRowStrategy extends RowStrategy:
 			# If removing a single size made it impossible on both possibilities, all MUST be used
 			if not SubsetSum.can_be_solved(water_left_min, new) and not SubsetSum.can_be_solved(water_left_max, new):
 				for cmp in size_to_cmp[size]:
-					cmp.put_water()
-				any = true
+					if cmp.put_water():
+						any = true
 			# If using a single size made it impossible on both possibilities, all CANT be used
 			elif not SubsetSum.can_be_solved(water_left_min - size, new) and not SubsetSum.can_be_solved(water_left_max - size, new):
 				for cmp in size_to_cmp[size]:
-					cmp.put_nowater()
-				any = true
+					if cmp.put_nowater():
+						any = true
 		return any
 
 
@@ -525,15 +532,16 @@ class BasicColStrategy extends ColumnStrategy:
 		- Put water everywhere if there's no more space for non-water
 		"""
 	func _apply_strategy(values: Array[ColComponent], water_left_min: float, water_left_max: float, nothing_left: float) -> bool:
+		var any := false
 		if water_left_min >= nothing_left:
 			for comp in values:
-				comp.put_water_on(grid, comp.size)
-			return true
-		var any := false
+				if comp.put_water_on(grid, comp.size):
+					any = true
+			return any
 		for comp in values:
 			if comp.size > water_left_max:
-				comp.put_nowater_on(grid, comp.size - water_left_max)
-				any = true
+				if comp.put_nowater_on(grid, comp.size - water_left_max):
+					any = true
 		return any
 
 class MediumColStrategy extends ColumnStrategy:
@@ -543,8 +551,8 @@ class MediumColStrategy extends ColumnStrategy:
 		var any := false
 		for comp in values:
 			if nothing_left - comp.size < water_left_min:
-				comp.put_water_on(grid, water_left_min - (nothing_left - comp.size))
-				any = true
+				if comp.put_water_on(grid, water_left_min - (nothing_left - comp.size)):
+					any = true
 		return any
 
 class AdvancedColStrategy extends ColumnStrategy:
@@ -826,8 +834,8 @@ class TogetherStrategy extends RowColStrategy:
 		if h * 2 > b_len:
 			for b2 in range(b_len - (int(2 * h) - b_len), b_len + (int(2 * h) - b_len)):
 				if _content(a, b2) != Content.Water:
-					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
-					any = true
+					if _cell(a, b2 / 2).put_water(_corner(a, b2), false):
+						any = true
 		return any
 
 	# If there's no water and a single empty aquarium, add water to it from the bottom
@@ -845,8 +853,7 @@ class TogetherStrategy extends RowColStrategy:
 		# Should be true if we haven't fucked up
 		if last_empty_b2 != -1:
 			# Add water to the single aquarium as {?} implies non-zero water
-			_cell(a, last_empty_b2 / 2).put_water(_corner(a, last_empty_b2), false)
-			return true
+			return _cell(a, last_empty_b2 / 2).put_water(_corner(a, last_empty_b2), false) > 0
 		return false
 
 	# Like the subset sum strategy on rows, but since it's required to be together, we actually
@@ -881,8 +888,9 @@ class TogetherStrategy extends RowColStrategy:
 					min_solution_right = r2
 			# This cell is not in ANY solution
 			if max_solution_right < l2:
-				any = true
-				_cell(a, l2 / 2).put_nowater(_corner(a, l2), false, true)
+				#print("Put nowater (%d, %d), not in any solution" % [a, l2/2])
+				if _cell(a, l2 / 2).put_nowater(_corner(a, l2), false, true):
+					any = true
 			if _left() == E.Left:
 				while not _wall_right(a, l2):
 					l2 += 1
@@ -893,8 +901,9 @@ class TogetherStrategy extends RowColStrategy:
 		# Every cell between max_solution_left and min_solution_right are in EVERY solution
 		for b2 in range(max_solution_left, min_solution_right + 1, 1):
 			if _content(a, b2) == Content.Nothing:
-				_cell(a, b2 / 2).put_water(_corner(a, b2), false)
-				any = true
+				#print("Put water (%d, %d), in EVERY solution" % [a, b2 / 2])
+				if _cell(a, b2 / 2).put_water(_corner(a, b2), false):
+					any = true
 		return any
 
 	func _apply(a: int) -> bool:
@@ -905,20 +914,20 @@ class TogetherStrategy extends RowColStrategy:
 		var rightmost := -1
 		for b2 in 2 * _b_len():
 			if _content(a, b2) == Content.Water:
-				leftmost = min(leftmost, b2)
+				leftmost = mini(leftmost, b2)
 				rightmost = b2
 		if rightmost == -1:
 			return _add_necessary_waters_and_nowaters(a)
 		var any := false
-		if basic:
-			# Merge all waters together
-			for b2 in range(leftmost + 1, rightmost):
-				var content := _content(a, b2)
-				if content != Content.Water:
+		# This is a basic rule but we assume it is done for the remaining
+		# Merge all waters together
+		for b2 in range(leftmost + 1, rightmost):
+			var content := _content(a, b2)
+			if content != Content.Water:
+				if _cell(a, b2 / 2).put_water(_corner(a, b2), false) > 0:
 					any = true
-					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
-			if any:
-				return true
+		if basic and any:
+			return true
 		# Mark far away cells as empty
 		var min_b2 := leftmost
 		while min_b2 > 0 and _content(a, min_b2 - 1) == Content.Nothing:
@@ -932,7 +941,7 @@ class TogetherStrategy extends RowColStrategy:
 		if water_left2 < 0:
 			# Invalid solution
 			if hint >= 0:
-				return false
+				return any
 		if basic:
 			var no_b2 := []
 			if water_left2 >= 0:
@@ -942,21 +951,24 @@ class TogetherStrategy extends RowColStrategy:
 			no_b2.append_array(range(max_b2 + 1, 2 * _b_len())) # After block/nowater
 			for b2 in no_b2:
 				if _content(a, b2) == Content.Nothing:
-					any = true
-					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
+					if _cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true):
+						any = true
 		else:
 			if water_left2 < 0:
 				return any
 			# Mark nearby cells as full if close to the "border"
 			var yes_b2 := []
+			#print("minb2 %d leftmost %d rightmost %d maxb2 %d" % [min_b2, leftmost, rightmost, max_b2])
 			if leftmost - min_b2 < water_left2:
+				#print("Too little water in the 'left' %d < %d, so putting %d in the 'right'" % [leftmost - min_b2, water_left2, water_left2 - (leftmost - min_b2)])
 				yes_b2.append_array(range(rightmost + 1, min(rightmost + 1 + water_left2 - (leftmost - min_b2), 2 * _b_len())))
 			if max_b2 - rightmost < water_left2:
+				#print("Too little water in the 'right' %d < %d, so putting %d in the 'left'" % [max_b2 - rightmost, water_left2, water_left2 - (max_b2 - rightmost)])
 				yes_b2.append_array(range(max(0, leftmost - (water_left2 - (max_b2 - rightmost))), leftmost))
 			for b2 in yes_b2:
 				if _content(a, b2) != Content.Water:
-					any = true
-					_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+					if _cell(a, b2 / 2).put_water(_corner(a, b2), false) > 0:
+						any = true
 		return any
 
 	func apply_any() -> bool:
@@ -1128,8 +1140,8 @@ class SeparateStrategy extends RowColStrategy:
 						elif state == DURING:
 							state = AFTER
 					if state != SEPARATED and left2 == 0:
-						any = true
-						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+						if _cell(a, b2 / 2).put_water(_corner(a, b2), false) > 0:
+							any = true
 					break
 				elif _content(a, b2) == Content.Water:
 					break
@@ -1148,8 +1160,8 @@ class SeparateStrategy extends RowColStrategy:
 						elif state == DURING:
 							state = AFTER
 					if state != SEPARATED and left2 == 0:
-						any = true
-						_cell(a, b2 / 2).put_water(_corner(a, b2), false)
+						if _cell(a, b2 / 2).put_water(_corner(a, b2), false) > 0:
+							any = true
 					break
 				elif _content(a, b2) == Content.Water:
 					break
@@ -1170,8 +1182,8 @@ class SeparateStrategy extends RowColStrategy:
 					leftmost = min(leftmost, b2)
 					rightmost = b2
 					if basic and _will_flood_how_many(a, b2) == water_left2:
-						_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-						any = true
+						if _cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true):
+							any = true
 			return any
 		if not basic:
 			return any
@@ -1180,8 +1192,7 @@ class SeparateStrategy extends RowColStrategy:
 			var c := _content(a, b2)
 			if c != Content.Water:
 				if not_water_middle == water_left2 and (c == Content.Nothing or c == Content.NoBoat) and _will_flood_how_many(a, b2) == water_left2:
-					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-					return true
+					return _cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
 				return false
 		if _left() == E.Side.Top:
 			# Walk up until we find a cell if we put water it will flood exactly water_left2
@@ -1190,8 +1201,8 @@ class SeparateStrategy extends RowColStrategy:
 				if bool(b2 & 1) and _cell(a, (b2 / 2)).cell_type() == E.CellType.Single:
 					b2 -= 1
 				if leftmost - b2 == water_left2:
-					_cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true)
-					any = true
+					if _cell(a, b2 / 2).put_nowater(_corner(a, b2), false, true):
+						any = true
 					break
 				if leftmost - b2 > water_left2 or b2 == 0 or _wall_right(a, b2 - 1):
 					break
@@ -1199,11 +1210,11 @@ class SeparateStrategy extends RowColStrategy:
 					b2 -= 1
 		else:
 			if leftmost > 0 and (_content(a, leftmost - 1) == Content.Nothing or _content(a, leftmost - 1) == Content.NoBoat) and _will_flood_how_many(a, leftmost - 1) == water_left2:
-				_cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true)
-				any = true
+				if _cell(a, (leftmost - 1) / 2).put_nowater(_corner(a, leftmost - 1), false, true):
+					any = true
 		if rightmost < _b_len() * 2 - 1 and _content(a, rightmost + 1) == Content.Nothing and _will_flood_how_many(a, rightmost + 1) == water_left2:
-			_cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true)
-			any = true
+			if _cell(a, (rightmost + 1) / 2).put_nowater(_corner(a, rightmost + 1), false, true):
+				any = true
 		return any
 
 	func apply_any() -> bool:
@@ -1347,24 +1358,30 @@ class AllBoatsStrategy extends Strategy:
 						any = true
 		return any
 
-static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition) -> bool:
+static func _put_water(grid: GridImpl, pos: GridModel.WaterPosition, fail_if_impossible := true) -> bool:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
 	var c := grid.get_cell(pos.i, pos.j)
-	if not c.water_at(corner):
+	if c.water_at(corner):
+		return false
+	elif c.nothing_at(corner) or c.noboat_at(corner):
 		var added := grid.get_cell(pos.i, pos.j).put_water(corner, false)
 		assert(added > 0, "_put_water call but didn't succeed to put water")
 		return added > 0
 	else:
+		assert(not fail_if_impossible)
 		return false
 
-static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition) -> bool:
+static func _put_nowater(grid: GridImpl, pos: GridModel.WaterPosition, fail_if_impossible := true) -> bool:
 	var corner := (pos.loc as E.Corner) if pos.loc != E.Single else E.Corner.TopLeft
 	var c := grid.get_cell(pos.i, pos.j)
-	if not c.nowater_at(corner):
+	if c.nowater_at(corner):
+		return false
+	elif c.nothing_at(corner) or c.noboat_at(corner):
 		var added := c.put_nowater(corner, false, true)
 		assert(added, "_put_nowater call but couldn't add nowater")
 		return added
 	else:
+		assert(not fail_if_impossible)
 		return false
 
 class AquariumsStrategy extends Strategy:
@@ -1472,9 +1489,9 @@ class AquariumsStrategy extends Strategy:
 						continue
 					if hint.get(reaches, -1) == 0:
 						for pos in aq.cells_at_height[i]:
-							SolverModel._put_water(grid, pos)
+							if SolverModel._put_water(grid, pos):
+								any = true
 						reaches += aq.empty_at_height[i]
-						any = true
 					else:
 						break
 		if any or basic:
@@ -1491,14 +1508,14 @@ class AquariumsStrategy extends Strategy:
 						continue
 					elif reaches == sz:
 						for pos in aq.cells_at_height[i]:
-							SolverModel._put_nowater(grid, pos)
-						any = true
+							if SolverModel._put_nowater(grid, pos, false):
+								any = true
 					else:
 						reaches += aq.empty_at_height[i]
 						if reaches == sz:
 							for pos in aq.cells_at_height[i]:
-								SolverModel._put_water(grid, pos)
-							any = true
+								if SolverModel._put_water(grid, pos, false):
+									any = true
 		if any:
 			return true
 		# Put airs on the top while the high values of reaches are 0 in the hints
@@ -1509,9 +1526,9 @@ class AquariumsStrategy extends Strategy:
 					continue
 				if hint.get(reaches, -1) == 0:
 					for pos in aq.cells_at_height[i]:
-						SolverModel._put_nowater(grid, pos)
+						if SolverModel._put_nowater(grid, pos, false):
+							any = true
 					reaches -= aq.empty_at_height[i]
-					any = true
 				else:
 					break
 		return any
@@ -1606,9 +1623,9 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint_min: float,
 				if aq.empty_at_height[di] == 0:
 					continue
 				if total_empty - aq.total_empty < water_hint_min - total_water:
-					any = true
 					for pos in aq.cells_at_height[di]:
-						SolverModel._put_water(grid, pos)
+						if SolverModel._put_water(grid, pos):
+							any = true
 					total_water += aq.empty_at_height[di]
 					aq.total_water += aq.empty_at_height[di]
 					total_empty -= aq.empty_at_height[di]
@@ -1621,9 +1638,9 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint_min: float,
 				if aq.empty_at_height[di] == 0:
 					continue
 				if aq.total_empty > water_hint_max - total_water:
-					any = true
 					for pos in aq.cells_at_height[di]:
-						SolverModel._put_nowater(grid, pos)
+						if SolverModel._put_nowater(grid, pos):
+							any = true
 					total_empty -= aq.empty_at_height[di]
 					aq.total_empty -= aq.empty_at_height[di]
 					aq.empty_at_height[di] = 0.0
@@ -1667,11 +1684,13 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint_min: float,
 							if water > 0:
 								water -= aq.empty_at_height[kdx]
 								for pos in aq.cells_at_height[kdx]:
-									SolverModel._put_water(grid, pos)
+									if SolverModel._put_water(grid, pos):
+										any = true
 							else:
 								for pos in aq.cells_at_height[kdx]:
-									SolverModel._put_nowater(grid, pos)
-						return true
+									if SolverModel._put_nowater(grid, pos):
+										any = true
+						return any
 					elif options[idx].size() > 2 and (jdx == 0 or jdx == options[idx].size() - 1):
 						new = options.duplicate()
 						# Checking if new[idx][jdx] is NEVER in the solution is only useful
@@ -1685,15 +1704,17 @@ static func generic_solve(grid: GridImpl, advanced: bool, water_hint_min: float,
 								for kdx in aq.empty_at_height.size():
 									if aq.empty_at_height[kdx] > 0:
 										for pos in aq.cells_at_height[kdx]:
-											SolverModel._put_water(grid, pos)
+											if SolverModel._put_water(grid, pos):
+												any = true
 										break
 							else:
 								for kdx in range(aq.empty_at_height.size() - 1, -1, -1):
 									if aq.empty_at_height[kdx] > 0:
 										for pos in aq.cells_at_height[kdx]:
-											SolverModel._put_nowater(grid, pos)
+											if SolverModel._put_nowater(grid, pos):
+												any = true
 										break
-							return true
+							return any
 	return any
 
 
@@ -2063,14 +2084,12 @@ class TogetherSeparateCellHintsStrategy extends CellHintsStrategy:
 			c.put_water(corner, true)
 			if hint_now_invalid(ci, cj, hint, water_hint_min, water_hint_max):
 				grid.undo()
-				SolverModel._put_nowater(grid, GridModel.WaterPosition.new(i, j, waters))
-				return true
+				return SolverModel._put_nowater(grid, GridModel.WaterPosition.new(i, j, waters))
 			grid.undo()
 			c.put_nowater(corner, true, true)
 			if hint_now_invalid(ci, cj, hint, water_hint_min, water_hint_max):
 				grid.undo()
-				SolverModel._put_water(grid, GridModel.WaterPosition.new(i, j, waters))
-				return true
+				return SolverModel._put_water(grid, GridModel.WaterPosition.new(i, j, waters))
 			grid.undo()
 		return false
 	func _apply(ci: int, cj: int, hint: GridModel.CellHints, water_hint_min: float, water_hint_max: float) -> bool:
@@ -2113,8 +2132,8 @@ class KnightStrategy extends Strategy:
 					for d in GridImpl.KNIGHT_MOVES:
 						var c2 := grid.get_cell(i + d[0], j + d[1])
 						if not c2.out_of_bounds() and c2.nothing_full():
-							c2.put_nowater(E.Corner.TopLeft, false, true)
-							any = true
+							if c2.put_nowater(E.Corner.TopLeft, false, true):
+								any = true
 		return any
 	func apply_any() -> bool:
 		if not grid.rule_variants().has(GridModel.RuleVariant.Knight):
@@ -2188,36 +2207,36 @@ class SnakeStrategy extends Strategy:
 						for di in 2:
 							for dj in 2:
 								if grid.get_cell(i+di, j+dj).nothing_full():
-									any = true
-									grid.get_cell(i+di, j+dj).put_nowater(E.Corner.TopLeft, false, true)
+									if grid.get_cell(i+di, j+dj).put_nowater(E.Corner.TopLeft, false, true):
+										any = true
 				# Case 2: A T almost full, put a X on the center
 				if grid._snake_nbhs(Vector2i(i, j)) >= 3 and c.nothing_full():
-					any = true
-					c.put_nowater(E.Corner.TopLeft, false, true)
+					if c.put_nowater(E.Corner.TopLeft, false, true):
+						any = true
 				# Case 3: Putting water here creates a simple 2x2, put a X 
 				if not c.wall_at(E.Walls.Right) and not c.wall_at(E.Walls.Bottom) and not grid.get_cell(i,j+1).wall_at(E.Walls.Bottom):
 					for dj in 2:
 						var c2 := grid.get_cell(i, j+dj)
 						if c2.nothing_full():
-							any = true
-							c2.put_nowater(E.Corner.TopLeft, false, true)
+							if c2.put_nowater(E.Corner.TopLeft, false, true):
+								any = true
 				# Case 4: Putting water here creates a T, put a X
 				if c.nothing_full() and not c.wall_at(E.Walls.Left) and not c.wall_at(E.Walls.Right) and not c.wall_at(E.Walls.Bottom):
-					any = true
-					c.put_nowater(E.Corner.TopLeft, false, true)
+					if c.put_nowater(E.Corner.TopLeft, false, true):
+						any = true
 				# Case 5: Putting water here creates an upside down T, put a X
 				if c.nothing_full() and not c.wall_at(E.Walls.Bottom):
 					var c2 := grid.get_cell(i+1, j)
 					if not c2.wall_at(E.Walls.Left) and not c2.wall_at(E.Walls.Right):
-						any = true
-						c.put_nowater(E.Corner.TopLeft, false, true)
+						if c.put_nowater(E.Corner.TopLeft, false, true):
+							any = true
 				# Case 6: This has water and 2 neighbors, mark the others as X
 				if c.water_full() and grid._snake_nbhs(Vector2i(i,j)) >= 2:
 					for d in GridImpl.DIRS:
 						var c2 := grid.get_cellv(Vector2i(i,j) + d)
 						if not c2.out_of_bounds() and c2.nothing_full():
-							any = true
-							c2.put_nowater(E.Corner.TopLeft, false, true)
+							if c2.put_nowater(E.Corner.TopLeft, false, true):
+								any = true
 		return any
 	func water_adj_possible(ij: Vector2i) -> Array[Vector2i]:
 		var pos: Array[Vector2i] = []
@@ -2253,13 +2272,15 @@ class SnakeStrategy extends Strategy:
 								# the other end of the path, so we must always grow, even if the
 								# other end could reach something
 								if dfs.water_count > 1 and grid._pure_cell(other_end.x, other_end.y).last_seen(E.Corner.TopLeft) < grid.last_seen:
-									grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false)
-									return true
+									if grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false):
+										any = true
+									return any
 							possible.append_array(water_adj_possible(other_end))
 						if possible.size() == 1:
-							grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false)
+							if grid.get_cellv(possible[0]).put_water(E.Corner.TopLeft, false):
+								any = true
 							# Putting two waters here might create inconsistencies
-							return true
+							return any
 		return any
 	func make_sure_snake_together() -> bool:
 		if grid.count_waters() == 0:
@@ -2272,8 +2293,8 @@ class SnakeStrategy extends Strategy:
 				if dfs.water_count > 0 or dfs.nothing_cells.size() > 0:
 					if dfs.water_count == 0:
 						for ij in dfs.nothing_cells:
-							any = true
-							grid.get_cellv(ij).put_nowater(E.Corner.TopLeft, false, true)
+							if grid.get_cellv(ij).put_nowater(E.Corner.TopLeft, false, true):
+								any = true
 					else:
 						dfs.water_count = 0
 					dfs.nothing_cells.clear()

@@ -83,8 +83,8 @@ func assert_cant_solve(s: String, strategies := []) -> void:
 func assert_apply_strategies(s: String, res: String = "", strategies := []) -> void:
 	if res == "":
 		# W and X show future water and nowater
-		res = s.replace("W", "w").replace("X", "x")
-		s = s.replace("W", ".").replace("X", ".")
+		res = s.replace("W", "w").replace("X", "x").replace("BB", "bb")
+		s = s.replace("W", ".").replace("X", ".").replace("BB", "..")
 	assert_grid_eq(apply_strategies(s, strategies).to_str(), res)
 
 func get_rows(s : String) -> int:
@@ -1797,6 +1797,78 @@ func test_snake_solver() -> void:
 	g.clear_content()
 	var r := SolverModel.new().full_solve(g, all_strategies(), func(): return false)
 	check(r != SolverModel.SolveResult.Unsolvable)
+
+func test_bugs_06_10() -> void:
+	# Fix this test
+	var g := GridImpl.import_data(JSON.parse_string('{"0":2,"11":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":2,"5":1,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0},{"4":4,"5":2,"6":-1,"7":0},{"4":5,"5":1,"6":-1,"7":0},{"4":4,"5":1,"6":-1,"7":0},{"4":4,"5":1,"6":-1,"7":0}],"13":[[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[0,0,0,0,0,0],[1,1,1,0,1,0],[1,1,1,1,1,1],[1,1,1,1,0,0],[1,1,1,1,0,0]],"15":[[1,1,0,1,1],[1,1,0,1,1],[0,0,1,1,0],[0,0,1,0,0],[0,1,0,1,0],[1,0,0,1,0]],"16":{"8":22,"9":0,"10":{}},"17":[]}'), GridModel.LoadMode.Testing)
+	check(g.are_hints_satisfied())
+	g.clear_content()
+	SolverModel.new().apply_strategies(g, all_strategies())
+	check(g.are_hints_satisfied(true))
+
+	# MediumCol was not counting the boat as nothing but counting it in the components
+	assert_apply_strategies("""
+	+waters=11.0
+	+boats=2
+	+aqua=0.0:9
+	+aqua=0.5:1
+	+aqua=1.5:1
+	+aqua=2.5:1
+	+aqua=3.5:1
+	B.1.1...0.0.
+	.h.-5-..7}.}
+	0.X.X.XXXXXX
+	..|/|/|..../
+	..XWW..XWWXX
+	..|╲././|/|.
+	13BBXWXXWWXX
+	}.|._╲L/|.L.
+	16XWBBWWWWWX
+	.-|╲|.|../.╲
+	07XWWWWXWXWW
+	..L╲_.L/L/L.""")
+	
+	# Aquarium advanced strategy was incorrectly marking cells already with water with X
+	# when it should just mark the cells that currently had nothing
+	assert_apply_strategies("""
+	+waters=8.5
+	+boats=5
+	+aqua=0.5:5
+	+aqua=1.5:1
+	+aqua=0.0:7
+	+aqua=1.0:0
+	B.2...0.1.1.
+	.h.-3.4-....
+	..BBBBXXXXXX
+	}.|.|.L.L._.
+	..WXXWXXBBXX
+	.-|/|╲L.|../
+	2.BBX.WWWWBB
+	-.|.|╲L._.|.
+	03WXXXXXXWWX
+	.-|/.╲L../_/
+	..XX.WWWWWW.
+	..L.L╲_.L._/""")
+	
+	# It was executing TogetherStrategy forever because it failed to apply anything
+	# but still returned true
+	g = str_grid("""
+	+waters=11.5
+	h..6...5.
+	5........
+	}|╲./.╲./
+	5........
+	-|/.╲./.╲
+	4...##...
+	-|╲_/L╲./
+	3...##...
+	}|/.╲|/.╲
+	2........
+	.|╲./.╲./
+	4........
+	}L/_╲_/_╲""")
+	SolverModel.new().full_solve(g, all_strategies(), func(): return false)
+	assert(g.are_hints_satisfied(true))
 
 func test_streak_reconcile_resets_if_missed_days() -> void:
 	var user_data := UserData.current()

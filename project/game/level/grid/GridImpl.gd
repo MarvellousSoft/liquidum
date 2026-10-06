@@ -1268,6 +1268,8 @@ func auto_update_hints() -> bool:
 	return editor_mode() and auto_update_hints_
 
 func _col_hint(h: int, type: E.HintType) -> String:
+	if type in [E.HintType.Separated, E.HintType.Together] and h >= 10:
+		push_warning("Can't generate string of grid with together/separate and a hint of >= 10")
 	if type == E.HintType.Separated:
 		return "%s-" % [str(h) if h >= 0 else "."]
 	elif type == E.HintType.Together:
@@ -1692,6 +1694,7 @@ class CrawlAquarium extends Dfs:
 	func check_for_pools() -> bool:
 		return pool_check
 	func reset() -> void:
+		grid.last_seen += 1
 		info = AquariumInfo.new()
 		pool_check = false
 	func reset_for_pool_check() -> void:

@@ -8,6 +8,9 @@ var cancel_gen := false
 # State of the RNG right before generating a successful level
 # Can be used to generate it very quickly
 var success_state: int
+var had_unsolvable_error := false
+const MAX_TRIES := 2000
+var tries := 0
 
 func _init() -> void:
 	GeneratingLevel.cancel.connect(self.cancel)
@@ -21,11 +24,12 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 	var start_time := Time.get_ticks_usec()
 	var total_gen := 0
 	var total_solve := 0
-	var tries := 0
 	var multiple_solutions := 0
 	var too_easy := 0
 	var too_hard := 0
-	for i in 1000:
+	var inner_tries := 0
+	for i in MAX_TRIES:
+		tries += 1
 		if ((i+1) % 25) == 0:
 			print("Try %d: [too easy %d] [too hard %d] [multiple solutions %d]" % [i+1, too_easy, too_hard, multiple_solutions])
 		if cancel_gen:
@@ -44,7 +48,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			print(g.to_str())
 			assert(false)
 		var start_solve := Time.get_ticks_usec()
-		tries += 1
+		inner_tries += 1
 		if not forced_strategies.is_empty():
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Solution)
 			if solver.can_solve_with_strategies(g2, strategies, forced_strategies):
@@ -64,9 +68,11 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			#print("Solve result %s" % [SolverModel.SolveResult.find_key(solve_result)])
 			match solve_result:
 				SolverModel.SolveResult.Unsolvable:
+					had_unsolvable_error = true
 					# Strategies should ALWAYS just do valid moves, and never "drop" any valid solution
 					# Otherwise the uniqueness testing won't work properly
 					push_error("Got to unsolvable state, weird. This probably means some strategy is doing an invalid move.")
+					print("This seems unsolvable but shouldn't be")
 					g2.clear_content()
 					print(JSON.stringify(g2.export_data()))
 				SolverModel.SolveResult.SolvedMultiple:
@@ -82,10 +88,12 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 				break
 		total_solve += Time.get_ticks_usec() - start_solve
 	if found:
-		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d,success_state=%d]" % [tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S, initial_seed, initial_state, success_state])
+		print("Created level after %d tries and %.1fs (%.1fs gen + %.1fs solve) [seed=%d,initial_state=%d,success_state=%d]" % [inner_tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S, initial_seed, initial_state, success_state])
 	else:
-		print("Level generation canceled after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S])
+		print("Level generation canceled after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [inner_tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S])
 	return g if found else null
+
+var direct_thread := false
 
 func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	return await generate_with_size(rng, func(_rng): return Vector2i(n, m), apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)
@@ -96,8 +104,10 @@ func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable,
 # If forced_str is empty, the level is generated as "interesting" (SolvedUnique)
 func generate_with_size(rng: RandomNumberGenerator, gen_size: Callable, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	cancel_gen = false
-	# Uncomment this to force same thread, which improves the debug experience
-	#return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)
+	had_unsolvable_error = false
+	tries = 0
+	if direct_thread:
+		return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)
 	gen_thread.start(func(): return _inner_gen_level(rng, gen_size, apply_hints, gen_options_builder, strategies, forced_strategies, force_boats))
 	return await Global.wait_for_thread(gen_thread)
 
