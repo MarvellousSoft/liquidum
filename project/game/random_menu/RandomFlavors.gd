@@ -45,6 +45,8 @@ enum Flavor {
 	Snake,
 	# Symbols variant, simple rules
 	Symbols,
+	# Mirros variant, with boats
+	Mirrors,
 }
 
 static func _symbols_builder(rng: RandomNumberGenerator) -> Generator.Options:

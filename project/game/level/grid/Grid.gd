@@ -266,6 +266,7 @@ enum RuleVariant {
 	Symbols,
 	Knight,
 	Quad,
+	Mirrors,
 }
 
 func rule_variants() -> Array[RuleVariant]:

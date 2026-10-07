@@ -1983,6 +1983,27 @@ func _quad_status() -> E.HintStatus:
 					return E.HintStatus.Wrong
 	return st
 
+func _mirrors_status() -> E.HintStatus:
+	var st := E.HintStatus.Satisfied
+	for i in n:
+		for j in m:
+			var c1_mirrored := _pure_cell(i, j).clone()
+			c1_mirrored.mirror_horizontal()
+			var c2 := _pure_cell(i, m - 1 - j)
+			for co in c1_mirrored.all_corners():
+				if c1_mirrored.water_at(co):
+					var c2_has_obstruction := (c2.nowater_at(co) or c2.block_at(co)) if c2._valid_corner(co) else (c2.nowater_count() > 0 or c2.block_count() > 0)
+					if c2._has_boat() or c2_has_obstruction:
+						return E.HintStatus.Wrong
+					var c2_has_all_water := c2.water_at(co) if c2._valid_corner(co) else c2.water_full()
+					if not c2_has_all_water:
+						st = E.HintStatus.Normal
+				elif c1_mirrored._has_boat():
+					if c2.cell_type() != E.CellType.Single or c2.water_full():
+						return E.HintStatus.Wrong
+					elif not c2._has_boat():
+						st = E.HintStatus.Normal
+	return st
 
 func rule_variants_status() -> Array[E.HintStatus]:
 	var ret : Array[E.HintStatus] = []
@@ -2000,6 +2021,8 @@ func rule_variants_status() -> Array[E.HintStatus]:
 				ret.append(_knight_status())
 			GridModel.RuleVariant.Quad:
 				ret.append(_quad_status())
+			GridModel.RuleVariant.Mirrors:
+				ret.append(_mirrors_status())
 	return ret
 
 func count_nowater_row(i : int) -> float:
