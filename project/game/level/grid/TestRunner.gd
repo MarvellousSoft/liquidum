@@ -177,6 +177,44 @@ func _on_dif_button_pressed():
 	%DifOptions.disabled = false
 	FileManager.save_preprocessed_difficulty(prep)
 
+func _gen_endless(i: int, cancel_but: Button, prep_check: bool, rets: Array[Dictionary], mode: int, endless_flavor: RandomFlavors.Flavor, prep_pandora: PreprocessedPandora, prep_endless: PreprocessedEndless) -> void:
+	if cancel_but.button_pressed:
+		rets[i] = {status = "cancelled"}
+		return
+	var gen := RandomLevelGenerator.new()
+	gen.direct_thread = true
+	var is_pandora := mode != -1
+	var seed_str := str(i)
+	var flavor: RandomFlavors.Flavor
+	if is_pandora:
+		if mode == PandoraHub.Mode.Pandora:
+			var flavor_rng := RandomNumberGenerator.new()
+			flavor_rng.seed = RandomHub.consistent_hash(seed_str + "-flavor")
+			flavor = PandoraHub.PANDORA_FLAVORS[flavor_rng.randi() % PandoraHub.PANDORA_FLAVORS.size()]
+		else:
+			flavor = PandoraHub.PANDORA_FLAVORS[mode]
+	else:
+		flavor = endless_flavor
+	var rng := RandomNumberGenerator.new()
+	rng.seed = RandomHub.consistent_hash(seed_str)
+	var current_state := prep_pandora.success_state(i) if is_pandora else prep_endless.success_state(i)
+	if current_state == 0:
+		print("Starting endless level %d" % [i])
+		await RandomFlavors.gen(gen, rng, flavor)
+		rets[i] = {status = "successfully generated"}
+		if is_pandora:
+			prep_pandora.set_success_state(i, gen.success_state)
+		else:
+			prep_endless.set_success_state(i, gen.success_state)
+	elif prep_check:
+		# Check it is correct
+		rng.state = current_state
+		await RandomFlavors.gen(gen, rng, flavor)
+		rets[i] = {status = "verified if it was ok", result = (gen.success_state == current_state)}
+		assert(gen.success_state == current_state)
+	else:
+		rets[i] = {status = "was already generated"}
+
 func _on_endless_button_pressed() -> void:
 	var selected_id: int = %EndlessOptions.get_selected_id()
 	var is_pandora := selected_id >= PANDORA_OPTION_OFFSET
@@ -186,17 +224,17 @@ func _on_endless_button_pressed() -> void:
 	var prep_pandora: PreprocessedPandora = null
 	var prep_endless: PreprocessedEndless = null
 	var endless_flavor: RandomFlavors.Flavor
-	var count: int
+	var count: int = 1000
 
 	if is_pandora:
 		prep_pandora = FileManager.load_preprocessed_pandora(mode)
-		count = 1001
+		prep_pandora._success_states.resize(count)
 	else:
 		prep_endless = FileManager.load_preprocessed_endless(section)
+		prep_endless._success_states.resize(count)
 		endless_flavor = ExtraLevelLister.section_endless_flavor(section) as RandomFlavors.Flavor
-		count = 1000
 
-	var gen := RandomLevelGenerator.new()
+
 	%EndlessProgress.value = 0
 	%EndlessProgress.max_value = count
 	%EndlessProgress.visible = true
@@ -204,51 +242,49 @@ func _on_endless_button_pressed() -> void:
 	%EndlessButton.visible = false
 	%EndlessCancel.visible = true
 	%EndlessCancel.button_pressed = false
+	var rets : Array[Dictionary] = []
+	rets.resize(count)
+	# For easier debugging
+	# Snakes are bugged for some reason
+	var FORCE_SEQUENTIAL := (mode == PandoraHub.Mode.Snake or mode == PandoraHub.Mode.Pandora) or true
+	
+	var group_id := WorkerThreadPool.add_group_task(self._gen_endless.bind(%EndlessCancel, %PrepCheck.button_pressed, rets, mode, endless_flavor, prep_pandora, prep_endless), count, 1 if FORCE_SEQUENTIAL else -1)
 	var watch := Stopwatch.new()
-	var rng := RandomNumberGenerator.new()
-	for i in count:
+
+	while WorkerThreadPool.get_group_processed_element_count(group_id) < count:
 		if %EndlessCancel.button_pressed:
 			break
-		var seed_str := str(i)
-		var flavor: RandomFlavors.Flavor
-		if is_pandora:
-			if mode == PandoraHub.Mode.Pandora:
-				var flavor_rng := RandomNumberGenerator.new()
-				flavor_rng.seed = RandomHub.consistent_hash(seed_str + "-flavor")
-				flavor = PandoraHub.PANDORA_FLAVORS[flavor_rng.randi() % PandoraHub.PANDORA_FLAVORS.size()]
-			else:
-				flavor = PandoraHub.PANDORA_FLAVORS[mode]
-		else:
-			flavor = endless_flavor
-
-		rng.seed = RandomHub.consistent_hash(seed_str)
-		var current_state := prep_pandora.success_state(i) if is_pandora else prep_endless.success_state(i)
-		if current_state == 0:
-			await RandomFlavors.gen(gen, rng, flavor)
-			if is_pandora:
-				prep_pandora.set_success_state(i, gen.success_state)
-			else:
-				prep_endless.set_success_state(i, gen.success_state)
-		elif %PrepCheck.button_pressed:
-			# Check it is correct
-			rng.state = current_state
-			await RandomFlavors.gen(gen, rng, flavor)
-			assert(gen.success_state == current_state)
 		if watch.elapsed() > 30.:
 			watch.elapsed_reset()
 			if is_pandora:
 				FileManager.save_preprocessed_pandora(prep_pandora)
 			else:
 				FileManager.save_preprocessed_endless(section, prep_endless)
-		%EndlessProgress.value += 1
+		var ct := WorkerThreadPool.get_group_processed_element_count(group_id)
+		if ct > %EndlessProgress.value:
+			print("Finished %d endless levels" % [ct])
+			%EndlessProgress.value = ct
+		await get_tree().create_timer(0.5).timeout
+	while not WorkerThreadPool.is_group_task_completed(group_id):
+		await get_tree().create_timer(0.5).timeout
+	var by_status: Dictionary = {}
+	for ret in rets:
+		if not by_status.has(ret.status):
+			by_status[ret.status] = 0
+		by_status[ret.status] += 1
+	print(by_status)
+	if is_pandora:
+		FileManager.save_preprocessed_pandora(prep_pandora)
+		if not %EndlessCancel.button_pressed and mode < PandoraHub.Mode.Pandora:
+			%EndlessOptions.select(%EndlessOptions.get_item_index(selected_id) + 1)
+			await _on_endless_button_pressed()
+			return
+	else:
+		FileManager.save_preprocessed_endless(section, prep_endless)
 	%EndlessCancel.visible = false
 	%EndlessProgress.visible = false
 	%EndlessButton.visible = true
 	%EndlessOptions.disabled = false
-	if is_pandora:
-		FileManager.save_preprocessed_pandora(prep_pandora)
-	else:
-		FileManager.save_preprocessed_endless(section, prep_endless)
 
 func _on_reset_stats_pressed():
 	SteamManager.steam.resetAllStats(true)
@@ -257,11 +293,9 @@ func _on_reset_stats_pressed():
 
 func _on_preprocess_weeklies_pressed() -> void:
 	var year := int(%WeekliesYear.value)
+	print("====== PREPROCESSING WEEKLIES FOR %d ======" % [year])
 	var prep := FileManager.load_preprocessed_weeklies(year)
 	var first_monday: String = PreprocessedWeeklies.first_monday_of_the_year(year)
-	if year == 2024:
-		# We didn't have weeklies before this.
-		first_monday = "2024-03-11"
 	var unixtime := Time.get_unix_time_from_datetime_string(first_monday)
 	var gen := RandomLevelGenerator.new()
 	%WeekliesProgress.value = 0
@@ -271,28 +305,33 @@ func _on_preprocess_weeklies_pressed() -> void:
 	%WeekliesCancel.visible = true
 	%WeekliesCancel.button_pressed = false
 	var watch := Stopwatch.new()
+	var cur_period := WeeklyButton.get_curr_fst_day()
 	while true:
-		var monday := Time.get_datetime_string_from_unix_time(unixtime)
-		monday = monday.substr(0, monday.find("T"))
-		for i in 10:
-			if not monday.begins_with(str(year)) or %WeekliesCancel.button_pressed:
-				break
-			if prep.success_state(monday, i) == 0:
-				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
-				prep.set_success_state(monday, i, gen.success_state)
-			elif %PrepCheck.button_pressed:
-				# Check it is correct
-				await WeeklyButton.gen_level(gen, monday, i + 1, 10)
-			if watch.elapsed() > 30.:
-				watch.elapsed_reset()
-				FileManager.save_preprocessed_weeklies(2024, prep)
+		var monday := WeeklyButton._day_strip_time(unixtime)
+		if monday >= cur_period:
+			for i in 10:
+				if not monday.begins_with(str(year)) or %WeekliesCancel.button_pressed:
+					break
+				if prep.success_state(monday, i) == 0:
+					await WeeklyButton.gen_level(gen, monday, i + 1, 10)
+					prep.set_success_state(monday, i, gen.success_state)
+				elif %PrepCheck.button_pressed:
+					# Check it is correct
+					await WeeklyButton.gen_level(gen, monday, i + 1, 10)
+				if watch.elapsed() > 30.:
+					watch.elapsed_reset()
+					FileManager.save_preprocessed_weeklies(year, prep)
 		%WeekliesProgress.value += 1
 		unixtime += 7 * 24 * 60 * 60
+	FileManager.save_preprocessed_weeklies(year, prep)
+	if not %WeekliesCancel.button_pressed:
+		%WeekliesYear.value = year + 1
+		await _on_preprocess_weeklies_pressed()
+		return
 	%WeekliesProgress.visible = false
 	%WeekliesYear.visible = true
 	%WeekliesButton.visible = true
 	%WeekliesCancel.visible = false
-	FileManager.save_preprocessed_weeklies(2024, prep)
 
 func _on_infinite_gen_button_pressed() -> void:
 	if _infinite_gen_running:

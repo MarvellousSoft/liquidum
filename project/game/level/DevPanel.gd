@@ -227,6 +227,7 @@ func _on_paste_pressed():
 	else:
 		g = GridImpl.from_str(txt, GridModel.LoadMode.Testing)
 	_reload_variants(g)
+	print("Loaded %d x %d grid, total waters %d, status %s" % [g.rows(), g.cols(), g.count_waters(), E.HintStatus.find_key(g.all_hints_status())])
 	load_grid.emit(g)
 
 

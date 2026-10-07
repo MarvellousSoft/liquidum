@@ -131,7 +131,7 @@ class Strategy:
 			elif mn_possible == 0:
 				# Let's try to check if 0 is not possible
 				# A very simple test, we could definitely do better
-				grid.push_empty_undo()
+				grid.push_empty_undo(false)
 				for i in grid.rows():
 					if grid.row_hints()[i].water_alt_text == s2:
 						for j in grid.cols():
@@ -146,7 +146,7 @@ class Strategy:
 							_fill_nowater(i, j)
 				if grid.all_hints_status() == E.HintStatus.Wrong:
 					mn_possible = 0.5 if any_diags else 1.0
-				grid.undo()
+				grid.undo(false)
 			s_to_range[s2] = Vector2(mn_possible, mx_possible)
 		while true:
 			var any_change := false
@@ -2202,7 +2202,7 @@ class SnakeStrategy extends Strategy:
 					var ct := 0
 					for di in 2:
 						for dj in 2:
-							ct += 1 if grid.get_cell(i, j).water_full() else 0
+							ct += 1 if grid.get_cell(i + di, j + dj).water_full() else 0
 					if ct == 3:
 						for di in 2:
 							for dj in 2:
@@ -2453,6 +2453,7 @@ const MAX_GUESSES := 2
 # If look_for_multiple = false, will not try to look for multiple solutions
 func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, guesses_left := MAX_GUESSES, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
 	assert(grid.editor_mode() and not grid.auto_update_hints())
+	const DBG := false
 	if flush_undo:
 		grid.push_empty_undo()
 	if cancel_sig.call() or guesses_left < 0:
@@ -2467,34 +2468,35 @@ func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flu
 		if grid.any_schrodinger_boats():
 			return SolveResult.SolvedMultiple
 		return SolveResult.SolvedUniqueNoGuess
+	
 	for i in grid.rows():
 		for j in grid.cols():
 			for corner in E.Corner.values():
 				var c := grid.get_cell(i, j)
 				if c.nothing_at(corner):
 					# New undo stack
-					#print("Try water at (%d, %d) corner %d" % [i, j, corner])
+					if DBG: print("Try water at (%d, %d) corner %d" % [i, j, corner])
 					c.put_water(corner, true)
 					var r1 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, look_for_multiple)
 					grid.undo()
-					#print("Undoing, got %s" % [SolverModel.SolveResult.find_key(r1)])
+					if DBG: print("Undoing, got %s" % [SolverModel.SolveResult.find_key(r1)])
 					# Unsolvable means there's definitely no water here. Tail recurse.
 					if r1 == SolveResult.Unsolvable:
-						#print("Water at (%d, %d) was unsolvable, definitely nowater" % [i, j])
+						if DBG: print("Water at (%d, %d) was unsolvable, definitely nowater" % [i, j])
 						c.put_nowater(corner, false)
 						return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, min_boat_place, look_for_multiple))
 					elif not look_for_multiple or r1 == SolveResult.SolvedMultiple or r1 == SolveResult.GaveUp:
-						#print("Actually redoing water on (%d, %d)" % [i, j])
+						if DBG: print("Actually redoing water on (%d, %d)" % [i, j])
 						grid.redo()
 						return r1
-					#print("No instead try nowater at (%d, %d) corner %d" % [i, j, corner])
+					if DBG: print("No instead try nowater at (%d, %d) corner %d" % [i, j, corner])
 					# Otherwise we need to try to solve with nowater
 					c.put_nowater(corner, true, true)
 					var r2 := full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, min_boat_place, false)
-					#print("Solved with nowater at (%d, %d) and got %s" % [i, j, SolverModel.SolveResult.find_key(r2)])
+					if DBG: print("Solved with nowater at (%d, %d) and got %s" % [i, j, SolverModel.SolveResult.find_key(r2)])
 					# It definitely had water
 					if r2 == SolveResult.Unsolvable:
-						#print("Nowater at (%d, %d) was unsolvable, do water" % [i, j])
+						if DBG: print("Nowater at (%d, %d) was unsolvable, do water" % [i, j])
 						grid.undo()
 						c.put_water(corner, false)
 						# TODO: Maybe here we could store the undo stack and reuse it

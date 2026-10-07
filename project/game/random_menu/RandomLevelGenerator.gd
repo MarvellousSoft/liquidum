@@ -13,7 +13,8 @@ const MAX_TRIES := 2000
 var tries := 0
 
 func _init() -> void:
-	GeneratingLevel.cancel.connect(self.cancel)
+	if OS.get_thread_caller_id() == OS.get_main_thread_id():
+		GeneratingLevel.cancel.connect(self.cancel)
 
 func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats: bool) -> GridModel:
 	var initial_seed := rng.seed
@@ -43,10 +44,30 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 			continue
 		g.set_auto_update_hints(false)
 		apply_hints.call(rng, g)
-		if not g.are_hints_satisfied():
-			print("Weird, generated level is not satisfied")
-			print(g.to_str())
-			assert(false)
+
+		var st := g.all_hints_status()
+		if st != E.HintStatus.Satisfied:
+			print("[%d] Weird, generated level is not satisfied, but %s on thread %d" % [OS.get_thread_caller_id(), E.HintStatus.find_key(st)])
+			print("all_boats_hint_status: ", E.HintStatus.find_key(g.all_boats_hint_status()))
+			print("all_waters_hint_status: ", E.HintStatus.find_key(g.all_waters_hint_status()))
+			print("aquarium_hints_status: ", E.HintStatus.find_key(g.aquarium_hints_status()))
+			for ri in g.rows():
+				var rst := g.get_row_hint_status(ri, E.HintContent.Water)
+				if rst != E.HintStatus.Satisfied:
+					print("row %d water: %s (count: %f, hint: %f, type: %s)" % [ri, E.HintStatus.find_key(rst), g.count_water_row(ri), g.row_hints()[ri].water_count, E.HintType.find_key(g.row_hints()[ri].water_count_type)])
+			for cj in g.cols():
+				var cst := g.get_col_hint_status(cj, E.HintContent.Water)
+				if cst != E.HintStatus.Satisfied:
+					print("col %d water: %s (count: %f, hint: %f, type: %s)" % [cj, E.HintStatus.find_key(cst), g.count_water_col(cj), g.col_hints()[cj].water_count, E.HintType.find_key(g.col_hints()[cj].water_count_type)])
+			for vi in g.rule_variants_status():
+				print("variant status: ", E.HintStatus.find_key(vi))
+			var st2 := g.all_hints_status()
+			print("[%d] %s" % [OS.get_thread_caller_id(), E.HintStatus.find_key(st2)])
+			if st2 == E.HintStatus.Satisfied:
+				print("Waht the actual fuck")
+			else:
+				print(JSON.stringify(g.export_data()))
+				assert(false)
 		var start_solve := Time.get_ticks_usec()
 		inner_tries += 1
 		if not forced_strategies.is_empty():
@@ -62,6 +83,9 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 				found = true
 				break
 		else:
+			var g_old_data
+			if OS.is_debug_build():
+				g_old_data = g.export_data()
 			g.clear_content()
 			var g2 := GridImpl.import_data(g.export_data(), GridModel.LoadMode.Testing)
 			var solve_result := solver.full_solve(g2, strategies, func(): return self.cancel_gen or Time.get_ticks_usec() > start_solve + MAX_TIME_PER_SOLVE * US_TO_S)
@@ -72,9 +96,9 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 					# Strategies should ALWAYS just do valid moves, and never "drop" any valid solution
 					# Otherwise the uniqueness testing won't work properly
 					push_error("Got to unsolvable state, weird. This probably means some strategy is doing an invalid move.")
-					print("This seems unsolvable but shouldn't be")
-					g2.clear_content()
-					print(JSON.stringify(g2.export_data()))
+					if OS.is_debug_build():
+						print("This seems unsolvable but shouldn't be")
+						print(JSON.stringify(g_old_data))
 				SolverModel.SolveResult.SolvedMultiple:
 					multiple_solutions +=1
 				SolverModel.SolveResult.SolvedUniqueNoGuess:

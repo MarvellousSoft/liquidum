@@ -16,9 +16,10 @@ func get_data() -> Variant:
 	return _success_states.map(func(arr): return arr.map(func(x): return String.num_int64(x)))
 
 static func first_monday_of_the_year(year: int) -> String:
-	assert(year == 2024)
-	# TODO: make it work with other years
-	return "2024-01-01"
+	var unixtime := Time.get_unix_time_from_datetime_string("%s-01-01" % [year])
+	while Time.get_datetime_dict_from_unix_time(unixtime).weekday != Time.WEEKDAY_MONDAY:
+		unixtime += 24 * 60 * 60
+	return WeeklyButton._day_strip_time(unixtime)
 
 func _idx(monday: String) -> int:
 	var first_monday := PreprocessedWeeklies.first_monday_of_the_year(int(monday.substr(0, 4)))

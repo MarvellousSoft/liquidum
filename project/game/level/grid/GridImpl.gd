@@ -1407,8 +1407,9 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes], skip_empty: bool) 
 	maybe_update_hints()
 	return true
 
-func push_empty_undo() -> void:
-	_push_undo_changes([], true)
+# If not user facing, keep empty undo stacks, it might be useful for code
+func push_empty_undo(user_facing := true) -> void:
+	_push_undo_changes([], true, user_facing)
 
 func undo(skip_empty := true) -> bool:
 	return _undo_impl(undo_stack, redo_stack, skip_empty)
@@ -1417,9 +1418,9 @@ func redo(skip_empty := true) -> bool:
 	# Beautifully, redo works exactly the same as undo
 	return _undo_impl(redo_stack, undo_stack, skip_empty)
 
-func _push_undo_changes(changes: Array[Change], flush_first: bool) -> void:
+func _push_undo_changes(changes: Array[Change], flush_first: bool, user_facing := true) -> void:
 	redo_stack.clear()
-	while flush_first and not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
+	while flush_first and user_facing and not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
 		undo_stack.pop_back()
 	if flush_first or undo_stack.is_empty():
 		undo_stack.push_back(Changes.new(changes))
@@ -1805,6 +1806,7 @@ func _snake_status() -> E.HintStatus:
 				elif ct == 1:
 					deg_1s.append(Vector2i(i, j))
 				elif ct > 2:
+					#print("[%d] water with degree %d at (%d,%d)" % [OS.get_thread_caller_id(), ct, i, j])
 					return E.HintStatus.Wrong
 	if water_count == 1:
 		return E.HintStatus.Satisfied # Single cell, kinda dumb but ok
@@ -1812,6 +1814,7 @@ func _snake_status() -> E.HintStatus:
 	for ij in deg_1s:
 		in_paths += _snake_dfs(ij, ij).x
 	if in_paths != water_count * 2:
+		#print("[%d] We counted just %d waters but there are %d, so there are paths" % [OS.get_thread_caller_id(), in_paths / 2, water_count])
 		return E.HintStatus.Wrong # There is a cycle
 	elif deg_1s.size() != 2 or deg_0s > 0:
 		return E.HintStatus.Normal # A bunch of paths, can still be completed
