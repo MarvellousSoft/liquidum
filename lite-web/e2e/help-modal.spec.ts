@@ -79,7 +79,7 @@ test.describe('Help Modal & Game Mechanics E2E Tests', () => {
     await expect(banner).toBeVisible();
   });
 
-  test('hides text on narrow screens for help and profile buttons', async ({ page }) => {
+  test('on narrow screens, opens help modal via mobile hamburger menu', async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem('liquidum_help_seen', 'true');
     });
@@ -88,21 +88,23 @@ test.describe('Help Modal & Game Mechanics E2E Tests', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
-    const helpBtn = page.locator('[data-testid="btn-help"]');
-    const accountBtn = page.locator('[data-testid="btn-account"]');
+    // Desktop toolbar buttons are hidden on mobile
+    await expect(page.locator('[data-testid="btn-help"]')).toBeHidden();
+    await expect(page.locator('[data-testid="btn-account"]')).toBeHidden();
 
-    await expect(helpBtn).toBeVisible();
-    await expect(accountBtn).toBeVisible();
+    // Hamburger button is visible
+    const hamburgerBtn = page.locator('[data-testid="btn-hamburger"]');
+    await expect(hamburgerBtn).toBeVisible();
+    await hamburgerBtn.click();
 
-    // Text spans inside both buttons should be hidden (display: none)
-    const helpText = helpBtn.locator('.btn-text');
-    const accountText = accountBtn.locator('.btn-text');
+    // Help and account items are visible in mobile sidebar
+    const sidebarHelpBtn = page.locator('[data-testid="sidebar-btn-help"]');
+    const sidebarAccountBtn = page.locator('[data-testid="sidebar-btn-account"]');
+    await expect(sidebarHelpBtn).toBeVisible();
+    await expect(sidebarAccountBtn).toBeVisible();
 
-    await expect(helpText).toBeHidden();
-    await expect(accountText).toBeHidden();
-
-    // Clicking help button still opens modal
-    await helpBtn.click();
+    // Clicking help item opens help modal
+    await sidebarHelpBtn.click();
     await expect(page.locator('[data-testid="help-modal"]')).toBeVisible();
   });
 

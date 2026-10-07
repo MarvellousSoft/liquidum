@@ -951,6 +951,7 @@ export class CrawlAquarium extends Dfs {
     }
 
     reset(): void {
+        this.grid.last_seen += 1;
         this.info = new AquariumInfo();
         this.pool_check = false;
     }
@@ -2023,6 +2024,9 @@ export class GridImpl extends GridModel {
     }
 
     _col_hint(h: number, type: E.HintType): string {
+        if ((type === E.HintType.Separated || type === E.HintType.Together) && h >= 10) {
+            console.warn("Can't generate string of grid with together/separate and a hint of >= 10");
+        }
         if (type === E.HintType.Separated) {
             return `${h >= 0 ? h : "."}-`;
         } else if (type === E.HintType.Together) {

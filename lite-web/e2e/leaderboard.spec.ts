@@ -272,7 +272,7 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     await expect(sidePanel.locator("text=SeaOtter")).toBeVisible();
   });
 
-  test("on mobile viewport, hides side panel and opens leaderboard modal from top bar button", async ({
+  test("on mobile viewport, hides side panel and opens leaderboard modal from mobile menu", async ({
     page,
   }) => {
     // Set mobile viewport
@@ -282,11 +282,16 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     // Desktop leaderboard is hidden
     await expect(page.locator('[data-testid="desktop-leaderboard"]')).toBeHidden();
 
-    // Mobile button is visible
-    const mobileBtn = page.locator('[data-testid="btn-leaderboard"]');
+    // Open mobile sidebar via hamburger button
+    const hamburgerBtn = page.locator('[data-testid="btn-hamburger"]');
+    await expect(hamburgerBtn).toBeVisible();
+    await hamburgerBtn.click();
+
+    // Mobile sidebar leaderboard button is visible
+    const mobileBtn = page.locator('[data-testid="sidebar-btn-leaderboard"]');
     await expect(mobileBtn).toBeVisible();
 
-    // Click Leaderboard button in top bar
+    // Click Leaderboard button in mobile sidebar
     await mobileBtn.click();
 
     const modal = page.locator('[role="dialog"]');

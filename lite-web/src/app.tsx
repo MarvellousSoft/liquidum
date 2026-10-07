@@ -1955,6 +1955,7 @@ export function App() {
             <div class="mobile-sidebar-header">
               <span class="mobile-sidebar-title">{t('toolbar.menu')}</span>
               <button
+                data-testid="sidebar-btn-close"
                 class="mobile-sidebar-close"
                 onClick={() => setShowMobileSidebar(false)}
                 aria-label={t('toolbar.close_menu')}
@@ -1967,6 +1968,7 @@ export function App() {
             </div>
 
             <button
+              data-testid="sidebar-btn-help"
               class="mobile-sidebar-item"
               onClick={() => { setShowHelpModal(true); setShowMobileSidebar(false); }}
             >
@@ -1975,6 +1977,7 @@ export function App() {
             </button>
 
             <button
+              data-testid="sidebar-btn-shortcuts"
               class="mobile-sidebar-item"
               onClick={() => { setShowShortcuts(true); setShowMobileSidebar(false); }}
             >
@@ -1983,6 +1986,7 @@ export function App() {
             </button>
 
             <button
+              data-testid="sidebar-btn-settings"
               class="mobile-sidebar-item"
               onClick={() => { setShowSettings(true); setShowMobileSidebar(false); }}
             >
@@ -1991,6 +1995,7 @@ export function App() {
             </button>
 
             <button
+              data-testid="sidebar-btn-account"
               class="mobile-sidebar-item"
               onClick={() => { setShowAccountModal(true); setShowMobileSidebar(false); }}
             >
@@ -2009,6 +2014,7 @@ export function App() {
 
             {isDailyMode && (
               <button
+                data-testid="sidebar-btn-leaderboard"
                 class="mobile-sidebar-item"
                 onClick={() => { setShowLeaderboardModal(true); setShowMobileSidebar(false); }}
               >
@@ -2020,6 +2026,7 @@ export function App() {
             <div class="mobile-sidebar-divider" />
 
             <button
+              data-testid="sidebar-btn-theme-toggle"
               class="mobile-sidebar-item"
               onClick={() => { setIsDarkMode(!isDarkMode); }}
             >
@@ -2030,6 +2037,7 @@ export function App() {
             <div class="mobile-sidebar-divider" />
             
             <a
+              data-testid="sidebar-btn-steam-link"
               href="https://store.steampowered.com/app/2716690/Liquidum?utm_source=liteweb_persistent"
               target="_blank"
               rel="noopener noreferrer"

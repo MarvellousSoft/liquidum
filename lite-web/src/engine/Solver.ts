@@ -83,24 +83,30 @@ export class SolverModel {
         return SolverModel._maybe_infer_hint(grid, grid.col_hints(), j, false);
     }
 
-    static _put_water(grid: GridImpl, pos: WaterPosition): boolean {
+    static _put_water(grid: GridImpl, pos: WaterPosition, fail_if_impossible: boolean = true): boolean {
         const corner = pos.loc !== E.Waters.Single ? (pos.loc as unknown as E.Corner) : E.Corner.TopLeft;
         const c = grid.get_cell(pos.i, pos.j);
-        if (!c.water_at(corner)) {
+        if (c.water_at(corner)) {
+            return false;
+        } else if (c.nothing_at(corner) || c.noboat_at(corner)) {
             const added = grid.get_cell(pos.i, pos.j).put_water(corner, false);
             return added > 0;
+        } else {
+            return false;
         }
-        return false;
     }
 
-    static _put_nowater(grid: GridImpl, pos: WaterPosition): boolean {
+    static _put_nowater(grid: GridImpl, pos: WaterPosition, fail_if_impossible: boolean = true): boolean {
         const corner = pos.loc !== E.Waters.Single ? (pos.loc as unknown as E.Corner) : E.Corner.TopLeft;
         const c = grid.get_cell(pos.i, pos.j);
-        if (!c.nowater_at(corner)) {
+        if (c.nowater_at(corner)) {
+            return false;
+        } else if (c.nothing_at(corner) || c.noboat_at(corner)) {
             const added = (c as CellWithLoc).put_nowater(corner, false, true);
             return added;
+        } else {
+            return false;
         }
-        return false;
     }
 
     static _maybe_extra_boat_col(grid: GridImpl, j: number): boolean {
@@ -226,9 +232,10 @@ export class SolverModel {
                 for (let di = 0; di < aq.empty_at_height.length; di++) {
                     if (aq.empty_at_height[di] === 0) continue;
                     if (total_empty - aq.total_empty < water_hint - total_water) {
-                        any = true;
                         for (const pos of aq.cells_at_height[di]) {
-                            SolverModel._put_water(grid, pos);
+                            if (SolverModel._put_water(grid, pos)) {
+                                any = true;
+                            }
                         }
                         total_water += aq.empty_at_height[di];
                         aq.total_water += aq.empty_at_height[di];
@@ -242,9 +249,10 @@ export class SolverModel {
                 for (let di = aq.empty_at_height.length - 1; di >= 0; di--) {
                     if (aq.empty_at_height[di] === 0) continue;
                     if (aq.total_empty > water_hint - total_water) {
-                        any = true;
                         for (const pos of aq.cells_at_height[di]) {
-                            SolverModel._put_nowater(grid, pos);
+                            if (SolverModel._put_nowater(grid, pos)) {
+                                any = true;
+                            }
                         }
                         total_empty -= aq.empty_at_height[di];
                         aq.total_empty -= aq.empty_at_height[di];
@@ -292,15 +300,19 @@ export class SolverModel {
                                 if (water > 0) {
                                     water -= aq.empty_at_height[kdx];
                                     for (const pos of aq.cells_at_height[kdx]) {
-                                        SolverModel._put_water(grid, pos);
+                                        if (SolverModel._put_water(grid, pos)) {
+                                            any = true;
+                                        }
                                     }
                                 } else {
                                     for (const pos of aq.cells_at_height[kdx]) {
-                                        SolverModel._put_nowater(grid, pos);
+                                        if (SolverModel._put_nowater(grid, pos)) {
+                                            any = true;
+                                        }
                                     }
                                 }
                             }
-                            return true;
+                            return any;
                         } else if (options[idx].length > 2 && (jdx === 0 || jdx === options[idx].length - 1)) {
                             const new_opts2 = options.map(o => [...o]);
                             new_opts2.splice(idx, 1);
@@ -310,7 +322,9 @@ export class SolverModel {
                                     for (let kdx = 0; kdx < aq.empty_at_height.length; kdx++) {
                                         if (aq.empty_at_height[kdx] > 0) {
                                             for (const pos of aq.cells_at_height[kdx]) {
-                                                SolverModel._put_water(grid, pos);
+                                                if (SolverModel._put_water(grid, pos)) {
+                                                    any = true;
+                                                }
                                             }
                                             break;
                                         }
@@ -319,13 +333,15 @@ export class SolverModel {
                                     for (let kdx = aq.empty_at_height.length - 1; kdx >= 0; kdx--) {
                                         if (aq.empty_at_height[kdx] > 0) {
                                             for (const pos of aq.cells_at_height[kdx]) {
-                                                SolverModel._put_nowater(grid, pos);
+                                                if (SolverModel._put_nowater(grid, pos)) {
+                                                    any = true;
+                                                }
                                             }
                                             break;
                                         }
                                     }
                                 }
-                                return true;
+                                return any;
                             }
                         }
                     }
@@ -672,8 +688,9 @@ export class AddNoWaterThroughDips extends Dfs {
             case Content.Nothing:
             case Content.NoBoat:
                 if (i <= this.min_i) {
-                    cell.put_nowater(corner, false);
-                    this.any = true;
+                    if (cell.put_nowater(corner, false)) {
+                        this.any = true;
+                    }
                 }
                 break;
             case Content.Block:
@@ -730,12 +747,12 @@ export class RowComponent {
         this.corner = corner_;
     }
 
-    put_water(): void {
-        this.first.put_water(this.corner, false);
+    put_water(): boolean {
+        return this.first.put_water(this.corner, false) > 0;
     }
 
-    put_nowater(): void {
-        this.first.put_nowater(this.corner, false, true);
+    put_nowater(): boolean {
+        return this.first.put_nowater(this.corner, false, true);
     }
 }
 
@@ -749,7 +766,7 @@ export class RowDfs extends Dfs {
     }
 
     _cell_logic(i: number, _j: number, corner: E.Corner, cell: PureCell): boolean {
-        if (cell.block_at(corner) || cell.nowater_at(corner)) {
+        if (cell.block_at(corner) || cell.nowater_at(corner) || cell._has_boat()) {
             return false;
         }
         if (i === this.row_i && !cell.water_at(corner)) {
@@ -825,25 +842,33 @@ export class ColComponent {
     size: number = 0;
     cells: CellPosition[] = [];
 
-    put_water_on(grid: GridImpl, count: number): void {
+    put_water_on(grid: GridImpl, count: number): boolean {
+        let any = false;
         for (const c of this.cells) {
             count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner);
             if (count <= 0) {
-                grid.get_cell(c.i, c.j).put_water(c.corner, false);
-                return;
+                if (grid.get_cell(c.i, c.j).put_water(c.corner, false) > 0) {
+                    any = true;
+                }
+                return any;
             }
         }
+        return any;
     }
 
-    put_nowater_on(grid: GridImpl, count: number): void {
+    put_nowater_on(grid: GridImpl, count: number): boolean {
+        let any = false;
         for (let idx = 0; idx < this.cells.length; idx++) {
             const c = this.cells[this.cells.length - 1 - idx];
             count -= grid._pure_cell(c.i, c.j)._content_count_from(Content.Nothing, c.corner);
             if (count <= 0) {
-                (grid.get_cell(c.i, c.j) as CellWithLoc).put_nowater(c.corner, false, true);
-                return;
+                if ((grid.get_cell(c.i, c.j) as CellWithLoc).put_nowater(c.corner, false, true)) {
+                    any = true;
+                }
+                return any;
             }
         }
+        return any;
     }
 }
 
@@ -917,17 +942,20 @@ export abstract class ColumnStrategy extends Strategy {
 
 export class BasicRowStrategy extends RowStrategy {
     _apply_strategy(_i: number, values: RowComponent[], water_left: number, nothing_left: number): boolean {
+        let any = false;
         if (water_left === nothing_left) {
             for (const comp of values) {
-                comp.put_water();
+                if (comp.put_water()) {
+                    any = true;
+                }
             }
-            return true;
+            return any;
         }
-        let any = false;
         for (const comp of values) {
             if (comp.size > water_left) {
-                comp.put_nowater();
-                any = true;
+                if (comp.put_nowater()) {
+                    any = true;
+                }
             }
         }
         return any;
@@ -939,8 +967,9 @@ export class MediumRowStrategy extends RowStrategy {
         let any = false;
         for (const comp of values) {
             if (comp.size <= water_left && (nothing_left - comp.size) < water_left) {
-                comp.put_water();
-                any = true;
+                if (comp.put_water()) {
+                    any = true;
+                }
             }
         }
         return any;
@@ -964,14 +993,16 @@ export class AdvancedRowStrategy extends RowStrategy {
             if (idx !== -1) next_nums.splice(idx, 1);
             if (!SubsetSum.can_be_solved(water_left, next_nums)) {
                 for (const cmp of cmps) {
-                    cmp.put_water();
+                    if (cmp.put_water()) {
+                        any = true;
+                    }
                 }
-                any = true;
             } else if (!SubsetSum.can_be_solved(water_left - size, next_nums)) {
                 for (const cmp of cmps) {
-                    cmp.put_nowater();
+                    if (cmp.put_nowater()) {
+                        any = true;
+                    }
                 }
-                any = true;
             }
         }
         return any;
@@ -980,17 +1011,20 @@ export class AdvancedRowStrategy extends RowStrategy {
 
 export class BasicColStrategy extends ColumnStrategy {
     _apply_strategy(values: ColComponent[], water_left: number, nothing_left: number): boolean {
+        let any = false;
         if (water_left === nothing_left) {
             for (const comp of values) {
-                comp.put_water_on(this.grid, comp.size);
+                if (comp.put_water_on(this.grid, comp.size)) {
+                    any = true;
+                }
             }
-            return true;
+            return any;
         }
-        let any = false;
         for (const comp of values) {
             if (comp.size > water_left) {
-                comp.put_nowater_on(this.grid, comp.size - water_left);
-                any = true;
+                if (comp.put_nowater_on(this.grid, comp.size - water_left)) {
+                    any = true;
+                }
             }
         }
         return any;
@@ -1002,8 +1036,9 @@ export class MediumColStrategy extends ColumnStrategy {
         let any = false;
         for (const comp of values) {
             if (nothing_left - comp.size < water_left) {
-                comp.put_water_on(this.grid, water_left - (nothing_left - comp.size));
-                any = true;
+                if (comp.put_water_on(this.grid, water_left - (nothing_left - comp.size))) {
+                    any = true;
+                }
             }
         }
         return any;
@@ -1248,8 +1283,9 @@ export class TogetherStrategy extends RowColStrategy {
             const end = b_len + (Math.floor(2 * h) - b_len);
             for (let b2 = start; b2 < end; b2++) {
                 if (this._content(a, b2) !== Content.Water) {
-                    this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
-                    any = true;
+                    if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                        any = true;
+                    }
                 }
             }
         }
@@ -1268,8 +1304,7 @@ export class TogetherStrategy extends RowColStrategy {
             }
         }
         if (last_empty_b2 !== -1) {
-            this._cell(a, Math.floor(last_empty_b2 / 2)).put_water(this._corner(a, last_empty_b2), false);
-            return true;
+            return this._cell(a, Math.floor(last_empty_b2 / 2)).put_water(this._corner(a, last_empty_b2), false) > 0;
         }
         return false;
     }
@@ -1308,8 +1343,9 @@ export class TogetherStrategy extends RowColStrategy {
                 }
             }
             if (max_solution_right < l2) {
-                any = true;
-                this._cell(a, Math.floor(l2 / 2)).put_nowater(this._corner(a, l2), false, true);
+                if (this._cell(a, Math.floor(l2 / 2)).put_nowater(this._corner(a, l2), false, true)) {
+                    any = true;
+                }
             }
             if (this._left() === E.Side.Left) {
                 while (!this._wall_right(a, l2)) {
@@ -1325,8 +1361,9 @@ export class TogetherStrategy extends RowColStrategy {
 
         for (let b2 = max_solution_left; b2 <= min_solution_right; b2++) {
             if (this._content(a, b2) === Content.Nothing) {
-                this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
-                any = true;
+                if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                    any = true;
+                }
             }
         }
         return any;
@@ -1347,16 +1384,19 @@ export class TogetherStrategy extends RowColStrategy {
             return this._add_necessary_waters_and_nowaters(a);
         }
         let any = false;
-        if (this.basic) {
-            for (let b2 = leftmost + 1; b2 < rightmost; b2++) {
-                if (this._content(a, b2) !== Content.Water) {
+        // This is a basic rule but we assume it is done for the remaining
+        // Merge all waters together
+        for (let b2 = leftmost + 1; b2 < rightmost; b2++) {
+            const content = this._content(a, b2);
+            if (content !== Content.Water) {
+                if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
                     any = true;
-                    this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
                 }
             }
-            if (any) return true;
         }
+        if (this.basic && any) return true;
 
+        // Mark far away cells as empty
         let min_b2 = leftmost;
         while (min_b2 > 0 && this._content(a, min_b2 - 1) === Content.Nothing) {
             min_b2 -= 1;
@@ -1369,7 +1409,8 @@ export class TogetherStrategy extends RowColStrategy {
         const hint = a_hint.water_count;
         const water_left2 = Math.floor(2 * (hint - this._count_water_a(a)));
         if (water_left2 < 0) {
-            if (hint >= 0) return false;
+            // Invalid solution
+            if (hint >= 0) return any;
         }
 
         if (this.basic) {
@@ -1382,12 +1423,14 @@ export class TogetherStrategy extends RowColStrategy {
             for (let b2 = max_b2 + 1; b2 < 2 * this._b_len(); b2++) no_b2.push(b2);
             for (const b2 of no_b2) {
                 if (this._content(a, b2) === Content.Nothing) {
-                    any = true;
-                    this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true);
+                    if (this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true)) {
+                        any = true;
+                    }
                 }
             }
         } else {
             if (water_left2 < 0) return any;
+            // Mark nearby cells as full if close to the "border"
             const yes_b2: number[] = [];
             if (leftmost - min_b2 < water_left2) {
                 const limit = Math.min(rightmost + 1 + water_left2 - (leftmost - min_b2), 2 * this._b_len());
@@ -1399,8 +1442,9 @@ export class TogetherStrategy extends RowColStrategy {
             }
             for (const b2 of yes_b2) {
                 if (this._content(a, b2) !== Content.Water) {
-                    any = true;
-                    this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
+                    if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                        any = true;
+                    }
                 }
             }
         }
@@ -1557,8 +1601,9 @@ export class SeparateStrategy extends RowColStrategy {
                         }
                     }
                     if (state !== SEPARATED && left2 === 0) {
-                        any = true;
-                        this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
+                        if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                            any = true;
+                        }
                     }
                     break;
                 } else if (this._content(a, b2) === Content.Water) {
@@ -1580,8 +1625,9 @@ export class SeparateStrategy extends RowColStrategy {
                         }
                     }
                     if (state !== SEPARATED && left2 === 0) {
-                        any = true;
-                        this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false);
+                        if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                            any = true;
+                        }
                     }
                     break;
                 } else if (this._content(a, b2) === Content.Water) {
@@ -1607,8 +1653,9 @@ export class SeparateStrategy extends RowColStrategy {
                     leftmost = Math.min(leftmost, b2);
                     rightmost = b2;
                     if (this.basic && this._will_flood_how_many(a, b2) === water_left2) {
-                        this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true);
-                        any = true;
+                        if (this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true)) {
+                            any = true;
+                        }
                     }
                 }
             }
@@ -1621,8 +1668,7 @@ export class SeparateStrategy extends RowColStrategy {
             const c = this._content(a, b2);
             if (c !== Content.Water) {
                 if (not_water_middle === water_left2 && (c === Content.Nothing || c === Content.NoBoat) && this._will_flood_how_many(a, b2) === water_left2) {
-                    this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true);
-                    return true;
+                    return this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true);
                 }
                 return false;
             }
@@ -1635,8 +1681,9 @@ export class SeparateStrategy extends RowColStrategy {
                     b2 -= 1;
                 }
                 if (leftmost - b2 === water_left2) {
-                    this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true);
-                    any = true;
+                    if (this._cell(a, Math.floor(b2 / 2)).put_nowater(this._corner(a, b2), false, true)) {
+                        any = true;
+                    }
                     break;
                 }
                 if (leftmost - b2 > water_left2 || b2 === 0 || this._wall_right(a, b2 - 1)) {
@@ -1647,13 +1694,15 @@ export class SeparateStrategy extends RowColStrategy {
             }
         } else {
             if (leftmost > 0 && (this._content(a, leftmost - 1) === Content.Nothing || this._content(a, leftmost - 1) === Content.NoBoat) && this._will_flood_how_many(a, leftmost - 1) === water_left2) {
-                this._cell(a, Math.floor((leftmost - 1) / 2)).put_nowater(this._corner(a, leftmost - 1), false, true);
-                any = true;
+                if (this._cell(a, Math.floor((leftmost - 1) / 2)).put_nowater(this._corner(a, leftmost - 1), false, true)) {
+                    any = true;
+                }
             }
         }
         if (rightmost < this._b_len() * 2 - 1 && this._content(a, rightmost + 1) === Content.Nothing && this._will_flood_how_many(a, rightmost + 1) === water_left2) {
-            this._cell(a, Math.floor((rightmost + 1) / 2)).put_nowater(this._corner(a, rightmost + 1), false, true);
-            any = true;
+            if (this._cell(a, Math.floor((rightmost + 1) / 2)).put_nowater(this._corner(a, rightmost + 1), false, true)) {
+                any = true;
+            }
         }
         return any;
     }
@@ -1920,10 +1969,11 @@ export class AquariumsStrategy extends Strategy {
                     if (aq.empty_at_height[i] <= 0) continue;
                     if (hint[reaches] === 0) {
                         for (const pos of aq.cells_at_height[i]) {
-                            SolverModel._put_water(this.grid, pos);
+                            if (SolverModel._put_water(this.grid, pos)) {
+                                any = true;
+                            }
                         }
                         reaches += aq.empty_at_height[i];
-                        any = true;
                     } else {
                         break;
                     }
@@ -1941,16 +1991,18 @@ export class AquariumsStrategy extends Strategy {
                     if (aq.empty_at_height[i] <= 0) continue;
                     else if (reaches === sz) {
                         for (const pos of aq.cells_at_height[i]) {
-                            SolverModel._put_nowater(this.grid, pos);
+                            if (SolverModel._put_nowater(this.grid, pos, false)) {
+                                any = true;
+                            }
                         }
-                        any = true;
                     } else {
                         reaches += aq.empty_at_height[i];
                         if (reaches === sz) {
                             for (const pos of aq.cells_at_height[i]) {
-                                SolverModel._put_water(this.grid, pos);
+                                if (SolverModel._put_water(this.grid, pos, false)) {
+                                    any = true;
+                                }
                             }
-                            any = true;
                         }
                     }
                 }
@@ -1964,10 +2016,11 @@ export class AquariumsStrategy extends Strategy {
                 if (aq.empty_at_height[i] <= 0) continue;
                 if (hint[reaches] === 0) {
                     for (const pos of aq.cells_at_height[i]) {
-                        SolverModel._put_nowater(this.grid, pos);
+                        if (SolverModel._put_nowater(this.grid, pos, false)) {
+                            any = true;
+                        }
                     }
                     reaches -= aq.empty_at_height[i];
-                    any = true;
                 } else {
                     break;
                 }
@@ -2334,15 +2387,13 @@ export class TogetherSeparateCellHintsStrategy extends CellHintsStrategy {
             c.put_water(corner, true);
             if (this.hint_now_invalid(ci, cj, hint)) {
                 this.grid.undo();
-                SolverModel._put_nowater(this.grid, new WaterPosition(i, j, waters));
-                return true;
+                return SolverModel._put_nowater(this.grid, new WaterPosition(i, j, waters));
             }
             this.grid.undo();
             (c as CellWithLoc).put_nowater(corner, true, true);
             if (this.hint_now_invalid(ci, cj, hint)) {
                 this.grid.undo();
-                SolverModel._put_water(this.grid, new WaterPosition(i, j, waters));
-                return true;
+                return SolverModel._put_water(this.grid, new WaterPosition(i, j, waters));
             }
             this.grid.undo();
         }

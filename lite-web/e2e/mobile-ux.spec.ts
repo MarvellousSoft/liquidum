@@ -13,8 +13,11 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     await page.setViewportSize({ width: 360, height: 740 });
     await page.goto("/");
 
-    // Open Account Modal
-    const btnAccount = page.locator('[data-testid="btn-account"]');
+    // Open Account Modal via mobile menu
+    const hamburgerBtn = page.locator('[data-testid="btn-hamburger"]');
+    await expect(hamburgerBtn).toBeVisible();
+    await hamburgerBtn.click();
+    const btnAccount = page.locator('[data-testid="sidebar-btn-account"]');
     await expect(btnAccount).toBeVisible();
     await btnAccount.click();
 
@@ -61,7 +64,13 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     } else {
       // In case desktop sidepanel is visible, simulate mobile viewport
       await page.setViewportSize({ width: 400, height: 800 });
-      await btnLeaderboard.click();
+      const hamburger = page.locator('[data-testid="btn-hamburger"]');
+      if (await hamburger.isVisible()) {
+        await hamburger.click();
+        await page.click('[data-testid="sidebar-btn-leaderboard"]');
+      } else {
+        await btnLeaderboard.click();
+      }
     }
 
     const leaderboardModal = page.locator('[data-testid="leaderboard-modal"]');
@@ -89,8 +98,11 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto("/");
 
-    // Open shortcuts modal
-    const btnShortcuts = page.locator('[data-testid="btn-shortcuts"]');
+    // Open shortcuts modal via mobile menu
+    const hamburgerBtn = page.locator('[data-testid="btn-hamburger"]');
+    await expect(hamburgerBtn).toBeVisible();
+    await hamburgerBtn.click();
+    const btnShortcuts = page.locator('[data-testid="sidebar-btn-shortcuts"]');
     await expect(btnShortcuts).toBeVisible();
     await btnShortcuts.click();
 
@@ -126,8 +138,11 @@ test.describe("Mobile UX & Responsiveness E2E Tests", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto("/");
 
-    // Open Help modal
-    const btnHelp = page.locator('[data-testid="btn-help"]');
+    // Open Help modal via mobile menu
+    const hamburgerBtn = page.locator('[data-testid="btn-hamburger"]');
+    await expect(hamburgerBtn).toBeVisible();
+    await hamburgerBtn.click();
+    const btnHelp = page.locator('[data-testid="sidebar-btn-help"]');
     await expect(btnHelp).toBeVisible();
     await btnHelp.click();
 

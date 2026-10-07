@@ -12,7 +12,26 @@ function cleanGridStr(s: string): string {
     if (lines.length === 0) return '';
     const indents = lines.filter(l => l.length > 0).map(l => l.match(/^(\s*)/)![1].length);
     const minIndent = Math.min(...indents);
-    return lines.map(l => l.slice(minIndent).trimEnd()).join('\n');
+    const unindented = lines.map(l => l.slice(minIndent).trimEnd());
+    const result: string[] = [];
+    const aquaLines: string[] = [];
+    for (const line of unindented) {
+        if (line.startsWith('+aqua=')) {
+            aquaLines.push(line);
+        } else {
+            if (aquaLines.length > 0) {
+                aquaLines.sort();
+                result.push(...aquaLines);
+                aquaLines.length = 0;
+            }
+            result.push(line);
+        }
+    }
+    if (aquaLines.length > 0) {
+        aquaLines.sort();
+        result.push(...aquaLines);
+    }
+    return result.join('\n');
 }
 
 function assert_grid_eq(a: string, b: string): void {
@@ -54,8 +73,8 @@ function assert_cant_solve(s: string, strategies: string[] = []): void {
 
 function assert_apply_strategies(s: string, res: string = "", strategies: string[] = []): void {
     if (res === "") {
-        res = s.replace(/W/g, "w").replace(/X/g, "x");
-        s = s.replace(/W/g, ".").replace(/X/g, ".");
+        res = s.replace(/W/g, "w").replace(/X/g, "x").replace(/BB/g, "bb");
+        s = s.replace(/W/g, ".").replace(/X/g, ".").replace(/BB/g, "..");
     }
     assert_grid_eq(apply_strategies(s, strategies).to_str(), res);
 }
@@ -982,5 +1001,78 @@ describe('SolverTests ported from Godot GridTests.gd', () => {
 	L.L.L.
 	`);
     });
+
+    test('test_bugs_06_10', () => {
+        const g = GridImpl.import_data(JSON.parse('{"0":2,"11":[{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0},{"4":-1,"5":0,"6":-1,"7":0}],"12":[{"4":2,"5":1,"6":-1,"7":0},{"4":3,"5":1,"6":-1,"7":0},{"4":4,"5":2,"6":-1,"7":0},{"4":5,"5":1,"6":-1,"7":0},{"4":4,"5":1,"6":-1,"7":0},{"4":4,"5":1,"6":-1,"7":0}],"13":[[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11}],[{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}],[{"1":0,"2":0,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11},{"1":1,"2":1,"3":11}]],"14":[[0,0,0,0,0,0],[1,1,1,0,1,0],[1,1,1,1,1,1],[1,1,1,1,0,0],[1,1,1,1,0,0]],"15":[[1,1,0,1,1],[1,1,0,1,1],[0,0,1,1,0],[0,0,1,0,0],[0,1,0,1,0],[1,0,0,1,0]],"16":{"8":22,"9":0,"10":{}},"17":[]}'), LoadMode.Testing);
+        expect(g.are_hints_satisfied()).toBe(true);
+        g.clear_content();
+        new SolverModel().apply_strategies(g, Object.keys(SolverModel.STRATEGY_LIST));
+        expect(g.are_hints_satisfied(true)).toBe(true);
+
+        // MediumCol was not counting the boat as nothing but counting it in the components
+        assert_apply_strategies(`
+	+waters=11.0
+	+boats=2
+	+aqua=0.0:9
+	+aqua=0.5:1
+	+aqua=1.5:1
+	+aqua=2.5:1
+	+aqua=3.5:1
+	B.1.1...0.0.
+	.h.-5-..7}.}
+	0.X.X.XXXXXX
+	..|/|/|..../
+	..XWW..XWWXX
+	..|╲././|/|.
+	13BBXWXXWWXX
+	}.|._╲L/|.L.
+	16XWBBWWWWWX
+	.-|╲|.|../.╲
+	07XWWWWXWXWW
+	..L╲_.L/L/L.`);
+
+        // Aquarium advanced strategy was incorrectly marking cells already with water with X
+        // when it should just mark the cells that currently had nothing
+        assert_apply_strategies(`
+	+waters=8.5
+	+boats=5
+	+aqua=0.5:5
+	+aqua=1.5:1
+	+aqua=0.0:7
+	+aqua=1.0:0
+	B.2...0.1.1.
+	.h.-3.4-....
+	..BBBBXXXXXX
+	}.|.|.L.L._.
+	..WXXWXXBBXX
+	.-|/|╲L.|../
+	2.BBX.WWWWBB
+	-.|.|╲L._.|.
+	03WXXXXXXWWX
+	.-|/.╲L../_/
+	..XX.WWWWWW.
+	..L.L╲_.L._/`);
+
+        // It was executing TogetherStrategy forever because it failed to apply anything
+        // but still returned true
+        const g2 = str_grid(`
+	+waters=11.5
+	h..6...5.
+	5........
+	}|╲./.╲./
+	5........
+	-|/.╲./.╲
+	4...##...
+	-|╲_/L╲./
+	3...##...
+	}|/.╲|/.╲
+	2........
+	.|╲./.╲./
+	4........
+	}L/_╲_/_╲`);
+        new SolverModel().full_solve(g2, Object.keys(SolverModel.STRATEGY_LIST), () => false);
+        expect(g2.are_hints_satisfied(true)).toBe(true);
+    });
 });
+
 
