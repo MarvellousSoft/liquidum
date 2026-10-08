@@ -39,6 +39,18 @@ func corner_is_side(corner: E.Corner, side: E.Side) -> bool:
 			return not corner_is_top(corner)
 	assert(false, "Invalid side")
 	return false
+func corner_matching(corner: E.Corner) -> E.Corner:
+	match corner:
+		E.TopLeft:
+			return E.Corner.BottomRight
+		E.TopRight:
+			return E.Corner.BottomLeft
+		E.BottomLeft:
+			return E.Corner.TopRight
+		E.BottomRight:
+			return E.Corner.TopLeft
+	assert(false, "Invalid corner")
+	return E.Corner.TopLeft
 func corner_to_diag(corner: E.Corner) -> E.Diagonal:
 	if corner == E.Corner.BottomLeft or corner == E.Corner.TopRight:
 		return E.Diagonal.Dec
@@ -76,3 +88,15 @@ func waters_to_corner(waters: E.Waters) -> E.Corner:
 			return E.Corner.TopLeft
 		_:
 			return waters as E.Corner
+func mirror_horizontal_corner(c: E.Corner) -> E.Corner:
+	match c:
+		E.Corner.TopLeft:
+			return E.Corner.TopRight
+		E.Corner.TopRight:
+			return E.Corner.TopLeft
+		E.Corner.BottomLeft:
+			return E.Corner.BottomRight
+		E.Corner.BottomRight:
+			return E.Corner.BottomLeft
+	assert(false)
+	return E.Corner.TopLeft

@@ -122,7 +122,7 @@ class CellModel:
 		return GridModel.must_be_implemented()
 	func has_boat() -> bool:
 		return GridModel.must_be_implemented()
-	func put_boat(_flush_undo := true, _flood := false) -> bool:
+	func put_boat(_flush_undo := true, _flood_nowater := false) -> bool:
 		return GridModel.must_be_implemented()
 	func cell_type() -> E.CellType:
 		return GridModel.must_be_implemented()
@@ -151,6 +151,19 @@ class CellModel:
 	func hints() -> CellHints:
 		return GridModel.must_be_implemented()
 	func hints_status() -> E.HintStatus:
+		return GridModel.must_be_implemented()
+	func valid_corner(_co: E.Corner) -> bool:
+		return GridModel.must_be_implemented()
+	func water_count() -> float:
+		return GridModel.must_be_implemented()
+	func block_count() -> float:
+		return GridModel.must_be_implemented()
+	func nowater_count() -> float:
+		return GridModel.must_be_implemented()
+	func noboat_count() -> float:
+		return GridModel.must_be_implemented()
+	# Includes both corners in the case of a Single cell
+	func all_corners() -> Array[E.Corner]:
 		return GridModel.must_be_implemented()
 
 func rows() -> int:
@@ -348,7 +361,11 @@ func redo(_skip_empty := true) -> bool:
 
 # Push empty undo. Only useful when doing multiple operations with flush = false
 # It is safe to just have an empty undo, it will be ignored.
-func push_empty_undo() -> void:
+# If not user facing, keep empty undo stacks, it might be useful for code
+func push_empty_undo(_user_facing := true) -> void:
+	return GridModel.must_be_implemented()
+
+func merge_undo_with_previous() -> void:
 	return GridModel.must_be_implemented()
 
 # Flood all water in the grid. Returns whether it did anything

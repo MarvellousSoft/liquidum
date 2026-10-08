@@ -308,9 +308,11 @@ func _on_preprocess_weeklies_pressed() -> void:
 	var cur_period := WeeklyButton.get_curr_fst_day()
 	while true:
 		var monday := WeeklyButton._day_strip_time(unixtime)
+		if not monday.begins_with(str(year)) or %WeekliesCancel.button_pressed:
+			break
 		if monday >= cur_period:
 			for i in 10:
-				if not monday.begins_with(str(year)) or %WeekliesCancel.button_pressed:
+				if %WeekliesCancel.button_pressed:
 					break
 				if prep.success_state(monday, i) == 0:
 					await WeeklyButton.gen_level(gen, monday, i + 1, 10)

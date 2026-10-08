@@ -1,11 +1,12 @@
 class_name Generator
 
 class Options:
-	var sudoku: bool
-	var knights: bool
 	var diagonals: bool
-	var boats: bool
-	var snake: bool
+	var sudoku: bool = false
+	var knights: bool = false
+	var boats: bool = false
+	var snake: bool = false
+	var mirrors: bool = false
 	# Just a hint, doesn't need to be strictly satisfied
 	var aquarium_count: int = 0
 	#
@@ -37,6 +38,9 @@ class Options:
 	func with_snake() -> Options:
 		snake = true
 		diagonals = false
+		return self
+	func with_mirrors() -> Options:
+		mirrors = true
 		return self
 	func build(rseed: int) -> Generator:
 		return Generator.new(rseed, self)
@@ -126,6 +130,9 @@ func _gen_grid_groups(n: int, m: int, adj_rule: AdjacencyRule, fixed_waters : Ar
 		aqs = opts.aquarium_count - 1
 	else:
 		var min_aqs: int = (n * m) / 5 if opts.diagonals else int((n * m) / 2.5)
+		# More aquariums in mirrors
+		if opts.mirrors:
+			min_aqs = (n * m) / 3 if opts.diagonals else int((n * m) / 1.5)
 		aqs =  rng.randi_range(min_aqs, (n * m) / 2)
 	var g: Array[Array] = []
 	for i in n:
@@ -230,13 +237,18 @@ func randomize_boats(grid: GridModel) -> void:
 	var all_cells := _all_cells(grid)
 	Global.shuffle(all_cells, rng)
 	var boat_pct := rng.randf_range(0.3, 0.9)
+	if opts.mirrors:
+		boat_pct /= 2
 	for idx in all_cells:
 		var c := grid.get_cell(idx.x, idx.y)
 		if not c.boat_possible():
 			continue
 		if rng.randf() < boat_pct:
-			if not c.put_boat(true):
-				push_error("Boat placing should succeed")
+			if not opts.mirrors:
+				if not c.put_boat(true):
+					push_error("Boat placing should succeed")
+			else:
+				SolverModel._try_to_add_mirrored(grid, idx, E.Corner.TopLeft, GridImpl.Content.Boat, true)
 
 func randomize_cell_hints(grid: GridModel) -> void:
 	var all_cells := _all_cells(grid)
@@ -259,6 +271,8 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	if min_water == 0:
 		min_water = int((grid.rows() * grid.cols() - grid.count_blocks()) * rng.randf_range(0.2, 0.75))
 	var water_wanted: float = min_water - grid.count_waters()
+	if opts.mirrors and water_wanted <= 0:
+		water_wanted = 1
 	if water_wanted < 0:
 		return
 	# Put X everywhere where putting a knight would automatically fail
@@ -277,9 +291,17 @@ func randomize_water(grid: GridModel, flush_undo := true) -> void:
 	while not all_cells.is_empty():
 		var idx: Vector2i = pop_random(all_cells)
 		var c := grid.get_cell(idx.x, idx.y)
+		# This seems wrong, we always try to add all waters in a diag.
 		for corner in c.corners():
 			if c.nothing_at(corner):
-				water_wanted -= c.put_water(corner, false)
+				if not opts.mirrors:
+					water_wanted -= c.put_water(corner, false)
+				else:
+					# Also add nowater to avoid too full grid
+					var content := GridImpl.Content.Water if rng.randf() < 0.5 else GridImpl.Content.NoWater
+					var res := SolverModel._try_to_add_mirrored(grid, idx, corner, content, true)
+					#print("After putting %s on (%s,%s) got %s" % [GridImpl.Content.find_key(content), idx, E.Corner.find_key(corner), res])
+					water_wanted -= res.y
 				if opts.knights:
 					SolverModel.KnightStrategy.knight_mark_x(grid)
 					assert((grid as GridImpl)._knight_status() == E.HintStatus.Satisfied)
@@ -451,6 +473,7 @@ func generate(n: int, m: int) -> GridModel:
 	if opts.boats:
 		randomize_boats(grid)
 	randomize_water(grid, false)
+	#print("boats %d water %f on a %d x %d grid" % [grid.count_boats(), grid.count_waters(), grid.rows(), grid.cols()])
 	if opts.cell_hints > 0:
 		randomize_cell_hints(grid)
 	# Necessary because we did unsafe updates

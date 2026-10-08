@@ -47,7 +47,7 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 
 		var st := g.all_hints_status()
 		if st != E.HintStatus.Satisfied:
-			print("[%d] Weird, generated level is not satisfied, but %s on thread %d" % [OS.get_thread_caller_id(), E.HintStatus.find_key(st)])
+			print("[%d] Weird, generated level is not satisfied, but %s" % [OS.get_thread_caller_id(), E.HintStatus.find_key(st)])
 			print("all_boats_hint_status: ", E.HintStatus.find_key(g.all_boats_hint_status()))
 			print("all_waters_hint_status: ", E.HintStatus.find_key(g.all_waters_hint_status()))
 			print("aquarium_hints_status: ", E.HintStatus.find_key(g.aquarium_hints_status()))
@@ -117,7 +117,8 @@ func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hint
 		print("Level generation canceled after %d tries and %.1fs (%.1fs gen + %.1fs solve)" % [inner_tries, (Time.get_ticks_usec() - start_time) / US_TO_S, total_gen / US_TO_S, total_solve / US_TO_S])
 	return g if found else null
 
-var direct_thread := false
+# Change to true to ease debugging
+var direct_thread := true
 
 func generate(rng: RandomNumberGenerator, n: int, m: int, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats := false) -> GridModel:
 	return await generate_with_size(rng, func(_rng): return Vector2i(n, m), apply_hints, gen_options_builder, strategies, forced_strategies, force_boats)

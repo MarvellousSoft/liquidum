@@ -45,9 +45,47 @@ enum Flavor {
 	Snake,
 	# Symbols variant, simple rules
 	Symbols,
-	# Mirros variant, with boats
+	# Mirros variant, with boats and diags maybe
 	Mirrors,
 }
+
+static func _mirrors_size_gen(rng: RandomNumberGenerator) -> Vector2i:
+	# No odds because it has some hard cases for the boats solver :P
+	return Vector2i(rng.randi_range(3, 5), 4 + 2 * rng.randi_range(0, 2))
+
+static func _mirrors_builder(rng: RandomNumberGenerator) -> Generator.Options:
+	var opts := Generator.builder().with_mirrors()
+	if rng.randf() < 0.35:
+		opts.with_boats()
+	if rng.randf() < 0.35:
+		opts.with_diags()
+	return opts
+
+static func _mirrors_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
+	if not grid.rule_variants().has(GridModel.RuleVariant.Mirrors):
+		grid.rule_variants().append(GridModel.RuleVariant.Mirrors)
+	var h := Level.HintVisibility.all_hidden(grid.rows(), grid.cols())
+	h.total_water = rng.randf() < 0.35
+	var any_boats := grid.count_boats() > 0
+	h.total_boats = any_boats and rng.randf() < 0.35
+	for a in [h.row, h.col]:
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_COUNT_VISIBLE, rng.randi_range(a.size()*0.05, a.size() * 0.55))
+		RandomHub._vis_array_or(rng, a, HintBar.WATER_TYPE_VISIBLE, rng.randi_range(-2, a.size()*.3))
+		if any_boats:
+			RandomHub._vis_array_or(rng, a, HintBar.BOAT_COUNT_VISIBLE, rng.randi_range(0, a.size()*.5))
+	# Remove col hints when they are on both sides, since it doesn't give any info
+	for j in (grid.cols()/2):
+		var oj := grid.cols() - 1 - j
+		var a := h.col[j] | h.col[oj]
+		h.col[j] = 0
+		h.col[oj] = 0
+		for f in [HintBar.WATER_COUNT_VISIBLE, HintBar.WATER_TYPE_VISIBLE, HintBar.BOAT_COUNT_VISIBLE]:
+			if (a & f) != 0:
+				var nj := j if rng.randf() < 0.5 else grid.cols()-1-j
+				h.col[nj] |= f
+	h.apply_to_grid(grid)
+	#RandomHub.hide_too_easy_hints(grid)
+	
 
 static func _symbols_builder(rng: RandomNumberGenerator) -> Generator.Options:
 	var opts := Generator.builder().with_min_water(12)
@@ -408,6 +446,8 @@ static func gen(l_gen: RandomLevelGenerator, rng: RandomNumberGenerator, flavor:
 			return await l_gen.generate_with_size(rng, RandomFlavors._knight_size_gen, RandomFlavors._snake_hints, _builder(b.with_snake()), strategies, []) 
 		Flavor.Symbols:
 			return await l_gen.generate_with_size(rng, RandomFlavors._symbols_size_gen, RandomFlavors._symbols_hints, RandomFlavors._symbols_builder, strategies, []) 
+		Flavor.Mirrors:
+			return await l_gen.generate_with_size(rng, RandomFlavors._mirrors_size_gen, RandomFlavors._mirrors_hints, RandomFlavors._mirrors_builder, strategies, [], false)
 		_:
 			push_error("Unknown flavor %d" % flavor)
 			return null

@@ -316,7 +316,6 @@ class PureCell:
 				return [E.Corner.TopLeft, E.Corner.BottomRight]
 		push_error("Unknown type %d" % type)
 		return []
-	# Includes both corners in the case of a Single cell
 	func all_corners() -> Array[E.Corner]:
 		match type:
 			E.CellType.DecDiag:
@@ -686,6 +685,18 @@ class CellWithLoc extends GridModel.CellModel:
 		return grid.cell_hints[i][j]
 	func hints_status() -> E.HintStatus:
 		return grid.cell_hint_status(i, j)
+	func valid_corner(co: E.Corner) -> bool:
+		return pure()._valid_corner(co)
+	func water_count() -> float:
+		return pure().water_count()
+	func block_count() -> float:
+		return pure().block_count()
+	func nowater_count() -> float:
+		return pure().nowater_count()
+	func noboat_count() -> float:
+		return pure().noboat_count()
+	func all_corners() -> Array[E.Corner]:
+		return pure().all_corners()
 
 func rows() -> int:
 	return n
@@ -1407,7 +1418,6 @@ func _undo_impl(undos: Array[Changes], redos: Array[Changes], skip_empty: bool) 
 	maybe_update_hints()
 	return true
 
-# If not user facing, keep empty undo stacks, it might be useful for code
 func push_empty_undo(user_facing := true) -> void:
 	_push_undo_changes([], true, user_facing)
 
@@ -1426,6 +1436,13 @@ func _push_undo_changes(changes: Array[Change], flush_first: bool, user_facing :
 		undo_stack.push_back(Changes.new(changes))
 	else:
 		(undo_stack.back() as Changes).changes.append_array(changes)
+
+func merge_undo_with_previous() -> void:
+	if undo_stack.size() < 2:
+		return
+	var last := undo_stack.pop_back() as Changes
+	(undo_stack.back() as Changes).changes.append_array(last.changes)
+	
 
 # Returns Array[(i, j, E.Walls)] a list of walls defined by these vertices.
 func _idx_to_cell_wall(i1: int, j1: int, i2: int, j2: int) -> Array[Vector3i]:
@@ -1990,18 +2007,18 @@ func _mirrors_status() -> E.HintStatus:
 			var c1_mirrored := _pure_cell(i, j).clone()
 			c1_mirrored.mirror_horizontal()
 			var c2 := _pure_cell(i, m - 1 - j)
+			if c1_mirrored._has_boat():
+				if c2.cell_type() != E.CellType.Single or c2.water_full() or c2.block_full():
+					return E.HintStatus.Wrong
+				elif not c2._has_boat():
+					st = E.HintStatus.Normal
 			for co in c1_mirrored.all_corners():
 				if c1_mirrored.water_at(co):
 					var c2_has_obstruction := (c2.nowater_at(co) or c2.block_at(co)) if c2._valid_corner(co) else (c2.nowater_count() > 0 or c2.block_count() > 0)
 					if c2._has_boat() or c2_has_obstruction:
 						return E.HintStatus.Wrong
-					var c2_has_all_water := c2.water_at(co) if c2._valid_corner(co) else c2.water_full()
+					var c2_has_all_water := c2.water_at(co) if c2._valid_corner(co) else (c2.water_count() == 1)
 					if not c2_has_all_water:
-						st = E.HintStatus.Normal
-				elif c1_mirrored._has_boat():
-					if c2.cell_type() != E.CellType.Single or c2.water_full():
-						return E.HintStatus.Wrong
-					elif not c2._has_boat():
 						st = E.HintStatus.Normal
 	return st
 
@@ -2031,6 +2048,13 @@ func count_nowater_row(i : int) -> float:
 		count += _pure_cell(i, j).nowater_count()
 	return count
 
+func count_block_row(i : int) -> float:
+	var count: float = 0.
+	for j in m:
+		count += _pure_cell(i, j).block_count()
+	return count
+
+
 func count_nothing_row(i: int) -> float:
 	var count: float = 0.
 	for j in m:
@@ -2050,10 +2074,22 @@ func count_water_col(j: int) -> float:
 		count += _pure_cell(i, j).water_count()
 	return count
 
+func count_nowater_col(j: int) -> float:
+	var count: float = 0.
+	for i in n:
+		count += _pure_cell(i, j).nowater_count()
+	return count
+
 func count_nothing_col(j: int) -> float:
 	var count: float = 0.
 	for i in n:
 		count += _pure_cell(i, j).nothing_count()
+	return count
+
+func count_block_col(j: int) -> float:
+	var count: float = 0.
+	for i in n:
+		count += _pure_cell(i, j).block_count()
 	return count
 
 func count_boat_row(i: int) -> int:
@@ -2236,6 +2272,9 @@ func get_row_hint_status(i : int, hint_content : E.HintContent) -> E.HintStatus:
 			var type :=  _hint_type_ok(_row_hints[i].boat_count_type, _row_bools(i, Content.Boat))
 			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
+			if _row_hints[i].water_count_type in [E.HintType.Together, E.HintType.Separated]:
+				if count_nowater_row(i) + count_block_row(i) == m:
+					return E.HintStatus.Wrong
 			var count := _row_hints[i].water_count
 			var status := _hint_statusf(count_water_row(i), count)
 			var type := _hint_type_ok(_row_hints[i].water_count_type, _row_bools(i, Content.Water))
@@ -2252,6 +2291,9 @@ func get_col_hint_status(j : int, hint_content : E.HintContent) -> E.HintStatus:
 			var type := _hint_type_ok(_col_hints[j].boat_count_type, _col_bools(j, Content.Boat))
 			return _status_and_then(status, type, count == -1)
 		E.HintContent.Water:
+			if _col_hints[j].water_count_type in [E.HintType.Together, E.HintType.Separated]:
+				if count_nowater_col(j) + count_block_col(j) == n:
+					return E.HintStatus.Wrong
 			var count := _col_hints[j].water_count
 			var status := _hint_statusf(count_water_col(j), count)
 			var type := _hint_type_ok(_col_hints[j].water_count_type, _col_bools(j, Content.Water))
