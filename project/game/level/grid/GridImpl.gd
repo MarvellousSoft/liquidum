@@ -1901,6 +1901,7 @@ func _symbols_values() -> Dictionary:
 	var add_occ := func(s: String, cur: float, empty: float) -> void:
 		if s == "":
 			return
+		s = s.strip_edges()
 		if (s[0] == '{' and s[-1] == '}') or (s[0] == '-' and s[-1] == '-'):
 			s = s.substr(1, s.length() - 2)
 		if not symbol_to_vals.has(s):
