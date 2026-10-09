@@ -13,7 +13,7 @@ const MAX_TRIES := 2000
 var tries := 0
 
 func _init() -> void:
-	if OS.get_thread_caller_id() == OS.get_main_thread_id():
+	if Thread.is_main_thread():
 		GeneratingLevel.cancel.connect(self.cancel)
 
 func _inner_gen_level(rng: RandomNumberGenerator, gen_size: Callable, apply_hints: Callable, gen_options_builder: Callable, strategies: Array, forced_strategies: Array, force_boats: bool) -> GridModel:

@@ -6,7 +6,7 @@ static var steam := SteamStats.new()
 static var google := GoogleStats.new()
 
 static func instance() -> StatsTracker:
-	if SteamManager.enabled and SteamManager.stats_received:
+	if SteamManager.enabled:
 		return MultiplexerStats.new([steam, base])
 	elif GooglePlayGameServices.enabled:
 		return MultiplexerStats.new([google, base])

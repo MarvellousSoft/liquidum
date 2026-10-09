@@ -941,12 +941,13 @@ class TogetherStrategy extends RowColStrategy:
 				if not bool(l2 & 1) and not _wall_right(a, l2):
 					l2 += 1
 			l2 += 1
-		# Every cell between max_solution_left and min_solution_right are in EVERY solution
-		for b2 in range(max_solution_left, min_solution_right + 1, 1):
-			if _content(a, b2) == Content.Nothing:
-				#print("Put water (%d, %d), in EVERY solution" % [a, b2 / 2])
-				if _cell(a, b2 / 2).put_water(_corner(a, b2), false):
-					any = true
+		if min_solution_right != -1:
+			# Every cell between max_solution_left and min_solution_right are in EVERY solution
+			for b2 in range(max_solution_left, min_solution_right + 1, 1):
+				if _content(a, b2) == Content.Nothing:
+					#print("Put water (%d, %d), in EVERY solution" % [a, b2 / 2])
+					if _cell(a, b2 / 2).put_water(_corner(a, b2), false):
+						any = true
 		return any
 
 	func _apply(a: int) -> bool:

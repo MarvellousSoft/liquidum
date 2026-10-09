@@ -7,8 +7,6 @@ const APP_ID := 2716690
 var steam := Steam
 # This is used to globally wipe stats if necessary. Use with care.
 const STATS_VERSION := 1
-
-var stats_received := false
 var cached_lds := {}
 
 var ld_mutex := DumbMutex.new()
@@ -36,34 +34,21 @@ func _ready() -> void:
 		return
 	Global.is_demo = not steam.isSubscribedApp(2716690) or ProjectSettings.get_setting("liquidum/force_demo")
 	SteamManager.steam.dlc_installed.connect(_on_dlc_installed)
-	#SteamManager.steam.current_stats_received.connect(_stats_received)
-	# Stats are now received automatically
-	call_deferred("_stats_received")
 	SteamManager.steam.overlay_toggled.connect(_on_overlay_toggled)
-	#SteamManager.steam.requestCurrentStats()
 	# False mobile on computer
 	if Global.is_mobile:
 		enabled = false
-
-func _stats_received() -> void:
-	if stats_received:
-		return
-	if STATS_VERSION != SteamManager.steam.getStatInt("version"):
-		print("Resetting all stats!")
-		SteamManager.steam.resetAllStats(false)
-		SteamManager.steam.setStatInt("version", STATS_VERSION)
-		SteamManager.steam.storeStats()
-		await SteamManager.steam.user_stats_stored
-		#SteamManager.steam.:()
-		return
-	stats_received = true
-	await StatsTracker.instance().update_campaign_stats()
+	else:
+		if STATS_VERSION != SteamManager.steam.getStatInt("version"):
+			print("Resetting all stats!")
+			SteamManager.steam.resetAllStats(false)
+			SteamManager.steam.setStatInt("version", STATS_VERSION)
+			SteamManager.steam.storeStats()
+			await SteamManager.steam.user_stats_stored
+		await StatsTracker.instance().update_campaign_stats()
 
 func store_stats() -> void:
 	if not SteamManager.enabled:
-		return
-	if not stats_received:
-		#SteamManager.steam.requestCurrentStats()
 		return
 	print("Storing steam stats")
 	SteamManager.steam.storeStats()
