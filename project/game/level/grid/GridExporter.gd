@@ -189,6 +189,7 @@ func load_compatible(old_grid: GridImpl, data: Dictionary, new_cells: Array[Arra
 
 func load_data(grid: GridImpl, data: Dictionary, load_mode: GridModel.LoadMode) -> GridImpl:
 	data = _convert_keys_to_int(data)
+	#print(data)
 	if data[version] < 2:
 		data[version] = 2
 		data[cell_hints] = []

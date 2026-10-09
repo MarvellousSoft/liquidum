@@ -103,6 +103,9 @@ func steam_dlc(section: int) -> int:
 func endless_title(section: int) -> String:
 	return _config(section).get_value("section", "endless_title", "ENDLESS")
 
+func endless_description(section: int) -> String:
+	return _config(section).get_value("section", "endless_description", "")
+
 func section_disabled(section: int) -> bool:
 	if Global.is_demo:
 		return true

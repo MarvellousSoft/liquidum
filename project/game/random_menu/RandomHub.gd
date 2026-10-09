@@ -128,6 +128,9 @@ func _start_background_generation(dif: int, seed_str: String, manually_seeded: b
 	_cancel_background_generation()
 	_bg_generation_coroutine(dif, seed_str, manually_seeded, next_left, total, current_left)
 
+func _dif_description(_dif: int, _seed: String, _next_left: int, _total: int) -> String:
+	return ""
+
 func _bg_generation_coroutine(dif: int, seed_str: String, manually_seeded: bool, next_left: int, total: int, current_left: int) -> void:
 	_bg_task_in_progress = true
 	_bg_dif = dif
@@ -154,7 +157,7 @@ func _bg_generation_coroutine(dif: int, seed_str: String, manually_seeded: bool,
 		return
 
 	if g != null:
-		var data := LevelData.new(_dif_name(dif, next_left, total), "", g.export_data(), "")
+		var data := LevelData.new(_dif_name(dif, next_left, total), _dif_description(dif, seed_str, next_left, total), g.export_data(), "")
 		data.difficulty = dif
 		data.marathon_left = next_left
 		data.marathon_total = total
@@ -351,7 +354,7 @@ func gen_and_play(rng: RandomNumberGenerator, dif: int, seed_str: String, manual
 				TransitionManager.pop_scene()
 			return
 		# There may be an existing level save
-		data = LevelData.new(_dif_name(dif, marathon_left, marathon_total), "", g.export_data(), "")
+		data = LevelData.new(_dif_name(dif, marathon_left, marathon_total), _dif_description(dif, seed_str, marathon_left, marathon_total), g.export_data(), "")
 		data.difficulty = dif
 		data.marathon_left = marathon_left
 		data.marathon_total = marathon_total
@@ -373,17 +376,21 @@ func _speedrun_key(marathon_total: int, dif: int) -> String:
 			return M_100[dif]
 	return ""
 
+func _setup_level(_level: Level) -> void:
+	pass
+
 func load_existing(marathon_time: float, marathon_mistakes: int) -> void:
 	var data := _load_level_data()
 	if data == null:
 		return
 	var tracking: Array[String] = _get_tracking(data)
-	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), _save_level_name(), data.full_name, "", tracking)
+	var level := Global.create_level(GridImpl.import_data(data.grid_data, GridModel.LoadMode.Solution), _save_level_name(), data.full_name, data.description, tracking)
 	level.difficulty = data.difficulty
 	level.seed_str = data.seed_str
 	level.manually_seeded = data.manually_seeded
 	level.flavor = data.flavor
 	level.difficulty_name = data.difficulty_name
+	_setup_level(level)
 	if data.marathon_left != -1:
 		level.marathon_left = data.marathon_left
 		level.marathon_total = data.marathon_total
@@ -599,4 +606,3 @@ func _on_marathon_button_pressed() -> void:
 		%Marathon/Button.hide()
 	if has_node("%Marathon/Slider"):
 		%Marathon/Slider.show()
-

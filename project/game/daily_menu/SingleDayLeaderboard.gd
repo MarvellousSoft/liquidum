@@ -169,7 +169,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 			plus.visible = item.flair.extra_flairs > 0
 			plus.text = "+%d" % [item.flair.extra_flairs]
 		var mistakes := Grid.get_node("Mistakes1").duplicate()
-		mistakes.text = str(item.mistakes)
+		mistakes.text = String.num_int64(item.mistakes)
 		var time := Grid.get_node("Time1").duplicate()
 		time.text = Level.time_str(item.secs)
 		for c in [icon, pos, name_, mistakes, time]:

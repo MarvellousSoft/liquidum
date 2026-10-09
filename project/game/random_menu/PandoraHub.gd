@@ -82,8 +82,34 @@ func _mode_to_flavor(mode: int) -> RandomFlavors.Flavor:
 			return RandomFlavors.Flavor.Liar
 		Mode.Symbols:
 			return RandomFlavors.Flavor.Symbols
-		_:
-			return RandomFlavors.Flavor.Snake
+	return RandomFlavors.Flavor.Snake
+
+func _dif_description(mode: int, seed_str: String, marathon_left: int, marathon_total: int) -> String:
+	var flavor := _mode_to_flavor(mode)
+	if mode == Mode.Pandora:
+		if marathon_total > 1:
+			var shuffled_flavors: Array[RandomFlavors.Flavor] = PANDORA_FLAVORS.duplicate()
+			var shuffle_rng := RandomNumberGenerator.new()
+			shuffle_rng.seed = RandomHub.consistent_hash(seed_str)
+			Global.shuffle(shuffled_flavors, shuffle_rng)
+			var current_idx: int = marathon_total - (marathon_left + 1)
+			flavor = shuffled_flavors[current_idx % shuffled_flavors.size()]
+		else:
+			var flavor_rng := RandomNumberGenerator.new()
+			flavor_rng.seed = RandomHub.consistent_hash(seed_str + "-flavor")
+			flavor = PANDORA_FLAVORS[flavor_rng.randi() % PANDORA_FLAVORS.size()]
+	match flavor:
+		RandomFlavors.Flavor.Snake:
+			return "SNAKE_RULES"
+		RandomFlavors.Flavor.Sudoku:
+			return "SUDOKU_RULES"
+		RandomFlavors.Flavor.Knight:
+			return "KNIGHT_RULES"
+		RandomFlavors.Flavor.Liar:
+			return "LIAR_RULES"
+		RandomFlavors.Flavor.Symbols:
+			return "SYMBOLS_RULES"
+	return ""
 
 func _generate_grid(rng: RandomNumberGenerator, mode: int, marathon_left: int, marathon_total: int, seed_str: String, l_gen: RandomLevelGenerator = gen) -> GridModel:
 	var flavor: RandomFlavors.Flavor
@@ -108,6 +134,9 @@ func _generate_grid(rng: RandomNumberGenerator, mode: int, marathon_left: int, m
 func _setup_level_data(data: LevelData, mode: int, _marathon_left: int, _marathon_total: int, _seed_str: String) -> void:
 	data.flavor = _current_flavor
 	data.difficulty_name = _mode_button_key(mode)
+
+func _setup_level(level: Level) -> void:
+	level.extra_section = ExtraLevelLister.pandora_section()
 
 func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
 	var flavor_solved: int = data.flavor

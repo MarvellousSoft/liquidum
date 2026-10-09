@@ -84,7 +84,7 @@ func _load_json_data(dir_name: String, file_name: String, error_non_existing := 
 		return null
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != Error.OK:
-		push_error("Error parsing JSON on line %d: %s" % [json.get_error_line(), json.get_error_message()])
+		push_error("Error parsing JSON from %s on line %d: %s" % [file_name, json.get_error_line(), json.get_error_message()])
 		return null
 	return json.get_data()
 

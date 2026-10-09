@@ -31,4 +31,3 @@ func flush() -> void:
 
 func _exit_tree() -> void:
 	flush()
-

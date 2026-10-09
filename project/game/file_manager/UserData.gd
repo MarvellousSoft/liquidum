@@ -436,4 +436,3 @@ func _pandora_variant_idx(flavor_or_idx: int) -> int:
 			if flavor_or_idx >= 0 and flavor_or_idx < 5:
 				return flavor_or_idx
 			return -1
-

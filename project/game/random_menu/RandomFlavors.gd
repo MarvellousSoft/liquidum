@@ -194,11 +194,11 @@ static func _liar_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	for i in grid.rows():
 		var w := grid.count_water_row(i)
 		var d := 1 if w <= grid.cols() - 2 and (w < 2 or rng.randf() < up_pct) else -1
-		grid.row_hints()[i].water_alt_text = str(w + d)
+		grid.row_hints()[i].water_alt_text = Global.hint_to_str(w + d)
 	for j in grid.cols():
 		var w := grid.count_water_col(j)
 		var d := 1 if w <= grid.rows() - 2 and (w < 2 or rng.randf() < up_pct) else -1
-		grid.col_hints()[j].water_alt_text = str(grid.count_water_col(j) + d)
+		grid.col_hints()[j].water_alt_text = Global.hint_to_str(grid.count_water_col(j) + d)
 
 static func _liar_size_gen(rng: RandomNumberGenerator) -> Vector2i:
 	return Vector2i(rng.randi_range(5, 8), rng.randi_range(5, 8))

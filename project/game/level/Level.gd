@@ -178,10 +178,6 @@ func _ready():
 				$SteamRichPresence.set_group("daily")
 				$SteamRichPresence.set_display("#Weekly")
 				$SteamRichPresence.set_key_value("level", str(RecurringMarathon.idx_from_level_name(level_name)))
-			elif difficulty != -1:
-				$SteamRichPresence.set_group("random")
-				$SteamRichPresence.set_display("#Random")
-				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
 			elif extra_section != -1 and extra_level_number == -1:
 				$SteamRichPresence.set_group("extra_island")
 				if extra_section > MAX_EXTRA_RICH_PRESENCE:
@@ -191,6 +187,10 @@ func _ready():
 					$SteamRichPresence.set_display("#ExtraIslandLoc")
 					$SteamRichPresence.set_key_value("section", str(extra_section))
 				$SteamRichPresence.set_key_value("level", "∞")
+			elif difficulty != -1: # If there is extra_section, prioritize that first
+				$SteamRichPresence.set_group("random")
+				$SteamRichPresence.set_display("#Random")
+				$SteamRichPresence.set_key_value("difficulty", str(difficulty))
 			elif extra_section != -1 and extra_level_number != -1:
 				$SteamRichPresence.set_group("extra_island")
 				if extra_section > MAX_EXTRA_RICH_PRESENCE:

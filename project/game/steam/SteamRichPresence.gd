@@ -25,4 +25,3 @@ func set_key_value(key: String, value: String) -> void:
 func _exit_tree() -> void:
 	if SteamManager.enabled:
 		SteamManager.steam.clearRichPresence()
-

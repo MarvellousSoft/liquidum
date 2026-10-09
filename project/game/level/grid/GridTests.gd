@@ -1896,3 +1896,28 @@ func test_streak_reconcile_resets_if_missed_days() -> void:
 	user_data.best_streak = orig_best
 	user_data.last_day = orig_last
 	UserData.save(false)
+
+func test_symbols_infer_undo() -> void:
+	var s := """+variant=symbols
++row_alt=0:A
++row_alt=1:A
++row_alt=2:B
++row_alt=3:A
++col_alt=0:A
++col_alt=1:A
++col_alt=2:A
++col_alt=3:B
++cellhint=1:0:5.0
++cell_alt=1:0:C
+........
+|.|._.|.
+........
+|.L.|.L.
+........
+|._.L._.
+........
+L.L.L._."""
+	var g := GridImpl.from_str(s, GridModel.LoadMode.Testing)
+	var solver := SolverModel.new()
+	var res := solver.full_solve(g, all_strategies(), func(): return false)
+	fail_later_if(res != SolverModel.SolveResult.SolvedUnique)

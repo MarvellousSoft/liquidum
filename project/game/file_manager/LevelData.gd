@@ -6,7 +6,7 @@ var full_name: String
 var description: String
 var grid_data: Dictionary
 var tutorial: String
-# Only used for levels created from the random hub. It's either RandomHub.Difficulty or -1
+# Only used for levels created from the random hub (or it's pandora version)
 var difficulty: int = -1
 var difficulty_name: String = ""
 var flavor: int = -1
@@ -62,4 +62,3 @@ static func load_data(data_: Variant) -> LevelData:
 	level_data.seed_str = data.get("seed_str", "")
 	level_data.manually_seeded = data.get("manually_seeded", false)
 	return level_data
-

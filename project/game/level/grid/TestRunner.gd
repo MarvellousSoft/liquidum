@@ -253,9 +253,9 @@ func _on_endless_button_pressed() -> void:
 	rets.resize(count)
 	# For easier debugging
 	# Snakes are bugged for some reason
-	var FORCE_SEQUENTIAL := (mode == PandoraHub.Mode.Snake or mode == PandoraHub.Mode.Pandora) or true
+	var FORCE_SEQUENTIAL := false
 	
-	var group_id := WorkerThreadPool.add_group_task(self._gen_endless.bind(%EndlessCancel, %PrepCheck.button_pressed, rets, mode, endless_flavor, prep_pandora, prep_endless), count, 1 if FORCE_SEQUENTIAL else -1)
+	var group_id := WorkerThreadPool.add_group_task(self._gen_endless.bind(%EndlessCancel, %PrepCheck.button_pressed, rets, mode, endless_flavor, prep_pandora, prep_endless), count, 10 if FORCE_SEQUENTIAL else -1)
 	var watch := Stopwatch.new()
 
 	while WorkerThreadPool.get_group_processed_element_count(group_id) < count:

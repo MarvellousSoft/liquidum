@@ -479,4 +479,3 @@ func generate(n: int, m: int) -> GridModel:
 	# Necessary because we did unsafe updates
 	grid.set_auto_update_hints(true)
 	return grid
-

@@ -159,7 +159,7 @@ func load_existing_endless() -> void:
 	if gdata == null:
 		return
 	var key := ExtraLevelLister.endless_level_name(my_section)
-	var level_node := Global.create_level(GridImpl.import_data(gdata.grid_data, GridModel.LoadMode.Solution), key, "", "", ["random", key])
+	var level_node := Global.create_level(GridImpl.import_data(gdata.grid_data, GridModel.LoadMode.Solution), key, gdata.full_name, gdata.description, ["random", key])
 	level_node.seed_str = gdata.seed_str
 	level_node.manually_seeded = gdata.manually_seeded
 	level_node.extra_section = my_section
@@ -195,7 +195,9 @@ func gen_and_load_endless() -> void:
 	GeneratingLevel.disable()
 	if grid == null:
 		return
-	var gdata := LevelData.new("", "", grid.export_data(), "")
+	var l_name := ""
+	var desc := ExtraLevelLister.endless_description(my_section)
+	var gdata := LevelData.new(l_name, desc, grid.export_data(), "")
 	gdata.manually_seeded = false
 	gdata.seed_str = seed_str
 	FileManager.save_extra_endless_level(my_section, gdata)

@@ -2166,43 +2166,51 @@ func merge_status(status1: E.HintStatus, status2: E.HintStatus) -> E.HintStatus:
 
 func all_hints_status() -> E.HintStatus:
 	var s := E.HintStatus.Satisfied
-	#print("bef ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_boats_hint_status())
 	if s == E.HintStatus.Wrong:
+		#print("[%d] all_hints_status became Wrong at all_boats" % [OS.get_thread_caller_id()])
 		return s
-	#print("boats ", E.HintStatus.find_key(s))
 	s = merge_status(s, all_waters_hint_status())
 	if s == E.HintStatus.Wrong:
+		#print("[%d] all_hints_status became Wrong at all_waters" % [OS.get_thread_caller_id()])
 		return s
-	#print("waters ", E.HintStatus.find_key(s))
 	s = merge_status(s, aquarium_hints_status())
 	if s == E.HintStatus.Wrong:
+		#print("[%d] all_hints_status became Wrong at aquarium_hints" % [OS.get_thread_caller_id()])
 		return s
-	#print("aquariums ", E.HintStatus.find_key(s))
 	for i in n:
-		s = merge_status(s, get_row_hint_status(i, E.HintContent.Water))
-		if s == E.HintStatus.Wrong:
-			return s
-		s = merge_status(s, get_row_hint_status(i, E.HintContent.Boat))
-		if s == E.HintStatus.Wrong:
-			return s
-		#print("row %d " % i, E.HintStatus.find_key(s))
+		var st_w := get_row_hint_status(i, E.HintContent.Water)
+		if st_w == E.HintStatus.Wrong:
+			#print("[%d] all_hints_status became Wrong at row %d water" % [OS.get_thread_caller_id(), i])
+			return E.HintStatus.Wrong
+		s = merge_status(s, st_w)
+		var st_b := get_row_hint_status(i, E.HintContent.Boat)
+		if st_b == E.HintStatus.Wrong:
+			#print("[%d] all_hints_status became Wrong at row %d boat" % [OS.get_thread_caller_id(), i])
+			return E.HintStatus.Wrong
+		s = merge_status(s, st_b)
 	for j in m:
-		s = merge_status(s, get_col_hint_status(j, E.HintContent.Water))
-		if s == E.HintStatus.Wrong:
-			return s
-		s = merge_status(s, get_col_hint_status(j, E.HintContent.Boat))
-		if s == E.HintStatus.Wrong:
-			return s
-		#print("col %d " % j, E.HintStatus.find_key(s))
+		var st_w := get_col_hint_status(j, E.HintContent.Water)
+		if st_w == E.HintStatus.Wrong:
+			#print("[%d] all_hints_status became Wrong at col %d water" % [OS.get_thread_caller_id(), j])
+			return E.HintStatus.Wrong
+		s = merge_status(s, st_w)
+		var st_b := get_col_hint_status(j, E.HintContent.Boat)
+		if st_b == E.HintStatus.Wrong:
+			#print("[%d] all_hints_status became Wrong at col %d boat" % [OS.get_thread_caller_id(), j])
+			return E.HintStatus.Wrong
+		s = merge_status(s, st_b)
 	for i in n:
 		for j in m:
-			s = merge_status(s, cell_hint_status(i, j))
-			#if get_cell(i, j).hints() != null:
-			#	print("cell %s %s" % [Vector2i(i, j), E.HintStatus.find_key(s)])
-			if s == E.HintStatus.Wrong:
-				return s
+			var st_c := cell_hint_status(i, j)
+			if st_c == E.HintStatus.Wrong:
+				#print("[%d] all_hints_status became Wrong at cell (%d, %d)" % [OS.get_thread_caller_id(), i, j])
+				return E.HintStatus.Wrong
+			s = merge_status(s, st_c)
 	for st2 in rule_variants_status():
+		if st2 == E.HintStatus.Wrong:
+			#print("[%d] all_hints_status became Wrong at rule_variants" % [OS.get_thread_caller_id()])
+			return E.HintStatus.Wrong
 		s = merge_status(s, st2)
 	return s
 
