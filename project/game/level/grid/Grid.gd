@@ -3,6 +3,9 @@ class_name GridModel
 # Profile.allow_mistakes is true and the user did an error
 signal invalid_place_allowed()
 
+# Hacky thing used by solver because we don't actually have noboat
+var min_boat_pos : Vector2i
+
 static func must_be_implemented() -> Variant:
 	assert(false, "Must be implemented")
 	return null
@@ -365,7 +368,7 @@ func redo(_skip_empty := true) -> bool:
 func push_empty_undo(_user_facing := true) -> void:
 	return GridModel.must_be_implemented()
 
-func merge_undo_with_previous() -> void:
+func merge_last_undo(_skip_empty := true) -> void:
 	return GridModel.must_be_implemented()
 
 # Flood all water in the grid. Returns whether it did anything
@@ -403,9 +406,6 @@ func is_empty() -> bool:
 	return GridModel.must_be_implemented()
 
 func copy_to_clipboard() -> void:
-	return GridModel.must_be_implemented()
-
-func merge_last_undo() -> void:
 	return GridModel.must_be_implemented()
 
 func count_waters() -> float:

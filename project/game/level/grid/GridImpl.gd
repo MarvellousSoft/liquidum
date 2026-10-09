@@ -1437,12 +1437,13 @@ func _push_undo_changes(changes: Array[Change], flush_first: bool, user_facing :
 	else:
 		(undo_stack.back() as Changes).changes.append_array(changes)
 
-func merge_undo_with_previous() -> void:
+func merge_last_undo(skip_empty := true) -> void:
+	while skip_empty and not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
+		undo_stack.pop_back()
 	if undo_stack.size() < 2:
 		return
-	var last := undo_stack.pop_back() as Changes
+	var last: Changes = undo_stack.pop_back()
 	(undo_stack.back() as Changes).changes.append_array(last.changes)
-	
 
 # Returns Array[(i, j, E.Walls)] a list of walls defined by these vertices.
 func _idx_to_cell_wall(i1: int, j1: int, i2: int, j2: int) -> Array[Vector3i]:
@@ -2489,14 +2490,6 @@ func is_empty() -> bool:
 func copy_to_clipboard() -> void:
 	var s = JSON.stringify(export_data())
 	DisplayServer.clipboard_set(s)
-
-func merge_last_undo() -> void:
-	while not undo_stack.is_empty() and (undo_stack.back() as Changes).changes.is_empty():
-		undo_stack.pop_back()
-	if undo_stack.size() < 2:
-		return
-	var last: Changes = undo_stack.pop_back()
-	(undo_stack.back() as Changes).changes.append_array(last.changes)
 
 func _any_sol_boats() -> bool:
 	for i in n:

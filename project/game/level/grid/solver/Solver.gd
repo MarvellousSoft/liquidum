@@ -50,7 +50,7 @@ static func _maybe_infer_hint(grid: GridImpl, hints: Array[GridModel.LineHint], 
 	if not is_row and grid.rule_variants().has(GridModel.RuleVariant.Mirrors):
 		var oh := hints[grid.cols() - 1 - a]
 		if h.water_count == -1 and oh.water_count != -1:
-			h.duplicate()
+			h = h.duplicate()
 			h.water_count = oh.water_count
 		if h.water_count_type == E.HintType.Hidden and oh.water_count_type != E.HintType.Hidden:
 			if h == hints[a]:
@@ -668,16 +668,15 @@ static func _maybe_extra_boat_on_row(grid: GridImpl, i: int) -> bool:
 	return hint == -1 or grid.count_boat_row(i) < hint
 
 # This static var is quite hacky...
-static var min_boat_pos := Vector2i(0, 0)
 static func _infer_boat_possible(grid: GridImpl, i: int, j: int) -> bool:
-	if Vector2i(i, j) < min_boat_pos:
+	if Vector2i(i, j) < grid.min_boat_pos:
 		return false
 	var boat_possible := grid.get_cell(i, j).boat_possible()
 	if not grid.rule_variants().has(GridModel.RuleVariant.Mirrors) or (j == grid.cols() - 1 - j):
 		return boat_possible
 	var at_most_one_boat_left_on_row := (grid.grid_hints().total_boats == grid.count_boats() + 1) or (grid.row_hints()[i].boat_count == grid.count_boat_row(i) + 1)
 	var c2 := grid.get_cell(i, grid.cols() - 1 - j)
-	boat_possible = boat_possible and (c2.has_boat() or (min_boat_pos <= Vector2i(i, grid.cols()-1-j) and not at_most_one_boat_left_on_row and c2.boat_possible()))
+	boat_possible = boat_possible and (c2.has_boat() or (grid.min_boat_pos <= Vector2i(i, grid.cols()-1-j) and not at_most_one_boat_left_on_row and c2.boat_possible()))
 	return boat_possible
 
 # Aquariums that CAN and DO NOT have boats. The boat position might not be clear.
@@ -2444,7 +2443,7 @@ static func _try_to_add_mirrored(grid: GridModel, ij: Vector2i, corner: E.Corner
 			break
 	if undo_if_failed:
 		if ok:
-			grid.merge_last_undo()
+			grid.merge_last_undo(false)
 		else:
 			grid.undo(false)
 			added = Vector2(0, 0)
@@ -2473,7 +2472,7 @@ class MirrorsStrategy extends Strategy:
 						else:
 							water_went_wrong = true
 						if water_went_wrong:
-							return (SolverModel._try_to_add_mirrored(grid, Vector2(i, j), co, GridImpl.Content.NoWater, false).x != 0)
+							return (SolverModel._try_to_add_mirrored(grid, Vector2i(i, j), co, GridImpl.Content.NoWater, false).x != 0)
 						grid.push_empty_undo(false)
 						var nowater_went_wrong := false
 						if SolverModel._try_to_add_mirrored(grid, Vector2i(i, j), co, GridImpl.Content.NoWater, true).x != 0:
@@ -2482,7 +2481,7 @@ class MirrorsStrategy extends Strategy:
 						else:
 							nowater_went_wrong = true
 						if nowater_went_wrong:
-							return (SolverModel._try_to_add_mirrored(grid, Vector2(i, j), co, GridImpl.Content.Water, false).x != 0)
+							return (SolverModel._try_to_add_mirrored(grid, Vector2i(i, j), co, GridImpl.Content.Water, false).x != 0)
 		return any
 	func description() -> String:
 		return "Mirrors water, nowater and boats."
@@ -2509,7 +2508,7 @@ class MirrorsAdvancedRowStrategy extends AdvancedRowStrategy:
 				var cmp2 := by_j[2 * nj + (0 if is_left else 1)]
 				# Try both sides
 				if cmp2 == null and grid.get_cell(i, cmp.all_js[idx]).cell_type() == E.Single:
-					cmp2 = by_j[2 * nj + (1 if is_left else 1)]
+					cmp2 = by_j[2 * nj + (1 if is_left else 0)]
 				if cmp2 != null:
 					merged_cmp = cmp2
 					break
@@ -2667,10 +2666,10 @@ const MAX_GUESSES := 2
 # Will apply strategies but also try to guess
 # If look_for_multiple = false, will not try to look for multiple solutions
 func full_solve(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo := true, guesses_left := MAX_GUESSES, min_boat_place := Vector2i.ZERO, look_for_multiple := true) -> SolveResult:
-	var prev_min_boat_place := SolverModel.min_boat_pos
-	SolverModel.min_boat_pos = min_boat_place # Hacky, this will bite us in the future
+	var prev_min_boat_place := grid.min_boat_pos
+	grid.min_boat_pos = min_boat_place # Hacky, this will bite us in the future
 	var res := full_solve_impl(grid, strategy_list, cancel_sig, flush_undo, guesses_left, min_boat_place, look_for_multiple)
-	SolverModel.min_boat_pos = prev_min_boat_place # Hacky, this will bite us in the future
+	grid.min_boat_pos = prev_min_boat_place # Hacky, this will bite us in the future
 	return res
 func full_solve_impl(grid: GridModel, strategy_list: Array, cancel_sig: Callable, flush_undo: bool, guesses_left: int, min_boat_place: Vector2i, look_for_multiple: bool) -> SolveResult:
 	assert(grid.editor_mode() and not grid.auto_update_hints())
@@ -2758,8 +2757,8 @@ func full_solve_impl(grid: GridModel, strategy_list: Array, cancel_sig: Callable
 				return _make_guess(full_solve(grid, strategy_list, cancel_sig, false, guesses_left, nx_min_boat_place, look_for_multiple))
 			else:
 				grid.redo(false)
-				if r2 == SolveResult.SolvedMultiple:
-					return SolveResult.SolvedMultiple
+				if r2 in [SolveResult.SolvedMultiple, SolveResult.GaveUp]:
+					return r2
 				else:
 					if grid.get_cell(i, j).has_boat():
 						# In this case we actually tried to solve without this boat but got this boat again
