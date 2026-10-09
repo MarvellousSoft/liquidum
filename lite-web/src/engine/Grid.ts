@@ -126,6 +126,7 @@ export enum LoadMode {
 }
 
 export abstract class GridModel {
+    min_boat_pos: Vector2i = new Vector2i(0, 0);
     abstract rows(): number;
     abstract cols(): number;
     abstract get_cell(i: number, j: number): CellModel;

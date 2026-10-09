@@ -119,6 +119,13 @@ export class SolverModel {
         return hint === -1 || grid.count_boat_row(i) < hint;
     }
 
+    static _infer_boat_possible(grid: GridImpl, i: number, j: number): boolean {
+        if (i < grid.min_boat_pos.x || (i === grid.min_boat_pos.x && j < grid.min_boat_pos.y)) {
+            return false;
+        }
+        return grid.get_cell(i, j).boat_possible();
+    }
+
     static _list_possible_boats_on_col(grid: GridImpl, j: number): Vector2i[] {
         let i = grid.rows() - 1;
         const ans: Vector2i[] = [];
@@ -128,7 +135,7 @@ export class SolverModel {
                 i -= 1;
                 continue;
             }
-            const boat_possible = c.boat_possible();
+            const boat_possible = SolverModel._infer_boat_possible(grid, i, j);
             const had_boat = c.has_boat();
             if (!boat_possible) {
                 i -= 1;
@@ -164,7 +171,7 @@ export class SolverModel {
         let any = false;
         let possible_i = -1;
         for (let i = lr.x; i <= lr.y; i++) {
-            if (possible_i !== -2 && SolverModel._maybe_extra_boat_on_row(grid, i)) {
+            if (possible_i !== -2 && SolverModel._maybe_extra_boat_on_row(grid, i) && SolverModel._infer_boat_possible(grid, i, j)) {
                 if (possible_i === -1) {
                     possible_i = i;
                 } else {
@@ -568,6 +575,22 @@ export class SolverModel {
         min_boat_place: Vector2i = new Vector2i(0, 0),
         look_for_multiple: boolean = true
     ): SolveResult {
+        const prev_min_boat_place = grid.min_boat_pos;
+        grid.min_boat_pos = min_boat_place;
+        const res = this.full_solve_impl(grid, strategy_list, cancel_sig, flush_undo, guesses_left, min_boat_place, look_for_multiple);
+        grid.min_boat_pos = prev_min_boat_place;
+        return res;
+    }
+
+    full_solve_impl(
+        grid: GridImpl,
+        strategy_list: string[],
+        cancel_sig: () => boolean,
+        flush_undo: boolean,
+        guesses_left: number,
+        min_boat_place: Vector2i,
+        look_for_multiple: boolean
+    ): SolveResult {
         if (flush_undo) {
             grid.push_empty_undo();
         }
@@ -628,28 +651,36 @@ export class SolverModel {
         for (let i = 0; i < grid.rows(); i++) {
             for (let j = 0; j < grid.cols(); j++) {
                 const c = grid.get_cell(i, j);
-                if ((i < min_boat_place.x || (i === min_boat_place.x && j < min_boat_place.y)) || !c.boat_possible() || c.has_boat()) {
+                if ((i < min_boat_place.x || (i === min_boat_place.x && j < min_boat_place.y)) || !SolverModel._infer_boat_possible(grid, i, j) || c.has_boat()) {
                     continue;
                 }
                 const b = c.put_boat(true, true);
                 if (b) {
-                    const r1 = this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, new Vector2i(i, j + 1), look_for_multiple);
+                    const nx_min_boat_place = (j !== grid.cols() - 1) ? new Vector2i(i, j + 1) : new Vector2i(i + 1, 0);
+                    const r1 = this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left - 1, nx_min_boat_place, look_for_multiple);
                     grid.undo();
                     if (r1 === SolveResult.Unsolvable) {
-                        return this._make_guess(this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left, new Vector2i(i, j + 1), look_for_multiple));
+                        return this._make_guess(this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left, nx_min_boat_place, look_for_multiple));
                     } else if (!look_for_multiple || r1 === SolveResult.SolvedMultiple || r1 === SolveResult.GaveUp) {
                         grid.redo();
                         return r1;
                     }
-                    c.put_boat(false, true);
-                    const r2 = this.full_solve(grid, strategy_list, cancel_sig, true, guesses_left - 1, new Vector2i(i, j + 1), false);
+                    const r2 = this.full_solve(grid, strategy_list, cancel_sig, true, guesses_left - 1, nx_min_boat_place, false);
                     grid.undo(false);
                     if (r2 === SolveResult.Unsolvable) {
                         c.put_boat(false, true);
-                        return this._make_guess(this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left, new Vector2i(i, j + 1), look_for_multiple));
+                        return this._make_guess(this.full_solve(grid, strategy_list, cancel_sig, false, guesses_left, nx_min_boat_place, look_for_multiple));
                     } else {
                         grid.redo(false);
-                        return SolveResult.SolvedMultiple;
+                        if (r2 === SolveResult.SolvedMultiple || r2 === SolveResult.GaveUp) {
+                            return r2;
+                        } else {
+                            if (grid.get_cell(i, j).has_boat()) {
+                                return r2;
+                            } else {
+                                return SolveResult.SolvedMultiple;
+                            }
+                        }
                     }
                 }
             }
@@ -1109,7 +1140,7 @@ export class BoatRowStrategy extends RowStrategy {
                     for (let j = first_boat; j <= last_boat; j++) {
                         const c = this.grid.get_cell(i, j);
                         if (!c.has_boat()) {
-                            if (c.boat_possible() && SolverModel._maybe_extra_boat_col(this.grid, j)) {
+                            if (SolverModel._infer_boat_possible(this.grid, i, j) && SolverModel._maybe_extra_boat_col(this.grid, j)) {
                                 if (c.put_boat(false, true)) {
                                     any = true;
                                 }
@@ -1130,7 +1161,7 @@ export class BoatRowStrategy extends RowStrategy {
             const c = this.grid.get_cell(i, j);
             if (c.has_boat()) {
                 hint -= 1;
-            } else if (c.boat_possible() && SolverModel._maybe_extra_boat_col(this.grid, j)) {
+            } else if (SolverModel._infer_boat_possible(this.grid, i, j) && SolverModel._maybe_extra_boat_col(this.grid, j)) {
                 count += 1;
             }
         }
@@ -1138,7 +1169,7 @@ export class BoatRowStrategy extends RowStrategy {
             let any = false;
             for (let j = 0; j < this.grid.cols(); j++) {
                 const c = this.grid.get_cell(i, j);
-                if (!c.has_boat() && c.boat_possible() && SolverModel._maybe_extra_boat_col(this.grid, j)) {
+                if (!c.has_boat() && SolverModel._infer_boat_possible(this.grid, i, j) && SolverModel._maybe_extra_boat_col(this.grid, j)) {
                     if (c.put_boat(false, true)) {
                         any = true;
                     }
@@ -1359,10 +1390,12 @@ export class TogetherStrategy extends RowColStrategy {
             l2 += 1;
         }
 
-        for (let b2 = max_solution_left; b2 <= min_solution_right; b2++) {
-            if (this._content(a, b2) === Content.Nothing) {
-                if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
-                    any = true;
+        if (min_solution_right !== -1) {
+            for (let b2 = max_solution_left; b2 <= min_solution_right; b2++) {
+                if (this._content(a, b2) === Content.Nothing) {
+                    if (this._cell(a, Math.floor(b2 / 2)).put_water(this._corner(a, b2), false) > 0) {
+                        any = true;
+                    }
                 }
             }
         }
