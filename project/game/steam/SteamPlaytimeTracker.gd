@@ -17,7 +17,7 @@ func set_tracking(on: bool) -> void:
 	set_process(on)
 
 func flush() -> void:
-	if not SteamManager.enabled or not SteamManager.stats_received:
+	if not SteamManager.enabled:
 		return
 	for stat in stats:
 		var stat_name := stat + "_secs"
