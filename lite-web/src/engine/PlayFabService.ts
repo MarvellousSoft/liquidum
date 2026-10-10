@@ -189,6 +189,13 @@ export function markDailyScoreSubmitted(version: number, storage?: Storage): voi
   }
 }
 
+export function clearDailyScoreSubmitted(version: number, storage?: Storage): void {
+  const store = storage || (typeof localStorage !== "undefined" ? localStorage : null);
+  if (store) {
+    store.removeItem(`liquidum_daily_submitted_${version}`);
+  }
+}
+
 /**
  * Extracts display name matching Godot's PlayfabIntegration.gd:
  * 1. profile.DisplayName if non-empty

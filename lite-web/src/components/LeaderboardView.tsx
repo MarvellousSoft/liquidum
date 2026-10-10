@@ -15,6 +15,7 @@ export interface LeaderboardViewProps {
   isSidePanel?: boolean;
   className?: string;
   refreshTrigger?: number;
+  initialTab?: TabType;
 }
 
 type TabType = "today" | "yesterday";
@@ -30,9 +31,10 @@ export function LeaderboardView({
   isSidePanel = false,
   className = "",
   refreshTrigger = 0,
+  initialTab = "today",
 }: LeaderboardViewProps) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<TabType>("today");
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -85,6 +87,12 @@ export function LeaderboardView({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   useEffect(() => {
     loadLeaderboard();

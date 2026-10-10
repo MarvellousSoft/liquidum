@@ -7,9 +7,10 @@ interface LeaderboardModalProps {
   isOpen: boolean;
   onClose: () => void;
   refreshTrigger?: number;
+  initialTab?: "today" | "yesterday";
 }
 
-export function LeaderboardModal({ isOpen, onClose, refreshTrigger }: LeaderboardModalProps) {
+export function LeaderboardModal({ isOpen, onClose, refreshTrigger, initialTab = "today" }: LeaderboardModalProps) {
   useModalScrollLock(isOpen);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export function LeaderboardModal({ isOpen, onClose, refreshTrigger }: Leaderboar
           onClose={onClose}
           isSidePanel={false}
           refreshTrigger={refreshTrigger}
+          initialTab={initialTab}
         />
       </div>
     </div>

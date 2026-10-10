@@ -42,11 +42,12 @@ import {
 import { playFabService } from './engine/PlayFabService';
 import { lazy, Suspense } from 'preact/compat';
 import { LeaderboardView } from './components/LeaderboardView';
+import { LeaderboardModal } from './components/LeaderboardModal';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })));
 const ShortcutsModal = lazy(() => import('./components/ShortcutsModal').then(m => ({ default: m.ShortcutsModal })));
 const LevelSelectModal = lazy(() => import('./components/LevelSelectModal').then(m => ({ default: m.LevelSelectModal })));
-const LeaderboardModal = lazy(() => import('./components/LeaderboardModal').then(m => ({ default: m.LeaderboardModal })));
 const AccountModal = lazy(() => import('./components/AccountModal').then(m => ({ default: m.AccountModal })));
 const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
 const SteamSyncModal = lazy(() => import('./components/SteamSyncModal').then(m => ({ default: m.SteamSyncModal })));
@@ -171,6 +172,7 @@ export function App() {
 
   const [showLeaderboardModal, setShowLeaderboardModal] = useState<boolean>(false);
   const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState<number>(0);
+  const [leaderboardInitialTab, setLeaderboardInitialTab] = useState<'today' | 'yesterday'>('today');
 
   const [showAccountModal, setShowAccountModal] = useState<boolean>(false);
   const showAccountModalRef = useRef(showAccountModal);
@@ -340,14 +342,23 @@ export function App() {
   const secondsElapsedRef = useRef(secondsElapsed);
   secondsElapsedRef.current = secondsElapsed;
 
-  // Countdown timer for daily puzzle deadline (UTC midnight)
+  // Countdown timer for daily puzzle deadline (UTC midnight) & automatic day rollover
   useEffect(() => {
     setTimeLeftSeconds(getTimeLeftTodaySeconds());
     const interval = setInterval(() => {
       setTimeLeftSeconds(getTimeLeftTodaySeconds());
+
+      // Check if UTC midnight rollover happened
+      const currentToday = get_today_str();
+      if (isDailyModeRef.current && dailyDateRef.current < currentToday) {
+        // If the player is idle, or has already completed the previous day's level:
+        if (!hasStartedRef.current || won) {
+          loadDailyLevel(currentToday);
+        }
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [won]);
 
   // Refresh streak data on mount
   useEffect(() => {
@@ -524,16 +535,31 @@ export function App() {
             if (res.submitted) {
               console.log("PlayFab daily score submitted successfully!");
               setLeaderboardRefreshKey((k) => k + 1);
+              setLeaderboardInitialTab('today');
               setShowLeaderboardModal(true);
             } else if (res.reason === "already_submitted") {
               console.log("Daily score already submitted for this day.");
+              setLeaderboardInitialTab('today');
+              setShowLeaderboardModal(true);
             } else if (res.reason === "older_level") {
               console.log("Older level, skipping score submission.");
+              setLeaderboardInitialTab('yesterday');
+              setShowLeaderboardModal(true);
+            } else {
+              setLeaderboardInitialTab('today');
+              setShowLeaderboardModal(true);
             }
           })
           .catch((err) => {
             console.warn("PlayFab score submission skipped or failed:", err);
+            setLeaderboardInitialTab('today');
+            setShowLeaderboardModal(true);
           });
+      } else {
+        // Solved an archive level or yesterday's level after reset
+        const isYesterday = dailyDateRef.current === shiftDate(todayStr, -1);
+        setLeaderboardInitialTab(isYesterday ? 'yesterday' : 'today');
+        setShowLeaderboardModal(true);
       }
     }
   }, [won]);
@@ -764,7 +790,7 @@ export function App() {
 
   const loadDailyLevel = async (dateStr?: string) => {
     const todayStr = get_today_str();
-    let targetDate = (dateStr && dateStr !== 'today') ? dateStr : (dailyDateRef.current || todayStr);
+    let targetDate = (dateStr && dateStr !== 'today') ? dateStr : todayStr;
     if (targetDate > todayStr) {
       targetDate = todayStr;
     }
@@ -1193,9 +1219,10 @@ export function App() {
     (window as any).isDaily = () => isDailyModeRef.current;
     (window as any).restartLevel = handleRestart;
     (window as any).startPuzzle = () => setHasStarted(true);
-    (window as any).hasStarted = () => hasStartedRef.current;
-    (window as any).openLeaderboard = () => setShowLeaderboardModal(true);
-    (window as any).getTime = () => secondsElapsedRef.current;
+    (window as any).openLeaderboard = (tab?: 'today' | 'yesterday') => {
+      setLeaderboardInitialTab(tab || 'today');
+      setShowLeaderboardModal(true);
+    };
     (window as any).setTool = (tool: Content.Water | Content.Boat | Content.NoWater | Content.NoBoat) => {
       if ((tool === Content.Boat || tool === Content.NoBoat) && !hasBoatsRef.current) {
         return;
@@ -1912,7 +1939,7 @@ export function App() {
           {isDailyMode && (
             <button
               data-testid="btn-leaderboard"
-              onClick={() => setShowLeaderboardModal(true)}
+              onClick={() => { setLeaderboardInitialTab('today'); setShowLeaderboardModal(true); }}
               class="btn-shortcuts lg:hidden"
               title={t('toolbar.leaderboard')}
               aria-label={t('toolbar.leaderboard')}
@@ -2016,7 +2043,7 @@ export function App() {
               <button
                 data-testid="sidebar-btn-leaderboard"
                 class="mobile-sidebar-item"
-                onClick={() => { setShowLeaderboardModal(true); setShowMobileSidebar(false); }}
+                onClick={() => { setLeaderboardInitialTab('today'); setShowLeaderboardModal(true); setShowMobileSidebar(false); }}
               >
                 <span class="mobile-sidebar-icon">🏆</span>
                 <span>{t('toolbar.leaderboard')}</span>
@@ -2084,7 +2111,12 @@ export function App() {
                 <>
                   <button
                     data-testid="btn-leaderboard-win"
-                    onClick={() => setShowLeaderboardModal(true)}
+                    onClick={() => {
+                      const todayStr = get_today_str();
+                      const isYesterday = dailyDateRef.current === shiftDate(todayStr, -1);
+                      setLeaderboardInitialTab(isYesterday ? 'yesterday' : 'today');
+                      setShowLeaderboardModal(true);
+                    }}
                     class="level-btn flex items-center gap-1.5"
                     title={t('toolbar.leaderboard')}
                   >
@@ -2422,91 +2454,94 @@ export function App() {
         </div>
       )}
 
-      <Suspense fallback={
-        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(0,9,36,0.3)] backdrop-blur-[2px] animate-fade-in">
-          <div class="flex flex-col items-center gap-3 p-6 bg-[rgba(0,9,36,0.85)] border border-[rgba(217,255,226,0.3)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            <div class="loading-spinner"></div>
-            <span class="godot-text-outline text-[var(--game-mint)] text-lg">{t('game.loading')}</span>
+      {showLeaderboardModal && (
+        <LeaderboardModal
+          isOpen={showLeaderboardModal}
+          onClose={() => setShowLeaderboardModal(false)}
+          refreshTrigger={leaderboardRefreshKey}
+          initialTab={leaderboardInitialTab}
+        />
+      )}
+
+      <ErrorBoundary>
+        <Suspense fallback={
+          <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(0,9,36,0.3)] backdrop-blur-[2px] animate-fade-in">
+            <div class="flex flex-col items-center gap-3 p-6 bg-[rgba(0,9,36,0.85)] border border-[rgba(217,255,226,0.3)] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+              <div class="loading-spinner"></div>
+              <span class="godot-text-outline text-[var(--game-mint)] text-lg">{t('game.loading')}</span>
+            </div>
           </div>
-        </div>
-      }>
-        {showSettings && (
-          <SettingsModal
-            isOpen={showSettings}
-            onClose={() => setShowSettings(false)}
-            settings={settings}
-            updateSetting={updateSetting}
-          />
-        )}
+        }>
+          {showSettings && (
+            <SettingsModal
+              isOpen={showSettings}
+              onClose={() => setShowSettings(false)}
+              settings={settings}
+              updateSetting={updateSetting}
+            />
+          )}
 
-        {showShortcuts && (
-          <ShortcutsModal
-            isOpen={showShortcuts}
-            onClose={() => setShowShortcuts(false)}
-          />
-        )}
+          {showShortcuts && (
+            <ShortcutsModal
+              isOpen={showShortcuts}
+              onClose={() => setShowShortcuts(false)}
+            />
+          )}
 
-        {showLevelsModal && (
-          <LevelSelectModal
-            isOpen={showLevelsModal}
-            onClose={() => setShowLevelsModal(false)}
-            levelKeys={levelKeys}
-            currentLevelKey={currentLevelKey}
-            isDailyMode={isDailyMode}
-            completedLevels={completedLevels}
-            onSelectLevel={loadLevel}
-            iconUrl={iconUrl}
-          />
-        )}
+          {showLevelsModal && (
+            <LevelSelectModal
+              isOpen={showLevelsModal}
+              onClose={() => setShowLevelsModal(false)}
+              levelKeys={levelKeys}
+              currentLevelKey={currentLevelKey}
+              isDailyMode={isDailyMode}
+              completedLevels={completedLevels}
+              onSelectLevel={loadLevel}
+              iconUrl={iconUrl}
+            />
+          )}
 
-        {showLeaderboardModal && (
-          <LeaderboardModal
-            isOpen={showLeaderboardModal}
-            onClose={() => setShowLeaderboardModal(false)}
-            refreshTrigger={leaderboardRefreshKey}
-          />
-        )}
+          {showAccountModal && (
+            <AccountModal
+              isOpen={showAccountModal}
+              onClose={() => setShowAccountModal(false)}
+              onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
+            />
+          )}
 
-        {showAccountModal && (
-          <AccountModal
-            isOpen={showAccountModal}
-            onClose={() => setShowAccountModal(false)}
-            onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
-          />
-        )}
+          {showHelpModal && (
+            <HelpModal
+              isOpen={showHelpModal}
+              onClose={() => setShowHelpModal(false)}
+              dailyDate={isDailyMode ? dailyDate : undefined}
+              onOpenAccount={() => setShowAccountModal(true)}
+              onOpenControls={() => setShowShortcuts(true)}
+            />
+          )}
 
-        {showHelpModal && (
-          <HelpModal
-            isOpen={showHelpModal}
-            onClose={() => setShowHelpModal(false)}
-            dailyDate={isDailyMode ? dailyDate : undefined}
-            onOpenAccount={() => setShowAccountModal(true)}
-            onOpenControls={() => setShowShortcuts(true)}
-          />
-        )}
-
-        {steamSyncPromptId && (
-          <SteamSyncModal
-            isOpen={Boolean(steamSyncPromptId)}
-            incomingId={steamSyncPromptId}
-            onConfirm={async () => {
-              const targetId = steamSyncPromptId;
-              setSteamSyncPromptId(null);
-              removeQueryParam('id');
-              try {
-                await playFabService.switchAccount(targetId);
-                setLeaderboardRefreshKey((k) => k + 1);
-              } catch (err) {
-                console.error('Failed to switch to Steam account:', err);
-              }
-            }}
-            onCancel={() => {
-              setSteamSyncPromptId(null);
-              removeQueryParam('id');
-            }}
-          />
-        )}
-      </Suspense>
+          {steamSyncPromptId && (
+            <SteamSyncModal
+              isOpen={Boolean(steamSyncPromptId)}
+              incomingId={steamSyncPromptId}
+              onConfirm={async () => {
+                const targetId = steamSyncPromptId;
+                setSteamSyncPromptId(null);
+                removeQueryParam('id');
+                try {
+                  await playFabService.switchAccount(targetId);
+                  setLeaderboardRefreshKey((k) => k + 1);
+                } catch (err) {
+                  console.error('Failed to switch to Steam account:', err);
+                }
+              }}
+              onCancel={() => {
+                setSteamSyncPromptId(null);
+                removeQueryParam('id');
+              }}
+            />
+          )}
+        </Suspense>
+      </ErrorBoundary>
 
       {mobileTooltip && (
         <div class="fixed bottom-24 left-1/2 z-[10000] bg-[rgba(0,9,36,0.95)] border border-[rgba(217,255,226,0.3)] text-[var(--game-mint)] px-4 py-2.5 rounded-xl text-sm shadow-[0_8px_32px_rgba(0,0,0,0.5)] max-w-[90vw] text-center pointer-events-none mobile-tooltip-anim font-game whitespace-pre-wrap lg:hidden">
