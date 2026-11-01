@@ -1786,11 +1786,12 @@ func _liar_status() -> E.HintStatus:
 			st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_col(j)))
 		if hint.boat_alt_text.is_valid_float():
 			st = merge_status(st, _liar_compare(float(hint.boat_alt_text), count_boat_col(j)))
-	for i in n:
-		for j in m:
-			var hint: CellHints = cell_hints[i][j]
-			if hint != null and hint.water_alt_text.is_valid_float():
-				st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_adj(i, j)))
+	if not _rule_variants.has(GridModel.RuleVariant.Pools): # Interaction not implemented
+		for i in n:
+			for j in m:
+				var hint: CellHints = cell_hints[i][j]
+				if hint != null and hint.water_alt_text.is_valid_float():
+					st = merge_status(st, _liar_compare(float(hint.water_alt_text), count_water_adj(i, j)))
 	return st
 
 const DIRS = [Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(0, 1)]

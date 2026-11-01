@@ -580,7 +580,7 @@ func highlight_grid(p_i : int, p_j : int) -> void:
 		# basically removes highlight instead
 		p_i = -1
 		p_j = -1
-	var has_hint: bool = grid_logic != null and grid_logic.get_cell(oi, oj).hints() != null and Profile.get_option("highlight_cellhint")
+	var has_hint: bool = grid_logic != null and grid_logic.get_cell(oi, oj).hints() != null and Profile.get_option("highlight_cellhint") and not grid_logic.rule_variants().has(GridModel.RuleVariant.Pools)
 	for i in rows:
 		for j in columns:
 			var c := get_cell(i, j)
