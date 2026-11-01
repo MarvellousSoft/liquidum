@@ -130,7 +130,7 @@ func section_endless_flavor(section: int) -> int:
 	else:
 		return RandomFlavors.Flavor.get(flavor_name, -1)
 
-const PANDORA_SECTION := 8
+const PANDORA_SECTION := 9
 func is_pandora_section(section: int) -> bool:
 	return section == PANDORA_SECTION
 

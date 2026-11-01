@@ -372,7 +372,7 @@ POOL_RULES,"""Pools"" Rules - Cell hints describe the amount of orthogonaly conn
 QUAD_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água."
 QUAD_SYMBOL_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.\n""Symbols"" Rules - Same symbol hints represent the same value of water cells. Different symbols must represent different values.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes."
 LIAR_POOL_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value.\n""Pools"" Rules - Cell hints describe the amount of orthogonaly connected water cells they are a part of.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte."
-EXTRA_08_01,Liar 1,Liar 1,Liar 1
+EXTRA_08_01,Level,,
 EXTRA_08_02,Level,,
 EXTRA_08_03,Level,,
 EXTRA_08_04,Level,,
@@ -380,6 +380,7 @@ EXTRA_08_05,Level,,
 EXTRA_08_06,Level,,
 EXTRA_08_07,Level,,
 EXTRA_08_08,Level,,
+EXTRA_08_09,Level,,
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
@@ -484,9 +485,20 @@ KNIGHT_BUTTON,Knight,Cavalo,Cavalo
 LIAR_BUTTON,Liar,Mentirosa,Mentirosa
 SYMBOLS_BUTTON,Symbols,Símbolos,Símbolos
 PANDORA_BUTTON,Pandora's Box,Caixa de Pandora,Caixa de Pandora
-SNAKE_TOOLTIP,Snake levels,Níveis de cobra,Níveis de cobra
-SUDOKU_TOOLTIP,Sudoku levels,Níveis de sudoku,Níveis de sudoku
-KNIGHT_TOOLTIP,Knight levels,Níveis de cavalo,Níveis de cavalo
-LIAR_TOOLTIP,Liar levels,Níveis de mentirosa,Níveis de mentirosa
-SYMBOLS_TOOLTIP,Symbols levels,Níveis de símbolos,Níveis de símbolos
-PANDORA_TOOLTIP,Pandora's Box levels,Níveis de caixa de Pandora,Níveis de caixa de Pandora
+SNAKE_TOOLTIP,"Levels with ""Snake"" rules","Níveis com regra ""Cobra""","Níveis com regra ""Cobra"""
+SUDOKU_TOOLTIP,"Levels with ""Sudoku"" rules","Níveis com regra ""Sudoku""","Níveis com regra ""Sudoku"""
+KNIGHT_TOOLTIP,"Levels with ""Knight"" rules","Níveis com regra ""Cavalo""","Níveis com regra ""Cavalo"""
+LIAR_TOOLTIP,"Levels with ""Liar"" rules","Níveis com regra ""Mentirosa""","Níveis com regra ""Mentirosa"""
+SYMBOLS_TOOLTIP,"Levels with ""Symbols"" rules","Níveis com regra ""Símbolos""","Níveis com regra ""Símbolos"""
+PANDORA_TOOLTIP,Levels with random rules,Niveis com regras aleatórias,Niveis com regras aleatórias
+EXTRA_09_01,Level,,
+EXTRA_09_02,Level,,
+EXTRA_09_03,Level,,
+EXTRA_09_04,Level,,
+EXTRA_09_05,Level,,
+EXTRA_09_06,Level,,
+EXTRA_09_07,Level,,
+EXTRA_09_08,Level,,
+EXTRA_09_09,Level,,
+EXTRA8_NAME,Jaunting Journey,Percurso Perspicaz,Percurso Perspicaz
+EXTRA9_NAME,Virtuous Voyage,Viagem Virtuosa,Viagem Virtuosa
