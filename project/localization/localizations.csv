@@ -361,7 +361,7 @@ EXTRA_07_05,USS Pickering,USS Pickering,USS Pickering
 EXTRA_07_06,Revonoc,Revonoc,Revonoc
 EXTRA_07_07,USS Proteus,USS Proteus,USS Proteus
 EXTRA_07_08,Witchcraft,Witchcraft,Witchcraft
-DLC5_NAME,PANDORA,PANDORA,PANDORA
+DLC5_NAME,Pandora's Box,Caixa de Pandora,Caixa de Pandora
 SUDOKU_RULES,"""Sudoku"" Rules - Each row, column and 3x3 subgrid has a unique number of water from 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrade 3x3 tem um valor único de água de 1-9","Regra ""Sudoku"" - Cada linha, coluna e subgrade 3x3 tem um valor único de água de 1-9"
 LIAR_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado."
 SNAKE_RULES,"""Snake"" Rules - Water cells form a single continuous snake. The snake may not touch itself orthogonally.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente."
@@ -372,15 +372,15 @@ POOL_RULES,"""Pools"" Rules - Cell hints describe the amount of orthogonaly conn
 QUAD_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água."
 QUAD_SYMBOL_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.\n""Symbols"" Rules - Same symbol hints represent the same value of water cells. Different symbols must represent different values.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes."
 LIAR_POOL_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value.\n""Pools"" Rules - Cell hints describe the amount of orthogonaly connected water cells they are a part of.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte."
-EXTRA_08_01,Level,,
-EXTRA_08_02,Level,,
-EXTRA_08_03,Level,,
-EXTRA_08_04,Level,,
-EXTRA_08_05,Level,,
-EXTRA_08_06,Level,,
-EXTRA_08_07,Level,,
-EXTRA_08_08,Level,,
-EXTRA_08_09,Level,,
+EXTRA_08_01,Poseidon,Poseidon,Poseidon
+EXTRA_08_02,Hermes,Hermes,Hermes
+EXTRA_08_03,Python,Píton,Píton
+EXTRA_08_04,Alpha,Alfa,Alfa
+EXTRA_08_05,Odysseus,Odisseu,Odisseu
+EXTRA_08_06,Pythagoras,Pitágoras,Pitágoras
+EXTRA_08_07,Pegasus,Pégaso,Pégaso
+EXTRA_08_08,Apollo,Apolo,Apolo
+EXTRA_08_09,Chimera,Quimera,Quimera
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
@@ -491,14 +491,13 @@ KNIGHT_TOOLTIP,"Levels with ""Knight"" rules","Níveis com regra ""Cavalo""","N�
 LIAR_TOOLTIP,"Levels with ""Liar"" rules","Níveis com regra ""Mentirosa""","Níveis com regra ""Mentirosa"""
 SYMBOLS_TOOLTIP,"Levels with ""Symbols"" rules","Níveis com regra ""Símbolos""","Níveis com regra ""Símbolos"""
 PANDORA_TOOLTIP,Levels with random rules,Niveis com regras aleatórias,Niveis com regras aleatórias
-EXTRA_09_01,Level,,
-EXTRA_09_02,Level,,
-EXTRA_09_03,Level,,
-EXTRA_09_04,Level,,
-EXTRA_09_05,Level,,
-EXTRA_09_06,Level,,
-EXTRA_09_07,Level,,
-EXTRA_09_08,Level,,
-EXTRA_09_09,Level,,
-EXTRA8_NAME,Jaunting Journey,Percurso Perspicaz,Percurso Perspicaz
-EXTRA9_NAME,Virtuous Voyage,Viagem Virtuosa,Viagem Virtuosa
+EXTRA_09_01,Triton,Tritão,Tritão
+EXTRA_09_02,Sisyphus,Sísifo,Sísifo
+EXTRA_09_03,Ladon,Ládon,Ládon
+EXTRA_09_04,Omega,Ômega,Ômega
+EXTRA_09_05,Trojan Horse,Cavalo de Troia,Cavalo de Troia
+EXTRA_09_06,Chiron,Quíron,Quíron
+EXTRA_09_07,Calliope,Calíope,Calíope
+EXTRA_09_08,Scylla & Charybdis,Cila e Caríbdis,Cila e Caríbdis
+EXTRA8_NAME,Olympian Odyssey,Odisseia Olímpica,Odisseia Olímpica
+EXTRA9_NAME,Pandora's Passage,Passagem de Pandora,Passagem de Pandora
