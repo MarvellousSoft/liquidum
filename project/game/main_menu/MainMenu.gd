@@ -272,4 +272,3 @@ func _on_web_button_pressed() -> void:
 	if key != "":
 		url += "?id=" + key.uri_encode()
 	OS.shell_open(url)
-

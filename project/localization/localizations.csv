@@ -373,11 +373,11 @@ QUAD_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water
 QUAD_SYMBOL_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.\n""Symbols"" Rules - Same symbol hints represent the same value of water cells. Different symbols must represent different values.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes."
 LIAR_POOL_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value.\n""Pools"" Rules - Cell hints describe the amount of orthogonaly connected water cells they are a part of.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte."
 EXTRA_08_01,Poseidon,Poseidon,Poseidon
-EXTRA_08_02,Hermes,Hermes,Hermes
-EXTRA_08_03,Python,Píton,Píton
-EXTRA_08_04,Alpha,Alfa,Alfa
-EXTRA_08_05,Odysseus,Odisseu,Odisseu
-EXTRA_08_06,Euclid,Euclides,Euclides
+EXTRA_08_02,Euclid,Euclides,Euclides
+EXTRA_08_03,Hermes,Hermes,Hermes
+EXTRA_08_04,Python,Píton,Píton
+EXTRA_08_05,Alpha,Alfa,Alfa
+EXTRA_08_06,Odysseus,Odisseu,Odisseu
 EXTRA_08_07,Pegasus,Pégaso,Pégaso
 EXTRA_08_08,Apollo,Apolo,Apolo
 EXTRA_08_09,Chimera,Quimera,Quimera
