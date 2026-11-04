@@ -139,10 +139,8 @@ func set_alt_text(new_text : String) -> void:
 	if alt_text != "":
 		ToggleVisibility.set_pressed(true)
 		ToggleVisibility.hide()
-		Number.modulate = Color(0.7, 0.7, 1.0)
 	else:
 		ToggleVisibility.show()
-		Number.modulate = Color(1, 1, 1)
 	update_label()
 
 
