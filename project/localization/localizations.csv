@@ -372,6 +372,9 @@ POOL_RULES,"""Pools"" Rules - Cell hints describe the amount of orthogonaly conn
 QUAD_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água."
 QUAD_SYMBOL_RULES,"""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.\n""Symbols"" Rules - Same symbol hints represent the same value of water cells. Different symbols must represent different values.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes.","Regra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.\nRegra ""Símbolos"" - Dicas com o mesmo símbolo representam o mesmo valor de células de água. Símbolos diferentes representam valores diferentes."
 LIAR_POOL_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value.\n""Pools"" Rules - Cell hints describe the amount of orthogonaly connected water cells they are a part of.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Piscinas"" - As dicas nas células indicam a quantidade de células de água conectadas ortogonalmente das quais elas fazem parte."
+LIAR_QUAD_RULES,"""Liar"" Rules - Each clue is either one greater or one less than the actual value.\n""Quad"" Rules - Every single 2x2 subgrid must have at least 1 water cell.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água.","Regra ""Mentirosa"" - Cada dica é na verdade uma unidade maior ou uma unidade menor que o valor mostrado.\nRegra ""Quad"" - Cada subgrid 2x2 deve conter pelo menos uma célula de água."
+SNAKE_MIRROR_RULES,"""Snake"" Rules - Water cells form a single continuous snake. The snake may not touch itself orthogonally.\n""Mirrors"" Rules - All water and boat cells are horizontally mirrored in the grid.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.\nRegra ""Espelho"" - Todos espaços com água ou barcos estão espelhados horizontalmente na grade.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.\nRegra ""Espelho"" - Todos espaços com água ou barcos estão espelhados horizontalmente na grade."
+SNAKE_IMPOSTOR_RULES,"""Snake"" Rules - Water cells form a single continuous snake. The snake may not touch itself orthogonally.\n""Impostor"" Rules - Exactly one given number hint is a lie.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.\nRegra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira.","Regra ""Cobra"" - As células de água formam uma única cobra contínua. A cobra não pode tocar em si mesma ortogonalmente.\nRegra ""Impostor"" - Exatamente uma das dicas fornecidas é uma mentira."
 EXTRA_08_01,Poseidon,Poseidon,Poseidon
 EXTRA_08_02,Euclid,Euclides,Euclides
 EXTRA_08_03,Hermes,Hermes,Hermes
@@ -381,6 +384,7 @@ EXTRA_08_06,Odysseus,Odisseu,Odisseu
 EXTRA_08_07,Pegasus,Pégaso,Pégaso
 EXTRA_08_08,Apollo,Apolo,Apolo
 EXTRA_08_09,Chimera,Quimera,Quimera
+EXTRA_08_10,Proteus,Proteu,Proteu
 HARD_LEVEL,Hard level,Nível difícil,Nível difícil
 ONGOING,In progress,Em progresso,Em progresso
 DLC_BUY,Purchase,Comprar,Comprar
@@ -500,5 +504,6 @@ EXTRA_09_06,Pythagoras,Pitágoras,Pitágoras
 EXTRA_09_07,Chiron,Quíron,Quíron
 EXTRA_09_08,Calliope,Calíope,Calíope
 EXTRA_09_09,Scylla & Charybdis,Cila e Caríbdis,Cila e Caríbdis
+EXTRA_09_10,Laocoön,Laocoonte,Laocoonte
 EXTRA8_NAME,Olympian Odyssey,Odisseia Olímpica,Odisseia Olímpica
 EXTRA9_NAME,Pandora's Passage,Passagem de Pandora,Passagem de Pandora
