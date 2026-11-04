@@ -2,6 +2,7 @@ class_name PandoraHub
 extends RandomHub
 
 const PANDORA := "pandora"
+const SPEEDRUN_MAX_MINUTES := 20
 
 enum Mode {
 	Snake = 0,
@@ -153,6 +154,11 @@ func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
 	UserData.save()
 	var stats := StatsTracker.instance()
 	stats.increment_random_any()
+	if data.difficulty == Mode.Pandora and data.marathon_total == 10 and data.marathon_left == 0:
+		if info.total_marathon_mistakes == 0:
+			await stats.unlock_flawless_pandora_marathon()
+		if info.total_marathon_mistakes <= 5 and info.time_secs <= SPEEDRUN_MAX_MINUTES * 60:
+			await stats.unlock_fast_pandora_marathon()
 	if data.marathon_left == 0 and shows_marathon_leaderboards(data.marathon_total, data.manually_seeded):
 		await RecurringMarathon.upload_leaderboard(marathon_leaderboard(data.marathon_total, data.difficulty), info, true)
 		if SteamManager.enabled:

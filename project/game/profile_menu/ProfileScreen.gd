@@ -24,6 +24,8 @@ func select_profile(profile: String) -> void:
 	for child in %Profiles.get_children():
 		child.set_selected(child.profile_name == profile)
 	FileManager.change_current_profile(profile)
+	await StatsTracker.instance().update_campaign_stats()
+	await UserData.current().save_stats()
 	_on_back_button_pressed()
 
 

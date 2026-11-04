@@ -29,16 +29,48 @@ func set_random_levels(completed_count: Array[int]) -> void:
 	if any:
 		flushNewAchievements()
 
+func set_pandora_levels(completed_count: Array[int]) -> void:
+	var any := false
+	var tot := 0
+	var each := true
+	for i in PandoraHub.PANDORA_FLAVORS.size():
+		var c: int = completed_count[i] if i < completed_count.size() else 0
+		if c < 1:
+			each = false
+		tot += c
+		var flavor_name: String = RandomFlavors.Flavor.find_key(PandoraHub.PANDORA_FLAVORS[i]).to_lower()
+		var stat_name := "pandora_%s_levels" % [flavor_name]
+		SteamManager.steam.setStatInt(stat_name, c)
+	SteamManager.steam.setStatInt("pandora_all_levels", tot)
+	if each and _achieve("pandora_each", false):
+		any = true
+	if any:
+		flushNewAchievements()
+
 func set_endless_completed(completed_count: Array[int]) -> void:
 	var any := false
 	var total := 0
 	for i in completed_count.size():
 		var stat_name := "endless_%02d_levels" % [i + 1]
-		SteamManager.steam.setStatInt(stat_name, completed_count[i])
+		if i == 2:
+			if _set_stat_with_goal(stat_name, completed_count[i], 3, "endless_03_3", 1):
+				any = true
+		else:
+			SteamManager.steam.setStatInt(stat_name, completed_count[i])
 		total += completed_count[i]
 	if total >= 1 and _achieve("endless_1", false):
 		any = true
 	if _set_stat_with_goal("endless_levels", total, 10, "endless_10", 5):
+		any = true
+	var secrets_total := 0
+	var secrets_each := true
+	for sec_idx in [4, 5, 6]:
+		var c: int = completed_count[sec_idx] if sec_idx < completed_count.size() else 0
+		if c < 1:
+			secrets_each = false
+		secrets_total += c
+	SteamManager.steam.setStatInt("endless_secrets_levels", secrets_total)
+	if secrets_each and _achieve("endless_secrets_each", false):
 		any = true
 	if any:
 		flushNewAchievements()
@@ -85,9 +117,27 @@ func increment_recurring_good(type: RecurringMarathon.Type) -> void:
 func increment_recurring_started(type: RecurringMarathon.Type) -> void:
 	_increment("%s_started" % RecurringMarathon.type_name(type))
 
-func set_endless_good(count: int) -> void:
-	var l_name := "endless_good_levels"
-	if _set_stat_with_goal(l_name, count, 100, "endless_100", 10):
+func set_endless_good(good_count: Array[int]) -> void:
+	var any := false
+	var total := 0
+	for g in good_count:
+		total += g
+	if _set_stat_with_goal("endless_good_levels", total, 100, "endless_100", 10):
+		any = true
+	var ff_good: int = good_count[2] if good_count.size() > 2 else 0
+	if _set_stat_with_goal("endless_03_good_levels", ff_good, 20, "endless_03_20", 5):
+		any = true
+	var secrets_good := 0
+	for sec_idx in [4, 5, 6]:
+		var c: int = good_count[sec_idx] if sec_idx < good_count.size() else 0
+		secrets_good += c
+	if _set_stat_with_goal("endless_secrets_good_levels", secrets_good, 50, "endless_secrets_50", 10):
+		any = true
+	var p_idx := ExtraLevelLister.pandora_section() - 1
+	var pandora_good: int = good_count[p_idx] if p_idx >= 0 and p_idx < good_count.size() else 0
+	if _set_stat_with_goal("pandora_good_levels", pandora_good, 50, "pandora_50", 10):
+		any = true
+	if any:
 		flushNewAchievements()
 
 func increment_insane_good() -> void:
@@ -121,12 +171,16 @@ func unlock_recurring_no_mistakes(type: RecurringMarathon.Type) -> void:
 # Indicates progress every checkpoint values
 func _set_stat_with_goal(stat: String, val: int, goal: int, achievement: String, checkpoint: int) -> bool:
 	var prev: int = SteamManager.steam.getStatInt(stat)
+	var any := false
 	if prev != val:
 		SteamManager.steam.setStatInt(stat, val)
 		if val > prev and val < goal and (prev / checkpoint) != (val / checkpoint):
 			SteamManager.steam.indicateAchievementProgress(achievement, val, goal)
-		return prev < goal and val >= goal
-	return false
+		if prev < goal and val >= goal:
+			any = true
+	if val >= goal and _achieve(achievement, false):
+		any = true
+	return any
 
 func update_campaign_stats() -> void:
 	var any := false
@@ -156,11 +210,8 @@ func update_campaign_stats() -> void:
 		var completed := ExtraLevelLister.count_completed_section_levels(extra_section)
 		var section_levels := ExtraLevelLister.count_section_levels(extra_section)
 		var s_name := "extra_%02d_levels" % [extra_section]
-		if ExtraLevelLister.is_free(extra_section):
-			if _set_stat_with_goal(s_name, completed, section_levels, "extra_%02d_complete", section_levels / 2):
-				any = true
-		else:
-			SteamManager.steam.setStatInt(s_name, completed)
+		if _set_stat_with_goal(s_name, completed, section_levels, "extra_%02d_complete" % [extra_section], section_levels / 2):
+			any = true
 		extra_section += 1
 	if any:
 		flushNewAchievements()
@@ -170,3 +221,9 @@ func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
 
 func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
 	_achieve("marathon_%s_10_speedrun" % RandomHub.Difficulty.find_key(dif).to_lower())
+
+func unlock_flawless_pandora_marathon() -> void:
+	_achieve("marathon_pandora_10_no_mistakes")
+
+func unlock_fast_pandora_marathon() -> void:
+	_achieve("marathon_pandora_10_speedrun")

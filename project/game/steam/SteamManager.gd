@@ -46,6 +46,7 @@ func _ready() -> void:
 			SteamManager.steam.storeStats()
 			await SteamManager.steam.user_stats_stored
 		await StatsTracker.instance().update_campaign_stats()
+		await UserData.current().save_stats()
 
 func store_stats() -> void:
 	if not SteamManager.enabled:

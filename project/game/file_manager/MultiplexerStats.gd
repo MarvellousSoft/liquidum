@@ -10,13 +10,17 @@ func set_random_levels(completed_count: Array[int]) -> void:
 	for impl in impls:
 		await impl.set_random_levels(completed_count)
 
+func set_pandora_levels(completed_count: Array[int]) -> void:
+	for impl in impls:
+		await impl.set_pandora_levels(completed_count)
+
 func set_endless_completed(completed_count: Array[int]) -> void:
 	for impl in impls:
 		await impl.set_endless_completed(completed_count)
 
-func set_endless_good(count: int) -> void:
+func set_endless_good(good_count: Array[int]) -> void:
 	for impl in impls:
-		await impl.set_endless_good(count)
+		await impl.set_endless_good(good_count)
 
 
 func set_recurring_streak(type: RecurringMarathon.Type, streak: int, best_streak: int) -> void:
@@ -62,3 +66,11 @@ func unlock_flawless_marathon(dif: RandomHub.Difficulty) -> void:
 func unlock_fast_marathon(dif: RandomHub.Difficulty) -> void:
 	for impl in impls:
 		await impl.unlock_fast_marathon(dif)
+
+func unlock_flawless_pandora_marathon() -> void:
+	for impl in impls:
+		await impl.unlock_flawless_pandora_marathon()
+
+func unlock_fast_pandora_marathon() -> void:
+	for impl in impls:
+		await impl.unlock_fast_pandora_marathon()

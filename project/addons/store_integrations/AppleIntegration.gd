@@ -53,6 +53,7 @@ func _init() -> void:
 func _ready() -> void:
 	await _try_authenticate()
 	await StatsTracker.instance().update_campaign_stats()
+	await UserData.current().save_stats()
 	print("Apple ready")
 
 func authenticated() -> bool:
