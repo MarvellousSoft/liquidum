@@ -2366,6 +2366,41 @@ class SymbolsStrategy extends Strategy:
 	func description() -> String:
 		return "If some row/column/cell needs to be fully filled or empty"
 
+class QuadStrategy extends Strategy:
+	func apply_any() -> bool:
+		if not grid.rule_variants().has(GridModel.RuleVariant.Quad):
+			return false
+		var any := false
+		for i in grid.rows() - 1:
+			for j in grid.cols() - 1:
+				var stop := false
+				var can_add : Array[Vector2i] = []
+				for di in 2:
+					for dj in 2:
+						var c := grid.get_cell(i+di, j+dj)
+						if c.water_count() > 0 or c.cell_type() != E.CellType.Single:
+							stop = true
+						elif c.nothing_full():
+							can_add.append(Vector2i(i+di,j+dj))
+				if stop or can_add.is_empty():
+					continue
+				if can_add.size() == 1:
+					if grid.get_cellv(can_add[0]).put_water(E.Corner.TopLeft, false):
+						any = true
+				elif can_add.size() == 2:
+					if can_add[1] == can_add[0] + Vector2i(0, 1) and not grid.get_cellv(can_add[0]).wall_at(E.Walls.Right):
+						if grid.get_cellv(can_add[0]).put_water(E.Corner.TopLeft, false):
+							any = true
+				elif can_add.size() == 4:
+					var c1 := grid.get_cellv(can_add[0])
+					var c4 := grid.get_cellv(can_add[3])
+					if not c1.wall_at(E.Walls.Right) and not c1.wall_at(E.Walls.Bottom) and not c4.wall_at(E.Walls.Top) and not c4.wall_at(E.Walls.Left):
+						if c4.put_water(E.Corner.TopLeft, false):
+							any = true
+		return any
+	func description() -> String:
+		return "Puts water if only one position possible"
+
 # Returns (1 if any change, waters_added)
 static func _try_to_add_mirrored(grid: GridModel, ij: Vector2i, corner: E.Corner, content: GridImpl.Content, undo_if_failed: bool) -> Vector2:
 	var added := Vector2(0, 0)
@@ -2572,6 +2607,7 @@ static var STRATEGY_LIST := {
 	Snake = func(grid): return SnakeStrategy.new(grid),
 	Mirrors = func(grid): return MirrorsStrategy.new(grid),
 	MirrorsAdvancedRow = func(grid): return MirrorsAdvancedRowStrategy.new(grid),
+	Quad = func(grid): return QuadStrategy.new(grid),
 }
 
 # Get a place in the solution that must have nowater and put a block on it
