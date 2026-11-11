@@ -85,6 +85,22 @@ func load_tutorial(tut: String) -> PackedScene:
 			return load("res://database/tutorials/CellHintsSeparate.tscn")
 		"cellhints_unk":
 			return load("res://database/tutorials/CellHintsUnknown.tscn")
+		"pools":
+			return load("res://database/tutorials/Pools.tscn")
+		"quad":
+			return load("res://database/tutorials/Quad.tscn")
+		"liar":
+			return load("res://database/tutorials/Liar.tscn")
+		"snake":
+			return load("res://database/tutorials/Snake.tscn")
+		"symbols":
+			return load("res://database/tutorials/Symbols.tscn")
+		"impostor":
+			return load("res://database/tutorials/Impostor.tscn")
+		"knight":
+			return load("res://database/tutorials/Knight.tscn")
+		"sudoku":
+			return load("res://database/tutorials/Sudoku.tscn")
 	return null
 
 signal dev_mode_toggled(status : bool)

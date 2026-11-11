@@ -466,6 +466,14 @@ TUT_CELLHINTS2,Cellhints 2,Dicas de célula 2,Dicas de célula 2
 TUT_CELLHINTS_TOG,Cellhints & Together,Dicas de célula juntas,Dicas de célula Juntas
 TUT_CELLHINTS_SEP,Cellhints & Separate,Dicas de célula separadas,Dicas de célula separadas
 TUT_CELLHINTS_UNK,Cellhints & Unknown,Dicas de célula desconhecidas,Dicas de célula desconhecidas
+TUT_POOLS,Pools,Piscinas,Piscinas
+TUT_QUAD,Quad,Quad,Quad
+TUT_LIAR,Liar,Mentirosa,Mentirosa
+TUT_SNAKE,Snake,Cobra,Cobra
+TUT_SYMBOLS,Symbols,Símbolos,Símbolos
+TUT_IMPOSTOR,Impostor,Impostor,Impostor
+TUT_KNIGHT,Knight,Cavalo,Cavalo
+TUT_SUDOKU,Sudoku,Sudoku,Sudoku
 EDIT_ALT_TEXT_TITLE,Edit Alt Text,Editar texto alternativo,Editar texto alternativo
 EDIT_ALT_TEXT_EXPLANATION,This text will show up instead of the actual hint. It may be any string. Set it as empty to clear.,Esse texto vai aparecer ao invés da dica. Pode ser qualquer texto. Deixe vazio para limpar.,Esse texto vai aparecer ao invés da dica. Pode ser qualquer texto. Deixe vazio para limpar.
 CONFIRM,Confirm,Confirmar,Confirmar

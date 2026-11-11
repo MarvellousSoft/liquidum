@@ -45,10 +45,13 @@ func setup():
 			var data := FileManager.load_campaign_level_data(section_number, level_number)
 			if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 					tutorials.append(data.tutorial)
-	for section_number in range(1, ExtraLevelLister.count_all_game_sections(false)):
-		for level_number in range(1, ExtraLevelLister.get_max_unlocked_level(section_number)):
+	for section_number in range(1, ExtraLevelLister.count_all_game_sections(false) + 1):
+		# A paid pack's rules must not be listed to someone who doesn't own it
+		if ExtraLevelLister.section_disabled(section_number):
+			continue
+		for level_number in range(1, ExtraLevelLister.get_max_unlocked_level(section_number) + 1):
 			var data = ExtraLevelLister.get_level_data(section_number, level_number)
-			if not data.tutorial.is_empty():
+			if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
 				tutorials.append(data.tutorial)
 				
 	idx = tutorials.size() - 1
@@ -63,7 +66,15 @@ func show_level_tutorial(section: int, level: int, is_extra := false) -> void:
 	else:
 		data = FileManager.load_campaign_level_data(section, level)
 	if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
-		idx = maxi(tutorials.find(data.tutorial), 0)
+		var at := tutorials.find(data.tutorial)
+		if at == -1:
+			# A trial level of a pack that isn't owned: its own rule stays
+			# reachable from inside it, it just isn't listed with the rest
+			tutorials.append(data.tutorial)
+			at = tutorials.size() - 1
+			%Back.visible = tutorials.size() > 1
+			%Forward.visible = tutorials.size() > 1
+		idx = at
 		update_tutorial()
 
 func enable():
