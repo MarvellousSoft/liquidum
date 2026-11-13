@@ -1,44 +1,44 @@
 [gd_scene format=3 uid="uid://caje3kq6rlnjv"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://da1m208hhrnvo" path="res://database/tutorials/Tutorial.gd" id="2_script"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_water"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="4_empty"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_check"]
 
-[node name="Sudoku" type="MarginContainer"]
+[node name="Sudoku" type="MarginContainer" unique_id=1211142685]
 theme = ExtResource("1_theme")
 script = ExtResource("2_script")
 tutorial_name = "TUT_SUDOKU"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=390905509]
 layout_mode = 2
 theme_override_constants/separation = 60
 
-[node name="Example1" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Example1" type="HBoxContainer" parent="VBoxContainer" unique_id=1111129181]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Board" type="VBoxContainer" parent="VBoxContainer/Example1"]
+[node name="Board" type="VBoxContainer" parent="VBoxContainer/Example1" unique_id=801537595]
 layout_mode = 2
-theme_override_constants/separation = 14
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/separation = 14
 
-[node name="ColHints" type="HBoxContainer" parent="VBoxContainer/Example1/Board"]
+[node name="ColHints" type="HBoxContainer" parent="VBoxContainer/Example1/Board" unique_id=742842108]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Corner" type="Control" parent="VBoxContainer/Example1/Board/ColHints"]
+[node name="Corner" type="Control" parent="VBoxContainer/Example1/Board/ColHints" unique_id=1371161771]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Stack1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints"]
+[node name="Stack1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints" unique_id=1168749232]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col1" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1"]
+[node name="Col1" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1" unique_id=1363952470]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -48,7 +48,7 @@ text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col2" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1"]
+[node name="Col2" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1" unique_id=2020716079]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -58,7 +58,7 @@ text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col3" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1"]
+[node name="Col3" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack1" unique_id=1028646371]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -68,11 +68,11 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Stack2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints"]
+[node name="Stack2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints" unique_id=783850987]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col4" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2"]
+[node name="Col4" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2" unique_id=1959517246]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -82,7 +82,7 @@ text = "9"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col5" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2"]
+[node name="Col5" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2" unique_id=1903907114]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -92,7 +92,7 @@ text = "8"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col6" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2"]
+[node name="Col6" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack2" unique_id=306714354]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -102,11 +102,11 @@ text = "7"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Stack3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints"]
+[node name="Stack3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/ColHints" unique_id=57592904]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col7" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3"]
+[node name="Col7" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3" unique_id=336953079]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -116,7 +116,7 @@ text = "4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col8" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3"]
+[node name="Col8" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3" unique_id=601551301]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -126,7 +126,7 @@ text = "5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Col9" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3"]
+[node name="Col9" type="Label" parent="VBoxContainer/Example1/Board/ColHints/Stack3" unique_id=876428765]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -136,15 +136,15 @@ text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Band1" type="HBoxContainer" parent="VBoxContainer/Example1/Board"]
+[node name="Band1" type="HBoxContainer" parent="VBoxContainer/Example1/Board" unique_id=620426212]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1" unique_id=601577704]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints"]
+[node name="Row1" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints" unique_id=2091158681]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -154,7 +154,7 @@ text = "7"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row2" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints"]
+[node name="Row2" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints" unique_id=199340066]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -164,7 +164,7 @@ text = "5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row3" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints"]
+[node name="Row3" type="Label" parent="VBoxContainer/Example1/Board/Band1/RowHints" unique_id=2038771605]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -174,27 +174,59 @@ text = "8"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Block11" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1"]
+[node name="Block11" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1" unique_id=448746545]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11" unique_id=13888655]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1" unique_id=1137243725]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1" unique_id=961928575]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1" unique_id=351998415]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11" unique_id=1392461134]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2" unique_id=2135270081]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2" unique_id=316915489]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2/Cell2" unique_id=1751257695]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -203,83 +235,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "5"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2" unique_id=1797197656]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11" unique_id=1336143573]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3" unique_id=251241395]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3" unique_id=459469534]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3" unique_id=390777595]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block11"]
+[node name="Block12" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1" unique_id=1473554112]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Block12" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12" unique_id=1702130229]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1" unique_id=1292557943]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1" unique_id=929591629]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1" unique_id=334235312]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12" unique_id=1171826911]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2" unique_id=1319569254]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2" unique_id=76420017]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2/Cell2" unique_id=782190964]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -288,83 +324,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "9"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2" unique_id=1285634111]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12" unique_id=1656999994]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3" unique_id=1385890180]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3" unique_id=738893056]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3" unique_id=506336411]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block12"]
+[node name="Block13" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1" unique_id=1466409826]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block13" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band1"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13" unique_id=687618442]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1" unique_id=1947063076]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1" unique_id=1903030316]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1" unique_id=1811262735]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13" unique_id=277900766]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2" unique_id=1389720147]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2" unique_id=24421757]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2/Cell2" unique_id=646132588]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -373,71 +413,43 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "6"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2" unique_id=1847525839]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13" unique_id=1811959633]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3" unique_id=864977725]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band1/Block13"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3" unique_id=865880637]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3" unique_id=1608143132]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band1/Block13/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Band2" type="HBoxContainer" parent="VBoxContainer/Example1/Board"]
+[node name="Band2" type="HBoxContainer" parent="VBoxContainer/Example1/Board" unique_id=941708933]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2" unique_id=752643834]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row4" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints"]
+[node name="Row4" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints" unique_id=173595259]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -447,7 +459,7 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row5" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints"]
+[node name="Row5" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints" unique_id=455767223]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -457,7 +469,7 @@ text = "4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row6" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints"]
+[node name="Row6" type="Label" parent="VBoxContainer/Example1/Board/Band2/RowHints" unique_id=2079468299]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -467,27 +479,59 @@ text = "9"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Block21" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2"]
+[node name="Block21" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2" unique_id=899240468]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21" unique_id=1207047395]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1" unique_id=607423002]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1" unique_id=2011421794]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1" unique_id=389679086]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21" unique_id=367976664]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2" unique_id=1034101526]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2" unique_id=550027372]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2/Cell2" unique_id=1760075664]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -496,83 +540,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "4"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2" unique_id=1780489379]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row1"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21" unique_id=2141400309]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3" unique_id=1868509782]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3" unique_id=792219960]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3" unique_id=1177866445]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Block22" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2" unique_id=952153615]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22" unique_id=554239310]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1" unique_id=1852964061]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1" unique_id=359513443]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1" unique_id=1315910166]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block21"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22" unique_id=1997736470]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2" unique_id=81497642]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2" unique_id=1389366090]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block21/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block22" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1/Cell1"]
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2/Cell2" unique_id=266418619]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -581,83 +629,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "7"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2" unique_id=227159585]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22" unique_id=1620520575]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3" unique_id=1890455268]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3" unique_id=1210098699]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3" unique_id=539762296]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Block23" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2" unique_id=2098427105]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23" unique_id=1893952563]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1" unique_id=1310603013]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1" unique_id=1654507244]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block23" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band2"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1" unique_id=913282062]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1/Cell1"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23" unique_id=1514770107]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2" unique_id=233534848]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2" unique_id=1516318547]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2/Cell2" unique_id=368428269]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -666,71 +718,43 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "3"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2" unique_id=559499176]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23" unique_id=1855260447]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band2/Block23"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3" unique_id=1900670975]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3" unique_id=514969852]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band2/Block23/Row3" unique_id=1585259123]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Band3" type="HBoxContainer" parent="VBoxContainer/Example1/Board"]
+[node name="Band3" type="HBoxContainer" parent="VBoxContainer/Example1/Board" unique_id=2134838348]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3" unique_id=1898336077]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row7" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints"]
+[node name="Row7" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints" unique_id=313262353]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -740,7 +764,7 @@ text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row8" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints"]
+[node name="Row8" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints" unique_id=2103612599]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -750,7 +774,7 @@ text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Row9" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints"]
+[node name="Row9" type="Label" parent="VBoxContainer/Example1/Board/Band3/RowHints" unique_id=2065536099]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -760,27 +784,59 @@ text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Block31" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3"]
+[node name="Block31" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3" unique_id=897040045]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31" unique_id=1735296623]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1" unique_id=547557879]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1" unique_id=356967159]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1" unique_id=1763006601]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31" unique_id=1805189145]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2" unique_id=2104723643]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2" unique_id=1353386800]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2/Cell2" unique_id=1607883091]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -789,83 +845,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "1"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2" unique_id=1057106582]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31" unique_id=1318424400]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3" unique_id=391517595]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3" unique_id=493403473]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3" unique_id=284574412]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Block32" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3" unique_id=1216453117]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32" unique_id=1767360347]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1" unique_id=1608331965]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block31"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Block32" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1" unique_id=554747116]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1/Cell1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1" unique_id=1817265141]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32" unique_id=1663377723]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2" unique_id=1059327892]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2" unique_id=5312363]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2/Cell2" unique_id=885777882]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -874,83 +934,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "8"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row2" unique_id=1996499396]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block32" unique_id=237392349]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3" unique_id=908194793]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3" unique_id=743542551]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block32/Row3" unique_id=1984042392]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Block33" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3"]
+[node name="Block33" type="VBoxContainer" parent="VBoxContainer/Example1/Board/Band3" unique_id=1519826231]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33" unique_id=2065387407]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1" unique_id=935423177]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1" unique_id=312870793]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1" unique_id=1578463321]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33" unique_id=1209698323]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2" unique_id=1155645480]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2" unique_id=37431149]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2/Cell2" unique_id=148825380]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -959,63 +1023,35 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "2"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2" unique_id=392264307]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33" unique_id=811296009]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3" unique_id=1531900871]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3" unique_id=1124373950]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3" unique_id=524887107]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Board/Band3/Block33"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Correct" type="TextureRect" parent="VBoxContainer/Example1"]
+[node name="Correct" type="TextureRect" parent="VBoxContainer/Example1" unique_id=127574113]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -1024,114 +1060,146 @@ size_flags_vertical = 4
 texture = ExtResource("5_check")
 expand_mode = 1
 
-[node name="Example2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Example2" type="HBoxContainer" parent="VBoxContainer" unique_id=1249535863]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Board" type="VBoxContainer" parent="VBoxContainer/Example2"]
+[node name="Board" type="VBoxContainer" parent="VBoxContainer/Example2" unique_id=1053264374]
 layout_mode = 2
-theme_override_constants/separation = 14
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/separation = 14
 
-[node name="ColHints" type="HBoxContainer" parent="VBoxContainer/Example2/Board"]
+[node name="ColHints" type="HBoxContainer" parent="VBoxContainer/Example2/Board" unique_id=443294200]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Corner" type="Control" parent="VBoxContainer/Example2/Board/ColHints"]
+[node name="Corner" type="Control" parent="VBoxContainer/Example2/Board/ColHints" unique_id=1234434114]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Stack1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints"]
+[node name="Stack1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints" unique_id=1805164462]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col1" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1"]
+[node name="Col1" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1" unique_id=1894844417]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col2" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1"]
+[node name="Col2" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1" unique_id=813167152]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col3" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1"]
+[node name="Col3" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack1" unique_id=1005668583]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Stack2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints"]
+[node name="Stack2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints" unique_id=1540560880]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col4" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2"]
+[node name="Col4" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2" unique_id=74107256]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col5" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2"]
+[node name="Col5" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2" unique_id=2098419634]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col6" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2"]
+[node name="Col6" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack2" unique_id=687290061]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Stack3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints"]
+[node name="Stack3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/ColHints" unique_id=1447422326]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Col7" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3"]
+[node name="Col7" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3" unique_id=823642839]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col8" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3"]
+[node name="Col8" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3" unique_id=1650841810]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Col9" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3"]
+[node name="Col9" type="Control" parent="VBoxContainer/Example2/Board/ColHints/Stack3" unique_id=223542241]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Band1" type="HBoxContainer" parent="VBoxContainer/Example2/Board"]
+[node name="Band1" type="HBoxContainer" parent="VBoxContainer/Example2/Board" unique_id=561403830]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1" unique_id=210402362]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints"]
+[node name="Row1" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints" unique_id=1243534892]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row2" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints"]
+[node name="Row2" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints" unique_id=146862834]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row3" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints"]
+[node name="Row3" type="Control" parent="VBoxContainer/Example2/Board/Band1/RowHints" unique_id=1059128567]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Block11" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1"]
+[node name="Block11" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1" unique_id=1723148489]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11" unique_id=1796025668]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1" unique_id=591432917]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1" unique_id=1285109004]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1" unique_id=1369493435]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11" unique_id=2036460487]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2" unique_id=1074782712]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2" unique_id=1829525535]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2/Cell2" unique_id=1320299902]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1140,83 +1208,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "5"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2" unique_id=421913788]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11" unique_id=1494291806]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3" unique_id=980409069]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3" unique_id=1291808218]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3" unique_id=2146615966]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block11"]
+[node name="Block12" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1" unique_id=753825594]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block11/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Block12" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12" unique_id=1663612006]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1" unique_id=1154247624]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1" unique_id=1645488649]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1" unique_id=808575519]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12" unique_id=1316139188]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2" unique_id=435472763]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2" unique_id=950280144]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2/Cell2" unique_id=1598118526]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1225,83 +1297,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "9"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2" unique_id=843614082]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12" unique_id=1475205951]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3" unique_id=1495335092]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3" unique_id=654213389]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3" unique_id=1976579813]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block12"]
+[node name="Block13" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1" unique_id=1280569145]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block12/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block13" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band1"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13" unique_id=1560977965]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1" unique_id=1197286613]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1" unique_id=1105264873]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1" unique_id=533479663]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13" unique_id=1845181091]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2" unique_id=310799616]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2" unique_id=1367732072]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2/Cell2" unique_id=1391568532]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1310,103 +1386,107 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "6"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2" unique_id=1036897336]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13" unique_id=1488698587]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3" unique_id=461756898]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band1/Block13"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3" unique_id=1978905905]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3" unique_id=901883299]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band1/Block13/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Band2" type="HBoxContainer" parent="VBoxContainer/Example2/Board"]
+[node name="Band2" type="HBoxContainer" parent="VBoxContainer/Example2/Board" unique_id=1969065318]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2" unique_id=1758631056]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row4" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints"]
+[node name="Row4" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints" unique_id=871086742]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row5" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints"]
+[node name="Row5" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints" unique_id=1362233100]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row6" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints"]
+[node name="Row6" type="Control" parent="VBoxContainer/Example2/Board/Band2/RowHints" unique_id=896828422]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Block21" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2"]
+[node name="Block21" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2" unique_id=269694635]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21" unique_id=1066146867]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1" unique_id=168360735]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1" unique_id=1518561201]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1" unique_id=993289465]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21" unique_id=354280976]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2" unique_id=1771311615]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2" unique_id=531895572]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2/Cell2" unique_id=1106677285]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1415,83 +1495,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "4"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2" unique_id=1310882821]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row1"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21" unique_id=1563080310]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3" unique_id=1355711726]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3" unique_id=1517787481]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3" unique_id=1521823397]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Block22" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2" unique_id=1110534747]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22" unique_id=981781485]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1" unique_id=674419942]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1" unique_id=214606492]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1" unique_id=1996398631]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block21"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22" unique_id=1353871536]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2" unique_id=1286435238]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2" unique_id=12509015]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block21/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block22" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1/Cell1"]
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2/Cell2" unique_id=36328589]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1500,83 +1584,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "7"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2" unique_id=307464831]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22" unique_id=1767823953]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3" unique_id=1185408608]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3" unique_id=609623804]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3" unique_id=702187588]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Block23" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2" unique_id=1203194287]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23" unique_id=1046240309]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1" unique_id=112859933]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1" unique_id=1856567916]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block22"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block22/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Block23" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band2"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1" unique_id=629362064]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1/Cell1"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23" unique_id=1361442780]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2" unique_id=764805347]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2" unique_id=1413159475]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2/Cell2" unique_id=13504127]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1585,103 +1673,107 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "3"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2" unique_id=99721554]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23" unique_id=416475462]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band2/Block23"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3" unique_id=692688128]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3" unique_id=775891215]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band2/Block23/Row3" unique_id=1900221204]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Band3" type="HBoxContainer" parent="VBoxContainer/Example2/Board"]
+[node name="Band3" type="HBoxContainer" parent="VBoxContainer/Example2/Board" unique_id=1905792715]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3"]
+[node name="RowHints" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3" unique_id=1300989836]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row7" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints"]
+[node name="Row7" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints" unique_id=523413679]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row8" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints"]
+[node name="Row8" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints" unique_id=1033639821]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Row9" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints"]
+[node name="Row9" type="Control" parent="VBoxContainer/Example2/Board/Band3/RowHints" unique_id=1357621112]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="Block31" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3"]
+[node name="Block31" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3" unique_id=1731401154]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31" unique_id=1263313583]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1" unique_id=889760428]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1" unique_id=1034902289]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1" unique_id=2072908548]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31" unique_id=1775669781]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2" unique_id=394699193]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2" unique_id=1229532063]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2/Cell2" unique_id=1880763336]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
@@ -1690,83 +1782,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "2"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2" unique_id=64048765]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31" unique_id=1063676413]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3" unique_id=1940957466]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3" unique_id=1034045180]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3" unique_id=1533344048]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Block32" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3" unique_id=532747344]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32" unique_id=1641650802]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1" unique_id=1037135957]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1" unique_id=936592761]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block31"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block31/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Block32" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1" unique_id=833084076]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1/Cell1"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32" unique_id=1169222892]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2" unique_id=133203129]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2" unique_id=753782142]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2/Cell2" unique_id=1355533642]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0.431373, 1)
@@ -1775,83 +1871,87 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "8"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row2" unique_id=923069605]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block32" unique_id=1706339040]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3" unique_id=458802439]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3" unique_id=1673694000]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block32/Row3" unique_id=843928195]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Block33" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3"]
+[node name="Block33" type="VBoxContainer" parent="VBoxContainer/Example2/Board/Band3" unique_id=122327675]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33" unique_id=2121756577]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1" unique_id=782066021]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1/Cell1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1" unique_id=1979146398]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("3_water")
+expand_mode = 1
+
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1" unique_id=2076470568]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33" unique_id=392435092]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2" unique_id=556396277]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2" unique_id=1816004495]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("4_empty")
+expand_mode = 1
+
+[node name="BlockTotal" type="Label" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2/Cell2" unique_id=1232630061]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.5
+offset_top = -21.820313
+offset_right = 11.5
+offset_bottom = 21.820313
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
@@ -1860,67 +1960,38 @@ theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 38
 text = "2"
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("3_water")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2" unique_id=1338824855]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33" unique_id=182228668]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3" unique_id=2015778192]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3" unique_id=2136491626]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3" unique_id=590437090]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Board/Band3/Block33"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Board/Band3/Block33/Row3"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("4_empty")
-expand_mode = 1
-
-[node name="Wrong" type="Label" parent="VBoxContainer/Example2"]
+[node name="Wrong" type="Label" parent="VBoxContainer/Example2" unique_id=937649651]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 50
