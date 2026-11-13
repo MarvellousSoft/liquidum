@@ -43,8 +43,11 @@ func _mode_name(mode: int) -> String:
 func _mode_button_key(mode: int) -> String:
 	return "%s_BUTTON" % _mode_name(mode).to_upper()
 
-func _mode_button_text(mode: int) -> String:
-	return tr(_mode_button_key(mode))
+func _mode_button_text(mode: int, disabled: bool) -> String:
+	if disabled:
+		return tr("HIDDEN_PANDORA_BUTTON")
+	else:
+		return tr(_mode_button_key(mode))
 
 func _get_completed_node(mode: int) -> Node:
 	if Completed == null or mode == Mode.Pandora:
@@ -167,7 +170,7 @@ func _on_level_won(info: Level.WinInfo, level: Level, data: LevelData) -> void:
 			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if not l_data.is_empty():
 				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
-				var mode_name := _mode_button_text(data.difficulty).to_lower()
+				var mode_name := _mode_button_text(data.difficulty, false).to_lower()
 				display.display(l_data, "%d %s" % [data.marathon_total, mode_name], [], "")
 
 func _speedrun_key(marathon_total: int, mode: int) -> String:
@@ -179,9 +182,30 @@ func _speedrun_key(marathon_total: int, mode: int) -> String:
 
 func _update_unlocked() -> void:
 	_on_dark_mode_changed(Profile.get_option("dark_mode"))
+	var all_done := true
+	for section in [8, 9]:
+		if ExtraLevelLister.count_completed_section_levels(section) < ExtraLevelLister.count_section_levels(section):
+			all_done = false
+	if Profile.get_option("unlock_everything"):
+		all_done = true
+	var pandora := ExtraLevelLister.pandora_section()
+	var desc_to_completed := {}
+	for i in ExtraLevelLister.count_section_levels(pandora):
+		var save := FileManager.load_level(ExtraLevelLister.level_name(pandora, i))
+		if save != null and save.is_completed():
+			var data := FileManager.load_extra_level_data(pandora, i)
+			desc_to_completed[data.description] = true
 	for mode in _get_modes():
 		var but: Button = _get_mode_button(mode)
 		if but != null:
-			but.disabled = false
-			but.tooltip_text = "%s_TOOLTIP" % _mode_name(mode).to_upper()
+			var enabled := all_done
+			if not all_done and mode != Mode.Pandora:
+				var desc_name := _dif_description(mode, "", -1, -1)
+				enabled = desc_to_completed.get(desc_name, false)
+			var mname := _mode_name(mode).to_upper()
+			if enabled:
+				but.tooltip_text = tr("%s_TOOLTIP" % mname)
+			else:
+				but.tooltip_text = tr("LOCKED_PANDORA_TOOLTIP")
+			but.disabled = not enabled
 	_update_contents()

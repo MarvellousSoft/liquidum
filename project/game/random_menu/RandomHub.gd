@@ -50,7 +50,7 @@ func _mode_name(mode: int) -> String:
 func _mode_button_key(mode: int) -> String:
 	return "%s_BUTTON" % _mode_name(mode).to_upper()
 
-func _mode_button_text(mode: int) -> String:
+func _mode_button_text(mode: int, _disabled: bool) -> String:
 	return tr(_mode_button_key(mode))
 
 func _get_mode_button(mode: int) -> Button:
@@ -223,7 +223,7 @@ func _exit_tree() -> void:
 	_cancel_background_generation()
 
 func _dif_name(dif: int, marathon_left: int, marathon_total: int) -> String:
-	var dif_name := _mode_button_text(dif)
+	var dif_name := _mode_button_text(dif, false)
 	if marathon_left != -1:
 		dif_name += " (%d⁄%d)" % [marathon_total - marathon_left, marathon_total]
 	return dif_name
@@ -266,10 +266,11 @@ func _update_contents() -> void:
 	if has_saved_level:
 		var data := _load_level_data()
 		Continue.text = "%s - %s" % [tr("CONTINUE"), _dif_name(data.difficulty, data.marathon_left, data.marathon_total)]
+	var any_visible := false
 	for mode in _get_modes():
 		var but: Button = _get_mode_button(mode)
 		if but != null:
-			but.text = _mode_button_text(mode)
+			but.text = _mode_button_text(mode, but.disabled)
 			if not but.disabled and has_node("%Marathon"):
 				var val: int = int(%Marathon/Slider.value)
 				if val > 1:
@@ -277,7 +278,9 @@ func _update_contents() -> void:
 		var cont: Node = _get_completed_node(mode)
 		if cont != null:
 			cont.visible = (but == null or not but.disabled)
+			any_visible = any_visible or cont.visible
 			cont.get_node(^"HBox/Count").text = "%d" % _get_completed_count(mode)
+	Completed.get_parent().visible = any_visible
 
 
 func _play_new_level_again():
@@ -415,7 +418,7 @@ func _setup_level_leaderboard(level: Level, data: LevelData) -> void:
 		var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 		if not l_data.is_empty():
 			var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false, _speedrun_key(data.marathon_total, data.difficulty))
-			var dif_name := _mode_button_text(data.difficulty).to_lower()
+			var dif_name := _mode_button_text(data.difficulty, false).to_lower()
 			display.display(l_data, "%d %s" % [data.marathon_total, dif_name], [], "")
 
 func _confirm_new_level() -> bool:
@@ -452,7 +455,7 @@ func _level_completed(info: Level.WinInfo, level: Level, dif: int, manually_seed
 			var l_data := await RecurringMarathon.get_leaderboard_data(l_id)
 			if not l_data.is_empty():
 				var display := LeaderboardDisplay.get_or_create(level, "MARATHON", false)
-				var dif_name := _mode_button_text(dif).to_lower()
+				var dif_name := _mode_button_text(dif, false).to_lower()
 				display.display(l_data, "%d %s" % [marathon_total, dif_name], [], "")
 		
 
