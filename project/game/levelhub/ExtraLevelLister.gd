@@ -98,7 +98,16 @@ func ios_payment(section: int) -> String:
 	return _config(section).get_value("section", "ios_payment", "")
 
 func steam_dlc(section: int) -> int:
-	return _config(section).get_value("section", "dlc", -1)
+	var id := -1
+	match section:
+		3:
+			id = 2861770
+		5, 6, 7:
+			id = 2861780
+		8, 9:
+			id = 2861800
+	assert(id == int(_config(section).get_value("section", "dlc", -1)))
+	return id
 
 func endless_title(section: int) -> String:
 	return _config(section).get_value("section", "endless_title", "ENDLESS")
