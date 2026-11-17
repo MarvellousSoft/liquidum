@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bb4amtqqldd5t" path="res://game/levelhub/LevelButton.gd" id="1_iig44"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_ocbvr"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
+[ext_resource type="StyleBox" uid="uid://cjnhlstaaheqa" path="res://assets/ui/LevelButton/DisabledStyle.tres" id="3_84hro"]
 [ext_resource type="Shader" uid="uid://bob0owhnds2mx" path="res://assets/shaders/Wave.gdshader" id="3_d8olh"]
 [ext_resource type="StyleBox" uid="uid://bnjwr3k1iw6a7" path="res://assets/ui/LevelButton/CompletedNormalStyle.tres" id="3_ftjw4"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/CompletedHoverStyle.tres" id="4_dny2s"]
+[ext_resource type="StyleBox" uid="uid://cp33pixu0q1l7" path="res://assets/ui/LevelButton/CompletedHoverStyle.tres" id="4_dny2s"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_tmmmn"]
-[ext_resource type="StyleBox" path="res://assets/ui/LevelButton/CompletedPressedStyle.tres" id="5_q1joq"]
+[ext_resource type="StyleBox" uid="uid://drhlllbinnh3b" path="res://assets/ui/LevelButton/CompletedPressedStyle.tres" id="5_q1joq"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="9_1gdj7"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="10_5jj0t"]
 [ext_resource type="Texture2D" uid="uid://ns8gxu1xv3ej" path="res://assets/images/icons/lock.png" id="11_ywtcx"]
@@ -269,6 +269,10 @@ text_overrun_behavior = 3
 [node name="OngoingSolution" parent="." unique_id=1170163563 instance=ExtResource("4_tmmmn")]
 unique_name_in_owner = true
 layout_mode = 0
+offset_left = 78.0
+offset_top = 48.0
+offset_right = 248.0
+offset_bottom = 118.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1262102670]
 libraries/ = SubResource("AnimationLibrary_4p2d0")
