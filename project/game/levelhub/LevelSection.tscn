@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dl1moq1i2jjs" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
 [ext_resource type="StyleBox" uid="uid://gpptqi1sbtas" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
-[ext_resource type="StyleBox" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
+[ext_resource type="StyleBox" uid="uid://bd4fm2bjdg3iq" path="res://assets/ui/SectionButton/DisabledStyle.tres" id="6_lf75c"]
 [ext_resource type="Texture2D" uid="uid://ns8gxu1xv3ej" path="res://assets/images/icons/lock.png" id="8_py7ud"]
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="8_xte08"]
 [ext_resource type="Texture2D" uid="uid://dl6shfvdqk5ao" path="res://assets/images/ui/icons/shark-fin.png" id="9_kuosf"]
@@ -30,7 +30,6 @@ expand_margin_right = 90.0
 expand_margin_bottom = 50.0
 shadow_color = Color(0.560784, 0.560784, 0.560784, 0.901961)
 shadow_size = 20
-anti_aliasing_size = 7.338
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1121v"]
 shader = ExtResource("3_nwex1")

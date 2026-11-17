@@ -18,4 +18,3 @@ expand_margin_right = 90.0
 expand_margin_bottom = 50.0
 shadow_color = Color(0.105882, 0.435294, 0.435294, 1)
 shadow_size = 20
-anti_aliasing_size = 7.338
