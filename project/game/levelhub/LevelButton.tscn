@@ -269,10 +269,10 @@ text_overrun_behavior = 3
 [node name="OngoingSolution" parent="." unique_id=1170163563 instance=ExtResource("4_tmmmn")]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 78.0
-offset_top = 48.0
-offset_right = 248.0
-offset_bottom = 118.0
+offset_left = 28.0
+offset_top = 102.0
+offset_right = 198.0
+offset_bottom = 172.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1262102670]
 libraries/ = SubResource("AnimationLibrary_4p2d0")
