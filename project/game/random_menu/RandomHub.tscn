@@ -263,9 +263,9 @@ horizontal_alignment = 2
 
 [node name="MarathonLabel" type="Label" parent="." unique_id=2090954219]
 layout_mode = 0
-offset_left = 2746.0
+offset_left = 2707.0
 offset_top = 1850.0
-offset_right = 3804.0
+offset_right = 3765.0
 offset_bottom = 1982.0
 theme_override_font_sizes/font_size = 50
 text = "MARATHON_TEXT"
@@ -281,7 +281,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -435.0
+offset_left = -938.0
+offset_top = -146.0
+offset_right = -76.0
 offset_bottom = -43.0
 grow_horizontal = 0
 grow_vertical = 0
