@@ -142,15 +142,22 @@ func _input(event):
 	if event.is_action_pressed(&"toggle_dev_mode") and OS.is_debug_build():
 		toggle_dev_mode()
 	if event.is_action_pressed(&"dev_mode_screenshot") and OS.is_debug_build():
+		print("Taking 4K screenshot")
 		var view := get_viewport()
+		var prev_size = view.size
 		view.size = Vector2(3840, 2160)
 		await get_tree().process_frame
 		await get_tree().process_frame
 		var img := view.get_texture().get_image()
+		if img.get_size() != Vector2i(3840, 2160):
+			print("Image size is not proper 4K, aborting.")
+			return
+		view.size = prev_size
 		var i := 1
 		while FileAccess.file_exists("res://screenshots/%02d.png" % i):
 			i += 1
 		img.save_png("res://screenshots/%02d.png" % i)
+		print("Screenshot saved to res://screenshots/%02d.png" % i)
 
 
 func _notification(what: int) -> void:
