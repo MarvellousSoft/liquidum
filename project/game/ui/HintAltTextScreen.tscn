@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb7vaiwgibd4u"]
+[gd_scene format=3 uid="uid://cb7vaiwgibd4u"]
 
-[ext_resource type="Script" path="res://game/ui/HintAltTextScreen.gd" id="1_n31nv"]
+[ext_resource type="Script" uid="uid://k7ibqxcondgr" path="res://game/ui/HintAltTextScreen.gd" id="1_n31nv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_s0gyy"]
 font_size = 29
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1849429828]
 script = ExtResource("1_n31nv")
 
-[node name="BlockInput" type="ColorRect" parent="."]
+[node name="BlockInput" type="ColorRect" parent="." unique_id=890744793]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,7 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1837254456]
 anchors_preset = -1
 anchor_left = 0.3
 anchor_top = 0.3
@@ -26,19 +26,19 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.8)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1959487840]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=434476846]
 layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1641209937]
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
 text = "EDIT_ALT_TEXT_TITLE"
@@ -46,7 +46,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Explanation" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Explanation" type="Label" parent="CenterContainer/VBoxContainer" unique_id=859337604]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 text = "EDIT_ALT_TEXT_EXPLANATION"
@@ -55,24 +55,24 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="AltText" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+[node name="AltText" type="LineEdit" parent="CenterContainer/VBoxContainer" unique_id=2073527727]
 unique_name_in_owner = true
 layout_mode = 2
 max_length = 5
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1535581217]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 120
 alignment = 1
 
-[node name="Confirm" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer"]
+[node name="Confirm" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer" unique_id=192598659]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "CONFIRM"
 
-[node name="Cancel" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer"]
+[node name="Cancel" type="Button" parent="CenterContainer/VBoxContainer/ButtonsContainer" unique_id=1689280861]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0

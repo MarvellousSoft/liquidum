@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cfiruubugsdql"]
+[gd_scene format=3 uid="uid://cfiruubugsdql"]
 
 [ext_resource type="Theme" uid="uid://dy3gs64tja5uk" path="res://assets/ui/GeneralDarkTheme.tres" id="1_nerce"]
-[ext_resource type="Script" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
+[ext_resource type="Script" uid="uid://cm4f2bkc1hd6o" path="res://game/daily_menu/LeaderboardDisplay.gd" id="1_nerdx"]
 [ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="3_oxr4k"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_4wq2p"]
 
@@ -134,11 +134,11 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6ide8"]
 _data = {
-"HideLd": SubResource("Animation_34gp2"),
-"RESET": SubResource("Animation_fl8pi")
+&"HideLd": SubResource("Animation_34gp2"),
+&"RESET": SubResource("Animation_fl8pi")
 }
 
-[node name="LeaderboardDisplay" type="Control"]
+[node name="LeaderboardDisplay" type="Control" unique_id=2116677769]
 custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 3
 anchors_preset = 4
@@ -153,7 +153,7 @@ mouse_force_pass_scroll_events = false
 theme = ExtResource("1_nerce")
 script = ExtResource("1_nerdx")
 
-[node name="LdVBox" type="VBoxContainer" parent="."]
+[node name="LdVBox" type="VBoxContainer" parent="." unique_id=246171993]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -163,36 +163,36 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="TitleHBox" type="HBoxContainer" parent="LdVBox"]
+[node name="TitleHBox" type="HBoxContainer" parent="LdVBox" unique_id=2014726232]
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Spacing" type="Control" parent="LdVBox/TitleHBox"]
+[node name="Spacing" type="Control" parent="LdVBox/TitleHBox" unique_id=440787179]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="LdVBox/TitleHBox"]
+[node name="Label" type="Label" parent="LdVBox/TitleHBox" unique_id=1507227002]
 layout_mode = 2
 text = "LEADERBOARDS"
 horizontal_alignment = 1
 
-[node name="ToggleVisibility" parent="LdVBox/TitleHBox" instance=ExtResource("3_oxr4k")]
+[node name="ToggleVisibility" parent="LdVBox/TitleHBox" unique_id=950213368 instance=ExtResource("3_oxr4k")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 
-[node name="TabContainer" type="TabContainer" parent="LdVBox"]
+[node name="TabContainer" type="TabContainer" parent="LdVBox" unique_id=957493126]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 tab_alignment = 1
 
-[node name="Control" type="Control" parent="LdVBox"]
+[node name="Control" type="Control" parent="LdVBox" unique_id=91730707]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="SpeedrunButton" type="Button" parent="LdVBox"]
+[node name="SpeedrunButton" type="Button" parent="LdVBox" unique_id=1540686616]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -200,7 +200,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 40
 text = "SPEEDRUN_BUTTON"
 
-[node name="LoadingContainer" type="HBoxContainer" parent="."]
+[node name="LoadingContainer" type="HBoxContainer" parent="." unique_id=1393914692]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -215,17 +215,15 @@ offset_bottom = 49.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="LoadingContainer"]
+[node name="Label" type="Label" parent="LoadingContainer" unique_id=902223060]
 layout_mode = 2
 text = "LOADING"
 
-[node name="OngoingSolution" parent="LoadingContainer" instance=ExtResource("4_4wq2p")]
+[node name="OngoingSolution" parent="LoadingContainer" unique_id=363105827 instance=ExtResource("4_4wq2p")]
 layout_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_6ide8")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=467407950]
+libraries/ = SubResource("AnimationLibrary_6ide8")
 
 [connection signal="toggled" from="LdVBox/TitleHBox/ToggleVisibility" to="." method="_on_toggle_visibility_toggled"]
 [connection signal="mouse_entered" from="LdVBox/SpeedrunButton" to="." method="_on_button_mouse_entered"]

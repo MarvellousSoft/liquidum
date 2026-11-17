@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsk3aixfyauum"]
+[gd_scene format=3 uid="uid://bsk3aixfyauum"]
 
-[ext_resource type="Script" path="res://game/splash/Splash.gd" id="1_a3cdn"]
+[ext_resource type="Script" uid="uid://dhv8sa3wc158k" path="res://game/splash/Splash.gd" id="1_a3cdn"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="1_q0rlm"]
 [ext_resource type="Texture2D" uid="uid://c6ai8pq54uyhi" path="res://assets/images/ui/credits/Marvellous Soft.png" id="2_aujo6"]
 [ext_resource type="Texture2D" uid="uid://doksg4kojsprj" path="res://assets/images/ui/objects/boat.png" id="3_s8xrm"]
@@ -79,21 +79,21 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k5d25"]
 _data = {
-"RESET": SubResource("Animation_ghptg"),
-"intro": SubResource("Animation_0opli")
+&"RESET": SubResource("Animation_ghptg"),
+&"intro": SubResource("Animation_0opli")
 }
 
-[node name="SplashMobile" type="Control"]
+[node name="SplashMobile" type="Control" unique_id=528936083]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
 script = ExtResource("1_a3cdn")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("1_q0rlm")]
+[node name="MobileBGHelp" parent="." unique_id=64162181 instance=ExtResource("1_q0rlm")]
 layout_mode = 0
 
-[node name="Marvellous" type="TextureRect" parent="."]
+[node name="Marvellous" type="TextureRect" parent="." unique_id=213416847]
 custom_minimum_size = Vector2(900, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -105,13 +105,11 @@ texture = ExtResource("2_aujo6")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "intro"
-libraries = {
-"": SubResource("AnimationLibrary_k5d25")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=389952582]
+libraries/ = SubResource("AnimationLibrary_k5d25")
+autoplay = &"intro"
 
-[node name="Boat" type="TextureRect" parent="."]
+[node name="Boat" type="TextureRect" parent="." unique_id=1246168915]
 modulate = Color(0.0156863, 0.105882, 0.219608, 1)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 1

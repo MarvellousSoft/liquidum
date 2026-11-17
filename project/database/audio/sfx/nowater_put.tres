@@ -1,12 +1,9 @@
-[gd_resource type="Resource" load_steps=3 format=3]
+[gd_resource type="Resource" format=3 uid="uid://ccyaxgukrrryx"]
 
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/put_nowater.wav" id="1_kvmfi"]
-[ext_resource type="Script" path="res://database/audio/SFX.gd" id="2_hm0ev"]
+[ext_resource type="AudioStream" uid="uid://d3e4qtevmbhg5" path="res://assets/audio/sfx/put_nowater.wav" id="1_kvmfi"]
+[ext_resource type="Script" uid="uid://b0ij5ggv3eqse" path="res://database/audio/SFX.gd" id="2_hm0ev"]
 
 [resource]
 script = ExtResource("2_hm0ev")
 asset = ExtResource("1_kvmfi")
-base_db = 0.0
-random_db_var = 0.0
-base_pitch = 1.0
 random_pitch_var = 0.01

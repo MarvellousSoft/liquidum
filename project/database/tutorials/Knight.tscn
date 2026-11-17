@@ -1,98 +1,98 @@
 [gd_scene format=3 uid="uid://c1aw42v56dwxe"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://da1m208hhrnvo" path="res://database/tutorials/Tutorial.gd" id="2_script"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="3_water"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="4_empty"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="5_check"]
 
-[node name="Knight" type="MarginContainer"]
+[node name="Knight" type="MarginContainer" unique_id=845281756]
 theme = ExtResource("1_theme")
 script = ExtResource("2_script")
 tutorial_name = "TUT_KNIGHT"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=421393826]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Example1" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Example1" type="HBoxContainer" parent="VBoxContainer" unique_id=334661094]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Grid" type="VBoxContainer" parent="VBoxContainer/Example1"]
+[node name="Grid" type="VBoxContainer" parent="VBoxContainer/Example1" unique_id=1162926791]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Grid"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example1/Grid" unique_id=1575949482]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1" unique_id=922720754]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1" unique_id=1267463431]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row1" unique_id=1723771731]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Grid"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example1/Grid" unique_id=384077382]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2" unique_id=1728411264]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2" unique_id=844554734]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row2" unique_id=298577149]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Grid"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example1/Grid" unique_id=551892815]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3" unique_id=962382077]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3" unique_id=1671277800]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example1/Grid/Row3" unique_id=1869782235]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Correct" type="TextureRect" parent="VBoxContainer/Example1"]
+[node name="Correct" type="TextureRect" parent="VBoxContainer/Example1" unique_id=1417561551]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -101,88 +101,87 @@ size_flags_vertical = 4
 texture = ExtResource("5_check")
 expand_mode = 1
 
-[node name="Example2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Example2" type="HBoxContainer" parent="VBoxContainer" unique_id=1893418143]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="Grid" type="VBoxContainer" parent="VBoxContainer/Example2"]
+[node name="Grid" type="VBoxContainer" parent="VBoxContainer/Example2" unique_id=1663868631]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Grid"]
+[node name="Row1" type="HBoxContainer" parent="VBoxContainer/Example2/Grid" unique_id=113375437]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1" unique_id=1714974212]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1" unique_id=560709601]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row1" unique_id=1504474377]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Grid"]
+[node name="Row2" type="HBoxContainer" parent="VBoxContainer/Example2/Grid" unique_id=2030809910]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2" unique_id=265896087]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2" unique_id=454501542]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row2" unique_id=526183857]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Grid"]
+[node name="Row3" type="HBoxContainer" parent="VBoxContainer/Example2/Grid" unique_id=1395811628]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3"]
+[node name="Cell1" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3" unique_id=965963935]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3"]
+[node name="Cell2" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3" unique_id=201979916]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_empty")
 expand_mode = 1
 
-[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3"]
+[node name="Cell3" type="TextureRect" parent="VBoxContainer/Example2/Grid/Row3" unique_id=802406120]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_water")
 expand_mode = 1
 
-[node name="Wrong" type="Label" parent="VBoxContainer/Example2"]
+[node name="Wrong" type="Label" parent="VBoxContainer/Example2" unique_id=1723362858]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.415686, 0.415686, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 50

@@ -1,7 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://p83575ngqa1"]
+[gd_scene format=3 uid="uid://p83575ngqa1"]
 
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_vpkgi"]
-[ext_resource type="Script" path="res://game/level/hints/AquariumHintContainer.gd" id="2_vsnt4"]
+[ext_resource type="Script" uid="uid://dwc2il7413xyp" path="res://game/level/hints/AquariumHintContainer.gd" id="2_vsnt4"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_gakqc"]
 [ext_resource type="StyleBox" uid="uid://1tfgi1g0cf7r" path="res://assets/ui/AquariumHintContainerMobilePanel.tres" id="3_jwy1a"]
 [ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_68433"]
@@ -49,11 +49,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yituc"]
 _data = {
-"RESET": SubResource("Animation_7ug84"),
-"startup": SubResource("Animation_v31lt")
+&"RESET": SubResource("Animation_7ug84"),
+&"startup": SubResource("Animation_v31lt")
 }
 
-[node name="AquariumHintContainer" type="Control"]
+[node name="AquariumHintContainer" type="Control" unique_id=1095892805]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(680, 230)
 layout_mode = 3
@@ -63,21 +63,21 @@ offset_bottom = 230.0
 theme = ExtResource("1_vpkgi")
 script = ExtResource("2_vsnt4")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=400054025]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 670.0
 offset_bottom = 225.0
 theme_override_styles/panel = ExtResource("3_jwy1a")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1167655405]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=496252067]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBox"]
+[node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBox" unique_id=944968760]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("4_68433")
@@ -86,14 +86,14 @@ theme_override_font_sizes/font_size = 40
 text = "AQUARIUMS_COUNTER"
 horizontal_alignment = 1
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox" unique_id=1975885022]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=1312698313]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -102,7 +102,7 @@ theme_override_fonts/font = SubResource("FontVariation_st5oh")
 theme_override_font_sizes/font_size = 30
 text = "SIZE"
 
-[node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=72124568]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
@@ -110,13 +110,13 @@ theme_override_fonts/font = SubResource("FontVariation_n0dxx")
 theme_override_font_sizes/font_size = 30
 text = "AQ_AMOUNT"
 
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=1036672792]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_vpkgi")
 theme_override_styles/separator = ExtResource("4_fm4yl")
 
-[node name="Size2" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Size2" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=940071902]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
@@ -124,7 +124,7 @@ theme_override_fonts/font = SubResource("FontVariation_st5oh")
 theme_override_font_sizes/font_size = 30
 text = "SIZE"
 
-[node name="Amount2" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Amount2" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=534724781]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
@@ -132,13 +132,13 @@ theme_override_fonts/font = SubResource("FontVariation_n0dxx")
 theme_override_font_sizes/font_size = 30
 text = "AQ_AMOUNT"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox" unique_id=915637245]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(650, 100)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="HintContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBox/ScrollContainer"]
+[node name="HintContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBox/ScrollContainer" unique_id=237922312]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
@@ -146,31 +146,29 @@ theme_override_constants/h_separation = 58
 theme_override_constants/v_separation = 5
 columns = 2
 
-[node name="AquariumHint" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=1731598837 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint2" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint2" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=1943066143 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint5" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint5" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=168037430 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint6" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint6" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=369699587 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint7" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint7" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=221060627 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint8" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint8" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=719213889 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=162105959 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AquariumHint4" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("4_woeob")]
+[node name="AquariumHint4" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=2057141299 instance=ExtResource("4_woeob")]
 layout_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_yituc")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1742779499]
+libraries/ = SubResource("AnimationLibrary_yituc")

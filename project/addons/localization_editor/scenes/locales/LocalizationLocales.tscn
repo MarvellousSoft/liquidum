@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1vh2nj5eobm7"]
+[gd_scene format=3 uid="uid://d1vh2nj5eobm7"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/locales/LocalizationLocales.gd" id="1"]
+[ext_resource type="Script" uid="uid://c6vqdsgu2by2r" path="res://addons/localization_editor/scenes/locales/LocalizationLocales.gd" id="1"]
 
-[node name="LocalizationLocales" type="MarginContainer"]
+[node name="LocalizationLocales" type="MarginContainer" unique_id=2110468842]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,19 +10,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=396698898]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Scroll" type="ScrollContainer" parent="Panel"]
+[node name="Scroll" type="ScrollContainer" parent="Panel" unique_id=414398153]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBox" type="VBoxContainer" parent="Panel/Scroll"]
+[node name="VBox" type="VBoxContainer" parent="Panel/Scroll" unique_id=1001095441]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

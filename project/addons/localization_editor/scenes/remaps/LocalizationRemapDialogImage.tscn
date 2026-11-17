@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://buhycrtyn3qtp"]
 
-[node name="LocalizationRemapVideoDialog" type="Window"]
+[node name="LocalizationRemapVideoDialog" type="Window" unique_id=1968921700]
 visible = false
 
-[node name="Texture" type="TextureRect" parent="."]
+[node name="Texture" type="TextureRect" parent="." unique_id=1122240573]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

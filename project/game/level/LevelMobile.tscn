@@ -1,6 +1,6 @@
-[gd_scene load_steps=41 format=3 uid="uid://cj1y1oo2ma3bk"]
+[gd_scene format=3 uid="uid://cj1y1oo2ma3bk"]
 
-[ext_resource type="Script" path="res://game/level/Level.gd" id="2_5r7gi"]
+[ext_resource type="Script" uid="uid://ukhecoq5uui0" path="res://game/level/Level.gd" id="2_5r7gi"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_vch05"]
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="3_uwkov"]
 [ext_resource type="PackedScene" uid="uid://fbn8fagd6qbm" path="res://game/settings/SettingsScreenMobile.tscn" id="4_dk1gs"]
@@ -19,9 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://p83575ngqa1" path="res://game/level/hints/AquariumHintContainerMobile.tscn" id="15_b0gmy"]
 [ext_resource type="Texture2D" uid="uid://bjmde3uep55q3" path="res://assets/images/icons/leaderboards.png" id="17_7ewnk"]
 [ext_resource type="PackedScene" uid="uid://b63agud8d16ep" path="res://game/level/TutorialDisplay.tscn" id="17_46m0x"]
-[ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="18_4jcdt"]
+[ext_resource type="Shader" uid="uid://dy05ww6qiuqo5" path="res://assets/shaders/WaterWaves.gdshader" id="18_4jcdt"]
 [ext_resource type="PackedScene" uid="uid://cpoyo7yv1jpj6" path="res://game/ui/WaveEffect.tscn" id="18_ioxu2"]
-[ext_resource type="Script" path="res://game/ads/BottomAdShower.gd" id="20_ff4mn"]
+[ext_resource type="Script" uid="uid://ctttdmcgxhfii" path="res://game/ads/BottomAdShower.gd" id="20_ff4mn"]
 [ext_resource type="PackedScene" uid="uid://d1mr4677loeoa" path="res://game/steam/SteamPlaytimeTracker.tscn" id="20_o7ta7"]
 [ext_resource type="PackedScene" uid="uid://nvoc8ctns0pu" path="res://game/level/PaintManager.tscn" id="23_1d80d"]
 
@@ -62,8 +62,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_eff0b"]
 _data = {
-"disable": SubResource("Animation_8b2um"),
-"enable": SubResource("Animation_x76te")
+&"disable": SubResource("Animation_8b2um"),
+&"enable": SubResource("Animation_x76te")
 }
 
 [sub_resource type="Animation" id="Animation_7d8rq"]
@@ -113,8 +113,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_myebw"]
 _data = {
-"disappear": SubResource("Animation_7d8rq"),
-"idle": SubResource("Animation_krvyy")
+&"disappear": SubResource("Animation_7d8rq"),
+&"idle": SubResource("Animation_krvyy")
 }
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3453y"]
@@ -308,8 +308,8 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dnqfm"]
 _data = {
-"RESET": SubResource("Animation_72efb"),
-"show": SubResource("Animation_aqku1")
+&"RESET": SubResource("Animation_72efb"),
+&"show": SubResource("Animation_aqku1")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mldsp"]
@@ -426,11 +426,11 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_b8al2"]
 _data = {
-"RESET": SubResource("Animation_1qr1w"),
-"startup": SubResource("Animation_4ayxj")
+&"RESET": SubResource("Animation_1qr1w"),
+&"startup": SubResource("Animation_4ayxj")
 }
 
-[node name="Level" type="Control"]
+[node name="Level" type="Control" unique_id=1508174969]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 720.0
@@ -438,10 +438,10 @@ offset_bottom = 1280.0
 theme = ExtResource("3_uwkov")
 script = ExtResource("2_5r7gi")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_vch05")]
+[node name="MobileBGHelp" parent="." unique_id=685547509 instance=ExtResource("2_vch05")]
 layout_mode = 0
 
-[node name="InputFallback" type="Control" parent="."]
+[node name="InputFallback" type="Control" parent="." unique_id=711724835]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -449,18 +449,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=804937696]
 layout_mode = 0
 offset_top = 227.0
 offset_right = 720.0
 offset_bottom = 927.0
 mouse_filter = 2
 
-[node name="GridView" parent="CenterContainer" instance=ExtResource("4_lwsqm")]
+[node name="GridView" parent="CenterContainer" unique_id=1272170921 instance=ExtResource("4_lwsqm")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TopButtons" type="HBoxContainer" parent="."]
+[node name="TopButtons" type="HBoxContainer" parent="." unique_id=1893351108]
 layout_mode = 0
 offset_left = 55.0
 offset_top = 42.0
@@ -468,7 +468,7 @@ offset_right = 555.0
 offset_bottom = 142.0
 theme_override_constants/separation = 36
 
-[node name="BackButton" type="Button" parent="TopButtons"]
+[node name="BackButton" type="Button" parent="TopButtons" unique_id=890682518]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -476,11 +476,11 @@ focus_mode = 0
 mouse_filter = 1
 text = "BACK"
 
-[node name="Spacer" type="Control" parent="TopButtons"]
+[node name="Spacer" type="Control" parent="TopButtons" unique_id=797186331]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="TutorialButton" type="Button" parent="TopButtons"]
+[node name="TutorialButton" type="Button" parent="TopButtons" unique_id=1093832815]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -493,12 +493,12 @@ icon = ExtResource("14_hwkp3")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Spacer2" type="Control" parent="TopButtons"]
+[node name="Spacer2" type="Control" parent="TopButtons" unique_id=594063889]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="ResetButton" type="TextureButton" parent="TopButtons"]
+[node name="ResetButton" type="TextureButton" parent="TopButtons" unique_id=344175377]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -509,15 +509,14 @@ texture_hover = ExtResource("12_po5ls")
 ignore_texture_size = true
 stretch_mode = 6
 
-[node name="TopInfo" type="Control" parent="."]
+[node name="TopInfo" type="Control" parent="." unique_id=1405206008]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 3
 anchors_preset = 0
 offset_top = 3.0
 offset_bottom = 3.0
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopInfo"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopInfo" unique_id=1142950649]
 custom_minimum_size = Vector2(0, 69)
 layout_mode = 0
 offset_top = 146.0
@@ -527,13 +526,13 @@ mouse_filter = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/HBoxContainer"]
+[node name="TimerContainer" type="HBoxContainer" parent="TopInfo/HBoxContainer" unique_id=153378900]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="TimerIcon" type="TextureRect" parent="TopInfo/HBoxContainer/TimerContainer"]
+[node name="TimerIcon" type="TextureRect" parent="TopInfo/HBoxContainer/TimerContainer" unique_id=282098486]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(69.12, 54.72)
 layout_mode = 2
@@ -542,7 +541,7 @@ mouse_filter = 2
 texture = ExtResource("5_dv3ih")
 expand_mode = 1
 
-[node name="TimerLabel" type="Label" parent="TopInfo/HBoxContainer/TimerContainer"]
+[node name="TimerLabel" type="Label" parent="TopInfo/HBoxContainer/TimerContainer" unique_id=2111527282]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -554,27 +553,27 @@ theme_override_font_sizes/font_size = 40
 text = "00:00"
 vertical_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="TopInfo/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="TopInfo/HBoxContainer" unique_id=507833465]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
-[node name="MistakeCounter" parent="TopInfo/HBoxContainer" instance=ExtResource("7_7ge7w")]
+[node name="MistakeCounter" parent="TopInfo/HBoxContainer" unique_id=1139304937 instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 check_for_satisfied = false
 
-[node name="HBoxContainer" parent="TopInfo/HBoxContainer/MistakeCounter" index="0"]
+[node name="HBoxContainer" parent="TopInfo/HBoxContainer/MistakeCounter" index="0" unique_id=385051941]
 custom_minimum_size = Vector2(0, 0)
 theme_override_constants/separation = 40
 
-[node name="VisibilityButton" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="0"]
+[node name="VisibilityButton" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="0" unique_id=2046080250]
 visible = false
 
-[node name="Label" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="1"]
+[node name="Label" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="1" unique_id=890143085]
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -582,13 +581,13 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 autowrap_mode = 0
 
-[node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="TopInfo/HBoxContainer/MistakeCounter/HBoxContainer" index="2" unique_id=2103771057]
 theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 0
 
-[node name="HintsMarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
+[node name="HintsMarginContainer" type="MarginContainer" parent="." unique_id=410355871]
+layout_mode = 0
 offset_top = 931.0
 offset_right = 720.0
 offset_bottom = 1012.0
@@ -597,26 +596,26 @@ mouse_filter = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 
-[node name="HintsContainer" type="HBoxContainer" parent="HintsMarginContainer"]
+[node name="HintsContainer" type="HBoxContainer" parent="HintsMarginContainer" unique_id=1070916680]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="WaterCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
+[node name="WaterCounter" parent="HintsMarginContainer/HintsContainer" unique_id=1632975150 instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 counter_name = "WATERS_COUNTER"
 
-[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/WaterCounter" index="0"]
+[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/WaterCounter" index="0" unique_id=385051941]
 theme_override_constants/separation = 5
 
-[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="0"]
+[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="0" unique_id=2046080250]
 visible = false
 
-[node name="Label" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="1"]
+[node name="Label" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="1" unique_id=890143085]
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -624,11 +623,11 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 25
 autowrap_mode = 0
 
-[node name="Counter" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="HintsMarginContainer/HintsContainer/WaterCounter/HBoxContainer" index="2" unique_id=2103771057]
 theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 25
 
-[node name="HintsContainerSeparator1" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
+[node name="HintsContainerSeparator1" type="VSeparator" parent="HintsMarginContainer/HintsContainer" unique_id=423618188]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
@@ -636,18 +635,18 @@ size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
-[node name="BoatCounter" parent="HintsMarginContainer/HintsContainer" instance=ExtResource("7_7ge7w")]
+[node name="BoatCounter" parent="HintsMarginContainer/HintsContainer" unique_id=563052426 instance=ExtResource("7_7ge7w")]
 unique_name_in_owner = true
 layout_mode = 2
 counter_name = "BOATS_COUNTER"
 
-[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/BoatCounter" index="0"]
+[node name="HBoxContainer" parent="HintsMarginContainer/HintsContainer/BoatCounter" index="0" unique_id=385051941]
 theme_override_constants/separation = 5
 
-[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="0"]
+[node name="VisibilityButton" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="0" unique_id=2046080250]
 visible = false
 
-[node name="Label" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="1"]
+[node name="Label" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="1" unique_id=890143085]
 custom_minimum_size = Vector2(0, 0)
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -655,11 +654,11 @@ theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 25
 autowrap_mode = 0
 
-[node name="Counter" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="HintsMarginContainer/HintsContainer/BoatCounter/HBoxContainer" index="2" unique_id=2103771057]
 theme_override_constants/outline_size = 22
 theme_override_font_sizes/font_size = 25
 
-[node name="HintsContainerSeparator2" type="VSeparator" parent="HintsMarginContainer/HintsContainer"]
+[node name="HintsContainerSeparator2" type="VSeparator" parent="HintsMarginContainer/HintsContainer" unique_id=1795106124]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
@@ -667,7 +666,7 @@ size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/separator = ExtResource("11_iu1ri")
 
-[node name="AquariumButton" type="Button" parent="HintsMarginContainer/HintsContainer"]
+[node name="AquariumButton" type="Button" parent="HintsMarginContainer/HintsContainer" unique_id=359168059]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
@@ -677,13 +676,11 @@ icon = ExtResource("13_fmxye")
 flat = true
 expand_icon = true
 
-[node name="AquariumAnim" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton"]
+[node name="AquariumAnim" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton" unique_id=1402939188]
 unique_name_in_owner = true
-libraries = {
-"": SubResource("AnimationLibrary_eff0b")
-}
+libraries/ = SubResource("AnimationLibrary_eff0b")
 
-[node name="FingerAnim" type="TextureRect" parent="HintsMarginContainer/HintsContainer/AquariumButton"]
+[node name="FingerAnim" type="TextureRect" parent="HintsMarginContainer/HintsContainer/AquariumButton" unique_id=1557942812]
 unique_name_in_owner = true
 modulate = Color(0.0352941, 0.211765, 0.34902, 0)
 layout_mode = 0
@@ -697,13 +694,11 @@ texture = ExtResource("14_fetof")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton/FingerAnim"]
-autoplay = "idle"
-libraries = {
-"": SubResource("AnimationLibrary_myebw")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HintsMarginContainer/HintsContainer/AquariumButton/FingerAnim" unique_id=524734341]
+libraries/ = SubResource("AnimationLibrary_myebw")
+autoplay = &"idle"
 
-[node name="BrushPicker" parent="." instance=ExtResource("9_bwhp3")]
+[node name="BrushPicker" parent="." unique_id=219995634 instance=ExtResource("9_bwhp3")]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 1)
 layout_mode = 0
@@ -712,24 +707,24 @@ offset_bottom = 0.0
 scale = Vector2(0.42, 0.42)
 mouse_filter = 2
 
-[node name="CenterContainer" parent="BrushPicker" index="0"]
+[node name="CenterContainer" parent="BrushPicker" index="0" unique_id=70624202]
 offset_top = 2720.0
 offset_right = 1714.29
 offset_bottom = 2990.0
 
-[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" index="4"]
+[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" parent_id_path=PackedInt32Array(219995634, 1416137816) index="4" unique_id=46286402]
 visible = false
 
-[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" index="5"]
+[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images" parent_id_path=PackedInt32Array(219995634, 1416137816) index="5" unique_id=1538833813]
 visible = false
 
-[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" index="4"]
+[node name="Wall" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" parent_id_path=PackedInt32Array(219995634, 1938758760) index="4" unique_id=767958873]
 visible = false
 
-[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" index="5"]
+[node name="Block" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Buttons" parent_id_path=PackedInt32Array(219995634, 1938758760) index="5" unique_id=251814506]
 visible = false
 
-[node name="Description" type="MarginContainer" parent="."]
+[node name="Description" type="MarginContainer" parent="." unique_id=1232921096]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_top = 1007.0
@@ -737,14 +732,14 @@ offset_right = 720.0
 offset_bottom = 1127.0
 mouse_filter = 2
 
-[node name="Scroll" type="ScrollContainer" parent="Description"]
+[node name="Scroll" type="ScrollContainer" parent="Description" unique_id=919923240]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 mouse_filter = 2
 follow_focus = true
 horizontal_scroll_mode = 3
 
-[node name="Label" type="Label" parent="Description/Scroll"]
+[node name="Label" type="Label" parent="Description/Scroll" unique_id=1302065153]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -757,21 +752,22 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="AquariumHintContainer" parent="." instance=ExtResource("15_b0gmy")]
+[node name="AquariumHintContainer" parent="." unique_id=349008309 instance=ExtResource("15_b0gmy")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 24.0
 offset_top = 1305.0
 offset_right = 724.0
 offset_bottom = 1555.0
 theme = null
 
-[node name="Title" type="Control" parent="."]
+[node name="Title" type="Control" parent="." unique_id=160464523]
 visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TitleBanner" type="PanelContainer" parent="Title"]
+[node name="TitleBanner" type="PanelContainer" parent="Title" unique_id=1986923336]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("CanvasItemMaterial_3453y")
 layout_mode = 1
@@ -788,7 +784,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c876g")
 
-[node name="Label" type="Label" parent="Title/TitleBanner"]
+[node name="Label" type="Label" parent="Title/TitleBanner" unique_id=2138116952]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 0.32549)
 theme_override_colors/font_outline_color = Color(0.0156863, 0.105882, 0.219608, 1)
@@ -800,7 +796,7 @@ text = "Level title"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="Edit" type="LineEdit" parent="Title"]
+[node name="Edit" type="LineEdit" parent="Title" unique_id=1386677222]
 visible = false
 layout_mode = 0
 offset_left = 74.0
@@ -811,7 +807,7 @@ placeholder_text = "LEVEL_TITLE_PLACEHOLDER"
 max_length = 64
 caret_blink = true
 
-[node name="ContinueContainer" type="VBoxContainer" parent="."]
+[node name="ContinueContainer" type="VBoxContainer" parent="." unique_id=1431725667]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -826,7 +822,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 50
 
-[node name="LeaderboardsButton" type="Button" parent="ContinueContainer"]
+[node name="LeaderboardsButton" type="Button" parent="ContinueContainer" unique_id=1900419983]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -834,7 +830,7 @@ size_flags_horizontal = 8
 focus_mode = 0
 icon = ExtResource("17_7ewnk")
 
-[node name="ShareButton" type="Button" parent="ContinueContainer"]
+[node name="ShareButton" type="Button" parent="ContinueContainer" unique_id=2102646779]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -842,38 +838,36 @@ size_flags_horizontal = 8
 focus_mode = 0
 text = "SHARE"
 
-[node name="ContinueButton" type="Button" parent="ContinueContainer"]
+[node name="ContinueButton" type="Button" parent="ContinueContainer" unique_id=858834072]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "CONTINUE"
 
-[node name="PlayAgainButton" type="Button" parent="ContinueContainer"]
+[node name="PlayAgainButton" type="Button" parent="ContinueContainer" unique_id=1668655178]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "PLAY_AGAIN_NEW_LEVEL"
 
-[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer"]
+[node name="ContinueAnim" type="AnimationPlayer" parent="ContinueContainer" unique_id=1004571580]
 unique_name_in_owner = true
 root_node = NodePath("../ContinueButton")
-libraries = {
-"": SubResource("AnimationLibrary_dnqfm")
-}
+libraries/ = SubResource("AnimationLibrary_dnqfm")
 
-[node name="TutorialDisplayBG" type="ColorRect" parent="."]
+[node name="TutorialDisplayBG" type="ColorRect" parent="." unique_id=343104976]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 z_index = 3
 custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
+layout_mode = 0
 offset_right = 720.0
 offset_bottom = 1280.0
 color = Color(0, 0.0352941, 0.141176, 0.886275)
 
-[node name="TutorialDisplayContainer" type="CenterContainer" parent="TutorialDisplayBG"]
+[node name="TutorialDisplayContainer" type="CenterContainer" parent="TutorialDisplayBG" unique_id=651339045]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 48.0
@@ -883,7 +877,7 @@ offset_bottom = 2626.0
 scale = Vector2(0.45, 0.45)
 mouse_filter = 2
 
-[node name="TutorialDisplay" parent="TutorialDisplayBG/TutorialDisplayContainer" instance=ExtResource("17_46m0x")]
+[node name="TutorialDisplay" parent="TutorialDisplayBG/TutorialDisplayContainer" unique_id=1140899544 instance=ExtResource("17_46m0x")]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
@@ -899,10 +893,10 @@ theme_override_font_sizes/font_size = 80
 custom_minimum_size = Vector2(150, 150)
 theme_override_font_sizes/font_size = 120
 
-[node name="WaveLayer" type="CanvasLayer" parent="."]
+[node name="WaveLayer" type="CanvasLayer" parent="." unique_id=623920739]
 layer = 2
 
-[node name="WaveEffect" parent="WaveLayer" instance=ExtResource("18_ioxu2")]
+[node name="WaveEffect" parent="WaveLayer" unique_id=856452358 instance=ExtResource("18_ioxu2")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_mldsp")
 custom_minimum_size = Vector2(0, 0)
@@ -914,25 +908,23 @@ offset_bottom = 1280.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="SettingsScreen" parent="." instance=ExtResource("4_dk1gs")]
+[node name="SettingsScreen" parent="." unique_id=1967403870 instance=ExtResource("4_dk1gs")]
 unique_name_in_owner = true
 layer = 3
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_b8al2")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2091460268]
+libraries/ = SubResource("AnimationLibrary_b8al2")
 
-[node name="Autosaver" type="Timer" parent="."]
+[node name="Autosaver" type="Timer" parent="." unique_id=1641355218]
 wait_time = 30.0
 autostart = true
 
-[node name="SteamPlaytimeTracker" parent="." instance=ExtResource("20_o7ta7")]
+[node name="SteamPlaytimeTracker" parent="." unique_id=1959439589 instance=ExtResource("20_o7ta7")]
 
-[node name="BottomAdShower" type="Node" parent="."]
+[node name="BottomAdShower" type="Node" parent="." unique_id=530198771]
 script = ExtResource("20_ff4mn")
 
-[node name="PaintManager" parent="." instance=ExtResource("23_1d80d")]
+[node name="PaintManager" parent="." unique_id=65382592 instance=ExtResource("23_1d80d")]
 unique_name_in_owner = true
 
 [connection signal="theme_changed" from="." to="." method="_on_theme_changed"]

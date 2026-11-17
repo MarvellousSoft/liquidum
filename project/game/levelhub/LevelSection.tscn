@@ -1,8 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://dc0n1i0v2jf7g"]
+[gd_scene format=3 uid="uid://dc0n1i0v2jf7g"]
 
-[ext_resource type="Script" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
+[ext_resource type="Script" uid="uid://bq4dqjnyb0iad" path="res://game/levelhub/LevelSection.gd" id="2_5vo2a"]
 [ext_resource type="StyleBox" uid="uid://cuaic14krl4js" path="res://assets/ui/SectionButton/NormalStyle.tres" id="3_57438"]
-[ext_resource type="Shader" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
+[ext_resource type="Shader" uid="uid://bob0owhnds2mx" path="res://assets/shaders/Wave.gdshader" id="3_nwex1"]
 [ext_resource type="PackedScene" uid="uid://dl1moq1i2jjs" path="res://game/levelhub/LevelButton.tscn" id="4_2vvp1"]
 [ext_resource type="StyleBox" uid="uid://gpptqi1sbtas" path="res://assets/ui/SectionButton/CompletedHoverStyle.tres" id="4_ej3iu"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="4_wvh0b"]
@@ -77,8 +77,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pi52m"]
 _data = {
-"RESET": SubResource("Animation_6qrt7"),
-"idle": SubResource("Animation_5li48")
+&"RESET": SubResource("Animation_6qrt7"),
+&"idle": SubResource("Animation_5li48")
 }
 
 [sub_resource type="Gradient" id="Gradient_ovksr"]
@@ -93,15 +93,15 @@ gradient = SubResource("Gradient_ovksr")
 lifetime_randomness = 0.5
 direction = Vector3(0, 0, 0)
 spread = 180.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 500.0
 initial_velocity_max = 500.0
+gravity = Vector3(0, 0, 0)
 tangential_accel_max = 26.97
+attractor_interaction_enabled = false
 scale_min = 0.5
 color_ramp = SubResource("GradientTexture1D_3u54o")
 turbulence_noise_strength = 17.78
 turbulence_noise_scale = 2.659
-attractor_interaction_enabled = false
 
 [sub_resource type="Animation" id="Animation_i0d6d"]
 length = 0.001
@@ -274,12 +274,12 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nwjf5"]
 _data = {
-"RESET": SubResource("Animation_i0d6d"),
-"float": SubResource("Animation_fsyhn"),
-"unlock": SubResource("Animation_h30k4")
+&"RESET": SubResource("Animation_i0d6d"),
+&"float": SubResource("Animation_fsyhn"),
+&"unlock": SubResource("Animation_h30k4")
 }
 
-[node name="LevelSection" type="Control"]
+[node name="LevelSection" type="Control" unique_id=1265394590]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -290,7 +290,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_5vo2a")
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=1775251288]
 layout_mode = 0
 offset_right = 189.0
 offset_bottom = 273.0
@@ -302,11 +302,11 @@ theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1
 theme_override_constants/outline_size = 80
 theme_override_font_sizes/font_size = 150
 theme_override_styles/normal = ExtResource("3_57438")
-theme_override_styles/hover = ExtResource("4_ej3iu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_a7tmt")
+theme_override_styles/hover = ExtResource("4_ej3iu")
 theme_override_styles/disabled = ExtResource("6_lf75c")
 
-[node name="ShaderEffect" type="ColorRect" parent="Button"]
+[node name="ShaderEffect" type="ColorRect" parent="Button" unique_id=1965101588]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_1121v")
 layout_mode = 0
@@ -317,7 +317,7 @@ offset_bottom = 389.145
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 1)
 
-[node name="MouseBlocker" type="ColorRect" parent="Button"]
+[node name="MouseBlocker" type="ColorRect" parent="Button" unique_id=770268746]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_left = -1375.0
@@ -326,15 +326,16 @@ offset_right = 1590.0
 offset_bottom = 1062.0
 mouse_force_pass_scroll_events = false
 
-[node name="OngoingSolution" parent="Button" instance=ExtResource("4_wvh0b")]
+[node name="OngoingSolution" parent="Button" unique_id=1441320476 instance=ExtResource("4_wvh0b")]
 unique_name_in_owner = true
 visible = false
+layout_mode = 0
 offset_left = 129.0
 offset_top = 238.0
 offset_right = 129.0
 offset_bottom = 238.0
 
-[node name="LevelCount" type="Label" parent="Button"]
+[node name="LevelCount" type="Label" parent="Button" unique_id=1257747250]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 176.0
@@ -345,7 +346,7 @@ theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1
 theme_override_constants/outline_size = 51
 text = "0/8"
 
-[node name="NewDLC" type="Label" parent="Button"]
+[node name="NewDLC" type="Label" parent="Button" unique_id=124206171]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 0
@@ -358,14 +359,12 @@ theme_override_colors/font_outline_color = Color(0.0352941, 0.211765, 0.34902, 1
 text = "NEW"
 horizontal_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Button/NewDLC"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Button/NewDLC" unique_id=1513597737]
 root_node = NodePath("../../..")
-autoplay = "idle"
-libraries = {
-"": SubResource("AnimationLibrary_pi52m")
-}
+libraries/ = SubResource("AnimationLibrary_pi52m")
+autoplay = &"idle"
 
-[node name="SectionNumber" type="Label" parent="Button"]
+[node name="SectionNumber" type="Label" parent="Button" unique_id=1762130930]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = -93.0
@@ -379,7 +378,7 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SectionName" type="Label" parent="Button"]
+[node name="SectionName" type="Label" parent="Button" unique_id=798913468]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(300, 0)
@@ -397,7 +396,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="SelectALevel" type="Label" parent="Button"]
+[node name="SelectALevel" type="Label" parent="Button" unique_id=522064000]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
@@ -417,7 +416,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="LevelInfoContainer" type="MarginContainer" parent="Button"]
+[node name="LevelInfoContainer" type="MarginContainer" parent="Button" unique_id=2020602994]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = -154.0
@@ -427,7 +426,7 @@ offset_bottom = 393.0
 pivot_offset = Vector2(190, 190)
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Button/LevelInfoContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/LevelInfoContainer" unique_id=480814369]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -435,7 +434,7 @@ mouse_filter = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="LevelName" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+[node name="LevelName" type="Label" parent="Button/LevelInfoContainer/VBoxContainer" unique_id=31929732]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -448,7 +447,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Completed" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+[node name="Completed" type="Label" parent="Button/LevelInfoContainer/VBoxContainer" unique_id=1400871242]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -458,12 +457,12 @@ theme_override_font_sizes/font_size = 30
 text = "COMPLETED_LEVEL"
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="Button/LevelInfoContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="Button/LevelInfoContainer/VBoxContainer" unique_id=2124965281]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="BestTime" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+[node name="BestTime" type="Label" parent="Button/LevelInfoContainer/VBoxContainer" unique_id=1567467961]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -473,7 +472,7 @@ theme_override_font_sizes/font_size = 20
 text = "BEST_TIME"
 horizontal_alignment = 1
 
-[node name="BestMistakes" type="Label" parent="Button/LevelInfoContainer/VBoxContainer"]
+[node name="BestMistakes" type="Label" parent="Button/LevelInfoContainer/VBoxContainer" unique_id=707985498]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -483,18 +482,18 @@ theme_override_font_sizes/font_size = 20
 text = "BEST_MISTAKES"
 horizontal_alignment = 1
 
-[node name="UnlockParticles" type="GPUParticles2D" parent="Button"]
+[node name="UnlockParticles" type="GPUParticles2D" parent="Button" unique_id=419617096]
 position = Vector2(91, 130)
 emitting = false
 amount = 60
-process_material = SubResource("ParticleProcessMaterial_qqkry")
 texture = ExtResource("8_xte08")
 lifetime = 2.5
 one_shot = true
 speed_scale = 1.5
 explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_qqkry")
 
-[node name="BuyDLCButton" type="Button" parent="Button"]
+[node name="BuyDLCButton" type="Button" parent="Button" unique_id=2132893452]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -509,7 +508,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "DLC_BUY"
 
-[node name="LockIcon" type="TextureRect" parent="Button"]
+[node name="LockIcon" type="TextureRect" parent="Button" unique_id=182836424]
 unique_name_in_owner = true
 visible = false
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
@@ -525,54 +524,64 @@ texture = ExtResource("8_py7ud")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "float"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=72553465]
+libraries/ = SubResource("AnimationLibrary_nwjf5")
+autoplay = &"float"
 speed_scale = 0.7
-libraries = {
-"": SubResource("AnimationLibrary_nwjf5")
-}
 
-[node name="Levels" type="Control" parent="."]
+[node name="Levels" type="Control" parent="." unique_id=1365713452]
 anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
-[node name="LevelButton1" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="LevelButton1" parent="Levels" unique_id=579561354 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = -360.0
 offset_top = -616.0
 offset_right = -360.0
 offset_bottom = -616.0
 
-[node name="LevelButton2" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="OngoingSolution" parent="Levels/LevelButton1" index="1" unique_id=1170163563]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 170.0
+offset_bottom = 70.0
+
+[node name="LevelButton2" parent="Levels" unique_id=1989955714 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = 640.0
 offset_top = -800.0
 offset_right = 640.0
 offset_bottom = -800.0
 
-[node name="LevelButton3" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="LevelButton3" parent="Levels" unique_id=1892147970 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = 1114.0
 offset_top = 18.0
 offset_right = 1114.0
 offset_bottom = 18.0
 
-[node name="LevelButton4" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="LevelButton4" parent="Levels" unique_id=1409884750 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = 922.0
 offset_top = 758.0
 offset_right = 922.0
 offset_bottom = 758.0
 
-[node name="LevelButton5" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="LevelButton5" parent="Levels" unique_id=1788721016 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = -640.0
 offset_top = 600.0
 offset_right = -640.0
 offset_bottom = 600.0
 
-[node name="LevelButton6" parent="Levels" instance=ExtResource("4_2vvp1")]
+[node name="LevelButton6" parent="Levels" unique_id=98057454 instance=ExtResource("4_2vvp1")]
+layout_mode = 0
 offset_left = -908.0
 offset_top = -84.0
 offset_right = -908.0
 offset_bottom = -84.0
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=1063183233]
 layout_mode = 0
 offset_left = -333.0
 offset_top = -466.0
@@ -583,7 +592,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 70
 text = "BACK"
 
-[node name="IconCaptions" type="VBoxContainer" parent="."]
+[node name="IconCaptions" type="VBoxContainer" parent="." unique_id=1632676625]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = -643.0
@@ -592,89 +601,89 @@ offset_right = -300.0
 offset_bottom = 506.0
 alignment = 2
 
-[node name="HardLevelsDesc" type="HBoxContainer" parent="IconCaptions"]
+[node name="HardLevelsDesc" type="HBoxContainer" parent="IconCaptions" unique_id=2046929487]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="TextureRect" type="TextureRect" parent="IconCaptions/HardLevelsDesc"]
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/HardLevelsDesc" unique_id=364584294]
 modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("9_kuosf")
 expand_mode = 2
 
-[node name="Equal" type="Label" parent="IconCaptions/HardLevelsDesc"]
+[node name="Equal" type="Label" parent="IconCaptions/HardLevelsDesc" unique_id=349681108]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "= "
 
-[node name="Meaning" type="Label" parent="IconCaptions/HardLevelsDesc"]
+[node name="Meaning" type="Label" parent="IconCaptions/HardLevelsDesc" unique_id=127432237]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "HARD_LEVEL"
 
-[node name="OngoingDesc" type="HBoxContainer" parent="IconCaptions"]
+[node name="OngoingDesc" type="HBoxContainer" parent="IconCaptions" unique_id=1794064849]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="IconCaptions/OngoingDesc"]
+[node name="HBoxContainer" type="HBoxContainer" parent="IconCaptions/OngoingDesc" unique_id=1326397203]
 layout_mode = 2
 theme_override_constants/separation = -14
 
-[node name="TextureRect" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer" unique_id=1225471671]
 layout_mode = 2
 texture = ExtResource("10_uf1wk")
 expand_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer" unique_id=2011010276]
 layout_mode = 2
 texture = ExtResource("10_uf1wk")
 expand_mode = 2
 
-[node name="TextureRect3" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="IconCaptions/OngoingDesc/HBoxContainer" unique_id=206439796]
 layout_mode = 2
 texture = ExtResource("10_uf1wk")
 expand_mode = 2
 
-[node name="Equal" type="Label" parent="IconCaptions/OngoingDesc"]
+[node name="Equal" type="Label" parent="IconCaptions/OngoingDesc" unique_id=2088321855]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "= "
 
-[node name="Meaning" type="Label" parent="IconCaptions/OngoingDesc"]
+[node name="Meaning" type="Label" parent="IconCaptions/OngoingDesc" unique_id=464208678]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "ONGOING"
 
-[node name="LockDesc" type="HBoxContainer" parent="IconCaptions"]
+[node name="LockDesc" type="HBoxContainer" parent="IconCaptions" unique_id=1710401551]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="TextureRect" type="TextureRect" parent="IconCaptions/LockDesc"]
+[node name="TextureRect" type="TextureRect" parent="IconCaptions/LockDesc" unique_id=318276853]
 layout_mode = 2
 texture = ExtResource("8_py7ud")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Equal" type="Label" parent="IconCaptions/LockDesc"]
+[node name="Equal" type="Label" parent="IconCaptions/LockDesc" unique_id=1941913016]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 40
 text = "= "
 
-[node name="Meaning" type="Label" parent="IconCaptions/LockDesc"]
+[node name="Meaning" type="Label" parent="IconCaptions/LockDesc" unique_id=1956240241]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18

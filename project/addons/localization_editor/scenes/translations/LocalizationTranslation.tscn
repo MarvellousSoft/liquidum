@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://7e0s4rxkpjnh"]
+[gd_scene format=3 uid="uid://7e0s4rxkpjnh"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/translations/LocalizationTranslation.gd" id="1"]
+[ext_resource type="Script" uid="uid://cjj4b2r3bloka" path="res://addons/localization_editor/scenes/translations/LocalizationTranslation.gd" id="1"]
 
-[node name="LocalizationTranslation" type="MarginContainer"]
+[node name="LocalizationTranslation" type="MarginContainer" unique_id=1589431279]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,12 +11,12 @@ theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 script = ExtResource("1")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1939084474]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Translation" type="LineEdit" parent="HBox"]
+[node name="Translation" type="LineEdit" parent="HBox" unique_id=450373498]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

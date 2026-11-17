@@ -428,17 +428,17 @@ unique_name_in_owner = true
 layout_mode = 2
 check_for_satisfied = false
 
-[node name="HBoxContainer" parent="TopInfo/VBoxContainer/MistakeCounter" index="0"]
+[node name="HBoxContainer" parent="TopInfo/VBoxContainer/MistakeCounter" index="0" unique_id=385051941]
 alignment = 2
 
-[node name="Label" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="1"]
+[node name="Label" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="1" unique_id=890143085]
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 96
 autowrap_mode = 0
 
-[node name="Counter" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="2"]
+[node name="Counter" parent="TopInfo/VBoxContainer/MistakeCounter/HBoxContainer" index="2" unique_id=2103771057]
 theme_override_constants/outline_size = 40
 theme_override_font_sizes/font_size = 100
 
@@ -504,9 +504,6 @@ theme = null
 unique_name_in_owner = true
 layout_mode = 0
 offset_bottom = 0.0
-
-[node name="AnimationPlayer" parent="BrushPicker/CenterContainer/HBoxContainer/PanelContainer/Images/NoWater/FingerAnim" index="0"]
-autoplay = &"idle"
 
 [node name="ResetButton" type="TextureButton" parent="." unique_id=1008255317]
 unique_name_in_owner = true

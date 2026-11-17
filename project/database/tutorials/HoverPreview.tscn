@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://d57wc6vvy73r"]
+[gd_scene format=3 uid="uid://d57wc6vvy73r"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_h4jjk"]
-[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_eh2o0"]
+[ext_resource type="Script" uid="uid://da1m208hhrnvo" path="res://database/tutorials/Tutorial.gd" id="2_eh2o0"]
 [ext_resource type="Texture2D" uid="uid://cwle5kbt8vmin" path="res://assets/images/ui/tutorial/empty_cell_bottom_right_open_example.png" id="3_h8qng"]
 [ext_resource type="Texture2D" uid="uid://ccj56pxysxo6d" path="res://assets/images/ui/tutorial/empty_cell_right_open_example.png" id="4_cdc1m"]
 [ext_resource type="Texture2D" uid="uid://dld8m87hv7j5r" path="res://assets/images/ui/icons/mouse.png" id="5_5r75p"]
@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bli5cxgvrmfa7" path="res://assets/images/ui/tutorial/water_cell_no_border_example.png" id="6_i3vb2"]
 [ext_resource type="Texture2D" uid="uid://dasypwk0w0uqo" path="res://assets/images/ui/tutorial/water_cell_full_no_border_example.png" id="7_t4pva"]
 
-[node name="Mouse" type="Control"]
+[node name="Mouse" type="Control" unique_id=1243575827]
 custom_minimum_size = Vector2(840, 640)
 layout_mode = 3
 anchors_preset = 0
@@ -19,8 +19,8 @@ theme = ExtResource("1_h4jjk")
 script = ExtResource("2_eh2o0")
 tutorial_name = "TUT_PREVIEW"
 
-[node name="Equal" type="Label" parent="."]
-layout_mode = 2
+[node name="Equal" type="Label" parent="." unique_id=1462841540]
+layout_mode = 0
 offset_left = 334.0
 offset_top = 42.0
 offset_right = 446.0
@@ -32,14 +32,13 @@ theme_override_font_sizes/font_size = 200
 text = "="
 vertical_alignment = 1
 
-[node name="ClickedEmptyAquarium" type="Control" parent="."]
-layout_mode = 2
+[node name="ClickedEmptyAquarium" type="Control" parent="." unique_id=1916024273]
 anchors_preset = 0
 offset_right = 300.0
 offset_bottom = 384.0
 
-[node name="AquariumEmpty" type="GridContainer" parent="ClickedEmptyAquarium"]
-layout_mode = 2
+[node name="AquariumEmpty" type="GridContainer" parent="ClickedEmptyAquarium" unique_id=111821249]
+layout_mode = 0
 offset_right = 300.0
 offset_bottom = 300.0
 theme_override_constants/h_separation = -2
@@ -47,14 +46,14 @@ theme_override_constants/v_separation = 0
 columns = 2
 metadata/_edit_group_ = true
 
-[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty" unique_id=1928579836]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("3_h8qng")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+[node name="TextureRect2" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty" unique_id=1406422330]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -62,14 +61,14 @@ texture = ExtResource("3_h8qng")
 expand_mode = 1
 flip_h = true
 
-[node name="TextureRect3" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+[node name="TextureRect3" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty" unique_id=1626999325]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("4_cdc1m")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty"]
+[node name="TextureRect4" type="TextureRect" parent="ClickedEmptyAquarium/AquariumEmpty" unique_id=1410483153]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -77,9 +76,9 @@ texture = ExtResource("4_cdc1m")
 expand_mode = 1
 flip_h = true
 
-[node name="Mouse" type="TextureRect" parent="ClickedEmptyAquarium"]
+[node name="Mouse" type="TextureRect" parent="ClickedEmptyAquarium" unique_id=1803766218]
 modulate = Color(0.0156863, 0.105882, 0.219608, 1)
-layout_mode = 2
+layout_mode = 0
 offset_left = 21.0
 offset_top = 434.0
 offset_right = 248.0
@@ -88,7 +87,7 @@ rotation = -0.261799
 texture = ExtResource("5_5r75p")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="ClickedEmptyAquarium"]
+[node name="Label" type="Label" parent="ClickedEmptyAquarium" unique_id=1099629744]
 layout_mode = 0
 offset_top = 317.0
 offset_right = 300.0
@@ -99,7 +98,7 @@ theme_override_font_sizes/font_size = 50
 text = "HOVER"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium"]
+[node name="TextureRect" type="TextureRect" parent="ClickedEmptyAquarium" unique_id=390936052]
 modulate = Color(0.0156863, 0.105882, 0.219608, 1)
 layout_mode = 0
 offset_left = 59.0
@@ -109,15 +108,14 @@ offset_bottom = 177.0
 texture = ExtResource("6_3s8rj")
 expand_mode = 1
 
-[node name="PreviewAquarium" type="Control" parent="."]
-layout_mode = 2
+[node name="PreviewAquarium" type="Control" parent="." unique_id=159257938]
 anchors_preset = 0
 offset_left = 485.0
 offset_right = 785.0
 offset_bottom = 415.0
 
-[node name="AquariumEmpty" type="GridContainer" parent="PreviewAquarium"]
-layout_mode = 2
+[node name="AquariumEmpty" type="GridContainer" parent="PreviewAquarium" unique_id=744766871]
+layout_mode = 0
 offset_right = 300.0
 offset_bottom = 300.0
 theme_override_constants/h_separation = -2
@@ -125,14 +123,14 @@ theme_override_constants/v_separation = 0
 columns = 2
 metadata/_edit_group_ = true
 
-[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/AquariumEmpty" unique_id=1371876270]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("3_h8qng")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/AquariumEmpty" unique_id=765233389]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -140,14 +138,14 @@ texture = ExtResource("3_h8qng")
 expand_mode = 1
 flip_h = true
 
-[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/AquariumEmpty" unique_id=451680460]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("4_cdc1m")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/AquariumEmpty"]
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/AquariumEmpty" unique_id=608497586]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -155,7 +153,7 @@ texture = ExtResource("4_cdc1m")
 expand_mode = 1
 flip_h = true
 
-[node name="PreviewWater" type="GridContainer" parent="PreviewAquarium"]
+[node name="PreviewWater" type="GridContainer" parent="PreviewAquarium" unique_id=1713874306]
 modulate = Color(1, 1, 1, 0.662745)
 layout_mode = 0
 offset_right = 300.0
@@ -165,14 +163,14 @@ theme_override_constants/v_separation = 0
 columns = 2
 metadata/_edit_group_ = true
 
-[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+[node name="TextureRect" type="TextureRect" parent="PreviewAquarium/PreviewWater" unique_id=1141503667]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("6_i3vb2")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+[node name="TextureRect2" type="TextureRect" parent="PreviewAquarium/PreviewWater" unique_id=1209027199]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -180,14 +178,14 @@ texture = ExtResource("6_i3vb2")
 expand_mode = 1
 flip_h = true
 
-[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+[node name="TextureRect3" type="TextureRect" parent="PreviewAquarium/PreviewWater" unique_id=458151393]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("7_t4pva")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/PreviewWater"]
+[node name="TextureRect4" type="TextureRect" parent="PreviewAquarium/PreviewWater" unique_id=540581513]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -195,7 +193,7 @@ texture = ExtResource("7_t4pva")
 expand_mode = 1
 flip_h = true
 
-[node name="Preview" type="Label" parent="PreviewAquarium"]
+[node name="Preview" type="Label" parent="PreviewAquarium" unique_id=149411626]
 layout_mode = 0
 offset_left = -17.0
 offset_top = 317.0

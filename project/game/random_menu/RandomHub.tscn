@@ -1,12 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1eaivgv5cofo"]
+[gd_scene format=3 uid="uid://b1eaivgv5cofo"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
-[ext_resource type="Script" path="res://game/random_menu/RandomHub.gd" id="2_1yoql"]
+[ext_resource type="Script" uid="uid://8cm74mmic2rq" path="res://game/random_menu/RandomHub.gd" id="2_1yoql"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
 [ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_jxjxy"]
 [ext_resource type="Texture2D" uid="uid://yb7nehpgxv4m" path="res://assets/images/ui/spinbox_arrows.png" id="5_xxff2"]
 
-[node name="RandomHub" type="Control"]
+[node name="RandomHub" type="Control" unique_id=710127865]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,7 @@ grow_vertical = 2
 theme = ExtResource("1_7k2d0")
 script = ExtResource("2_1yoql")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=392707642]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -30,67 +30,67 @@ text = "RANDOM_TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Difficulties" type="CenterContainer" parent="."]
+[node name="Difficulties" type="CenterContainer" parent="." unique_id=1482767359]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.2
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBox" type="VBoxContainer" parent="Difficulties"]
+[node name="VBox" type="VBoxContainer" parent="Difficulties" unique_id=1656118829]
 layout_mode = 2
 theme_override_constants/separation = 75
 alignment = 1
 
-[node name="Continue" type="Button" parent="Difficulties/VBox"]
+[node name="Continue" type="Button" parent="Difficulties/VBox" unique_id=2739647]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
-auto_translate = false
 localize_numeral_system = false
 focus_mode = 0
 text = "CONTINUE - EASY_BUTTON"
 
-[node name="ContinueSeparator" type="HSeparator" parent="Difficulties/VBox"]
+[node name="ContinueSeparator" type="HSeparator" parent="Difficulties/VBox" unique_id=1820321636]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Easy" type="Button" parent="Difficulties/VBox"]
+[node name="Easy" type="Button" parent="Difficulties/VBox" unique_id=562173407]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "EASY_BUTTON"
 
-[node name="Medium" type="Button" parent="Difficulties/VBox"]
+[node name="Medium" type="Button" parent="Difficulties/VBox" unique_id=1006385415]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "MEDIUM_BUTTON"
 
-[node name="Hard" type="Button" parent="Difficulties/VBox"]
+[node name="Hard" type="Button" parent="Difficulties/VBox" unique_id=1956931429]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "HARD_BUTTON"
 
-[node name="Expert" type="Button" parent="Difficulties/VBox"]
+[node name="Expert" type="Button" parent="Difficulties/VBox" unique_id=460318146]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "EXPERT_BUTTON"
 
-[node name="Insane" type="Button" parent="Difficulties/VBox"]
+[node name="Insane" type="Button" parent="Difficulties/VBox" unique_id=1555223419]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "INSANE_BUTTON"
 
-[node name="Back" type="Button" parent="."]
+[node name="Back" type="Button" parent="." unique_id=1649374180]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 75.0
@@ -98,7 +98,7 @@ offset_top = 75.0
 focus_mode = 0
 text = "BACK"
 
-[node name="CustomSeedButton" type="Button" parent="."]
+[node name="CustomSeedButton" type="Button" parent="." unique_id=689236231]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -115,7 +115,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 40
 text = "USE_CUSTOM_SEED"
 
-[node name="Seed" type="LineEdit" parent="."]
+[node name="Seed" type="LineEdit" parent="." unique_id=1792135744]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -132,11 +132,11 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 60
 placeholder_text = "SEED"
 max_length = 10
-virtual_keyboard_type = 2
 deselect_on_focus_loss_enabled = false
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=359318709]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -147,122 +147,122 @@ grow_vertical = 2
 theme = ExtResource("4_jxjxy")
 metadata/_edit_group_ = true
 
-[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer"]
+[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer" unique_id=1321406500]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="PanelContainer/CompletedCount"]
+[node name="Title" type="Label" parent="PanelContainer/CompletedCount" unique_id=2082566246]
 layout_mode = 2
 text = "RANDOM_COMPLETED"
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount" unique_id=1406632947]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Easy" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Easy" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=339190039]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Easy"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Easy" unique_id=1026818254]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox" unique_id=1136547343]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "EASY_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Easy/HBox" unique_id=799112314]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Medium" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Medium" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=1259153484]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Medium"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Medium" unique_id=388199690]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox" unique_id=1178443726]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "MEDIUM_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Medium/HBox" unique_id=278183791]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Hard" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Hard" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=47961017]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Hard"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Hard" unique_id=1396667211]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox" unique_id=867706259]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "HARD_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Hard/HBox" unique_id=809150227]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Expert" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Expert" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=322588337]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Expert"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Expert" unique_id=1799193635]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox" unique_id=1628701701]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "EXPERT_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Expert/HBox" unique_id=1678925834]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Insane" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Insane" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=1219909311]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Insane"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Insane" unique_id=1391553596]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox" unique_id=816527177]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "INSANE_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Insane/HBox" unique_id=1247609993]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="MarathonLabel" type="Label" parent="."]
-layout_mode = 2
+[node name="MarathonLabel" type="Label" parent="." unique_id=2090954219]
+layout_mode = 0
 offset_left = 2746.0
 offset_top = 1850.0
 offset_right = 3804.0
@@ -273,7 +273,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="Marathon" type="HBoxContainer" parent="."]
+[node name="Marathon" type="HBoxContainer" parent="." unique_id=1441997319]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -287,25 +287,25 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 70
 
-[node name="Button1" type="Button" parent="Marathon"]
+[node name="Button1" type="Button" parent="Marathon" unique_id=2146148072]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "1"
 
-[node name="Button10" type="Button" parent="Marathon"]
+[node name="Button10" type="Button" parent="Marathon" unique_id=1410249239]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "10"
 
-[node name="Button100" type="Button" parent="Marathon"]
+[node name="Button100" type="Button" parent="Marathon" unique_id=1842307661]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "100"
 
-[node name="Slider" type="SpinBox" parent="Marathon"]
+[node name="Slider" type="SpinBox" parent="Marathon" unique_id=2141128090]
 layout_mode = 2
 theme_override_icons/updown = ExtResource("5_xxff2")
 min_value = 1.0
@@ -314,7 +314,7 @@ alignment = 1
 update_on_text_changed = true
 select_all_on_focus = true
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="." unique_id=1967608207]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 0
@@ -327,7 +327,7 @@ text = "VERSION"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
+[node name="SettingsScreen" parent="." unique_id=733658688 instance=ExtResource("3_6ijuv")]
 
 [connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]

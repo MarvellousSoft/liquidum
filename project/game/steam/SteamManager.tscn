@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://6ar58c2ii1sk"]
+[gd_scene format=3 uid="uid://6ar58c2ii1sk"]
 
-[ext_resource type="Script" path="res://game/steam/SteamManager.gd" id="1_28o4c"]
+[ext_resource type="Script" uid="uid://bketrxn3yckmm" path="res://game/steam/SteamManager.gd" id="1_28o4c"]
 
-[node name="SteamManager" type="Node"]
+[node name="SteamManager" type="Node" unique_id=1580867931]
 script = ExtResource("1_28o4c")
 
-[node name="StoreStats" type="Timer" parent="."]
+[node name="StoreStats" type="Timer" parent="." unique_id=369025590]
 wait_time = 600.0
 autostart = true
 

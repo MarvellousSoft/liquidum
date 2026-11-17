@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bw0ses7ylbbh3"]
+[gd_scene format=3 uid="uid://bw0ses7ylbbh3"]
 
-[ext_resource type="Script" path="res://game/credits/AssetsUsed.gd" id="1_xxgdc"]
+[ext_resource type="Script" uid="uid://pwy40d8x64rg" path="res://game/credits/AssetsUsed.gd" id="1_xxgdc"]
 
-[node name="AssetsUsed" type="Control"]
+[node name="AssetsUsed" type="Control" unique_id=1593717346]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xxgdc")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1799042618]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +23,11 @@ theme_override_constants/margin_top = 200
 theme_override_constants/margin_right = 200
 theme_override_constants/margin_bottom = 100
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=668201371]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Label" type="Label" parent="MarginContainer/ScrollContainer"]
+[node name="Label" type="Label" parent="MarginContainer/ScrollContainer" unique_id=2105088910]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "If not specified, all assets in our project are under the license:
@@ -63,8 +63,8 @@ Sound effect when you complete all levels.
 by qubodup, https://opengameart.org/users/qubodup, CC BY 3.0"
 autowrap_mode = 3
 
-[node name="Back" type="Button" parent="."]
-layout_mode = 2
+[node name="Back" type="Button" parent="." unique_id=295742652]
+layout_mode = 0
 offset_left = 50.0
 offset_top = 50.0
 offset_right = 292.0

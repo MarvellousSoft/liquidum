@@ -1,42 +1,42 @@
-[gd_scene load_steps=6 format=3 uid="uid://bf38u7kebrrib"]
+[gd_scene format=3 uid="uid://bf38u7kebrrib"]
 
 [ext_resource type="Texture2D" uid="uid://bkeugb6vucegl" path="res://addons/localization_editor/icons/Audio.svg" id="2_6uq4h"]
 [ext_resource type="Texture2D" uid="uid://dl6cg75c815d8" path="res://addons/localization_editor/icons/Image.svg" id="3_aivuy"]
 [ext_resource type="Texture2D" uid="uid://oxmydroedm6f" path="res://addons/localization_editor/icons/Video.svg" id="4_mrycj"]
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsKeysHead.gd" id="5"]
+[ext_resource type="Script" uid="uid://dihyvanvv2rbj" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsKeysHead.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://n1yxscibler4" path="res://addons/localization_editor/icons/Cancel.svg" id="5_ydycg"]
 
-[node name="Head" type="MarginContainer"]
+[node name="Head" type="MarginContainer" unique_id=466383455]
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 0
 script = ExtResource("5")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1386951312]
 layout_mode = 2
 
-[node name="HBoxTop" type="HBoxContainer" parent="VBox"]
+[node name="HBoxTop" type="HBoxContainer" parent="VBox" unique_id=370873204]
 layout_mode = 2
 
-[node name="Music" type="Button" parent="VBox/HBoxTop"]
+[node name="Music" type="Button" parent="VBox/HBoxTop" unique_id=1805512760]
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("2_6uq4h")
 
-[node name="Image" type="Button" parent="VBox/HBoxTop"]
+[node name="Image" type="Button" parent="VBox/HBoxTop" unique_id=47693217]
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("3_aivuy")
 
-[node name="HBoxBottom" type="HBoxContainer" parent="VBox"]
+[node name="HBoxBottom" type="HBoxContainer" parent="VBox" unique_id=1868534671]
 layout_mode = 2
 
-[node name="Video" type="Button" parent="VBox/HBoxBottom"]
+[node name="Video" type="Button" parent="VBox/HBoxBottom" unique_id=761113423]
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("4_mrycj")
 
-[node name="Reset" type="Button" parent="VBox/HBoxBottom"]
+[node name="Reset" type="Button" parent="VBox/HBoxBottom" unique_id=1694794544]
 layout_mode = 2
 icon = ExtResource("5_ydycg")

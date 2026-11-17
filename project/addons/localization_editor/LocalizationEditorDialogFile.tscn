@@ -1,4 +1,4 @@
 [gd_scene format=3 uid="uid://bwk4o1tcfbnr0"]
 
-[node name="LocalizationEditorDialogFile" type="FileDialog"]
+[node name="LocalizationEditorDialogFile" type="FileDialog" unique_id=189583926]
 filters = PackedStringArray("*.csv")

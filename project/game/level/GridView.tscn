@@ -1,7 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://bde14y8dr2ugg"]
+[gd_scene format=3 uid="uid://bde14y8dr2ugg"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_1r4dl"]
-[ext_resource type="Script" path="res://game/level/GridView.gd" id="1_a7a5u"]
+[ext_resource type="Script" uid="uid://bqv4emnj5i6rb" path="res://game/level/GridView.gd" id="1_a7a5u"]
 [ext_resource type="PackedScene" uid="uid://edlqrx1gw8k0" path="res://game/level/hints/HintBar.tscn" id="2_q06jt"]
 [ext_resource type="PackedScene" uid="uid://dg36xpbgk5g24" path="res://game/level/cells/RegularCell.tscn" id="3_68xyc"]
 [ext_resource type="PackedScene" uid="uid://dpf2p7vtpwwqe" path="res://game/level/cells/CellCorner.tscn" id="4_tc07c"]
@@ -44,11 +44,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hctdx"]
 _data = {
-"RESET": SubResource("Animation_n7vvy"),
-"startup": SubResource("Animation_0ktux")
+&"RESET": SubResource("Animation_n7vvy"),
+&"startup": SubResource("Animation_0ktux")
 }
 
-[node name="GridView" type="Control"]
+[node name="GridView" type="Control" unique_id=43820388]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,85 +58,91 @@ grow_vertical = 2
 theme = ExtResource("1_1r4dl")
 script = ExtResource("1_a7a5u")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=212884960]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 use_top_left = true
 
-[node name="GridContainer" type="GridContainer" parent="CenterContainer"]
+[node name="GridContainer" type="GridContainer" parent="CenterContainer" unique_id=284539853]
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 3
 
-[node name="TLPanel" type="Panel" parent="CenterContainer/GridContainer"]
+[node name="TLPanel" type="Panel" parent="CenterContainer/GridContainer" unique_id=676487664]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="HintBarTop" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
+[node name="HintBarTop" parent="CenterContainer/GridContainer" unique_id=1638547770 instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
 layout_mode = 2
 is_horizontal = true
 
-[node name="TRPanel" type="Panel" parent="CenterContainer/GridContainer"]
+[node name="TRPanel" type="Panel" parent="CenterContainer/GridContainer" unique_id=373956537]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="HintBarLeft" parent="CenterContainer/GridContainer" instance=ExtResource("2_q06jt")]
+[node name="HintBarLeft" parent="CenterContainer/GridContainer" unique_id=948496530 instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Horizontal" parent="CenterContainer/GridContainer/HintBarLeft" index="0"]
 visible = false
 
-[node name="Columns" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+[node name="Columns" type="VBoxContainer" parent="CenterContainer/GridContainer" unique_id=1760554077]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Row1" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
+[node name="Row1" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns" unique_id=1288779996]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row1" unique_id=300316574 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="AnimationPlayer" parent="CenterContainer/GridContainer/Columns/Row1/RegularCell/Boat" index="0"]
+autoplay = &"idle"
+
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row1" unique_id=1071888875 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row1" instance=ExtResource("3_68xyc")]
+[node name="AnimationPlayer" parent="CenterContainer/GridContainer/Columns/Row1/RegularCell2/Boat" index="0"]
+autoplay = &"idle"
+
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row1" unique_id=501313255 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="Row2" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
+[node name="Row2" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns" unique_id=1837673015]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row2" unique_id=230082960 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row2" unique_id=1902636826 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row2" instance=ExtResource("3_68xyc")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row2" unique_id=1180914297 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="Row3" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns"]
+[node name="Row3" type="HBoxContainer" parent="CenterContainer/GridContainer/Columns" unique_id=2136504724]
 layout_mode = 2
 
-[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell" parent="CenterContainer/GridContainer/Columns/Row3" unique_id=1767194112 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell2" parent="CenterContainer/GridContainer/Columns/Row3" unique_id=981701425 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row3" instance=ExtResource("3_68xyc")]
+[node name="RegularCell3" parent="CenterContainer/GridContainer/Columns/Row3" unique_id=130823888 instance=ExtResource("3_68xyc")]
 layout_mode = 2
 
-[node name="RightVBox" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+[node name="RightVBox" type="VBoxContainer" parent="CenterContainer/GridContainer" unique_id=459664098]
 layout_mode = 2
 alignment = 2
 
-[node name="HintBarRight" parent="CenterContainer/GridContainer/RightVBox" instance=ExtResource("2_q06jt")]
+[node name="HintBarRight" parent="CenterContainer/GridContainer/RightVBox" unique_id=19588087 instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
 layout_mode = 2
 max_alpha = 0.5
@@ -144,22 +150,22 @@ max_alpha = 0.5
 [node name="Horizontal" parent="CenterContainer/GridContainer/RightVBox/HintBarRight" index="0"]
 visible = false
 
-[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer/RightVBox/HintBarRight"]
+[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer/RightVBox/HintBarRight" unique_id=1708186981]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/RightVBox"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/RightVBox" unique_id=1209925350]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 
-[node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/GridContainer/RightVBox/MarginContainer"]
+[node name="EditColumnSize" type="HBoxContainer" parent="CenterContainer/GridContainer/RightVBox/MarginContainer" unique_id=66704954]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 10
 
-[node name="-" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize"]
+[node name="-" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize" unique_id=936331170]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 8
@@ -168,12 +174,12 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
 theme_override_styles/normal = ExtResource("5_lbb5x")
-theme_override_styles/hover = ExtResource("6_gvyph")
 theme_override_styles/pressed = ExtResource("7_8e5in")
+theme_override_styles/hover = ExtResource("6_gvyph")
 text = "-
 "
 
-[node name="+" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize"]
+[node name="+" type="Button" parent="CenterContainer/GridContainer/RightVBox/MarginContainer/EditColumnSize" unique_id=1535822063]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 8
@@ -182,38 +188,38 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
 theme_override_styles/normal = ExtResource("8_s30ge")
-theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
+theme_override_styles/hover = ExtResource("9_uydqk")
 text = "+"
 
-[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer"]
+[node name="BLPanel" type="Panel" parent="CenterContainer/GridContainer" unique_id=1732079889]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="BottomHBox" type="HBoxContainer" parent="CenterContainer/GridContainer"]
+[node name="BottomHBox" type="HBoxContainer" parent="CenterContainer/GridContainer" unique_id=1092889522]
 layout_mode = 2
 size_flags_horizontal = 8
 alignment = 2
 
-[node name="HintBarBottom" parent="CenterContainer/GridContainer/BottomHBox" instance=ExtResource("2_q06jt")]
+[node name="HintBarBottom" parent="CenterContainer/GridContainer/BottomHBox" unique_id=60431472 instance=ExtResource("2_q06jt")]
 unique_name_in_owner = true
 layout_mode = 2
 is_horizontal = true
 max_alpha = 0.5
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/BottomHBox"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/GridContainer/BottomHBox" unique_id=2034442093]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 20
 
-[node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer"]
+[node name="EditRowSize" type="VBoxContainer" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer" unique_id=10749465]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="-" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize"]
+[node name="-" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize" unique_id=1739529420]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -222,12 +228,12 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
 theme_override_styles/normal = ExtResource("5_lbb5x")
-theme_override_styles/hover = ExtResource("6_gvyph")
 theme_override_styles/pressed = ExtResource("7_8e5in")
+theme_override_styles/hover = ExtResource("6_gvyph")
 text = "-
 "
 
-[node name="+" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize"]
+[node name="+" type="Button" parent="CenterContainer/GridContainer/BottomHBox/MarginContainer/EditRowSize" unique_id=346862587]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -237,11 +243,11 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 210
 theme_override_styles/normal = ExtResource("8_s30ge")
-theme_override_styles/hover = ExtResource("9_uydqk")
 theme_override_styles/pressed = ExtResource("10_f8tbb")
+theme_override_styles/hover = ExtResource("9_uydqk")
 text = "+"
 
-[node name="SizePanel" type="MarginContainer" parent="CenterContainer/GridContainer"]
+[node name="SizePanel" type="MarginContainer" parent="CenterContainer/GridContainer" unique_id=1675455103]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -249,7 +255,7 @@ mouse_filter = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
 
-[node name="GridSizeLabel" type="Label" parent="CenterContainer/GridContainer/SizePanel"]
+[node name="GridSizeLabel" type="Label" parent="CenterContainer/GridContainer/SizePanel" unique_id=868106998]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -258,7 +264,7 @@ theme_override_constants/outline_size = 70
 theme_override_font_sizes/font_size = 150
 text = "10x10"
 
-[node name="CellCornerGrid" type="GridContainer" parent="."]
+[node name="CellCornerGrid" type="GridContainer" parent="." unique_id=1016148640]
 z_index = 1
 layout_mode = 1
 offset_right = 1150.0
@@ -268,69 +274,67 @@ theme_override_constants/h_separation = 250
 theme_override_constants/v_separation = 250
 columns = 4
 
-[node name="CellCorner" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner" parent="CellCornerGrid" unique_id=454292612 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner2" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner2" parent="CellCornerGrid" unique_id=905889376 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner3" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner3" parent="CellCornerGrid" unique_id=1955153408 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner4" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner4" parent="CellCornerGrid" unique_id=1819923037 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner5" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner5" parent="CellCornerGrid" unique_id=1368574497 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner6" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner6" parent="CellCornerGrid" unique_id=312713874 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner7" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner7" parent="CellCornerGrid" unique_id=1457088790 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner8" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner8" parent="CellCornerGrid" unique_id=1793583481 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner9" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner9" parent="CellCornerGrid" unique_id=1460206014 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner10" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner10" parent="CellCornerGrid" unique_id=1218658038 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner11" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner11" parent="CellCornerGrid" unique_id=1700894609 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner12" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner12" parent="CellCornerGrid" unique_id=1446512630 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner13" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner13" parent="CellCornerGrid" unique_id=1447882401 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner14" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner14" parent="CellCornerGrid" unique_id=1924970142 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner15" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner15" parent="CellCornerGrid" unique_id=1702826390 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="CellCorner16" parent="CellCornerGrid" instance=ExtResource("4_tc07c")]
+[node name="CellCorner16" parent="CellCornerGrid" unique_id=1503206336 instance=ExtResource("4_tc07c")]
 layout_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_hctdx")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=461709515]
+libraries/ = SubResource("AnimationLibrary_hctdx")
 
-[node name="DragPreviewCanvas" type="CanvasLayer" parent="."]
+[node name="DragPreviewCanvas" type="CanvasLayer" parent="." unique_id=922443668]
 
-[node name="DragPreviewLine" type="Line2D" parent="DragPreviewCanvas"]
+[node name="DragPreviewLine" type="Line2D" parent="DragPreviewCanvas" unique_id=1233214073]
 width = 8.0
 default_color = Color(0, 0, 0, 1)
 begin_cap_mode = 2
 end_cap_mode = 2
 antialiased = true
 
-[node name="LongTouchTimer" type="Timer" parent="."]
+[node name="LongTouchTimer" type="Timer" parent="." unique_id=1492922918]
 wait_time = 0.5
 one_shot = true
 

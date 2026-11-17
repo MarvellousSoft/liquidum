@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://btndayenc110g"]
+[gd_scene format=3 uid="uid://btndayenc110g"]
 
-[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="1_st5mj"]
+[ext_resource type="Shader" uid="uid://d01b8vw7ao2jc" path="res://assets/shaders/RippleShader.gdshader" id="1_st5mj"]
 [ext_resource type="FontFile" uid="uid://divxru3x843oj" path="res://assets/fonts/Comfortaa-Bold.ttf" id="1_wnywq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ly"]
@@ -9,19 +9,19 @@ shader_parameter/wave_count = 9.0
 shader_parameter/speed = 0.7
 shader_parameter/height = 0.005
 
-[node name="Title" type="Control"]
+[node name="Title" type="Control" unique_id=2057589083]
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1912840729]
 layout_mode = 0
 offset_top = 441.0
 offset_right = 3860.0
 offset_bottom = 941.0
 mouse_filter = 2
 
-[node name="TitleLabel" type="Label" parent="CenterContainer"]
+[node name="TitleLabel" type="Label" parent="CenterContainer" unique_id=1466118905]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45098, 0.941176, 0.776471, 1)
 theme_override_colors/font_shadow_color = Color(0, 0.0352941, 0.141176, 1)
@@ -34,7 +34,7 @@ text = "Liquidum"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ShaderEffect" type="ColorRect" parent="."]
+[node name="ShaderEffect" type="ColorRect" parent="." unique_id=524203632]
 material = SubResource("ShaderMaterial_hu5ly")
 layout_mode = 0
 offset_left = -51.0

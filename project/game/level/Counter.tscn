@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://cq2k6358oxu3f"]
+[gd_scene format=3 uid="uid://cq2k6358oxu3f"]
 
-[ext_resource type="Script" path="res://game/level/Counter.gd" id="1_bwmcc"]
+[ext_resource type="Script" uid="uid://bkd4k7fk6o0dh" path="res://game/level/Counter.gd" id="1_bwmcc"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="2_hnkmi"]
 [ext_resource type="Theme" uid="uid://coxmpyqhwgjw1" path="res://assets/ui/CounterTheme.tres" id="2_wetut"]
 [ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="3_86ios"]
@@ -91,26 +91,26 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_infr8"]
 _data = {
-"RESET": SubResource("Animation_ott8p"),
-"startup": SubResource("Animation_eidh2"),
-"update_counter": SubResource("Animation_irywk"),
-"update_counter_big": SubResource("Animation_8cqt4"),
-"update_counter_mobile": SubResource("Animation_5bxwh")
+&"RESET": SubResource("Animation_ott8p"),
+&"startup": SubResource("Animation_eidh2"),
+&"update_counter": SubResource("Animation_irywk"),
+&"update_counter_big": SubResource("Animation_8cqt4"),
+&"update_counter_mobile": SubResource("Animation_5bxwh")
 }
 
-[node name="Counter" type="BoxContainer"]
+[node name="Counter" type="BoxContainer" unique_id=2077918789]
 modulate = Color(1, 1, 1, 0)
 mouse_filter = 2
 script = ExtResource("1_bwmcc")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=385051941]
 custom_minimum_size = Vector2(0, 81)
 layout_mode = 2
 mouse_filter = 2
 theme = ExtResource("2_wetut")
 theme_override_constants/separation = 15
 
-[node name="VisibilityButton" parent="HBoxContainer" instance=ExtResource("3_86ios")]
+[node name="VisibilityButton" parent="HBoxContainer" unique_id=2046080250 instance=ExtResource("3_86ios")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -118,7 +118,7 @@ size_flags_vertical = 0
 [node name="BG" parent="HBoxContainer/VisibilityButton" index="0"]
 custom_minimum_size = Vector2(50, 50)
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=890143085]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
@@ -130,7 +130,7 @@ text = "MISTAKES"
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Counter" type="Label" parent="HBoxContainer"]
+[node name="Counter" type="Label" parent="HBoxContainer" unique_id=2103771057]
 layout_mode = 2
 theme_override_constants/outline_size = 45
 theme_override_fonts/font = SubResource("FontVariation_bdphc")
@@ -139,9 +139,7 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_infr8")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=687875760]
+libraries/ = SubResource("AnimationLibrary_infr8")
 
 [editable path="HBoxContainer/VisibilityButton"]

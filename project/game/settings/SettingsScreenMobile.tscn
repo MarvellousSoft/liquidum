@@ -1,6 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://fbn8fagd6qbm"]
+[gd_scene format=3 uid="uid://fbn8fagd6qbm"]
 
-[ext_resource type="Script" path="res://game/settings/SettingsScreen.gd" id="1_eau0i"]
+[ext_resource type="Script" uid="uid://bpqvi1kp51rda" path="res://game/settings/SettingsScreen.gd" id="1_eau0i"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_hpxdw"]
 [ext_resource type="Theme" uid="uid://dcnk7jk5h3hov" path="res://assets/ui/SettingsMobileTheme.tres" id="3_crrjp"]
 [ext_resource type="Texture2D" uid="uid://dlxn50psp55f3" path="res://assets/images/ui/settings/checkbox_unpressed.png" id="4_d7qef"]
@@ -166,16 +166,16 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sb0jh"]
 _data = {
-"RESET": SubResource("Animation_mqb4d"),
-"disable": SubResource("Animation_84cm6"),
-"enable": SubResource("Animation_mh6ii")
+&"RESET": SubResource("Animation_mqb4d"),
+&"disable": SubResource("Animation_84cm6"),
+&"enable": SubResource("Animation_mh6ii")
 }
 
-[node name="SettingsScreen" type="CanvasLayer"]
+[node name="SettingsScreen" type="CanvasLayer" unique_id=1024570672]
 layer = 2
 script = ExtResource("1_eau0i")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=246920968]
 visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -185,10 +185,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_hpxdw")]
+[node name="MobileBGHelp" parent="." unique_id=1448362368 instance=ExtResource("2_hpxdw")]
 visible = false
 
-[node name="Settings" type="Control" parent="."]
+[node name="Settings" type="Control" parent="." unique_id=1849745461]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -198,32 +198,32 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("3_crrjp")
 
-[node name="CenterContainer" type="CenterContainer" parent="Settings"]
+[node name="CenterContainer" type="CenterContainer" parent="Settings" unique_id=195590004]
 layout_mode = 0
 offset_top = 200.0
 offset_right = 722.0
 offset_bottom = 1280.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/CenterContainer" unique_id=1975293900]
 custom_minimum_size = Vector2(0, 1080)
 layout_mode = 2
 theme_override_constants/separation = 69
 alignment = 1
 
-[node name="TitleContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="TitleContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer" unique_id=1170097292]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="LevelTitle" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+[node name="LevelTitle" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" unique_id=1656410795]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "LEVEL_NAME"
 horizontal_alignment = 1
 
-[node name="LevelID" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer"]
+[node name="LevelID" type="Label" parent="Settings/CenterContainer/VBoxContainer/TitleContainer" unique_id=2092703738]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
@@ -231,31 +231,33 @@ text = "LEVEL_ID"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TabContainer" type="TabContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="Settings/CenterContainer/VBoxContainer" unique_id=522494625]
 custom_minimum_size = Vector2(100, 700)
 layout_mode = 2
 tab_alignment = 1
+current_tab = 0
 clip_tabs = false
 
-[node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="DISPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer" unique_id=1490628355]
 layout_mode = 2
 theme_override_constants/margin_top = 10
+metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY" unique_id=136116410]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer" unique_id=2037035846]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 41
 alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="HSeparator" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=1425989407]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="GeneralDisplayLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="GeneralDisplayLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=1176116682]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
 theme_override_font_sizes/font_size = 45
@@ -263,24 +265,24 @@ text = "GENERAL_DISPLAY"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="LanguageVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="LanguageVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=117965385]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="LanguageMobileLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox"]
+[node name="LanguageMobileLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox" unique_id=1674331264]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "LANGUAGE_SELECT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox"]
+[node name="LanguageSelectContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox" unique_id=56969961]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer" unique_id=949452415]
 visible = false
 layout_mode = 2
 theme_override_constants/line_spacing = 47
@@ -289,11 +291,11 @@ text = "LANGUAGE_SELECT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox/LanguageSelectContainer" unique_id=613648533]
 layout_mode = 2
 focus_mode = 0
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "LANGUAGE_SYSTEM"
 popup/item_0/id = 0
 popup/item_1/text = "English"
@@ -301,20 +303,20 @@ popup/item_1/id = 1
 popup/item_2/text = "Português"
 popup/item_2/id = 2
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/LanguageVBox" unique_id=668465332]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "RESTART_MAY_BE_NECESSARY"
 horizontal_alignment = 1
 
-[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="FullscreenContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=478261673]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/FullscreenContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/FullscreenContainer" unique_id=471412153]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -325,7 +327,7 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/FullscreenContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/FullscreenContainer" unique_id=70481026]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 47
@@ -333,24 +335,24 @@ text = "FULLSCREEN"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="VsyncContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="VsyncContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=1656025999]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/VsyncContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/VsyncContainer" unique_id=1851967671]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "VSYNC"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/VsyncContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/VsyncContainer" unique_id=1979690992]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-item_count = 4
 selected = 1
+item_count = 4
 popup/item_0/text = "DISABLED"
 popup/item_0/id = 0
 popup/item_1/text = "ENABLED"
@@ -360,7 +362,7 @@ popup/item_2/id = 2
 popup/item_3/text = "MAILBOX"
 popup/item_3/id = 3
 
-[node name="VisibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="VisibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=2085460243]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
 theme_override_font_sizes/font_size = 45
@@ -368,13 +370,13 @@ text = "VISIBILITY"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="DarkModeContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="DarkModeContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=1495066499]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer" unique_id=1454614149]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -385,7 +387,7 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/DarkModeContainer" unique_id=1704235827]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 47
@@ -393,47 +395,47 @@ text = "DARK_MODE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PaletteContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="PaletteContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=574022206]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer" unique_id=836439971]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "PALETTE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/PaletteContainer" unique_id=1035532776]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 
-[node name="BlueFilterContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="BlueFilterContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=63856106]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer" unique_id=1611033375]
 layout_mode = 2
 text = "BLUE_FILTER"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/BlueFilterContainer" unique_id=360466722]
 layout_mode = 2
 value = 50.0
 
-[node name="ShowBubblesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="ShowBubblesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=113177286]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer" unique_id=1605514538]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -444,7 +446,7 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox/ShowBubblesContainer" unique_id=1096091896]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 47
@@ -452,29 +454,30 @@ text = "SHOW_BUBBLES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox"]
+[node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/DISPLAY/ScrollContainer/VBox" unique_id=1744205885]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="GAMEPLAY" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer" unique_id=628313071]
 visible = false
 custom_minimum_size = Vector2(100, 600)
 layout_mode = 2
+metadata/_tab_index = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY" unique_id=1110722111]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer" unique_id=931514189]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 70
 alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HSeparator" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1124380792]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="PlaystyleLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="PlaystyleLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=41942257]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
 theme_override_font_sizes/font_size = 45
@@ -482,13 +485,13 @@ text = "PLAYSTYLE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="AllowMistakesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="AllowMistakesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1438733767]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer" unique_id=2098956491]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -499,20 +502,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/AllowMistakesContainer" unique_id=2064299635]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "ALLOW_MISTAKES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ShowTimerContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="ShowTimerContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=467137158]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer" unique_id=1869057587]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -523,32 +526,32 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowTimerContainer" unique_id=128756422]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "SHOW_TIMER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="IncompleteInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="IncompleteInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=428190445]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer" unique_id=1311661727]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "INCOMPLETE_LINE_INFO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/IncompleteInfoContainer" unique_id=1095165573]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "LINE_INFO_NONE"
 popup/item_0/id = 0
 popup/item_1/text = "LINE_INFO_MISSING"
@@ -556,13 +559,13 @@ popup/item_1/id = 1
 popup/item_2/text = "LINE_INFO_CURRENT"
 popup/item_2/id = 2
 
-[node name="HighlightHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HighlightHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=75678948]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer" unique_id=1373012388]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -573,20 +576,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightHintsContainer" unique_id=1959427095]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "HIGHLIGHT_HINTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HighlightLinesContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1305550759]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer" unique_id=2106525086]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -597,20 +600,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightLinesContainer" unique_id=906001089]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "HIGHLIGHT_LINES_MOBILE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="ShowPreviewContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=629539547]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer" unique_id=249297471]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -621,20 +624,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ShowPreviewContainer" unique_id=315226688]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "SHOW_PREVIEW"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HideUnknownContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HideUnknownContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1577636050]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HideUnknownContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HideUnknownContainer" unique_id=398943203]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -645,20 +648,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HideUnknownContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HideUnknownContainer" unique_id=2096957587]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "HIDE_UNKNOWN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ProgressOnUnknownContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="ProgressOnUnknownContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=64912290]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer" unique_id=138912571]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -669,20 +672,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ProgressOnUnknownContainer" unique_id=247408661]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "PROGRESS_ON_UNKNOWN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DragContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="DragContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=755253540]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer" unique_id=1510517024]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -693,20 +696,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DragContainer" unique_id=272147312]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "DRAG_BUTTON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SkipAnimsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="SkipAnimsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1408537221]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/SkipAnimsContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/SkipAnimsContainer" unique_id=1069690864]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -717,7 +720,7 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/SkipAnimsContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/SkipAnimsContainer" unique_id=1182118470]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 47
@@ -725,37 +728,37 @@ text = "SKIP_ANIMS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CellHintsInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="CellHintsInfoContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1025998907]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer" unique_id=1207534330]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "CELLHINTS_INFO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer"]
+[node name="OptionButton" type="OptionButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/CellHintsInfoContainer" unique_id=1777122126]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "CELLHINTS_TOTAL"
 popup/item_0/id = 0
 popup/item_1/text = "CELLHINTS_REMAINING"
 popup/item_1/id = 1
 
-[node name="HighlightCellHintContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HighlightCellHintContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=108019663]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer" unique_id=1096399437]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -766,14 +769,14 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/HighlightCellHintContainer" unique_id=45389244]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "HIGHLIGHT_CELL_HINT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AccessibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="AccessibilityLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=722415991]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
 theme_override_font_sizes/font_size = 45
@@ -781,13 +784,13 @@ text = "ACCESSIBILITY"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="BiggerHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="BiggerHintsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1686485767]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer" unique_id=122109846]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -798,20 +801,20 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/BiggerHintsContainer" unique_id=1923253722]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "BIGGER_HINTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ThickerWallsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="ThickerWallsContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1466508349]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer" unique_id=1044138451]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -822,14 +825,14 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/ThickerWallsContainer" unique_id=1250308586]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "THICKER_WALLS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MiscellaneousLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="MiscellaneousLabel" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=57983777]
 layout_mode = 2
 theme_override_constants/line_spacing = 15
 theme_override_font_sizes/font_size = 45
@@ -837,13 +840,13 @@ text = "MISCELLANEOUS"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="DailyNotifContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="DailyNotifContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=992483055]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer" unique_id=1661734711]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -854,7 +857,7 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/DailyNotifContainer" unique_id=576327585]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 47
@@ -862,17 +865,17 @@ text = "DAILY_NOTIF"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UnlockVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="UnlockVBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=812528803]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="UnlockContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox"]
+[node name="UnlockContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox" unique_id=1311591275]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer" unique_id=1462268838]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -883,24 +886,24 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox/UnlockContainer" unique_id=1205468395]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "UNLOCK_EVERYTHING_BUTTON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UnlockDesc" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox"]
+[node name="UnlockDesc" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox/UnlockVBox" unique_id=1031242076]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "UNLOCK_EVERYTHING_DESC"
 horizontal_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox"]
+[node name="HSeparator2" type="HSeparator" parent="Settings/CenterContainer/VBoxContainer/TabContainer/GAMEPLAY/ScrollContainer/VBox" unique_id=1950606573]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="SOUND" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer" unique_id=1819385942]
 visible = false
 custom_minimum_size = Vector2(100, 600)
 layout_mode = 2
@@ -908,68 +911,70 @@ theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 30
+metadata/_tab_index = 2
 
-[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND" unique_id=2118872107]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+[node name="MasterSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox" unique_id=643963262]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer" unique_id=2102475940]
 layout_mode = 2
 text = "MASTER_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/MasterSoundContainer" unique_id=952557234]
 layout_mode = 2
 value = 50.0
 
-[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+[node name="BGMSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox" unique_id=142268622]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer" unique_id=2120615649]
 layout_mode = 2
 text = "BGM_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/BGMSoundContainer" unique_id=777178062]
 layout_mode = 2
 
-[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox"]
+[node name="SFXSoundContainer" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox" unique_id=1656448845]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer" unique_id=1256784213]
 layout_mode = 2
 text = "SFX_SOUND"
 horizontal_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer"]
+[node name="HSlider" type="HSlider" parent="Settings/CenterContainer/VBoxContainer/TabContainer/SOUND/VBox/SFXSoundContainer" unique_id=1758943580]
 layout_mode = 2
 
-[node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer"]
+[node name="CONTROLS" type="MarginContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer" unique_id=1755768815]
 visible = false
 custom_minimum_size = Vector2(100, 500)
 layout_mode = 2
+metadata/_tab_index = 3
 
-[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS"]
+[node name="VBox" type="VBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS" unique_id=1446165911]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+[node name="InvertMouseContainer" type="HBoxContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox" unique_id=940675693]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer"]
+[node name="CheckBox" type="TextureButton" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer" unique_id=848534698]
 custom_minimum_size = Vector2(66, 70)
 layout_mode = 2
 focus_mode = 0
@@ -980,68 +985,68 @@ texture_hover = ExtResource("6_gfgdl")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer"]
+[node name="Label" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/InvertMouseContainer" unique_id=374916870]
 layout_mode = 2
 theme_override_constants/line_spacing = 47
 text = "INVERT_MOUSE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="ControlList" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+[node name="ControlList" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox" unique_id=419433442]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "CONTROL_LIST"
 horizontal_alignment = 1
 
-[node name="Controls" type="CenterContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox"]
+[node name="Controls" type="CenterContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox" unique_id=351118148]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls" unique_id=1782139074]
 custom_minimum_size = Vector2(100, 250)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="HBoxContainer" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer"]
+[node name="HBoxContainer" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer" unique_id=1226794910]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 50
 theme_override_constants/v_separation = 20
 columns = 2
 
-[node name="Key1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Key1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1414170343]
 layout_mode = 2
 text = "TAP"
 horizontal_alignment = 2
 
-[node name="Control1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Control1" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1971751681]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "PLACE_BRUSH"
 autowrap_mode = 3
 
-[node name="Key2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Key2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1407908166]
 layout_mode = 2
 text = "HOLD"
 horizontal_alignment = 2
 
-[node name="Control2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Control2" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1656088410]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "PREVIEW"
 autowrap_mode = 3
 
-[node name="Key3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Key3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1273063950]
 layout_mode = 2
 text = "DRAG_TOUCH"
 horizontal_alignment = 2
 
-[node name="Control3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer"]
+[node name="Control3" type="Label" parent="Settings/CenterContainer/VBoxContainer/TabContainer/CONTROLS/VBox/Controls/ScrollContainer/HBoxContainer" unique_id=1301995665]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "PLACE_DRAG"
 autowrap_mode = 3
 
-[node name="BottomButtonGrid" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="BottomButtonGrid" type="GridContainer" parent="Settings/CenterContainer/VBoxContainer" unique_id=1634951904]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1049,7 +1054,7 @@ theme_override_constants/h_separation = 65
 theme_override_constants/v_separation = 51
 columns = 2
 
-[node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="RemoveAdsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=1039255583]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 5
@@ -1057,7 +1062,7 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "REMOVE_ADS"
 
-[node name="RestorePurchasesButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="RestorePurchasesButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=436858134]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -1066,7 +1071,7 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "RESTORE_PURCHASES"
 
-[node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="CreditsButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=1043638473]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 5
@@ -1074,7 +1079,7 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "CREDITS_BUTTON"
 
-[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="BackButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=299645304]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -1083,7 +1088,7 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "SAVE_AND_BACK"
 
-[node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="ProfileButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=1220317571]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 5
@@ -1091,7 +1096,7 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "CHANGE_PROFILE_BUTTON"
 
-[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid"]
+[node name="QuitButton" type="Button" parent="Settings/CenterContainer/VBoxContainer/BottomButtonGrid" unique_id=597114616]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 5
@@ -1099,10 +1104,10 @@ focus_mode = 0
 theme = ExtResource("4_s1c65")
 text = "SAVE_AND_EXIT"
 
-[node name="BottomMargin" type="Control" parent="Settings/CenterContainer/VBoxContainer"]
+[node name="BottomMargin" type="Control" parent="Settings/CenterContainer/VBoxContainer" unique_id=2052446826]
 layout_mode = 2
 
-[node name="PauseButton" type="TextureButton" parent="."]
+[node name="PauseButton" type="TextureButton" parent="." unique_id=1458561588]
 offset_left = 577.0
 offset_top = 42.0
 offset_right = 1089.0
@@ -1115,11 +1120,9 @@ texture_hover = ExtResource("10_2idhi")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1223957178]
+libraries/ = SubResource("AnimationLibrary_sb0jh")
 speed_scale = 3.5
-libraries = {
-"": SubResource("AnimationLibrary_sb0jh")
-}
 
 [connection signal="tab_changed" from="Settings/CenterContainer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_changed"]
 [connection signal="tab_hovered" from="Settings/CenterContainer/VBoxContainer/TabContainer" to="." method="_on_tab_container_tab_hovered"]

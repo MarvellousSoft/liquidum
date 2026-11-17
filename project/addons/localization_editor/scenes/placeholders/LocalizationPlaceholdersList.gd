@@ -54,5 +54,3 @@ func _add_placeholder(key) -> void:
 	var placeholder_ui = LocalizationPlaceholder.instantiate()
 	_placeholders_ui.add_child(placeholder_ui)
 	placeholder_ui.set_data(key, _locale, _data)
-
-

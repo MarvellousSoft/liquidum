@@ -1,10 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dtdbkn0fp6o8j"]
+[gd_scene format=3 uid="uid://dtdbkn0fp6o8j"]
 
 [ext_resource type="Texture2D" uid="uid://dd04btxtr18wg" path="res://assets/images/ui/bg/bubble.png" id="1_rmur7"]
-[ext_resource type="Script" path="res://game/ui/Background.gd" id="1_slr8i"]
-[ext_resource type="Shader" path="res://assets/shaders/Background.gdshader" id="1_vkkdf"]
+[ext_resource type="Script" uid="uid://bp3nkcvh8ljk" path="res://game/ui/Background.gd" id="1_slr8i"]
+[ext_resource type="Shader" uid="uid://bvmir1lcpnub4" path="res://assets/shaders/Background.gdshader" id="1_vkkdf"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_3o51c"]
-[ext_resource type="Shader" path="res://assets/shaders/RippleShader.gdshader" id="5_4gme2"]
+[ext_resource type="Shader" uid="uid://d01b8vw7ao2jc" path="res://assets/shaders/RippleShader.gdshader" id="5_4gme2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xpma"]
 shader = ExtResource("1_vkkdf")
@@ -22,18 +22,17 @@ gradient = SubResource("Gradient_63qul")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hkg60"]
 lifetime_randomness = 0.5
+particle_flag_disable_z = true
 emission_shape = 3
 emission_box_extents = Vector3(360, 1, 1)
-particle_flag_disable_z = true
-direction = Vector3(0, -1, 0)
-gravity = Vector3(0, -40, 0)
-angular_velocity_min = 5.0
-angular_velocity_max = 90.0
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.01
-tangential_accel_max = 26.97
 angle_min = -5.0
 angle_max = 5.0
+direction = Vector3(0, -1, 0)
+angular_velocity_min = 5.0
+angular_velocity_max = 90.0
+orbit_velocity_max = 0.01
+gravity = Vector3(0, -40, 0)
+tangential_accel_max = 26.97
 scale_min = 0.5
 scale_max = 0.8
 color_ramp = SubResource("GradientTexture1D_3u54o")
@@ -78,42 +77,40 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p1m1d"]
 _data = {
-"RESET": SubResource("Animation_3abvm"),
-"idle": SubResource("Animation_uojn2")
+&"RESET": SubResource("Animation_3abvm"),
+&"idle": SubResource("Animation_uojn2")
 }
 
-[node name="Background" type="CanvasLayer"]
+[node name="Background" type="CanvasLayer" unique_id=1308540660]
 layer = -1
 script = ExtResource("1_slr8i")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_3o51c")]
+[node name="MobileBGHelp" parent="." unique_id=2086352425 instance=ExtResource("2_3o51c")]
 visible = false
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=455330739]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0xpma")
 offset_right = 720.0
 offset_bottom = 1280.0
 
-[node name="Particles" type="GPUParticles2D" parent="."]
+[node name="Particles" type="GPUParticles2D" parent="." unique_id=1971309150]
 unique_name_in_owner = true
 position = Vector2(360, 1480)
 amount = 15
-process_material = SubResource("ParticleProcessMaterial_hkg60")
 texture = ExtResource("1_rmur7")
 lifetime = 12.0
 fixed_fps = 60
 visibility_rect = Rect2(-1930, -2140, 3860, 2140)
+process_material = SubResource("ParticleProcessMaterial_hkg60")
 
-[node name="Effect" type="ColorRect" parent="."]
+[node name="Effect" type="ColorRect" parent="." unique_id=566067792]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_b5c2e")
 offset_right = 720.0
 offset_bottom = 1280.0
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "idle"
-libraries = {
-"": SubResource("AnimationLibrary_p1m1d")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=967361210]
+libraries/ = SubResource("AnimationLibrary_p1m1d")
+autoplay = &"idle"

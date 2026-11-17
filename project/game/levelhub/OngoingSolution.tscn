@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cwympyod5pu88"]
+[gd_scene format=3 uid="uid://cwympyod5pu88"]
 
 [ext_resource type="Texture2D" uid="uid://wgiutevs26gg" path="res://assets/images/ui/progress_dot.png" id="1_psev4"]
 
@@ -60,11 +60,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tqnon"]
 _data = {
-"RESET": SubResource("Animation_d3dbx"),
-"idle": SubResource("Animation_71b8q")
+&"RESET": SubResource("Animation_d3dbx"),
+&"idle": SubResource("Animation_71b8q")
 }
 
-[node name="OngoingSolution" type="Control"]
+[node name="OngoingSolution" type="Control" unique_id=848448655]
 custom_minimum_size = Vector2(170, 70)
 layout_mode = 3
 anchors_preset = 0
@@ -75,7 +75,7 @@ offset_bottom = 183.0
 size_flags_vertical = 8
 mouse_filter = 2
 
-[node name="Dot1" type="TextureRect" parent="."]
+[node name="Dot1" type="TextureRect" parent="." unique_id=2013673282]
 layout_mode = 0
 offset_right = 70.0
 offset_bottom = 70.0
@@ -84,7 +84,7 @@ mouse_filter = 2
 texture = ExtResource("1_psev4")
 expand_mode = 1
 
-[node name="Dot2" type="TextureRect" parent="."]
+[node name="Dot2" type="TextureRect" parent="." unique_id=1001779367]
 layout_mode = 0
 offset_left = 50.0
 offset_right = 120.0
@@ -94,7 +94,7 @@ mouse_filter = 2
 texture = ExtResource("1_psev4")
 expand_mode = 1
 
-[node name="Dot3" type="TextureRect" parent="."]
+[node name="Dot3" type="TextureRect" parent="." unique_id=1577700885]
 layout_mode = 0
 offset_left = 100.0
 offset_right = 170.0
@@ -104,8 +104,6 @@ mouse_filter = 2
 texture = ExtResource("1_psev4")
 expand_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "idle"
-libraries = {
-"": SubResource("AnimationLibrary_tqnon")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1648882705]
+libraries/ = SubResource("AnimationLibrary_tqnon")
+autoplay = &"idle"

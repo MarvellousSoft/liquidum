@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://df2dol20lmbo1"]
+[gd_scene format=3 uid="uid://df2dol20lmbo1"]
 
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_yllid"]
-[ext_resource type="Script" path="res://game/daily_menu/SingleDayLeaderboard.gd" id="2_l0tcj"]
+[ext_resource type="Script" uid="uid://bhmd4rlxbb61e" path="res://game/daily_menu/SingleDayLeaderboard.gd" id="2_l0tcj"]
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/hint/x.png" id="2_xgyi3"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="3_6e6wl"]
 [ext_resource type="Texture2D" uid="uid://beax5oseh6sd5" path="res://assets/images/icons/256_256.png" id="4_yv1kv"]
@@ -24,14 +24,14 @@ expand_margin_top = 5.0
 expand_margin_right = 10.0
 expand_margin_bottom = 5.0
 
-[node name="SingleDayLeaderboardMobile" type="ScrollContainer"]
+[node name="SingleDayLeaderboardMobile" type="ScrollContainer" unique_id=795661818]
 custom_minimum_size = Vector2(720, 1280)
 offset_right = 30.0
 theme = ExtResource("1_yllid")
 horizontal_scroll_mode = 0
 script = ExtResource("2_l0tcj")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=873232488]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -39,40 +39,40 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 25
 
-[node name="Grid" type="GridContainer" parent="MarginContainer"]
+[node name="Grid" type="GridContainer" parent="MarginContainer" unique_id=1964676643]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="E1" type="Control" parent="MarginContainer/Grid"]
+[node name="E1" type="Control" parent="MarginContainer/Grid" unique_id=1670590139]
 custom_minimum_size = Vector2(30, 40)
 layout_mode = 2
 
-[node name="E2" type="Control" parent="MarginContainer/Grid"]
+[node name="E2" type="Control" parent="MarginContainer/Grid" unique_id=1646864665]
 layout_mode = 2
 
-[node name="Date" type="Label" parent="MarginContainer/Grid"]
+[node name="Date" type="Label" parent="MarginContainer/Grid" unique_id=941262521]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "2024-01-01"
 
-[node name="Mistakes" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Mistakes" type="TextureRect" parent="MarginContainer/Grid" unique_id=1085333257]
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("2_xgyi3")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Time" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Time" type="TextureRect" parent="MarginContainer/Grid" unique_id=1953139688]
 modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 2
 texture = ExtResource("3_6e6wl")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Icon1" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Icon1" type="TextureRect" parent="MarginContainer/Grid" unique_id=686355376]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -80,7 +80,7 @@ texture = ExtResource("4_yv1kv")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerBG" type="Panel" parent="MarginContainer/Grid/Icon1"]
+[node name="PlayerBG" type="Panel" parent="MarginContainer/Grid/Icon1" unique_id=623027437]
 modulate = Color(0.0156863, 0.105882, 0.219608, 0.513726)
 show_behind_parent = true
 layout_mode = 0
@@ -90,17 +90,17 @@ offset_right = 707.0
 offset_bottom = 59.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_xfjlc")
 
-[node name="Pos1" type="Label" parent="MarginContainer/Grid"]
+[node name="Pos1" type="Label" parent="MarginContainer/Grid" unique_id=2004006539]
 layout_mode = 2
 text = "1."
 
-[node name="NameContainer1" type="HBoxContainer" parent="MarginContainer/Grid"]
+[node name="NameContainer1" type="HBoxContainer" parent="MarginContainer/Grid" unique_id=1188813047]
 custom_minimum_size = Vector2(394, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 14
 
-[node name="Flair" type="Label" parent="MarginContainer/Grid/NameContainer1"]
+[node name="Flair" type="Label" parent="MarginContainer/Grid/NameContainer1" unique_id=383514630]
 layout_mode = 2
 mouse_filter = 1
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -108,7 +108,7 @@ theme_override_font_sizes/font_size = 20
 text = " dev "
 vertical_alignment = 1
 
-[node name="Plus" type="Label" parent="MarginContainer/Grid/NameContainer1/Flair"]
+[node name="Plus" type="Label" parent="MarginContainer/Grid/NameContainer1/Flair" unique_id=2104332029]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -124,7 +124,7 @@ text = "+13"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BG" type="Panel" parent="MarginContainer/Grid/NameContainer1/Flair"]
+[node name="BG" type="Panel" parent="MarginContainer/Grid/NameContainer1/Flair" unique_id=1451418202]
 modulate = Color(0, 0.04, 0.14, 0.75)
 show_behind_parent = true
 layout_mode = 1
@@ -136,18 +136,18 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_ctcqt")
 
-[node name="Space" type="Control" parent="MarginContainer/Grid/NameContainer1"]
+[node name="Space" type="Control" parent="MarginContainer/Grid/NameContainer1" unique_id=1920177053]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="Name" type="Label" parent="MarginContainer/Grid/NameContainer1"]
+[node name="Name" type="Label" parent="MarginContainer/Grid/NameContainer1" unique_id=708326519]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30
 text = "Person name"
 text_overrun_behavior = 3
 
-[node name="Mistakes1" type="Label" parent="MarginContainer/Grid"]
+[node name="Mistakes1" type="Label" parent="MarginContainer/Grid" unique_id=220774744]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -155,7 +155,7 @@ theme_override_font_sizes/font_size = 30
 text = "0"
 horizontal_alignment = 1
 
-[node name="Time1" type="Label" parent="MarginContainer/Grid"]
+[node name="Time1" type="Label" parent="MarginContainer/Grid" unique_id=1618107670]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 30

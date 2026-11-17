@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bhn03aekm8wud"]
+[gd_scene format=3 uid="uid://bhn03aekm8wud"]
 
-[ext_resource type="Script" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
+[ext_resource type="Script" uid="uid://vmpcwj24nm4p" path="res://game/level/hints/AquariumHint.gd" id="1_f56ld"]
 [ext_resource type="PackedScene" uid="uid://b6f5erkxadeiq" path="res://game/level/hints/HintOptionButton.tscn" id="2_lgxd6"]
-[ext_resource type="Shader" path="res://assets/shaders/Water.gdshader" id="2_utjnr"]
+[ext_resource type="Shader" uid="uid://b7bdn7umas3hi" path="res://assets/shaders/Water.gdshader" id="2_utjnr"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_bqvbu"]
 [ext_resource type="Texture2D" uid="uid://b14xkj3uolvis" path="res://assets/images/ui/cell/wall_left.png" id="4_4kw1v"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="5_g4jsa"]
@@ -16,9 +16,9 @@ fractal_weighted_strength = 0.25
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bi3kj"]
 width = 500
 height = 500
+noise = SubResource("FastNoiseLite_t7cfv")
 seamless = true
 seamless_blend_skirt = 0.4
-noise = SubResource("FastNoiseLite_t7cfv")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qre3a"]
 shader = ExtResource("2_utjnr")
@@ -92,11 +92,11 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_geoow"]
 _data = {
-"RESET": SubResource("Animation_2wtmy"),
-"startup": SubResource("Animation_jehb0")
+&"RESET": SubResource("Animation_2wtmy"),
+&"startup": SubResource("Animation_jehb0")
 }
 
-[node name="AquariumHint" type="HBoxContainer"]
+[node name="AquariumHint" type="HBoxContainer" unique_id=1573739085]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,7 +108,7 @@ grow_vertical = 2
 theme_override_constants/separation = 11
 script = ExtResource("1_f56ld")
 
-[node name="VisibilityButton" parent="." instance=ExtResource("2_lgxd6")]
+[node name="VisibilityButton" parent="." unique_id=1262555850 instance=ExtResource("2_lgxd6")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
@@ -117,16 +117,16 @@ button_pressed = false
 [node name="BG" parent="VisibilityButton" index="0"]
 custom_minimum_size = Vector2(50, 50)
 
-[node name="LeftContainer" type="HBoxContainer" parent="."]
+[node name="LeftContainer" type="HBoxContainer" parent="." unique_id=1175498788]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(267, 0)
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="CenterContainer" type="CenterContainer" parent="LeftContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="LeftContainer" unique_id=1158246336]
 layout_mode = 2
 
-[node name="Water" type="TextureRect" parent="LeftContainer/CenterContainer"]
+[node name="Water" type="TextureRect" parent="LeftContainer/CenterContainer" unique_id=976628472]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 material = SubResource("ShaderMaterial_qre3a")
@@ -135,14 +135,14 @@ layout_mode = 2
 texture = ExtResource("5_g4jsa")
 expand_mode = 1
 
-[node name="WallLeft" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+[node name="WallLeft" type="TextureRect" parent="LeftContainer/CenterContainer/Water" unique_id=1817139031]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 150.0
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
-[node name="WallRight" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+[node name="WallRight" type="TextureRect" parent="LeftContainer/CenterContainer/Water" unique_id=481656792]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 150.0
@@ -151,7 +151,7 @@ texture = ExtResource("4_4kw1v")
 expand_mode = 1
 flip_h = true
 
-[node name="WallBottom" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+[node name="WallBottom" type="TextureRect" parent="LeftContainer/CenterContainer/Water" unique_id=499627149]
 layout_mode = 0
 offset_right = 150.0
 offset_bottom = 150.0
@@ -160,7 +160,7 @@ pivot_offset = Vector2(75, 75)
 texture = ExtResource("4_4kw1v")
 expand_mode = 1
 
-[node name="WallTop" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+[node name="WallTop" type="TextureRect" parent="LeftContainer/CenterContainer/Water" unique_id=867519017]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 150.0
@@ -171,7 +171,7 @@ texture = ExtResource("4_4kw1v")
 expand_mode = 1
 flip_h = true
 
-[node name="WallDiag" type="TextureRect" parent="LeftContainer/CenterContainer/Water"]
+[node name="WallDiag" type="TextureRect" parent="LeftContainer/CenterContainer/Water" unique_id=863084987]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
@@ -180,7 +180,7 @@ offset_bottom = 150.0
 texture = ExtResource("6_v313m")
 expand_mode = 1
 
-[node name="Size" type="Label" parent="LeftContainer/CenterContainer"]
+[node name="Size" type="Label" parent="LeftContainer/CenterContainer" unique_id=810573745]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -191,7 +191,7 @@ theme_override_font_sizes/font_size = 70
 text = "3.5"
 vertical_alignment = 2
 
-[node name="Plus" type="Label" parent="LeftContainer"]
+[node name="Plus" type="Label" parent="LeftContainer" unique_id=288901185]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -199,19 +199,19 @@ theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 38
 text = "+"
 
-[node name="MiddleSeparator" type="Panel" parent="."]
+[node name="MiddleSeparator" type="Panel" parent="." unique_id=1610118290]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 
-[node name="RightContainer" type="HBoxContainer" parent="."]
+[node name="RightContainer" type="HBoxContainer" parent="." unique_id=1944362684]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 alignment = 2
 
-[node name="ExpectedAmount" type="Label" parent="RightContainer"]
+[node name="ExpectedAmount" type="Label" parent="RightContainer" unique_id=1749291574]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -222,12 +222,12 @@ theme_override_font_sizes/font_size = 70
 text = "x4"
 vertical_alignment = 2
 
-[node name="Separator2" type="Panel" parent="RightContainer"]
+[node name="Separator2" type="Panel" parent="RightContainer" unique_id=588652330]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="CurrentAmount" type="Label" parent="RightContainer"]
+[node name="CurrentAmount" type="Label" parent="RightContainer" unique_id=1761605943]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
@@ -238,9 +238,7 @@ theme_override_font_sizes/font_size = 70
 text = "(4)"
 vertical_alignment = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_geoow")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=267409430]
+libraries/ = SubResource("AnimationLibrary_geoow")
 
 [editable path="VisibilityButton"]

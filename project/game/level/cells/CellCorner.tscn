@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpf2p7vtpwwqe"]
+[gd_scene format=3 uid="uid://dpf2p7vtpwwqe"]
 
 [ext_resource type="Texture2D" uid="uid://n6gna2yn0ruj" path="res://assets/images/ui/cell/cornergrabber.png" id="1_mtb6s"]
-[ext_resource type="Script" path="res://game/level/cells/CellCorner.gd" id="2_1l5y6"]
+[ext_resource type="Script" uid="uid://dwwe63qyiowf0" path="res://game/level/cells/CellCorner.gd" id="2_1l5y6"]
 
 [sub_resource type="Animation" id="Animation_bupte"]
 length = 0.001
@@ -36,11 +36,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_neuas"]
 _data = {
-"RESET": SubResource("Animation_bupte"),
-"error": SubResource("Animation_7ocbi")
+&"RESET": SubResource("Animation_bupte"),
+&"error": SubResource("Animation_7ocbi")
 }
 
-[node name="CellCorner" type="TextureRect"]
+[node name="CellCorner" type="TextureRect" unique_id=344050095]
 modulate = Color(0.45098, 0.941176, 0.776471, 0.784314)
 use_parent_material = true
 custom_minimum_size = Vector2(180, 180)
@@ -50,10 +50,8 @@ texture = ExtResource("1_mtb6s")
 expand_mode = 1
 script = ExtResource("2_1l5y6")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_neuas")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1992858135]
+libraries/ = SubResource("AnimationLibrary_neuas")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

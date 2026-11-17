@@ -1,10 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://crsmi0h6d1x66"]
+[gd_scene format=3 uid="uid://crsmi0h6d1x66"]
 
-[ext_resource type="Script" path="res://game/flairs/FlairPicker.gd" id="1_x4isc"]
+[ext_resource type="Script" uid="uid://cm1w510qvpcyd" path="res://game/flairs/FlairPicker.gd" id="1_x4isc"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qvdnd"]
 [ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="3_708c7"]
 [ext_resource type="Texture2D" uid="uid://dha8a5x24don4" path="res://assets/images/ui/icons/pencil.png" id="4_my02h"]
-[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="5_0jska"]
+[ext_resource type="Script" uid="uid://r5x7jv5te4wg" path="res://game/main_menu/ModulateTextureButton.gd" id="5_0jska"]
 [ext_resource type="Texture2D" uid="uid://7vssyechjmut" path="res://assets/images/ui/icons/cloud-upload.png" id="6_nupha"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="7_m1stc"]
 [ext_resource type="PackedScene" uid="uid://dg2us6yeidxme" path="res://game/flairs/FlairButtonMobile.tscn" id="8_3i1if"]
@@ -19,7 +19,7 @@ corner_detail = 20
 expand_margin_top = 10.0
 expand_margin_bottom = 10.0
 
-[node name="FlairPicker" type="Control"]
+[node name="FlairPicker" type="Control" unique_id=846779707]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,30 +28,30 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_x4isc")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_qvdnd")]
+[node name="MobileBGHelp" parent="." unique_id=648527867 instance=ExtResource("2_qvdnd")]
 layout_mode = 0
 
-[node name="TopContainer" type="CenterContainer" parent="."]
+[node name="TopContainer" type="CenterContainer" parent="." unique_id=147386737]
 layout_mode = 0
 offset_right = 720.0
 offset_bottom = 652.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer" unique_id=1363663792]
 layout_mode = 2
 theme_override_constants/separation = 85
 alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="TopContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TopContainer/VBoxContainer" unique_id=413606093]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="TitleContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer/MarginContainer"]
+[node name="TitleContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer/MarginContainer" unique_id=684932170]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Title" type="Label" parent="TopContainer/VBoxContainer/MarginContainer/TitleContainer"]
+[node name="Title" type="Label" parent="TopContainer/VBoxContainer/MarginContainer/TitleContainer" unique_id=1701298461]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 60
@@ -59,7 +59,7 @@ theme_override_font_sizes/font_size = 53
 text = "FLAIR_PICKER_TITLE"
 horizontal_alignment = 1
 
-[node name="Explanation" type="Label" parent="TopContainer/VBoxContainer/MarginContainer/TitleContainer"]
+[node name="Explanation" type="Label" parent="TopContainer/VBoxContainer/MarginContainer/TitleContainer" unique_id=1379403546]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
@@ -67,18 +67,18 @@ theme_override_font_sizes/font_size = 25
 text = "FLAIR_EXPLANATION"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer/VBoxContainer" unique_id=1392723559]
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer"]
+[node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer" unique_id=1945311281]
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Image" type="TextureRect" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="Image" type="TextureRect" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=1592785930]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 0)
@@ -88,19 +88,19 @@ texture = ExtResource("3_708c7")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="FlairContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="FlairContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=1683182865]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="Flair" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+[node name="Flair" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer" unique_id=215309107]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "  dev  "
 vertical_alignment = 1
 
-[node name="BG" type="Panel" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer/Flair"]
+[node name="BG" type="Panel" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer/Flair" unique_id=1971156389]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 show_behind_parent = true
 layout_mode = 1
@@ -111,7 +111,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gpiaw")
 
-[node name="Plus" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+[node name="Plus" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer" unique_id=212796332]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -120,11 +120,11 @@ theme_override_font_sizes/font_size = 60
 text = "+2"
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/VBoxContainer" unique_id=320951119]
 layout_mode = 2
 alignment = 1
 
-[node name="Name" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Name" type="Label" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1909505196]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(550, 0)
 layout_mode = 2
@@ -137,7 +137,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=724270610]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(550, 0)
@@ -152,7 +152,7 @@ max_length = 25
 middle_mouse_paste_enabled = false
 select_all_on_focus = true
 
-[node name="EditButton" type="TextureButton" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="EditButton" type="TextureButton" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=2030181712]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 custom_minimum_size = Vector2(90, 90)
@@ -162,7 +162,7 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("5_0jska")
 
-[node name="UploadButton" type="TextureButton" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="UploadButton" type="TextureButton" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=2039659161]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(90, 90)
@@ -172,52 +172,52 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("5_0jska")
 
-[node name="NameLoading" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("7_m1stc")]
+[node name="NameLoading" parent="TopContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=386178003 instance=ExtResource("7_m1stc")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=757645220]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Flairs" type="ScrollContainer" parent="."]
+[node name="Flairs" type="ScrollContainer" parent="." unique_id=686991436]
 layout_mode = 0
 offset_top = 552.0
 offset_right = 690.0
 offset_bottom = 1223.0
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Flairs"]
+[node name="MarginContainer" type="MarginContainer" parent="Flairs" unique_id=1350139024]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer"]
+[node name="FlairList" type="VBoxContainer" parent="Flairs/MarginContainer" unique_id=1738595831]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 55
 
-[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("8_3i1if")]
+[node name="FlairButton" parent="Flairs/MarginContainer/FlairList" unique_id=111337481 instance=ExtResource("8_3i1if")]
 layout_mode = 2
 
-[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("8_3i1if")]
+[node name="FlairButton2" parent="Flairs/MarginContainer/FlairList" unique_id=1006203496 instance=ExtResource("8_3i1if")]
 layout_mode = 2
 
-[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("8_3i1if")]
+[node name="FlairButton3" parent="Flairs/MarginContainer/FlairList" unique_id=1539043838 instance=ExtResource("8_3i1if")]
 layout_mode = 2
 
-[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("8_3i1if")]
+[node name="FlairButton4" parent="Flairs/MarginContainer/FlairList" unique_id=93740037 instance=ExtResource("8_3i1if")]
 layout_mode = 2
 
-[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" instance=ExtResource("8_3i1if")]
+[node name="FlairButton5" parent="Flairs/MarginContainer/FlairList" unique_id=727287364 instance=ExtResource("8_3i1if")]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=1906427206]
 layout_mode = 0
 offset_left = 41.0
 offset_top = 38.0

@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckvgjuqcx6til"]
+[gd_scene format=3 uid="uid://ckvgjuqcx6til"]
 
-[ext_resource type="Script" path="res://game/ui/TransitionManager.gd" id="1"]
+[ext_resource type="Script" uid="uid://df1jct7rkqk6n" path="res://game/ui/TransitionManager.gd" id="1"]
 [ext_resource type="Material" uid="uid://dx4nqctb0ameo" path="res://assets/shaders/TransitionShaderMaterial.tres" id="2_e4k7h"]
 
 [sub_resource type="Animation" id="Animation_x27hb"]
@@ -35,15 +35,15 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hg3bf"]
 _data = {
-"RESET": SubResource("Animation_x27hb"),
-"transition_out": SubResource("3")
+&"RESET": SubResource("Animation_x27hb"),
+&"transition_out": SubResource("3")
 }
 
-[node name="TransitionManager" type="CanvasLayer"]
+[node name="TransitionManager" type="CanvasLayer" unique_id=613988959]
 layer = 4
 script = ExtResource("1")
 
-[node name="Effect" type="ColorRect" parent="."]
+[node name="Effect" type="ColorRect" parent="." unique_id=1337878281]
 material = ExtResource("2_e4k7h")
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,8 +52,6 @@ offset_right = 241.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1244960481]
+libraries/ = SubResource("AnimationLibrary_hg3bf")
 speed_scale = 1.2
-libraries = {
-"": SubResource("AnimationLibrary_hg3bf")
-}

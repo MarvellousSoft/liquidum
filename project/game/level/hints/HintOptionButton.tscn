@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6f5erkxadeiq"]
+[gd_scene format=3 uid="uid://b6f5erkxadeiq"]
 
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/hint/x.png" id="1_3xn5t"]
 [ext_resource type="Texture2D" uid="uid://o0hkmxbq8my4" path="res://assets/images/ui/hint/button_visibility.png" id="2_0ygv4"]
-[ext_resource type="Script" path="res://game/level/hints/HintOptionButton.gd" id="3_dgaqe"]
+[ext_resource type="Script" uid="uid://dplldyqne77tr" path="res://game/level/hints/HintOptionButton.gd" id="3_dgaqe"]
 
-[node name="HintOptionButton" type="TextureButton"]
+[node name="HintOptionButton" type="TextureButton" unique_id=483473488]
 custom_minimum_size = Vector2(150, 150)
 focus_mode = 0
 toggle_mode = true
@@ -15,7 +15,7 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("3_dgaqe")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=480553573]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15

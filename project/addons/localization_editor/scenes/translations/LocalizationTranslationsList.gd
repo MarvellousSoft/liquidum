@@ -52,5 +52,3 @@ func _add_translation(key, translation) -> void:
 	var translation_ui = LocalizationTranslation.instantiate()
 	_translations_ui.add_child(translation_ui)
 	translation_ui.set_data(key, translation, _locale, _data)
-
-

@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://21j64u0a50td"]
+[gd_scene format=3 uid="uid://21j64u0a50td"]
 
-[ext_resource type="Script" path="res://addons/ui_extensions/dropdown/Dropdown.gd" id="1_ah183"]
+[ext_resource type="Script" uid="uid://2hr8ei65lnwn" path="res://addons/ui_extensions/dropdown/Dropdown.gd" id="1_ah183"]
 [ext_resource type="Texture2D" uid="uid://btxlurvr45t4y" path="res://addons/ui_extensions/dropdown/Cancel.svg" id="1_l2sby"]
 [ext_resource type="Texture2D" uid="uid://bb76dl3aocsjo" path="res://addons/ui_extensions/dropdown/Arrow.svg" id="2_ims8p"]
 
-[node name="DropdownContent" type="VBoxContainer"]
+[node name="DropdownContent" type="VBoxContainer" unique_id=611787705]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 31.0
@@ -12,52 +12,52 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 script = ExtResource("1_ah183")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1989225070]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="HBox"]
+[node name="Icon" type="TextureRect" parent="HBox" unique_id=1045978000]
 visible = false
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Selector" type="Button" parent="HBox"]
+[node name="Selector" type="Button" parent="HBox" unique_id=351517679]
 layout_mode = 2
 size_flags_horizontal = 3
 icon = ExtResource("2_ims8p")
 alignment = 0
 icon_alignment = 2
 
-[node name="Clear" type="Button" parent="HBox"]
+[node name="Clear" type="Button" parent="HBox" unique_id=24503094]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 icon = ExtResource("1_l2sby")
 icon_alignment = 1
 
-[node name="PopupPanel" type="PopupPanel" parent="."]
+[node name="PopupPanel" type="PopupPanel" parent="." unique_id=556662943]
 
-[node name="VBoxPanel" type="VBoxContainer" parent="PopupPanel"]
+[node name="VBoxPanel" type="VBoxContainer" parent="PopupPanel" unique_id=758514409]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 297.0
-offset_bottom = 110.0
+offset_right = 96.0
+offset_bottom = 96.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Filter" type="LineEdit" parent="PopupPanel/VBoxPanel"]
+[node name="Filter" type="LineEdit" parent="PopupPanel/VBoxPanel" unique_id=624791749]
 layout_mode = 2
 
-[node name="Scroll" type="ScrollContainer" parent="PopupPanel/VBoxPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollVBox" type="VBoxContainer" parent="PopupPanel/VBoxPanel/Scroll"]
+[node name="Scroll" type="ScrollContainer" parent="PopupPanel/VBoxPanel" unique_id=1790777925]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBox" type="VBoxContainer" parent="PopupPanel/VBoxPanel/Scroll/ScrollVBox"]
+[node name="ScrollVBox" type="VBoxContainer" parent="PopupPanel/VBoxPanel/Scroll" unique_id=2146547306]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="PopupPanel/VBoxPanel/Scroll/ScrollVBox" unique_id=1272554711]
 layout_mode = 2

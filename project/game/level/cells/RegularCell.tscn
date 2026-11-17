@@ -1,6 +1,6 @@
-[gd_scene load_steps=55 format=3 uid="uid://dg36xpbgk5g24"]
+[gd_scene format=3 uid="uid://dg36xpbgk5g24"]
 
-[ext_resource type="Script" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
+[ext_resource type="Script" uid="uid://c4rvmdr61olml" path="res://game/level/cells/RegularCell.gd" id="1_102n5"]
 [ext_resource type="Texture2D" uid="uid://dun3c16t2wtwv" path="res://assets/images/ui/cell/water_single.png" id="3_7aqdv"]
 [ext_resource type="Texture2D" uid="uid://diujc8hvl55rj" path="res://assets/images/ui/cell/water_topleft.png" id="4_lwpcm"]
 [ext_resource type="Texture2D" uid="uid://bh1phrockbvk5" path="res://assets/images/ui/cell/water_topright.png" id="5_l8l5q"]
@@ -90,8 +90,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k3t6r"]
 _data = {
-"RESET": SubResource("Animation_3g2u4"),
-"idle": SubResource("Animation_wjmlx")
+&"RESET": SubResource("Animation_3g2u4"),
+&"idle": SubResource("Animation_wjmlx")
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxuet"]
@@ -135,8 +135,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y6cvr"]
 _data = {
-"RESET": SubResource("Animation_ucp6y"),
-"error": SubResource("Animation_whcw4")
+&"RESET": SubResource("Animation_ucp6y"),
+&"error": SubResource("Animation_whcw4")
 }
 
 [sub_resource type="Animation" id="Animation_8uirt"]
@@ -172,8 +172,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5oaie"]
 _data = {
-"RESET": SubResource("Animation_8uirt"),
-"error": SubResource("Animation_2hmw4")
+&"RESET": SubResource("Animation_8uirt"),
+&"error": SubResource("Animation_2hmw4")
 }
 
 [sub_resource type="Animation" id="Animation_htf7u"]
@@ -209,8 +209,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_71fpu"]
 _data = {
-"RESET": SubResource("Animation_htf7u"),
-"error": SubResource("Animation_627e5")
+&"RESET": SubResource("Animation_htf7u"),
+&"error": SubResource("Animation_627e5")
 }
 
 [sub_resource type="Animation" id="Animation_mevw4"]
@@ -246,8 +246,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_366xd"]
 _data = {
-"RESET": SubResource("Animation_mevw4"),
-"error": SubResource("Animation_m2xxj")
+&"RESET": SubResource("Animation_mevw4"),
+&"error": SubResource("Animation_m2xxj")
 }
 
 [sub_resource type="Animation" id="Animation_7fk0h"]
@@ -283,8 +283,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8oflq"]
 _data = {
-"RESET": SubResource("Animation_7fk0h"),
-"error": SubResource("Animation_6oxih")
+&"RESET": SubResource("Animation_7fk0h"),
+&"error": SubResource("Animation_6oxih")
 }
 
 [sub_resource type="Animation" id="Animation_so0f4"]
@@ -359,12 +359,12 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7yamt"]
 _data = {
-"RESET": SubResource("Animation_so0f4"),
-"feedback": SubResource("Animation_5tm6i"),
-"startup": SubResource("Animation_i3tnc")
+&"RESET": SubResource("Animation_so0f4"),
+&"feedback": SubResource("Animation_5tm6i"),
+&"startup": SubResource("Animation_i3tnc")
 }
 
-[node name="RegularCell" type="Control"]
+[node name="RegularCell" type="Control" unique_id=1961444370]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
@@ -378,7 +378,7 @@ grow_vertical = 2
 pivot_offset = Vector2(250, 250)
 script = ExtResource("1_102n5")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=292653994]
 unique_name_in_owner = true
 z_index = -1
 custom_minimum_size = Vector2(500, 500)
@@ -388,10 +388,10 @@ offset_bottom = 40.0
 mouse_filter = 2
 color = Color(0.0352941, 0.211765, 0.34902, 1)
 
-[node name="Preview" type="Control" parent="."]
+[node name="Preview" type="Control" parent="." unique_id=1304376743]
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="Preview"]
+[node name="Single" type="TextureRect" parent="Preview" unique_id=1729262072]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -399,7 +399,7 @@ offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("24_0kqeq")
 
-[node name="TopLeft" type="TextureRect" parent="Preview"]
+[node name="TopLeft" type="TextureRect" parent="Preview" unique_id=1574620831]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -408,7 +408,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("25_00o68")
 
-[node name="TopRight" type="TextureRect" parent="Preview"]
+[node name="TopRight" type="TextureRect" parent="Preview" unique_id=838315607]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -417,7 +417,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("26_lb8de")
 
-[node name="BottomRight" type="TextureRect" parent="Preview"]
+[node name="BottomRight" type="TextureRect" parent="Preview" unique_id=139219986]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -426,7 +426,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("27_fulr6")
 
-[node name="BottomLeft" type="TextureRect" parent="Preview"]
+[node name="BottomLeft" type="TextureRect" parent="Preview" unique_id=373841044]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -435,10 +435,10 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("28_6ngov")
 
-[node name="Waters" type="Control" parent="."]
+[node name="Waters" type="Control" parent="." unique_id=1524445910]
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="Waters"]
+[node name="Single" type="TextureRect" parent="Waters" unique_id=537866248]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -446,7 +446,7 @@ offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("3_7aqdv")
 
-[node name="TopLeft" type="TextureRect" parent="Waters"]
+[node name="TopLeft" type="TextureRect" parent="Waters" unique_id=16358394]
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
 offset_right = 100.0
@@ -455,7 +455,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("4_lwpcm")
 
-[node name="TopRight" type="TextureRect" parent="Waters"]
+[node name="TopRight" type="TextureRect" parent="Waters" unique_id=106747438]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -464,7 +464,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("5_l8l5q")
 
-[node name="BottomRight" type="TextureRect" parent="Waters"]
+[node name="BottomRight" type="TextureRect" parent="Waters" unique_id=1029132834]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -473,7 +473,7 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("6_k26rs")
 
-[node name="BottomLeft" type="TextureRect" parent="Waters"]
+[node name="BottomLeft" type="TextureRect" parent="Waters" unique_id=1300347040]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 100.0
@@ -482,18 +482,18 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("7_v8ssd")
 
-[node name="NoContent" type="Control" parent="."]
+[node name="NoContent" type="Control" parent="." unique_id=716192901]
 unique_name_in_owner = true
 anchors_preset = 0
 
-[node name="Single" type="HBoxContainer" parent="NoContent"]
+[node name="Single" type="HBoxContainer" parent="NoContent" unique_id=1663122496]
 layout_mode = 0
 offset_right = 500.0
 offset_bottom = 500.0
 mouse_filter = 2
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="NoContent/Single"]
+[node name="Water" type="TextureRect" parent="NoContent/Single" unique_id=414964503]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -503,7 +503,7 @@ texture = ExtResource("8_k2l07")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Boat" type="TextureRect" parent="NoContent/Single"]
+[node name="Boat" type="TextureRect" parent="NoContent/Single" unique_id=483046119]
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -514,7 +514,7 @@ texture = ExtResource("13_bxk1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuestionMark" type="TextureRect" parent="NoContent/Single/Boat"]
+[node name="QuestionMark" type="TextureRect" parent="NoContent/Single/Boat" unique_id=699893267]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -526,14 +526,14 @@ texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TopLeft" type="HBoxContainer" parent="NoContent"]
+[node name="TopLeft" type="HBoxContainer" parent="NoContent" unique_id=1071864352]
 layout_mode = 0
 offset_right = 307.0
 offset_bottom = 244.0
 mouse_filter = 2
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="NoContent/TopLeft"]
+[node name="Water" type="TextureRect" parent="NoContent/TopLeft" unique_id=1726872711]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -543,7 +543,7 @@ texture = ExtResource("8_k2l07")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Boat" type="TextureRect" parent="NoContent/TopLeft"]
+[node name="Boat" type="TextureRect" parent="NoContent/TopLeft" unique_id=1435239702]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -553,7 +553,7 @@ texture = ExtResource("13_bxk1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuestionMark" type="TextureRect" parent="NoContent/TopLeft/Boat"]
+[node name="QuestionMark" type="TextureRect" parent="NoContent/TopLeft/Boat" unique_id=560813703]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -565,7 +565,7 @@ texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TopRight" type="HBoxContainer" parent="NoContent"]
+[node name="TopRight" type="HBoxContainer" parent="NoContent" unique_id=1325291244]
 layout_mode = 0
 offset_left = 190.0
 offset_right = 497.0
@@ -573,7 +573,7 @@ offset_bottom = 244.0
 mouse_filter = 2
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="NoContent/TopRight"]
+[node name="Water" type="TextureRect" parent="NoContent/TopRight" unique_id=274387959]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -583,7 +583,7 @@ texture = ExtResource("8_k2l07")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Boat" type="TextureRect" parent="NoContent/TopRight"]
+[node name="Boat" type="TextureRect" parent="NoContent/TopRight" unique_id=1668744251]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -593,7 +593,7 @@ texture = ExtResource("13_bxk1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuestionMark" type="TextureRect" parent="NoContent/TopRight/Boat"]
+[node name="QuestionMark" type="TextureRect" parent="NoContent/TopRight/Boat" unique_id=1088678853]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -605,7 +605,7 @@ texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BottomLeft" type="HBoxContainer" parent="NoContent"]
+[node name="BottomLeft" type="HBoxContainer" parent="NoContent" unique_id=202466038]
 layout_mode = 0
 offset_top = 251.0
 offset_right = 307.0
@@ -613,7 +613,7 @@ offset_bottom = 495.0
 mouse_filter = 2
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="NoContent/BottomLeft"]
+[node name="Water" type="TextureRect" parent="NoContent/BottomLeft" unique_id=1526064179]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -623,7 +623,7 @@ texture = ExtResource("8_k2l07")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Boat" type="TextureRect" parent="NoContent/BottomLeft"]
+[node name="Boat" type="TextureRect" parent="NoContent/BottomLeft" unique_id=1862374422]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -633,7 +633,7 @@ texture = ExtResource("13_bxk1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomLeft/Boat"]
+[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomLeft/Boat" unique_id=1375583253]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -645,7 +645,7 @@ texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BottomRight" type="HBoxContainer" parent="NoContent"]
+[node name="BottomRight" type="HBoxContainer" parent="NoContent" unique_id=1192036541]
 layout_mode = 0
 offset_left = 190.0
 offset_top = 251.0
@@ -654,7 +654,7 @@ offset_bottom = 495.0
 mouse_filter = 2
 alignment = 1
 
-[node name="Water" type="TextureRect" parent="NoContent/BottomRight"]
+[node name="Water" type="TextureRect" parent="NoContent/BottomRight" unique_id=2048283171]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -664,7 +664,7 @@ texture = ExtResource("8_k2l07")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Boat" type="TextureRect" parent="NoContent/BottomRight"]
+[node name="Boat" type="TextureRect" parent="NoContent/BottomRight" unique_id=2090729267]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -674,7 +674,7 @@ texture = ExtResource("13_bxk1v")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomRight/Boat"]
+[node name="QuestionMark" type="TextureRect" parent="NoContent/BottomRight/Boat" unique_id=2143562673]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -686,12 +686,12 @@ texture = ExtResource("14_oyl5j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Blocks" type="Control" parent="."]
+[node name="Blocks" type="Control" parent="." unique_id=1291040099]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
 
-[node name="Single" type="TextureRect" parent="Blocks"]
+[node name="Single" type="TextureRect" parent="Blocks" unique_id=667545137]
 visible = false
 layout_mode = 0
 offset_right = 500.0
@@ -699,7 +699,7 @@ offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("24_0kqeq")
 
-[node name="TopLeft" type="TextureRect" parent="Blocks"]
+[node name="TopLeft" type="TextureRect" parent="Blocks" unique_id=1458460038]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -708,7 +708,7 @@ offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("25_00o68")
 
-[node name="TopRight" type="TextureRect" parent="Blocks"]
+[node name="TopRight" type="TextureRect" parent="Blocks" unique_id=1686039378]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -717,7 +717,7 @@ offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("26_lb8de")
 
-[node name="BottomRight" type="TextureRect" parent="Blocks"]
+[node name="BottomRight" type="TextureRect" parent="Blocks" unique_id=1548617640]
 visible = false
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -726,7 +726,7 @@ offset_bottom = 500.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("27_fulr6")
 
-[node name="BottomLeft" type="TextureRect" parent="Blocks"]
+[node name="BottomLeft" type="TextureRect" parent="Blocks" unique_id=1722253178]
 visible = false
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
@@ -735,10 +735,10 @@ offset_bottom = 100.0
 pivot_offset = Vector2(250, 250)
 texture = ExtResource("28_6ngov")
 
-[node name="Buttons" type="Control" parent="."]
+[node name="Buttons" type="Control" parent="." unique_id=652222445]
 anchors_preset = 0
 
-[node name="Single" type="TextureButton" parent="Buttons"]
+[node name="Single" type="TextureButton" parent="Buttons" unique_id=430847608]
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 0
 offset_right = 50.0
@@ -748,7 +748,7 @@ focus_mode = 0
 texture_pressed = ExtResource("12_8pxsf")
 texture_hover = ExtResource("13_0ph6y")
 
-[node name="TopLeft" type="TextureButton" parent="Buttons"]
+[node name="TopLeft" type="TextureButton" parent="Buttons" unique_id=1893967632]
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -758,7 +758,7 @@ texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
 
-[node name="TopRight" type="TextureButton" parent="Buttons"]
+[node name="TopRight" type="TextureButton" parent="Buttons" unique_id=1170931870]
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -769,7 +769,7 @@ texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
 
-[node name="BottomRight" type="TextureButton" parent="Buttons"]
+[node name="BottomRight" type="TextureButton" parent="Buttons" unique_id=1865807509]
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -780,7 +780,7 @@ texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
 
-[node name="BottomLeft" type="TextureButton" parent="Buttons"]
+[node name="BottomLeft" type="TextureButton" parent="Buttons" unique_id=1446384254]
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -791,7 +791,7 @@ texture_pressed = ExtResource("16_g5nkk")
 texture_hover = ExtResource("17_g3cup")
 texture_click_mask = ExtResource("19_sucjp")
 
-[node name="Hints" type="Control" parent="."]
+[node name="Hints" type="Control" parent="." unique_id=234449304]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
@@ -799,7 +799,7 @@ offset_right = 500.0
 offset_bottom = 500.0
 mouse_filter = 2
 
-[node name="Top" type="TextureRect" parent="Hints"]
+[node name="Top" type="TextureRect" parent="Hints" unique_id=1475488468]
 layout_mode = 0
 offset_top = -6.0
 offset_right = 500.0
@@ -809,7 +809,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("20_6vhtd")
 
-[node name="Left" type="TextureRect" parent="Hints"]
+[node name="Left" type="TextureRect" parent="Hints" unique_id=455776303]
 layout_mode = 0
 offset_left = -2.0
 offset_right = 498.0
@@ -818,7 +818,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("20_6vhtd")
 
-[node name="Inc" type="TextureRect" parent="Hints"]
+[node name="Inc" type="TextureRect" parent="Hints" unique_id=964413088]
 visible = false
 layout_mode = 0
 offset_right = 500.0
@@ -828,7 +828,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("21_23xke")
 
-[node name="Dec" type="TextureRect" parent="Hints"]
+[node name="Dec" type="TextureRect" parent="Hints" unique_id=1036135865]
 visible = false
 layout_mode = 0
 offset_right = 500.0
@@ -837,7 +837,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("21_23xke")
 
-[node name="CellHintHighlight" type="TextureRect" parent="."]
+[node name="CellHintHighlight" type="TextureRect" parent="." unique_id=501389641]
 unique_name_in_owner = true
 visible = false
 modulate = Color(0.85098, 1, 0.886275, 0.407843)
@@ -848,7 +848,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_q4k2l")
 
-[node name="Walls" type="Control" parent="."]
+[node name="Walls" type="Control" parent="." unique_id=1201947970]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 anchors_preset = 0
@@ -856,7 +856,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Top" type="TextureRect" parent="Walls"]
+[node name="Top" type="TextureRect" parent="Walls" unique_id=396323408]
 layout_mode = 0
 offset_top = -13.0
 offset_right = 500.0
@@ -866,7 +866,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_ffvl2")
 
-[node name="Right" type="TextureRect" parent="Walls"]
+[node name="Right" type="TextureRect" parent="Walls" unique_id=452227802]
 layout_mode = 0
 offset_left = 13.0
 offset_right = 513.0
@@ -876,7 +876,7 @@ mouse_filter = 2
 texture = ExtResource("22_ffvl2")
 flip_h = true
 
-[node name="Bottom" type="TextureRect" parent="Walls"]
+[node name="Bottom" type="TextureRect" parent="Walls" unique_id=2146221680]
 layout_mode = 0
 offset_top = 13.0
 offset_right = 500.0
@@ -887,7 +887,7 @@ mouse_filter = 2
 texture = ExtResource("22_ffvl2")
 flip_h = true
 
-[node name="Left" type="TextureRect" parent="Walls"]
+[node name="Left" type="TextureRect" parent="Walls" unique_id=815017921]
 layout_mode = 0
 offset_left = -13.0
 offset_right = 487.0
@@ -896,7 +896,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("22_ffvl2")
 
-[node name="Dec" type="TextureRect" parent="Walls"]
+[node name="Dec" type="TextureRect" parent="Walls" unique_id=49651938]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -904,7 +904,7 @@ pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 texture = ExtResource("23_mbu3t")
 
-[node name="Inc" type="TextureRect" parent="Walls"]
+[node name="Inc" type="TextureRect" parent="Walls" unique_id=1886198891]
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -913,7 +913,7 @@ mouse_filter = 2
 texture = ExtResource("23_mbu3t")
 flip_h = true
 
-[node name="Boat" type="TextureRect" parent="."]
+[node name="Boat" type="TextureRect" parent="." unique_id=492179076]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
@@ -927,13 +927,11 @@ texture = ExtResource("29_6b42n")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Boat"]
-autoplay = "idle"
-libraries = {
-"": SubResource("AnimationLibrary_k3t6r")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Boat" unique_id=802425936]
+libraries/ = SubResource("AnimationLibrary_k3t6r")
+autoplay = &"idle"
 
-[node name="BoatPreview" type="TextureRect" parent="."]
+[node name="BoatPreview" type="TextureRect" parent="." unique_id=1680058201]
 unique_name_in_owner = true
 modulate = Color(0, 0.0352941, 0.141176, 1)
 z_index = 1
@@ -947,7 +945,7 @@ texture = ExtResource("29_6b42n")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="CellHints" type="Control" parent="."]
+[node name="CellHints" type="Control" parent="." unique_id=1952868574]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -956,7 +954,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BG" type="Panel" parent="CellHints"]
+[node name="BG" type="Panel" parent="CellHints" unique_id=742542784]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -969,7 +967,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dxuet")
 
-[node name="Hint" parent="CellHints" instance=ExtResource("25_ble6w")]
+[node name="Hint" parent="CellHints" unique_id=180429830 instance=ExtResource("25_ble6w")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1004,7 +1002,7 @@ mouse_filter = 1
 [node name="VBoxContainer" parent="CellHints/Hint/VBoxContainer/HintsContainer" index="0"]
 mouse_filter = 2
 
-[node name="Highlight" type="ColorRect" parent="."]
+[node name="Highlight" type="ColorRect" parent="." unique_id=2040289448]
 unique_name_in_owner = true
 z_index = 1
 custom_minimum_size = Vector2(500, 500)
@@ -1014,12 +1012,12 @@ offset_bottom = 500.0
 mouse_filter = 2
 color = Color(0.670588, 1, 0.819608, 0.313726)
 
-[node name="Errors" type="Control" parent="."]
+[node name="Errors" type="Control" parent="." unique_id=566595717]
 z_index = 2
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="Single" type="TextureRect" parent="Errors"]
+[node name="Single" type="TextureRect" parent="Errors" unique_id=2047144518]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -1028,12 +1026,10 @@ offset_bottom = 100.0
 mouse_filter = 2
 texture = ExtResource("30_varfe")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/Single"]
-libraries = {
-"": SubResource("AnimationLibrary_y6cvr")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/Single" unique_id=706651938]
+libraries/ = SubResource("AnimationLibrary_y6cvr")
 
-[node name="TopLeft" type="TextureRect" parent="Errors"]
+[node name="TopLeft" type="TextureRect" parent="Errors" unique_id=570241558]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -1043,13 +1039,11 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("31_am8uv")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopLeft"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopLeft" unique_id=1245839836]
 root_node = NodePath("../../Single")
-libraries = {
-"": SubResource("AnimationLibrary_5oaie")
-}
+libraries/ = SubResource("AnimationLibrary_5oaie")
 
-[node name="TopRight" type="TextureRect" parent="Errors"]
+[node name="TopRight" type="TextureRect" parent="Errors" unique_id=2089615286]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -1059,13 +1053,11 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("32_6crl1")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopRight"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/TopRight" unique_id=1717909849]
 root_node = NodePath("../../Single")
-libraries = {
-"": SubResource("AnimationLibrary_71fpu")
-}
+libraries/ = SubResource("AnimationLibrary_71fpu")
 
-[node name="BottomRight" type="TextureRect" parent="Errors"]
+[node name="BottomRight" type="TextureRect" parent="Errors" unique_id=340479428]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -1075,13 +1067,11 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("33_ki4f0")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomRight"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomRight" unique_id=1069052017]
 root_node = NodePath("../../Single")
-libraries = {
-"": SubResource("AnimationLibrary_366xd")
-}
+libraries/ = SubResource("AnimationLibrary_366xd")
 
-[node name="BottomLeft" type="TextureRect" parent="Errors"]
+[node name="BottomLeft" type="TextureRect" parent="Errors" unique_id=760964639]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(100, 90)
 layout_mode = 0
@@ -1091,16 +1081,12 @@ pivot_offset = Vector2(50, 50)
 mouse_filter = 2
 texture = ExtResource("34_vo2d5")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomLeft"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Errors/BottomLeft" unique_id=125127388]
 root_node = NodePath("../../Single")
-libraries = {
-"": SubResource("AnimationLibrary_8oflq")
-}
+libraries/ = SubResource("AnimationLibrary_8oflq")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_7yamt")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=296254413]
+libraries/ = SubResource("AnimationLibrary_7yamt")
 
 [connection signal="mouse_entered" from="Blocks/Single" to="." method="_on_block_mouse_entered"]
 [connection signal="mouse_entered" from="Blocks/TopLeft" to="." method="_on_block_mouse_entered"]

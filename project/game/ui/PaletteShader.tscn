@@ -1,17 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://cc0rjxbayi6c3"]
+[gd_scene format=3 uid="uid://cc0rjxbayi6c3"]
 
-[ext_resource type="Script" path="res://game/ui/PaletteShader.gd" id="1_k1dxl"]
-[ext_resource type="Shader" path="res://game/ui/PaletteShader.gdshader" id="2_fpyr6"]
+[ext_resource type="Script" uid="uid://c4v4n4tqpyxh0" path="res://game/ui/PaletteShader.gd" id="1_k1dxl"]
+[ext_resource type="Shader" uid="uid://oft41xil4kvk" path="res://game/ui/PaletteShader.gdshader" id="2_fpyr6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qcwxh"]
 shader = ExtResource("2_fpyr6")
 shader_parameter/palette_color = Color(1, 1, 1, 1)
 
-[node name="PaletteShader" type="CanvasLayer"]
+[node name="PaletteShader" type="CanvasLayer" unique_id=1890313242]
 layer = 5
 script = ExtResource("1_k1dxl")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=369284173]
 visible = false
 material = SubResource("ShaderMaterial_qcwxh")
 offset_right = 3840.0

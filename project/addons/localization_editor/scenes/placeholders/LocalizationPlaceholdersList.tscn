@@ -1,32 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkdv287jdpypi"]
+[gd_scene format=3 uid="uid://dkdv287jdpypi"]
 
 [ext_resource type="PackedScene" uid="uid://coebstiuea1jo" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersHead.tscn" id="1"]
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersList.gd" id="2"]
+[ext_resource type="Script" uid="uid://csmqfaa3v8iyy" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersList.gd" id="2"]
 
-[node name="LocalizationPlaceholdersList" type="HBoxContainer"]
+[node name="LocalizationPlaceholdersList" type="HBoxContainer" unique_id=1756914707]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 script = ExtResource("2")
 
-[node name="Separator" type="VSeparator" parent="."]
+[node name="Separator" type="VSeparator" parent="." unique_id=353930237]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Head" parent="VBox" instance=ExtResource("1")]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="VBox"]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1732360574]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PlaceholdersList" type="VBoxContainer" parent="VBox/Scroll"]
+[node name="Head" parent="VBox" unique_id=1074509998 instance=ExtResource("1")]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="VBox" unique_id=780036514]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlaceholdersList" type="VBoxContainer" parent="VBox/Scroll" unique_id=2044784868]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

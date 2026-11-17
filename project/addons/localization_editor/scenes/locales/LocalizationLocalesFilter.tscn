@@ -1,19 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsceg1shixxfw"]
+[gd_scene format=3 uid="uid://bsceg1shixxfw"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/locales/LocalizationLocalesFilter.gd" id="1"]
+[ext_resource type="Script" uid="uid://qqt51m4hsnfy" path="res://addons/localization_editor/scenes/locales/LocalizationLocalesFilter.gd" id="1"]
 
-[node name="LocalizationLocalesFilter" type="MarginContainer"]
+[node name="LocalizationLocalesFilter" type="MarginContainer" unique_id=1652367993]
 size_flags_horizontal = 3
 script = ExtResource("1")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=273340421]
 layout_mode = 2
 
-[node name="Filter" type="LineEdit" parent="HBox"]
+[node name="Filter" type="LineEdit" parent="HBox" unique_id=2110639197]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Filter"
 
-[node name="Selected" type="CheckBox" parent="HBox"]
+[node name="Selected" type="CheckBox" parent="HBox" unique_id=1416956818]
 layout_mode = 2
 text = "Selected"

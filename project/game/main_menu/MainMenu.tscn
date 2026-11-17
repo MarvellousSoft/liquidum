@@ -1,6 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://ro0q1vkhf05x"]
+[gd_scene format=3 uid="uid://ro0q1vkhf05x"]
 
-[ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
+[ext_resource type="Script" uid="uid://csiqnt7ygofkg" path="res://game/main_menu/MainMenu.gd" id="1_il4q0"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="2_h8530"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_io7nr"]
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="3_nnq5w"]
@@ -8,10 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://b16t08ejoqnqc" path="res://game/levelhub/LevelHub.tscn" id="4_afxkm"]
 [ext_resource type="Texture2D" uid="uid://c5lle40115ifn" path="res://assets/images/ui/icons/double-fish.png" id="4_au5uo"]
 [ext_resource type="PackedScene" uid="uid://dtcuemu2b1rcx" path="res://game/daily_menu/DailyButton.tscn" id="4_o512o"]
-[ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="5_ixgbd"]
+[ext_resource type="Script" uid="uid://d16pch8g3xa2q" path="res://game/main_menu/LinkButton.gd" id="5_ixgbd"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="6_nf8ou"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="7_i4ngl"]
-[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="7_twom8"]
+[ext_resource type="Script" uid="uid://r5x7jv5te4wg" path="res://game/main_menu/ModulateTextureButton.gd" id="7_twom8"]
 [ext_resource type="PackedScene" uid="uid://oir1c3787ivq" path="res://game/main_menu/PlayerDisplayButton.tscn" id="8_pplw8"]
 [ext_resource type="PackedScene" uid="uid://drtp5pcfag6ly" path="res://game/weekly/WeeklyButton.tscn" id="10_kkfou"]
 [ext_resource type="Texture2D" uid="uid://ns8gxu1xv3ej" path="res://assets/images/icons/lock.png" id="15_f6qam"]
@@ -19,14 +19,15 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_vktdt"]
 diffuse_texture = ExtResource("3_nnq5w")
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1236543391]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_il4q0")
 
-[node name="Title" parent="." instance=ExtResource("2_h8530")]
+[node name="Title" parent="." unique_id=521242175 instance=ExtResource("2_h8530")]
+layout_mode = 0
 
-[node name="MainButtonsContainer" type="CenterContainer" parent="."]
+[node name="MainButtonsContainer" type="CenterContainer" parent="." unique_id=1760591090]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,19 +38,19 @@ offset_bottom = 2156.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer" unique_id=90075602]
 layout_mode = 2
 theme_override_constants/separation = 65
 alignment = 1
 
-[node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1498608723]
 layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
 text = "PLAY_BUTTON"
 
-[node name="ExtraLevelsButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="ExtraLevelsButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=851091673]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -57,7 +58,7 @@ tooltip_text = "EXTRA_LEVELS_TOOLTIP"
 focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
 
-[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" instance=ExtResource("3_twfmx")]
+[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" unique_id=241941848 instance=ExtResource("3_twfmx")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -70,7 +71,7 @@ offset_top = 4.043
 offset_right = 264.0
 offset_bottom = 102.043
 
-[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton"]
+[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" unique_id=684184989]
 visible = false
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -85,7 +86,7 @@ texture = ExtResource("15_f6qam")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1299490888]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -93,7 +94,7 @@ tooltip_text = "RANDOM_TOOLTIP"
 focus_mode = 0
 text = "RANDOM_BUTTON"
 
-[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/RandomButton"]
+[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/RandomButton" unique_id=11285054]
 visible = false
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -108,7 +109,7 @@ texture = ExtResource("15_f6qam")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EditorButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="EditorButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1656934534]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -117,7 +118,7 @@ tooltip_text = "LEVEL_EDITOR_TOOLTIP"
 focus_mode = 0
 text = "LEVEL_EDITOR_BUTTON"
 
-[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/EditorButton"]
+[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/EditorButton" unique_id=1780468508]
 visible = false
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -132,7 +133,7 @@ texture = ExtResource("15_f6qam")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Workshop" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="Workshop" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1045184335]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -140,7 +141,7 @@ tooltip_text = "WORKSHOP_TOOLTIP"
 focus_mode = 0
 text = "WORKSHOP_BUTTON"
 
-[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/Workshop"]
+[node name="LockIcon" type="TextureRect" parent="MainButtonsContainer/VBoxContainer/Workshop" unique_id=1038493478]
 visible = false
 modulate = Color(0.847059, 0.996078, 0.882353, 1)
 custom_minimum_size = Vector2(75, 75)
@@ -155,13 +156,13 @@ texture = ExtResource("15_f6qam")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ExitButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="ExitButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1025662260]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "EXIT_BUTTON"
 
-[node name="InfoVBox" type="VBoxContainer" parent="."]
+[node name="InfoVBox" type="VBoxContainer" parent="." unique_id=367443014]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -176,7 +177,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 45
 
-[node name="DiscordButton" type="TextureButton" parent="InfoVBox"]
+[node name="DiscordButton" type="TextureButton" parent="InfoVBox" unique_id=652318001]
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
@@ -188,31 +189,31 @@ stretch_mode = 5
 script = ExtResource("5_ixgbd")
 link = "https://discord.gg/vDT8F4gGZE"
 
-[node name="WebButton" type="Button" parent="InfoVBox"]
+[node name="WebButton" type="Button" parent="InfoVBox" unique_id=1977878417]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "PLAY_ON_WEB"
 
-[node name="BuyFullGameButton" type="Button" parent="InfoVBox"]
+[node name="BuyFullGameButton" type="Button" parent="InfoVBox" unique_id=458313119]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "BUY_FULL_GAME"
 
-[node name="BuyFullGameSpace" type="Control" parent="InfoVBox"]
+[node name="BuyFullGameSpace" type="Control" parent="InfoVBox" unique_id=1204336095]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CreditsButton" type="Button" parent="InfoVBox"]
+[node name="CreditsButton" type="Button" parent="InfoVBox" unique_id=2101933915]
 layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "CREDITS_BUTTON"
 
-[node name="Version" type="Label" parent="InfoVBox"]
+[node name="Version" type="Label" parent="InfoVBox" unique_id=801207664]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
@@ -221,7 +222,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("7_twom8")
 
-[node name="ProfileButton" type="Button" parent="."]
+[node name="ProfileButton" type="Button" parent="." unique_id=1925644360]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 55.0
@@ -235,7 +236,7 @@ icon = ExtResource("4_au5uo")
 icon_alignment = 1
 expand_icon = true
 
-[node name="PlayerDisplayButton" parent="." instance=ExtResource("8_pplw8")]
+[node name="PlayerDisplayButton" parent="." unique_id=26323890 instance=ExtResource("8_pplw8")]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 330.0
@@ -243,7 +244,7 @@ offset_top = 35.0
 offset_right = 1130.0
 offset_bottom = 285.0
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=324095154]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -260,12 +261,12 @@ grow_vertical = 2
 focus_mode = 0
 text = "BACK"
 
-[node name="LevelHub" parent="." instance=ExtResource("4_afxkm")]
+[node name="LevelHub" parent="." unique_id=1926805504 instance=ExtResource("4_afxkm")]
 layout_mode = 1
 offset_top = -2360.0
 offset_bottom = -2360.0
 
-[node name="ExtraLevelHub" parent="." instance=ExtResource("7_i4ngl")]
+[node name="ExtraLevelHub" parent="." unique_id=726859468 instance=ExtResource("7_i4ngl")]
 unique_name_in_owner = true
 layout_mode = 0
 anchors_preset = 0
@@ -277,7 +278,7 @@ offset_bottom = 2160.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="BackExtra" type="Button" parent="."]
+[node name="BackExtra" type="Button" parent="." unique_id=1896266404]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4765.0
@@ -287,7 +288,7 @@ offset_bottom = 152.0
 focus_mode = 0
 text = "BACK"
 
-[node name="RecurringEvents" type="VBoxContainer" parent="."]
+[node name="RecurringEvents" type="VBoxContainer" parent="." unique_id=1834665982]
 layout_mode = 0
 offset_left = 90.0
 offset_top = 1120.0
@@ -296,47 +297,47 @@ offset_bottom = 2120.0
 theme_override_constants/separation = 50
 alignment = 2
 
-[node name="WeeklyButton" parent="RecurringEvents" instance=ExtResource("10_kkfou")]
+[node name="WeeklyButton" parent="RecurringEvents" unique_id=1510669229 instance=ExtResource("10_kkfou")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="DailyButton" parent="RecurringEvents" instance=ExtResource("4_o512o")]
+[node name="DailyButton" parent="RecurringEvents" unique_id=1375341761 instance=ExtResource("4_o512o")]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("6_nf8ou")
 
-[node name="LockDesc" type="HBoxContainer" parent="RecurringEvents"]
+[node name="LockDesc" type="HBoxContainer" parent="RecurringEvents" unique_id=143480007]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="TextureRect" type="TextureRect" parent="RecurringEvents/LockDesc"]
+[node name="TextureRect" type="TextureRect" parent="RecurringEvents/LockDesc" unique_id=813002774]
 layout_mode = 2
 texture = ExtResource("15_f6qam")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Equal" type="Label" parent="RecurringEvents/LockDesc"]
+[node name="Equal" type="Label" parent="RecurringEvents/LockDesc" unique_id=627998317]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 60
 text = "= "
 
-[node name="Meaning" type="Label" parent="RecurringEvents/LockDesc"]
+[node name="Meaning" type="Label" parent="RecurringEvents/LockDesc" unique_id=412020274]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 60
 text = "LOCKED_DEMO"
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1607122313]
 position = Vector2(1930, 4000)
 position_smoothing_enabled = true
 position_smoothing_speed = 4.0
 
-[node name="SettingsScreen" parent="." instance=ExtResource("3_io7nr")]
+[node name="SettingsScreen" parent="." unique_id=1584676088 instance=ExtResource("3_io7nr")]
 is_main_menu = true
 
 [connection signal="mouse_entered" from="MainButtonsContainer/VBoxContainer/Play" to="." method="_on_button_mouse_entered"]

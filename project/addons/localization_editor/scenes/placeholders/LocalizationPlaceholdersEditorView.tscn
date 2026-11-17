@@ -1,25 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcu48bmvtf0r0"]
+[gd_scene format=3 uid="uid://bcu48bmvtf0r0"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersEditorView.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1t8cycjdkpmk" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersEditorView.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ia567up46s8r" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersKeys.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bij7j7tjp6bw8" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholders.tscn" id="3"]
 
-[node name="LocalizationPlaceholdersEditorView" type="VBoxContainer"]
+[node name="LocalizationPlaceholdersEditorView" type="VBoxContainer" unique_id=232891305]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
 
-[node name="Split" type="HSplitContainer" parent="."]
+[node name="Split" type="HSplitContainer" parent="." unique_id=1633086262]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = -162
+split_offsets = PackedInt32Array(-1570)
+split_offset = -1570
 
-[node name="Keys" parent="Split" instance=ExtResource("2")]
+[node name="Keys" parent="Split" unique_id=888405549 instance=ExtResource("2")]
 layout_mode = 2
 
-[node name="Placeholders" parent="Split" instance=ExtResource("3")]
+[node name="Placeholders" parent="Split" unique_id=1871359174 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -1,6 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://bptqmpmyen3j6"]
+[gd_scene format=3 uid="uid://bptqmpmyen3j6"]
 
-[ext_resource type="Script" path="res://game/ui/NewIndicator.gd" id="1_g5uih"]
+[ext_resource type="Script" uid="uid://bd7rwg724e0s6" path="res://game/ui/NewIndicator.gd" id="1_g5uih"]
+
+[sub_resource type="Animation" id="Animation_onxvd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_etycq"]
 resource_name = "float"
@@ -18,37 +33,20 @@ tracks/0/keys = {
 "values": [Vector2(1, 1), Vector2(1.2, 1.2)]
 }
 
-[sub_resource type="Animation" id="Animation_onxvd"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_udw2x"]
 _data = {
-"RESET": SubResource("Animation_onxvd"),
-"float": SubResource("Animation_etycq")
+&"RESET": SubResource("Animation_onxvd"),
+&"float": SubResource("Animation_etycq")
 }
 
-[node name="NewIndicator" type="Label"]
+[node name="NewIndicator" type="Label" unique_id=1083393407]
 offset_right = 195.0
 offset_bottom = 98.0
 text = "NEW"
 script = ExtResource("1_g5uih")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "float"
-libraries = {
-"": SubResource("AnimationLibrary_udw2x")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2094281890]
+libraries/ = SubResource("AnimationLibrary_udw2x")
+autoplay = &"float"
 
 [connection signal="resized" from="." to="." method="_on_resized"]

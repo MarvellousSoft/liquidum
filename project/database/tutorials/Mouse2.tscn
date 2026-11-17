@@ -1,35 +1,35 @@
-[gd_scene load_steps=7 format=3 uid="uid://b16tb4wwqgo85"]
+[gd_scene format=3 uid="uid://b16tb4wwqgo85"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_j3v0c"]
-[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_sy81x"]
+[ext_resource type="Script" uid="uid://da1m208hhrnvo" path="res://database/tutorials/Tutorial.gd" id="2_sy81x"]
 [ext_resource type="Texture2D" uid="uid://dfht37d8wbbvi" path="res://assets/images/ui/icons/mouse_no_buttons.png" id="2_y2uuo"]
 [ext_resource type="Texture2D" uid="uid://dguu4animlbb" path="res://assets/images/ui/icons/mouse_left_button.png" id="3_ma811"]
 [ext_resource type="Texture2D" uid="uid://bgodttpynf1hp" path="res://assets/images/ui/tutorial/air_cell_example.png" id="4_2bwax"]
 [ext_resource type="Texture2D" uid="uid://lc31l4wcqsjj" path="res://assets/images/ui/icons/mouse_right_button_highlight.png" id="4_bchqm"]
 
-[node name="Mouse2" type="MarginContainer"]
+[node name="Mouse2" type="MarginContainer" unique_id=673440588]
 offset_right = 892.0
 offset_bottom = 300.0
 theme = ExtResource("1_j3v0c")
 script = ExtResource("2_sy81x")
 tutorial_name = "TUT_MOUSE2"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1832406416]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="SecondClick" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SecondClick" type="HBoxContainer" parent="VBoxContainer" unique_id=562706554]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Mouse" type="TextureRect" parent="VBoxContainer/SecondClick"]
+[node name="Mouse" type="TextureRect" parent="VBoxContainer/SecondClick" unique_id=1846435309]
 self_modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 texture = ExtResource("2_y2uuo")
 expand_mode = 1
 
-[node name="LeftButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
+[node name="LeftButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse" unique_id=1680305141]
 self_modulate = Color(0.85098, 1, 0.886275, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
@@ -38,7 +38,7 @@ offset_bottom = 40.0
 texture = ExtResource("3_ma811")
 expand_mode = 1
 
-[node name="RightButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse"]
+[node name="RightButton" type="TextureRect" parent="VBoxContainer/SecondClick/Mouse" unique_id=493957238]
 self_modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 0
@@ -47,7 +47,7 @@ offset_bottom = 40.0
 texture = ExtResource("4_bchqm")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/SecondClick"]
+[node name="Label" type="Label" parent="VBoxContainer/SecondClick" unique_id=1766076125]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85098, 1, 0.886275, 1)
 theme_override_colors/font_outline_color = Color(0.85098, 1, 0.886275, 1)
@@ -56,11 +56,11 @@ theme_override_font_sizes/font_size = 200
 text = "="
 vertical_alignment = 1
 
-[node name="Spacer" type="Control" parent="VBoxContainer/SecondClick"]
+[node name="Spacer" type="Control" parent="VBoxContainer/SecondClick" unique_id=1313109491]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SecondClick"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SecondClick" unique_id=1207773127]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 texture = ExtResource("4_2bwax")

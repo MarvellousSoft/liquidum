@@ -1,6 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://cj4y7dyk1n7hy"]
+[gd_scene format=3 uid="uid://cj4y7dyk1n7hy"]
 
-[ext_resource type="Script" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
+[ext_resource type="Script" uid="uid://csiqnt7ygofkg" path="res://game/main_menu/MainMenu.gd" id="1_irufj"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_qxpit"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="4_edxlj"]
 [ext_resource type="PackedScene" uid="uid://bptqmpmyen3j6" path="res://game/ui/NewIndicator.tscn" id="5_h8qaa"]
@@ -12,40 +12,41 @@
 [ext_resource type="Texture2D" uid="uid://bmhu23j2514wv" path="res://assets/images/ui/icons/discord.png" id="10_avytv"]
 [ext_resource type="Texture2D" uid="uid://bd35d0yvwv8hp" path="res://assets/images/ui/icons/trophy.png" id="10_cb1wk"]
 [ext_resource type="Texture2D" uid="uid://bqds1kdjck88j" path="res://assets/images/icons/steam_logo.png" id="11_emxsm"]
-[ext_resource type="Script" path="res://game/main_menu/AchButton.gd" id="11_waysh"]
+[ext_resource type="Script" uid="uid://dgbpg3gc761hx" path="res://game/main_menu/AchButton.gd" id="11_waysh"]
 [ext_resource type="PackedScene" uid="uid://b684of0yteu0u" path="res://game/levelhub/ExtraLevelHub.tscn" id="12_a1g2a"]
-[ext_resource type="Script" path="res://game/main_menu/LinkButton.gd" id="13_epnyx"]
-[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="15_o571r"]
+[ext_resource type="Script" uid="uid://d16pch8g3xa2q" path="res://game/main_menu/LinkButton.gd" id="13_epnyx"]
+[ext_resource type="Script" uid="uid://r5x7jv5te4wg" path="res://game/main_menu/ModulateTextureButton.gd" id="15_o571r"]
 [ext_resource type="Texture2D" uid="uid://cyn4cbxifv4xn" path="res://assets/images/icons/no_ads.png" id="15_odq8t"]
-[ext_resource type="Script" path="res://game/main_menu/NoAdsButton.gd" id="16_h6coi"]
+[ext_resource type="Script" uid="uid://5sbukyawuvak" path="res://game/main_menu/NoAdsButton.gd" id="16_h6coi"]
 
-[node name="MainMenuMobile" type="Control"]
+[node name="MainMenuMobile" type="Control" unique_id=1603619612]
 layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("5_sgldn")
 script = ExtResource("1_irufj")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_qxpit")]
+[node name="MobileBGHelp" parent="." unique_id=208584819 instance=ExtResource("2_qxpit")]
 layout_mode = 0
 
-[node name="MobileBGHelp2" parent="." instance=ExtResource("2_qxpit")]
+[node name="MobileBGHelp2" parent="." unique_id=1811969365 instance=ExtResource("2_qxpit")]
 layout_mode = 0
 offset_top = -1780.0
 offset_bottom = -500.0
 
-[node name="MobileBGHelp3" parent="." instance=ExtResource("2_qxpit")]
+[node name="MobileBGHelp3" parent="." unique_id=1738429203 instance=ExtResource("2_qxpit")]
 layout_mode = 0
 offset_left = 2283.0
 offset_right = 3003.0
 
-[node name="Title" parent="." instance=ExtResource("4_edxlj")]
+[node name="Title" parent="." unique_id=1114644062 instance=ExtResource("4_edxlj")]
+layout_mode = 0
 offset_left = -129.0
 offset_top = 78.0
 offset_right = -129.0
 offset_bottom = 78.0
 scale = Vector2(0.25, 0.25)
 
-[node name="MainButtonsContainer" type="CenterContainer" parent="."]
+[node name="MainButtonsContainer" type="CenterContainer" parent="." unique_id=38164195]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,19 +57,19 @@ offset_bottom = 1238.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer" unique_id=394015622]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="Play" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=2104538088]
 layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
 text = "PLAY_BUTTON"
 
-[node name="ExtraLevelsButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="ExtraLevelsButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=1309930064]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -76,9 +77,8 @@ tooltip_text = "PLAY_TOOLTIP"
 focus_mode = 0
 text = "EXTRA_LEVELS_BUTTON"
 
-[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" instance=ExtResource("5_h8qaa")]
+[node name="NewIndicator" parent="MainButtonsContainer/VBoxContainer/ExtraLevelsButton" unique_id=623615111 instance=ExtResource("5_h8qaa")]
 unique_name_in_owner = true
-layout_direction = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.009
@@ -88,29 +88,30 @@ anchor_bottom = 0.11
 offset_left = 45.472
 offset_right = 136.472
 offset_bottom = 47.0
+layout_direction = 2
 
-[node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer"]
+[node name="RandomButton" type="Button" parent="MainButtonsContainer/VBoxContainer" unique_id=734793940]
 layout_mode = 2
 size_flags_horizontal = 4
 tooltip_text = "RANDOM_TOOLTIP"
 focus_mode = 0
 text = "RANDOM_BUTTON"
 
-[node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="MainButtonsContainer/VBoxContainer" unique_id=1017370556]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_pd0dy")]
+[node name="WeeklyButton" parent="MainButtonsContainer/VBoxContainer" unique_id=230829985 instance=ExtResource("6_pd0dy")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_horizontal = 1
 
-[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" instance=ExtResource("6_j41ip")]
+[node name="DailyButton" parent="MainButtonsContainer/VBoxContainer" unique_id=1479550770 instance=ExtResource("6_j41ip")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="DailyUnlockText" type="Label" parent="MainButtonsContainer/VBoxContainer"]
+[node name="DailyUnlockText" type="Label" parent="MainButtonsContainer/VBoxContainer" unique_id=675962549]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -121,7 +122,7 @@ theme_override_font_sizes/font_size = 30
 text = "DAILY_UNLOCK_MOBILE"
 horizontal_alignment = 1
 
-[node name="InfoVBox" type="VBoxContainer" parent="."]
+[node name="InfoVBox" type="VBoxContainer" parent="." unique_id=1185289461]
 visible = false
 layout_mode = 0
 offset_left = 3027.0
@@ -130,7 +131,7 @@ offset_right = 3789.0
 offset_bottom = 2149.0
 theme_override_constants/separation = 30
 
-[node name="ExtraLevelHub" parent="." instance=ExtResource("12_a1g2a")]
+[node name="ExtraLevelHub" parent="." unique_id=1024297786 instance=ExtResource("12_a1g2a")]
 unique_name_in_owner = true
 layout_mode = 0
 anchors_preset = 0
@@ -143,21 +144,21 @@ grow_horizontal = 1
 grow_vertical = 1
 scale = Vector2(0.5, 0.5)
 
-[node name="ScrollContainer" parent="ExtraLevelHub" index="0"]
+[node name="ScrollContainer" parent="ExtraLevelHub" index="0" unique_id=1613704793]
 offset_top = 640.0
 offset_bottom = -244.0
 
-[node name="MarginContainer" parent="ExtraLevelHub/ScrollContainer" index="0"]
+[node name="MarginContainer" parent="ExtraLevelHub/ScrollContainer" index="0" unique_id=1944126807]
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 100
 
-[node name="Sections" parent="ExtraLevelHub/ScrollContainer/MarginContainer" index="0"]
+[node name="Sections" parent="ExtraLevelHub/ScrollContainer/MarginContainer" index="0" unique_id=746787653]
 theme_override_constants/h_separation = 700
 columns = 2
 
-[node name="BackExtra" type="Button" parent="."]
+[node name="BackExtra" type="Button" parent="." unique_id=1575175425]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2326.0
@@ -167,7 +168,7 @@ offset_bottom = 90.0
 focus_mode = 0
 text = "BACK"
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=514384020]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -184,55 +185,55 @@ grow_vertical = 2
 focus_mode = 0
 text = "BACK"
 
-[node name="LevelHub" parent="." instance=ExtResource("7_bx73v")]
+[node name="LevelHub" parent="." unique_id=1701918929 instance=ExtResource("7_bx73v")]
 layout_mode = 1
 offset_top = -2360.0
 offset_bottom = -2360.0
 scale = Vector2(0.5, 0.5)
 
-[node name="LevelSection1" parent="LevelHub/Sections" index="0"]
+[node name="LevelSection1" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="0" unique_id=1302444167]
 offset_left = 357.5
 offset_top = 2137.5
 offset_right = 317.5
 offset_bottom = 2097.5
 
-[node name="LevelSection2" parent="LevelHub/Sections" index="1"]
+[node name="LevelSection2" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="1" unique_id=1898942920]
 offset_left = 1250.0
 offset_top = 2287.5
 offset_right = 1210.0
 offset_bottom = 2247.5
 
-[node name="LevelSection3" parent="LevelHub/Sections" index="2"]
+[node name="LevelSection3" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="2" unique_id=413975147]
 offset_left = 350.0
 offset_top = 3012.5
 offset_right = 310.0
 offset_bottom = 2972.5
 
-[node name="LevelSection4" parent="LevelHub/Sections" index="3"]
+[node name="LevelSection4" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="3" unique_id=1187989547]
 offset_left = 1222.5
 offset_top = 3090.0
 offset_right = 1182.5
 offset_bottom = 3050.0
 
-[node name="LevelSection5" parent="LevelHub/Sections" index="4"]
+[node name="LevelSection5" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="4" unique_id=805122069]
 offset_left = 332.5
 offset_top = 3925.0
 offset_right = 292.5
 offset_bottom = 3885.0
 
-[node name="LevelSection6" parent="LevelHub/Sections" index="5"]
+[node name="LevelSection6" parent="LevelHub/Sections" parent_id_path=PackedInt32Array(1701918929, 1253375324) index="5" unique_id=1683212891]
 offset_left = 1270.0
 offset_top = 3940.0
 offset_right = 1230.0
 offset_bottom = 3900.0
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=514620365]
 position = Vector2(360, 640)
 position_smoothing_enabled = true
 position_smoothing_speed = 4.0
 editor_draw_limits = true
 
-[node name="AchButton" type="TextureButton" parent="."]
+[node name="AchButton" type="TextureButton" parent="." unique_id=169312896]
 modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 0
 offset_left = 605.0
@@ -244,7 +245,7 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("11_waysh")
 
-[node name="SteamButton" type="TextureButton" parent="."]
+[node name="SteamButton" type="TextureButton" parent="." unique_id=1483651253]
 modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 0
 offset_left = 615.0
@@ -257,7 +258,7 @@ stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://store.steampowered.com/app/2716690/Liquidum?utm_source=android_app"
 
-[node name="DiscordButton" type="TextureButton" parent="."]
+[node name="DiscordButton" type="TextureButton" parent="." unique_id=2122259867]
 modulate = Color(0.670588, 1, 0.819608, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
@@ -273,7 +274,7 @@ stretch_mode = 5
 script = ExtResource("13_epnyx")
 link = "https://discord.gg/vDT8F4gGZE"
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="." unique_id=568999290]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 580.0
@@ -286,10 +287,10 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("15_o571r")
 
-[node name="SettingsScreen" parent="." instance=ExtResource("9_7nw1q")]
+[node name="SettingsScreen" parent="." unique_id=1726819225 instance=ExtResource("9_7nw1q")]
 is_main_menu = true
 
-[node name="NoAdsButton" type="TextureButton" parent="."]
+[node name="NoAdsButton" type="TextureButton" parent="." unique_id=1604022512]
 modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 0
 offset_left = 10.0

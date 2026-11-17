@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dy2jeqivho5gm"]
+[gd_scene format=3 uid="uid://dy2jeqivho5gm"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationUI.gd" id="1_uf0s3"]
+[ext_resource type="Script" uid="uid://djmcij6dqhoyp" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationUI.gd" id="1_uf0s3"]
 
-[node name="PseudolocalizationEditorView" type="VBoxContainer"]
+[node name="PseudolocalizationEditorView" type="VBoxContainer" unique_id=733157123]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,190 +10,190 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_uf0s3")
 
-[node name="HBoxPseudolocalization" type="HBoxContainer" parent="."]
+[node name="HBoxPseudolocalization" type="HBoxContainer" parent="." unique_id=117039517]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxPseudolocalization"]
+[node name="Label" type="Label" parent="HBoxPseudolocalization" unique_id=517122747]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Use Pseudolocalization"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxPseudolocalization"]
+[node name="Panel" type="Panel" parent="HBoxPseudolocalization" unique_id=1974310702]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-auto_translate = false
 
-[node name="Pseudolocalization" type="CheckBox" parent="HBoxPseudolocalization/Panel"]
+[node name="Pseudolocalization" type="CheckBox" parent="HBoxPseudolocalization/Panel" unique_id=1559142784]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 text = "On"
 
-[node name="HBoxAccents" type="HBoxContainer" parent="."]
+[node name="HBoxAccents" type="HBoxContainer" parent="." unique_id=1244293399]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxAccents"]
+[node name="Label" type="Label" parent="HBoxAccents" unique_id=1082748046]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Replace With Accents
 "
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxAccents"]
+[node name="Panel" type="Panel" parent="HBoxAccents" unique_id=41194965]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-auto_translate = false
 
-[node name="Accents" type="CheckBox" parent="HBoxAccents/Panel"]
+[node name="Accents" type="CheckBox" parent="HBoxAccents/Panel" unique_id=325868940]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 button_pressed = true
 text = "On"
 
-[node name="HBoxDoubleVowels" type="HBoxContainer" parent="."]
+[node name="HBoxDoubleVowels" type="HBoxContainer" parent="." unique_id=1339094834]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxDoubleVowels"]
+[node name="Label" type="Label" parent="HBoxDoubleVowels" unique_id=490324636]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Double Vowels"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxDoubleVowels"]
+[node name="Panel" type="Panel" parent="HBoxDoubleVowels" unique_id=1150442143]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DoubleVowels" type="CheckBox" parent="HBoxDoubleVowels/Panel"]
+[node name="DoubleVowels" type="CheckBox" parent="HBoxDoubleVowels/Panel" unique_id=367651506]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 text = "On"
 
-[node name="HBoxFakeBidi" type="HBoxContainer" parent="."]
+[node name="HBoxFakeBidi" type="HBoxContainer" parent="." unique_id=781363792]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxFakeBidi"]
+[node name="Label" type="Label" parent="HBoxFakeBidi" unique_id=1039785063]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Fake Bidi"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxFakeBidi"]
+[node name="Panel" type="Panel" parent="HBoxFakeBidi" unique_id=514469639]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FakeBidi" type="CheckBox" parent="HBoxFakeBidi/Panel"]
+[node name="FakeBidi" type="CheckBox" parent="HBoxFakeBidi/Panel" unique_id=707712176]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 text = "On"
 
-[node name="HBoxOverride" type="HBoxContainer" parent="."]
+[node name="HBoxOverride" type="HBoxContainer" parent="." unique_id=1058599243]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxOverride"]
+[node name="Label" type="Label" parent="HBoxOverride" unique_id=564737138]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Override"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxOverride"]
+[node name="Panel" type="Panel" parent="HBoxOverride" unique_id=797527589]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Override" type="CheckBox" parent="HBoxOverride/Panel"]
+[node name="Override" type="CheckBox" parent="HBoxOverride/Panel" unique_id=1545890656]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 text = "On"
 
-[node name="HBoxExpansionRatio" type="HBoxContainer" parent="."]
+[node name="HBoxExpansionRatio" type="HBoxContainer" parent="." unique_id=411383802]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxExpansionRatio"]
+[node name="Label" type="Label" parent="HBoxExpansionRatio" unique_id=1508682349]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Expansion Ratio"
 vertical_alignment = 1
 
-[node name="ExpansionRatio" type="LineEdit" parent="HBoxExpansionRatio"]
+[node name="ExpansionRatio" type="LineEdit" parent="HBoxExpansionRatio" unique_id=1881622222]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-auto_translate = false
-text = "0"
+text = "0.0"
 
-[node name="HBoxPrefix" type="HBoxContainer" parent="."]
+[node name="HBoxPrefix" type="HBoxContainer" parent="." unique_id=1930208854]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxPrefix"]
+[node name="Label" type="Label" parent="HBoxPrefix" unique_id=653881055]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Prefix"
 vertical_alignment = 1
 
-[node name="ExpansionPrefix" type="LineEdit" parent="HBoxPrefix"]
+[node name="ExpansionPrefix" type="LineEdit" parent="HBoxPrefix" unique_id=1328716181]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-auto_translate = false
 text = "["
 
-[node name="HBoxSuffix" type="HBoxContainer" parent="."]
+[node name="HBoxSuffix" type="HBoxContainer" parent="." unique_id=1440819841]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxSuffix"]
+[node name="Label" type="Label" parent="HBoxSuffix" unique_id=1989146787]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Suffix"
 vertical_alignment = 1
 
-[node name="ExpansionSuffix" type="LineEdit" parent="HBoxSuffix"]
+[node name="ExpansionSuffix" type="LineEdit" parent="HBoxSuffix" unique_id=1475272311]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-auto_translate = false
 text = "]"
 
-[node name="HBoxSkipPlaceholders" type="HBoxContainer" parent="."]
+[node name="HBoxSkipPlaceholders" type="HBoxContainer" parent="." unique_id=23348278]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxSkipPlaceholders"]
+[node name="Label" type="Label" parent="HBoxSkipPlaceholders" unique_id=11518243]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Skip Placeholders"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBoxSkipPlaceholders"]
+[node name="Panel" type="Panel" parent="HBoxSkipPlaceholders" unique_id=204152374]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SkipPlaceholders" type="CheckBox" parent="HBoxSkipPlaceholders/Panel"]
+[node name="SkipPlaceholders" type="CheckBox" parent="HBoxSkipPlaceholders/Panel" unique_id=926526224]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 button_pressed = true
 text = "On"

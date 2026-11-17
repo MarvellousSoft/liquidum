@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://82relvbdakoy"]
+[gd_scene format=3 uid="uid://82relvbdakoy"]
 
-[ext_resource type="Script" path="res://game/ui/Quitting.gd" id="1_slv4p"]
+[ext_resource type="Script" uid="uid://d0o1uss6b45yv" path="res://game/ui/Quitting.gd" id="1_slv4p"]
 
-[node name="Quitting" type="Control"]
+[node name="Quitting" type="Control" unique_id=1693911230]
 top_level = true
 layout_mode = 3
 anchors_preset = 15
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_slv4p")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=121459022]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

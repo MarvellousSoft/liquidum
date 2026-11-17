@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cv1kqc0onf1ox"]
+[gd_scene format=3 uid="uid://cv1kqc0onf1ox"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapPath.gd" id="1"]
+[ext_resource type="Script" uid="uid://bevet5sn454nc" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapPath.gd" id="1"]
 
-[node name="LocalizationRemapPath" type="LineEdit"]
+[node name="LocalizationRemapPath" type="LineEdit" unique_id=1466705182]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

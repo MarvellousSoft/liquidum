@@ -1,20 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddjtgwoue6yd6"]
+[gd_scene format=3 uid="uid://ddjtgwoue6yd6"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/remaps/LocalizationRemaps.gd" id="2"]
+[ext_resource type="Script" uid="uid://b7jmtuaws5q5x" path="res://addons/localization_editor/scenes/remaps/LocalizationRemaps.gd" id="2"]
 
-[node name="LocalizationRemaps" type="Panel"]
+[node name="LocalizationRemaps" type="Panel" unique_id=694300897]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("2")
 
-[node name="Scroll" type="ScrollContainer" parent="."]
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=196339262]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Remaps" type="HBoxContainer" parent="Scroll"]
+[node name="Remaps" type="HBoxContainer" parent="Scroll" unique_id=928498217]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bhvs33ket0l57"]
+[gd_scene format=3 uid="uid://bhvs33ket0l57"]
 
-[ext_resource type="Script" path="res://game/flairs/FlairPicker.gd" id="1_cr2h3"]
+[ext_resource type="Script" uid="uid://cm1w510qvpcyd" path="res://game/flairs/FlairPicker.gd" id="1_cr2h3"]
 [ext_resource type="Texture2D" uid="uid://h8dsq6pyh5ge" path="res://assets/images/icons/icon.png" id="2_ljy7n"]
 [ext_resource type="Texture2D" uid="uid://dha8a5x24don4" path="res://assets/images/ui/icons/pencil.png" id="3_8v7yg"]
 [ext_resource type="PackedScene" uid="uid://dv1u5f265dm05" path="res://game/flairs/FlairButton.tscn" id="3_jn8da"]
-[ext_resource type="Script" path="res://game/main_menu/ModulateTextureButton.gd" id="4_7ov7p"]
+[ext_resource type="Script" uid="uid://r5x7jv5te4wg" path="res://game/main_menu/ModulateTextureButton.gd" id="4_7ov7p"]
 [ext_resource type="Texture2D" uid="uid://7vssyechjmut" path="res://assets/images/ui/icons/cloud-upload.png" id="5_wvht4"]
 [ext_resource type="PackedScene" uid="uid://cwympyod5pu88" path="res://game/levelhub/OngoingSolution.tscn" id="6_u4tod"]
 
@@ -18,7 +18,7 @@ corner_detail = 20
 expand_margin_top = 10.0
 expand_margin_bottom = 10.0
 
-[node name="FlairPicker" type="Control"]
+[node name="FlairPicker" type="Control" unique_id=875155489]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,18 +27,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cr2h3")
 
-[node name="TopContainer" type="CenterContainer" parent="."]
+[node name="TopContainer" type="CenterContainer" parent="." unique_id=1230806251]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 596.0
 grow_horizontal = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopContainer" unique_id=1733405544]
 layout_mode = 2
 theme_override_constants/separation = 120
 
-[node name="Title" type="Label" parent="TopContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="TopContainer/VBoxContainer" unique_id=1808319409]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 60
@@ -46,14 +46,14 @@ theme_override_font_sizes/font_size = 150
 text = "FLAIR_PICKER_TITLE"
 horizontal_alignment = 1
 
-[node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer"]
+[node name="LeaderboardExampleContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer" unique_id=648521639]
 custom_minimum_size = Vector2(2500, 300)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="Image" type="TextureRect" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="Image" type="TextureRect" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=154280708]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
@@ -61,19 +61,19 @@ texture = ExtResource("2_ljy7n")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="FlairContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="FlairContainer" type="HBoxContainer" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=12025389]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="Flair" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+[node name="Flair" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer" unique_id=66049062]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 140
 text = "  dev  "
 vertical_alignment = 1
 
-[node name="BG" type="Panel" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer/Flair"]
+[node name="BG" type="Panel" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer/Flair" unique_id=1399882681]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 show_behind_parent = true
 layout_mode = 1
@@ -84,7 +84,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gpiaw")
 
-[node name="Plus" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer"]
+[node name="Plus" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer/FlairContainer" unique_id=1483808132]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -93,7 +93,7 @@ theme_override_font_sizes/font_size = 140
 text = "+2"
 vertical_alignment = 1
 
-[node name="Name" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="Name" type="Label" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=106133590]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1200, 0)
 layout_mode = 2
@@ -105,7 +105,7 @@ text = "Person name"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="NameEdit" type="LineEdit" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=938268303]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(1200, 0)
@@ -120,7 +120,7 @@ max_length = 25
 middle_mouse_paste_enabled = false
 select_all_on_focus = true
 
-[node name="EditButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="EditButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=693180072]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -129,7 +129,7 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("4_7ov7p")
 
-[node name="UploadButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer"]
+[node name="UploadButton" type="TextureButton" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=2122007236]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(200, 200)
@@ -139,13 +139,13 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("4_7ov7p")
 
-[node name="NameLoading" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" instance=ExtResource("6_u4tod")]
+[node name="NameLoading" parent="TopContainer/VBoxContainer/LeaderboardExampleContainer" unique_id=320442000 instance=ExtResource("6_u4tod")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=1623048979]
 layout_mode = 0
 offset_left = 115.0
 offset_top = 95.0
@@ -154,7 +154,7 @@ offset_bottom = 220.0
 focus_mode = 0
 text = "BACK"
 
-[node name="BottomContainer" type="CenterContainer" parent="."]
+[node name="BottomContainer" type="CenterContainer" parent="." unique_id=760965567]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.4
@@ -163,15 +163,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomContainer" unique_id=1664049079]
 layout_mode = 2
 theme_override_constants/separation = 200
 
-[node name="Flairs" type="VBoxContainer" parent="BottomContainer/HBoxContainer"]
+[node name="Flairs" type="VBoxContainer" parent="BottomContainer/HBoxContainer" unique_id=1722809153]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/Flairs"]
+[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/Flairs" unique_id=601836931]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
@@ -179,7 +179,7 @@ theme_override_font_sizes/font_size = 100
 text = "FLAIRS"
 horizontal_alignment = 1
 
-[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/Flairs"]
+[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/Flairs" unique_id=240966739]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
@@ -187,44 +187,44 @@ theme_override_font_sizes/font_size = 30
 text = "FLAIR_EXPLANATION"
 horizontal_alignment = 1
 
-[node name="Scroll" type="ScrollContainer" parent="BottomContainer/HBoxContainer/Flairs"]
+[node name="Scroll" type="ScrollContainer" parent="BottomContainer/HBoxContainer/Flairs" unique_id=342627212]
 custom_minimum_size = Vector2(0, 900)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll"]
+[node name="MarginContainer" type="MarginContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll" unique_id=1984473385]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_right = 50
 
-[node name="FlairList" type="VBoxContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer"]
+[node name="FlairList" type="VBoxContainer" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer" unique_id=1140263046]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="FlairButton" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+[node name="FlairButton" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" unique_id=822341407 instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton2" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+[node name="FlairButton2" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" unique_id=1209345914 instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton3" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+[node name="FlairButton3" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" unique_id=752036633 instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton4" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+[node name="FlairButton4" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" unique_id=1525050932 instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="FlairButton5" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" instance=ExtResource("3_jn8da")]
+[node name="FlairButton5" parent="BottomContainer/HBoxContainer/Flairs/Scroll/MarginContainer/FlairList" unique_id=52721337 instance=ExtResource("3_jn8da")]
 layout_mode = 2
 
-[node name="RecoveryKey" type="VBoxContainer" parent="BottomContainer/HBoxContainer"]
+[node name="RecoveryKey" type="VBoxContainer" parent="BottomContainer/HBoxContainer" unique_id=1090184439]
 custom_minimum_size = Vector2(900, 0)
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="Title" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=2082251492]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 30
@@ -233,7 +233,7 @@ text = "RECOVERY_KEY"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="Explanation" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=1440778667]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
@@ -242,7 +242,7 @@ text = "RECOVERY_EXPLANATION"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="WebButton" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="WebButton" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=1913058701]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -250,12 +250,12 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "SYNC_TO_WEB"
 
-[node name="HSeparator" type="HSeparator" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="HSeparator" type="HSeparator" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=1492446911]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="AdvancedTitle" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="AdvancedTitle" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=1184732212]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 20
@@ -263,22 +263,22 @@ theme_override_font_sizes/font_size = 70
 text = "ADVANCED"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey" unique_id=100065697]
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="CurrentKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+[node name="CurrentKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer" unique_id=1960779773]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
 theme_override_font_sizes/font_size = 35
 text = "CURRENT_KEY"
 
-[node name="CopyKey" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+[node name="CopyKey" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer" unique_id=1215833862]
 layout_mode = 2
 theme_override_constants/separation = 60
 
-[node name="CopyKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey"]
+[node name="CopyKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey" unique_id=2141418868]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -287,7 +287,7 @@ placeholder_text = "********************************"
 editable = false
 select_all_on_focus = true
 
-[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey"]
+[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/CopyKey" unique_id=1489561922]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -295,18 +295,18 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "COPY_KEY_BUTTON"
 
-[node name="RestoreKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+[node name="RestoreKey" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer" unique_id=1120429725]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 13
 theme_override_font_sizes/font_size = 35
 text = "RESTORE_KEY"
 
-[node name="RestoreKeyB" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+[node name="RestoreKeyB" type="HBoxContainer" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer" unique_id=118802017]
 layout_mode = 2
 theme_override_constants/separation = 60
 
-[node name="RestoreKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB"]
+[node name="RestoreKeyEdit" type="LineEdit" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB" unique_id=1427899358]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -315,7 +315,7 @@ max_length = 50
 clear_button_enabled = true
 select_all_on_focus = true
 
-[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB"]
+[node name="Button" type="Button" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer/RestoreKeyB" unique_id=476329009]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -323,7 +323,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "RESTORE_KEY_BUTTON"
 
-[node name="KeyRestored" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer"]
+[node name="KeyRestored" type="Label" parent="BottomContainer/HBoxContainer/RecoveryKey/VBoxContainer" unique_id=355817133]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cllyxiq00f2qm"]
+[gd_scene format=3 uid="uid://cllyxiq00f2qm"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsList.gd" id="1"]
+[ext_resource type="Script" uid="uid://cs2yt0xomxxw0" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsList.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cxef263ppeo16" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsHead.tscn" id="2"]
 
-[node name="RemapsVBox" type="HBoxContainer"]
+[node name="RemapsVBox" type="HBoxContainer" unique_id=1804194592]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,23 +11,23 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")
 
-[node name="Separator" type="VSeparator" parent="."]
+[node name="Separator" type="VSeparator" parent="." unique_id=186833940]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Head" parent="VBox" instance=ExtResource("2")]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="VBox"]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1732355482]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RemapsList" type="VBoxContainer" parent="VBox/Scroll"]
+[node name="Head" parent="VBox" unique_id=2129035497 instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="VBox" unique_id=1507763721]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RemapsList" type="VBoxContainer" parent="VBox/Scroll" unique_id=1276695456]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

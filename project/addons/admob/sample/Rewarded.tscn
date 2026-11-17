@@ -1,20 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://co1e1ewums6um"]
+[gd_scene format=3 uid="uid://co1e1ewums6um"]
 
-[ext_resource type="Script" path="res://addons/admob/sample/Rewarded.gd" id="1_mo7qa"]
+[ext_resource type="Script" uid="uid://bjjso38irxbs2" path="res://addons/admob/sample/Rewarded.gd" id="1_mo7qa"]
 
-[node name="Rewarded" type="VBoxContainer"]
+[node name="Rewarded" type="VBoxContainer" unique_id=721004448]
 script = ExtResource("1_mo7qa")
 
-[node name="Load" type="Button" parent="."]
+[node name="Load" type="Button" parent="." unique_id=714169355]
 layout_mode = 2
 text = "Load"
 
-[node name="Show" type="Button" parent="."]
+[node name="Show" type="Button" parent="." unique_id=2069804014]
 layout_mode = 2
 disabled = true
 text = "Show"
 
-[node name="Destroy" type="Button" parent="."]
+[node name="Destroy" type="Button" parent="." unique_id=914564943]
 layout_mode = 2
 disabled = true
 text = "Destroy"

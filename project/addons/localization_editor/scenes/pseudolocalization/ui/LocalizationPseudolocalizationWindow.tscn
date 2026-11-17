@@ -1,18 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvdpv4r3xvcpf"]
+[gd_scene format=3 uid="uid://bvdpv4r3xvcpf"]
 
 [ext_resource type="PackedScene" uid="uid://dy2jeqivho5gm" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationUI.tscn" id="1_0aul8"]
 
-[node name="Window" type="Window"]
+[node name="Window" type="Window" unique_id=803526835]
 disable_3d = true
+oversampling_override = 1.0
 title = "Pseudolocalization"
 size = Vector2i(500, 850)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=982595624]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PseudolocalizationEditorView" parent="ScrollContainer" instance=ExtResource("1_0aul8")]
+[node name="PseudolocalizationEditorView" parent="ScrollContainer" unique_id=1797166796 instance=ExtResource("1_0aul8")]
 layout_mode = 2

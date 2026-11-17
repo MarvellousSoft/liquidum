@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://cdaplrx3hun6g"]
+[gd_scene format=3 uid="uid://cdaplrx3hun6g"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/auto_translate/translator/LocalizationAutoTranslate.gd" id="1_cuqef"]
+[ext_resource type="Script" uid="uid://dy23s45vvun4k" path="res://addons/localization_editor/scenes/auto_translate/translator/LocalizationAutoTranslate.gd" id="1_cuqef"]
 [ext_resource type="Texture2D" uid="uid://byv22srd37niw" path="res://addons/localization_editor/icons/Google.png" id="2_l1peq"]
 [ext_resource type="Texture2D" uid="uid://chlw8bdg84q1m" path="res://addons/localization_editor/icons/Yandex.png" id="3_ul6cn"]
 [ext_resource type="Texture2D" uid="uid://c24qna6n2q27l" path="res://addons/localization_editor/icons/DeepL.png" id="4_142cw"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dekewvpr4ic2c" path="res://addons/localization_editor/icons/Microsoft.png" id="6_tal6j"]
 [ext_resource type="PackedScene" uid="uid://21j64u0a50td" path="res://addons/ui_extensions/dropdown/Dropdown.tscn" id="7_jsbqb"]
 
-[node name="LocalizationAutotranslateGoogle" type="MarginContainer"]
+[node name="LocalizationAutotranslateGoogle" type="MarginContainer" unique_id=1913956897]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,12 +17,12 @@ grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_cuqef")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=626244854]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBox" type="VBoxContainer" parent="Panel"]
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1351741022]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,59 +30,54 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxTranslator" type="HBoxContainer" parent="Panel/VBox"]
+[node name="HBoxTranslator" type="HBoxContainer" parent="Panel/VBox" unique_id=9701305]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBox/HBoxTranslator"]
+[node name="Label" type="Label" parent="Panel/VBox/HBoxTranslator" unique_id=27311951]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Translator"
 
-[node name="Translator" type="OptionButton" parent="Panel/VBox/HBoxTranslator"]
+[node name="Translator" type="OptionButton" parent="Panel/VBox/HBoxTranslator" unique_id=1711871259]
 layout_mode = 2
 tooltip_text = "Select translation engine"
-item_count = 5
 selected = 0
-popup/item_0/text = ""
+item_count = 5
 popup/item_0/icon = ExtResource("2_l1peq")
 popup/item_0/id = 0
-popup/item_1/text = ""
 popup/item_1/icon = ExtResource("3_ul6cn")
 popup/item_1/id = 1
 popup/item_1/disabled = true
-popup/item_2/text = ""
 popup/item_2/icon = ExtResource("4_142cw")
 popup/item_2/id = 2
-popup/item_3/text = ""
 popup/item_3/icon = ExtResource("5_0oig7")
 popup/item_3/id = 3
-popup/item_4/text = ""
 popup/item_4/icon = ExtResource("6_tal6j")
 popup/item_4/id = 4
 
-[node name="LinkButton" type="LinkButton" parent="Panel/VBox/HBoxTranslator"]
+[node name="LinkButton" type="LinkButton" parent="Panel/VBox/HBoxTranslator" unique_id=828627673]
 layout_mode = 2
 text = "https://translate.google.com/"
 
-[node name="SaveAuth" type="CheckBox" parent="Panel/VBox/HBoxTranslator"]
+[node name="SaveAuth" type="CheckBox" parent="Panel/VBox/HBoxTranslator" unique_id=1600935904]
 layout_mode = 2
 text = "Save Authentication Data"
 
-[node name="HBoxMicrosoft" type="HBoxContainer" parent="Panel/VBox"]
+[node name="HBoxMicrosoft" type="HBoxContainer" parent="Panel/VBox" unique_id=2066905353]
 visible = false
 layout_mode = 2
 
-[node name="LabelURL" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="LabelURL" type="Label" parent="Panel/VBox/HBoxMicrosoft" unique_id=1351775561]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Base URL:
 "
 
-[node name="URL" type="OptionButton" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="URL" type="OptionButton" parent="Panel/VBox/HBoxMicrosoft" unique_id=809703789]
 layout_mode = 2
 tooltip_text = "Select BAse-URL for translation service"
-item_count = 4
 selected = 0
+item_count = 4
 popup/item_0/text = "GLOBAL | api.cognitive.microsofttranslator.com"
 popup/item_0/id = 0
 popup/item_1/text = "ASIA PACIFIC | api-apc.congnitive.microsofttranslator.com"
@@ -92,39 +87,39 @@ popup/item_2/id = 2
 popup/item_3/text = "UNITED STATES | api-nam.congnitive.microsofttranslator.com"
 popup/item_3/id = 3
 
-[node name="LabelLocation" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="LabelLocation" type="Label" parent="Panel/VBox/HBoxMicrosoft" unique_id=1790035525]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Location:"
 
-[node name="Location" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="Location" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft" unique_id=1806749140]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 tooltip_text = "Location/Region for translation service"
 
-[node name="LabelKey" type="Label" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="LabelKey" type="Label" parent="Panel/VBox/HBoxMicrosoft" unique_id=1478030938]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "Key:"
 
-[node name="Key" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft"]
+[node name="Key" type="LineEdit" parent="Panel/VBox/HBoxMicrosoft" unique_id=1694905574]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Insert Ocp-Apim-Subscription-Key for authorisation"
 secret = true
 
-[node name="VBoxAWS" type="VBoxContainer" parent="Panel/VBox"]
+[node name="VBoxAWS" type="VBoxContainer" parent="Panel/VBox" unique_id=1167602150]
 layout_mode = 2
 
-[node name="HBoxRegion" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+[node name="HBoxRegion" type="HBoxContainer" parent="Panel/VBox/VBoxAWS" unique_id=628875726]
 layout_mode = 2
 
-[node name="LabelRegion" type="Label" parent="Panel/VBox/VBoxAWS/HBoxRegion"]
+[node name="LabelRegion" type="Label" parent="Panel/VBox/VBoxAWS/HBoxRegion" unique_id=2054435253]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Region:"
 
-[node name="Region" type="OptionButton" parent="Panel/VBox/VBoxAWS/HBoxRegion"]
+[node name="Region" type="OptionButton" parent="Panel/VBox/VBoxAWS/HBoxRegion" unique_id=1122085153]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Select BAse-URL for translation service"
@@ -164,73 +159,73 @@ popup/item_15/id = 15
 popup/item_16/text = "AWS GovCloud (US-West) | translate.us-gov-west-1.amazonaws.com"
 popup/item_16/id = 16
 
-[node name="HBoxAccessKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+[node name="HBoxAccessKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS" unique_id=1995670733]
 layout_mode = 2
 
-[node name="LabelAccessKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxAccessKey"]
+[node name="LabelAccessKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxAccessKey" unique_id=1832277673]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "AccessKey:"
 
-[node name="AccessKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxAccessKey"]
+[node name="AccessKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxAccessKey" unique_id=1384006448]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Location/Region for translation service"
 secret = true
 
-[node name="HBoxSecretKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS"]
+[node name="HBoxSecretKey" type="HBoxContainer" parent="Panel/VBox/VBoxAWS" unique_id=1096502350]
 layout_mode = 2
 
-[node name="LabelSecretKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxSecretKey"]
+[node name="LabelSecretKey" type="Label" parent="Panel/VBox/VBoxAWS/HBoxSecretKey" unique_id=1375741739]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "SecretKey:"
 
-[node name="SecretKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxSecretKey"]
+[node name="SecretKey" type="LineEdit" parent="Panel/VBox/VBoxAWS/HBoxSecretKey" unique_id=225915432]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Insert Ocp-Apim-Subscription-Key for authorisation"
 secret = true
 
-[node name="HBoxDeepL" type="HBoxContainer" parent="Panel/VBox"]
+[node name="HBoxDeepL" type="HBoxContainer" parent="Panel/VBox" unique_id=2000370215]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/VBox/HBoxDeepL"]
+[node name="Label" type="Label" parent="Panel/VBox/HBoxDeepL" unique_id=683689190]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Key:"
 
-[node name="DeepLKey" type="LineEdit" parent="Panel/VBox/HBoxDeepL"]
+[node name="DeepLKey" type="LineEdit" parent="Panel/VBox/HBoxDeepL" unique_id=66692360]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Insert DeepL-Auth-Key for authorisation"
 secret = true
 
-[node name="HBox" type="HBoxContainer" parent="Panel/VBox"]
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox" unique_id=390313302]
 layout_mode = 2
 
-[node name="From" type="Label" parent="Panel/VBox/HBox"]
+[node name="From" type="Label" parent="Panel/VBox/HBox" unique_id=716970546]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "From:"
 
-[node name="FromLanguage" parent="Panel/VBox/HBox" instance=ExtResource("7_jsbqb")]
+[node name="FromLanguage" parent="Panel/VBox/HBox" unique_id=2021142099 instance=ExtResource("7_jsbqb")]
 layout_mode = 2
 
-[node name="To" type="Label" parent="Panel/VBox/HBox"]
+[node name="To" type="Label" parent="Panel/VBox/HBox" unique_id=1590100070]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "To:"
 
-[node name="ToLanguage" parent="Panel/VBox/HBox" instance=ExtResource("7_jsbqb")]
+[node name="ToLanguage" parent="Panel/VBox/HBox" unique_id=2113259432 instance=ExtResource("7_jsbqb")]
 layout_mode = 2
 
-[node name="Translate" type="Button" parent="Panel/VBox/HBox"]
+[node name="Translate" type="Button" parent="Panel/VBox/HBox" unique_id=1061546934]
 layout_mode = 2
 disabled = true
 text = "Translate"
 
-[node name="Progress" type="ProgressBar" parent="Panel/VBox"]
+[node name="Progress" type="ProgressBar" parent="Panel/VBox" unique_id=2013114757]
 layout_mode = 2

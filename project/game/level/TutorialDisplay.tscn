@@ -1,25 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://b63agud8d16ep"]
+[gd_scene format=3 uid="uid://b63agud8d16ep"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_xlkyc"]
-[ext_resource type="Script" path="res://game/level/TutorialDisplay.gd" id="2_irhp8"]
+[ext_resource type="Script" uid="uid://m7br67trupmk" path="res://game/level/TutorialDisplay.gd" id="2_irhp8"]
 [ext_resource type="StyleBox" uid="uid://6cdeg3oikb2d" path="res://assets/ui/TutorialPanelDark.tres" id="3_1ywdi"]
 [ext_resource type="Texture2D" uid="uid://4x2d32qjcwi1" path="res://assets/images/ui/tutorial/info.png" id="3_s7fl0"]
 [ext_resource type="PackedScene" uid="uid://coyce45pjwmr7" path="res://database/tutorials/TogetherSeparate.tscn" id="4_5facx"]
 
-[node name="TutorialDisplay" type="MarginContainer"]
+[node name="TutorialDisplay" type="MarginContainer" unique_id=972760911]
 theme = ExtResource("1_xlkyc")
 script = ExtResource("2_irhp8")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=893771684]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TopContainer" type="HBoxContainer" parent="VBox"]
+[node name="TopContainer" type="HBoxContainer" parent="VBox" unique_id=335662145]
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="VBox/TopContainer"]
+[node name="Icon" type="TextureRect" parent="VBox/TopContainer" unique_id=2005991629]
 modulate = Color(0.85098, 1, 0.886275, 1)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -27,7 +27,7 @@ texture = ExtResource("3_s7fl0")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Title" type="Label" parent="VBox/TopContainer"]
+[node name="Title" type="Label" parent="VBox/TopContainer" unique_id=2007890508]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
@@ -37,17 +37,17 @@ text = "TUTORIAL"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CloseButton" type="Button" parent="VBox/TopContainer"]
+[node name="CloseButton" type="Button" parent="VBox/TopContainer" unique_id=536293108]
 layout_mode = 2
 size_flags_horizontal = 10
 focus_mode = 0
 text = "X"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox" unique_id=563121673]
 layout_mode = 2
 theme_override_constants/separation = 110
 
-[node name="Back" type="Button" parent="VBox/HBoxContainer"]
+[node name="Back" type="Button" parent="VBox/HBoxContainer" unique_id=2080894215]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -56,34 +56,34 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 100
 text = "<"
 
-[node name="PanelContainer" type="PanelContainer" parent="VBox/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBox/HBoxContainer" unique_id=659313172]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = ExtResource("3_1ywdi")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBox/HBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBox/HBoxContainer/PanelContainer" unique_id=16451890]
 layout_mode = 2
 theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBox/HBoxContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBox/HBoxContainer/PanelContainer/MarginContainer" unique_id=29633039]
 layout_mode = 2
 theme_override_constants/separation = 70
 
-[node name="TutorialCenterContainer" type="CenterContainer" parent="VBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TutorialCenterContainer" type="CenterContainer" parent="VBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1773943865]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TogetherSeparate" parent="VBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" instance=ExtResource("4_5facx")]
+[node name="TogetherSeparate" parent="VBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TutorialCenterContainer" unique_id=1900054365 instance=ExtResource("4_5facx")]
 layout_mode = 2
 
-[node name="Forward" type="Button" parent="VBox/HBoxContainer"]
+[node name="Forward" type="Button" parent="VBox/HBoxContainer" unique_id=1397076736]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2

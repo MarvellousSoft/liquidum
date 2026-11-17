@@ -1,19 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkyeeiyq8dv1n"]
+[gd_scene format=3 uid="uid://bkyeeiyq8dv1n"]
 
-[ext_resource type="Script" path="res://audio/AudioManager.gd" id="1"]
+[ext_resource type="Script" uid="uid://ie8gmefbkapm" path="res://audio/AudioManager.gd" id="1"]
 
-[node name="AudioManager" type="Node"]
+[node name="AudioManager" type="Node" unique_id=364674703]
 script = ExtResource("1")
 
-[node name="BGMPlayer" type="AudioStreamPlayer" parent="."]
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="." unique_id=143309303]
 bus = &"BGM"
 
-[node name="FadeOutBGMPlayer" type="AudioStreamPlayer" parent="."]
+[node name="FadeOutBGMPlayer" type="AudioStreamPlayer" parent="." unique_id=5683139]
 bus = &"BGM"
 
-[node name="SFXS" type="Node" parent="."]
+[node name="SFXS" type="Node" parent="." unique_id=1306871105]
 
-[node name="BGMTimer" type="Timer" parent="."]
+[node name="BGMTimer" type="Timer" parent="." unique_id=1014707196]
 unique_name_in_owner = true
 one_shot = true
 

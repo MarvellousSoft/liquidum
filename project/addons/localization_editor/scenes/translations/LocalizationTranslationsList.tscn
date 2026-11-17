@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxc4qgab6wglq"]
+[gd_scene format=3 uid="uid://dxc4qgab6wglq"]
 
 [ext_resource type="PackedScene" uid="uid://bpmaw0y6cul8h" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsHead.tscn" id="1"]
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsList.gd" id="2"]
+[ext_resource type="Script" uid="uid://dnvdygl24yk5a" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsList.gd" id="2"]
 
-[node name="LocalizationTranslationsList" type="HBoxContainer"]
+[node name="LocalizationTranslationsList" type="HBoxContainer" unique_id=1256124247]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,23 +11,23 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("2")
 
-[node name="Separator" type="VSeparator" parent="."]
+[node name="Separator" type="VSeparator" parent="." unique_id=1923124086]
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Head" parent="VBox" instance=ExtResource("1")]
-layout_mode = 2
-
-[node name="Scroll" type="ScrollContainer" parent="VBox"]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=52374922]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TranslationsList" type="VBoxContainer" parent="VBox/Scroll"]
+[node name="Head" parent="VBox" unique_id=1004710898 instance=ExtResource("1")]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="VBox" unique_id=1335366339]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TranslationsList" type="VBoxContainer" parent="VBox/Scroll" unique_id=855288400]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

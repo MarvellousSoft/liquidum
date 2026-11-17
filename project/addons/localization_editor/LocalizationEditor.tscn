@@ -1,16 +1,22 @@
-[gd_scene load_steps=10 format=3 uid="uid://ccvub4livq3sw"]
+[gd_scene format=3 uid="uid://ccvub4livq3sw"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/LocalizationEditor.gd" id="1_8fvc6"]
+[ext_resource type="Script" uid="uid://cmoywqw6pqq3n" path="res://addons/localization_editor/LocalizationEditor.gd" id="1_8fvc6"]
 [ext_resource type="Texture2D" uid="uid://drjyfbi5n382s" path="res://addons/localization_editor/icons/Save.svg" id="1_c7hr8"]
 [ext_resource type="Texture2D" uid="uid://crjkaavcu17ry" path="res://addons/localization_editor/icons/File.svg" id="2_4pkbj"]
+[ext_resource type="Texture2D" uid="uid://clg02fkdtojbl" path="res://addons/localization_editor/icons/Localization.svg" id="4_3nmob"]
 [ext_resource type="PackedScene" uid="uid://dr8w8dqav3u6m" path="res://addons/localization_editor/scenes/translations/LocalizationTranslationsEditorView.tscn" id="4_kmfo1"]
 [ext_resource type="PackedScene" uid="uid://bdiylluaih22h" path="res://addons/localization_editor/scenes/locales/LocalizationLocalesEditorView.tscn" id="4_mauhd"]
+[ext_resource type="Texture2D" uid="uid://c7yf5nsn3kcsk" path="res://addons/localization_editor/icons/Remaps.svg" id="5_rtcvx"]
+[ext_resource type="Texture2D" uid="uid://qd4ukmjjrqhm" path="res://addons/localization_editor/icons/Locales.svg" id="6_fy8g7"]
+[ext_resource type="Texture2D" uid="uid://buvf2n266m3jc" path="res://addons/localization_editor/icons/Placeholders.svg" id="7_2x3kw"]
+[ext_resource type="Texture2D" uid="uid://b6trurx65v5k8" path="res://addons/localization_editor/icons/Pseudolocalization.svg" id="8_gtwb7"]
 [ext_resource type="PackedScene" uid="uid://dsd7fjl6ma47u" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapsEditorView.tscn" id="8_orcd3"]
+[ext_resource type="Texture2D" uid="uid://cvuknftmrxe5d" path="res://addons/localization_editor/icons/Translation.svg" id="9_sqemp"]
 [ext_resource type="PackedScene" uid="uid://ehxh31dert3e" path="res://addons/localization_editor/scenes/auto_translate/LocalizationAutoTranslateEditorView.tscn" id="10_3m4id"]
 [ext_resource type="PackedScene" uid="uid://bcu48bmvtf0r0" path="res://addons/localization_editor/scenes/placeholders/LocalizationPlaceholdersEditorView.tscn" id="12_tkjln"]
 [ext_resource type="PackedScene" uid="uid://cmppgw5ln2mbs" path="res://addons/localization_editor/scenes/pseudolocalization/LocalizationPseudolocalizationEditorView.tscn" id="12_w0ry5"]
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" unique_id=627307776]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +27,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_8fvc6")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1061729167]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,51 +37,64 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Margin" type="MarginContainer" parent="VBox"]
+[node name="Margin" type="MarginContainer" parent="VBox" unique_id=329033643]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBox" type="HBoxContainer" parent="VBox/Margin"]
+[node name="HBox" type="HBoxContainer" parent="VBox/Margin" unique_id=967816078]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Save" type="Button" parent="VBox/Margin/HBox"]
+[node name="Save" type="Button" parent="VBox/Margin/HBox" unique_id=140826110]
 layout_mode = 2
 icon = ExtResource("1_c7hr8")
 
-[node name="Open" type="Button" parent="VBox/Margin/HBox"]
+[node name="Open" type="Button" parent="VBox/Margin/HBox" unique_id=1663426292]
 layout_mode = 2
 icon = ExtResource("2_4pkbj")
 
-[node name="File" type="Label" parent="VBox/Margin/HBox"]
+[node name="File" type="Label" parent="VBox/Margin/HBox" unique_id=696944734]
 layout_mode = 2
 text = "Path:"
 
-[node name="Tabs" type="TabContainer" parent="VBox"]
+[node name="Tabs" type="TabContainer" parent="VBox" unique_id=676938864]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+current_tab = 0
+tab_0/icon = ExtResource("4_3nmob")
+tab_1/icon = ExtResource("5_rtcvx")
+tab_2/icon = ExtResource("6_fy8g7")
+tab_3/icon = ExtResource("7_2x3kw")
+tab_4/icon = ExtResource("8_gtwb7")
+tab_5/icon = ExtResource("9_sqemp")
 
-[node name="Translations" parent="VBox/Tabs" instance=ExtResource("4_kmfo1")]
+[node name="Translations" parent="VBox/Tabs" unique_id=100037506 instance=ExtResource("4_kmfo1")]
 layout_mode = 2
+metadata/_tab_index = 0
 
-[node name="Remaps" parent="VBox/Tabs" instance=ExtResource("8_orcd3")]
+[node name="Remaps" parent="VBox/Tabs" unique_id=311707166 instance=ExtResource("8_orcd3")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
-[node name="Locales" parent="VBox/Tabs" instance=ExtResource("4_mauhd")]
+[node name="Locales" parent="VBox/Tabs" unique_id=704470135 instance=ExtResource("4_mauhd")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
-[node name="Placeholders" parent="VBox/Tabs" instance=ExtResource("12_tkjln")]
+[node name="Placeholders" parent="VBox/Tabs" unique_id=1124513383 instance=ExtResource("12_tkjln")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 3
 
-[node name="Pseudolocalization" parent="VBox/Tabs" instance=ExtResource("12_w0ry5")]
+[node name="Pseudolocalization" parent="VBox/Tabs" unique_id=1225445278 instance=ExtResource("12_w0ry5")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4
 
-[node name="AutoTranslate" parent="VBox/Tabs" instance=ExtResource("10_3m4id")]
+[node name="AutoTranslate" parent="VBox/Tabs" unique_id=1335848769 instance=ExtResource("10_3m4id")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 5

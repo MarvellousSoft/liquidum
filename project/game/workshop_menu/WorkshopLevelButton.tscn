@@ -1,12 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://dte2gdbdkw8ap"]
+[gd_scene format=3 uid="uid://dte2gdbdkw8ap"]
 
-[ext_resource type="Script" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
+[ext_resource type="Script" uid="uid://7ihe26w3agg4" path="res://game/workshop_menu/WorkshopLevelButton.gd" id="2_7eonp"]
 [ext_resource type="PackedScene" uid="uid://dl1moq1i2jjs" path="res://game/levelhub/LevelButton.tscn" id="2_gtk5o"]
 [ext_resource type="Texture2D" uid="uid://cbroo6eud8n15" path="res://assets/images/icons/thumb-up.png" id="4_tofat"]
 [ext_resource type="Texture2D" uid="uid://dgo2eiiw66bp3" path="res://assets/images/icons/open_outside.png" id="5_d1g4h"]
 [ext_resource type="Texture2D" uid="uid://3ryoreoxabsw" path="res://assets/images/icons/thumb-down.png" id="5_r7ve2"]
 
-[node name="WorkshopLevelButton" type="Control"]
+[node name="WorkshopLevelButton" type="Control" unique_id=938318728]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 50.0
@@ -15,17 +15,17 @@ offset_right = 192.0
 offset_bottom = 172.0
 script = ExtResource("2_7eonp")
 
-[node name="Open" parent="." instance=ExtResource("2_gtk5o")]
+[node name="Open" parent="." unique_id=924281123 instance=ExtResource("2_gtk5o")]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 50.0
 offset_top = 30.0
 offset_right = 192.0
 offset_bottom = 172.0
 
-[node name="ThumbUp" type="Button" parent="."]
+[node name="ThumbUp" type="Button" parent="." unique_id=2032246545]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = -405.0
 offset_top = -81.0
 offset_right = -305.0
@@ -37,9 +37,9 @@ toggle_mode = true
 icon = ExtResource("4_tofat")
 expand_icon = true
 
-[node name="ThumbDown" type="Button" parent="."]
+[node name="ThumbDown" type="Button" parent="." unique_id=62705023]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = -405.0
 offset_top = 93.0
 offset_right = -305.0
@@ -51,8 +51,9 @@ toggle_mode = true
 icon = ExtResource("5_r7ve2")
 expand_icon = true
 
-[node name="OpenOutside" type="Button" parent="."]
+[node name="OpenOutside" type="Button" parent="." unique_id=1800417636]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = -405.0
 offset_top = 265.0
 offset_right = -305.0

@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://di2bf2ormot60"]
+[gd_scene format=3 uid="uid://di2bf2ormot60"]
 
-[ext_resource type="Script" path="res://game/daily_menu/SingleDayLeaderboard.gd" id="1_dn36x"]
+[ext_resource type="Script" uid="uid://bhmd4rlxbb61e" path="res://game/daily_menu/SingleDayLeaderboard.gd" id="1_dn36x"]
 [ext_resource type="Texture2D" uid="uid://dl5f8agso8p12" path="res://assets/images/ui/hint/x.png" id="1_wkjq3"]
 [ext_resource type="Texture2D" uid="uid://4o1s8byoivu8" path="res://assets/images/ui/objects/timer_icon.png" id="2_lmufn"]
 [ext_resource type="Texture2D" uid="uid://beax5oseh6sd5" path="res://assets/images/icons/256_256.png" id="3_ef8ai"]
@@ -23,14 +23,14 @@ expand_margin_top = 5.0
 expand_margin_right = 10.0
 expand_margin_bottom = 5.0
 
-[node name="ScrollContainer" type="ScrollContainer"]
+[node name="ScrollContainer" type="ScrollContainer" unique_id=1347208444]
 custom_minimum_size = Vector2(1140, 800)
 offset_right = 30.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_dn36x")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=312856117]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -38,41 +38,41 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 25
 
-[node name="Grid" type="GridContainer" parent="MarginContainer"]
+[node name="Grid" type="GridContainer" parent="MarginContainer" unique_id=420725739]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 10
 columns = 5
 
-[node name="E1" type="Control" parent="MarginContainer/Grid"]
+[node name="E1" type="Control" parent="MarginContainer/Grid" unique_id=391155261]
 custom_minimum_size = Vector2(60, 95)
 layout_mode = 2
 
-[node name="E2" type="Control" parent="MarginContainer/Grid"]
+[node name="E2" type="Control" parent="MarginContainer/Grid" unique_id=1610284013]
 custom_minimum_size = Vector2(10, 95)
 layout_mode = 2
 
-[node name="Date" type="Label" parent="MarginContainer/Grid"]
+[node name="Date" type="Label" parent="MarginContainer/Grid" unique_id=471123747]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "2024-01-01"
 
-[node name="Mistakes" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Mistakes" type="TextureRect" parent="MarginContainer/Grid" unique_id=1219451959]
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("1_wkjq3")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Time" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Time" type="TextureRect" parent="MarginContainer/Grid" unique_id=1163937943]
 modulate = Color(0.670588, 1, 0.819608, 1)
 layout_mode = 2
 texture = ExtResource("2_lmufn")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Icon1" type="TextureRect" parent="MarginContainer/Grid"]
+[node name="Icon1" type="TextureRect" parent="MarginContainer/Grid" unique_id=672632155]
 custom_minimum_size = Vector2(98, 98)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -80,7 +80,7 @@ texture = ExtResource("3_ef8ai")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="PlayerBG" type="Panel" parent="MarginContainer/Grid/Icon1"]
+[node name="PlayerBG" type="Panel" parent="MarginContainer/Grid/Icon1" unique_id=1715873579]
 modulate = Color(0.0156863, 0.105882, 0.219608, 0.513726)
 show_behind_parent = true
 layout_mode = 0
@@ -90,18 +90,18 @@ offset_right = 1140.0
 offset_bottom = 110.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_nk0if")
 
-[node name="Pos1" type="Label" parent="MarginContainer/Grid"]
+[node name="Pos1" type="Label" parent="MarginContainer/Grid" unique_id=191854126]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "1."
 
-[node name="NameContainer1" type="HBoxContainer" parent="MarginContainer/Grid"]
+[node name="NameContainer1" type="HBoxContainer" parent="MarginContainer/Grid" unique_id=135547835]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 14
 
-[node name="Flair" type="Label" parent="MarginContainer/Grid/NameContainer1"]
+[node name="Flair" type="Label" parent="MarginContainer/Grid/NameContainer1" unique_id=268176193]
 layout_mode = 2
 mouse_filter = 1
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
@@ -109,7 +109,7 @@ theme_override_font_sizes/font_size = 45
 text = " dev "
 vertical_alignment = 1
 
-[node name="Plus" type="Label" parent="MarginContainer/Grid/NameContainer1/Flair"]
+[node name="Plus" type="Label" parent="MarginContainer/Grid/NameContainer1/Flair" unique_id=1109094424]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -126,7 +126,7 @@ text = "+12
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BG" type="Panel" parent="MarginContainer/Grid/NameContainer1/Flair"]
+[node name="BG" type="Panel" parent="MarginContainer/Grid/NameContainer1/Flair" unique_id=1820023277]
 modulate = Color(0, 0.04, 0.14, 0.75)
 show_behind_parent = true
 layout_mode = 1
@@ -138,7 +138,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_5mbkq")
 
-[node name="Name" type="Label" parent="MarginContainer/Grid/NameContainer1"]
+[node name="Name" type="Label" parent="MarginContainer/Grid/NameContainer1" unique_id=1647437769]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -146,7 +146,7 @@ theme_override_font_sizes/font_size = 60
 text = "Person name"
 text_overrun_behavior = 3
 
-[node name="Mistakes1" type="Label" parent="MarginContainer/Grid"]
+[node name="Mistakes1" type="Label" parent="MarginContainer/Grid" unique_id=2033511192]
 custom_minimum_size = Vector2(98, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -154,7 +154,7 @@ theme_override_font_sizes/font_size = 70
 text = "0"
 horizontal_alignment = 1
 
-[node name="Time1" type="Label" parent="MarginContainer/Grid"]
+[node name="Time1" type="Label" parent="MarginContainer/Grid" unique_id=853497075]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 70

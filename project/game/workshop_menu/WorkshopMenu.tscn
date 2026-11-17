@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bw8w0mew6x5p8"]
+[gd_scene format=3 uid="uid://bw8w0mew6x5p8"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7r58g"]
-[ext_resource type="Script" path="res://game/workshop_menu/WorkshopMenu.gd" id="2_hwdrt"]
+[ext_resource type="Script" uid="uid://dgl14h2i4twic" path="res://game/workshop_menu/WorkshopMenu.gd" id="2_hwdrt"]
 [ext_resource type="PackedScene" uid="uid://dte2gdbdkw8ap" path="res://game/workshop_menu/WorkshopLevelButton.tscn" id="3_7uwtg"]
 
-[node name="WorkshopMenu" type="Control"]
+[node name="WorkshopMenu" type="Control" unique_id=1432508863]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,7 +14,7 @@ grow_vertical = 2
 theme = ExtResource("1_7r58g")
 script = ExtResource("2_hwdrt")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1673000533]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,17 +23,17 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=2010861208]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TopPart" type="Control" parent="ScrollContainer/VBoxContainer"]
+[node name="TopPart" type="Control" parent="ScrollContainer/VBoxContainer" unique_id=1811204624]
 custom_minimum_size = Vector2(3840, 600)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Title" type="Label" parent="ScrollContainer/VBoxContainer/TopPart"]
-layout_mode = 2
+[node name="Title" type="Label" parent="ScrollContainer/VBoxContainer/TopPart" unique_id=1700490963]
+layout_mode = 0
 offset_top = 278.0
 offset_right = 3840.0
 offset_bottom = 419.0
@@ -43,8 +43,8 @@ theme_override_font_sizes/font_size = 120
 text = "WORKSHOP_LEVELS"
 horizontal_alignment = 1
 
-[node name="OpenWorkshop" type="Button" parent="ScrollContainer/VBoxContainer/TopPart"]
-layout_mode = 2
+[node name="OpenWorkshop" type="Button" parent="ScrollContainer/VBoxContainer/TopPart" unique_id=584917849]
+layout_mode = 0
 offset_left = 3002.0
 offset_top = 75.0
 offset_right = 3765.0
@@ -53,53 +53,53 @@ grow_horizontal = 0
 focus_mode = 0
 text = "OPEN_WORKSHOP"
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/VBoxContainer" unique_id=1386306343]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/margin_top = 200
 theme_override_constants/margin_bottom = 400
 
-[node name="ButtonsContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/MarginContainer"]
+[node name="ButtonsContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/MarginContainer" unique_id=517892340]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 1200
 theme_override_constants/v_separation = 1000
 columns = 3
 
-[node name="WorkshopLevelButton" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=504227610 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton2" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton2" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=2031057396 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton3" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton3" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=1122726970 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton4" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton4" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=994752934 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton5" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton5" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=460601756 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton6" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton6" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=1679947946 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton7" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton7" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=646421023 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="WorkshopLevelButton8" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" instance=ExtResource("3_7uwtg")]
+[node name="WorkshopLevelButton8" parent="ScrollContainer/VBoxContainer/MarginContainer/ButtonsContainer" unique_id=797624251 instance=ExtResource("3_7uwtg")]
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Back" type="Button" parent="."]
-layout_mode = 2
+[node name="Back" type="Button" parent="." unique_id=1783881501]
+layout_mode = 0
 offset_left = 60.0
 offset_top = 75.0
 offset_right = 302.0
@@ -107,7 +107,7 @@ offset_bottom = 184.0
 focus_mode = 0
 text = "BACK"
 
-[node name="Explanation" type="Label" parent="."]
+[node name="Explanation" type="Label" parent="." unique_id=1778638183]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1

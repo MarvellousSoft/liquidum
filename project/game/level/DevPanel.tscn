@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://k6240grbegxf"]
+[gd_scene format=3 uid="uid://k6240grbegxf"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_bh5km"]
-[ext_resource type="Script" path="res://game/level/DevPanel.gd" id="2_3k7ls"]
+[ext_resource type="Script" uid="uid://b08ytf8vbr30i" path="res://game/level/DevPanel.gd" id="2_3k7ls"]
 
-[node name="DevPanel" type="VBoxContainer"]
+[node name="DevPanel" type="VBoxContainer" unique_id=619959180]
 offset_right = 806.0
 offset_bottom = 2366.0
 scale = Vector2(0.4, 0.4)
@@ -11,30 +11,30 @@ theme = ExtResource("1_bh5km")
 theme_override_constants/separation = 50
 script = ExtResource("2_3k7ls")
 
-[node name="Strategies" type="Button" parent="."]
+[node name="Strategies" type="Button" parent="." unique_id=751689461]
 layout_mode = 2
 focus_mode = 0
 text = "Strategies"
 
-[node name="StrategiesOnce" type="Button" parent="."]
+[node name="StrategiesOnce" type="Button" parent="." unique_id=83091479]
 layout_mode = 2
 focus_mode = 0
 text = "1 Strategy"
 
-[node name="StrategyList" type="MenuButton" parent="."]
+[node name="StrategyList" type="MenuButton" parent="." unique_id=990907618]
 layout_mode = 2
 text = "Used strategies"
 
-[node name="ForcedStrategyList" type="MenuButton" parent="."]
+[node name="ForcedStrategyList" type="MenuButton" parent="." unique_id=709991769]
 layout_mode = 2
 text = "Forced strategies"
 
-[node name="Variants" type="MenuButton" parent="."]
+[node name="Variants" type="MenuButton" parent="." unique_id=1743726444]
 layout_mode = 2
 text = "Variants"
 flat = false
 
-[node name="Guesses" type="SpinBox" parent="."]
+[node name="Guesses" type="SpinBox" parent="." unique_id=1347690444]
 layout_mode = 2
 max_value = 30.0
 value = 2.0
@@ -42,17 +42,17 @@ rounded = true
 suffix = "guesses"
 select_all_on_focus = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=863716606]
 layout_mode = 2
 theme_override_constants/separation = 80
 
-[node name="FullSolve" type="Button" parent="HBoxContainer"]
+[node name="FullSolve" type="Button" parent="HBoxContainer" unique_id=1523188318]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Full solve"
 
-[node name="CancelSolve" type="Button" parent="HBoxContainer"]
+[node name="CancelSolve" type="Button" parent="HBoxContainer" unique_id=1708453011]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -60,99 +60,99 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="FullSolveType" type="Label" parent="."]
+[node name="FullSolveType" type="Label" parent="." unique_id=1676361414]
 layout_mode = 2
 text = "Solving manually"
 
-[node name="GodMode" type="CheckButton" parent="."]
+[node name="GodMode" type="CheckButton" parent="." unique_id=1264757924]
 layout_mode = 2
 focus_mode = 0
 text = "God mode"
 
-[node name="Seed" type="LineEdit" parent="."]
+[node name="Seed" type="LineEdit" parent="." unique_id=741885796]
 layout_mode = 2
 placeholder_text = "Seed: ?"
 
-[node name="Generate" type="Button" parent="."]
+[node name="Generate" type="Button" parent="." unique_id=24353788]
 layout_mode = 2
 focus_mode = 0
 text = "Generate"
 
-[node name="FlavorOptions" type="OptionButton" parent="."]
+[node name="FlavorOptions" type="OptionButton" parent="." unique_id=1725737332]
 layout_mode = 2
 focus_mode = 0
 
-[node name="Interesting" type="CheckButton" parent="."]
+[node name="Interesting" type="CheckButton" parent="." unique_id=1438185678]
 layout_mode = 2
 focus_mode = 0
 text = "Interesting"
 
-[node name="KeepWalls" type="CheckButton" parent="."]
+[node name="KeepWalls" type="CheckButton" parent="." unique_id=254665645]
 layout_mode = 2
 focus_mode = 0
 text = "Keep walls"
 
-[node name="KeepWater" type="CheckButton" parent="."]
+[node name="KeepWater" type="CheckButton" parent="." unique_id=593343383]
 layout_mode = 2
 focus_mode = 0
 text = "Keep water"
 
-[node name="KeepVis" type="CheckButton" parent="."]
+[node name="KeepVis" type="CheckButton" parent="." unique_id=113723969]
 layout_mode = 2
 focus_mode = 0
 button_pressed = true
 text = "Keep visibility"
 
-[node name="Diags" type="CheckBox" parent="."]
+[node name="Diags" type="CheckBox" parent="." unique_id=1309805205]
 layout_mode = 2
 focus_mode = 0
 text = "Diagonals"
 
-[node name="Boats" type="CheckBox" parent="."]
+[node name="Boats" type="CheckBox" parent="." unique_id=1960386148]
 layout_mode = 2
 focus_mode = 0
 text = "Boats"
 
-[node name="Aquariums" type="CheckBox" parent="."]
+[node name="Aquariums" type="CheckBox" parent="." unique_id=83126051]
 layout_mode = 2
 focus_mode = 0
 text = "Aquariums"
 
-[node name="CellHintsLabel" type="Label" parent="."]
+[node name="CellHintsLabel" type="Label" parent="." unique_id=39161654]
 layout_mode = 2
 text = "CellHints max: 0%"
 
-[node name="CellHintsSlider" type="HSlider" parent="."]
+[node name="CellHintsSlider" type="HSlider" parent="." unique_id=959843604]
 layout_mode = 2
 focus_mode = 0
 max_value = 50.0
 
-[node name="Paste" type="Button" parent="."]
+[node name="Paste" type="Button" parent="." unique_id=611875411]
 layout_mode = 2
 focus_mode = 0
 text = "Paste clipboard"
 
-[node name="Save" type="Button" parent="."]
+[node name="Save" type="Button" parent="." unique_id=677718114]
 layout_mode = 2
 focus_mode = 0
 text = "Save to filesystem"
 
-[node name="CopyToEditor" type="Button" parent="."]
+[node name="CopyToEditor" type="Button" parent="." unique_id=833415233]
 layout_mode = 2
 focus_mode = 0
 text = "Copy to editor"
 
-[node name="RotateClock" type="Button" parent="."]
+[node name="RotateClock" type="Button" parent="." unique_id=619308609]
 layout_mode = 2
 focus_mode = 0
 text = "Rotate clock"
 
-[node name="MirrorH" type="Button" parent="."]
+[node name="MirrorH" type="Button" parent="." unique_id=826842649]
 layout_mode = 2
 focus_mode = 0
 text = "Mirror horizontal"
 
-[node name="MirrorV" type="Button" parent="."]
+[node name="MirrorV" type="Button" parent="." unique_id=1666249231]
 layout_mode = 2
 focus_mode = 0
 text = "Mirror vertical"

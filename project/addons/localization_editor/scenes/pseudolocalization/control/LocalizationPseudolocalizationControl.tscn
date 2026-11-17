@@ -1,39 +1,39 @@
-[gd_scene load_steps=3 format=3 uid="uid://bls65p0mxjr0e"]
+[gd_scene format=3 uid="uid://bls65p0mxjr0e"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationControl.gd" id="1_an27a"]
+[ext_resource type="Script" uid="uid://bcnkcnptdf3gj" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationControl.gd" id="1_an27a"]
 [ext_resource type="PackedScene" uid="uid://dy2jeqivho5gm" path="res://addons/localization_editor/scenes/pseudolocalization/control/LocalizationPseudolocalizationUI.tscn" id="2_jxw8w"]
 
-[node name="LocalizationPseudolocalizationControl" type="VBoxContainer"]
+[node name="LocalizationPseudolocalizationControl" type="VBoxContainer" unique_id=895194461]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_an27a")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=641395196]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBox"]
+[node name="Label" type="Label" parent="HBox" unique_id=144265482]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-auto_translate = false
 text = "Use Pseudolocalization Control in UI"
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="HBox"]
+[node name="Panel" type="Panel" parent="HBox" unique_id=1983159994]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PseudolocalizationControl" type="CheckBox" parent="HBox/Panel"]
+[node name="PseudolocalizationControl" type="CheckBox" parent="HBox/Panel" unique_id=268121670]
+auto_translate_mode = 2
 layout_mode = 0
 offset_right = 44.0
 offset_bottom = 31.0
-auto_translate = false
 button_pressed = true
 text = "On"
 
-[node name="HSeparator" type="HSeparator" parent="."]
+[node name="HSeparator" type="HSeparator" parent="." unique_id=1627120707]
 layout_mode = 2
 
-[node name="PseudolocalizationEditorView" parent="." instance=ExtResource("2_jxw8w")]
+[node name="PseudolocalizationEditorView" parent="." unique_id=1274712793 instance=ExtResource("2_jxw8w")]
 layout_mode = 2

@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://5bymewa5wxxf"]
+[gd_scene format=3 uid="uid://5bymewa5wxxf"]
 
-[ext_resource type="Script" path="res://game/ui/ConfirmationScreen.gd" id="1_40f4i"]
+[ext_resource type="Script" uid="uid://dj7q22qjjmil8" path="res://game/ui/ConfirmationScreen.gd" id="1_40f4i"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="2_8015s"]
 [ext_resource type="Theme" uid="uid://dcnk7jk5h3hov" path="res://assets/ui/SettingsMobileTheme.tres" id="3_5r6cq"]
 
@@ -159,16 +159,16 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sb0jh"]
 _data = {
-"RESET": SubResource("Animation_mqb4d"),
-"disable": SubResource("Animation_84cm6"),
-"enable": SubResource("Animation_mh6ii")
+&"RESET": SubResource("Animation_mqb4d"),
+&"disable": SubResource("Animation_84cm6"),
+&"enable": SubResource("Animation_mh6ii")
 }
 
-[node name="ConfirmationScreen" type="CanvasLayer"]
+[node name="ConfirmationScreen" type="CanvasLayer" unique_id=1882110187]
 layer = 4
 script = ExtResource("1_40f4i")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=31193632]
 visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -178,10 +178,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.0352941, 0.141176, 0.980392)
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("2_8015s")]
+[node name="MobileBGHelp" parent="." unique_id=1692365296 instance=ExtResource("2_8015s")]
 visible = false
 
-[node name="Content" type="Control" parent="."]
+[node name="Content" type="Control" parent="." unique_id=1811346977]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -191,18 +191,18 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("3_5r6cq")
 
-[node name="CenterContainer" type="CenterContainer" parent="Content"]
+[node name="CenterContainer" type="CenterContainer" parent="Content" unique_id=1171213191]
 unique_name_in_owner = true
 layout_mode = 1
 offset_right = 722.0
 offset_bottom = 1280.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/CenterContainer" unique_id=1689953001]
 layout_mode = 2
 theme_override_constants/separation = 97
 alignment = 1
 
-[node name="MainTitle" type="Label" parent="Content/CenterContainer/VBoxContainer"]
+[node name="MainTitle" type="Label" parent="Content/CenterContainer/VBoxContainer" unique_id=1160891335]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -211,29 +211,27 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="Content/CenterContainer/VBoxContainer" unique_id=1770994794]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 120
 alignment = 1
 
-[node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer"]
+[node name="Yes" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer" unique_id=2080978458]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "YES"
 
-[node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer"]
+[node name="No" type="Button" parent="Content/CenterContainer/VBoxContainer/ButtonsContainer" unique_id=62141472]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "NO"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1081727035]
+libraries/ = SubResource("AnimationLibrary_sb0jh")
 speed_scale = 3.5
-libraries = {
-"": SubResource("AnimationLibrary_sb0jh")
-}
 
 [connection signal="mouse_entered" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Content/CenterContainer/VBoxContainer/ButtonsContainer/Yes" to="." method="_on_yes_pressed"]

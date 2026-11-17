@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7t6kdqc5bvy6"]
+[gd_scene format=3 uid="uid://c7t6kdqc5bvy6"]
 
-[ext_resource type="Script" path="res://game/level/hints/AquariumHintContainer.gd" id="1_5rypm"]
+[ext_resource type="Script" uid="uid://dwc2il7413xyp" path="res://game/level/hints/AquariumHintContainer.gd" id="1_5rypm"]
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_wjtfv"]
 [ext_resource type="PackedScene" uid="uid://bhn03aekm8wud" path="res://game/level/hints/AquariumHint.tscn" id="3_6cjw2"]
 [ext_resource type="FontFile" uid="uid://vgpg1gbatn5o" path="res://assets/fonts/Bold.otf" id="3_16wfb"]
@@ -46,11 +46,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yituc"]
 _data = {
-"RESET": SubResource("Animation_7ug84"),
-"startup": SubResource("Animation_v31lt")
+&"RESET": SubResource("Animation_7ug84"),
+&"startup": SubResource("Animation_v31lt")
 }
 
-[node name="AquariumHintContainer" type="Control"]
+[node name="AquariumHintContainer" type="Control" unique_id=1464984536]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(660, 730)
 layout_mode = 3
@@ -59,23 +59,23 @@ mouse_force_pass_scroll_events = false
 theme = ExtResource("1_wjtfv")
 script = ExtResource("1_5rypm")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1909452967]
 layout_mode = 0
 offset_right = 780.0
 offset_bottom = 952.0
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1883825648]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=274693316]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBox"]
+[node name="Title" type="Label" parent="PanelContainer/MarginContainer/VBox" unique_id=602615281]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.0352941, 0.141176, 1)
@@ -84,16 +84,16 @@ theme_override_font_sizes/font_size = 76
 text = "AQUARIUMS_COUNTER"
 horizontal_alignment = 1
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox"]
+[node name="Header" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBox" unique_id=1733774887]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 170
 alignment = 1
 
-[node name="Spacer1" type="Control" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Spacer1" type="Control" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=1856765628]
 layout_mode = 2
 
-[node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Size" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=1494415871]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
@@ -101,10 +101,10 @@ theme_override_fonts/font = SubResource("FontVariation_st5oh")
 theme_override_font_sizes/font_size = 52
 text = "SIZE"
 
-[node name="Spacer2" type="Control" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Spacer2" type="Control" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=839443289]
 layout_mode = 2
 
-[node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header"]
+[node name="Amount" type="Label" parent="PanelContainer/MarginContainer/VBox/Header" unique_id=345604350]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0156863, 0.105882, 0.219608, 1)
@@ -112,24 +112,22 @@ theme_override_fonts/font = SubResource("FontVariation_n0dxx")
 theme_override_font_sizes/font_size = 52
 text = "AQ_AMOUNT"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBox" unique_id=1543934972]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(680, 700)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="HintContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox/ScrollContainer"]
+[node name="HintContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBox/ScrollContainer" unique_id=200071077]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 30
 
-[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" instance=ExtResource("3_6cjw2")]
+[node name="AquariumHint3" parent="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer" unique_id=648348030 instance=ExtResource("3_6cjw2")]
 layout_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_yituc")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1355676772]
+libraries/ = SubResource("AnimationLibrary_yituc")
 
 [editable path="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3"]
 [editable path="PanelContainer/MarginContainer/VBox/ScrollContainer/HintContainer/AquariumHint3/VisibilityButton"]

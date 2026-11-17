@@ -1,77 +1,77 @@
-[gd_scene load_steps=7 format=3 uid="uid://coyce45pjwmr7"]
+[gd_scene format=3 uid="uid://coyce45pjwmr7"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_bb3ca"]
 [ext_resource type="Texture2D" uid="uid://bbtgn25dlwt24" path="res://assets/images/ui/icons/checkmark.png" id="2_7e18s"]
-[ext_resource type="Script" path="res://database/tutorials/Tutorial.gd" id="2_lv41p"]
+[ext_resource type="Script" uid="uid://da1m208hhrnvo" path="res://database/tutorials/Tutorial.gd" id="2_lv41p"]
 [ext_resource type="Texture2D" uid="uid://bwmlv1e8bkppl" path="res://assets/images/ui/tutorial/empty_cell_example.png" id="3_ubhew"]
 [ext_resource type="Texture2D" uid="uid://blgsb76y53v7a" path="res://assets/images/ui/tutorial/water_cell_example.png" id="4_c74ck"]
 [ext_resource type="Texture2D" uid="uid://bmmjno0tahpim" path="res://assets/images/ui/tutorial/block_cell_example.png" id="5_cmte4"]
 
-[node name="TogetherSeparate" type="MarginContainer"]
+[node name="TogetherSeparate" type="MarginContainer" unique_id=1676710143]
 theme = ExtResource("1_bb3ca")
 script = ExtResource("2_lv41p")
 tutorial_name = "TUT_TOG_SEP"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=706093994]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="TogetherContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TogetherContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1357249160]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Label" type="Label" parent="VBoxContainer/TogetherContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TogetherContainer" unique_id=643325026]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 text = "{ 3 } "
 
-[node name="ExamplesContainer" type="VBoxContainer" parent="VBoxContainer/TogetherContainer"]
+[node name="ExamplesContainer" type="VBoxContainer" parent="VBoxContainer/TogetherContainer" unique_id=381725563]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Example1" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer"]
+[node name="Example1" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer" unique_id=608402875]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1" unique_id=428606749]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=1645103404]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=1724265229]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=804971094]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=2137185671]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=2029337559]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="Correct" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1"]
+[node name="Correct" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example1" unique_id=1824968348]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -79,48 +79,48 @@ size_flags_horizontal = 4
 texture = ExtResource("2_7e18s")
 expand_mode = 1
 
-[node name="Example2" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer"]
+[node name="Example2" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer" unique_id=134582499]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2" unique_id=1247525935]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1342657214]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=116356026]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1707242740]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1851211068]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1330150593]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="Wrong" type="Label" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2"]
+[node name="Wrong" type="Label" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example2" unique_id=1973537125]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -132,48 +132,48 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Example3" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer"]
+[node name="Example3" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer" unique_id=1142505686]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3" unique_id=794428380]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=527564640]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=928294467]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=1163782818]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_cmte4")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=495571883]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=1539945021]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="Wrong" type="Label" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3"]
+[node name="Wrong" type="Label" parent="VBoxContainer/TogetherContainer/ExamplesContainer/Example3" unique_id=1412629541]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -185,65 +185,65 @@ text = "X"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Separator" type="HSeparator" parent="VBoxContainer"]
+[node name="Separator" type="HSeparator" parent="VBoxContainer" unique_id=809813661]
 layout_mode = 2
 
-[node name="SeparateContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SeparateContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=858522417]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Label" type="Label" parent="VBoxContainer/SeparateContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/SeparateContainer" unique_id=401949543]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0.0352941, 0.141176, 1)
 theme_override_constants/outline_size = 40
 text = "- 3 - "
 
-[node name="ExamplesContainer" type="VBoxContainer" parent="VBoxContainer/SeparateContainer"]
+[node name="ExamplesContainer" type="VBoxContainer" parent="VBoxContainer/SeparateContainer" unique_id=444805873]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Example1" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer"]
+[node name="Example1" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer" unique_id=972820051]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1" unique_id=1294226366]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=1938803793]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=819774114]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=52903440]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=1655736]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1/HBoxContainer" unique_id=440397647]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example1" unique_id=1952093260]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -251,48 +251,48 @@ size_flags_horizontal = 4
 texture = ExtResource("2_7e18s")
 expand_mode = 1
 
-[node name="Example2" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer"]
+[node name="Example2" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer" unique_id=2079326942]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2" unique_id=2019574291]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=798364519]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1358992517]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=539703352]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_cmte4")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=180188105]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2/HBoxContainer" unique_id=1635016918]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example2" unique_id=314745934]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -300,48 +300,48 @@ size_flags_horizontal = 4
 texture = ExtResource("2_7e18s")
 expand_mode = 1
 
-[node name="Example3" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer"]
+[node name="Example3" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer" unique_id=844664040]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3" unique_id=1009722248]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=1279138681]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=1270521606]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=1330707779]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=433876033]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3/HBoxContainer" unique_id=459608172]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example3" unique_id=1089039243]
 modulate = Color(0.380392, 0.988235, 0.537255, 1)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
@@ -349,48 +349,48 @@ size_flags_horizontal = 4
 texture = ExtResource("2_7e18s")
 expand_mode = 1
 
-[node name="Example4" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer"]
+[node name="Example4" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer" unique_id=1101877905]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4" unique_id=169744201]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer" unique_id=613702151]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer" unique_id=25312705]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer" unique_id=528414643]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer" unique_id=766470306]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("4_c74ck")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer"]
+[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4/HBoxContainer" unique_id=127196209]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("3_ubhew")
 expand_mode = 1
 
-[node name="Wrong" type="Label" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4"]
+[node name="Wrong" type="Label" parent="VBoxContainer/SeparateContainer/ExamplesContainer/Example4" unique_id=1149026689]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4

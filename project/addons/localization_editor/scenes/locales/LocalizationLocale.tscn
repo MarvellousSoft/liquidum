@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cgb7lyytsk455"]
+[gd_scene format=3 uid="uid://cgb7lyytsk455"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/locales/LocalizationLocale.gd" id="2"]
+[ext_resource type="Script" uid="uid://bd4dqxw6m4us7" path="res://addons/localization_editor/scenes/locales/LocalizationLocale.gd" id="2"]
 
-[node name="Locale" type="MarginContainer"]
+[node name="Locale" type="MarginContainer" unique_id=620033051]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,22 +12,22 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 script = ExtResource("2")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1177694185]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Selection" type="CheckBox" parent="HBox"]
+[node name="Selection" type="CheckBox" parent="HBox" unique_id=338521243]
 layout_mode = 2
 size_flags_vertical = 0
 text = "en"
 
-[node name="Locale" type="Label" parent="HBox"]
+[node name="Locale" type="Label" parent="HBox" unique_id=599937975]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "English"
 
-[node name="Eye" type="TextureButton" parent="HBox"]
+[node name="Eye" type="TextureButton" parent="HBox" unique_id=460211723]
 layout_mode = 2
 size_flags_vertical = 0
 toggle_mode = true

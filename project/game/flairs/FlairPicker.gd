@@ -167,4 +167,3 @@ func _on_open_web_pressed() -> void:
 	if key != "":
 		url += "?id=" + key.uri_encode()
 	OS.shell_open(url)
-

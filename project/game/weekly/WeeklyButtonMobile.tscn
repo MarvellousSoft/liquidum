@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxeyb8lqhqk0h"]
+[gd_scene format=3 uid="uid://dxeyb8lqhqk0h"]
 
 [ext_resource type="PackedScene" uid="uid://cpiojpbtpveaj" path="res://game/daily_menu/DailyButtonMobile.tscn" id="1_g3lim"]
-[ext_resource type="Script" path="res://game/weekly/WeeklyButton.gd" id="2_vilvt"]
+[ext_resource type="Script" uid="uid://fdhhcscs56gx" path="res://game/weekly/WeeklyButton.gd" id="2_vilvt"]
 
-[node name="WeeklyButton" instance=ExtResource("1_g3lim")]
+[node name="WeeklyButton" unique_id=123667863 instance=ExtResource("1_g3lim")]
 custom_minimum_size = Vector2(720, 150)
 script = ExtResource("2_vilvt")
 
-[node name="DailyHBox" parent="CenterContainer/VBox" index="0"]
+[node name="DailyHBox" parent="CenterContainer/VBox" parent_id_path=PackedInt32Array(747998692) index="0" unique_id=1751496578]
 theme_override_constants/separation = 6
 
-[node name="3Mistakes" parent="CenterContainer/VBox/StreakContainer" index="1"]
+[node name="3Mistakes" parent="CenterContainer/VBox/StreakContainer" parent_id_path=PackedInt32Array(172392739) index="1" unique_id=1425026171]
 text = "LESS_SIX_MISTAKES"

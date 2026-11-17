@@ -1,12 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://crjep7fdv3cty"]
+[gd_scene format=3 uid="uid://crjep7fdv3cty"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/remaps/LocalizationRemap.gd" id="4"]
+[ext_resource type="Script" uid="uid://dwl5b616wxv56" path="res://addons/localization_editor/scenes/remaps/LocalizationRemap.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://cv1kqc0onf1ox" path="res://addons/localization_editor/scenes/remaps/LocalizationRemapPath.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://bkeugb6vucegl" path="res://addons/localization_editor/icons/Audio.svg" id="5_84ecs"]
 [ext_resource type="Texture2D" uid="uid://oxmydroedm6f" path="res://addons/localization_editor/icons/Video.svg" id="6_uxbjg"]
 [ext_resource type="Texture2D" uid="uid://dl6cg75c815d8" path="res://addons/localization_editor/icons/Image.svg" id="7_is72i"]
 
-[node name="Remap" type="MarginContainer"]
+[node name="Remap" type="MarginContainer" unique_id=2011349522]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -18,22 +18,22 @@ theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 script = ExtResource("4")
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=725258926]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="Remap" parent="HBox" instance=ExtResource("5")]
+[node name="Remap" parent="HBox" unique_id=1615571666 instance=ExtResource("5")]
 layout_mode = 2
 
-[node name="Audio" type="Button" parent="HBox"]
+[node name="Audio" type="Button" parent="HBox" unique_id=628348685]
 layout_mode = 2
 icon = ExtResource("5_84ecs")
 
-[node name="Video" type="Button" parent="HBox"]
+[node name="Video" type="Button" parent="HBox" unique_id=1498371696]
 layout_mode = 2
 icon = ExtResource("6_uxbjg")
 
-[node name="Image" type="Button" parent="HBox"]
+[node name="Image" type="Button" parent="HBox" unique_id=397647096]
 layout_mode = 2
 icon = ExtResource("7_is72i")

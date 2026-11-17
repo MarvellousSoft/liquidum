@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cpoyo7yv1jpj6"]
+[gd_scene format=3 uid="uid://cpoyo7yv1jpj6"]
 
-[ext_resource type="Shader" path="res://assets/shaders/WaterWaves.gdshader" id="1_ck5oo"]
-[ext_resource type="Script" path="res://game/ui/WaveEffect.gd" id="2_0nsrt"]
+[ext_resource type="Shader" uid="uid://dy05ww6qiuqo5" path="res://assets/shaders/WaterWaves.gdshader" id="1_ck5oo"]
+[ext_resource type="Script" uid="uid://dl16tglvc5qdg" path="res://game/ui/WaveEffect.gd" id="2_0nsrt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lhedk"]
 shader = ExtResource("1_ck5oo")
@@ -45,11 +45,11 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kxm5g"]
 _data = {
-"RESET": SubResource("Animation_yihg8"),
-"grow": SubResource("Animation_sfk0d")
+&"RESET": SubResource("Animation_yihg8"),
+&"grow": SubResource("Animation_sfk0d")
 }
 
-[node name="WaveEffect" type="ColorRect"]
+[node name="WaveEffect" type="ColorRect" unique_id=490204631]
 material = SubResource("ShaderMaterial_lhedk")
 custom_minimum_size = Vector2(3840, 2160)
 anchors_preset = 15
@@ -60,7 +60,5 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_0nsrt")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_kxm5g")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=483090960]
+libraries/ = SubResource("AnimationLibrary_kxm5g")

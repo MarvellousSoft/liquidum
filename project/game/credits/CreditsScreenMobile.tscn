@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dif1c6q0u0wuq"]
+[gd_scene format=3 uid="uid://dif1c6q0u0wuq"]
 
 [ext_resource type="Theme" uid="uid://dnk8htb63eidw" path="res://assets/ui/MobileTheme.tres" id="1_in2ub"]
-[ext_resource type="Script" path="res://game/credits/CreditsScreen.gd" id="1_nqg2g"]
+[ext_resource type="Script" uid="uid://bxefhobantnid" path="res://game/credits/CreditsScreen.gd" id="1_nqg2g"]
 [ext_resource type="PackedScene" uid="uid://yopd6eyct7hx" path="res://game/mobile/MobileBGHelp.tscn" id="3_78jen"]
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="3_nkgyg"]
 [ext_resource type="Texture2D" uid="uid://dwlbrh4a0vv8b" path="res://assets/images/ui/credits/rica.png" id="4_43c3x"]
@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dgvo6glv50gdb" path="res://assets/images/ui/credits/godot.png" id="6_x6fjy"]
 [ext_resource type="Texture2D" uid="uid://c6ai8pq54uyhi" path="res://assets/images/ui/credits/Marvellous Soft.png" id="7_ccuum"]
 
-[node name="CreditsScreenMobile" type="Control"]
+[node name="CreditsScreenMobile" type="Control" unique_id=1209555153]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 720.0
@@ -17,17 +17,17 @@ offset_bottom = 1280.0
 theme = ExtResource("1_in2ub")
 script = ExtResource("1_nqg2g")
 
-[node name="MobileBGHelp" parent="." instance=ExtResource("3_78jen")]
+[node name="MobileBGHelp" parent="." unique_id=690033928 instance=ExtResource("3_78jen")]
 layout_mode = 0
 
-[node name="Title" parent="." instance=ExtResource("3_nkgyg")]
+[node name="Title" parent="." unique_id=869204777 instance=ExtResource("3_nkgyg")]
 layout_mode = 0
 offset_top = 35.0
 offset_right = 500.0
 offset_bottom = 535.0
 scale = Vector2(0.2, 0.2)
 
-[node name="Back" type="Button" parent="."]
+[node name="Back" type="Button" parent="." unique_id=1886262356]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 40.0
@@ -35,7 +35,7 @@ offset_top = 30.0
 focus_mode = 0
 text = "BACK"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1085335953]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.2
@@ -45,92 +45,92 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=277059114]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 50
 
-[node name="VBox" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="ScrollContainer/MarginContainer" unique_id=741237371]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 50
 
-[node name="MadeBy" type="Label" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="MadeBy" type="Label" parent="ScrollContainer/MarginContainer/VBox" unique_id=1228106081]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 40
 text = "MADE_BY"
 
-[node name="RicaHBox" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="RicaHBox" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBox" unique_id=101757212]
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Rica" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox/RicaHBox"]
+[node name="Rica" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox/RicaHBox" unique_id=44044790]
 layout_mode = 2
 texture = ExtResource("4_43c3x")
 
-[node name="RicaName" type="Label" parent="ScrollContainer/MarginContainer/VBox/RicaHBox"]
+[node name="RicaName" type="Label" parent="ScrollContainer/MarginContainer/VBox/RicaHBox" unique_id=1030333789]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Ricardo Lira
 da Fonseca"
 
-[node name="YanHBox" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="YanHBox" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBox" unique_id=532628184]
 layout_mode = 2
 theme_override_constants/separation = 30
 alignment = 1
 
-[node name="Yan" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox/YanHBox"]
+[node name="Yan" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox/YanHBox" unique_id=927182303]
 layout_mode = 2
 texture = ExtResource("5_hujda")
 
-[node name="YanName" type="Label" parent="ScrollContainer/MarginContainer/VBox/YanHBox"]
+[node name="YanName" type="Label" parent="ScrollContainer/MarginContainer/VBox/YanHBox" unique_id=1338481432]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Yan Soares
 Couto"
 
-[node name="MadeUsing" type="Label" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="MadeUsing" type="Label" parent="ScrollContainer/MarginContainer/VBox" unique_id=1353245991]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 40
 text = "MADE_USING"
 
-[node name="Godot" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="Godot" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox" unique_id=1863777343]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 texture = ExtResource("6_x6fjy")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SpecialThanks" type="Label" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="SpecialThanks" type="Label" parent="ScrollContainer/MarginContainer/VBox" unique_id=601103432]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 40
 text = "SPECIAL_THANKS_TITLE"
 
-[node name="SpecialThanksText" type="Label" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="SpecialThanksText" type="Label" parent="ScrollContainer/MarginContainer/VBox" unique_id=1293713370]
 custom_minimum_size = Vector2(650, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "SPECIAL_THANKS"
 autowrap_mode = 3
 
-[node name="Company" type="Label" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="Company" type="Label" parent="ScrollContainer/MarginContainer/VBox" unique_id=235026851]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 40
 text = "COMPANY"
 
-[node name="MarvellousSoft" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="MarvellousSoft" type="TextureRect" parent="ScrollContainer/MarginContainer/VBox" unique_id=1199073631]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 size_flags_vertical = 3
@@ -138,19 +138,19 @@ texture = ExtResource("7_ccuum")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="OtherGames" type="Button" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="OtherGames" type="Button" parent="ScrollContainer/MarginContainer/VBox" unique_id=201915902]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "OUR_OTHER_GAMES"
 
-[node name="AssetsUsed" type="Button" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="AssetsUsed" type="Button" parent="ScrollContainer/MarginContainer/VBox" unique_id=1909216719]
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "ASSETS_USED"
 
-[node name="FinalSpace" type="HSeparator" parent="ScrollContainer/MarginContainer/VBox"]
+[node name="FinalSpace" type="HSeparator" parent="ScrollContainer/MarginContainer/VBox" unique_id=757723452]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 theme_override_constants/separation = 20

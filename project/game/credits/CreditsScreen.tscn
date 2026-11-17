@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3nklp4h1qqru"]
+[gd_scene format=3 uid="uid://c3nklp4h1qqru"]
 
 [ext_resource type="PackedScene" uid="uid://btndayenc110g" path="res://game/main_menu/Title.tscn" id="1_kd1hx"]
-[ext_resource type="Script" path="res://game/credits/CreditsScreen.gd" id="1_p25oe"]
+[ext_resource type="Script" uid="uid://bxefhobantnid" path="res://game/credits/CreditsScreen.gd" id="1_p25oe"]
 [ext_resource type="Texture2D" uid="uid://dwlbrh4a0vv8b" path="res://assets/images/ui/credits/rica.png" id="2_rym2r"]
 [ext_resource type="Texture2D" uid="uid://ct3bujc2krb43" path="res://assets/images/ui/credits/yan.png" id="3_feam5"]
 [ext_resource type="Texture2D" uid="uid://dgvo6glv50gdb" path="res://assets/images/ui/credits/godot.png" id="4_qsutg"]
@@ -14,7 +14,7 @@ corner_radius_top_right = 300
 corner_radius_bottom_right = 300
 corner_radius_bottom_left = 300
 
-[node name="CreditsScreen" type="Control"]
+[node name="CreditsScreen" type="Control" unique_id=1459819056]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +23,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p25oe")
 
-[node name="Title" parent="." instance=ExtResource("1_kd1hx")]
+[node name="Title" parent="." unique_id=493121660 instance=ExtResource("1_kd1hx")]
+layout_mode = 0
 offset_top = -410.0
 offset_bottom = -410.0
 
-[node name="MadeBy" type="Label" parent="."]
+[node name="MadeBy" type="Label" parent="." unique_id=797596401]
 layout_mode = 0
 offset_left = 50.0
 offset_top = 711.0
@@ -38,12 +39,12 @@ theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
 text = "MADE_BY"
 
-[node name="Rica" type="Sprite2D" parent="."]
+[node name="Rica" type="Sprite2D" parent="." unique_id=349132978]
 position = Vector2(261, 1115)
 scale = Vector2(3, 3)
 texture = ExtResource("2_rym2r")
 
-[node name="RicaName" type="Label" parent="."]
+[node name="RicaName" type="Label" parent="." unique_id=384161033]
 layout_mode = 0
 offset_left = 441.0
 offset_top = 1020.0
@@ -53,12 +54,12 @@ theme_override_font_sizes/font_size = 100
 text = "Ricardo Lira
 da Fonseca"
 
-[node name="Yan" type="Sprite2D" parent="."]
+[node name="Yan" type="Sprite2D" parent="." unique_id=42876029]
 position = Vector2(1295.5, 1113.5)
 scale = Vector2(3, 3)
 texture = ExtResource("3_feam5")
 
-[node name="YanName" type="Label" parent="."]
+[node name="YanName" type="Label" parent="." unique_id=631854336]
 layout_mode = 0
 offset_left = 1475.5
 offset_top = 1011.5
@@ -68,7 +69,7 @@ theme_override_font_sizes/font_size = 100
 text = "Yan Soares
 Couto"
 
-[node name="MadeUsing" type="Label" parent="."]
+[node name="MadeUsing" type="Label" parent="." unique_id=1610444745]
 layout_mode = 0
 offset_left = 2200.0
 offset_top = 711.0
@@ -79,7 +80,7 @@ theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
 text = "MADE_USING"
 
-[node name="SpecialThanks" type="Label" parent="MadeUsing"]
+[node name="SpecialThanks" type="Label" parent="MadeUsing" unique_id=924979857]
 layout_mode = 0
 offset_left = 606.0
 offset_right = 1438.0
@@ -89,7 +90,7 @@ theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
 text = "SPECIAL_THANKS_TITLE"
 
-[node name="SpecialThanksText" type="Label" parent="MadeUsing/SpecialThanks"]
+[node name="SpecialThanksText" type="Label" parent="MadeUsing/SpecialThanks" unique_id=1463399326]
 layout_mode = 0
 offset_top = 191.0
 offset_right = 853.0
@@ -98,12 +99,12 @@ theme_override_font_sizes/font_size = 50
 text = "SPECIAL_THANKS"
 autowrap_mode = 3
 
-[node name="Godot" type="Sprite2D" parent="."]
+[node name="Godot" type="Sprite2D" parent="." unique_id=644124453]
 position = Vector2(2483, 1036)
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("4_qsutg")
 
-[node name="Company" type="Label" parent="."]
+[node name="Company" type="Label" parent="." unique_id=2040009305]
 layout_mode = 0
 offset_left = 50.0
 offset_top = 1458.0
@@ -114,7 +115,7 @@ theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
 text = "COMPANY"
 
-[node name="MarvellousBG" type="Panel" parent="."]
+[node name="MarvellousBG" type="Panel" parent="." unique_id=863999001]
 layout_mode = 0
 offset_left = 105.1
 offset_top = 1550.0
@@ -123,12 +124,12 @@ offset_bottom = 2358.0
 scale = Vector2(0.7, 0.7)
 theme_override_styles/panel = SubResource("StyleBoxFlat_bofn3")
 
-[node name="MarvellousSoft" type="Sprite2D" parent="."]
+[node name="MarvellousSoft" type="Sprite2D" parent="." unique_id=552765913]
 position = Vector2(528.1, 1834)
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("6_lppim")
 
-[node name="AssetsUsed" type="Button" parent="."]
+[node name="AssetsUsed" type="Button" parent="." unique_id=202558357]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -142,7 +143,7 @@ grow_vertical = 0
 focus_mode = 0
 text = "ASSETS_USED"
 
-[node name="OtherGames" type="Button" parent="."]
+[node name="OtherGames" type="Button" parent="." unique_id=82312636]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -156,7 +157,7 @@ grow_vertical = 0
 focus_mode = 0
 text = "OUR_OTHER_GAMES"
 
-[node name="Back" type="Button" parent="."]
+[node name="Back" type="Button" parent="." unique_id=1962535280]
 layout_mode = 0
 offset_left = 50.0
 offset_top = 50.0

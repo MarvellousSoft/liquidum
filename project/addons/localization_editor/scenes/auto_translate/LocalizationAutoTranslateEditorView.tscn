@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://ehxh31dert3e"]
+[gd_scene format=3 uid="uid://ehxh31dert3e"]
 
-[ext_resource type="Script" path="res://addons/localization_editor/scenes/auto_translate/LocalizationAutoTranslateEditorView.gd" id="1"]
+[ext_resource type="Script" uid="uid://pxhjm6mqyx81" path="res://addons/localization_editor/scenes/auto_translate/LocalizationAutoTranslateEditorView.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cdaplrx3hun6g" path="res://addons/localization_editor/scenes/auto_translate/translator/LocalizationAutoTranslate.tscn" id="2"]
 
-[node name="LocalizationAutotranslateEditorView" type="VBoxContainer"]
+[node name="LocalizationAutotranslateEditorView" type="VBoxContainer" unique_id=888491338]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,6 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="Translators" parent="." instance=ExtResource("2")]
+[node name="Translators" parent="." unique_id=392599023 instance=ExtResource("2")]
 layout_mode = 2
 size_flags_vertical = 3

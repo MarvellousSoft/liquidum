@@ -1,12 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://da2wrnq33ve1k"]
+[gd_scene format=3 uid="uid://da2wrnq33ve1k"]
 
 [ext_resource type="Theme" uid="uid://bjysepqligucr" path="res://assets/ui/GeneralTheme.tres" id="1_7k2d0"]
-[ext_resource type="Script" path="res://game/random_menu/PandoraHub.gd" id="2_1yoql"]
+[ext_resource type="Script" uid="uid://7drqvwklt477" path="res://game/random_menu/PandoraHub.gd" id="2_1yoql"]
 [ext_resource type="PackedScene" uid="uid://uoquxrowsye8" path="res://game/settings/SettingsScreen.tscn" id="3_6ijuv"]
 [ext_resource type="Theme" uid="uid://rcuwhge3555x" path="res://assets/ui/DarkFont.tres" id="4_jxjxy"]
 [ext_resource type="Texture2D" uid="uid://yb7nehpgxv4m" path="res://assets/images/ui/spinbox_arrows.png" id="5_xxff2"]
 
-[node name="PandoraHub" type="Control"]
+[node name="PandoraHub" type="Control" unique_id=34984533]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,7 @@ grow_vertical = 2
 theme = ExtResource("1_7k2d0")
 script = ExtResource("2_1yoql")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1844691770]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -30,74 +30,74 @@ text = "PANDORA_TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Difficulties" type="CenterContainer" parent="."]
+[node name="Difficulties" type="CenterContainer" parent="." unique_id=1052276663]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.2
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBox" type="VBoxContainer" parent="Difficulties"]
+[node name="VBox" type="VBoxContainer" parent="Difficulties" unique_id=1489443427]
 layout_mode = 2
 theme_override_constants/separation = 55
 alignment = 1
 
-[node name="Continue" type="Button" parent="Difficulties/VBox"]
+[node name="Continue" type="Button" parent="Difficulties/VBox" unique_id=698357983]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
-auto_translate = false
 localize_numeral_system = false
 focus_mode = 0
 text = "CONTINUE - SNAKE_BUTTON"
 
-[node name="ContinueSeparator" type="HSeparator" parent="Difficulties/VBox"]
+[node name="ContinueSeparator" type="HSeparator" parent="Difficulties/VBox" unique_id=121676325]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Snake" type="Button" parent="Difficulties/VBox"]
+[node name="Snake" type="Button" parent="Difficulties/VBox" unique_id=660520714]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "SNAKE_BUTTON"
 
-[node name="Sudoku" type="Button" parent="Difficulties/VBox"]
+[node name="Sudoku" type="Button" parent="Difficulties/VBox" unique_id=1051775362]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "SUDOKU_BUTTON"
 
-[node name="Knight" type="Button" parent="Difficulties/VBox"]
+[node name="Knight" type="Button" parent="Difficulties/VBox" unique_id=979721680]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "KNIGHT_BUTTON"
 
-[node name="Liar" type="Button" parent="Difficulties/VBox"]
+[node name="Liar" type="Button" parent="Difficulties/VBox" unique_id=98591911]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "LIAR_BUTTON"
 
-[node name="Symbols" type="Button" parent="Difficulties/VBox"]
+[node name="Symbols" type="Button" parent="Difficulties/VBox" unique_id=97289071]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "SYMBOLS_BUTTON"
 
-[node name="Pandora" type="Button" parent="Difficulties/VBox"]
+[node name="Pandora" type="Button" parent="Difficulties/VBox" unique_id=1576932903]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 text = "PANDORA_BUTTON"
 
-[node name="Back" type="Button" parent="."]
+[node name="Back" type="Button" parent="." unique_id=1765569938]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 75.0
@@ -105,7 +105,7 @@ offset_top = 75.0
 focus_mode = 0
 text = "BACK"
 
-[node name="CustomSeedButton" type="Button" parent="."]
+[node name="CustomSeedButton" type="Button" parent="." unique_id=661190848]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -122,7 +122,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 40
 text = "USE_CUSTOM_SEED"
 
-[node name="Seed" type="LineEdit" parent="."]
+[node name="Seed" type="LineEdit" parent="." unique_id=1240496124]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -139,11 +139,11 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 60
 placeholder_text = "SEED"
 max_length = 10
-virtual_keyboard_type = 2
 deselect_on_focus_loss_enabled = false
 select_all_on_focus = true
+virtual_keyboard_type = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1841601033]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -154,122 +154,122 @@ grow_vertical = 2
 theme = ExtResource("4_jxjxy")
 metadata/_edit_group_ = true
 
-[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer"]
+[node name="CompletedCount" type="VBoxContainer" parent="PanelContainer" unique_id=1126820074]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="PanelContainer/CompletedCount"]
+[node name="Title" type="Label" parent="PanelContainer/CompletedCount" unique_id=1984422902]
 layout_mode = 2
 text = "RANDOM_COMPLETED"
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/CompletedCount" unique_id=296580248]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Snake" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Snake" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=354452221]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Snake"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Snake" unique_id=1252354058]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox" unique_id=1973748801]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "SNAKE_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Snake/HBox" unique_id=98639653]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Sudoku" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Sudoku" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=1557682959]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Sudoku"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Sudoku" unique_id=474018813]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox" unique_id=628749362]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "SUDOKU_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Sudoku/HBox" unique_id=2052235567]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Knight" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Knight" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=629198270]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Knight"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Knight" unique_id=1326868643]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox" unique_id=1985422014]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "KNIGHT_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Knight/HBox" unique_id=649347639]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Liar" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Liar" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=1088207758]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Liar"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Liar" unique_id=1700294993]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox" unique_id=198983144]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "LIAR_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Liar/HBox" unique_id=1007738720]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="Symbols" type="MarginContainer" parent="PanelContainer/CompletedCount"]
+[node name="Symbols" type="MarginContainer" parent="PanelContainer/CompletedCount" unique_id=1440585265]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_right = 20
 
-[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Symbols"]
+[node name="HBox" type="HBoxContainer" parent="PanelContainer/CompletedCount/Symbols" unique_id=745632861]
 layout_mode = 2
 
-[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox"]
+[node name="Difficulty" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox" unique_id=1368195050]
 layout_mode = 2
 theme_override_font_sizes/font_size = 70
 text = "SYMBOLS_BUTTON"
 
-[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox"]
+[node name="Count" type="Label" parent="PanelContainer/CompletedCount/Symbols/HBox" unique_id=1926124314]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "999
 "
 horizontal_alignment = 2
 
-[node name="MarathonLabel" type="Label" parent="."]
-layout_mode = 2
+[node name="MarathonLabel" type="Label" parent="." unique_id=1163857567]
+layout_mode = 0
 offset_left = 2746.0
 offset_top = 1850.0
 offset_right = 3804.0
@@ -280,7 +280,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="Marathon" type="HBoxContainer" parent="."]
+[node name="Marathon" type="HBoxContainer" parent="." unique_id=2031889859]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -294,25 +294,25 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/separation = 70
 
-[node name="Button1" type="Button" parent="Marathon"]
+[node name="Button1" type="Button" parent="Marathon" unique_id=475367089]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "1"
 
-[node name="Button10" type="Button" parent="Marathon"]
+[node name="Button10" type="Button" parent="Marathon" unique_id=887237562]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "10"
 
-[node name="Button100" type="Button" parent="Marathon"]
+[node name="Button100" type="Button" parent="Marathon" unique_id=2086172297]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 60
 text = "100"
 
-[node name="Slider" type="SpinBox" parent="Marathon"]
+[node name="Slider" type="SpinBox" parent="Marathon" unique_id=1299151150]
 layout_mode = 2
 theme_override_icons/updown = ExtResource("5_xxff2")
 min_value = 1.0
@@ -321,7 +321,7 @@ alignment = 1
 update_on_text_changed = true
 select_all_on_focus = true
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="." unique_id=552710755]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 0
@@ -334,7 +334,7 @@ text = "VERSION"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsScreen" parent="." instance=ExtResource("3_6ijuv")]
+[node name="SettingsScreen" parent="." unique_id=1129717284 instance=ExtResource("3_6ijuv")]
 
 [connection signal="mouse_entered" from="Difficulties/VBox/Continue" to="." method="_on_button_mouse_entered"]
 [connection signal="pressed" from="Difficulties/VBox/Continue" to="." method="_on_continue_pressed"]

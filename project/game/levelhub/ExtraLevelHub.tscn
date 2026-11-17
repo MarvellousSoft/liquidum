@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://b684of0yteu0u"]
+[gd_scene format=3 uid="uid://b684of0yteu0u"]
 
-[ext_resource type="Script" path="res://game/levelhub/LevelHub.gd" id="1_bxko5"]
+[ext_resource type="Script" uid="uid://dq882piehoj3m" path="res://game/levelhub/LevelHub.gd" id="1_bxko5"]
 [ext_resource type="PackedScene" uid="uid://dc0n1i0v2jf7g" path="res://game/levelhub/LevelSection.tscn" id="1_t5l7o"]
-[ext_resource type="Script" path="res://game/ui/DisableableScrollContainer.gd" id="2_7ocyv"]
+[ext_resource type="Script" uid="uid://c3tveec5kw58d" path="res://game/ui/DisableableScrollContainer.gd" id="2_7ocyv"]
 
-[node name="ExtraLevelHub" type="Control"]
+[node name="ExtraLevelHub" type="Control" unique_id=237730382]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,7 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_bxko5")
 extra_levels = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1613704793]
 clip_contents = false
 layout_mode = 1
 anchors_preset = -1
@@ -26,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_7ocyv")
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=1944126807]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
@@ -35,7 +35,7 @@ theme_override_constants/margin_top = 550
 theme_override_constants/margin_right = 700
 theme_override_constants/margin_bottom = 500
 
-[node name="Sections" type="GridContainer" parent="ScrollContainer/MarginContainer"]
+[node name="Sections" type="GridContainer" parent="ScrollContainer/MarginContainer" unique_id=746787653]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,14 +44,14 @@ theme_override_constants/h_separation = 1250
 theme_override_constants/v_separation = 800
 columns = 3
 
-[node name="LevelSection" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
+[node name="LevelSection" parent="ScrollContainer/MarginContainer/Sections" unique_id=1704219780 instance=ExtResource("1_t5l7o")]
 layout_mode = 2
 
-[node name="LevelSection2" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
+[node name="LevelSection2" parent="ScrollContainer/MarginContainer/Sections" unique_id=982298945 instance=ExtResource("1_t5l7o")]
 layout_mode = 2
 
-[node name="LevelSection3" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
+[node name="LevelSection3" parent="ScrollContainer/MarginContainer/Sections" unique_id=221518007 instance=ExtResource("1_t5l7o")]
 layout_mode = 2
 
-[node name="LevelSection4" parent="ScrollContainer/MarginContainer/Sections" instance=ExtResource("1_t5l7o")]
+[node name="LevelSection4" parent="ScrollContainer/MarginContainer/Sections" unique_id=1828561165 instance=ExtResource("1_t5l7o")]
 layout_mode = 2

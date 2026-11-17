@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dv1u5f265dm05"]
+[gd_scene format=3 uid="uid://dv1u5f265dm05"]
 
-[ext_resource type="Script" path="res://game/flairs/FlairButton.gd" id="1_0ug31"]
+[ext_resource type="Script" uid="uid://cl2i3mo7jr6u8" path="res://game/flairs/FlairButton.gd" id="1_0ug31"]
 [ext_resource type="StyleBox" uid="uid://d13epprvp6n7f" path="res://assets/ui/InvisibleButton/InvisibleButtonHover.tres" id="2_cc6ns"]
 [ext_resource type="StyleBox" uid="uid://dlk0d25ppdw36" path="res://assets/ui/InvisibleButton/InvisibleButtonPressed.tres" id="3_0ecfn"]
 [ext_resource type="ButtonGroup" uid="uid://b78vn2d22cyg0" path="res://assets/ui/FlairButtonGroup.tres" id="4_alao2"]
@@ -16,7 +16,7 @@ expand_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iw5xt"]
 
-[node name="FlairButton" type="Control"]
+[node name="FlairButton" type="Control" unique_id=1016627670]
 custom_minimum_size = Vector2(600, 80)
 layout_mode = 3
 anchors_preset = 0
@@ -24,7 +24,7 @@ offset_right = 500.0
 offset_bottom = 80.0
 script = ExtResource("1_0ug31")
 
-[node name="FlairContainer" type="HBoxContainer" parent="."]
+[node name="FlairContainer" type="HBoxContainer" parent="." unique_id=1421214522]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -35,7 +35,7 @@ offset_bottom = 40.0
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="Flair" type="Label" parent="FlairContainer"]
+[node name="Flair" type="Label" parent="FlairContainer" unique_id=1324535129]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
@@ -44,7 +44,7 @@ text = "  dev  "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BG" type="Panel" parent="FlairContainer/Flair"]
+[node name="BG" type="Panel" parent="FlairContainer/Flair" unique_id=1174822100]
 modulate = Color(0, 0.0352941, 0.141176, 1)
 show_behind_parent = true
 layout_mode = 1
@@ -55,7 +55,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hnex5")
 
-[node name="Reason" type="Label" parent="FlairContainer"]
+[node name="Reason" type="Label" parent="FlairContainer" unique_id=1310416824]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -67,15 +67,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=226376598]
 show_behind_parent = true
 layout_mode = 1
 offset_right = 600.0
 offset_bottom = 80.0
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_iw5xt")
-theme_override_styles/hover = ExtResource("2_cc6ns")
 theme_override_styles/pressed = ExtResource("3_0ecfn")
+theme_override_styles/hover = ExtResource("2_cc6ns")
 toggle_mode = true
 button_group = ExtResource("4_alao2")
 

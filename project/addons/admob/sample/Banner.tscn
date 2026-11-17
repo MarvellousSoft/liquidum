@@ -1,76 +1,76 @@
-[gd_scene load_steps=2 format=3 uid="uid://5r020bismawx"]
+[gd_scene format=3 uid="uid://5r020bismawx"]
 
-[ext_resource type="Script" path="res://addons/admob/sample/Banner.gd" id="1_5pjv8"]
+[ext_resource type="Script" uid="uid://blebfs6f13c3k" path="res://addons/admob/sample/Banner.gd" id="1_5pjv8"]
 
-[node name="Banner" type="VBoxContainer"]
+[node name="Banner" type="VBoxContainer" unique_id=1333872191]
 script = ExtResource("1_5pjv8")
 
-[node name="LoadBanner" type="Button" parent="."]
+[node name="LoadBanner" type="Button" parent="." unique_id=1399203927]
 layout_mode = 2
 text = "LoadBanner"
 
-[node name="DestroyBanner" type="Button" parent="."]
+[node name="DestroyBanner" type="Button" parent="." unique_id=1497983780]
 layout_mode = 2
 disabled = true
 text = "DestroyBanner"
 
-[node name="ShowBanner" type="Button" parent="."]
+[node name="ShowBanner" type="Button" parent="." unique_id=1101643800]
 layout_mode = 2
 disabled = true
 text = "ShowBanner"
 
-[node name="HideBanner" type="Button" parent="."]
+[node name="HideBanner" type="Button" parent="." unique_id=627530930]
 layout_mode = 2
 disabled = true
 text = "HideBanner"
 
-[node name="GetWidth" type="Button" parent="."]
+[node name="GetWidth" type="Button" parent="." unique_id=1430685261]
 layout_mode = 2
 disabled = true
 text = "GetWidth"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=2009441696]
 layout_mode = 2
 text = "AD POSITIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AdPositionList" type="VBoxContainer" parent="."]
+[node name="AdPositionList" type="VBoxContainer" parent="." unique_id=896181258]
 layout_mode = 2
 
-[node name="TOP" type="Button" parent="AdPositionList"]
+[node name="TOP" type="Button" parent="AdPositionList" unique_id=1494752222]
 layout_mode = 2
 text = "TOP"
 
-[node name="BOTTOM" type="Button" parent="AdPositionList"]
+[node name="BOTTOM" type="Button" parent="AdPositionList" unique_id=539998081]
 layout_mode = 2
 text = "BOTTOM"
 
-[node name="LEFT" type="Button" parent="AdPositionList"]
+[node name="LEFT" type="Button" parent="AdPositionList" unique_id=1277252604]
 layout_mode = 2
 text = "LEFT"
 
-[node name="RIGHT" type="Button" parent="AdPositionList"]
+[node name="RIGHT" type="Button" parent="AdPositionList" unique_id=1224955878]
 layout_mode = 2
 text = "RIGHT"
 
-[node name="TOP_LEFT" type="Button" parent="AdPositionList"]
+[node name="TOP_LEFT" type="Button" parent="AdPositionList" unique_id=2033487571]
 layout_mode = 2
 text = "TOP LEFT"
 
-[node name="TOP_RIGHT" type="Button" parent="AdPositionList"]
+[node name="TOP_RIGHT" type="Button" parent="AdPositionList" unique_id=239219339]
 layout_mode = 2
 text = "TOP RIGHT"
 
-[node name="BOTTOM_LEFT" type="Button" parent="AdPositionList"]
+[node name="BOTTOM_LEFT" type="Button" parent="AdPositionList" unique_id=39260112]
 layout_mode = 2
 text = "BOTTOM LEFT"
 
-[node name="BOTTOM_RIGHT" type="Button" parent="AdPositionList"]
+[node name="BOTTOM_RIGHT" type="Button" parent="AdPositionList" unique_id=2022966687]
 layout_mode = 2
 text = "BOTTOM RIGHT"
 
-[node name="CENTER" type="Button" parent="AdPositionList"]
+[node name="CENTER" type="Button" parent="AdPositionList" unique_id=1283873979]
 layout_mode = 2
 text = "CENTER"
 

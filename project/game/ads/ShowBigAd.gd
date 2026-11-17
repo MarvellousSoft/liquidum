@@ -35,4 +35,3 @@ func exit_ad() -> void:
 			TransitionManager.pop_scene()
 	else:
 		push_warning("Not inside tree")
-
