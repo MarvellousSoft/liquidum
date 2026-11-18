@@ -2212,7 +2212,7 @@ export function App() {
           <span>{t('game.generating_daily', { date: dailyDate })}</span>
         </div>
       ) : gridData ? (
-        <div class="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2 lg:gap-6 w-full max-w-7xl mx-auto px-2">
+        <div class={`flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2 lg:gap-6 w-full max-w-7xl mx-auto px-2 ${isTutorialMode ? 'lg:flex-wrap' : ''}`}>
           {/* Left on desktop, Below on narrow screens: Hints card */}
           <div class={`order-2 lg:order-1 flex flex-col items-center lg:items-start w-full lg:w-60 xl:w-72 flex-shrink-0 transition-all duration-300 ${isDailyMode && !hasStarted ? 'filter blur-md pointer-events-none select-none' : ''}`}>
             {/* Grid Hints Header */}
@@ -2449,20 +2449,26 @@ export function App() {
                   </div>
                 )}
               </div>
-
-              {/* The lesson for this onboarding step, under the board */}
-              {isTutorialMode && (
-                <Suspense fallback={null}>
-                  <TutorialLessonPanel
-                    levelKey={currentLevelKey}
-                    solved={won}
-                    onOpenSection={() => setShowTutorialModal(true)}
-                    onOpenControls={() => setShowShortcuts(true)}
-                  />
-                </Suspense>
-              )}
             </div>
           </div>
+
+          {/* The lesson for this tutorial. It is a sibling of the board rather
+              than a child so that on a phone it lands after the counters card
+              (order-3), keeping the mistakes and water counters next to the
+              board. On a desktop w-full makes it wrap onto its own full-width
+              row under everything, which is where it reads best. */}
+          {isTutorialMode && (
+            <div class="order-3 w-full flex justify-center">
+              <Suspense fallback={null}>
+                <TutorialLessonPanel
+                  levelKey={currentLevelKey}
+                  solved={won}
+                  onOpenSection={() => setShowTutorialModal(true)}
+                  onOpenControls={() => setShowShortcuts(true)}
+                />
+              </Suspense>
+            </div>
+          )}
 
           {/* Desktop Side-by-Side Leaderboard (only in daily mode on lg+ screens) */}
           {isDailyMode && (

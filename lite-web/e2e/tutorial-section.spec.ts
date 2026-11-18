@@ -155,4 +155,44 @@ test.describe('Learn to play section', () => {
     await expect(page.locator('[data-testid="tutorial-lesson"]')).toHaveCount(0);
     await expect(page.locator('[data-testid="daily-streak-badge"]')).toBeVisible();
   });
+  test('on a phone the counters stay next to the board, above the lesson', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    // the last tutorial has aquarium hints, so its counters card is a tall one
+    await page.locator(`[data-testid="tutorial-step-${STEPS.length}"]`).click();
+    await expect(page.locator('[data-testid="tutorial-lesson"]')).toBeVisible();
+
+    const top = async (selector: string) => {
+      const box = await page.locator(selector).boundingBox();
+      return box!.y;
+    };
+    const boardBottom = (await page.locator('.grid-board-card').boundingBox())!;
+    const counters = await top('[data-testid="grid-hints-card"]');
+    const lesson = await top('[data-testid="tutorial-lesson"]');
+
+    // board, then the counters, then the explanation - not the other way round
+    expect(counters).toBeGreaterThan(boardBottom.y);
+    expect(counters).toBeLessThan(lesson);
+    // and the counters sit close under the board rather than past the lesson
+    expect(counters - (boardBottom.y + boardBottom.height)).toBeLessThan(80);
+  });
+
+  test('on a desktop the lesson still sits below the board', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    await page.locator('[data-testid="tutorial-step-1"]').click();
+    await expect(page.locator('[data-testid="tutorial-lesson"]')).toBeVisible();
+
+    const board = (await page.locator('.grid-board-card').boundingBox())!;
+    const lesson = (await page.locator('[data-testid="tutorial-lesson"]').boundingBox())!;
+    const hints = (await page.locator('[data-testid="grid-hints-card"]').boundingBox())!;
+    expect(lesson.y).toBeGreaterThan(board.y + board.height - 1);
+    // hints card keeps its place as the left column, beside the board
+    expect(hints.x).toBeLessThan(board.x);
+    expect(Math.abs(hints.y - board.y)).toBeLessThan(40);
+  });
 });
