@@ -101,6 +101,9 @@ func update_sections() -> void:
 			section.setup_dlc_button()
 		else:
 			section.delete_dlc_button()
+		# A section that cannot be opened at all could never clear its own
+		# badge, so it is left out of the announcement.
+		section.setup_new_badge(extra_levels and not is_disabled and Profile.section_is_new(idx))
 		idx += 1
 
 func _on_loaded_endless(button: LevelButton) -> void:

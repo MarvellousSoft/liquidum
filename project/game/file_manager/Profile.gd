@@ -76,16 +76,14 @@ var options = {
 	# Android only
 	"deadline_for_next_review_request": Time.get_unix_time_from_system() + randf() * 14 * 24 * 60 * 60,
 }
-var dlc_info = {
-	#Small & tricky
-	"1" = {
-		"new": true,
-	},
-	#Mirrors
-	"2" = {
-		"new": true,
-	}
-}
+# Which extra sections this profile has already been shown, as
+# section number -> {"new": bool}. Entries appear lazily in
+# section_is_new(), because how many sections exist is data - one
+# config.ini per pack. This used to be hardcoded to "1" and "2", so
+# every other pack was invisible to the indicator and those two
+# announced themselves forever.
+var dlc_info := {}
+var _dlc_info_dirty := false
 
 const STEAM_LANGUAGES := {
 	brazilian = "pt_BR",
@@ -164,7 +162,7 @@ func set_save_data(data):
 		push_warning("Profile updated!")
 	
 	set_data(data, "options", options)
-	set_data(data, "dlc_info", dlc_info)
+	_load_dlc_info(data)
 	
 	if Global.is_mobile:
 		AudioManager.set_bus_volume(AudioManager.MASTER_BUS, MOBILE_MASTER_VOLUME)
@@ -231,21 +229,51 @@ func set_option(opt_name: String, value, should_save := false):
 		FileManager.save_profile()
 
 
-func get_all_dlc_info():
-	return dlc_info
+# True while the player has never opened this section in the extra
+# level hub. That is what lights the "New!" indicator on the main menu
+# and the badge on the section itself.
+func section_is_new(section: int) -> bool:
+	var key := str(section)
+	if not dlc_info.has(key):
+		dlc_info[key] = {"new": true}
+		_dlc_info_dirty = true
+	if dlc_info[key].new and ExtraLevelLister.count_completed_section_levels(section) > 0:
+		# Levels in it are already finished, so it is not news to this
+		# player whether or not the section was ever opened. Checking it
+		# here instead of migrating once also repairs profiles saved while
+		# the flag still only knew about the first two packs, which is how
+		# a finished game kept announcing itself.
+		dlc_info[key] = {"new": false}
+		_dlc_info_dirty = true
+	return dlc_info[key].new
 
 
-func get_dlc_info(dlc_id : int):
-	if dlc_info.has(str(dlc_id)):
-		return dlc_info[str(dlc_id)]
-	return false
+func mark_section_seen(section: int) -> void:
+	var key := str(section)
+	if dlc_info.has(key) and not dlc_info[key].new:
+		return
+	dlc_info[key] = {"new": false}
+	_dlc_info_dirty = true
+	save_dlc_info()
 
 
-func set_dlc_info(dlc_id : int, new_data : Dictionary, should_save := false):
-	assert(dlc_info.has(str(dlc_id)),"Not a valid dlc id to set data: " + str(dlc_id))
-	dlc_info[str(dlc_id)] = new_data
-	if should_save:
+func save_dlc_info() -> void:
+	if _dlc_info_dirty:
+		_dlc_info_dirty = false
 		FileManager.save_profile()
+
+
+# Read by hand rather than through set_data(), which erases any saved key
+# the defaults do not list - and the defaults cannot list the sections,
+# since they are only known once the pack configs are read from disk.
+func _load_dlc_info(data) -> void:
+	dlc_info = {}
+	if not data.has("dlc_info") or typeof(data.dlc_info) != TYPE_DICTIONARY:
+		return
+	for key in data.dlc_info:
+		var entry = data.dlc_info[key]
+		if typeof(entry) == TYPE_DICTIONARY and entry.has("new"):
+			dlc_info[str(key)] = {"new": bool(entry.new)}
 
 func _on_dark_mode_toggled(is_dark):
 	ProjectSettings.set_setting("gui/theme/custom", Global.get_theme(is_dark))

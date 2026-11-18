@@ -122,9 +122,12 @@ func set_section_name(section_name: String) -> void:
 		SectionName.text = section_name
 		SectionName.show()
 
+# The badge is about content the player has not opened yet, so it is
+# set apart from the buy button: an owned pack can still be new.
+func setup_new_badge(is_new: bool) -> void:
+	%NewDLC.visible = is_new
+
 func setup_dlc_button() -> void:
-	var info = Profile.get_dlc_info(my_section)
-	%NewDLC.visible = info and info.new
 	%BuyDLCButton.visible = focused
 	if ExtraLevelLister.is_free(my_section):
 		%BuyDLCButton.text = "DLC_FREE"
@@ -133,7 +136,6 @@ func setup_dlc_button() -> void:
 	
 func delete_dlc_button() -> void:
 	if has_node("%BuyDLCButton"):
-		%NewDLC.queue_free()
 		%BuyDLCButton.queue_free()
 
 func setup(hub_ref, section: int, unlocked_levels: int, extra_: bool) -> void:
@@ -318,12 +320,10 @@ func update_style_boxes(completed : bool):
 func _on_button_pressed():
 	AudioManager.play_sfx("zoom_in")
 	if extra:
-		var data = Profile.get_dlc_info(my_section)
-		if data:
-			data.new = false
-			Profile.set_dlc_info(my_section, data, true)
-			if has_node("%NewDLC"):
-				%NewDLC.queue_free()
+		# opening the pack is what counts as having seen it. The badge is
+		# hidden rather than freed, because the hub reuses these nodes.
+		Profile.mark_section_seen(my_section)
+		%NewDLC.hide()
 	focus()
 
 

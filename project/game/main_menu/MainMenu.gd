@@ -141,15 +141,15 @@ func check_for_new_dlc():
 	%NewIndicator.hide()
 	if Global.is_demo:
 		return
-	var idx = 1
-	for dlc in Profile.get_all_dlc_info().values():
-		if ExtraLevelLister.has_section(idx):
-			if dlc.new:
-				%NewIndicator.show()
-				break
-		else:
-			break
-		idx += 1
+	var any_new := false
+	# Every section is visited instead of stopping at the first hit, so
+	# the first run on a profile records all of them in one pass and the
+	# save below happens once.
+	for section in range(1, ExtraLevelLister.count_all_game_sections() + 1):
+		if Profile.section_is_new(section):
+			any_new = true
+	%NewIndicator.visible = any_new
+	Profile.save_dlc_info()
 
 
 func update_profile_button() -> void:
