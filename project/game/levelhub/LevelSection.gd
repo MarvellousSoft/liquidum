@@ -122,8 +122,6 @@ func set_section_name(section_name: String) -> void:
 		SectionName.text = section_name
 		SectionName.show()
 
-# The badge is about content the player has not opened yet, so it is
-# set apart from the buy button: an owned pack can still be new.
 func setup_new_badge(is_new: bool) -> void:
 	%NewDLC.visible = is_new
 
@@ -319,8 +317,6 @@ func update_style_boxes(completed : bool):
 func _on_button_pressed():
 	AudioManager.play_sfx("zoom_in")
 	if extra:
-		# opening the pack is what counts as having seen it. The badge is
-		# hidden rather than freed, because the hub reuses these nodes.
 		Profile.mark_section_seen(my_section)
 		%NewDLC.hide()
 	focus()

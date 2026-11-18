@@ -142,9 +142,6 @@ func check_for_new_dlc():
 	if Global.is_demo:
 		return
 	var any_new := false
-	# Every section is visited instead of stopping at the first hit, so
-	# the first run on a profile records all of them in one pass and the
-	# save below happens once.
 	for section in range(1, ExtraLevelLister.count_all_game_sections() + 1):
 		if Profile.section_is_new(section):
 			any_new = true

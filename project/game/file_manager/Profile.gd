@@ -76,12 +76,6 @@ var options = {
 	# Android only
 	"deadline_for_next_review_request": Time.get_unix_time_from_system() + randf() * 14 * 24 * 60 * 60,
 }
-# Which extra sections this profile has already been shown, as
-# section number -> {"new": bool}. Entries appear lazily in
-# section_is_new(), because how many sections exist is data - one
-# config.ini per pack. This used to be hardcoded to "1" and "2", so
-# every other pack was invisible to the indicator and those two
-# announced themselves forever.
 var dlc_info := {}
 var _dlc_info_dirty := false
 
@@ -229,20 +223,12 @@ func set_option(opt_name: String, value, should_save := false):
 		FileManager.save_profile()
 
 
-# True while the player has never opened this section in the extra
-# level hub. That is what lights the "New!" indicator on the main menu
-# and the badge on the section itself.
 func section_is_new(section: int) -> bool:
 	var key := str(section)
 	if not dlc_info.has(key):
 		dlc_info[key] = {"new": true}
 		_dlc_info_dirty = true
 	if dlc_info[key].new and ExtraLevelLister.count_completed_section_levels(section) > 0:
-		# Levels in it are already finished, so it is not news to this
-		# player whether or not the section was ever opened. Checking it
-		# here instead of migrating once also repairs profiles saved while
-		# the flag still only knew about the first two packs, which is how
-		# a finished game kept announcing itself.
 		dlc_info[key] = {"new": false}
 		_dlc_info_dirty = true
 	return dlc_info[key].new
@@ -263,9 +249,7 @@ func save_dlc_info() -> void:
 		FileManager.save_profile()
 
 
-# Read by hand rather than through set_data(), which erases any saved key
-# the defaults do not list - and the defaults cannot list the sections,
-# since they are only known once the pack configs are read from disk.
+# Loaded manually because section keys are dynamic (set_data() strips unknown keys).
 func _load_dlc_info(data) -> void:
 	dlc_info = {}
 	if not data.has("dlc_info") or typeof(data.dlc_info) != TYPE_DICTIONARY:
