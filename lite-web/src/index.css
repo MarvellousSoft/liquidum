@@ -69,8 +69,15 @@
   --bg-gradient-bottom: #093659;
   --cell-bg: rgba(0, 9, 36, 0.45);
   --cell-border: rgba(171, 255, 209, 0.25);
-  --cell-water: #157399;
-  --cell-foam: #1c99ca;
+  /* Water matches the Godot build's dark mode. Taking depth_color from
+     Global.WATER_COLORS.dark (#46CFB3) would be wrong: Water.gdshader
+     multiplies the tint by whatever is behind it before you see it.
+     Rendering that shader with the dark uniforms over the dark
+     background (#093659) gives #3FBFA7, which is what is used here.
+     Foam is water_color, #ABFFD1 in both themes. The values these
+     replace were a navy darker than the light theme's water. */
+  --cell-water: #3fbfa7;
+  --cell-foam: #abffd1;
   --cell-wall: #abffd1;
   --cell-block: #abffd1;
   --game-teal: #093659;
@@ -985,8 +992,8 @@ body,
 }
 
 .theme-dark .aq-tank-water {
-  background-color: #073f60;
-  background-image: radial-gradient(circle at 50% 0%, #157399 0%, #073f60 42%);
+  background-color: #3fbfa7;
+  background-image: radial-gradient(circle at 50% 0%, #6ad9b8 0%, #3fbfa7 42%);
 }
 .aq-tank-water-half {
   clip-path: polygon(0 0, 100% 100%, 0 100%);
@@ -1519,11 +1526,11 @@ body,
 }
 
 .theme-dark .cell-water {
-  background-color: #073f60;
+  background-color: #3fbfa7;
 }
 
 .theme-dark .cell-water.is-surface {
-  background-image: radial-gradient(circle at 50% 0%, #157399 0%, #073f60 42%);
+  background-image: radial-gradient(circle at 50% 0%, #6ad9b8 0%, #3fbfa7 42%);
 }
 
 .cell-boat {
@@ -2512,7 +2519,7 @@ body.modal-open {
   background-color: rgba(0, 153, 216, 0.45);
 }
 .theme-dark .cell-preview-water {
-  background-color: rgba(7, 63, 96, 0.6);
+  background-color: rgba(63, 191, 167, 0.5);
 }
 
 .cell-preview-air,
