@@ -195,4 +195,35 @@ test.describe('Learn to play section', () => {
     expect(hints.x).toBeLessThan(board.x);
     expect(Math.abs(hints.y - board.y)).toBeLessThan(40);
   });
+  // The one thing the unit tests cannot cover: that actually winning a
+  // tutorial reaches the progress store. Tutorial 2 is the three-column
+  // counter board, so three clicks finish it - water falls to the bottom of
+  // each aquarium, so clicking the highest cell a column needs fills it.
+  test('finishing a tutorial records it, and the record survives a reload', async ({ page }) => {
+    // only the help flag: addInitScript runs on the reload too, so clearing
+    // progress here would wipe the very thing this test is checking
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    await page.locator('[data-testid="tutorial-step-2"]').click();
+    await expect(page.locator('[data-testid="tutorial-lesson"]')).toBeVisible();
+
+    await page.locator('[data-testid="cell-1-0"]').click();
+    await page.locator('[data-testid="cell-2-1"]').click();
+    await page.locator('[data-testid="cell-0-2"]').click();
+
+    await expect(page.locator('[data-testid="win-banner"]')).toBeVisible();
+    // in a tutorial the next button follows the lesson order
+    await expect(page.locator('[data-testid="btn-next-level"]')).toContainText(/next tutorial/i);
+
+    const stored = await page.evaluate(() => localStorage.getItem('liquidum_tutorial_done'));
+    expect(JSON.parse(stored!)).toEqual([STEPS[1]]);
+
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    await expect(page.locator('[data-testid="tutorial-progress"]')).toContainText(`1 of ${STEPS.length}`);
+    await expect(page.locator('[data-testid="tutorial-step-2"] img')).toHaveCount(1);
+    await expect(page.locator('[data-testid="tutorial-step-1"] img')).toHaveCount(0);
+  });
 });
