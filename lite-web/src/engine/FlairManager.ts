@@ -204,7 +204,7 @@ export function createFlair(
       3: { text: "👄", color: "#fe2d86" },
       4: { text: "rock" },
       5: { text: "〰️", color: "#0068a8" },
-      6: { text: "🪸", color: "#ff826a" },
+      6: { text: "🐚", color: "#ff826a" },
       7: { text: "🔍", color: "#38bdf8" },
     };
     const entry = extraFlairsMap[section];
