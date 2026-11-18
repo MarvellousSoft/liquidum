@@ -2,7 +2,7 @@ class_name PandoraHub
 extends RandomHub
 
 const PANDORA := "pandora"
-const SPEEDRUN_MAX_MINUTES := 20
+const SPEEDRUN_MAX_MINUTES := 30
 
 enum Mode {
 	Snake = 0,
