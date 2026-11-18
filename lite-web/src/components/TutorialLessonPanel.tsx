@@ -73,6 +73,16 @@ export function TutorialLessonPanel({
         </div>
       )}
 
+      {step.teachesWaterCounter && (
+        <div class="tutorial-lesson-mechanic" data-testid="tutorial-lesson-water-counter">
+          <div class="tutorial-lesson-name godot-text-outline">
+            <span aria-hidden="true">💧</span>
+            <span>{t('tutorial.counter_title')}</span>
+          </div>
+          <p class="tutorial-lesson-desc">{t('tutorial.counter_desc')}</p>
+        </div>
+      )}
+
       {mechanics.map(m => (
         <div class="tutorial-lesson-mechanic" key={m.key} data-testid={`tutorial-lesson-${m.key}`}>
           <div class="tutorial-lesson-name godot-text-outline">

@@ -158,7 +158,7 @@
     "title": "Learn to Play",
     "button": "Learn to play",
     "button_title": "Short levels that teach every rule",
-    "intro": "Five short levels, in order. Each one introduces a rule and explains it under the board, so by the end nothing in a daily level will be new to you.",
+    "intro": "Six short levels, in order. Each one introduces a rule and explains it under the board, so by the end nothing in a daily level will be new to you.",
     "progress": "{{done}} of {{total}} done",
     "goal": "Finish them all and you will have met every rule a daily level can use.",
     "ready": "You are ready: every rule a daily level can use is covered. Go play today's!",
@@ -174,7 +174,9 @@
     "how_to_play": "How to play",
     "controls_title": "Controls",
     "controls_desc": "Click or tap a cell to fill it with water. Click it again to mark it as air, and once more to clear it. Drag to paint several cells at once.",
-    "controls_button": "All controls"
+    "controls_button": "All controls",
+    "counter_title": "Water counter",
+    "counter_desc": "The counter at the side of the board shows how much water the whole level needs, and how much you have placed so far. When a row or column has no clue of its own, the total is often what settles it."
   },
   "daily_theme": {
     "mon": {

@@ -1,7 +1,8 @@
 import { test, expect } from './fixtures';
 
 const DONE_KEY = 'liquidum_tutorial_done';
-const STEPS = ['Level 01/05', 'Level 02/01', 'Level 03/04', 'Level 04/01', 'Level 05/02'];
+const STEPS = ['Level 00/01', 'Level 00/02', 'Level 02/01', 'Level 03/04',
+               'Level 04/01', 'Level 05/02'];
 
 test.describe('Learn to play section', () => {
   test('opens by itself for a first-time visitor, instead of the help reference', async ({ page }) => {
@@ -51,21 +52,21 @@ test.describe('Learn to play section', () => {
     await openBtn.click();
     await expect(tutorial).toBeVisible();
 
-    // third step is the one that teaches diagonals and unknown hints
-    await page.locator('[data-testid="tutorial-step-3"]').click();
+    // the fourth tutorial teaches diagonals and unknown hints
+    await page.locator('[data-testid="tutorial-step-4"]').click();
     await expect(tutorial).toBeHidden();
 
     const lesson = page.locator('[data-testid="tutorial-lesson"]');
     await expect(lesson).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('[data-testid="tutorial-lesson-step"]')).toContainText('Tutorial 3 of 5');
+    await expect(page.locator('[data-testid="tutorial-lesson-step"]')).toContainText('Tutorial 4 of 6');
     await expect(page.locator('[data-testid="tutorial-lesson-diagonals"]')).toBeVisible();
     await expect(page.locator('[data-testid="tutorial-lesson-unknownHints"]')).toBeVisible();
 
     // the lesson reuses the help modal's diagrams, so they must render here too
     await expect(lesson.locator('[data-testid^="tutorial-grid-"]').first()).toBeVisible();
 
-    // and the board for that level is actually on screen
-    await expect(page.locator('[data-testid="level-name-label"]')).toContainText('Level 03/04');
+    // the raw level key is not shown while in a tutorial
+    await expect(page.locator('[data-testid="level-name-label"]')).toHaveText('');
   });
 
   test('shows stored progress and no lesson panel outside the section', async ({ page }) => {

@@ -158,7 +158,7 @@
     "title": "Aprenda a Jogar",
     "button": "Aprender a jogar",
     "button_title": "Fases curtas que ensinam todas as regras",
-    "intro": "Cinco fases curtas, em ordem. Cada uma apresenta uma regra e explica ela embaixo do tabuleiro, de forma que no fim nada num nível diário seja novidade para você.",
+    "intro": "Seis fases curtas, em ordem. Cada uma apresenta uma regra e explica ela embaixo do tabuleiro, de forma que no fim nada num nível diário seja novidade para você.",
     "progress": "{{done}} de {{total}} concluídos",
     "goal": "Termine todos e você terá visto todas as regras que um nível diário pode usar.",
     "ready": "Você está pronto: todas as regras que um nível diário usa foram cobertas. Jogue o de hoje!",
@@ -174,7 +174,9 @@
     "how_to_play": "Como jogar",
     "controls_title": "Controles",
     "controls_desc": "Clique ou toque numa célula para enchê-la de água. Clique de novo para marcar como ar, e mais uma vez para limpar. Arraste para pintar várias de uma vez.",
-    "controls_button": "Todos os controles"
+    "controls_button": "Todos os controles",
+    "counter_title": "Contador de água",
+    "counter_desc": "O contador ao lado do tabuleiro mostra quanta água a fase inteira precisa, e quanta você já colocou. Quando uma linha ou coluna não tem dica própria, muitas vezes é o total que resolve."
   },
   "daily_theme": {
     "mon": {

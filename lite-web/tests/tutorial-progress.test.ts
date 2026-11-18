@@ -61,7 +61,7 @@ function biggestAquarium(parsed: any): number {
 describe('onboarding sequence', () => {
   it('is short enough to finish in one sitting', () => {
     expect(TUTORIAL_STEPS.length).toBeGreaterThanOrEqual(3);
-    expect(TUTORIAL_STEPS.length).toBeLessThanOrEqual(5);
+    expect(TUTORIAL_STEPS.length).toBeLessThanOrEqual(6);
   });
 
   it('uses levels that exist, with canonical keys and no repeats', async () => {
@@ -79,7 +79,12 @@ describe('onboarding sequence', () => {
   it('only names mechanics the help modal actually documents', () => {
     const known = new Set(ALL_MECHANICS.map(m => m.key));
     for (const step of TUTORIAL_STEPS) {
-      expect(step.mechanics.length).toBeGreaterThan(0);
+      // every step has to teach something, though not always an ALL_MECHANICS
+      // entry: the controls and the water counter are not in that list
+      expect(
+        step.mechanics.length > 0 || step.teachesControls || step.teachesWaterCounter,
+        `${step.levelKey} teaches nothing`
+      ).toBeTruthy();
       for (const key of step.mechanics) {
         expect(known.has(key), `${key} is not a documented mechanic`).toBe(true);
       }
@@ -133,6 +138,25 @@ describe('onboarding sequence', () => {
       ).toBeGreaterThan(1);
     }
   });
+
+  // a level that is solvable without its counter would not teach the counter
+  it('needs the water counter on the step that teaches it', async () => {
+    const step = TUTORIAL_STEPS.find(s => s.teachesWaterCounter);
+    expect(step, 'no step teaches the water counter').toBeTruthy();
+    const data = await loadLevelData(step!.levelKey);
+    expect(data.grid_data['16']['8']).toBeGreaterThan(0);
+
+    const stripped = JSON.parse(JSON.stringify(data));
+    stripped.grid_data['16']['8'] = -1;
+    const grid = GridImpl.import_data(stripped.grid_data, LoadMode.Testing);
+    grid.clear_content();
+    const res = new SolverModel().full_solve(
+      grid, Object.keys(SolverModel.STRATEGY_LIST), () => false);
+    expect(
+      SolveResult[res],
+      'without the counter the board should stop being uniquely solvable'
+    ).not.toBe(SolveResult[SolveResult.SolvedUniqueNoGuess]);
+  }, 30000);
 
   // the daily generator never places rock, so a tutorial showing some would be
   // introducing a thing the player will never meet again

@@ -121,12 +121,15 @@ export function TutorialSectionModal({
                 : isDone
                 ? 'level-btn-done'
                 : 'level-btn-unsolved';
-              const teaches = step.mechanics
-                .map(key => {
-                  const m = ALL_MECHANICS.find(x => x.key === key);
-                  return m ? `${m.icon} ${t(`mechanics.${m.key}.name`, m.name)}` : key;
-                })
-                .join(' · ');
+              const labels = step.mechanics.map(key => {
+                const m = ALL_MECHANICS.find(x => x.key === key);
+                return m ? `${m.icon} ${t(`mechanics.${m.key}.name`, m.name)}` : key;
+              });
+              // the water counter is not one of ALL_MECHANICS, so it names itself
+              if (step.teachesWaterCounter) {
+                labels.push(`💧 ${t('tutorial.counter_title')}`);
+              }
+              const teaches = labels.join(' · ');
               return (
                 <button
                   key={step.levelKey}

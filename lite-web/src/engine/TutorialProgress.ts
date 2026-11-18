@@ -7,24 +7,27 @@
 // hints and diagonals, Secret Boat Tuesday wants boats, Hidden Thursday wants
 // unknown hints, Freaky Friday wants all of it).
 //
-//   01/05  the controls, aquariums and gravity, and the row/column numbers
+//   00/01  the controls, aquariums and gravity, and the row/column numbers
+//   00/02  the water counter in the header
 //   02/01  the {n} together and -n- separate decorators
 //   03/04  diagonals (half waters) and the {?} / -?- unknown hints
 //   04/01  boats
 //   05/02  aquarium hints
 //
-// All five are solvable by pure deduction - verified with the solver, zero
+// All six are solvable by pure deduction - verified with the solver, zero
 // guesses. That is why the aquarium step is 05/02 and not the first level of
 // that pack: 05/01 is unique but needs eight guesses, which is trial and error
 // and no way to teach a rule.
 //
-// The first step is 01/04 rather than the campaign's own first level, because
-// in 01/01 (and 01/02) every single cell is walled off on all four sides: nine
-// separate 1x1 aquariums, where water never flows anywhere. Those levels teach
-// the controls and the numbers but cannot show gravity at all. 01/05 has three
-// aquariums, the largest nine cells, so the water actually stacks. It is also
-// free of rock cells: the daily generator never places any, so rock would be a
-// thing to explain for no reason (which ruled out 01/04, the other candidate).
+// The first two live in section 00 because the campaign has nothing that fits.
+// 00/01 is level 01/04 with its two rock cells taken out and a clue added on
+// the row that held them; the campaign's own first levels could not be used,
+// since in 01/01 and 01/02 every cell is walled off on all four sides - nine
+// 1x1 aquariums where water never flows, so they cannot show gravity at all.
+// Rock went away because the daily generator never places any, so it would be
+// a thing to explain for no reason. 00/02 is a new board built around the
+// water counter: with the counter it is unique, and without it the solver
+// finds several solutions, which is what makes it teach the counter.
 
 import type { MechanicKey } from '../components/HelpModal';
 
@@ -35,10 +38,13 @@ export interface TutorialStep {
   mechanics: MechanicKey[];
   /** The first step also has to explain how to draw on the board at all. */
   teachesControls?: boolean;
+  /** The header's total-water counter, which is not one of ALL_MECHANICS. */
+  teachesWaterCounter?: boolean;
 }
 
 export const TUTORIAL_STEPS: readonly TutorialStep[] = [
-  { levelKey: 'Level 01/05', mechanics: ['aquariums', 'lineNumbers'], teachesControls: true },
+  { levelKey: 'Level 00/01', mechanics: ['aquariums', 'lineNumbers'], teachesControls: true },
+  { levelKey: 'Level 00/02', mechanics: [], teachesWaterCounter: true },
   { levelKey: 'Level 02/01', mechanics: ['togetherSeparate'] },
   { levelKey: 'Level 03/04', mechanics: ['diagonals', 'unknownHints'] },
   { levelKey: 'Level 04/01', mechanics: ['boats'] },

@@ -2432,7 +2432,11 @@ export function App() {
               {/* Level name and streak counter below the grid */}
               <div class="level-footer-info">
                 <div data-testid="level-name-label" class="level-name-label">
-                  {isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`)}` : '') : currentLevelKey}
+                  {/* a tutorial's own key (section 00) means nothing to a
+                      player, and the lesson right below already names it */}
+                  {isTutorialMode
+                    ? ''
+                    : isDailyMode ? (dailyMeta ? `${dailyMeta.emoji} ${t(`daily_theme.${WEEKDAY_KEYS[dailyMeta.weekday]}.name`)}` : '') : currentLevelKey}
                 </div>
                 {isDailyMode && (
                   <div
