@@ -12,6 +12,14 @@ import {
   loadLevelData,
 } from './engine/LevelDatabase';
 import {
+  TUTORIAL_STEPS,
+  getTutorialDone,
+  getNextTutorialStep,
+  getStepAfter,
+  isTutorialLevel,
+  markTutorialDone,
+} from './engine/TutorialProgress';
+import {
   UserLevelSaveData,
   saveDailyLevelProgress,
   loadDailyLevelProgress,
@@ -48,6 +56,8 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })));
 const ShortcutsModal = lazy(() => import('./components/ShortcutsModal').then(m => ({ default: m.ShortcutsModal })));
 const LevelSelectModal = lazy(() => import('./components/LevelSelectModal').then(m => ({ default: m.LevelSelectModal })));
+const TutorialSectionModal = lazy(() => import('./components/TutorialSectionModal').then(m => ({ default: m.TutorialSectionModal })));
+const TutorialLessonPanel = lazy(() => import('./components/TutorialLessonPanel').then(m => ({ default: m.TutorialLessonPanel })));
 const AccountModal = lazy(() => import('./components/AccountModal').then(m => ({ default: m.AccountModal })));
 const HelpModal = lazy(() => import('./components/HelpModal').then(m => ({ default: m.HelpModal })));
 const SteamSyncModal = lazy(() => import('./components/SteamSyncModal').then(m => ({ default: m.SteamSyncModal })));
@@ -65,7 +75,7 @@ import { SteamIcon } from './components/SteamIcon';
 
 const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 
-export type GameMode = 'daily' | 'weekly' | 'custom' | 'test';
+export type GameMode = 'daily' | 'weekly' | 'custom' | 'test' | 'tutorial';
 
 function formatSolveTime(totalSeconds: number): string {
   const mins = Math.floor(totalSeconds / 60);
@@ -94,6 +104,10 @@ export function App() {
   const [gridData, setGridData] = useState<GridModelData | null>(null);
   const [currentLevelKey, setCurrentLevelKey] = useState<string>("Level 01/01");
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set());
+  // which onboarding steps are finished. Only completion is kept, not a
+  // half-played board: these are small levels meant for one sitting.
+  const [tutorialDone, setTutorialDone] = useState<Set<string>>(() => getTutorialDone());
+  const [showTutorialModal, setShowTutorialModal] = useState<boolean>(false);
   const [gameMode, setGameMode] = useState<GameMode>("daily");
   const [isDailyMode, setIsDailyMode] = useState<boolean>(false);
   const [dailyDate, setDailyDate] = useState<string>(() => get_today_str());
@@ -266,7 +280,9 @@ export function App() {
       }
       const seen = localStorage.getItem('liquidum_help_seen');
       if (!seen) {
-        setShowHelpModal(true);
+        // A first-time visitor is sent to the learn-to-play section rather
+        // than the help reference: the same rules, but played instead of read.
+        setShowTutorialModal(true);
         localStorage.setItem('liquidum_help_seen', 'true');
       }
     } catch {
@@ -681,11 +697,11 @@ export function App() {
     }
   };
 
-  const loadLevel = async (levelKeyOrShort: string) => {
+  const loadLevel = async (levelKeyOrShort: string, mode: GameMode = 'test') => {
     try {
       setIsDailyMode(false);
       setDailyMeta(null);
-      setGameMode('test');
+      setGameMode(mode);
 
       const norm = normalizeLevelKey(levelKeyOrShort);
       const canonicalKey = norm ? norm.key : levelKeyOrShort;
@@ -963,6 +979,23 @@ export function App() {
 
   const loadLevelRef = useRef(loadLevel);
   loadLevelRef.current = loadLevel;
+
+  // One place where a finished non-daily level is recorded, so the
+  // onboarding progress in localStorage can never disagree with the
+  // in-memory set depending on which of the three win paths fired.
+  const markLevelCompleted = (levelKey: string) => {
+    setCompletedLevels(comp => new Set(comp).add(levelKey));
+    if (isTutorialLevel(levelKey)) {
+      setTutorialDone(markTutorialDone(levelKey));
+    }
+  };
+  const markLevelCompletedRef = useRef(markLevelCompleted);
+  markLevelCompletedRef.current = markLevelCompleted;
+
+  const openTutorialStep = (levelKey: string) => {
+    loadLevelRef.current(levelKey, 'tutorial');
+  };
+
   const loadDailyLevelRef = useRef(loadDailyLevel);
   loadDailyLevelRef.current = loadDailyLevel;
   const handleRestartRef = useRef(handleRestart);
@@ -1267,7 +1300,7 @@ export function App() {
       if (isLevelComplete(next)) {
         setWon(true);
         if (!isDailyModeRef.current) {
-          setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+          markLevelCompletedRef.current(currentLevelKey);
         }
       }
     };
@@ -1425,7 +1458,7 @@ export function App() {
       mouseHoldStatusRef.current = E.MouseDragState.None;
       setMouseHoldStatus(E.MouseDragState.None);
       if (!isDailyModeRef.current) {
-        setCompletedLevels(comp => new Set(comp).add(currentLevelKeyRef.current));
+        markLevelCompletedRef.current(currentLevelKeyRef.current);
       }
     }
     if (complete) {
@@ -1597,7 +1630,7 @@ export function App() {
         mouseHoldStatusRef.current = E.MouseDragState.None;
         setMouseHoldStatus(E.MouseDragState.None);
         if (!isDailyModeRef.current) {
-          setCompletedLevels(comp => new Set(comp).add(currentLevelKey));
+          markLevelCompletedRef.current(currentLevelKey);
         }
       }
       if (complete) {
@@ -1709,9 +1742,14 @@ export function App() {
     return foundAquariums.filter(aq => Math.abs(aq.size - targetSize) < 0.01).length;
   };
 
+  const isTutorialMode = gameMode === 'tutorial' && isTutorialLevel(currentLevelKey);
   const levelKeys = TEST_LEVEL_KEYS;
   const currentIndex = levelKeys.indexOf(currentLevelKey);
-  const nextLevelKey = currentIndex >= 0 && currentIndex < levelKeys.length - 1 ? levelKeys[currentIndex + 1] : null;
+  // inside the onboarding section "next" follows the lesson order, which is
+  // not the dev test-level list
+  const nextLevelKey = isTutorialMode
+    ? (getStepAfter(currentLevelKey)?.levelKey ?? null)
+    : (currentIndex >= 0 && currentIndex < levelKeys.length - 1 ? levelKeys[currentIndex + 1] : null);
 
   return (
     <div
@@ -2136,10 +2174,10 @@ export function App() {
                 nextLevelKey && (
                   <button
                     data-testid="btn-next-level"
-                    onClick={() => loadLevel(nextLevelKey)}
+                    onClick={() => loadLevel(nextLevelKey, isTutorialMode ? 'tutorial' : 'test')}
                     class="win-btn-next"
                   >
-                    <span>{t('victory.next_level')} ({nextLevelKey})</span>
+                    <span>{isTutorialMode ? t('tutorial.next_step') : `${t('victory.next_level')} (${nextLevelKey})`}</span>
                     <span>→</span>
                   </button>
                 )
@@ -2407,6 +2445,17 @@ export function App() {
                   </div>
                 )}
               </div>
+
+              {/* The lesson for this onboarding step, under the board */}
+              {isTutorialMode && (
+                <Suspense fallback={null}>
+                  <TutorialLessonPanel
+                    levelKey={currentLevelKey}
+                    solved={won}
+                    onOpenSection={() => setShowTutorialModal(true)}
+                  />
+                </Suspense>
+              )}
             </div>
           </div>
 
@@ -2427,30 +2476,44 @@ export function App() {
         <p>{t('game.loading')}</p>
       )}
 
-      {/* Daily / Test selector at bottom */}
-      {!isTestMode && import.meta.env.DEV && (
+      {/* Daily / learn / test selector at bottom. The learn button ships to
+          production; the test-level picker stays a dev tool. */}
+      {!isTestMode && (
         <div class="level-picker mt-8 mb-6">
-          <button
-            data-testid="btn-daily-mode"
-            onClick={() => {
-              if (!isDailyMode) {
-                loadDailyLevel();
-              }
-            }}
-            class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
-            title={t('game.play_daily_title')}
-          >
-            <span>{t('game.daily_level')}</span>
-          </button>
+          {(import.meta.env.DEV || !isDailyMode) && (
+            <button
+              data-testid="btn-daily-mode"
+              onClick={() => {
+                if (!isDailyMode) {
+                  loadDailyLevel();
+                }
+              }}
+              class={`level-btn level-btn-daily ${isDailyMode ? 'level-btn-daily-active' : ''}`}
+              title={t('game.play_daily_title')}
+            >
+              <span>{t('game.daily_level')}</span>
+            </button>
+          )}
 
           <button
-            data-testid="btn-open-levels-modal"
-            onClick={() => setShowLevelsModal(true)}
-            class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
-            title={t('game.test_levels_title')}
+            data-testid="btn-open-tutorial-modal"
+            onClick={() => setShowTutorialModal(true)}
+            class={`level-btn ${isTutorialMode ? 'level-btn-current' : tutorialDone.size >= TUTORIAL_STEPS.length ? 'level-btn-done' : 'level-btn-unsolved'}`}
+            title={t('tutorial.button_title')}
           >
-            <span>{t('game.test_levels')} {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
+            <span>🎓 {t('tutorial.button')}</span>
           </button>
+
+          {import.meta.env.DEV && (
+            <button
+              data-testid="btn-open-levels-modal"
+              onClick={() => setShowLevelsModal(true)}
+              class={`level-btn ${!isDailyMode ? 'level-btn-current' : 'level-btn-unsolved'}`}
+              title={t('game.test_levels_title')}
+            >
+              <span>{t('game.test_levels')} {!isDailyMode ? `(${currentLevelKey})` : ''}</span>
+            </button>
+          )}
         </div>
       )}
 
@@ -2506,6 +2569,19 @@ export function App() {
               isOpen={showAccountModal}
               onClose={() => setShowAccountModal(false)}
               onAccountUpdated={() => setLeaderboardRefreshKey((k) => k + 1)}
+            />
+          )}
+
+          {showTutorialModal && (
+            <TutorialSectionModal
+              isOpen={showTutorialModal}
+              onClose={() => setShowTutorialModal(false)}
+              done={tutorialDone}
+              currentLevelKey={currentLevelKey}
+              isPlayingTutorial={isTutorialMode}
+              onSelectStep={(key) => loadLevel(key, 'tutorial')}
+              onPlayDaily={() => loadDailyLevel()}
+              iconUrl={iconUrl}
             />
           )}
 

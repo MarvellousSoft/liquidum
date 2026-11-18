@@ -1093,6 +1093,90 @@ body,
   line-height: 1;
 }
 
+/* Lesson shown under the board while an onboarding level is being played.
+   Same card language as .grid-hints-card so it reads as part of the game. */
+.tutorial-lesson {
+  margin: 0.85rem auto 0;
+  max-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-family: var(--font-game);
+  color: var(--game-mint);
+  background-color: rgba(0, 9, 36, 0.4);
+  padding: 0.8rem 1.1rem;
+  border-radius: 1.25rem;
+  border: 2.5px solid var(--game-navy);
+  box-shadow: 0 4px 0 var(--game-navy), 0 8px 24px rgba(0, 9, 36, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.tutorial-lesson-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tutorial-lesson-step {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.tutorial-lesson-link {
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--game-mint);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.tutorial-lesson-link:hover {
+  opacity: 1;
+}
+
+.tutorial-lesson-mechanic {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tutorial-lesson-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tutorial-lesson-desc {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  opacity: 0.9;
+  white-space: pre-line;
+}
+
+.tutorial-lesson-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding-top: 0.15rem;
+}
+
+.tutorial-lesson-solved {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--game-green, #61fc89);
+}
+
 .level-footer-info {
   display: flex;
   align-items: center;

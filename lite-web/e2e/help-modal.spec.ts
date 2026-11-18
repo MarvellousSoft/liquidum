@@ -1,28 +1,26 @@
 import { test, expect } from './fixtures';
 
 test.describe('Help Modal & Game Mechanics E2E Tests', () => {
-  test('automatically opens help modal on first visit, but not on subsequent visits', async ({ page }) => {
-    // 1. Visit with fresh storage (first-time visitor)
+  // A first-time visitor is now sent to the learn-to-play section instead of
+  // this reference screen - see e2e/tutorial-section.spec.ts. The help modal
+  // stays available on demand, and still must not pop up by itself.
+  test('does not open by itself on a first visit, and the tutorial does', async ({ page }) => {
     await page.goto('/');
-    
-    // Help modal should be automatically open
-    const helpModal = page.locator('[data-testid="help-modal"]');
-    await expect(helpModal).toBeVisible({ timeout: 5000 });
-    await expect(helpModal.locator('h2')).toHaveText(/How to Play/);
 
-    // Verify localStorage has liquidum_help_seen set
+    const helpModal = page.locator('[data-testid="help-modal"]');
+    await expect(page.locator('[data-testid="tutorial-modal"]')).toBeVisible({ timeout: 5000 });
+    await expect(helpModal).toBeHidden();
+
     const seen = await page.evaluate(() => localStorage.getItem('liquidum_help_seen'));
     expect(seen).toBe('true');
 
-    // Close the modal via Close / "Got it" button
-    const closeBtn = page.locator('[data-testid="btn-help-close"], [data-testid="btn-help-got-it"]').first();
-    await closeBtn.click();
-    await expect(helpModal).toBeHidden();
+    await page.locator('[data-testid="btn-close-tutorial-modal"]').click();
 
-    // 2. Reload page (returning visitor) -> should NOT open automatically
+    // reload as a returning visitor: neither screen opens on its own
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
     await expect(helpModal).toBeHidden();
+    await expect(page.locator('[data-testid="tutorial-modal"]')).toBeHidden();
   });
 
   test('opens via toolbar "?" button and closes on close button and Esc', async ({ page }) => {

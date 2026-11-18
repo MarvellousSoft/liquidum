@@ -154,6 +154,23 @@
       "desc": "{N} indicates that the water in that row/column are contiguous.\n-N- indicates that they are not (there is at least one empty cell in the middle)."
     }
   },
+  "tutorial": {
+    "title": "Learn to Play",
+    "button": "Learn to play",
+    "button_title": "Short levels that teach every rule",
+    "intro": "A few short levels. Each one adds one new rule.",
+    "progress": "{{done}} of {{total}} done",
+    "goal": "Finish them all and you will have met every rule a daily can use.",
+    "ready": "You are ready: every rule a daily can use is covered. Go play today's!",
+    "play_daily": "Play the daily",
+    "start": "Start",
+    "continue": "Continue",
+    "done_alt": "done",
+    "step_of": "Step {{current}} of {{total}}",
+    "all_steps": "All steps",
+    "step_solved": "Solved! Open the steps to carry on.",
+    "next_step": "Next step"
+  },
   "daily_theme": {
     "mon": {
       "name": "Basic Monday",

@@ -154,6 +154,23 @@
       "desc": "{N} indica que as águas naquela linha/coluna são contíguas.\n-N- indica que não são (há pelo menos uma célula vazia no meio)."
     }
   },
+  "tutorial": {
+    "title": "Aprenda a Jogar",
+    "button": "Aprender a jogar",
+    "button_title": "Fases curtas que ensinam todas as regras",
+    "intro": "Algumas fases curtas. Cada uma acrescenta uma regra nova.",
+    "progress": "{{done}} de {{total}} concluídas",
+    "goal": "Termine todas e você terá visto todas as regras que uma daily pode usar.",
+    "ready": "Você está pronto: todas as regras que uma daily usa foram cobertas. Jogue a de hoje!",
+    "play_daily": "Jogar a daily",
+    "start": "Começar",
+    "continue": "Continuar",
+    "done_alt": "concluída",
+    "step_of": "Passo {{current}} de {{total}}",
+    "all_steps": "Todos os passos",
+    "step_solved": "Resolvido! Abra os passos para continuar.",
+    "next_step": "Próximo passo"
+  },
   "daily_theme": {
     "mon": {
       "name": "Segunda Simples",
