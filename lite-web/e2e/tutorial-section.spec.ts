@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 
 const DONE_KEY = 'liquidum_tutorial_done';
-const STEPS = ['Level 01/01', 'Level 02/01', 'Level 03/04', 'Level 04/01', 'Level 05/02'];
+const STEPS = ['Level 01/05', 'Level 02/01', 'Level 03/04', 'Level 04/01', 'Level 05/02'];
 
 test.describe('Learn to play section', () => {
   test('opens by itself for a first-time visitor, instead of the help reference', async ({ page }) => {
@@ -57,7 +57,7 @@ test.describe('Learn to play section', () => {
 
     const lesson = page.locator('[data-testid="tutorial-lesson"]');
     await expect(lesson).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('[data-testid="tutorial-lesson-step"]')).toContainText('Step 3 of 5');
+    await expect(page.locator('[data-testid="tutorial-lesson-step"]')).toContainText('Tutorial 3 of 5');
     await expect(page.locator('[data-testid="tutorial-lesson-diagonals"]')).toBeVisible();
     await expect(page.locator('[data-testid="tutorial-lesson-unknownHints"]')).toBeVisible();
 
@@ -103,5 +103,55 @@ test.describe('Learn to play section', () => {
     await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
     await expect(page.locator('[data-testid="tutorial-modal"]')).toBeVisible();
     await expect(page.locator('[data-testid="tutorial-progress"]')).toContainText(`0 of ${STEPS.length}`);
+  });
+  test("marks which tutorials cover rules in todays level", async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+
+    // aquariums and the line numbers are base rules of every daily, so the
+    // first tutorial is always flagged, whatever day it is
+    await expect(page.locator('[data-testid="tutorial-badge-today-1"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tutorial-badge-today-1"]')).toHaveText(/today/i);
+  });
+
+  test('opens the how-to-play reference from the section', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    await page.locator('[data-testid="btn-tutorial-how-to-play"]').click();
+    await expect(page.locator('[data-testid="help-modal"]')).toBeVisible();
+  });
+
+  test('the first tutorial explains the controls and links to the full list', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+    await page.locator('[data-testid="tutorial-step-1"]').click();
+
+    await expect(page.locator('[data-testid="tutorial-lesson-controls"]')).toBeVisible();
+    await page.locator('[data-testid="btn-tutorial-controls"]').click();
+    await expect(page.locator('[data-testid="shortcuts-modal"]')).toBeVisible();
+
+    // and only the first one carries it
+    await page.locator('[data-testid="btn-close-shortcuts"]').click();
+    await page.locator('[data-testid="btn-tutorial-lesson-back"]').click();
+    await page.locator('[data-testid="tutorial-step-2"]').click();
+    await expect(page.locator('[data-testid="tutorial-lesson"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tutorial-lesson-controls"]')).toHaveCount(0);
+  });
+
+  test('skipping goes to the daily level and is styled as a way out', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('liquidum_help_seen', 'true'));
+    await page.goto('/');
+    await page.locator('[data-testid="btn-open-tutorial-modal"]').click();
+
+    const skip = page.locator('[data-testid="btn-tutorial-play-daily"]');
+    await expect(skip).toHaveClass(/tutorial-skip-btn/);
+    await skip.click();
+
+    await expect(page.locator('[data-testid="tutorial-modal"]')).toBeHidden();
+    await expect(page.locator('[data-testid="tutorial-lesson"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="daily-streak-badge"]')).toBeVisible();
   });
 });

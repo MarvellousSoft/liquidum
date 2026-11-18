@@ -1,7 +1,8 @@
 import { h } from 'preact';
 import { useTranslation } from '../i18n';
 import { useModalScrollLock } from '../utils/scrollLock';
-import { ALL_MECHANICS } from './HelpModal';
+import { ALL_MECHANICS, getActiveMechanicsForWeekday } from './HelpModal';
+import { get_today_str } from '../engine/DailyLevel';
 import {
   TUTORIAL_STEPS,
   getNextTutorialStep,
@@ -14,15 +15,22 @@ export interface TutorialSectionModalProps {
   done: Set<string>;
   currentLevelKey: string;
   isPlayingTutorial: boolean;
+  /** Which day's level the badges refer to; defaults to today. */
+  dailyDate?: string;
   onSelectStep: (levelKey: string) => void;
   onPlayDaily: () => void;
+  onOpenHelp: () => void;
   iconUrl: (icon: string) => string;
 }
 
 /**
- * The learn-to-play section: the ordered list of onboarding levels, which ones
- * are done, and what each one teaches. Finishing all of them means every
- * mechanic a daily can use has been seen at least once.
+ * The learn-to-play section: the ordered list of tutorials, which ones are
+ * done, and what each one teaches. Finishing all of them means every rule a
+ * daily level can use has been seen at least once.
+ *
+ * The "in today's level" badge is the same one the help modal shows, driven by
+ * the same getActiveMechanicsForWeekday, so a player can tell at a glance
+ * which tutorials matter for the puzzle waiting for them.
  */
 export function TutorialSectionModal({
   isOpen,
@@ -30,14 +38,21 @@ export function TutorialSectionModal({
   done,
   currentLevelKey,
   isPlayingTutorial,
+  dailyDate,
   onSelectStep,
   onPlayDaily,
+  onOpenHelp,
   iconUrl,
 }: TutorialSectionModalProps) {
   useModalScrollLock(isOpen);
   const { t } = useTranslation();
 
   if (!isOpen) return null;
+
+  const dateStr = dailyDate || get_today_str();
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  const activeMechanics = getActiveMechanicsForWeekday(weekday);
 
   const doneCount = TUTORIAL_STEPS.filter(s => done.has(s.levelKey)).length;
   const complete = isTutorialComplete(done);
@@ -57,26 +72,36 @@ export function TutorialSectionModal({
       <div
         class="shortcuts-dialog"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: '480px' }}
+        style={{ maxWidth: '520px' }}
       >
         <div class="shortcuts-header">
           <div class="flex items-center gap-2">
             <span class="text-xl" aria-hidden="true">🎓</span>
             <h2 class="shortcuts-title godot-text-outline">{t('tutorial.title')}</h2>
           </div>
-          <button
-            data-testid="btn-close-tutorial-modal"
-            onClick={onClose}
-            class="shortcuts-close-btn"
-            title={t('account.close')}
-            aria-label={t('account.close')}
-          >
-            ✕
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              data-testid="btn-tutorial-how-to-play"
+              onClick={onOpenHelp}
+              class="btn-secondary text-xs px-3 py-1"
+              title={t('tutorial.how_to_play')}
+            >
+              ❓ {t('tutorial.how_to_play')}
+            </button>
+            <button
+              data-testid="btn-close-tutorial-modal"
+              onClick={onClose}
+              class="shortcuts-close-btn"
+              title={t('account.close')}
+              aria-label={t('account.close')}
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         <div class="shortcuts-content">
-          <p class="text-xs opacity-75 mb-1 text-[var(--game-mint)]">
+          <p class="text-xs opacity-75 mb-1 text-[var(--game-mint)] leading-relaxed">
             {t('tutorial.intro')}
           </p>
           <p
@@ -90,6 +115,7 @@ export function TutorialSectionModal({
             {TUTORIAL_STEPS.map((step, idx) => {
               const isDone = done.has(step.levelKey);
               const isCurrent = isPlayingTutorial && step.levelKey === currentLevelKey;
+              const inToday = step.mechanics.some(key => activeMechanics.has(key));
               const statusClass = isCurrent
                 ? 'level-btn-current'
                 : isDone
@@ -123,6 +149,14 @@ export function TutorialSectionModal({
                     )}
                   </span>
                   <span class="flex-1">{teaches}</span>
+                  {inToday && (
+                    <span
+                      data-testid={`tutorial-badge-today-${idx + 1}`}
+                      class="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-400/50"
+                    >
+                      {t('help.in_todays_puzzle')}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -134,15 +168,18 @@ export function TutorialSectionModal({
         </div>
 
         <div class="px-5 py-3 border-t border-[rgba(217,255,226,0.15)] bg-[rgba(0,9,36,0.2)] flex justify-between gap-2 shrink-0">
+          {/* Leaving the section on purpose, so it is coloured like an exit
+              rather than like the other actions in here. */}
           <button
             data-testid="btn-tutorial-play-daily"
-            class="btn-secondary text-xs px-4 py-1.5"
+            class="tutorial-skip-btn text-xs px-4 py-1.5"
+            title={t('tutorial.play_daily_title')}
             onClick={() => {
               onPlayDaily();
               onClose();
             }}
           >
-            {t('tutorial.play_daily')}
+            {t('tutorial.play_daily')} ↪
           </button>
           {next ? (
             <button

@@ -1171,6 +1171,31 @@ body,
   padding-top: 0.15rem;
 }
 
+/* Leaving the tutorials for the daily level is a way out, not one of the
+   actions inside the section, so it is amber instead of mint. */
+.tutorial-skip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffd79a;
+  background: rgba(92, 54, 0, 0.45);
+  border: 1.5px solid rgba(255, 196, 110, 0.4);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tutorial-skip-btn:hover {
+  background: rgba(120, 72, 0, 0.7);
+  border-color: #ffc46e;
+  color: #ffffff;
+}
+
 .tutorial-lesson-solved {
   font-size: 0.8rem;
   font-weight: 700;

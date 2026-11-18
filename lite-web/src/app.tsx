@@ -2453,6 +2453,7 @@ export function App() {
                     levelKey={currentLevelKey}
                     solved={won}
                     onOpenSection={() => setShowTutorialModal(true)}
+                    onOpenControls={() => setShowShortcuts(true)}
                   />
                 </Suspense>
               )}
@@ -2579,8 +2580,10 @@ export function App() {
               done={tutorialDone}
               currentLevelKey={currentLevelKey}
               isPlayingTutorial={isTutorialMode}
+              dailyDate={isDailyMode ? dailyDate : undefined}
               onSelectStep={(key) => loadLevel(key, 'tutorial')}
               onPlayDaily={() => loadDailyLevel()}
+              onOpenHelp={() => setShowHelpModal(true)}
               iconUrl={iconUrl}
             />
           )}
