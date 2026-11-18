@@ -145,7 +145,7 @@ func _on_copy_key_pressed() -> void:
 
 func _on_restore_key_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	var key := RestoreKey.text
+	var key := RestoreKey.text.strip_edges()
 	KeyRestored.text = tr("KEY_RESTORED_FAILED")
 	if key == "" or StoreIntegrations.playfab == null:
 		KeyRestored.show()
@@ -154,6 +154,8 @@ func _on_restore_key_pressed() -> void:
 	var ok := await StoreIntegrations.playfab.restore_custom_id(key)
 	if ok:
 		KeyRestored.text = tr("KEY_RESTORED_SUCCESS")
+		if CopyKey.text != "":
+			CopyKey.text = key
 	else:
 		AudioManager.play_sfx("error")
 	KeyRestored.show()

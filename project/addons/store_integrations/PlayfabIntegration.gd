@@ -505,6 +505,8 @@ func get_custom_id() -> String:
 
 # Tries to merge with the given id
 func restore_custom_id(id: String) -> bool:
+	if not SteamManager.enabled:
+		return false
 	# Let's get ticket before, because failing here is fine
 	var ticket: Dictionary = SteamManager.steam.getAuthSessionTicket()
 	var res_ticket: Array = await SteamManager.steam.get_auth_session_ticket_response
