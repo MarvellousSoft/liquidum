@@ -598,6 +598,7 @@ offset_left = -643.0
 offset_top = 404.0
 offset_right = -300.0
 offset_bottom = 506.0
+mouse_filter = 2
 alignment = 2
 
 [node name="HardLevelsDesc" type="HBoxContainer" parent="IconCaptions" unique_id=2046929487]
