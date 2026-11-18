@@ -175,10 +175,9 @@ func setup(hub_ref, section: int, unlocked_levels: int, extra_: bool) -> void:
 		var button = LEVELBUTTON.instantiate()
 		Levels.add_child(button)
 		position_level_button(button, total_levels + 1, total_levels + 1)
-		var enabled: bool = force_unlocked.is_empty() and (ExtraLevelLister.count_completed_section_levels(section) == total_levels or Global.is_dev_mode() or Profile.get_option("unlock_everything"))
-		if ExtraLevelLister.is_pandora_section(section):
-			enabled = true
-		button.setup(my_section, -1, enabled, not force_unlocked.is_empty(), true)
+		var section_disabled: bool = level_lister.section_disabled(section)
+		var enabled: bool = not section_disabled and (ExtraLevelLister.count_completed_section_levels(section) == total_levels or Global.is_dev_mode() or Profile.get_option("unlock_everything") or ExtraLevelLister.is_pandora_section(section))
+		button.setup(my_section, -1, enabled, section_disabled, true)
 		button.mouse_exited.connect(_on_level_button_mouse_exited)
 		button.mouse_entered.connect(_on_level_button_mouse_entered.bind(-1))
 		button.loaded_endless.connect(_on_loaded_endless)

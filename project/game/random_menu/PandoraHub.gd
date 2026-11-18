@@ -190,7 +190,7 @@ func _update_unlocked() -> void:
 		all_done = true
 	var pandora := ExtraLevelLister.pandora_section()
 	var desc_to_completed := {}
-	for i in ExtraLevelLister.count_section_levels(pandora):
+	for i in range(1, ExtraLevelLister.count_section_levels(pandora) + 1):
 		var save := FileManager.load_level(ExtraLevelLister.level_name(pandora, i))
 		if save != null and save.is_completed():
 			var data := FileManager.load_extra_level_data(pandora, i)

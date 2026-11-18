@@ -159,7 +159,15 @@ func endless_completed(section: int) -> int:
 		return UserData.current().get_endless_completed(section)
 
 func is_free(section: int) -> bool:
-	return android_payment(section) == ""
+	return steam_dlc(section) == -1
+
+func get_level_tutorial(section: int, level: int) -> String:
+	var data := get_level_data(section, level)
+	if not data.tutorial.is_empty():
+		return data.tutorial
+	if section_disabled(section):
+		return _config(section).get_value("section", "trial_tutorials", {}).get(level, "")
+	return ""
 
 func count_completed_levels(profile_name: String) -> int:
 	var count := 0

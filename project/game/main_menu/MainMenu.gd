@@ -267,7 +267,7 @@ func _on_buy_full_game_pressed() -> void:
 
 func _on_web_button_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	var key := await StoreIntegrations.playfab.get_custom_id()
+	var key := await StoreIntegrations.playfab.get_custom_id() if StoreIntegrations.playfab != null else ""
 	var url := "https://marvelloussoft.github.io/liquidum/"
 	if key != "":
 		url += "?id=" + key.uri_encode()

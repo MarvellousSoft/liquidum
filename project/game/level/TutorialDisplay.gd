@@ -60,17 +60,13 @@ func setup():
 	%Forward.visible = tutorials.size() > 1
 
 func show_level_tutorial(section: int, level: int, is_extra := false) -> void:
-	var data
-	if is_extra:
-		data = FileManager.load_extra_level_data(section, level)
-	else:
-		data = FileManager.load_campaign_level_data(section, level)
-	if not data.tutorial.is_empty() and Global.has_tutorial(data.tutorial):
-		var at := tutorials.find(data.tutorial)
+	var tutorial: String = ExtraLevelLister.get_level_tutorial(section, level) if is_extra else FileManager.load_campaign_level_data(section, level).tutorial
+	if not tutorial.is_empty() and Global.has_tutorial(tutorial):
+		var at := tutorials.find(tutorial)
 		if at == -1:
 			# A trial level of a pack that isn't owned: its own rule stays
 			# reachable from inside it, it just isn't listed with the rest
-			tutorials.append(data.tutorial)
+			tutorials.append(tutorial)
 			at = tutorials.size() - 1
 			%Back.visible = tutorials.size() > 1
 			%Forward.visible = tutorials.size() > 1

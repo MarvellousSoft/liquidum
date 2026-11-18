@@ -9,8 +9,9 @@ func _ready():
 	populate_flairs()
 	update_info()
 	update_flair()
-	StoreIntegrations.playfab.display_name_changed.connect(func(_name: String):
-		update_info())
+	if StoreIntegrations.playfab != null:
+		StoreIntegrations.playfab.display_name_changed.connect(func(_name: String):
+			update_info())
 	
 
 func reset_flairs():
@@ -46,9 +47,7 @@ func update_flair():
 	if cur_flair:
 		%FlairContainer.show()
 		%Flair.text = "  %s  " % cur_flair.text
-		%Flair.add_theme_color_override("font_color", cur_flair.color)
-		var contrast_color = Global.get_contrast_background(cur_flair.color)
-		%Flair.get_node("BG").modulate = contrast_color
+		cur_flair.apply_to_label(%Flair)
 		var amount = FlairManager.get_flair_amount() 
 		if amount > 1:
 			%Plus.show()
@@ -118,7 +117,7 @@ func _on_upload_name_pressed() -> void:
 	%NameEdit.hide()
 	%Name.text = new_name
 	%Name.show()
-	if await StoreIntegrations.playfab.change_display_name(new_name):
+	if StoreIntegrations.playfab != null and await StoreIntegrations.playfab.change_display_name(new_name):
 		%NameLoading.hide()
 		%EditButton.show()
 	else:
@@ -136,7 +135,7 @@ func _on_name_edit_text_submitted(_new_text):
 
 func _on_copy_key_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	var key := await StoreIntegrations.playfab.get_custom_id()
+	var key := await StoreIntegrations.playfab.get_custom_id() if StoreIntegrations.playfab != null else ""
 	if key == "":
 		AudioManager.play_sfx("error")
 		return
@@ -148,7 +147,7 @@ func _on_restore_key_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
 	var key := RestoreKey.text
 	KeyRestored.text = tr("KEY_RESTORED_FAILED")
-	if key == "":
+	if key == "" or StoreIntegrations.playfab == null:
 		KeyRestored.show()
 		AudioManager.play_sfx("error")
 		return
@@ -162,7 +161,7 @@ func _on_restore_key_pressed() -> void:
 
 func _on_open_web_pressed() -> void:
 	AudioManager.play_sfx("button_pressed")
-	var key := await StoreIntegrations.playfab.get_custom_id()
+	var key := await StoreIntegrations.playfab.get_custom_id() if StoreIntegrations.playfab != null else ""
 	var url := "https://marvelloussoft.github.io/liquidum/"
 	if key != "":
 		url += "?id=" + key.uri_encode()

@@ -200,9 +200,9 @@ func _ready():
 					$SteamRichPresence.set_display("#ExtraIslandLoc")
 					$SteamRichPresence.set_key_value("section", str(extra_section))
 				$SteamRichPresence.set_key_value("level", str(extra_level_number))
-				var data = FileManager.load_extra_level_data(extra_section, extra_level_number)
-				if not data.tutorial.is_empty():
-					if add_tutorial(data.tutorial):
+				var tutorial := ExtraLevelLister.get_level_tutorial(extra_section, extra_level_number)
+				if not tutorial.is_empty():
+					if add_tutorial(tutorial):
 						%TutorialContainer.show()
 			else:
 				# Assuming we're on playtesting

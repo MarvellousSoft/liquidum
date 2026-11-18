@@ -1900,11 +1900,11 @@ func _sudoku_status() -> E.HintStatus:
 func _symbols_values() -> Dictionary:
 	var symbol_to_vals : Dictionary = {}
 	var add_occ := func(s: String, cur: float, empty: float) -> void:
+		s = s.strip_edges()
+		if s.length() >= 2 and ((s[0] == '{' and s[-1] == '}') or (s[0] == '-' and s[-1] == '-')):
+			s = s.substr(1, s.length() - 2).strip_edges()
 		if s == "":
 			return
-		s = s.strip_edges()
-		if (s[0] == '{' and s[-1] == '}') or (s[0] == '-' and s[-1] == '-'):
-			s = s.substr(1, s.length() - 2)
 		if not symbol_to_vals.has(s):
 			symbol_to_vals[s] = []
 		symbol_to_vals[s].append(Vector2(cur, cur + empty))

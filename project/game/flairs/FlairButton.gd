@@ -8,9 +8,7 @@ var id
 func setup(flair_data):
 	id = flair_data.id
 	%Flair.text = "  %s  " % flair_data.text
-	%Flair.self_modulate = flair_data.color
-	var contrast_color = Global.get_contrast_background(flair_data.color)
-	%Flair.get_node("BG").modulate = contrast_color
+	flair_data.apply_to_label(%Flair)
 	%Reason.text = flair_data.description
 
 

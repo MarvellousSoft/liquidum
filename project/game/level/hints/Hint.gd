@@ -259,7 +259,7 @@ func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			toggle_fade()
-		elif hint_value != -1:
+		elif hint_value != -1 and alt_text == "":
 			left_clicked.emit()
 
 

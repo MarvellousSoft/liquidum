@@ -46,9 +46,7 @@ func update_flair():
 	if cur_flair:
 		%FlairContainer.show()
 		%Flair.text = "  %s  " % cur_flair.text
-		%Flair.add_theme_color_override("font_color", cur_flair.color)
-		var contrast_color = Global.get_contrast_background(cur_flair.color)
-		%Flair.get_node("BG").modulate = contrast_color
+		cur_flair.apply_to_label(%Flair)
 		var amount = FlairManager.get_flair_amount() 
 		if amount > 1:
 			%Plus.show()

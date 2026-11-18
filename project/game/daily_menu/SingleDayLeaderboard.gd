@@ -161,10 +161,7 @@ func display_day(data: RecurringMarathon.LeaderboardData, date: String) -> void:
 		if sflair != null:
 			flair.tooltip_text = sflair.description
 			flair.text = " %s " % [sflair.text]
-			flair.add_theme_color_override("font_color", sflair.color)
-			var contrast_color := Global.get_contrast_background(sflair.color)
-			contrast_color.a = 0.75
-			flair.get_node("BG").modulate = contrast_color
+			sflair.apply_to_label(flair, 0.75)
 			var plus: Label = flair.get_node("Plus")
 			plus.visible = item.flair.extra_flairs > 0
 			plus.text = "+%d" % [item.flair.extra_flairs]

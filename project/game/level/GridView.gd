@@ -766,7 +766,7 @@ func get_prev_status() -> PreviousStatus:
 
 
 func try_to_fill_column_with_air(col : int) -> void:
-	if grid_logic and grid_logic.get_col_hint_status(col, E.HintContent.Water) == E.HintStatus.Satisfied:
+	if grid_logic and grid_logic.col_hints()[col].water_count != -1 and _inner_col_status(col, E.HintContent.Water) == E.HintStatus.Satisfied:
 		for i in rows:
 			var cell_data = grid_logic.get_cell(i, col)
 			for corner in E.Corner.values():
@@ -776,7 +776,7 @@ func try_to_fill_column_with_air(col : int) -> void:
 
 
 func try_to_fill_row_with_air(row : int) -> void:
-	if grid_logic and grid_logic.get_row_hint_status(row, E.HintContent.Water) == E.HintStatus.Satisfied:
+	if grid_logic and grid_logic.row_hints()[row].water_count != -1 and _inner_row_status(row, E.HintContent.Water) == E.HintStatus.Satisfied:
 		for j in columns:
 			var cell_data = grid_logic.get_cell(row, j)
 			for corner in E.Corner.values():
