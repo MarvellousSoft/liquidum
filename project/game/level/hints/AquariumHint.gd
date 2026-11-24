@@ -88,7 +88,9 @@ func set_should_be_visible(b: bool) -> void:
 func set_values(aq_size: float, amount: int, current: int, editor_mode: bool) -> void:
 	VisibilityButton.visible = editor_mode
 	aquarium_size = aq_size
-	Size.text = str(aq_size)
+	# str() on a float always keeps a decimal in Godot 4, so whole sizes came
+	# out as "1.0". hint_to_str drops it and keeps halves like 1.5.
+	Size.text = Global.hint_to_str(aq_size)
 	if aq_size <= 0:
 		%Water.texture = null
 		%WallDiag.hide()
