@@ -3259,3 +3259,87 @@ body.modal-open {
 .animate-fade-in {
   animation: simpleFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ==========================================================================
+   Scroll Down Indicator Button (Shown when page extends below viewport)
+   ========================================================================== */
+.scroll-down-btn {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--game-navy);
+  background-color: var(--game-teal);
+  color: var(--game-mint);
+  box-shadow: 0 3px 0 var(--game-navy), 0 6px 16px rgba(0, 9, 36, 0.35);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  translate: 0 8px;
+  transition: opacity 0.2s ease, visibility 0.2s ease, translate 0.2s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.scroll-down-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  translate: 0 0;
+}
+
+.scroll-down-btn:hover {
+  background-color: var(--game-teal-hover);
+  transform: translateY(-2px);
+}
+
+.scroll-down-btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+.scroll-down-btn:focus-visible {
+  outline: 3px solid var(--game-foam);
+  outline-offset: 3px;
+}
+
+.theme-dark .scroll-down-btn {
+  border-color: rgba(171, 255, 209, 0.35);
+  box-shadow: 0 3px 0 rgba(0, 9, 36, 0.8), 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 640px) {
+  .scroll-down-btn {
+    right: max(1.5rem, env(safe-area-inset-right, 0px));
+    bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 1024px) {
+  .scroll-down-btn {
+    bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (pointer: coarse) {
+  .scroll-down-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-down-btn {
+    transition: opacity 0.01ms, visibility 0.01ms;
+    translate: 0 0;
+  }
+}

@@ -42,6 +42,8 @@ export function Grid({
   const [hoveredHint, setHoveredHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
   const [pinnedHint, setPinnedHint] = useState<{ type: 'row' | 'col'; index: number } | null>(null);
   const lastContextMenuTimeRef = useRef<number>(0);
+  const activeTouchCellPointerIdRef = useRef<number | null>(null);
+  const hintPointerStartRef = useRef<{ x: number; y: number } | null>(null);
   const activeHoveredHint = hoveredCell ? null : (pinnedHint ?? hoveredHint);
 
   useEffect(() => {
@@ -57,10 +59,47 @@ export function Grid({
     return () => window.removeEventListener('pointerdown', handlePointerDown);
   }, [pinnedHint]);
 
-  const handleHintClick = (type: 'row' | 'col', index: number) => {
+  const handleHintClick = (type: 'row' | 'col', index: number, e?: MouseEvent) => {
     if (Date.now() - lastContextMenuTimeRef.current < 300) return;
+    if (e && hintPointerStartRef.current) {
+      const dist = Math.hypot(
+        e.clientX - hintPointerStartRef.current.x,
+        e.clientY - hintPointerStartRef.current.y
+      );
+      hintPointerStartRef.current = null;
+      if (dist > 10) return;
+    }
     setPinnedHint(prev => (prev?.type === type && prev.index === index ? null : { type, index }));
   };
+
+  const handleHintPointerDown = (e: PointerEvent) => {
+    if (e.pointerType === 'touch') setHoveredHint(null);
+    if (e.button === 2) {
+      e.preventDefault();
+      e.stopPropagation();
+      hintPointerStartRef.current = null;
+      return;
+    }
+    hintPointerStartRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const getHintInteractionHandlers = (type: 'row' | 'col', index: number) => ({
+    onClick: (e: MouseEvent) => {
+      e.stopPropagation();
+      handleHintClick(type, index, e);
+    },
+    onPointerEnter: (e: PointerEvent) => {
+      if (e.pointerType !== 'touch') setHoveredHint({ type, index });
+    },
+    onPointerLeave: () => setHoveredHint(null),
+    onPointerDown: handleHintPointerDown,
+    onContextMenu: (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      lastContextMenuTimeRef.current = Date.now();
+      toggleDim(type, index, 'all');
+    },
+  });
 
   const [dimmedHints, setDimmedHints] = useState<Set<string>>(new Set());
 
@@ -491,14 +530,31 @@ export function Grid({
   return (
     <div
       class={rootClasses}
-      style={{
-        touchAction: 'none',
-        ...(dynamicCellSize ? { ['--cell-size' as any]: dynamicCellSize } : {}),
+      style={dynamicCellSize ? { ['--cell-size' as any]: dynamicCellSize } : undefined}
+      onPointerDown={(e) => {
+        if (e.pointerType !== 'touch') return;
+        const target = e.target as HTMLElement | null;
+        if (target?.closest?.('[data-row][data-col]')) {
+          activeTouchCellPointerIdRef.current = e.pointerId;
+        } else {
+          activeTouchCellPointerIdRef.current = null;
+        }
+      }}
+      onPointerUp={(e) => {
+        if (activeTouchCellPointerIdRef.current === e.pointerId) {
+          activeTouchCellPointerIdRef.current = null;
+        }
+      }}
+      onPointerCancel={(e) => {
+        if (activeTouchCellPointerIdRef.current === e.pointerId) {
+          activeTouchCellPointerIdRef.current = null;
+        }
       }}
       onPointerMove={(e) => {
         if (e.pointerType !== 'touch') return;
+        if (activeTouchCellPointerIdRef.current !== e.pointerId) return;
         const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-        const cellEl = target?.closest('[data-row]') as HTMLElement | null;
+        const cellEl = target?.closest('[data-row][data-col]') as HTMLElement | null;
         if (!cellEl) return;
         const rStr = cellEl.getAttribute('data-row');
         const cStr = cellEl.getAttribute('data-col');
@@ -554,27 +610,7 @@ export function Grid({
                 data-dimmed={isColDimmed(c) ? 'true' : 'false'}
                 class={`col-hint cursor-pointer ${showBoatHint ? 'has-boat-hint' : ''} ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''} ${isLastCol ? 'is-last-col' : ''}`}
                 title={cellTitle}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleHintClick('col', c);
-                }}
-                onPointerEnter={(e) => {
-                  if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
-                }}
-                onPointerLeave={() => setHoveredHint(null)}
-                onPointerDown={(e) => {
-                  if (e.pointerType === 'touch') setHoveredHint(null);
-                  if (e.button === 2) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  lastContextMenuTimeRef.current = Date.now();
-                  toggleDim('col', c, 'all');
-                }}
+                {...getHintInteractionHandlers('col', c)}
               >
                 {showBoatHint && (
                   <span
@@ -661,27 +697,7 @@ export function Grid({
               data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
               class={`row-hint cursor-pointer ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''} ${isLastRow ? 'is-last-row' : ''}`}
               title={cellTitle}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleHintClick('row', r);
-              }}
-              onPointerEnter={(e) => {
-                if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
-              }}
-              onPointerLeave={() => setHoveredHint(null)}
-              onPointerDown={(e) => {
-                if (e.pointerType === 'touch') setHoveredHint(null);
-                if (e.button === 2) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              }}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                lastContextMenuTimeRef.current = Date.now();
-                toggleDim('row', r, 'all');
-              }}
+              {...getHintInteractionHandlers('row', r)}
             >
               {hasDualRowHints ? (
                 <>
@@ -844,27 +860,7 @@ export function Grid({
                 data-dimmed={isRowDimmed(r) ? 'true' : 'false'}
                 class={`row-hint row-hint-opposite cursor-pointer flex items-center justify-center ${isRowHighlighted ? 'hint-hovered' : ''} ${isRowDimmed(r) ? 'hint-dimmed' : ''} ${isLastRow ? 'is-last-row' : ''}`}
                 title={getOppositeRowHoverText(r)}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleHintClick('row', r);
-                }}
-                onPointerEnter={(e) => {
-                  if (e.pointerType !== 'touch') setHoveredHint({ type: 'row', index: r });
-                }}
-                onPointerLeave={() => setHoveredHint(null)}
-                onPointerDown={(e) => {
-                  if (e.pointerType === 'touch') setHoveredHint(null);
-                  if (e.button === 2) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  lastContextMenuTimeRef.current = Date.now();
-                  toggleDim('row', r, 'all');
-                }}
+                {...getHintInteractionHandlers('row', r)}
               >
                 {renderOppositeRowHint(r)}
               </div>
@@ -892,27 +888,7 @@ export function Grid({
                   data-dimmed={isColDimmed(c) ? 'true' : 'false'}
                   class={`col-hint col-hint-opposite cursor-pointer flex items-center justify-center ${isColHighlighted ? 'hint-hovered' : ''} ${isColDimmed(c) ? 'hint-dimmed' : ''} ${isLastCol ? 'is-last-col' : ''}`}
                   title={getOppositeColHoverText(c)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleHintClick('col', c);
-                  }}
-                  onPointerEnter={(e) => {
-                    if (e.pointerType !== 'touch') setHoveredHint({ type: 'col', index: c });
-                  }}
-                  onPointerLeave={() => setHoveredHint(null)}
-                  onPointerDown={(e) => {
-                    if (e.pointerType === 'touch') setHoveredHint(null);
-                    if (e.button === 2) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    lastContextMenuTimeRef.current = Date.now();
-                    toggleDim('col', c, 'all');
-                  }}
+                  {...getHintInteractionHandlers('col', c)}
                 >
                   {renderOppositeColHint(c)}
                 </div>

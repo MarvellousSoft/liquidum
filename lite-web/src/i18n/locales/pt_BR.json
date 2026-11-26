@@ -386,6 +386,7 @@
     "test_levels_desc": "Níveis fixos para teste (serão removidos futuramente):",
     "daily_time_left_tooltip": "Tempo restante para resolver o desafio diário de hoje",
     "daily_fallback_title": "Desafio Diário",
-    "daily_fallback_desc": "Resolva o desafio diário o mais rápido que puder com o mínimo de erros!"
+    "daily_fallback_desc": "Resolva o desafio diário o mais rápido que puder com o mínimo de erros!",
+    "scroll_down": "Rolar para baixo"
   }
 }

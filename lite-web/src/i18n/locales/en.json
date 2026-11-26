@@ -386,6 +386,7 @@
     "test_levels_desc": "Fixed levels for testing (will be removed later):",
     "daily_time_left_tooltip": "Time remaining to solve today's daily puzzle",
     "daily_fallback_title": "Daily Puzzle",
-    "daily_fallback_desc": "Solve the daily puzzle as fast as you can with minimal mistakes!"
+    "daily_fallback_desc": "Solve the daily puzzle as fast as you can with minimal mistakes!",
+    "scroll_down": "Scroll down"
   }
 }

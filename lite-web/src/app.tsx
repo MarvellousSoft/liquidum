@@ -198,45 +198,106 @@ export function App() {
 
   const [showMobileSidebar, setShowMobileSidebar] = useState<boolean>(false);
   const [mobileTooltip, setMobileTooltip] = useState<string | null>(null);
+  const [showScrollDown, setShowScrollDown] = useState<boolean>(false);
+  const scrollDownBtnRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     let timeoutId: number;
+    let pendingTouch: {
+      pointerId: number;
+      startX: number;
+      startY: number;
+      moved: boolean;
+      target: EventTarget | null;
+    } | null = null;
+
+    const showTooltipForTarget = (targetEl: HTMLElement | null) => {
+      const titleEl = targetEl?.closest?.('[title]') as HTMLElement | null;
+      if (!titleEl || titleEl.hasAttribute('data-no-mobile-tooltip')) {
+        setMobileTooltip(null);
+        return;
+      }
+
+      const title = titleEl.getAttribute('title');
+      if (!title) {
+        setMobileTooltip(null);
+        return;
+      }
+
+      // Remove trailing keyboard shortcuts like " (1)" or " (Space)"
+      // Only matches uppercase letters, digits, Space, Tab, Esc, Del, commas, and ?
+      const cleanTitle = title.replace(/\s*\((?:[A-Z0-9?]|Space|Tab|Esc|Del|,\s*)+\)$/, '');
+
+      // Ignore trivial tooltips on mobile
+      const ignoreList = ['menu', 'close', 'close menu', 'close modal', 'fechar'];
+      if (ignoreList.includes(cleanTitle.trim().toLowerCase())) {
+        setMobileTooltip(null);
+      } else {
+        setMobileTooltip(cleanTitle);
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = window.setTimeout(() => {
+          setMobileTooltip(null);
+        }, 3000);
+      }
+    };
+
     const handlePointerDown = (e: PointerEvent) => {
       // Only handle touch
-      if (e.pointerType === 'mouse') return;
+      if (e.pointerType === 'mouse') {
+        pendingTouch = null;
+        return;
+      }
 
-      const target = e.target as HTMLElement;
-      const titleEl = target.closest('[title]');
+      pendingTouch = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        target: e.target,
+      };
+    };
 
-      if (titleEl) {
-        const title = titleEl.getAttribute('title');
-        if (title) {
-          // Remove trailing keyboard shortcuts like " (1)" or " (Space)"
-          // Only matches uppercase letters, digits, Space, Tab, Esc, Del, commas, and ?
-          const cleanTitle = title.replace(/\s*\((?:[A-Z0-9?]|Space|Tab|Esc|Del|,\s*)+\)$/, '');
-
-          // Ignore trivial tooltips on mobile
-          const ignoreList = ['menu', 'close', 'close menu', 'close modal', 'fechar'];
-          if (ignoreList.includes(cleanTitle.trim().toLowerCase())) {
-            setMobileTooltip(null);
-          } else {
-            setMobileTooltip(cleanTitle);
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = window.setTimeout(() => {
-              setMobileTooltip(null);
-            }, 3000);
-          }
-        }
-      } else {
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!pendingTouch || e.pointerId !== pendingTouch.pointerId) return;
+      if (Math.hypot(e.clientX - pendingTouch.startX, e.clientY - pendingTouch.startY) > 10) {
+        pendingTouch.moved = true;
         setMobileTooltip(null);
       }
     };
 
-    document.addEventListener('pointerdown', handlePointerDown);
+    const handlePointerCancel = (e: PointerEvent) => {
+      if (pendingTouch && e.pointerId === pendingTouch.pointerId) {
+        pendingTouch = null;
+      }
+      setMobileTooltip(null);
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+      if (!pendingTouch || e.pointerId !== pendingTouch.pointerId) return;
+      const touch = pendingTouch;
+      pendingTouch = null;
+
+      const dist = Math.hypot(e.clientX - touch.startX, e.clientY - touch.startY);
+      if (touch.moved || dist > 10) {
+        setMobileTooltip(null);
+        return;
+      }
+
+      const targetEl = (e.target as HTMLElement | null) ?? (touch.target as HTMLElement | null);
+      showTooltipForTarget(targetEl);
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown, true);
+    document.addEventListener('pointermove', handlePointerMove, true);
+    document.addEventListener('pointercancel', handlePointerCancel, true);
+    document.addEventListener('pointerup', handlePointerUp, true);
     return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('pointerdown', handlePointerDown, true);
+      document.removeEventListener('pointermove', handlePointerMove, true);
+      document.removeEventListener('pointercancel', handlePointerCancel, true);
+      document.removeEventListener('pointerup', handlePointerUp, true);
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
@@ -1743,6 +1804,58 @@ export function App() {
   };
 
   const isTutorialMode = gameMode === 'tutorial' && isTutorialLevel(currentLevelKey);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const updateScrollDown = () => {
+      const doc = document.documentElement;
+      const remaining = doc.scrollHeight - window.scrollY - window.innerHeight;
+      setShowScrollDown(remaining > 16);
+    };
+
+    let rafId: number | null = null;
+    const scheduleUpdate = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        updateScrollDown();
+      });
+    };
+
+    updateScrollDown();
+    window.addEventListener('scroll', updateScrollDown, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+
+    let ro: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== 'undefined' && document.body) {
+      ro = new ResizeObserver(scheduleUpdate);
+      ro.observe(document.body);
+    }
+
+    return () => {
+      window.removeEventListener('scroll', updateScrollDown);
+      window.removeEventListener('resize', scheduleUpdate);
+      ro?.disconnect();
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+    };
+  }, [gridData, won, isTutorialMode, isDailyMode, isLoadingDaily]);
+
+  useEffect(() => {
+    if (!showScrollDown && typeof document !== 'undefined' && document.activeElement === scrollDownBtnRef.current) {
+      scrollDownBtnRef.current?.blur();
+    }
+  }, [showScrollDown]);
+
+  const handleScrollDown = () => {
+    const prefersReducedMotion =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
+      settingsRef.current.skip_animations;
+    window.scrollBy({
+      top: Math.max(240, Math.round(window.innerHeight * 0.7)),
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  };
   const levelKeys = TEST_LEVEL_KEYS;
   const currentIndex = levelKeys.indexOf(currentLevelKey);
   // inside the onboarding section "next" follows the lesson order, which is
@@ -2633,10 +2746,31 @@ export function App() {
       </ErrorBoundary>
 
       {mobileTooltip && (
-        <div class="fixed bottom-24 left-1/2 z-[10000] bg-[rgba(0,9,36,0.95)] border border-[rgba(217,255,226,0.3)] text-[var(--game-mint)] px-4 py-2.5 rounded-xl text-sm shadow-[0_8px_32px_rgba(0,0,0,0.5)] max-w-[90vw] text-center pointer-events-none mobile-tooltip-anim font-game whitespace-pre-wrap lg:hidden">
+        <div
+          data-testid="mobile-tooltip"
+          class="fixed bottom-24 left-1/2 z-[10000] bg-[rgba(0,9,36,0.95)] border border-[rgba(217,255,226,0.3)] text-[var(--game-mint)] px-4 py-2.5 rounded-xl text-sm shadow-[0_8px_32px_rgba(0,0,0,0.5)] max-w-[90vw] text-center pointer-events-none mobile-tooltip-anim font-game whitespace-pre-wrap lg:hidden"
+        >
           {mobileTooltip}
         </div>
       )}
+
+      {/* Scroll Down Indicator (when content extends below viewport) */}
+      <button
+        ref={scrollDownBtnRef}
+        type="button"
+        data-testid="btn-scroll-down"
+        data-no-mobile-tooltip
+        onClick={handleScrollDown}
+        class={`scroll-down-btn ${showScrollDown ? 'is-visible' : ''}`}
+        title={t('game.scroll_down')}
+        aria-label={t('game.scroll_down')}
+        aria-hidden={!showScrollDown}
+        tabIndex={showScrollDown ? 0 : -1}
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
 
       {/* Persistent Desktop Steam Link */}
       <a 
