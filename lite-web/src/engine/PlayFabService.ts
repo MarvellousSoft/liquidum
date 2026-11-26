@@ -26,6 +26,15 @@ import {
 export const PLAYFAB_TITLE_ID = "3D3A0";
 export const DAILY_STATISTIC_NAME = "daily";
 export const BASE_DAILY_DATE_UTC = Date.UTC(2024, 3, 16); // 2024-04-16 00:00:00 UTC
+const OPTIMISTIC_SCORE_TTL_MS = 5 * 60 * 1000;
+
+interface OptimisticScoreEntry {
+  playFabId: string;
+  seconds: number;
+  mistakes: number;
+  rawScore: number;
+  timestamp: number;
+}
 
 export interface LeaderboardEntry {
   position: number; // 1-indexed rank
@@ -310,6 +319,64 @@ export class PlayFabService {
   private profileListeners: Set<(profile: PlayerProfileEvent) => void> = new Set();
   private streakListeners: Set<(streak: StreakData) => void> = new Set();
   private cachedCloudStreaks: CloudStreakMap | null = null;
+  private optimisticScores: Map<number, OptimisticScoreEntry> = new Map();
+
+  private getOptimisticStorageKey(version: number): string {
+    return `liquidum_optimistic_score_${version}`;
+  }
+
+  private saveOptimisticScore(version: number, entry: OptimisticScoreEntry): void {
+    this.optimisticScores.set(version, entry);
+    const store = this.storage || (typeof localStorage !== "undefined" ? localStorage : null);
+    if (store) {
+      try {
+        store.setItem(this.getOptimisticStorageKey(version), JSON.stringify(entry));
+      } catch {
+        // ignore storage quota errors
+      }
+    }
+  }
+
+  private getOptimisticScore(version: number): OptimisticScoreEntry | null {
+    let entry = this.optimisticScores.get(version) ?? null;
+    if (!entry) {
+      const store = this.storage || (typeof localStorage !== "undefined" ? localStorage : null);
+      if (store) {
+        try {
+          const raw = store.getItem(this.getOptimisticStorageKey(version));
+          if (raw) {
+            entry = JSON.parse(raw) as OptimisticScoreEntry;
+            this.optimisticScores.set(version, entry);
+          }
+        } catch {
+          this.clearOptimisticScore(version);
+          return null;
+        }
+      }
+    }
+
+    if (!entry) return null;
+    if (Date.now() - entry.timestamp > OPTIMISTIC_SCORE_TTL_MS) {
+      this.clearOptimisticScore(version);
+      return null;
+    }
+    if (entry.playFabId && this.currentPlayFabId && entry.playFabId !== this.currentPlayFabId) {
+      return null;
+    }
+    return entry;
+  }
+
+  private clearOptimisticScore(version: number): void {
+    this.optimisticScores.delete(version);
+    const store = this.storage || (typeof localStorage !== "undefined" ? localStorage : null);
+    if (store) {
+      try {
+        store.removeItem(this.getOptimisticStorageKey(version));
+      } catch {
+        // ignore
+      }
+    }
+  }
 
   constructor(storage?: Storage) {
     this.storage = storage || (typeof localStorage !== "undefined" ? localStorage : null);
@@ -548,6 +615,47 @@ export class PlayFabService {
       this.currentFlair = idToFlair[this.currentPlayFabId];
     }
 
+    if (entries.some((e) => e.isCurrentUser)) {
+      this.clearOptimisticScore(targetVersion);
+      return entries;
+    }
+
+    const opt = this.getOptimisticScore(targetVersion);
+    if (opt) {
+      const isOutsideTopPage =
+        entries.length >= maxResults &&
+        entries.length > 0 &&
+        opt.rawScore < entries[entries.length - 1].rawScore;
+
+      if (!isOutsideTopPage) {
+        const pid = this.currentPlayFabId || opt.playFabId;
+        const optimisticEntry: LeaderboardEntry = {
+          position: 1,
+          playFabId: pid,
+          displayName: this.currentDisplayName || getGeneratedName(pid),
+          avatarUrl: this.currentAvatarUrl,
+          flair: (pid ? idToFlair[pid] : null) || this.currentFlair || null,
+          seconds: opt.seconds,
+          mistakes: opt.mistakes,
+          rawScore: opt.rawScore,
+          isCurrentUser: true,
+        };
+
+        const insertIdx = entries.findIndex((e) => opt.rawScore > e.rawScore);
+        const merged = [...entries];
+        if (insertIdx === -1) {
+          merged.push(optimisticEntry);
+        } else {
+          merged.splice(insertIdx, 0, optimisticEntry);
+        }
+
+        return merged.slice(0, maxResults).map((entry, idx) => ({
+          ...entry,
+          position: idx + 1,
+        }));
+      }
+    }
+
     return entries;
   }
 
@@ -604,6 +712,14 @@ export class PlayFabService {
         }
 
         markDailyScoreSubmitted(version, this.storage || undefined);
+        const decoded = decodeDailyScore(encodedValue);
+        this.saveOptimisticScore(version, {
+          playFabId: this.currentPlayFabId || "",
+          seconds: decoded.seconds,
+          mistakes: decoded.mistakes,
+          rawScore: encodedValue,
+          timestamp: Date.now(),
+        });
         resolve({ submitted: true });
       });
     });
@@ -751,6 +867,7 @@ export class PlayFabService {
     this.currentAvatarUrl = null;
     this.currentFlair = null;
     this.cachedCloudStreaks = null;
+    this.optimisticScores.clear();
     this.loginPromise = null;
 
     const res = await this.login(trimmedId);

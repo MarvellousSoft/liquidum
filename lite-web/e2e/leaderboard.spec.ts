@@ -523,4 +523,78 @@ test.describe("Leaderboard & PlayFab E2E Tests", () => {
     await expect(page.locator('[data-testid="leaderboard-modal"]')).toBeVisible({ timeout: 5000 });
     await expect(page.locator('[data-testid="leaderboard-modal"]')).toContainText("Daily Leaderboard");
   });
+
+  test("shows optimistic user entry in sorted position immediately after winning before server leaderboard updates", async ({
+    page,
+  }) => {
+    // Override GetLeaderboard so today's server response does NOT include TEST_USER_999 yet
+    await page.route("**/Client/GetLeaderboard", async (route) => {
+      const postData = route.request().postDataJSON() || {};
+      if (postData.StatisticName === "flair") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ code: 200, status: "OK", data: { Leaderboard: [] } }),
+        });
+        return;
+      }
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          code: 200,
+          status: "OK",
+          data: {
+            Leaderboard: [
+              {
+                Position: 0,
+                PlayFabId: "PLAYER_TODAY_1",
+                DisplayName: "WhaleRider",
+                Profile: { DisplayName: "WhaleRider" },
+                StatValue: 0, // 0 mistakes, 0s (better than or tied with instant solve)
+              },
+              {
+                Position: 1,
+                PlayFabId: "PLAYER_TODAY_2",
+                DisplayName: "CoralReef",
+                Profile: { DisplayName: "CoralReef" },
+                StatValue: -100045, // 1 mistake, 45s (worse than 0-mistake solve)
+              },
+            ],
+          },
+        }),
+      });
+    });
+
+    await page.goto("/");
+    await expect(page.locator('[data-testid="cell-0-0"]')).toBeVisible();
+    await page.click('[data-testid="btn-start-puzzle"]');
+
+    // Solve today's level with 0 mistakes
+    await page.evaluate(() => {
+      const g = (window as any).getGridData();
+      if (!g || !g.solution_c_left) return;
+      for (let r = 0; r < g.cells.length; r++) {
+        for (let c = 0; c < g.cells[r].length; c++) {
+          const cell = g.cells[r][c];
+          const solL = g.solution_c_left[r][c];
+          const solR = g.solution_c_right[r][c];
+          const leftCorner = cell.type === 10 ? 8 : 5;
+          const rightCorner = cell.type === 9 ? 7 : 6;
+          if (solL === 1 || solL === 2 || solL === 4) (window as any).putCellAction(r, c, leftCorner, solL);
+          if (solR === 1 || solR === 2 || solR === 4) (window as any).putCellAction(r, c, rightCorner, solR);
+        }
+      }
+    });
+
+    const modal = page.locator('[data-testid="leaderboard-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+
+    // Current user should appear optimistically right away, sorted at Rank #2 (between 0s and 1-mistake 45s)
+    const userRow = modal.locator("tr.is-current-user");
+    await expect(userRow).toBeVisible();
+    await expect(userRow).toContainText("AquaNovice");
+    await expect(userRow).toContainText("(You)");
+    await expect(modal.locator(".leaderboard-user-bar")).toContainText("#2");
+  });
 });

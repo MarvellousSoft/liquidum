@@ -704,4 +704,180 @@ describe("FlairManager - Flair Decoding & Ported Definitions", () => {
   });
 });
 
+describe("PlayFabService - Optimistic Leaderboard Placement", () => {
+  it("inserts submitted score at the right rank until server leaderboard catches up", async () => {
+    const mockStorage = createMockStorage();
+    let serverIncludesCurrentUser = false;
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(async (url: any, options: any) => {
+      const urlStr = String(url);
+      const body = options?.body ? JSON.parse(options.body) : {};
+
+      if (urlStr.includes("/Client/LoginWithCustomID")) {
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: {
+              PlayFabId: "PLAYFAB_USER_123",
+              SessionTicket: "MOCK_TICKET",
+              NewlyCreated: false,
+              InfoResultPayload: {
+                PlayerProfile: {
+                  DisplayName: "AquaMaster",
+                  AvatarUrl: "https://example.com/me.png",
+                },
+              },
+            },
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (urlStr.includes("/Client/UpdatePlayerStatistics")) {
+        return new Response(JSON.stringify({ code: 200, status: "OK", data: {} }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      if (urlStr.includes("/Client/GetLeaderboard")) {
+        if (body.StatisticName === "flair") {
+          return new Response(
+            JSON.stringify({ code: 200, status: "OK", data: { Leaderboard: [] } }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          );
+        }
+
+        const list = [
+          {
+            Position: 0,
+            PlayFabId: "PLAYER_1",
+            StatValue: -40, // 0 mistakes, 40s
+            Profile: { DisplayName: "FastFish" },
+          },
+          {
+            Position: 1,
+            PlayFabId: "PLAYER_2",
+            StatValue: -100060, // 1 mistake, 60s
+            Profile: { DisplayName: "WaveWalker" },
+          },
+        ];
+        if (serverIncludesCurrentUser) {
+          list.splice(1, 0, {
+            Position: 1,
+            PlayFabId: "PLAYFAB_USER_123",
+            StatValue: -70,
+            Profile: { DisplayName: "AquaMaster" },
+          });
+          list[2].Position = 2;
+        }
+
+        return new Response(
+          JSON.stringify({ code: 200, status: "OK", data: { Leaderboard: list } }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      return new Response(JSON.stringify({ code: 200, status: "OK", data: {} }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    });
+
+    try {
+      const svc = new PlayFabService(mockStorage);
+      const todayVersion = getDailyLeaderboardVersion();
+
+      // Submit 0 mistakes, 70s -> rawScore -70 -> should rank #2 (between -40 and -100060)
+      const res = await svc.submitDailyScore(70, 0, todayVersion);
+      expect(res.submitted).toBe(true);
+
+      const optimisticEntries = await svc.getLeaderboard(todayVersion);
+      expect(optimisticEntries).toHaveLength(3);
+      expect(optimisticEntries.map((e) => [e.position, e.displayName, e.isCurrentUser])).toEqual([
+        [1, "FastFish", false],
+        [2, "AquaMaster", true],
+        [3, "WaveWalker", false],
+      ]);
+      expect(optimisticEntries[1].seconds).toBe(70);
+      expect(optimisticEntries[1].mistakes).toBe(0);
+
+      // Once server includes current user, authoritative server list is returned without duplicates
+      serverIncludesCurrentUser = true;
+      const serverEntries = await svc.getLeaderboard(todayVersion);
+      expect(serverEntries).toHaveLength(3);
+      expect(serverEntries.filter((e) => e.isCurrentUser)).toHaveLength(1);
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+
+  it("places tied optimistic scores after existing tied entries", async () => {
+    const mockStorage = createMockStorage();
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(async (url: any, options: any) => {
+      const urlStr = String(url);
+      const body = options?.body ? JSON.parse(options.body) : {};
+
+      if (urlStr.includes("/Client/LoginWithCustomID")) {
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: {
+              PlayFabId: "PLAYFAB_USER_123",
+              SessionTicket: "MOCK_TICKET",
+              NewlyCreated: false,
+              InfoResultPayload: { PlayerProfile: { DisplayName: "AquaMaster" } },
+            },
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      if (urlStr.includes("/Client/GetLeaderboard")) {
+        if (body.StatisticName === "flair") {
+          return new Response(
+            JSON.stringify({ code: 200, status: "OK", data: { Leaderboard: [] } }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          );
+        }
+        return new Response(
+          JSON.stringify({
+            code: 200,
+            status: "OK",
+            data: {
+              Leaderboard: [
+                { Position: 0, PlayFabId: "PLAYER_1", StatValue: -50, Profile: { DisplayName: "TiedPlayer" } },
+                { Position: 1, PlayFabId: "PLAYER_2", StatValue: -90, Profile: { DisplayName: "SlowerPlayer" } },
+              ],
+            },
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      return new Response(JSON.stringify({ code: 200, status: "OK", data: {} }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    });
+
+    try {
+      const svc = new PlayFabService(mockStorage);
+      const todayVersion = getDailyLeaderboardVersion();
+      await svc.submitDailyScore(50, 0, todayVersion);
+
+      const entries = await svc.getLeaderboard(todayVersion);
+      expect(entries.map((e) => [e.position, e.displayName])).toEqual([
+        [1, "TiedPlayer"],
+        [2, "AquaMaster"],
+        [3, "SlowerPlayer"],
+      ]);
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+});
+
 
