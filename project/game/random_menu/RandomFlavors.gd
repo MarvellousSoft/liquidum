@@ -88,11 +88,9 @@ static func _mirrors_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	
 
 static func _symbols_builder(rng: RandomNumberGenerator) -> Generator.Options:
-	var opts := Generator.builder().with_min_water(12)
-	if rng.randf() < 0.6:
-		opts.with_cell_hints(rng.randf_range(0.01, 0.3))
-	if rng.randf() < 0.35:
-		opts.with_diags()
+	var opts := Generator.builder().with_min_water(10)
+	if rng.randf() < 0.75:
+		opts.with_cell_hints(rng.randf_range(0.01, 0.4))
 	return opts
 
 static func _symbols_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
@@ -159,7 +157,12 @@ static func _symbols_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 		grid.col_hints()[j].water_alt_text = get_symbol.call(grid.count_water_col(j))
 
 static func _symbols_size_gen(rng: RandomNumberGenerator) -> Vector2i:
-	return Vector2i(rng.randi_range(4, 7), rng.randi_range(4, 7))
+	var a := rng.randi_range(4, 7)
+	var b := rng.randi_range(6, 7)
+	if rng.randf() < 0.5:
+		return Vector2i(a, b)
+	else:
+		return Vector2i(b, a)
 
 static func _snake_hints(rng: RandomNumberGenerator, grid: GridModel) -> void:
 	if not grid.rule_variants().has(GridModel.RuleVariant.Snake):
