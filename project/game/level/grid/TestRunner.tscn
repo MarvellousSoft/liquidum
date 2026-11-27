@@ -5,6 +5,112 @@
 [ext_resource type="PackedScene" uid="uid://b66jv6csdnca5" path="res://game/level/BrushPicker.tscn" id="3_1jrm3"]
 [ext_resource type="Script" uid="uid://cpqow361bfjrs" path="res://game/level/grid/GridTests.gd" id="3_ftgq8"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sidebar"]
+bg_color = Color(0.0313726, 0.0862745, 0.145098, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.219608, 0.443137, 0.568627, 0.6)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.0392157, 0.101961, 0.168627, 0.7)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.219608, 0.443137, 0.568627, 0.4)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+content_margin_left = 22.0
+content_margin_top = 12.0
+content_margin_right = 22.0
+content_margin_bottom = 12.0
+bg_color = Color(0.113725, 0.454902, 0.529412, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.0352941, 0.141176, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_left = 22.0
+content_margin_top = 12.0
+content_margin_right = 22.0
+content_margin_bottom = 12.0
+bg_color = Color(0.156863, 0.54902, 0.627451, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.670588, 1, 0.819608, 0.8)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+content_margin_left = 22.0
+content_margin_top = 12.0
+content_margin_right = 22.0
+content_margin_bottom = 12.0
+bg_color = Color(0.0705882, 0.309804, 0.372549, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.670588, 1, 0.819608, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 22.0
+content_margin_top = 12.0
+content_margin_right = 22.0
+content_margin_bottom = 12.0
+bg_color = Color(0.0705882, 0.196078, 0.239216, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.0352941, 0.141176, 0.5)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="Theme" id="Theme_dev_ui"]
+Button/font_sizes/font_size = 40
+Button/styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+Button/styles/hover = SubResource("StyleBoxFlat_btn_hover")
+Button/styles/normal = SubResource("StyleBoxFlat_btn_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+CheckBox/font_sizes/font_size = 40
+CheckButton/font_sizes/font_size = 40
+Label/font_sizes/font_size = 40
+LineEdit/font_sizes/font_size = 40
+OptionButton/font_sizes/font_size = 40
+PopupMenu/font_sizes/font_size = 38
+ProgressBar/font_sizes/font_size = 36
+
 [node name="TestRunner" type="Control" unique_id=744724043]
 layout_mode = 3
 anchors_preset = 15
@@ -14,70 +120,144 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xrxil")
 
+[node name="BackgroundRect" type="ColorRect" parent="." unique_id=190100001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.054902, 0.105882, 0.164706, 1)
+
+[node name="Grid1Panel" type="Panel" parent="." unique_id=190100002]
+layout_mode = 0
+offset_left = 1400.0
+offset_top = 340.0
+offset_right = 2580.0
+offset_bottom = 2120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Grid1Label" type="Label" parent="Grid1Panel" unique_id=190100003]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 24.0
+offset_bottom = 84.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 0.85)
+theme_override_font_sizes/font_size = 44
+text = "Grid 1 (Reference)"
+horizontal_alignment = 1
+
+[node name="Grid2Panel" type="Panel" parent="." unique_id=190100004]
+layout_mode = 0
+offset_left = 2620.0
+offset_top = 340.0
+offset_right = 3800.0
+offset_bottom = 2120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Grid2Label" type="Label" parent="Grid2Panel" unique_id=190100005]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 24.0
+offset_bottom = 84.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 0.85)
+theme_override_font_sizes/font_size = 44
+text = "Grid 2 (Interactive)"
+horizontal_alignment = 1
+
 [node name="Grid1" parent="." unique_id=281769485 instance=ExtResource("2_ojaat")]
 layout_mode = 0
 anchors_preset = 0
-anchor_left = -0.0817708
-anchor_top = 0.182407
-anchor_right = -0.0817708
-anchor_bottom = 0.182407
-offset_left = 846.0
-offset_top = 345.0
-offset_right = 846.0
-offset_bottom = 345.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 1990.0
+offset_top = 1260.0
+offset_right = 1990.0
+offset_bottom = 1260.0
 grow_horizontal = 1
 grow_vertical = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Grid2" parent="." unique_id=1302811992 instance=ExtResource("2_ojaat")]
 layout_mode = 0
 anchors_preset = 0
-anchor_left = 0.335417
-anchor_top = 0.158333
-anchor_right = 0.335417
-anchor_bottom = 0.158333
-offset_left = 846.0
-offset_top = 371.0
-offset_right = 846.0
-offset_bottom = 371.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 3210.0
+offset_top = 1260.0
+offset_right = 3210.0
+offset_bottom = 1260.0
 grow_horizontal = 1
 grow_vertical = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="BrushPicker" parent="." unique_id=1188016573 instance=ExtResource("3_1jrm3")]
 layout_mode = 0
+offset_left = 1400.0
+offset_top = 40.0
+offset_right = 1400.0
+offset_bottom = 40.0
+scale = Vector2(0.625, 0.625)
 
 [node name="Tests" type="Node" parent="." unique_id=1861924037]
 script = ExtResource("3_ftgq8")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=560327123]
-clip_contents = false
-layout_mode = 0
-offset_left = 47.0
-offset_top = 67.0
-offset_right = 1359.0
-offset_bottom = 2092.0
+[node name="SidebarPanel" type="PanelContainer" parent="." unique_id=190100006]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 1360.0
+offset_bottom = -40.0
+grow_vertical = 2
+theme = SubResource("Theme_dev_ui")
+theme_override_styles/panel = SubResource("StyleBoxFlat_sidebar")
 
-[node name="Buttons" type="VBoxContainer" parent="ScrollContainer" unique_id=1233336492]
+[node name="MarginContainer" type="MarginContainer" parent="SidebarPanel" unique_id=190100007]
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
 
-[node name="Run" type="Button" parent="ScrollContainer/Buttons" unique_id=923407253]
+[node name="ScrollContainer" type="ScrollContainer" parent="SidebarPanel/MarginContainer" unique_id=560327123]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Buttons" type="VBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer" unique_id=1233336492]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 22
+
+[node name="TestsHeader" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100008]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_font_sizes/font_size = 46
+text = "TESTS & GENERATOR"
+
+[node name="Run" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=923407253]
 layout_mode = 2
 focus_mode = 0
 text = "Run tests"
 
-[node name="InfiniteGenHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=1820088962]
+[node name="InfiniteGenHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=1820088962]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 
-[node name="InfiniteGenButton" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=942654235]
+[node name="InfiniteGenButton" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/InfiniteGenHBox" unique_id=942654235]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "Infinite Generator Test"
 
-[node name="InfiniteGenCancel" type="Button" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=69229656]
+[node name="InfiniteGenCancel" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/InfiniteGenHBox" unique_id=69229656]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -85,80 +265,106 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="InfiniteGenStatus" type="Label" parent="ScrollContainer/Buttons/InfiniteGenHBox" unique_id=1207610858]
+[node name="InfiniteGenStatus" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=1207610858]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.9, 0.95, 0.9)
+theme_override_font_sizes/font_size = 34
+autowrap_mode = 2
 
-[node name="AutoSolve" type="Button" parent="ScrollContainer/Buttons" unique_id=1379976968]
+[node name="Sep1" type="HSeparator" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100009]
 layout_mode = 2
+
+[node name="SolverHeader" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100010]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_font_sizes/font_size = 46
+text = "SOLVER & GRID"
+
+[node name="SolverButtonsHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100011]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="AutoSolve" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox" unique_id=1379976968]
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "Simple Solve"
 
-[node name="GodMode" type="CheckButton" parent="ScrollContainer/Buttons" unique_id=350891454]
+[node name="FullSolve" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox" unique_id=1450786140]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Full solve"
+
+[node name="Paste" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox" unique_id=1115644524]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Paste"
+
+[node name="SolverStateHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100012]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="GodMode" type="CheckButton" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverStateHBox" unique_id=350891454]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "God mode"
 
-[node name="Paste" type="Button" parent="ScrollContainer/Buttons" unique_id=1115644524]
-layout_mode = 2
-focus_mode = 0
-text = "Paste from clipboard"
-
-[node name="FullSolve" type="Button" parent="ScrollContainer/Buttons" unique_id=1450786140]
-layout_mode = 2
-focus_mode = 0
-text = "Full solve"
-
-[node name="SolvedType" type="Label" parent="ScrollContainer/Buttons" unique_id=1687766763]
+[node name="SolvedType" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverStateHBox" unique_id=1687766763]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+horizontal_alignment = 2
 
-[node name="PrintLocalStats" type="Button" parent="ScrollContainer/Buttons" unique_id=1082780112]
+[node name="Sep2" type="HSeparator" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100013]
 layout_mode = 2
-focus_mode = 0
-text = "Print local stats"
 
-[node name="PrintGlobalStats" type="Button" parent="ScrollContainer/Buttons" unique_id=1316865028]
+[node name="PreprocessHeader" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100014]
 layout_mode = 2
-focus_mode = 0
-text = "Print global stats
-"
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_font_sizes/font_size = 46
+text = "PREPROCESS"
 
-[node name="ResetStats" type="Button" parent="ScrollContainer/Buttons" unique_id=243804578]
-layout_mode = 2
-focus_mode = 0
-text = "Reset stats & achievements"
-
-[node name="DailiesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=199176699]
-layout_mode = 2
-theme_override_constants/separation = 50
-
-[node name="DailiesButton" type="Button" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=134850806]
+[node name="PrepCheck" type="CheckBox" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=1331118975]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+text = "Check prep is correct"
+
+[node name="DailiesHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=199176699]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DailiesButton" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DailiesHBox" unique_id=134850806]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "Preprocess Dailies"
 
-[node name="DailiesYear" type="SpinBox" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=1503613620]
+[node name="DailiesYear" type="SpinBox" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DailiesHBox" unique_id=1503613620]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 min_value = 2024.0
 max_value = 2040.0
 value = 2024.0
 rounded = true
 
-[node name="DailiesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=401011969]
+[node name="DailiesProgress" type="ProgressBar" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DailiesHBox" unique_id=401011969]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 365.0
 step = 1.0
 
-[node name="DailiesCancel" type="Button" parent="ScrollContainer/Buttons/DailiesHBox" unique_id=1375655545]
+[node name="DailiesCancel" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DailiesHBox" unique_id=1375655545]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -166,13 +372,14 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="DifHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=574766392]
+[node name="DifHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=574766392]
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 16
 
-[node name="DifOptions" type="OptionButton" parent="ScrollContainer/Buttons/DifHBox" unique_id=206295764]
+[node name="DifOptions" type="OptionButton" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DifHBox" unique_id=206295764]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 5
@@ -187,23 +394,22 @@ popup/item_3/id = 3
 popup/item_4/text = "Insane"
 popup/item_4/id = 4
 
-[node name="DifButton" type="Button" parent="ScrollContainer/Buttons/DifHBox" unique_id=1477590397]
+[node name="DifButton" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DifHBox" unique_id=1477590397]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
 focus_mode = 0
 text = "Preprocess"
 
-[node name="DifProgress" type="ProgressBar" parent="ScrollContainer/Buttons/DifHBox" unique_id=1433742168]
+[node name="DifProgress" type="ProgressBar" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DifHBox" unique_id=1433742168]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 1000.0
 step = 1.0
 
-[node name="DifCancel" type="Button" parent="ScrollContainer/Buttons/DifHBox" unique_id=422264039]
+[node name="DifCancel" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DifHBox" unique_id=422264039]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -211,32 +417,33 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="EndlessHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=1908396866]
+[node name="EndlessHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=1908396866]
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 16
 
-[node name="EndlessOptions" type="OptionButton" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=911378450]
+[node name="EndlessOptions" type="OptionButton" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/EndlessHBox" unique_id=911378450]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
+clip_text = true
 
-[node name="EndlessButton" type="Button" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=1498216778]
+[node name="EndlessButton" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/EndlessHBox" unique_id=1498216778]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
 focus_mode = 0
 text = "Preprocess"
 
-[node name="EndlessProgress" type="ProgressBar" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=779065718]
+[node name="EndlessProgress" type="ProgressBar" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/EndlessHBox" unique_id=779065718]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 1000.0
 step = 1.0
 
-[node name="EndlessCancel" type="Button" parent="ScrollContainer/Buttons/EndlessHBox" unique_id=1118752455]
+[node name="EndlessCancel" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/EndlessHBox" unique_id=1118752455]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -244,34 +451,36 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="WeekliesHBox" type="HBoxContainer" parent="ScrollContainer/Buttons" unique_id=813627393]
+[node name="WeekliesHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=813627393]
 layout_mode = 2
-theme_override_constants/separation = 50
+theme_override_constants/separation = 16
 
-[node name="WeekliesButton" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1431774682]
+[node name="WeekliesButton" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/WeekliesHBox" unique_id=1431774682]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "Preprocess Weeklies"
 
-[node name="WeekliesYear" type="SpinBox" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1054428602]
+[node name="WeekliesYear" type="SpinBox" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/WeekliesHBox" unique_id=1054428602]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 min_value = 2024.0
 max_value = 2040.0
 value = 2024.0
 rounded = true
 
-[node name="WeekliesProgress" type="ProgressBar" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=1032454275]
+[node name="WeekliesProgress" type="ProgressBar" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/WeekliesHBox" unique_id=1032454275]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 53.0
 step = 1.0
 
-[node name="WeekliesCancel" type="Button" parent="ScrollContainer/Buttons/WeekliesHBox" unique_id=2030522101]
+[node name="WeekliesCancel" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/WeekliesHBox" unique_id=2030522101]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -279,25 +488,49 @@ focus_mode = 0
 toggle_mode = true
 text = "Cancel"
 
-[node name="PrepCheck" type="CheckBox" parent="ScrollContainer/Buttons" unique_id=1331118975]
-unique_name_in_owner = true
+[node name="Sep3" type="HSeparator" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100015]
+layout_mode = 2
+
+[node name="StatsHeader" type="Label" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100016]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.670588, 1, 0.819608, 1)
+theme_override_font_sizes/font_size = 46
+text = "STEAM & STATS"
+
+[node name="StatsHBox" type="HBoxContainer" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=190100017]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PrintLocalStats" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/StatsHBox" unique_id=1082780112]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Print local stats"
+
+[node name="PrintGlobalStats" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons/StatsHBox" unique_id=1316865028]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Print global stats"
+
+[node name="ResetStats" type="Button" parent="SidebarPanel/MarginContainer/ScrollContainer/Buttons" unique_id=243804578]
 layout_mode = 2
 focus_mode = 0
-text = "Check prep is correct"
+text = "Reset stats & achievements"
 
 [connection signal="updated" from="Grid2" to="." method="_on_grid_2_updated" flags=3]
 [connection signal="brushed_picked" from="BrushPicker" to="Grid2" method="set_brush_mode"]
 [connection signal="show_grids" from="Tests" to="." method="_on_tests_show_grids"]
-[connection signal="pressed" from="ScrollContainer/Buttons/Run" to="." method="_on_run_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenButton" to="." method="_on_infinite_gen_button_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenCancel" to="." method="_on_infinite_gen_cancel_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/AutoSolve" to="." method="_on_auto_solve_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/Paste" to="." method="_on_paste_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/FullSolve" to="." method="_on_full_solve_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/PrintLocalStats" to="." method="_on_print_local_stats_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/PrintGlobalStats" to="." method="_on_print_global_stats_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/ResetStats" to="." method="_on_reset_stats_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/DailiesHBox/DailiesButton" to="." method="_on_preprocess_dailies_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/DifHBox/DifButton" to="." method="_on_dif_button_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/EndlessHBox/EndlessButton" to="." method="_on_endless_button_pressed"]
-[connection signal="pressed" from="ScrollContainer/Buttons/WeekliesHBox/WeekliesButton" to="." method="_on_preprocess_weeklies_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/Run" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenButton" to="." method="_on_infinite_gen_button_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/InfiniteGenHBox/InfiniteGenCancel" to="." method="_on_infinite_gen_cancel_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox/AutoSolve" to="." method="_on_auto_solve_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox/FullSolve" to="." method="_on_full_solve_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/SolverButtonsHBox/Paste" to="." method="_on_paste_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DailiesHBox/DailiesButton" to="." method="_on_preprocess_dailies_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/DifHBox/DifButton" to="." method="_on_dif_button_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/EndlessHBox/EndlessButton" to="." method="_on_endless_button_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/WeekliesHBox/WeekliesButton" to="." method="_on_preprocess_weeklies_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/StatsHBox/PrintLocalStats" to="." method="_on_print_local_stats_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/StatsHBox/PrintGlobalStats" to="." method="_on_print_global_stats_pressed"]
+[connection signal="pressed" from="SidebarPanel/MarginContainer/ScrollContainer/Buttons/ResetStats" to="." method="_on_reset_stats_pressed"]

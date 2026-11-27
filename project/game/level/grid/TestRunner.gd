@@ -1,7 +1,8 @@
 class_name TestRunner
 extends Control
 
-const DESIRED_W := 780.0
+const DESIRED_W := 1020.0
+const DESIRED_H := 1480.0
 
 static var running: bool = false
 
@@ -49,7 +50,10 @@ func _on_tests_show_grids(s1: String, s2: String):
 
 func scale_grids() -> void:
 	await get_tree().process_frame
-	var s := DESIRED_W / g2.get_grid_size().x
+	var grid_size := g2.get_grid_size()
+	if grid_size.x <= 0.0 or grid_size.y <= 0.0:
+		return
+	var s := minf(DESIRED_W / grid_size.x, DESIRED_H / grid_size.y)
 	g1.scale = Vector2(s, s)
 	g2.scale = Vector2(s, s)
 
